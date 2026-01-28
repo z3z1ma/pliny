@@ -1,0 +1,98 @@
+# INSTINCTS
+
+This is the *fast index* of the current instinct set.
+The source of truth is `.opencode/memory/instincts.json`.
+
+<!-- BEGIN:compound:instincts-md -->
+## Active instincts (top confidence)
+
+- **compound-learning-output-is-compoundspec-v2-json-only** (100%)
+  - Trigger: When responding to a background autolearn prompt
+  - Action: Output only valid JSON matching CompoundSpec v2; no commentary, no code fences, no product-code edits.
+- **team-core-changes-require-targeted-tests** (100%)
+  - Trigger: When editing src/agent_loom/team/core.py, src/agent_loom/team/prompts.py, or src/agent_loom/team/cli.py
+  - Action: Update/add focused tests covering the changed behavior (especially prompt contracts) and run `uv run pytest` for the relevant test module(s) plus `uv run ruff check .` before calling the work done.
+- **cli-output-is-a-contract** (100%)
+  - Trigger: When changing any CLI/user-facing output formatting (especially ticket/team UX)
+  - Action: Make output deterministic (explicit ordering, stable formatting) and add a focused pytest contract test for the rendered text.
+- **prompt-changes-require-prompt-tests** (96%)
+  - Trigger: When editing agent prompts or prompt assembly code
+  - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
+- **plan-mode-readonly-no-edits** (91%)
+  - Trigger: System reminder says Plan Mode ACTIVE / READ-ONLY phase
+  - Action: Do not edit/create/delete files or run write-capable commands; only inspect/read/search and produce an execution plan or required JSON payload.
+- **workspace-cli-output-is-a-contract** (90%)
+  - Trigger: When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py
+  - Action: Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv…
+- **compound-template-mirror-must-stay-in-sync** (83%)
+  - Trigger: When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy unde…
+  - Action: Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_i…
+- **team-mounts-changes-require-contract-test** (83%)
+  - Trigger: When editing team mount behavior (notably src/agent_loom/team/core.py) or adding/changing mounts-related logic and outputs.
+  - Action: Lock the behavior with deterministic invariants and update/add coverage in tests/test_team_mounts.py; then run uv run basedpyright, uv run ruff check ., and uv run pytest tests/test_team_mounts.py.
+- **team-prompts-need-section-level-contracts** (82%)
+  - Trigger: When adding or restructuring sections in src/agent_loom/team/prompts.py (or prompt assembly in src/agent_loom/team/core.py).
+  - Action: Make prompt rendering deterministic (explicit ordering, stable headings) and add/expand section-level contract tests in tests/test_team_prompts.py that assert required sections/ordering without relyin…
+- **python-commands-use-uv-run** (80%)
+  - Trigger: When about to run any Python command (tests, linters, scripts, REPL)
+  - Action: Use `uv run ...` (never `python`, `pip`, or bare tool binaries). Prefer `uv run pytest`, `uv run ruff check .`, etc.
+- **prefer-basedpyright-over-lsp-diagnostics** (78%)
+  - Trigger: When about to check Python types/diagnostics (or an existing checklist says to run lsp_diagnostics)
+  - Action: Run `uv run basedpyright` and fix findings before `uv run ruff check .` and targeted `uv run pytest ...`.
+- **team-spawn-integrator-changes-require-contract-test** (77%)
+  - Trigger: When changing team spawn/integrator wiring (typically in src/agent_loom/team/core.py or src/agent_loom/team/cli.py), especially anything that boots an integrator or mediates agent process startup.
+  - Action: Add/update a focused contract test in tests/test_team_spawn_integrator.py that asserts deterministic invariants (what starts, with what args/env, and what is persisted/returned), then run lsp_diagnost…
+- **compound-install-changes-require-install-contract-test** (77%)
+  - Trigger: When changing src/agent_loom/compound/install.py or src/agent_loom/compound/cli.py (or any behavior that affects generated .opencode/* files).
+  - Action: Update/add assertions in tests/test_compound_install.py for deterministic outputs; then run uv run basedpyright, uv run ruff check ., and uv run pytest tests/test_compound_install.py before calling th…
+- **skills-canonical-location-is-opencode** (74%)
+  - Trigger: When editing/creating skills and there are multiple skill directories (for example .opencode/skills and .claude/skills)
+  - Action: Only propose skill changes under .opencode/skills/<name>/SKILL.md and rely on docs/index sync; avoid duplicating or manually maintaining mirror copies elsewhere.
+- **workspace-core-changes-require-targeted-tests** (74%)
+  - Trigger: When editing src/agent_loom/workspace/core.py, src/agent_loom/workspace/models.py, src/agent_loom/workspace/state.py, src/agent_loom/workspace/repo_ops.py, src/agent_loom/workspace/git_ops.py, src/age…
+  - Action: Treat workspace as public API: add/adjust targeted pytest coverage for the behavior/contract being changed (CLI text, model serialization, ordering, guard failures). Run: uv run basedpyright, uv run r…
+- **loom-init-cli-changes-require-ux-contract-test** (74%)
+  - Trigger: When editing user-visible output/flags/formatting in src/agent_loom/init/cli.py (or init CLI output pathways).
+  - Action: Make output deterministic (stable ordering; no nondeterministic/machine-specific values) and add/update a focused pytest contract test (prefer tests/test_loom_init_cli_ux.py). Verify with: uv run base…
+- **team-expansion-requires-contract-tests-and-ruff** (73%)
+  - Trigger: When adding or significantly expanding team runtime (new CLI entrypoints, inbox loop, or new team modules like inbox/models/constants)
+  - Action: Treat it like a public API: add/adjust prompt-contract tests, run `uv run ruff check .`, run targeted `uv run pytest` for the changed surface area, and clear LSP diagnostics on touched files before ca…
+- **team-disband-changes-require-disband-tests** (72%)
+  - Trigger: When changing team shutdown/disband behavior (especially in src/agent_loom/team/core.py) or introducing a new disband pathway
+  - Action: Add/adjust focused tests covering disband semantics in tests/test_team_disband.py; keep teardown deterministic; run uv run pytest tests/test_team_disband.py and uv run ruff check . before calling work…
+- **core-cli-changes-require-ux-contract-test** (72%)
+  - Trigger: When editing user-visible output/flags/formatting in src/agent_loom/cli.py
+  - Action: Make output deterministic and lock it with a focused pytest contract test (prefer tests/test_cli_ux.py or the existing CLI test module). Verify via: uv run basedpyright, uv run ruff check ., uv run py…
+- **ticket-frontmatter-changes-require-roundtrip-tests** (66%)
+  - Trigger: When editing src/agent_loom/ticket/frontmatter.py or changing the ticket on-disk format/serialization
+  - Action: Add/adjust round-trip tests that load+save+reload tickets; ensure parse errors include actionable context; run lsp_diagnostics on touched files, then `uv run ruff check .`, then the smallest relevant …
+- **cli-environment-output-must-be-sanitized** (64%)
+  - Trigger: When adding CLI output that prints runtime environment or model identifiers (e.g., model id, working directory, platform, dates)
+  - Action: Avoid secrets and machine-specific absolute paths; prefer minimal, stable fields; keep formatting deterministic; add/adjust a contract test asserting stable invariants rather than full dumps.
+- **ui-changes-require-lsp-ruff-and-targeted-tests** (62%)
+  - Trigger: After editing Python UI code under src/agent_loom/ui/ (for example src/agent_loom/ui/ticket_ui.py)
+  - Action: Run lsp_diagnostics on touched UI files, fix all findings, then run `uv run ruff check .` and the smallest relevant `uv run pytest ...` subset (or full suite if unsure).
+- **merge-queue-changes-require-determinism-and-tests** (62%)
+  - Trigger: When adding/changing merge queue behavior in src/agent_loom/team/merge_queue.py (or wiring it from src/agent_loom/team/core.py).
+  - Action: Make ordering deterministic (explicit sorting/tie-breaks, no set/dict iteration) and add/update focused pytest coverage for the queue semantics; verify with uv run basedpyright then uv run ruff check …
+- **team-init-exports-are-public-api** (62%)
+  - Trigger: When editing src/agent_loom/team/__init__.py exports or adding new team entrypoints
+  - Action: Treat exports as a public contract: keep names stable, avoid side effects on import, and ensure tests cover expected import paths/entrypoints when behavior changes.
+- **ticket-core-changes-require-targeted-tests** (61%)
+  - Trigger: When editing src/agent_loom/ticket/cli.py, src/agent_loom/ticket/core.py, or src/agent_loom/ticket/store.py
+  - Action: Treat it like a public API: run lsp_diagnostics on touched files, fix issues, run `uv run ruff check .`, and add/run targeted pytest coverage for ticket CLI/core/store behavior before declaring done.
+- **team-ship-behavior-requires-ticket-sync-test** (57%)
+  - Trigger: When changing team ship/merge behavior in src/agent_loom/team/core.py, src/agent_loom/team/cli.py, or src/agent_loom/team/merge_queue.py
+  - Action: Add/update a focused contract test in tests/test_team_ship_ticket_sync.py and run `uv run pytest tests/test_team_ship_ticket_sync.py` plus `uv run ruff check .` (after clearing lsp_diagnostics on touc…
+- **team-start-merge-config-changes-require-contract-test** (57%)
+  - Trigger: When changing team startup behavior or merge configuration wiring (typically in src/agent_loom/team/core.py and/or src/agent_loom/team/cli.py), especially any logic that selects/validates merge config…
+  - Action: Treat it like a public contract: add/update tests/test_team_start_merge_config.py to lock expected invariants, clear lsp_diagnostics on touched files, then run `uv run ruff check .` and `uv run pytest…
+- **fix-lsp-before-committing** (47%)
+  - Trigger: After editing code or before declaring work complete
+  - Action: Run LSP diagnostics on touched files and fix errors/warnings before lint/tests; don’t defer LSP cleanup.
+
+## Notes
+
+- Instincts are the *pre-skill* layer: small, repeatable heuristics.
+- When an instinct proves useful across sessions, promote it into a Skill.
+<!-- END:compound:instincts-md -->

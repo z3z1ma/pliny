@@ -1,0 +1,2588 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#fafafa" />
+  <title>Workspace UI</title>
+
+  <script>
+    (function(){
+      'use strict';
+      const KEY = 'loom.workspace.theme';
+      let theme = 'light';
+      try{
+        const saved = localStorage.getItem(KEY);
+        if (saved === 'light' || saved === 'dark') theme = saved;
+        else if (window.matchMedia('(prefers-color-scheme: dark)').matches) theme = 'dark';
+      }catch{}
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', (theme === 'dark') ? '#282c34' : '#fafafa');
+    })();
+  </script>
+
+  <style>
+    :root {
+      --r: 8px;
+      --r-lg: 12px;
+      --r-pill: 999px;
+
+      --details-w: 460px;
+      --splitter-w: 12px;
+
+      --tint-a: 14%;
+      --tint-border: 22%;
+
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 16px;
+      --space-4: 24px;
+
+      --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+      --ease: cubic-bezier(0.23, 1, 0.32, 1);
+      --dur: 200ms;
+    }
+
+    :root[data-theme="light"] {
+      --bg-app: #fafafa;
+      --bg-panel: #ffffff;
+      --bg-element: #f0f1f4;
+      --bg-element-hover: #e5e5e6;
+      --bg-select: #f2f4f8;
+
+      --border: #dbdbdb;
+      --border-strong: #b8b8b8;
+
+      --text-main: #383a42;
+      --text-muted: #6e7078;
+      --text-faint: #d0d0d2;
+
+      --c-blue: #4078f2;
+      --c-green: #50a14f;
+      --c-red: #e45649;
+      --c-orange: #986801;
+      --c-purple: #a626a4;
+      --c-cyan: #0184bc;
+
+      --primary: var(--c-blue);
+      --success: var(--c-green);
+      --warning: var(--c-orange);
+      --danger: var(--c-red);
+      --info: var(--c-cyan);
+
+      --focus-ring: rgba(64, 120, 242, 0.4);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04), 0 2px 4px rgba(0,0,0,0.02);
+      --shadow-md: 0 4px 8px rgba(0,0,0,0.04), 0 8px 16px rgba(0,0,0,0.04);
+      --shadow-lg: 0 12px 24px rgba(0,0,0,0.06), 0 16px 32px rgba(0,0,0,0.06);
+    }
+
+    :root[data-theme="dark"] {
+      --bg-app: #21252b;
+      --bg-panel: #282c34;
+      --bg-element: #353b45;
+      --bg-element-hover: #3e4451;
+      --bg-select: #1d2025;
+
+      --border: #181a1f;
+      --border-strong: #454955;
+
+      --text-main: #abb2bf;
+      --text-muted: #8b919e;
+      --text-faint: #4b5363;
+
+      --c-blue: #61afef;
+      --c-green: #98c379;
+      --c-red: #e06c75;
+      --c-orange: #e5c07b;
+      --c-purple: #c678dd;
+      --c-cyan: #56b6c2;
+
+      --primary: var(--c-blue);
+      --success: var(--c-green);
+      --warning: var(--c-orange);
+      --danger: var(--c-red);
+      --info: var(--c-cyan);
+
+      --focus-ring: rgba(97, 175, 239, 0.4);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.2), 0 2px 4px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 8px rgba(0,0,0,0.3), 0 8px 16px rgba(0,0,0,0.3);
+      --shadow-lg: 0 12px 24px rgba(0,0,0,0.4), 0 16px 32px rgba(0,0,0,0.4);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      font-family: var(--font-ui);
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        radial-gradient(1200px 800px at 18% 10%, color-mix(in srgb, var(--c-blue) 9%, transparent), transparent 60%),
+        radial-gradient(900px 700px at 86% 0%, color-mix(in srgb, var(--c-cyan) 8%, transparent), transparent 65%),
+        radial-gradient(900px 800px at 80% 90%, color-mix(in srgb, var(--c-green) 6%, transparent), transparent 60%);
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    .wrap {
+      max-width: 1800px;
+      margin: 0 auto;
+      padding: var(--space-3);
+      height: 100%;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    @supports (height: 100dvh) {
+      .wrap { min-height: 100dvh; }
+    }
+
+    .scrim {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms var(--ease);
+    }
+    .scrim.is-open { opacity: 1; pointer-events: auto; }
+    @supports (backdrop-filter: blur(2px)) { .scrim { backdrop-filter: blur(2px); } }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-2) var(--space-3);
+      background: color-mix(in srgb, var(--bg-panel) 85%, transparent);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-sm);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .mark {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--c-blue), var(--c-cyan));
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .brandTitle { font-weight: 700; font-size: 16px; letter-spacing: -0.3px; }
+    .brandSub { font-size: 11px; color: var(--text-muted); margin-top: -2px; }
+    .actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+
+    .seg {
+      display: inline-flex;
+      background: var(--bg-element);
+      padding: 3px;
+      border-radius: var(--r);
+      border: 1px solid var(--border);
+    }
+    .seg button {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all var(--dur) var(--ease);
+      min-height: 36px;
+    }
+    .seg button:hover { color: var(--text-main); }
+    .seg button[aria-pressed="true"] {
+      background: var(--bg-panel);
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .seg button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+    .poll {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg-element);
+      padding: 4px 10px;
+      border-radius: var(--r-pill);
+      min-height: 36px;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      transition: background 0.3s;
+    }
+    .dot.live {
+      background: var(--success);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--success) 22%, transparent);
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .panel {
+      background: transparent;
+      border: none;
+      border-radius: var(--r-lg);
+      padding: var(--space-2) 0;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field { grid-column: span 2; }
+    .field.w3 { grid-column: span 3; }
+    .field.w4 { grid-column: span 4; }
+    .field.w6 { grid-column: span 6; }
+
+    @media (max-width: 1100px) {
+      .field { grid-column: span 3; }
+      .field.w4 { grid-column: span 6; }
+      .field.w6 { grid-column: span 12; }
+    }
+    @media (max-width: 768px) {
+      .field { grid-column: span 6; }
+      .field.w4 { grid-column: span 12; }
+      .field.w3 { grid-column: span 6; }
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    select, input {
+      width: 100%;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: var(--r);
+      font-size: 13px;
+      transition: all 0.2s;
+      outline: none;
+      box-shadow: var(--shadow-sm);
+      min-height: 36px;
+    }
+    select:hover, input:hover { border-color: var(--border-strong); }
+    select:focus, input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--focus-ring); }
+
+    .metaRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      gap: 12px;
+    }
+    .count {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--bg-panel);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: var(--r);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      white-space: nowrap;
+    }
+    .btn:hover { background: var(--bg-element); border-color: var(--border-strong); }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary { background: var(--primary); color: #fff; border-color: transparent; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
+    .btn.primary:hover { filter: brightness(1.1); }
+    .btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+    .stage {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(420px, 1fr) var(--splitter-w) clamp(320px, var(--details-w, 460px), 760px);
+      gap: 0;
+      min-height: 0;
+      overflow: visible;
+    }
+    .pane { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--r-lg); display: flex; flex-direction: column; overflow: hidden; box-shadow: var(--shadow-sm); min-width: 0; }
+    .paneTitle { padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--bg-element); display: flex; justify-content: space-between; align-items: center; }
+    .paneTitle h2 { margin: 0; font-size: 14px; font-weight: 700; }
+    .paneTitle .small { font-size: 11px; color: var(--text-muted); }
+
+    .splitter {
+      grid-column: 2;
+      position: relative;
+      cursor: col-resize;
+      touch-action: none;
+      user-select: none;
+      background: transparent;
+    }
+    .splitter::after { content: ''; position: absolute; top: 0; bottom: 0; left: -10px; right: -10px; }
+    .splitter::before {
+      content: '';
+      position: absolute;
+      top: 16px; bottom: 16px;
+      left: 50%; width: 2px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--border-strong) 40%, transparent);
+      opacity: 0.4;
+      transition: opacity var(--dur) var(--ease), background var(--dur) var(--ease);
+    }
+    .splitter:hover::before { opacity: 0.8; background: color-mix(in srgb, var(--primary) 45%, var(--border-strong)); }
+
+    body.resizing { cursor: col-resize; user-select: none; }
+    body.resizing * { cursor: col-resize !important; }
+
+    .list {
+      padding: 12px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex: 1;
+      min-height: 0;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+    }
+
+    .row {
+      appearance: none;
+      text-align: left;
+      display: block;
+      width: 100%;
+      background: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .row:hover { border-color: var(--c-blue); background: var(--bg-element-hover); box-shadow: var(--shadow-md); }
+    .row[aria-selected="true"] { background: var(--bg-element); border-color: var(--primary); box-shadow: inset 3px 0 0 var(--primary); }
+    .row:focus-visible { outline: 2px solid var(--primary); outline-offset: -2px; }
+    .rowTitle {
+      font-weight: 650;
+      font-size: 14px;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .rowMeta { display: flex; flex-wrap: wrap; gap: 6px; font-size: 11px; }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: var(--r-pill);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      background: var(--bg-element);
+      color: var(--text-muted);
+      border: 1px solid transparent;
+    }
+    .chip.id { color: var(--text-main); border-color: var(--border); background: var(--bg-select); }
+    .chip.ok { color: var(--success); background: color-mix(in srgb, var(--success) var(--tint-a), transparent); border-color: color-mix(in srgb, var(--success) var(--tint-border), transparent); }
+    .chip.dirty { color: var(--danger); background: color-mix(in srgb, var(--danger) var(--tint-a), transparent); border-color: color-mix(in srgb, var(--danger) var(--tint-border), transparent); }
+    .chip.missing { color: var(--warning); background: color-mix(in srgb, var(--warning) var(--tint-a), transparent); border-color: color-mix(in srgb, var(--warning) var(--tint-border), transparent); }
+    .chip.external { color: var(--info); background: color-mix(in srgb, var(--info) var(--tint-a), transparent); border-color: color-mix(in srgb, var(--info) var(--tint-border), transparent); }
+
+    .details {
+      padding: 0;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      background: var(--bg-panel);
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      scrollbar-gutter: stable;
+    }
+    .detailsHeader {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin: 0;
+      padding: 20px 20px 16px 20px;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg-panel) 85%, transparent);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      position: sticky;
+      top: 0;
+      z-index: 12;
+      box-shadow: var(--shadow-sm);
+      gap: 12px;
+    }
+    .detailsHeader h2 { margin: 0 0 8px 0; font-size: clamp(18px, 2.1vw, 22px); line-height: 1.3; }
+    .detailsHeader .sub { display: flex; gap: 8px; flex-wrap: wrap; }
+    .detailsBody { padding: 20px; }
+
+    .kv { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .kv .k { font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600; min-width: 140px; }
+    .kv .v { font-size: 13px; color: var(--text-main); font-weight: 500; text-align: right; word-break: break-word; font-family: var(--font-mono); }
+
+    .empty {
+      padding: 28px;
+      text-align: center;
+      color: var(--text-muted);
+      border: 2px dashed var(--border);
+      border-radius: var(--r);
+      background: var(--bg-app);
+    }
+
+    .mono {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: pre-wrap;
+      word-break: break-word;
+      background: var(--bg-element);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 12px;
+    }
+
+    .graphWrap { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+    .graphToolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-top: 1px solid var(--border);
+      background: color-mix(in srgb, var(--bg-panel) 82%, transparent);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .graphToolbar .left,
+    .graphToolbar .right {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .graphToolbar .legend {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-family: var(--font-mono);
+    }
+    .swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      border: 1px solid color-mix(in srgb, var(--border-strong) 50%, transparent);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+      display: inline-block;
+    }
+    .swatch.internal { background: color-mix(in srgb, var(--primary) 16%, var(--bg-panel)); }
+    .swatch.external { background: color-mix(in srgb, var(--info) 18%, var(--bg-panel)); }
+    .swatch.clean { background: color-mix(in srgb, var(--success) 18%, var(--bg-panel)); }
+    .swatch.dirty { background: color-mix(in srgb, var(--danger) 20%, var(--bg-panel)); }
+    .swatch.missing { background: color-mix(in srgb, var(--warning) 20%, var(--bg-panel)); }
+
+    .graphStage {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      background: var(--bg-app);
+      border-top: 1px solid var(--border);
+    }
+    .graphCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .graphTooltip {
+      position: absolute;
+      z-index: 5;
+      pointer-events: none;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--bg-panel) 88%, transparent);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      max-width: min(380px, 70vw);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 120ms var(--ease), transform 120ms var(--ease);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .graphTooltip.is-open { opacity: 1; transform: translateY(0); }
+    .graphTooltip .tTitle { font-weight: 700; font-size: 12px; font-family: var(--font-mono); color: var(--text-main); }
+    .graphTooltip .tMeta { margin-top: 6px; display: grid; grid-template-columns: 90px 1fr; gap: 4px 10px; font-size: 11px; color: var(--text-muted); }
+    .graphTooltip .tMeta .k { text-transform: uppercase; letter-spacing: 0.03em; font-weight: 650; }
+    .graphTooltip .tMeta .v { font-family: var(--font-mono); color: var(--text-main); word-break: break-word; }
+
+    @media (max-width: 980px) {
+      .stage { grid-template-columns: 1fr; }
+      .splitter { display: none; }
+      .pane { border-radius: var(--r-lg); }
+      .pane--details { display: none; }
+      body.has-selection .pane--details {
+        display: flex;
+        position: fixed;
+        top: 0; right: 0; bottom: 0;
+        width: 520px;
+        max-width: 92vw;
+        z-index: 60;
+        transform: translateX(100%);
+        transition: transform 0.3s var(--ease);
+        pointer-events: none;
+        border-left: 1px solid var(--border);
+        box-shadow: -4px 0 24px rgba(0,0,0,0.22);
+      }
+      body.has-selection .pane--details.is-open { transform: translateX(0); pointer-events: auto; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; }
+      .dot.live { animation: none; }
+      .row { transition: none; }
+      body.has-selection .pane--details { transition: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="scrim" class="scrim" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="topbar" role="banner">
+      <div class="brand" aria-label="Workspace">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <div class="brandTitle">Workspace</div>
+          <div class="brandSub" id="brandSub">Worktrees + Services Graph</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="seg" role="group" aria-label="View">
+          <button id="viewList" type="button" aria-pressed="true">List</button>
+          <button id="viewGraph" type="button" aria-pressed="false">Graph</button>
+        </div>
+        <div class="seg" role="group" aria-label="Graph Mode">
+          <button id="graphServices" type="button" aria-pressed="true">Services</button>
+          <button id="graphWorktrees" type="button" aria-pressed="false">Worktrees</button>
+        </div>
+        <div class="seg" role="group" aria-label="Theme">
+          <button id="themeLight" type="button" aria-pressed="true">Light</button>
+          <button id="themeDark" type="button" aria-pressed="false">Dark</button>
+        </div>
+        <div class="poll" title="Auto refresh status">
+          <span id="pollDot" class="dot" aria-hidden="true"></span>
+          <span id="pollText" aria-live="polite">Idle</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="panel" aria-label="Filters">
+      <div class="filters">
+        <div class="field">
+          <label for="f_mode">Mode</label>
+          <select id="f_mode">
+            <option value="auto">Auto</option>
+            <option value="poly">Poly</option>
+            <option value="repo">Repo</option>
+          </select>
+        </div>
+
+        <div class="field w3" id="fieldGroup" style="display:none;">
+          <label for="f_group">Group</label>
+          <select id="f_group">
+            <option value="">All Groups</option>
+          </select>
+        </div>
+
+        <div class="field w3" id="fieldRepo" style="display:none;">
+          <label for="f_repo">Repo</label>
+          <select id="f_repo">
+            <option value="">All Repos</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f_dirty">Dirty Only</label>
+          <select id="f_dirty">
+            <option value="0" selected>No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+
+        <div class="field" id="fieldDetached" style="display:none;">
+          <label for="f_detached">Detached Only</label>
+          <select id="f_detached">
+            <option value="0" selected>No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+
+        <div class="field" id="fieldMissing" style="display:none;">
+          <label for="f_missing">Missing Only</label>
+          <select id="f_missing">
+            <option value="0" selected>No</option>
+            <option value="1">Yes</option>
+          </select>
+        </div>
+
+        <div class="field w6">
+          <label for="f_q">Search</label>
+          <input id="f_q" type="search" placeholder="Search by repo/group/branch/path..." />
+        </div>
+
+        <div class="field">
+          <label for="f_poll">Refresh</label>
+          <select id="f_poll">
+            <option value="0">Off</option>
+            <option value="5">5s</option>
+            <option value="10" selected>10s</option>
+            <option value="20">20s</option>
+            <option value="60">60s</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="metaRow">
+        <div class="count"><span id="count">0</span> items</div>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <button id="btnClear" class="btn" type="button">Reset</button>
+          <button id="btnRefresh" class="btn primary" type="button">Refresh</button>
+        </div>
+      </div>
+    </section>
+
+    <main class="stage" id="stage" aria-label="Workspace">
+      <section class="pane pane--primary" aria-label="Primary">
+        <div class="paneTitle">
+          <h2 id="primaryTitle">Worktrees</h2>
+          <div class="small" id="primaryHint">Select an item to view details</div>
+        </div>
+
+        <div id="listPane" class="list" role="listbox" aria-label="Worktrees list"></div>
+
+        <div id="graphPane" class="graphWrap" style="display:none;">
+          <div class="paneTitle" style="border-bottom:none;">
+            <h2 id="graphTitle">Services Graph</h2>
+            <div class="small" id="graphHint">Click a node to inspect</div>
+          </div>
+          <div class="graphToolbar" aria-label="Graph controls">
+            <div class="left">
+              <button id="gFit" class="btn" type="button" title="Fit graph (f)">Fit</button>
+              <button id="gReset" class="btn" type="button" title="Reheat + recompute layout (r)">Reset</button>
+              <div class="seg" role="group" aria-label="Graph toggles">
+                <button id="gFreeze" type="button" aria-pressed="false" title="Freeze simulation (space)">Freeze</button>
+                <button id="gLabels" type="button" aria-pressed="true" title="Toggle labels">Labels</button>
+                <button id="gExternal" type="button" aria-pressed="true" title="Toggle external nodes">External</button>
+              </div>
+            </div>
+            <div class="right">
+              <div class="legend" id="gLegend">
+                <span class="swatch internal" aria-hidden="true"></span><span>internal</span>
+                <span class="swatch external" aria-hidden="true"></span><span>external</span>
+                <span class="swatch clean" aria-hidden="true"></span><span>clean</span>
+                <span class="swatch dirty" aria-hidden="true"></span><span>dirty</span>
+                <span class="swatch missing" aria-hidden="true"></span><span>missing</span>
+              </div>
+            </div>
+          </div>
+          <div class="graphStage" id="graphStage"></div>
+        </div>
+      </section>
+
+      <div id="splitter" class="splitter" role="separator" aria-orientation="vertical" tabindex="0" aria-label="Resize details pane"></div>
+
+      <aside class="pane pane--details" id="detailsPane" aria-label="Details">
+        <div class="details" id="details">
+          <div class="detailsBody"><div class="empty">Select a worktree or service to see details.</div></div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      'use strict';
+
+      const $ = (sel, root = document) => root.querySelector(sel);
+      const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+      const els = {
+        scrim: $('#scrim'),
+        stage: $('#stage'),
+        splitter: $('#splitter'),
+        detailsPane: $('#detailsPane'),
+        details: $('#details'),
+        listPane: $('#listPane'),
+        graphPane: $('#graphPane'),
+        graphStage: $('#graphStage'),
+        gFit: $('#gFit'),
+        gReset: $('#gReset'),
+        gFreeze: $('#gFreeze'),
+        gLabels: $('#gLabels'),
+        gExternal: $('#gExternal'),
+        count: $('#count'),
+
+        viewList: $('#viewList'),
+        viewGraph: $('#viewGraph'),
+        graphServices: $('#graphServices'),
+        graphWorktrees: $('#graphWorktrees'),
+
+        themeLight: $('#themeLight'),
+        themeDark: $('#themeDark'),
+        pollDot: $('#pollDot'),
+        pollText: $('#pollText'),
+
+        f_mode: $('#f_mode'),
+        f_group: $('#f_group'),
+        f_repo: $('#f_repo'),
+        f_dirty: $('#f_dirty'),
+        f_detached: $('#f_detached'),
+        f_missing: $('#f_missing'),
+        f_q: $('#f_q'),
+        f_poll: $('#f_poll'),
+
+        fieldGroup: $('#fieldGroup'),
+        fieldRepo: $('#fieldRepo'),
+        fieldMissing: $('#fieldMissing'),
+        fieldDetached: $('#fieldDetached'),
+
+        btnRefresh: $('#btnRefresh'),
+        btnClear: $('#btnClear'),
+
+        primaryTitle: $('#primaryTitle'),
+        primaryHint: $('#primaryHint'),
+        graphTitle: $('#graphTitle'),
+        graphHint: $('#graphHint'),
+        brandSub: $('#brandSub')
+      };
+
+      const LS_THEME_KEY = 'loom.workspace.theme';
+      const LS_VIEW_KEY = 'loom.workspace.view';
+      const LS_GRAPH_KEY = 'loom.workspace.graph';
+      const LS_FILTERS_KEY = 'loom.workspace.filters.v1';
+      const SS_SELECTED_KEY = 'loom.workspace.selected.v1';
+
+      const state = {
+        meta: null,
+        mode: 'auto',
+        resolvedMode: 'auto',
+        view: 'list',
+        graphMode: 'services',
+        pollSeconds: 10,
+        pollTimer: null,
+        pollInFlight: false,
+        etagWorktrees: '',
+        etagGraph: '',
+        filters: { group: '', repo: '', q: '', dirty: '0', detached: '0', missing: '0' },
+        items: [],
+        graph: { nodes: [], edges: [] },
+        selected: null
+      };
+
+      function setPoll(mode, text){
+        els.pollText.textContent = text;
+        els.pollDot.classList.toggle('live', mode === 'live');
+      }
+
+      function escapeHtml(s){
+        return String(s ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+      }
+
+      function applyTheme(t, persist){
+        const theme = (t === 'dark') ? 'dark' : 'light';
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        els.themeLight.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+        els.themeDark.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#282c34' : '#fafafa');
+        if (persist !== false) {
+          try{ localStorage.setItem(LS_THEME_KEY, theme); }catch{}
+        }
+
+        if (graphEngine){
+          graphEngine._needsRender = true;
+          graphEngine.render(true);
+        }
+      }
+
+      function loadPersisted(){
+        try{
+          const v = localStorage.getItem(LS_VIEW_KEY);
+          if (v === 'list' || v === 'graph') state.view = v;
+        }catch{}
+        try{
+          const v = localStorage.getItem(LS_GRAPH_KEY);
+          if (v === 'services' || v === 'worktrees') state.graphMode = v;
+        }catch{}
+        try{
+          const f = JSON.parse(localStorage.getItem(LS_FILTERS_KEY) || 'null');
+          if (f && typeof f === 'object'){
+            state.mode = String(f.mode || state.mode);
+            state.filters.group = String(f.group || '');
+            state.filters.repo = String(f.repo || '');
+            state.filters.q = String(f.q || '');
+            state.filters.dirty = String(f.dirty || '0');
+            state.filters.detached = String(f.detached || '0');
+            state.filters.missing = String(f.missing || '0');
+            state.pollSeconds = Number(f.pollSeconds) || state.pollSeconds;
+          }
+        }catch{}
+        try{
+          const sel = sessionStorage.getItem(SS_SELECTED_KEY);
+          if (sel) state.selected = JSON.parse(sel);
+        }catch{}
+
+        els.f_mode.value = state.mode;
+        els.f_q.value = state.filters.q;
+        els.f_dirty.value = state.filters.dirty;
+        els.f_detached.value = state.filters.detached;
+        els.f_missing.value = state.filters.missing;
+        els.f_poll.value = String(state.pollSeconds);
+      }
+
+      let persistTimer = 0;
+      function persistSoon(){
+        clearTimeout(persistTimer);
+        persistTimer = setTimeout(() => {
+          try{
+            localStorage.setItem(LS_VIEW_KEY, state.view);
+            localStorage.setItem(LS_GRAPH_KEY, state.graphMode);
+            localStorage.setItem(LS_FILTERS_KEY, JSON.stringify({
+              mode: state.mode,
+              group: state.filters.group,
+              repo: state.filters.repo,
+              q: state.filters.q,
+              dirty: state.filters.dirty,
+              detached: state.filters.detached,
+              missing: state.filters.missing,
+              pollSeconds: state.pollSeconds
+            }));
+          }catch{}
+          try{ sessionStorage.setItem(SS_SELECTED_KEY, JSON.stringify(state.selected || null)); }catch{}
+        }, 120);
+      }
+
+      function setView(v){
+        state.view = (v === 'graph') ? 'graph' : 'list';
+        els.viewList.setAttribute('aria-pressed', state.view === 'list' ? 'true' : 'false');
+        els.viewGraph.setAttribute('aria-pressed', state.view === 'graph' ? 'true' : 'false');
+        els.listPane.style.display = (state.view === 'list') ? 'flex' : 'none';
+        els.graphPane.style.display = (state.view === 'graph') ? 'flex' : 'none';
+        persistSoon();
+        if (state.view === 'graph') renderGraph();
+      }
+
+      function setGraphMode(v){
+        state.graphMode = (v === 'worktrees') ? 'worktrees' : 'services';
+        els.graphServices.setAttribute('aria-pressed', state.graphMode === 'services' ? 'true' : 'false');
+        els.graphWorktrees.setAttribute('aria-pressed', state.graphMode === 'worktrees' ? 'true' : 'false');
+        els.graphTitle.textContent = (state.graphMode === 'services') ? 'Services Graph' : 'Worktrees Graph';
+        els.graphHint.textContent = (state.graphMode === 'services')
+          ? 'Dependencies from services/index.json'
+          : 'Same graph, tinted by selected group worktree status';
+        persistSoon();
+        if (state.view === 'graph') renderGraph();
+      }
+
+      function updateModeChrome(){
+        const m = state.resolvedMode;
+        const isPoly = m === 'poly';
+        els.fieldGroup.style.display = isPoly ? '' : 'none';
+        els.fieldRepo.style.display = isPoly ? '' : 'none';
+        els.fieldMissing.style.display = isPoly ? '' : 'none';
+        els.fieldDetached.style.display = (!isPoly) ? '' : 'none';
+        els.graphWorktrees.disabled = !isPoly;
+        if (!isPoly && state.graphMode === 'worktrees') setGraphMode('services');
+        els.brandSub.textContent = isPoly ? 'Poly workspace view' : 'Repo worktree view';
+      }
+
+      async function fetchJson(url, opts){
+        const res = await fetch(url, { method: 'GET', headers: { 'Accept': 'application/json' }, credentials: 'same-origin', ...opts });
+        const txt = await res.text();
+        let data = null;
+        try{ data = txt ? JSON.parse(txt) : null; }catch{ data = null; }
+        if (!res.ok){
+          const msg = (data && data.error) ? data.error : (txt || `HTTP ${res.status}`);
+          throw new Error(msg);
+        }
+        return { data, res };
+      }
+
+      function buildWorktreesUrl(){
+        const p = new URLSearchParams();
+        const mode = (state.mode === 'auto') ? '' : state.mode;
+        if (mode) p.set('mode', mode);
+        if (state.filters.group) p.set('group', state.filters.group);
+        if (state.filters.repo) p.set('repo', state.filters.repo);
+        if (state.filters.q) p.set('q', state.filters.q);
+        if (state.filters.dirty === '1') p.set('dirty', '1');
+        if (state.filters.detached === '1') p.set('detached', '1');
+        if (state.filters.missing === '1') p.set('missing', '1');
+        return `/api/worktrees?${p.toString()}`;
+      }
+
+      function buildGraphUrl(){
+        const p = new URLSearchParams();
+        const mode = (state.mode === 'auto') ? '' : state.mode;
+        if (mode) p.set('mode', mode);
+        return `/api/services/graph?${p.toString()}`;
+      }
+
+      async function refreshMeta(){
+        const p = new URLSearchParams();
+        if (state.mode !== 'auto') p.set('mode', state.mode);
+        const { data } = await fetchJson(`/api/meta?${p.toString()}`);
+        if (!data || data.ok !== true) throw new Error('Invalid meta');
+        state.meta = data;
+        state.resolvedMode = String(data.mode || 'auto');
+        updateModeChrome();
+
+        // Populate selects
+        if (state.resolvedMode === 'poly'){
+          const groups = Array.isArray(data.groups) ? data.groups : [];
+          const repos = Array.isArray(data.repos) ? data.repos : [];
+
+          els.f_group.innerHTML = '<option value="">All Groups</option>';
+          groups.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = String(g);
+            opt.textContent = String(g);
+            els.f_group.appendChild(opt);
+          });
+          els.f_repo.innerHTML = '<option value="">All Repos</option>';
+          repos.forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = String(r);
+            opt.textContent = String(r);
+            els.f_repo.appendChild(opt);
+          });
+          if (state.filters.group) els.f_group.value = state.filters.group;
+          if (state.filters.repo) els.f_repo.value = state.filters.repo;
+        }
+      }
+
+      function chip(label, cls){
+        const el = document.createElement('span');
+        el.className = `chip ${cls || ''}`.trim();
+        el.textContent = label;
+        return el;
+      }
+
+      function itemTitle(it){
+        if (it.kind === 'service') return String(it.name || '');
+        if (it.mode === 'poly'){
+          const g = String(it.group || '');
+          const r = String(it.repo || '');
+          return g ? `${r}  (${g})` : r;
+        }
+        const br = String(it.branch || '');
+        if (br) return br;
+        return String(it.path || '');
+      }
+
+      function renderList(){
+        els.listPane.innerHTML = '';
+        if (!state.items.length){
+          const empty = document.createElement('div');
+          empty.className = 'empty';
+          empty.textContent = 'No items match the current filters.';
+          els.listPane.appendChild(empty);
+          return;
+        }
+
+        state.items.forEach((it, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'row';
+          btn.setAttribute('role', 'option');
+          const selected = state.selected && state.selected.kind === 'worktree' && state.selected.key === it._key;
+          btn.setAttribute('aria-selected', selected ? 'true' : 'false');
+          btn.tabIndex = -1;
+
+          const title = document.createElement('div');
+          title.className = 'rowTitle';
+          title.textContent = itemTitle(it);
+
+          const meta = document.createElement('div');
+          meta.className = 'rowMeta';
+
+          if (it.mode === 'poly'){
+            meta.appendChild(chip(String(it.repo || ''), 'id'));
+            if (it.group) meta.appendChild(chip(String(it.group), ''));
+            if (it.missing) meta.appendChild(chip('missing', 'missing'));
+            else if (it.dirty) meta.appendChild(chip('DIRTY', 'dirty'));
+            else meta.appendChild(chip('clean', 'ok'));
+            if (it.branch) meta.appendChild(chip(String(it.branch), ''));
+            if (it.commit) meta.appendChild(chip(String(it.commit).slice(0,7), ''));
+          } else {
+            meta.appendChild(chip(String(it.id || ''), 'id'));
+            if (it.detached) meta.appendChild(chip('detached', 'missing'));
+            if (it.locked) meta.appendChild(chip('locked', ''));
+            if (it.dirty) meta.appendChild(chip('DIRTY', 'dirty'));
+            else meta.appendChild(chip('clean', 'ok'));
+            if (it.branch) meta.appendChild(chip(String(it.branch), ''));
+            if (it.head_short) meta.appendChild(chip(String(it.head_short), ''));
+          }
+
+          const pathChip = document.createElement('span');
+          pathChip.className = 'chip';
+          const p = String(it.path || '');
+          pathChip.textContent = p ? (p.length > 46 ? ('...' + p.slice(-43)) : p) : '-';
+          pathChip.title = p;
+          meta.appendChild(pathChip);
+
+          btn.appendChild(title);
+          btn.appendChild(meta);
+          btn.addEventListener('click', () => selectWorktree(it));
+          els.listPane.appendChild(btn);
+        });
+      }
+
+      function openDetailsOverlayIfNeeded(){
+        if (window.matchMedia && window.matchMedia('(max-width: 980px)').matches){
+          document.body.classList.add('has-selection');
+          els.detailsPane.classList.add('is-open');
+          els.scrim.classList.add('is-open');
+        }
+      }
+
+      function closeDetailsOverlay(){
+        els.detailsPane.classList.remove('is-open');
+        els.scrim.classList.remove('is-open');
+        document.body.classList.remove('has-selection');
+      }
+
+      async function selectWorktree(it){
+        state.selected = { kind: 'worktree', key: it._key, mode: it.mode, group: it.group || '', repo: it.repo || '', id: it.id || '', path: it.path || '' };
+        persistSoon();
+        renderSelection();
+        openDetailsOverlayIfNeeded();
+        await loadWorktreeDetail(state.selected);
+      }
+
+      async function selectService(name){
+        state.selected = { kind: 'service', name: String(name || '') };
+        persistSoon();
+        renderSelection();
+        openDetailsOverlayIfNeeded();
+        await loadServiceDetail(state.selected.name);
+      }
+
+      function renderSelection(){
+        // Update list selection
+        const nodes = $$('.row', els.listPane);
+        nodes.forEach(n => {
+          const key = n.dataset && n.dataset.key ? n.dataset.key : null;
+          if (!key) return;
+        });
+        // Simple re-render for now.
+        renderList();
+      }
+
+      function renderDetailsEmpty(msg){
+        els.details.innerHTML = `<div class="detailsBody"><div class="empty">${escapeHtml(msg)}</div></div>`;
+      }
+
+      function renderWorktreeDetail(d){
+        if (!d || d.ok !== true){
+          const err = d && d.error ? String(d.error) : 'Failed to load details.';
+          renderDetailsEmpty(err);
+          return;
+        }
+        const title = escapeHtml(d.repo ? `${d.repo}${d.group ? ` (${d.group})` : ''}` : (d.branch || d.path || 'Worktree'));
+        const subChips = [];
+        if (d.dirty) subChips.push('<span class="chip dirty">DIRTY</span>');
+        else subChips.push('<span class="chip ok">clean</span>');
+        if (d.upstream) subChips.push(`<span class="chip">upstream:${escapeHtml(d.upstream)}</span>`);
+        if (d.head_short) subChips.push(`<span class="chip">${escapeHtml(d.head_short)}</span>`);
+        const last = d.last_commit || {};
+        const lastLine = (last.subject ? escapeHtml(last.subject) : '');
+
+        const counts = d.counts || {};
+        const countsLine = `m:${counts.modified||0} a:${counts.added||0} d:${counts.deleted||0} u:${counts.untracked||0}`;
+
+        let cmpLine = '';
+        if (d.default_branch && d.default_branch_cmp){
+          const ab = d.default_branch_cmp;
+          cmpLine = `default:${escapeHtml(d.default_branch)} ahead:${ab.ahead||0} behind:${ab.behind||0}`;
+        }
+
+        const cmds = Array.isArray(d.commands) ? d.commands : [];
+        const cmdsText = cmds.join('\n');
+
+        els.details.innerHTML = `
+          <div class="detailsHeader">
+            <div>
+              <h2>${title}</h2>
+              <div class="sub">${subChips.join('')}</div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <button class="btn" type="button" id="btnCloseDetails">Close</button>
+            </div>
+          </div>
+          <div class="detailsBody">
+            <div class="kv"><div class="k">Path</div><div class="v">${escapeHtml(d.path || '')}</div></div>
+            <div class="kv"><div class="k">Branch</div><div class="v">${escapeHtml(d.branch || '')}</div></div>
+            <div class="kv"><div class="k">Head</div><div class="v">${escapeHtml(d.head || '')}</div></div>
+            <div class="kv"><div class="k">Status</div><div class="v">${escapeHtml(countsLine)}</div></div>
+            ${cmpLine ? `<div class="kv"><div class="k">Default</div><div class="v">${escapeHtml(cmpLine)}</div></div>` : ''}
+            ${d.ahead_behind ? `<div class="kv"><div class="k">Upstream</div><div class="v">ahead:${d.ahead_behind.ahead||0} behind:${d.ahead_behind.behind||0}</div></div>` : ''}
+            ${lastLine ? `<div class="kv"><div class="k">Last</div><div class="v">${lastLine}</div></div>` : ''}
+
+            <div style="height:12px;"></div>
+            <div style="font-size:11px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.03em; margin-bottom:6px;">Copy/Paste</div>
+            <div class="mono" id="cmdsBox">${escapeHtml(cmdsText)}</div>
+            <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+              <button class="btn" type="button" id="btnCopyCmds">Copy Commands</button>
+            </div>
+          </div>
+        `;
+
+        const close = $('#btnCloseDetails');
+        if (close) close.addEventListener('click', closeDetailsOverlay);
+        const copy = $('#btnCopyCmds');
+        if (copy) copy.addEventListener('click', async () => {
+          try{
+            await navigator.clipboard.writeText(cmdsText);
+            copy.textContent = 'Copied';
+            setTimeout(() => copy.textContent = 'Copy Commands', 900);
+          }catch{
+            copy.textContent = 'Copy failed';
+            setTimeout(() => copy.textContent = 'Copy Commands', 900);
+          }
+        });
+      }
+
+      function renderServiceDetail(d){
+        if (!d || d.ok !== true){
+          const err = d && d.error ? String(d.error) : 'Failed to load service.';
+          renderDetailsEmpty(err);
+          return;
+        }
+        const deps = Array.isArray(d.depends_on) ? d.depends_on : [];
+        const ext = Array.isArray(d.depends_on_external) ? d.depends_on_external : [];
+        const used = Array.isArray(d.used_by) ? d.used_by : [];
+        const excerpt = String(d.summary_excerpt || '').trim();
+        els.details.innerHTML = `
+          <div class="detailsHeader">
+            <div>
+              <h2>${escapeHtml(d.name || '')}</h2>
+              <div class="sub">
+                <span class="chip id">service</span>
+                ${ext.length ? `<span class="chip external">external deps:${ext.length}</span>` : ''}
+              </div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <button class="btn" type="button" id="btnCloseDetails">Close</button>
+            </div>
+          </div>
+          <div class="detailsBody">
+            <div class="kv"><div class="k">Repo Path</div><div class="v">${escapeHtml(d.repo_path || '')}</div></div>
+            <div class="kv"><div class="k">Service MD</div><div class="v">${escapeHtml(d.service_md || '')}</div></div>
+            <div class="kv"><div class="k">Depends On</div><div class="v">${escapeHtml(deps.join(', ') || '-') }</div></div>
+            <div class="kv"><div class="k">External</div><div class="v">${escapeHtml(ext.join(', ') || '-') }</div></div>
+            <div class="kv"><div class="k">Used By</div><div class="v">${escapeHtml(used.join(', ') || '-') }</div></div>
+            ${excerpt ? `<div style="height:12px;"></div><div style="font-size:11px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.03em; margin-bottom:6px;">Summary</div><div class="mono">${escapeHtml(excerpt)}</div>` : ''}
+          </div>
+        `;
+        const close = $('#btnCloseDetails');
+        if (close) close.addEventListener('click', closeDetailsOverlay);
+      }
+
+      async function loadWorktrees(){
+        const url = buildWorktreesUrl();
+        setPoll('live', 'Refreshing');
+        const headers = {};
+        if (state.etagWorktrees) headers['If-None-Match'] = state.etagWorktrees;
+        const res = await fetch(url, { method: 'GET', headers, credentials: 'same-origin' });
+        if (res.status === 304){
+          setPoll('live', 'Live');
+          return;
+        }
+        const etag = res.headers.get('ETag') || '';
+        const data = await res.json();
+        if (!res.ok) throw new Error((data && data.error) ? data.error : `HTTP ${res.status}`);
+        if (!data || data.ok !== true) throw new Error('Invalid worktrees payload');
+        state.etagWorktrees = etag;
+        const items = Array.isArray(data.worktrees) ? data.worktrees : [];
+
+        // Add a stable internal key for selection.
+        state.items = items.map(it => {
+          const x = { ...it };
+          if (x.mode === 'poly') x._key = `poly:${x.group || ''}:${x.repo || ''}`;
+          else x._key = `repo:${x.id || ''}`;
+          return x;
+        });
+        els.count.textContent = String(data.count || state.items.length);
+        renderList();
+        setPoll('live', 'Live');
+      }
+
+      async function loadGraph(){
+        const url = buildGraphUrl();
+        const headers = {};
+        if (state.etagGraph) headers['If-None-Match'] = state.etagGraph;
+        const res = await fetch(url, { method: 'GET', headers, credentials: 'same-origin' });
+        if (res.status === 304) return;
+        const etag = res.headers.get('ETag') || '';
+        const data = await res.json();
+        if (!res.ok) throw new Error((data && data.error) ? data.error : `HTTP ${res.status}`);
+        if (!data || data.ok !== true) throw new Error('Invalid graph payload');
+        state.etagGraph = etag;
+        state.graph = { nodes: Array.isArray(data.nodes) ? data.nodes : [], edges: Array.isArray(data.edges) ? data.edges : [] };
+      }
+
+      async function loadWorktreeDetail(sel){
+        if (!sel) return;
+        renderDetailsEmpty('Loading...');
+        const p = new URLSearchParams();
+        if (state.mode !== 'auto') p.set('mode', state.mode);
+        if (sel.mode === 'poly'){
+          p.set('group', sel.group || '');
+          p.set('repo', sel.repo || '');
+        } else {
+          p.set('id', sel.id || '');
+        }
+        const { data } = await fetchJson(`/api/worktrees/detail?${p.toString()}`);
+        renderWorktreeDetail(data);
+      }
+
+      async function loadServiceDetail(name){
+        renderDetailsEmpty('Loading...');
+        const p = new URLSearchParams();
+        if (state.mode !== 'auto') p.set('mode', state.mode);
+        p.set('name', name);
+        const { data } = await fetchJson(`/api/services/detail?${p.toString()}`);
+        renderServiceDetail(data);
+      }
+
+      function graphStatusForRepo(repoId){
+        if (state.graphMode !== 'worktrees') return 'none';
+        if (state.resolvedMode !== 'poly') return 'none';
+        const group = state.filters.group || '';
+        if (!group) return 'none';
+        const it = state.items.find(x => x.mode === 'poly' && String(x.group) === group && String(x.repo) === repoId);
+        if (!it) return 'missing';
+        if (it.missing) return 'missing';
+        if (it.dirty) return 'dirty';
+        return 'clean';
+      }
+
+      function hash01(s){
+        let h = 2166136261;
+        for (let i = 0; i < s.length; i++){
+          h ^= s.charCodeAt(i);
+          h = Math.imul(h, 16777619);
+        }
+        return ((h >>> 0) % 10000) / 10000;
+      }
+
+      class GraphEngine {
+        constructor(container, { onSelect } = {}){
+          this.container = container;
+          this.onSelect = onSelect || (() => {});
+
+          this.canvasBack = document.createElement('canvas');
+          this.canvasBack.className = 'graphCanvas';
+          this.canvasFront = document.createElement('canvas');
+          this.canvasFront.className = 'graphCanvas';
+
+          this.tooltip = document.createElement('div');
+          this.tooltip.className = 'graphTooltip';
+          this.tooltip.innerHTML = '<div class="tTitle"></div><div class="tMeta"></div>';
+
+          container.appendChild(this.canvasBack);
+          container.appendChild(this.canvasFront);
+          container.appendChild(this.tooltip);
+
+          this.ctxBack = this.canvasBack.getContext('2d');
+          this.ctxFront = this.canvasFront.getContext('2d');
+
+          this.dpr = Math.max(1, window.devicePixelRatio || 1);
+          this.w = 1;
+          this.h = 1;
+
+          this.transform = { x: 0, y: 0, k: 1 };
+
+          this.nodes = new Map();
+          this.edges = [];
+          this.clusters = new Map();
+
+          this.settings = {
+            frozen: false,
+            labels: true,
+            showExternal: true,
+            layeredX: true
+          };
+
+          this.hoverId = '';
+          this.selectedId = '';
+          this.dragging = null;
+          this.panning = null;
+          this._raf = 0;
+          this._needsRender = true;
+          this._lastTick = 0;
+          this._hasData = false;
+          this._etag = '';
+
+          this._bind();
+          this._resize();
+          this._observeResize();
+        }
+
+        _observeResize(){
+          if ('ResizeObserver' in window){
+            const ro = new ResizeObserver(() => {
+              this._resize();
+              this.render(true);
+            });
+            ro.observe(this.container);
+            this._ro = ro;
+          } else {
+            window.addEventListener('resize', () => {
+              this._resize();
+              this.render(true);
+            });
+          }
+        }
+
+        _resize(){
+          const rect = this.container.getBoundingClientRect();
+          this.w = Math.max(1, Math.floor(rect.width));
+          this.h = Math.max(1, Math.floor(rect.height));
+          this.dpr = Math.max(1, window.devicePixelRatio || 1);
+          const bw = Math.max(1, Math.floor(this.w * this.dpr));
+          const bh = Math.max(1, Math.floor(this.h * this.dpr));
+          [this.canvasBack, this.canvasFront].forEach(c => {
+            c.width = bw;
+            c.height = bh;
+            c.style.width = this.w + 'px';
+            c.style.height = this.h + 'px';
+          });
+          this.ctxBack.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+          this.ctxFront.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+        }
+
+        setSettings(next){
+          const beforeFrozen = !!this.settings.frozen;
+          Object.assign(this.settings, next || {});
+          const afterFrozen = !!this.settings.frozen;
+
+          // Pure visual toggles should just re-render.
+          const keys = Object.keys(next || {});
+          const onlyVisual = keys.every(k => ['labels', 'frozen'].includes(k));
+          if (onlyVisual){
+            this._needsRender = true;
+            this.render(true);
+          } else {
+            this.rebuild(true);
+          }
+
+          if (afterFrozen && !beforeFrozen) this._stop();
+          if (!afterFrozen && beforeFrozen) this._start();
+        }
+
+        setSelection(id){
+          this.selectedId = String(id || '');
+          this._needsRender = true;
+          this.render(false);
+        }
+
+        setData(graph, etag){
+          const nextEtag = String(etag || '');
+          if (this._etag && nextEtag && this._etag === nextEtag){
+            // Data identical; only refresh overlay status.
+            for (const n of this.nodes.values()) n.status = graphStatusForRepo(n.id);
+            this._needsRender = true;
+            this.render(true);
+            return;
+          }
+          this._etag = nextEtag || this._etag;
+          const rawNodes = Array.isArray(graph && graph.nodes) ? graph.nodes : [];
+          const rawEdges = Array.isArray(graph && graph.edges) ? graph.edges : [];
+
+          const wanted = new Set();
+          rawNodes.forEach(n => {
+            const id = String(n && n.id || '');
+            if (!id) return;
+            const kind = String(n.kind || 'internal');
+            if (!this.settings.showExternal && kind === 'external') return;
+            wanted.add(id);
+          });
+
+          // Update nodes in-place to keep positions.
+          rawNodes.forEach(n => {
+            const id = String(n && n.id || '');
+            if (!id || !wanted.has(id)) return;
+            const kind = String(n.kind || 'internal');
+            const existing = this.nodes.get(id);
+            const node = existing || {
+              id,
+              kind,
+              x: 0,
+              y: 0,
+              vx: 0,
+              vy: 0,
+              fixed: false,
+              _seeded: false,
+              w: 120,
+              h: 28,
+              label: id,
+              labelShort: id,
+              degreeIn: 0,
+              degreeOut: 0,
+              clusterId: '',
+              layer: 0,
+              status: 'none'
+            };
+            node.kind = kind;
+            node.label = id;
+            this.nodes.set(id, node);
+          });
+
+          // Remove nodes no longer present.
+          Array.from(this.nodes.keys()).forEach(id => {
+            if (!wanted.has(id)) this.nodes.delete(id);
+          });
+
+          // Edges
+          this.edges = rawEdges
+            .map(e => ({
+              from: String(e.from || ''),
+              to: String(e.to || ''),
+              kind: String(e.kind || 'internal')
+            }))
+            .filter(e => e.from && e.to && wanted.has(e.from) && wanted.has(e.to))
+            .filter(e => this.settings.showExternal ? true : (this.nodes.get(e.from).kind !== 'external' && this.nodes.get(e.to).kind !== 'external'));
+
+          // degrees
+          for (const n of this.nodes.values()){
+            n.degreeIn = 0;
+            n.degreeOut = 0;
+          }
+          this.edges.forEach(e => {
+            const a = this.nodes.get(e.from);
+            const b = this.nodes.get(e.to);
+            if (!a || !b) return;
+            a.degreeOut += 1;
+            b.degreeIn += 1;
+          });
+
+          this.rebuild(true);
+        }
+
+        rebuild(reheat){
+          this._measureLabels();
+          this._assignClusters();
+          this._assignLayers();
+          this._placeCentroids();
+          this._seedNewNodes();
+
+          for (const n of this.nodes.values()){
+            n.status = graphStatusForRepo(n.id);
+            if (reheat){
+              n.vx *= 0.2;
+              n.vy *= 0.2;
+            }
+          }
+
+          if (reheat) this.reheat();
+          this._needsRender = true;
+          this.render(true);
+        }
+
+        reheat(){
+          this._lastTick = 0;
+          this._tickOnce(1);
+          this._start();
+        }
+
+        fit(){
+          const pts = Array.from(this.nodes.values());
+          if (!pts.length){
+            this.transform = { x: this.w/2, y: this.h/2, k: 1 };
+            this._needsRender = true;
+            this.render(true);
+            return;
+          }
+          let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+          pts.forEach(n => {
+            minX = Math.min(minX, n.x - n.w/2);
+            maxX = Math.max(maxX, n.x + n.w/2);
+            minY = Math.min(minY, n.y - n.h/2);
+            maxY = Math.max(maxY, n.y + n.h/2);
+          });
+          const bw = Math.max(10, maxX - minX);
+          const bh = Math.max(10, maxY - minY);
+          const pad = 44;
+          const k = Math.max(0.28, Math.min(2.2, Math.min((this.w - pad*2) / bw, (this.h - pad*2) / bh)));
+          const cx = (minX + maxX) / 2;
+          const cy = (minY + maxY) / 2;
+          this.transform.k = k;
+          this.transform.x = this.w/2 - cx * k;
+          this.transform.y = this.h/2 - cy * k;
+          this._needsRender = true;
+          this.render(true);
+        }
+
+        reset(){
+          for (const n of this.nodes.values()){
+            n.fixed = false;
+            n._seeded = false;
+            n.vx = 0;
+            n.vy = 0;
+          }
+          this.rebuild(true);
+        }
+
+        _measureLabels(){
+          const ctx = this.ctxFront;
+          const mono = getComputedStyle(document.documentElement).getPropertyValue('--font-mono') || 'monospace';
+          ctx.save();
+          ctx.font = `12px ${mono}`;
+          for (const n of this.nodes.values()){
+            const full = n.label;
+            let label = full;
+            let w = ctx.measureText(label).width;
+            const maxW = 200;
+            if (w > maxW){
+              const keep = Math.max(8, Math.floor(maxW / 7));
+              label = full.slice(0, keep) + '…';
+              w = ctx.measureText(label).width;
+            }
+            n.labelShort = label;
+            n.w = Math.max(86, Math.min(240, Math.floor(w + 34)));
+            n.h = 32;
+          }
+          ctx.restore();
+        }
+
+        _assignClusters(){
+          // Internal connected components using internal edges.
+          const internalIds = Array.from(this.nodes.values())
+            .filter(n => n.kind !== 'external')
+            .map(n => n.id);
+
+          const adj = new Map();
+          internalIds.forEach(id => adj.set(id, []));
+          this.edges.forEach(e => {
+            if (e.kind !== 'internal') return;
+            const a = this.nodes.get(e.from);
+            const b = this.nodes.get(e.to);
+            if (!a || !b) return;
+            if (a.kind === 'external' || b.kind === 'external') return;
+            if (!adj.has(a.id) || !adj.has(b.id)) return;
+            adj.get(a.id).push(b.id);
+            adj.get(b.id).push(a.id);
+          });
+
+          const seen = new Set();
+          const clusters = [];
+          for (const id of internalIds){
+            if (seen.has(id)) continue;
+            const stack = [id];
+            const comp = [];
+            seen.add(id);
+            while (stack.length){
+              const cur = stack.pop();
+              comp.push(cur);
+              const nb = adj.get(cur) || [];
+              for (const nx of nb){
+                if (seen.has(nx)) continue;
+                seen.add(nx);
+                stack.push(nx);
+              }
+            }
+            clusters.push(comp);
+          }
+          // If no internal, everything goes into one cluster.
+          if (!clusters.length){
+            const all = Array.from(this.nodes.keys());
+            if (all.length) clusters.push(all);
+          }
+
+          // Assign cluster IDs
+          this.clusters.clear();
+          clusters.sort((a, b) => b.length - a.length);
+          clusters.forEach((ids, idx) => {
+            const cid = `c${idx}`;
+            this.clusters.set(cid, { id: cid, nodes: ids.slice(), cx: 0, cy: 0, hue: (idx * 47) % 360 });
+            ids.forEach(nid => {
+              const n = this.nodes.get(nid);
+              if (n) n.clusterId = cid;
+            });
+          });
+
+          // External nodes: attach to their strongest internal neighbor's cluster, else external halo cluster.
+          let extClusterId = '';
+          const ensureExtCluster = () => {
+            if (extClusterId) return extClusterId;
+            extClusterId = `c_ext`;
+            this.clusters.set(extClusterId, { id: extClusterId, nodes: [], cx: 0, cy: 0, hue: 195 });
+            return extClusterId;
+          };
+
+          for (const n of this.nodes.values()){
+            if (n.kind !== 'external') continue;
+            let best = '';
+            for (const e of this.edges){
+              if (e.from !== n.id && e.to !== n.id) continue;
+              const otherId = (e.from === n.id) ? e.to : e.from;
+              const other = this.nodes.get(otherId);
+              if (!other || other.kind === 'external') continue;
+              best = other.clusterId;
+              break;
+            }
+            const cid = best || ensureExtCluster();
+            n.clusterId = cid;
+            const c = this.clusters.get(cid);
+            if (c && !c.nodes.includes(n.id)) c.nodes.push(n.id);
+          }
+        }
+
+        _assignLayers(){
+          // Longest-path topo-ish layers for internal nodes; cycles fall back to 0.
+          const ids = Array.from(this.nodes.values())
+            .filter(n => n.kind !== 'external')
+            .map(n => n.id);
+          const indeg = new Map();
+          const out = new Map();
+          ids.forEach(id => { indeg.set(id, 0); out.set(id, []); });
+          this.edges.forEach(e => {
+            const a = this.nodes.get(e.from);
+            const b = this.nodes.get(e.to);
+            if (!a || !b) return;
+            if (a.kind === 'external' || b.kind === 'external') return;
+            if (!out.has(a.id) || !indeg.has(b.id)) return;
+            out.get(a.id).push(b.id);
+            indeg.set(b.id, (indeg.get(b.id) || 0) + 1);
+          });
+          const q = [];
+          ids.forEach(id => { if ((indeg.get(id) || 0) === 0) q.push(id); });
+          q.sort();
+          const order = [];
+          while (q.length){
+            const id = q.shift();
+            order.push(id);
+            (out.get(id) || []).forEach(nx => {
+              indeg.set(nx, (indeg.get(nx) || 0) - 1);
+              if ((indeg.get(nx) || 0) === 0) q.push(nx);
+            });
+            q.sort();
+          }
+
+          const layer = new Map();
+          if (order.length !== ids.length){
+            ids.forEach(id => layer.set(id, 0));
+          } else {
+            order.forEach(id => {
+              let best = 0;
+              this.edges.forEach(e => {
+                if (e.to !== id) return;
+                const src = this.nodes.get(e.from);
+                const dst = this.nodes.get(e.to);
+                if (!src || !dst) return;
+                if (src.kind === 'external' || dst.kind === 'external') return;
+                const pl = layer.get(e.from);
+                if (typeof pl === 'number') best = Math.max(best, pl + 1);
+              });
+              layer.set(id, best);
+            });
+          }
+          const maxLayer = Math.max(0, ...Array.from(layer.values()));
+          for (const n of this.nodes.values()){
+            if (n.kind === 'external'){
+              // external: hang off max layer + 1 (or 0 if none)
+              n.layer = maxLayer + 1;
+            } else {
+              n.layer = layer.get(n.id) || 0;
+            }
+          }
+        }
+
+        _placeCentroids(){
+          const clusters = Array.from(this.clusters.values());
+          if (!clusters.length) return;
+
+          const count = clusters.length;
+          const cols = Math.ceil(Math.sqrt(count));
+          const rows = Math.ceil(count / cols);
+          const spacingX = 520;
+          const spacingY = 380;
+          const startX = -((cols - 1) * spacingX) / 2;
+          const startY = -((rows - 1) * spacingY) / 2;
+
+          clusters.forEach((c, idx) => {
+            const col = idx % cols;
+            const row = Math.floor(idx / cols);
+            const wobble = (hash01(c.id) - 0.5) * 80;
+            c.cx = startX + col * spacingX + wobble;
+            c.cy = startY + row * spacingY + (hash01(c.id + 'y') - 0.5) * 70;
+          });
+        }
+
+        _seedNewNodes(){
+          for (const n of this.nodes.values()){
+            if (n._seeded) continue;
+            const c = this.clusters.get(n.clusterId);
+            const baseX = c ? c.cx : 0;
+            const baseY = c ? c.cy : 0;
+            const a = hash01(n.id) * Math.PI * 2;
+            const r = 60 + hash01(n.id + 'r') * 140;
+            n.x = baseX + Math.cos(a) * r;
+            n.y = baseY + Math.sin(a) * r;
+            n._seeded = true;
+          }
+        }
+
+        _worldToScreen(x, y){
+          return { x: x * this.transform.k + this.transform.x, y: y * this.transform.k + this.transform.y };
+        }
+
+        _screenToWorld(x, y){
+          return { x: (x - this.transform.x) / this.transform.k, y: (y - this.transform.y) / this.transform.k };
+        }
+
+        _hitTest(sx, sy){
+          const p = this._screenToWorld(sx, sy);
+          const ids = Array.from(this.nodes.keys());
+          for (let i = ids.length - 1; i >= 0; i--){
+            const n = this.nodes.get(ids[i]);
+            if (!n) continue;
+            const left = n.x - n.w/2;
+            const top = n.y - n.h/2;
+            if (p.x >= left && p.x <= left + n.w && p.y >= top && p.y <= top + n.h) return n;
+          }
+          return null;
+        }
+
+        _bind(){
+          const c = this.canvasFront;
+          c.addEventListener('pointerdown', (e) => {
+            c.setPointerCapture(e.pointerId);
+            const rect = c.getBoundingClientRect();
+            const sx = e.clientX - rect.left;
+            const sy = e.clientY - rect.top;
+            const hit = this._hitTest(sx, sy);
+            if (hit){
+              this.dragging = { id: hit.id, ox: hit.x, oy: hit.y, start: this._screenToWorld(sx, sy) };
+              hit.fixed = true;
+              this._needsRender = true;
+              this.render(false);
+              return;
+            }
+            this.panning = { sx, sy, tx: this.transform.x, ty: this.transform.y };
+          });
+
+          c.addEventListener('pointermove', (e) => {
+            const rect = c.getBoundingClientRect();
+            const sx = e.clientX - rect.left;
+            const sy = e.clientY - rect.top;
+            if (this.dragging){
+              const n = this.nodes.get(this.dragging.id);
+              if (n){
+                const p = this._screenToWorld(sx, sy);
+                n.x = p.x;
+                n.y = p.y;
+                n.vx *= 0.2;
+                n.vy *= 0.2;
+              }
+              this._needsRender = true;
+              this.render(false);
+              return;
+            }
+            if (this.panning){
+              const dx = sx - this.panning.sx;
+              const dy = sy - this.panning.sy;
+              this.transform.x = this.panning.tx + dx;
+              this.transform.y = this.panning.ty + dy;
+              this._needsRender = true;
+              this.render(false);
+              return;
+            }
+            // hover
+            const hit = this._hitTest(sx, sy);
+            const next = hit ? hit.id : '';
+            if (next !== this.hoverId){
+              this.hoverId = next;
+              if (hit) this._showTooltip(hit, sx, sy);
+              else this._hideTooltip();
+              this._needsRender = true;
+              this.render(false);
+            } else if (hit){
+              this._moveTooltip(sx, sy);
+            }
+          });
+
+          c.addEventListener('pointerup', (e) => {
+            try{ c.releasePointerCapture(e.pointerId); }catch{}
+            const rect = c.getBoundingClientRect();
+            const sx = e.clientX - rect.left;
+            const sy = e.clientY - rect.top;
+            const hit = this._hitTest(sx, sy);
+            if (this.dragging){
+              const id = this.dragging.id;
+              this.dragging = null;
+              const n = this.nodes.get(id);
+              if (n){
+                // Keep fixed if user moved it meaningfully.
+                n.fixed = true;
+              }
+              this._needsRender = true;
+              this.render(false);
+              return;
+            }
+            if (this.panning){
+              this.panning = null;
+              return;
+            }
+            if (hit){
+              this.selectedId = hit.id;
+              this.onSelect(hit.id);
+              this._needsRender = true;
+              this.render(false);
+            }
+          });
+
+          c.addEventListener('wheel', (e) => {
+            e.preventDefault();
+            const rect = c.getBoundingClientRect();
+            const sx = e.clientX - rect.left;
+            const sy = e.clientY - rect.top;
+            const before = this._screenToWorld(sx, sy);
+            const delta = -Math.sign(e.deltaY);
+            const factor = delta > 0 ? 1.12 : 0.90;
+            const nextK = Math.max(0.18, Math.min(3.4, this.transform.k * factor));
+            this.transform.k = nextK;
+            this.transform.x = sx - before.x * nextK;
+            this.transform.y = sy - before.y * nextK;
+            this._needsRender = true;
+            this.render(false);
+          }, { passive: false });
+        }
+
+        _showTooltip(n, sx, sy){
+          const t = this.tooltip;
+          const title = t.querySelector('.tTitle');
+          const meta = t.querySelector('.tMeta');
+          if (title) title.textContent = n.label;
+          if (meta){
+            const status = n.status || 'none';
+            meta.innerHTML = [
+              `<div class="k">kind</div><div class="v">${escapeHtml(n.kind)}</div>`,
+              `<div class="k">in</div><div class="v">${escapeHtml(String(n.degreeIn||0))}</div>`,
+              `<div class="k">out</div><div class="v">${escapeHtml(String(n.degreeOut||0))}</div>`,
+              (state.graphMode === 'worktrees' ? `<div class="k">status</div><div class="v">${escapeHtml(status)}</div>` : '')
+            ].filter(Boolean).join('');
+          }
+          this._moveTooltip(sx, sy);
+          t.classList.add('is-open');
+        }
+
+        _moveTooltip(sx, sy){
+          const pad = 12;
+          const t = this.tooltip;
+          let x = sx + 16;
+          let y = sy + 12;
+          const r = t.getBoundingClientRect();
+          if (x + r.width + pad > this.w) x = sx - r.width - 16;
+          if (y + r.height + pad > this.h) y = sy - r.height - 16;
+          x = Math.max(pad, Math.min(this.w - r.width - pad, x));
+          y = Math.max(pad, Math.min(this.h - r.height - pad, y));
+          t.style.left = x + 'px';
+          t.style.top = y + 'px';
+        }
+
+        _hideTooltip(){
+          this.tooltip.classList.remove('is-open');
+        }
+
+        _start(){
+          if (this._raf) return;
+          const step = (ts) => {
+            this._raf = requestAnimationFrame(step);
+            if (this.settings.frozen) return;
+            const dt = this._lastTick ? Math.min(32, ts - this._lastTick) : 16;
+            this._lastTick = ts;
+            const k = dt / 16;
+            this._tickOnce(k);
+            this.render(false);
+          };
+          this._raf = requestAnimationFrame(step);
+        }
+
+        _stop(){
+          if (!this._raf) return;
+          cancelAnimationFrame(this._raf);
+          this._raf = 0;
+        }
+
+        _tickOnce(k){
+          const nodes = Array.from(this.nodes.values());
+          const edges = this.edges;
+          if (!nodes.length) return;
+
+          // Build a spatial hash for approximate forces.
+          const cell = 180;
+          const grid = new Map();
+          const keyFor = (x, y) => `${Math.floor(x/cell)}:${Math.floor(y/cell)}`;
+          nodes.forEach(n => {
+            const key = keyFor(n.x, n.y);
+            if (!grid.has(key)) grid.set(key, []);
+            grid.get(key).push(n);
+          });
+          const neighbors = (n) => {
+            const cx = Math.floor(n.x/cell);
+            const cy = Math.floor(n.y/cell);
+            const out = [];
+            for (let dx = -1; dx <= 1; dx++){
+              for (let dy = -1; dy <= 1; dy++){
+                const key = `${cx+dx}:${cy+dy}`;
+                const arr = grid.get(key);
+                if (arr) out.push(...arr);
+              }
+            }
+            return out;
+          };
+
+          // Link force
+          const linkStrength = 0.035;
+          edges.forEach(e => {
+            const a = this.nodes.get(e.from);
+            const b = this.nodes.get(e.to);
+            if (!a || !b) return;
+            const dx = b.x - a.x;
+            const dy = b.y - a.y;
+            const dist = Math.max(0.001, Math.hypot(dx, dy));
+            const target = (e.kind === 'external') ? 220 : 170;
+            const s = linkStrength * (e.kind === 'external' ? 0.7 : 1.0);
+            const f = ((dist - target) / dist) * s * k;
+            if (!a.fixed){ a.vx += dx * f; a.vy += dy * f; }
+            if (!b.fixed){ b.vx -= dx * f; b.vy -= dy * f; }
+          });
+
+          // Centroid + layer forces
+          const centroidPull = 0.02;
+          const layerPull = this.settings.layeredX ? 0.015 : 0;
+          const layerGap = 320;
+          nodes.forEach(n => {
+            const c = this.clusters.get(n.clusterId);
+            const cx = c ? c.cx : 0;
+            const cy = c ? c.cy : 0;
+            const tx = cx;
+            const ty = cy;
+            if (!n.fixed){
+              n.vx += (tx - n.x) * centroidPull * k;
+              n.vy += (ty - n.y) * centroidPull * k;
+              const lx = (n.layer || 0) * layerGap;
+              n.vx += (lx - n.x) * layerPull * k;
+            }
+          });
+
+          // Repulsion + collision (local neighborhood)
+          const repulse = 420;
+          const collide = 0.28;
+          nodes.forEach(n => {
+            const near = neighbors(n);
+            for (const o of near){
+              if (o === n) continue;
+              const dx = n.x - o.x;
+              const dy = n.y - o.y;
+              const d2 = dx*dx + dy*dy;
+              if (d2 < 1e-6) continue;
+              const dist = Math.sqrt(d2);
+
+              // repulsion
+              if (dist < 360){
+                const f = (repulse / d2) * 0.6 * k;
+                if (!n.fixed){ n.vx += dx * f; n.vy += dy * f; }
+              }
+
+              // collision based on rect radii
+              const min = (Math.max(n.w, n.h) + Math.max(o.w, o.h)) * 0.34;
+              if (dist < min){
+                const push = ((min - dist) / dist) * collide * k;
+                if (!n.fixed){ n.vx += dx * push; n.vy += dy * push; }
+              }
+            }
+          });
+
+          // Integrate
+          const damp = 0.86;
+          nodes.forEach(n => {
+            if (n.fixed){
+              n.vx = 0;
+              n.vy = 0;
+              return;
+            }
+            n.vx *= damp;
+            n.vy *= damp;
+            n.x += n.vx * k;
+            n.y += n.vy * k;
+          });
+        }
+
+        render(force){
+          if (!force && !this._needsRender) return;
+          this._needsRender = false;
+          const back = this.ctxBack;
+          const front = this.ctxFront;
+
+          const css = getComputedStyle(document.documentElement);
+          const cssVar = (name) => (css.getPropertyValue(name) || '').trim();
+          const parseRgb = (s) => {
+            const m = String(s || '').trim().match(/^rgba?\(([^)]+)\)$/i);
+            if (!m) return null;
+            const parts = m[1].split(',').map(x => x.trim());
+            if (parts.length < 3) return null;
+            const r = Number(parts[0]);
+            const g = Number(parts[1]);
+            const b = Number(parts[2]);
+            if (!Number.isFinite(r) || !Number.isFinite(g) || !Number.isFinite(b)) return null;
+            return [r, g, b];
+          };
+          const parseHex = (s) => {
+            const t = String(s || '').trim();
+            if (!t.startsWith('#')) return null;
+            const hex = t.slice(1);
+            if (hex.length === 3){
+              const r = parseInt(hex[0] + hex[0], 16);
+              const g = parseInt(hex[1] + hex[1], 16);
+              const b = parseInt(hex[2] + hex[2], 16);
+              return [r, g, b];
+            }
+            if (hex.length === 6){
+              const r = parseInt(hex.slice(0,2), 16);
+              const g = parseInt(hex.slice(2,4), 16);
+              const b = parseInt(hex.slice(4,6), 16);
+              return [r, g, b];
+            }
+            return null;
+          };
+          const toRgb = (s) => {
+            return parseHex(s) || parseRgb(s) || [0, 0, 0];
+          };
+          const mix = (a, b, amountA) => {
+            const t = Math.max(0, Math.min(1, Number(amountA) || 0));
+            const r = a[0] * t + b[0] * (1 - t);
+            const g = a[1] * t + b[1] * (1 - t);
+            const bb = a[2] * t + b[2] * (1 - t);
+            return [r, g, bb];
+          };
+          const rgb = (c) => `rgb(${Math.round(c[0])}, ${Math.round(c[1])}, ${Math.round(c[2])})`;
+          const rgba = (c, a) => `rgba(${Math.round(c[0])}, ${Math.round(c[1])}, ${Math.round(c[2])}, ${Math.max(0, Math.min(1, a))})`;
+
+          const col = {
+            bgPanel: toRgb(cssVar('--bg-panel')),
+            primary: toRgb(cssVar('--primary')),
+            info: toRgb(cssVar('--info')),
+            success: toRgb(cssVar('--success')),
+            warning: toRgb(cssVar('--warning')),
+            danger: toRgb(cssVar('--danger')),
+            borderStrong: toRgb(cssVar('--border-strong')),
+            textMain: cssVar('--text-main') || '#111111',
+            textMuted: toRgb(cssVar('--text-muted')),
+          };
+          back.save();
+          front.save();
+          back.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+          front.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+          back.clearRect(0, 0, this.w, this.h);
+          front.clearRect(0, 0, this.w, this.h);
+
+          // World transform
+          const k = this.transform.k;
+          const tx = this.transform.x;
+          const ty = this.transform.y;
+
+          const worldToScreen = (x, y) => ({ x: x*k + tx, y: y*k + ty });
+
+          // Underlay: clusters
+          for (const c of this.clusters.values()){
+            const p = worldToScreen(c.cx, c.cy);
+            const r = 220 * k;
+            const g = back.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+            const hue = c.hue || 210;
+            const a1 = (document.documentElement.dataset.theme === 'dark') ? 0.10 : 0.07;
+            g.addColorStop(0, `hsla(${hue}, 80%, 60%, ${a1})`);
+            g.addColorStop(1, 'rgba(0,0,0,0)');
+            back.fillStyle = g;
+            back.beginPath();
+            back.arc(p.x, p.y, r, 0, Math.PI*2);
+            back.fill();
+          }
+
+          // Edges
+          const hover = this.hoverId;
+          const selected = this.selectedId;
+          const active = hover || selected;
+          const fade = active ? 0.14 : 0.72;
+
+          const isNeighbor = (id) => {
+            if (!active) return true;
+            if (id === active) return true;
+            for (const e of this.edges){
+              if (e.from === active && e.to === id) return true;
+              if (e.to === active && e.from === id) return true;
+            }
+            return false;
+          };
+
+          this.edges.forEach(e => {
+            const a = this.nodes.get(e.from);
+            const b = this.nodes.get(e.to);
+            if (!a || !b) return;
+            const aOk = isNeighbor(a.id);
+            const bOk = isNeighbor(b.id);
+            const strong = active && aOk && bOk;
+            const alpha = strong ? 0.62 : fade;
+            const p1 = worldToScreen(a.x, a.y);
+            const p2 = worldToScreen(b.x, b.y);
+            const dx = p2.x - p1.x;
+            const dy = p2.y - p1.y;
+            const dist = Math.max(1, Math.hypot(dx, dy));
+            const nx = -dy / dist;
+            const ny = dx / dist;
+            const bend = (hash01(e.from + '->' + e.to) - 0.5) * 26;
+            const cx = (p1.x + p2.x)/2 + nx * bend;
+            const cy = (p1.y + p2.y)/2 + ny * bend;
+
+            back.beginPath();
+            back.moveTo(p1.x, p1.y);
+            back.quadraticCurveTo(cx, cy, p2.x, p2.y);
+            back.lineWidth = strong ? 2.0 : 1.2;
+            if (e.kind === 'external'){
+              back.setLineDash([6, 5]);
+              back.strokeStyle = rgba(col.info, alpha);
+            } else {
+              back.setLineDash([]);
+              back.strokeStyle = rgba(col.textMuted, alpha);
+            }
+            back.stroke();
+          });
+          back.setLineDash([]);
+
+          // Nodes
+          const nodes = Array.from(this.nodes.values());
+          nodes.sort((a, b) => (a.kind === 'external') - (b.kind === 'external'));
+
+          const mono = getComputedStyle(document.documentElement).getPropertyValue('--font-mono') || 'monospace';
+          front.font = `12px ${mono}`;
+          front.textBaseline = 'middle';
+          front.textAlign = 'left';
+
+          nodes.forEach(n => {
+            const p = worldToScreen(n.x, n.y);
+            const left = p.x - (n.w/2) * k;
+            const top = p.y - (n.h/2) * k;
+            const w = n.w * k;
+            const h = n.h * k;
+            const ok = isNeighbor(n.id);
+            const alpha = active ? (ok ? 1 : 0.18) : 1;
+
+            // base fill
+            let fill = (n.kind === 'external')
+              ? rgb(mix(col.info, col.bgPanel, 0.18))
+              : rgb(mix(col.primary, col.bgPanel, 0.14));
+
+            if (state.graphMode === 'worktrees' && n.kind !== 'external'){
+              const s = n.status;
+              if (s === 'dirty') fill = rgb(mix(col.danger, col.bgPanel, 0.16));
+              else if (s === 'clean') fill = rgb(mix(col.success, col.bgPanel, 0.14));
+              else if (s === 'missing') fill = rgb(mix(col.warning, col.bgPanel, 0.14));
+            }
+
+            // shadow
+            front.save();
+            front.globalAlpha = alpha;
+            front.fillStyle = fill;
+            front.strokeStyle = (n.id === this.selectedId)
+              ? rgb(mix(col.primary, col.borderStrong, 0.85))
+              : rgba(col.borderStrong, 0.55);
+            front.lineWidth = (n.id === this.selectedId) ? 2.0 : 1.0;
+
+            // rounded rect
+            const r = 10 * k;
+            const rr = (x, y, w, h, r) => {
+              front.beginPath();
+              front.moveTo(x + r, y);
+              front.arcTo(x + w, y, x + w, y + h, r);
+              front.arcTo(x + w, y + h, x, y + h, r);
+              front.arcTo(x, y + h, x, y, r);
+              front.arcTo(x, y, x + w, y, r);
+              front.closePath();
+            };
+            rr(left, top, w, h, r);
+            front.fill();
+            front.stroke();
+
+            // status ring
+            if (state.graphMode === 'worktrees' && n.kind !== 'external'){
+              let ring = 'transparent';
+              if (n.status === 'dirty') ring = rgba(col.danger, 0.80);
+              if (n.status === 'clean') ring = rgba(col.success, 0.78);
+              if (n.status === 'missing') ring = rgba(col.warning, 0.82);
+              if (ring !== 'transparent'){
+                rr(left + 2*k, top + 2*k, w - 4*k, h - 4*k, Math.max(6*k, r - 4*k));
+                front.strokeStyle = ring;
+                front.lineWidth = 2.2;
+                front.stroke();
+              }
+            }
+
+            // label
+            if (this.settings.labels){
+              front.fillStyle = col.textMain;
+              front.globalAlpha = alpha;
+              front.fillText(n.labelShort, left + 12*k, top + h/2);
+              if (n.kind === 'external'){
+                front.fillStyle = rgb(col.info);
+                front.globalAlpha = alpha;
+                front.textAlign = 'right';
+                front.fillText('ext', left + w - 12*k, top + h/2);
+                front.textAlign = 'left';
+              }
+            }
+            front.restore();
+          });
+
+          back.restore();
+          front.restore();
+        }
+      }
+
+      let graphEngine = null;
+
+      function ensureGraphEngine(){
+        if (graphEngine) return graphEngine;
+        els.graphStage.innerHTML = '';
+        graphEngine = new GraphEngine(els.graphStage, {
+          onSelect: (id) => {
+            if (state.graphMode === 'services' || state.resolvedMode !== 'poly'){
+              selectService(id);
+              return;
+            }
+            const group = state.filters.group || '';
+            if (!group){
+              selectService(id);
+              return;
+            }
+            const it = state.items.find(x => x.mode === 'poly' && String(x.group) === group && String(x.repo) === id);
+            if (it) selectWorktree(it);
+            else selectService(id);
+          }
+        });
+        return graphEngine;
+      }
+
+      function renderGraph(){
+        const nodes = state.graph.nodes || [];
+        if (!nodes.length){
+          graphEngine = null;
+          els.graphStage.innerHTML = '';
+          const empty = document.createElement('div');
+          empty.className = 'empty';
+          empty.style.margin = '16px';
+          empty.textContent = (state.resolvedMode === 'poly')
+            ? 'No services graph found. Run `ws services refresh-index` to generate services/index.json.'
+            : 'Services graph is only available in poly mode.';
+          els.graphStage.appendChild(empty);
+          return;
+        }
+
+        const eng = ensureGraphEngine();
+        const first = !eng._hasData;
+        eng._hasData = true;
+        eng.setData(state.graph, state.etagGraph);
+        if (first) eng.fit();
+      }
+
+      function wireEvents(){
+        els.viewList.addEventListener('click', () => setView('list'));
+        els.viewGraph.addEventListener('click', () => setView('graph'));
+        els.graphServices.addEventListener('click', () => setGraphMode('services'));
+        els.graphWorktrees.addEventListener('click', () => setGraphMode('worktrees'));
+
+        // Graph controls
+        if (els.gFit) els.gFit.addEventListener('click', () => {
+          if (state.view !== 'graph') return;
+          const eng = ensureGraphEngine();
+          eng.fit();
+        });
+        if (els.gReset) els.gReset.addEventListener('click', () => {
+          if (state.view !== 'graph') return;
+          const eng = ensureGraphEngine();
+          eng.reset();
+          eng.fit();
+        });
+        if (els.gFreeze) els.gFreeze.addEventListener('click', () => {
+          const eng = ensureGraphEngine();
+          const next = !eng.settings.frozen;
+          eng.setSettings({ frozen: next });
+          els.gFreeze.setAttribute('aria-pressed', next ? 'true' : 'false');
+          els.gFreeze.textContent = next ? 'Frozen' : 'Freeze';
+        });
+        if (els.gLabels) els.gLabels.addEventListener('click', () => {
+          const eng = ensureGraphEngine();
+          const next = !eng.settings.labels;
+          eng.setSettings({ labels: next });
+          els.gLabels.setAttribute('aria-pressed', next ? 'true' : 'false');
+        });
+        if (els.gExternal) els.gExternal.addEventListener('click', () => {
+          const eng = ensureGraphEngine();
+          const next = !eng.settings.showExternal;
+          eng.setSettings({ showExternal: next });
+          els.gExternal.setAttribute('aria-pressed', next ? 'true' : 'false');
+          renderGraph();
+        });
+
+        els.themeLight.addEventListener('click', () => applyTheme('light', true));
+        els.themeDark.addEventListener('click', () => applyTheme('dark', true));
+
+        els.btnRefresh.addEventListener('click', () => refreshAll(true));
+        els.btnClear.addEventListener('click', () => {
+          state.filters = { group: '', repo: '', q: '', dirty: '0', detached: '0', missing: '0' };
+          els.f_q.value = '';
+          els.f_dirty.value = '0';
+          els.f_detached.value = '0';
+          els.f_missing.value = '0';
+          if (els.f_group) els.f_group.value = '';
+          if (els.f_repo) els.f_repo.value = '';
+          persistSoon();
+          refreshAll(true);
+        });
+
+        els.f_mode.addEventListener('change', () => {
+          state.mode = String(els.f_mode.value || 'auto');
+          persistSoon();
+          refreshAll(true);
+        });
+        els.f_group.addEventListener('change', () => {
+          state.filters.group = String(els.f_group.value || '');
+          persistSoon();
+          refreshAll(true);
+        });
+        els.f_repo.addEventListener('change', () => {
+          state.filters.repo = String(els.f_repo.value || '');
+          persistSoon();
+          refreshAll(true);
+        });
+        els.f_dirty.addEventListener('change', () => {
+          state.filters.dirty = String(els.f_dirty.value || '0');
+          persistSoon();
+          refreshAll(true);
+        });
+        els.f_detached.addEventListener('change', () => {
+          state.filters.detached = String(els.f_detached.value || '0');
+          persistSoon();
+          refreshAll(true);
+        });
+        els.f_missing.addEventListener('change', () => {
+          state.filters.missing = String(els.f_missing.value || '0');
+          persistSoon();
+          refreshAll(true);
+        });
+        let qTimer = 0;
+        els.f_q.addEventListener('input', () => {
+          clearTimeout(qTimer);
+          qTimer = setTimeout(() => {
+            state.filters.q = String(els.f_q.value || '');
+            persistSoon();
+            refreshAll(true);
+          }, 160);
+        });
+
+        els.f_poll.addEventListener('change', () => {
+          state.pollSeconds = Number(els.f_poll.value || '0') || 0;
+          persistSoon();
+          startPolling();
+        });
+
+        if (els.scrim) els.scrim.addEventListener('click', closeDetailsOverlay);
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && els.scrim.classList.contains('is-open')) closeDetailsOverlay();
+        });
+
+        // Graph keyboard shortcuts
+        window.addEventListener('keydown', (e) => {
+          if (state.view !== 'graph') return;
+          if (els.scrim.classList.contains('is-open')) return;
+          const key = (e.key || '').toLowerCase();
+          if (key === 'f'){
+            e.preventDefault();
+            const eng = ensureGraphEngine();
+            eng.fit();
+          }
+          if (key === 'r'){
+            e.preventDefault();
+            const eng = ensureGraphEngine();
+            eng.reset();
+          }
+          if (key === ' '){
+            e.preventDefault();
+            const eng = ensureGraphEngine();
+            const next = !eng.settings.frozen;
+            eng.setSettings({ frozen: next });
+            els.gFreeze.setAttribute('aria-pressed', next ? 'true' : 'false');
+            els.gFreeze.textContent = next ? 'Frozen' : 'Freeze';
+          }
+        });
+
+        // Splitter resizing
+        let dragging = false;
+        let startX = 0;
+        let startW = 0;
+        function onMove(ev){
+          if (!dragging) return;
+          const x = ev.touches ? ev.touches[0].clientX : ev.clientX;
+          const dx = startX - x;
+          const w = Math.max(320, Math.min(760, startW + dx));
+          document.documentElement.style.setProperty('--details-w', `${w}px`);
+        }
+        function onUp(){
+          if (!dragging) return;
+          dragging = false;
+          document.body.classList.remove('resizing');
+          window.removeEventListener('mousemove', onMove);
+          window.removeEventListener('mouseup', onUp);
+          window.removeEventListener('touchmove', onMove);
+          window.removeEventListener('touchend', onUp);
+        }
+        els.splitter.addEventListener('mousedown', (e) => {
+          dragging = true;
+          document.body.classList.add('resizing');
+          startX = e.clientX;
+          startW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--details-w')) || 460;
+          window.addEventListener('mousemove', onMove);
+          window.addEventListener('mouseup', onUp);
+        });
+        els.splitter.addEventListener('touchstart', (e) => {
+          dragging = true;
+          document.body.classList.add('resizing');
+          startX = e.touches[0].clientX;
+          startW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--details-w')) || 460;
+          window.addEventListener('touchmove', onMove, { passive: true });
+          window.addEventListener('touchend', onUp);
+        });
+      }
+
+      async function refreshAll(force){
+        if (state.pollInFlight && !force) return;
+        state.pollInFlight = true;
+        try{
+          await refreshMeta();
+          await Promise.all([loadWorktrees(), loadGraph()]);
+          if (state.view === 'graph') renderGraph();
+          // Restore selection
+          if (state.selected && state.selected.kind === 'worktree'){
+            const key = state.selected.key;
+            const it = state.items.find(x => (x._key === key));
+            if (it){
+              state.selected.mode = it.mode;
+              state.selected.group = it.group || '';
+              state.selected.repo = it.repo || '';
+              state.selected.id = it.id || '';
+            }
+          }
+        } catch(e){
+          setPoll('idle', 'Error');
+          renderDetailsEmpty(String(e && e.message ? e.message : e));
+        } finally {
+          state.pollInFlight = false;
+        }
+      }
+
+      function startPolling(){
+        if (state.pollTimer){
+          clearInterval(state.pollTimer);
+          state.pollTimer = null;
+        }
+        const n = Number(state.pollSeconds) || 0;
+        if (n <= 0){
+          setPoll('idle', 'Idle');
+          return;
+        }
+        setPoll('live', 'Live');
+        state.pollTimer = setInterval(() => refreshAll(false), n * 1000);
+      }
+
+      async function boot(){
+        loadPersisted();
+        const theme = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+        applyTheme(theme, false);
+        setView(state.view);
+        setGraphMode(state.graphMode);
+        wireEvents();
+        await refreshAll(true);
+        startPolling();
+        // If we had a saved selection, load it.
+        if (state.selected){
+          if (state.selected.kind === 'service' && state.selected.name) await loadServiceDetail(state.selected.name);
+          if (state.selected.kind === 'worktree') await loadWorktreeDetail(state.selected);
+        }
+      }
+
+      boot();
+    })();
+  </script>
+</body>
+</html>

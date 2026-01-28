@@ -1,0 +1,11 @@
+.team
+.ws-repo/
+.tickets/.locks/
+.tickets/.cache/
+.tickets/.audit/
+.memory/index.sqlite3*
+.memory/memory.sqlite3*
+.memory/personal/
+
+# Local virtualenvs (repo-root mounted into worktrees)
+.venv/

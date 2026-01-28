@@ -1,0 +1,3 @@
+observations.jsonl
+observations.jsonl.*.bak
+autolearn_failures/

@@ -1,0 +1,51 @@
+[project]
+name = "agent-loom"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "z3z1ma", email = "butler.alex2010@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "jmespath>=1.1.0",
+    "pyyaml>=6.0.3",
+    "requests>=2.32.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[project.scripts]
+loom = "agent_loom.cli:main"
+agent-loom = "agent_loom.cli:main"
+agent-loom-ticket = "agent_loom.ticket.cli:main"
+agent-loom-memory = "agent_loom.memory.cli:main"
+agent-loom-workspace = "agent_loom.workspace.cli:main"
+agent-loom-team = "agent_loom.team.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.9.16,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.pyright]
+typeCheckingMode = "basic"
+reportAny = "none"
+reportExplicitAny = "none"
+reportUnusedCallResult = "none"
+reportDeprecated = "none"
+reportUnknownArgumentType = "none"
+reportUnknownMemberType = "none"
+reportUnknownParameterType = "none"
+reportUnknownVariableType = "none"
+reportMissingParameterType = "none"
+reportUnusedVariable = "warning"
+reportUnusedParameter = "warning"
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.37.2",
+    "ruff>=0.14.14",
+]

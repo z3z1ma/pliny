@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": false,
+    "noImplicitAny": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "types": [],
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
+    "resolveJsonModule": true,
+    "noEmit": true
+  },
+  "include": [
+    ".opencode/plugins/compound_engineering.ts",
+    "types/**/*.d.ts"
+  ]
+}
