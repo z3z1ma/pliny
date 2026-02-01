@@ -130,6 +130,8 @@ Immediate sprint loop:
    - Clock out/in: `loom team clock-out CobraKai` (pause) and later `loom team clock-in CobraKai` (resume).
    - If you wake and inbox is empty: run `loom team status CobraKai`, then check in with 1-2 active workers, then wait again.
 11) Inbox: `loom team inbox CobraKai list --to manager --unacked` when nudged.
+   - Per-worker backlog: `loom team inbox CobraKai list --to <WORKER_ID> --unacked`.
+   - If you have pinged a worker multiple times and unacked keeps growing (e.g., 3+): bounce them: `loom team bounce CobraKai <WORKER_ID|TICKET_ID>`.
 
 Memory (optional but useful):
 - Loom memory is an Obsidian-like vault with links and backlinks.
@@ -203,6 +205,8 @@ class TestRenderWorkerPrompt(unittest.TestCase):
                 - Commit after each meaningful milestone (do not sit on uncommitted work).
                 - If blocked: write a structured escalation in Loom ticket (what was tried, what is needed, 2 options)
                   and notify the manager via `loom team send CobraKai manager "mem-127d blocked: ..."`.
+                - Inbox discipline: when nudged, run `loom team inbox CobraKai list --to w5 --unacked` and ack messages you read with `loom team inbox CobraKai ack <MSG_ID>`.
+                - Then respond with a brief status update and/or a Loom ticket update.
                 - If completion candidate: provide verification steps + commands run + risks.
 
                 Idling policy: if you have no concrete next command right now, run `loom team wait 15m` and stop output.
@@ -294,6 +298,8 @@ class TestRenderInvestigatorPrompt(unittest.TestCase):
                 - Commit after each meaningful milestone (do not sit on uncommitted work).
                 - If blocked: write a structured escalation in Loom ticket (what was tried, what is needed, 2 options)
                   and notify the manager via `loom team send CobraKai manager "t-1 blocked: ..."`.
+                - Inbox discipline: when nudged, run `loom team inbox CobraKai list --to w9 --unacked` and ack messages you read with `loom team inbox CobraKai ack <MSG_ID>`.
+                - Then respond with a brief status update and/or a Loom ticket update.
                 - If completion candidate: provide verification steps + commands run + risks.
 
                 Idling policy: if you have no concrete next command right now, run `loom team wait 15m` and stop output.
@@ -391,8 +397,8 @@ class TestEnsureOpenCodeAgents(unittest.TestCase):
         expected = {
             "team-integrator.md": "21a1e7d976e9a9f3a3020224efc58f451b8ad9b7839cbf800ab87468baca153e",
             "team-investigator.md": "d57403b3acfa0d557c7ac331f800a333640289fa34127837566c4b8f42eeab5d",
-            "team-manager.md": "93fe4e61055e557a0943aa1b76b6f3eb19f6d7b3ef240bb7ce047ca6daa8f432",
-            "team-worker.md": "cb398c685e313f9a7d0685cf42722ca0ec679fb4d5aa375b4b12052fc88074de",
+            "team-manager.md": "f47deba920a92ee1e57dcb63e488f1d657ea56ac5468c8ec4ce5a8060213feff",
+            "team-worker.md": "5024c54ce8abac069c553883e310e9d662a491bfcbe863bd1b6c7b66c959a4ee",
         }
 
         with tempfile.TemporaryDirectory() as d:

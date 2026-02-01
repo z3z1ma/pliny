@@ -51,10 +51,10 @@
       "trigger": "When editing agent prompts or prompt assembly code",
       "action": "Update/add focused tests covering the prompt contract and run the prompt test suite.",
       "tags": [],
-      "confidence": 0.9600000000000002,
+      "confidence": 0.9900000000000002,
       "status": "active",
       "created_at": "2026-01-30T19:57:13.467Z",
-      "updated_at": "2026-01-31T20:54:49.488Z",
+      "updated_at": "2026-02-01T19:14:15.264Z",
       "evidence": [
         {
           "ts": "2026-01-30T19:57:13.467Z",
@@ -94,6 +94,11 @@
           "ts": "2026-01-31T20:54:49.488Z",
           "sessionID": "ses_3ea40a8cbffeNxBvJascNhrYja",
           "note": "Recent work modified src/agent_loom/team/prompts.py alongside substantial updates to tests/test_team_prompts.py, reinforcing prompt changes as test-locked contracts."
+        },
+        {
+          "ts": "2026-02-01T19:14:15.264Z",
+          "sessionID": "ses_3e56af781ffeyuFUyUyQzJFmJB",
+          "note": "Prompt-facing behavior change (team prompts) was validated via targeted prompt tests, matching the intended gate of updating tests/test_team_prompts.py alongside prompt changes."
         }
       ]
     },
@@ -602,10 +607,10 @@
       "trigger": "When adding or restructuring sections in src/agent_loom/team/prompts.py (or prompt assembly in src/agent_loom/team/core.py).",
       "action": "Make prompt rendering deterministic (explicit ordering, stable headings) and add/expand section-level contract tests in tests/test_team_prompts.py that assert required sections/ordering without relying on nondeterministic data.",
       "tags": [],
-      "confidence": 0.8200000000000001,
+      "confidence": 0.8600000000000001,
       "status": "active",
       "created_at": "2026-01-31T20:42:03.012Z",
-      "updated_at": "2026-01-31T20:54:49.488Z",
+      "updated_at": "2026-02-01T19:14:15.264Z",
       "evidence": [
         {
           "ts": "2026-01-31T20:42:03.012Z",
@@ -615,6 +620,11 @@
           "ts": "2026-01-31T20:54:49.488Z",
           "sessionID": "ses_3ea40a8cbffeNxBvJascNhrYja",
           "note": "Large prompt expansion in src/agent_loom/team/prompts.py was paired with expanded tests/test_team_prompts.py, validating section-level invariants (ordering/headings) as the right abstraction for stability."
+        },
+        {
+          "ts": "2026-02-01T19:14:15.264Z",
+          "sessionID": "ses_3e56af781ffeyuFUyUyQzJFmJB",
+          "note": "Recent change touched src/agent_loom/team/prompts.py and was paired with updates to tests/test_team_prompts.py, reinforcing that prompt assembly needs section-level, deterministic contract coverage."
         }
       ]
     },

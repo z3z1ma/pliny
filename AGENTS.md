@@ -121,24 +121,24 @@ This block is maintained by the compound plugin.
 - **cli-output-is-a-contract** (100%)
   - Trigger: When changing any CLI/user-facing output formatting (especially ticket/team UX)
   - Action: Make output deterministic (explicit ordering, stable formatting) and add a focused pytest contract test for the rendered text.
+- **prompt-changes-require-prompt-tests** (99%)
+  - Trigger: When editing agent prompts or prompt assembly code
+  - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
 - **plan-mode-readonly-no-edits** (97%)
   - Trigger: System reminder says Plan Mode ACTIVE / READ-ONLY phase
   - Action: Do not edit/create/delete files or run write-capable commands; only inspect/read/search and produce an execution plan or required JSON payload.
-- **prompt-changes-require-prompt-tests** (96%)
-  - Trigger: When editing agent prompts or prompt assembly code
-  - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
 - **workspace-cli-output-is-a-contract** (90%)
   - Trigger: When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py
   - Action: Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv…
+- **team-prompts-need-section-level-contracts** (86%)
+  - Trigger: When adding or restructuring sections in src/agent_loom/team/prompts.py (or prompt assembly in src/agent_loom/team/core.py).
+  - Action: Make prompt rendering deterministic (explicit ordering, stable headings) and add/expand section-level contract tests in tests/test_team_prompts.py that assert required sections/ordering without relyin…
 - **compound-template-mirror-must-stay-in-sync** (83%)
   - Trigger: When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy unde…
   - Action: Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_i…
 - **team-mounts-changes-require-contract-test** (83%)
   - Trigger: When editing team mount behavior (notably src/agent_loom/team/core.py) or adding/changing mounts-related logic and outputs.
   - Action: Lock the behavior with deterministic invariants and update/add coverage in tests/test_team_mounts.py; then run uv run basedpyright, uv run ruff check ., and uv run pytest tests/test_team_mounts.py.
-- **team-prompts-need-section-level-contracts** (82%)
-  - Trigger: When adding or restructuring sections in src/agent_loom/team/prompts.py (or prompt assembly in src/agent_loom/team/core.py).
-  - Action: Make prompt rendering deterministic (explicit ordering, stable headings) and add/expand section-level contract tests in tests/test_team_prompts.py that assert required sections/ordering without relyin…
 - **python-commands-use-uv-run** (80%)
   - Trigger: When about to run any Python command (tests, linters, scripts, REPL)
   - Action: Use `uv run ...` (never `python`, `pip`, or bare tool binaries). Prefer `uv run pytest`, `uv run ruff check .`, etc.

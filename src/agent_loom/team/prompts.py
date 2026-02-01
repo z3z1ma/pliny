@@ -119,6 +119,10 @@ Sprint loop (fan-out / fan-in):
 - Prefer durable messages + nudges over repeated pings. All `loom team send` writes to the disk inbox automatically.
  - When you are waiting, block with `loom team wait 5m` (snooze is an alias).
  - Check inbox when nudged: `{cmd_inbox_list}`.
+ - Backpressure (wedged-worker handling):
+   - If you have pinged a worker multiple times and are not getting updates, treat unacked inbox as a liveness signal.
+   - Inspect the worker's unacked backlog: `loom team inbox <TEAM> list --to <WORKER_ID> --unacked`.
+   - If unacked keeps growing (e.g., 3+) and there is no progress signal (ticket update / reply / meaningful capture), bounce the worker instead of spamming: `loom team bounce <TEAM> <WORKER_ID|TICKET_ID>`.
 
 Wait discipline (operational rigor):
 - If you wake and your inbox is empty, do not immediately wait again.
@@ -199,6 +203,11 @@ Protocol:
 5) If blocked: write a structured escalation into Loom ticket (what was tried, what is needed, 2 options).
 6) Notify the manager after persisting: `{cmd_worker_blocked}`
 7) Completion candidate: update Loom ticket with verification steps + commands run + risks, then request manager review.
+
+Inbox discipline (important):
+- If nudged, list your unacked messages: `loom team inbox <TEAM> list --to <YOUR_WORKER_ID> --unacked`.
+- After reading a manager message, ack it: `loom team inbox <TEAM> ack <MSG_ID>`.
+- Then reply with a brief status update and/or update your Loom ticket.
 
 Follow-up tickets (encouraged):
 - If you notice important work that is out of scope for this ticket, create a follow-up ticket.
@@ -435,6 +444,8 @@ def render_manager_prompt(*, run: Mapping[str, Any], charter_path: Path) -> str:
         f"   - Clock out/in: `loom team clock-out {team}` (pause) and later `loom team clock-in {team}` (resume).\n"
         f"   - If you wake and inbox is empty: run `loom team status {team}`, then check in with 1-2 active workers, then wait again.\n"
         f"11) Inbox: `{_cmd_inbox_list(team=team, to='manager')}` when nudged.\n"
+        f"   - Per-worker backlog: `loom team inbox {team} list --to <WORKER_ID> --unacked`.\n"
+        f"   - If you have pinged a worker multiple times and unacked keeps growing (e.g., 3+): bounce them: `loom team bounce {team} <WORKER_ID|TICKET_ID>`.\n"
         "\n"
         "Memory (optional but useful):\n"
         "- Loom memory is an Obsidian-like vault with links and backlinks.\n"
@@ -537,6 +548,12 @@ def render_worker_prompt(
     )
     parts.append(
         f"  and notify the manager via `{_cmd_worker_blocked(team=team, ticket_id=ticket_id)}`.\n"
+    )
+    parts.append(
+        f"- Inbox discipline: when nudged, run `loom team inbox {team} list --to {worker_id} --unacked` and ack messages you read with `loom team inbox {team} ack <MSG_ID>`.\n"
+    )
+    parts.append(
+        "- Then respond with a brief status update and/or a Loom ticket update.\n"
     )
     parts.append(
         "- If completion candidate: provide verification steps + commands run + risks.\n\n"
