@@ -15,32 +15,32 @@ metadata:
 
 Initialize (creates `.tickets/`):
 
-- `compound_ticket(argv=["init"])`
+- `loom ticket init`
 
 Create:
 
-- `compound_ticket(argv=["create", "Add foo support", "-p", "2", "-t", "task", "--tags", "foo,bar"])`
+- `loom ticket create "Add foo support" -p 2 -t task --tags "foo,bar"`
 
 List / view:
 
-- `compound_ticket(argv=["list"])`
-- `compound_ticket(argv=["ready"])`
-- `compound_ticket(argv=["show", "<id>"])`
+- `loom ticket list`
+- `loom ticket ready`
+- `loom ticket show <id>`
 
 Update:
 
-- `compound_ticket(argv=["update", "<id>", "--status", "in_progress"])`
-- `compound_ticket(argv=["update", "<id>", "--status", "closed"])`
+- `loom ticket update <id> --status in_progress`
+- `loom ticket update <id> --status closed`
 
 Notes:
 
-- `compound_ticket(argv=["add-note", "<id>", "Found X. Fixed by Y."])`
+- `loom ticket add-note <id> "Found X. Fixed by Y."`
 
 Dependencies:
 
-- `compound_ticket(argv=["dep", "<id>"])`
-- `compound_ticket(argv=["dep-add", "<id>", "<dep-id>"])`
-- `compound_ticket(argv=["dep-rm", "<id>", "<dep-id>"])`
+- `loom ticket dep <id>`
+- `loom ticket dep-add <id> <dep-id>`
+- `loom ticket dep-rm <id> <dep-id>`
 
 ## Best practices
 

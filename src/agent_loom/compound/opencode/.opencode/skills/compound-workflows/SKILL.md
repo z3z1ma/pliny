@@ -27,11 +27,11 @@ The point is not vibes. The point is *reusable procedure*.
 ### `/workflows:plan <idea>`
 
 - Recall relevant memos for planning:
-  - `compound_memory_recall(query="<idea>", command="workflows:plan")`
+  - `loom memory recall "<idea>" --command workflows:plan --format prompt`
 - Create/organize tickets:
-  - `compound_ticket(argv=["init"])` (if needed)
-  - `compound_ticket(argv=["create", "..."])`
-  - `compound_ticket(argv=["dep-add", "<id>", "<dep-id>"])` (optional)
+  - `loom ticket init` (if needed)
+  - `loom ticket create "..."`
+  - `loom ticket dep-add <id> <dep-id>` (optional)
 - Output a plan with:
   - ticket IDs
   - sequencing / dependencies
@@ -43,7 +43,7 @@ The point is not vibes. The point is *reusable procedure*.
 - Fetch ticket, set status to `in_progress`.
 - Create/ensure a worktree:
   - Branch convention: `ticket-<id>-<slug>`
-  - `compound_workspace(argv=["repo", "worktree", "add", "<branch>"])`
+  - `loom workspace worktree ensure <branch> --base-ref main`
 - Do the work in that worktree.
 - Update ticket as you go (`add-note`, `update --status`).
 

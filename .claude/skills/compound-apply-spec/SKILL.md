@@ -20,7 +20,7 @@ So we separate:
 
 ## CompoundSpec v2
 
-A **single JSON object** matching the v2 schema.
+A single JSON object matching the v2 schema.
 
 ### Top-level shape
 
@@ -43,36 +43,20 @@ A **single JSON object** matching the v2 schema.
 - No code fences.
 - No commentary.
 
-### Scope discipline
-
-- Only propose changes to skills/instincts/memory notes and AI-managed docs blocks.
-- Do **not** propose product-code changes.
-
 ### Skill rules
 
 - `name` must match `^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$`.
 - `body` is markdown **without** frontmatter.
 - For `skills.update[]`, `body` must be the **entire final managed body** (not a diff/snippet).
-- Canonical skill location is `.opencode/skills/<name>/SKILL.md`.
 
-### Repo path rule
+## Apply
 
-When referencing repo files/dirs in markdown, use repo-root-relative paths (no absolute paths).
+1. Output the CompoundSpec v2 JSON object as your entire assistant message.
+2. Call `compound_apply()` immediately after.
 
-### Autolearn mode
+Notes:
 
-When responding to a background autolearn prompt:
-
-- Produce the CompoundSpec v2 JSON object.
-- **Do not** call `compound_apply` in the same response.
-
-## Apply (interactive use)
-
-1. Produce the CompoundSpec v2 JSON object.
-2. Apply it via the tool call:
-   - `compound_apply(spec_json="<the JSON string>")`
-
-The tool validates the JSON and applies updates to skills/docs/indexes safely.
+- `compound_apply()` takes no arguments here; it is expected to consume the prior JSON-only output.
 <!-- END:compound:skill-managed -->
 
 ## Manual notes

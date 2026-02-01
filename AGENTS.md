@@ -16,7 +16,14 @@ ALWAYS address LSP issues. Always run the linter. And address warnings. No excep
 
 Do not use lsp_diagnostics, use uv run basedpyright at most
 
-## Context
+## Using loom (within loom)
+
+We dogfood loom extensively in its own development.
+Use `uv tool install --force --reinstall .[dev]` to ensure you have latest changes.
+
+@LOOM.md
+
+## Project Context
 
 Python package name: agent-loom
 
@@ -93,8 +100,10 @@ This block is maintained by the compound plugin.
 - Skills: `.opencode/skills/<name>/SKILL.md`
 - Instincts: `.opencode/memory/instincts.json` (index at `.opencode/memory/INSTINCTS.md`)
 - Observations: `.opencode/memory/observations.jsonl` (gitignored by default)
- - Constitution: `LOOM_PROJECT.md`
- - Direction: `LOOM_ROADMAP.md`
+
+**Core docs:**
+- `AGENTS.md` (behavior + always-on context)
+- `LOOM_ROADMAP.md` (direction + backlog + changelog)
 <!-- END:compound:agents-ai-behavior -->
 
 <!-- BEGIN:compound:workflow-commands -->
@@ -109,6 +118,8 @@ This block is maintained by the compound plugin.
 - Tooling: use `uv run ...` for all Python commands; gate is basedpyright → ruff → targeted pytest.
 - Contracts: CLI output and prompts are deterministic and locked by focused contract tests.
 - Compound: Plan → Work → Review → Compound; extract durable procedure into skills.
+- Skills: treat `.opencode/skills/*` as canonical; avoid maintaining duplicates under `.claude/skills/*`.
+- Compound apply: output JSON-only CompoundSpec v2, then run `compound_apply()` (no args; consumes prior output).
 <!-- END:compound:loom-core-context -->
 
 <!-- BEGIN:compound:instincts-index -->
@@ -130,12 +141,15 @@ This block is maintained by the compound plugin.
 - **workspace-cli-output-is-a-contract** (90%)
   - Trigger: When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py
   - Action: Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv…
+- **compound-template-mirror-must-stay-in-sync** (88%)
+  - Trigger: When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy unde…
+  - Action: Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_i…
 - **team-prompts-need-section-level-contracts** (86%)
   - Trigger: When adding or restructuring sections in src/agent_loom/team/prompts.py (or prompt assembly in src/agent_loom/team/core.py).
   - Action: Make prompt rendering deterministic (explicit ordering, stable headings) and add/expand section-level contract tests in tests/test_team_prompts.py that assert required sections/ordering without relyin…
-- **compound-template-mirror-must-stay-in-sync** (83%)
-  - Trigger: When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy unde…
-  - Action: Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_i…
+- **skills-canonical-location-is-opencode** (83%)
+  - Trigger: When editing/creating skills and there are multiple skill directories (for example .opencode/skills and .claude/skills)
+  - Action: Only propose skill changes under .opencode/skills/<name>/SKILL.md and rely on docs/index sync; avoid duplicating or manually maintaining mirror copies elsewhere.
 - **team-mounts-changes-require-contract-test** (83%)
   - Trigger: When editing team mount behavior (notably src/agent_loom/team/core.py) or adding/changing mounts-related logic and outputs.
   - Action: Lock the behavior with deterministic invariants and update/add coverage in tests/test_team_mounts.py; then run uv run basedpyright, uv run ruff check ., and uv run pytest tests/test_team_mounts.py.
@@ -151,9 +165,6 @@ This block is maintained by the compound plugin.
 - **compound-install-changes-require-install-contract-test** (77%)
   - Trigger: When changing src/agent_loom/compound/install.py or src/agent_loom/compound/cli.py (or any behavior that affects generated .opencode/* files).
   - Action: Update/add assertions in tests/test_compound_install.py for deterministic outputs; then run uv run basedpyright, uv run ruff check ., and uv run pytest tests/test_compound_install.py before calling th…
-- **skills-canonical-location-is-opencode** (74%)
-  - Trigger: When editing/creating skills and there are multiple skill directories (for example .opencode/skills and .claude/skills)
-  - Action: Only propose skill changes under .opencode/skills/<name>/SKILL.md and rely on docs/index sync; avoid duplicating or manually maintaining mirror copies elsewhere.
 - **workspace-core-changes-require-targeted-tests** (74%)
   - Trigger: When editing src/agent_loom/workspace/core.py, src/agent_loom/workspace/models.py, src/agent_loom/workspace/state.py, src/agent_loom/workspace/repo_ops.py, src/agent_loom/workspace/git_ops.py, src/age…
   - Action: Treat workspace as public API: add/adjust targeted pytest coverage for the behavior/contract being changed (CLI text, model serialization, ordering, guard failures). Run: uv run basedpyright, uv run r…
@@ -169,9 +180,9 @@ This block is maintained by the compound plugin.
 - **core-cli-changes-require-ux-contract-test** (72%)
   - Trigger: When editing user-visible output/flags/formatting in src/agent_loom/cli.py
   - Action: Make output deterministic and lock it with a focused pytest contract test (prefer tests/test_cli_ux.py or the existing CLI test module). Verify via: uv run basedpyright, uv run ruff check ., uv run py…
-- **core-docs-are-contracts** (68%)
-  - Trigger: When proposing or making changes to AGENTS.md, LOOM_PROJECT.md, or LOOM_ROADMAP.md (especially deletions or restructures)
-  - Action: Treat these files as contracts: avoid large deletions without replacement; keep always-on blocks short/stable; update AI-managed blocks via CompoundSpec v2 (docs.blocks.upsert + docs.sync); keep paths…
+- **compound-apply-follows-json-output** (72%)
+  - Trigger: You just produced a CompoundSpec v2 JSON payload for learning updates
+  - Action: Immediately call `compound_apply()` next; assume it consumes the prior JSON-only assistant output (no args).
 <!-- END:compound:instincts-index -->
 
 <!-- BEGIN:compound:rules-index -->

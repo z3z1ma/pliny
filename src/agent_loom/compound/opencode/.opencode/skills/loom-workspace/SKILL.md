@@ -15,19 +15,19 @@ metadata:
 
 Ensure a worktree exists for a branch:
 
-- `compound_workspace(argv=["repo", "worktree", "add", "<branch>"])`
+- `loom workspace worktree ensure <branch> --base-ref main`
 
 List worktrees:
 
-- `compound_workspace(argv=["repo", "worktree", "ls"])`
+- `loom workspace worktree ls`
 
 Remove a worktree:
 
-- `compound_workspace(argv=["repo", "worktree", "rm", "<branch>"])`
+- `loom workspace worktree rm <branch> --yes`
 
 Repo status:
 
-- `compound_workspace(argv=["repo", "status"])`
+- `loom workspace status`
 
 ## Branch naming
 

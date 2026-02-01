@@ -17,19 +17,19 @@ Goals:
 Process:
 1) Run `compound_bootstrap`.
 2) Read the ticket:
-   - `compound_ticket(argv=["show", "$ARGUMENTS"])`
+   - `loom ticket show $ARGUMENTS`
 3) Set status to in_progress:
-   - `compound_ticket(argv=["update", "$ARGUMENTS", "--status", "in_progress"])`
+   - `loom ticket update $ARGUMENTS --status in_progress`
 4) Create a worktree for this ticket:
    - Branch naming convention: `ticket-<id>-<short-slug>`
-   - Use `compound_workspace(argv=["repo", "worktree", "add", "<branch>"])`
+   - Use `loom workspace worktree add <branch>`
    - NOTE: OpenCode operates in one working directory. After creating the worktree, do the actual code changes in that worktree (often by starting OpenCode in the worktree directory).
 5) Implement the ticket:
    - Small commits
    - Add/update tests
    - Keep docs aligned
 6) Update the ticket during work:
-   - `compound_ticket(argv=["add-note", "$ARGUMENTS", "<progress note>"])`
+   - `loom ticket add-note $ARGUMENTS "<progress note>"`
 7) When done:
    - run the relevant test commands
    - set status to `closed`

@@ -16,7 +16,7 @@ Goals:
 Process:
 1) Run `compound_bootstrap`.
 2) Gather context:
-   - `compound_ticket(argv=["show", "$ARGUMENTS"])`
+   - `loom ticket show $ARGUMENTS`
    - `compound_git_summary()`
 3) If the OpenCode `task` tool is available, run three subreviews (subagents):
    - agent: `review-quality`

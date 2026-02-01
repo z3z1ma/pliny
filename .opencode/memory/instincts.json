@@ -111,7 +111,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-30T19:57:13.467Z",
-      "updated_at": "2026-02-01T18:37:52.728Z",
+      "updated_at": "2026-02-01T21:05:38.095Z",
       "evidence": [
         {
           "ts": "2026-01-30T19:57:13.467Z",
@@ -166,6 +166,11 @@
           "ts": "2026-02-01T18:37:52.728Z",
           "sessionID": "ses_3e8acef0bffebmMo8l1iU1ZNUA",
           "note": "Autolearn prompt explicitly required JSON-only CompoundSpec v2 output; compliance remains a hard contract."
+        },
+        {
+          "ts": "2026-02-01T21:05:38.095Z",
+          "sessionID": "ses_3e4fa7035ffef9fueirYdJRAWg",
+          "note": "Background autolearn prompt explicitly required JSON-only output; session followed that contract."
         }
       ]
     },
@@ -536,10 +541,10 @@
       "trigger": "When editing/creating skills and there are multiple skill directories (for example .opencode/skills and .claude/skills)",
       "action": "Only propose skill changes under .opencode/skills/<name>/SKILL.md and rely on docs/index sync; avoid duplicating or manually maintaining mirror copies elsewhere.",
       "tags": [],
-      "confidence": 0.7400000000000001,
+      "confidence": 0.8300000000000001,
       "status": "active",
       "created_at": "2026-01-31T07:19:32.530Z",
-      "updated_at": "2026-02-01T04:25:40.315Z",
+      "updated_at": "2026-02-01T21:18:47.983Z",
       "evidence": [
         {
           "ts": "2026-01-31T07:19:32.530Z",
@@ -554,6 +559,16 @@
           "ts": "2026-02-01T04:25:40.315Z",
           "sessionID": "ses_3e8acef0bffebmMo8l1iU1ZNUA",
           "note": "Recent changes touched both .claude/skills/* and .opencode/skills/*; reinforce that .opencode/skills/* is the canonical location to avoid drift/duplication."
+        },
+        {
+          "ts": "2026-02-01T21:05:38.095Z",
+          "sessionID": "ses_3e4fa7035ffef9fueirYdJRAWg",
+          "note": "Recent changes touched `.claude/skills/*`, reinforcing the need to treat `.opencode/skills/*` as canonical and avoid duplicating skill sources."
+        },
+        {
+          "ts": "2026-02-01T21:18:47.983Z",
+          "sessionID": "ses_3e4fa7035ffef9fueirYdJRAWg",
+          "note": "Repo still contains `.claude/skills/*` duplicates that changed alongside `.opencode/skills/*`; strengthens the need to treat `.opencode/skills/*` as canonical and avoid drift/parallel maintenance."
         }
       ]
     },
@@ -673,10 +688,10 @@
       "trigger": "When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy under src/agent_loom/compound/opencode/.",
       "action": "Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_install.py to lock the expected installed files/contents.",
       "tags": [],
-      "confidence": 0.8300000000000001,
+      "confidence": 0.8800000000000001,
       "status": "active",
       "created_at": "2026-02-01T04:25:40.315Z",
-      "updated_at": "2026-02-01T17:23:10.436Z",
+      "updated_at": "2026-02-01T21:18:47.983Z",
       "evidence": [
         {
           "ts": "2026-02-01T04:25:40.315Z",
@@ -691,6 +706,11 @@
           "ts": "2026-02-01T17:23:10.436Z",
           "sessionID": "ses_3e8acef0bffebmMo8l1iU1ZNUA",
           "note": "Edits touched both canonical and scaffold-mirrored skill copies for workspace-cli-ux-contract-testing, reinforcing the need to keep .opencode/* sources and src/agent_loom/compound/opencode/.opencode/* mirrors aligned for deterministic installs."
+        },
+        {
+          "ts": "2026-02-01T21:18:47.983Z",
+          "sessionID": "ses_3e4fa7035ffef9fueirYdJRAWg",
+          "note": "Recent work updated workflow command docs/skills in both `.opencode/` and the scaffold mirror under `src/agent_loom/compound/opencode/.opencode/`, reinforcing that template mirroring must stay in lockstep for deterministic installs."
         }
       ]
     },
@@ -891,6 +911,23 @@
         {
           "ts": "2026-02-01T18:34:49.252Z",
           "sessionID": "ses_3e58522e3ffeIGfvDO6ZfyiAmL"
+        }
+      ]
+    },
+    {
+      "id": "compound-apply-follows-json-output",
+      "title": "Apply compound spec after JSON-only output",
+      "trigger": "You just produced a CompoundSpec v2 JSON payload for learning updates",
+      "action": "Immediately call `compound_apply()` next; assume it consumes the prior JSON-only assistant output (no args).",
+      "tags": [],
+      "confidence": 0.72,
+      "status": "active",
+      "created_at": "2026-02-01T21:05:38.095Z",
+      "updated_at": "2026-02-01T21:05:38.095Z",
+      "evidence": [
+        {
+          "ts": "2026-02-01T21:05:38.095Z",
+          "sessionID": "ses_3e4fa7035ffef9fueirYdJRAWg"
         }
       ]
     }

@@ -17,12 +17,9 @@ Goals:
 Process:
 1) Run `compound_bootstrap` to ensure scaffolding exists.
 2) Recall memory notes relevant to planning this idea:
-   - Call `compound_memory_recall` with:
-     - query: the user idea
-     - command: "workflows:plan"
-     - format: "prompt"
+   - `loom memory recall "$ARGUMENTS" --command workflows:plan --format prompt`
 3) Inspect current ticket backlog:
-   - `compound_ticket(argv=["list"])` (if it fails due to missing init, run `compound_ticket(argv=["init"])` then retry)
+   - `loom ticket list` (if it fails due to missing init, run `loom ticket init` then retry)
 4) Create tickets:
    - 1 epic ticket that describes the user-facing outcome and acceptance criteria.
    - N task tickets (small, sequential) that implement it.

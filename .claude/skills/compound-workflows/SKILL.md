@@ -26,11 +26,11 @@ The point is not vibes. The point is *reusable procedure*.
 ### `/workflows:plan <idea>`
 
 - Recall relevant memos for planning:
-  - `compound_memory_recall(query="<idea>", command="workflows:plan")`
+  - `loom memory recall "<idea>" --command workflows:plan --format prompt`
 - Create/organize tickets:
-  - `compound_ticket(argv=["init"])` (if needed)
-  - `compound_ticket(argv=["create", "..."])`
-  - `compound_ticket(argv=["dep-add", "<id>", "<dep-id>"])` (optional)
+  - `loom ticket init` (if needed)
+  - `loom ticket create "..."`
+  - `loom ticket dep-add <id> <dep-id>` (optional)
 - Output a plan with:
   - ticket IDs
   - sequencing / dependencies
@@ -42,7 +42,7 @@ The point is not vibes. The point is *reusable procedure*.
 - Fetch ticket, set status to `in_progress`.
 - Create/ensure a worktree:
   - Branch convention: `ticket-<id>-<slug>`
-  - `compound_workspace(argv=["repo", "worktree", "add", "<branch>"])`
+  - `loom workspace worktree ensure <branch> --base-ref main`
 - Do the work in that worktree.
 - Update ticket as you go (`add-note`, `update --status`).
 
@@ -59,21 +59,17 @@ The point is not vibes. The point is *reusable procedure*.
 ### `/workflows:compound <ticket-id>`
 
 - Write memory notes (loom memory) that future planning can recall.
-- Propose skill changes as a **CompoundSpec v2** JSON object.
-- Apply it via:
-  - `compound_apply(spec_json="<the JSON string>")`
-
-This can:
-- create/update skills under `.opencode/skills/`
-- update AI-managed blocks in AGENTS.md / LOOM_ROADMAP.md
-- append an agent-optimized changelog note in LOOM_ROADMAP.md
-- sync derived indexes
+- Propose skill/docs/instinct changes as a **CompoundSpec v2** JSON object.
+- Apply it:
+  - output the JSON object as your entire assistant message
+  - call `compound_apply()` immediately after (no args; it consumes the prior JSON-only output)
 
 ## Operational defaults
 
 - Keep skills small, scoped, and action-oriented.
 - Prefer updating an existing skill over creating a near-duplicate.
 - A skill should be applicable in at least 2 future contexts.
+- If you change workflow docs/skills under `.opencode/`, keep the scaffold mirror under `src/agent_loom/compound/opencode/.opencode/` in sync (install determinism depends on it).
 <!-- END:compound:skill-managed -->
 
 ## Manual notes

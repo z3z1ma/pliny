@@ -9,7 +9,6 @@ metadata:
   version: "1"
   tags: "skills,compounding,schema"
 ---
-
 <!-- BEGIN:compound:skill-managed -->
 ## Why this exists
 
@@ -52,9 +51,12 @@ A single JSON object matching the v2 schema.
 
 ## Apply
 
-Call:
+1. Output the CompoundSpec v2 JSON object as your entire assistant message.
+2. Call `compound_apply()` immediately after.
 
-- `compound_apply(spec_json="<the JSON string>")`
+Notes:
+
+- `compound_apply()` takes no arguments here; it is expected to consume the prior JSON-only output.
 <!-- END:compound:skill-managed -->
 
 ## Manual notes

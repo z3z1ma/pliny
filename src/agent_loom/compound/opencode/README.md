@@ -186,19 +186,3 @@ This plugin is intentionally limited:
 - ❌ Does **not** write product code
 
 If you want it to mutate application code automatically, you can do that, but you should probably also install a fire alarm and start journaling.
-
----
-
-## Native tools vs generic shell
-
-This system intentionally exposes Loom actions as **native tools** (e.g. `compound_ticket`, `compound_workspace`, `compound_memory_*`) instead of requiring shell calls.
-
-Benefits:
-
-- Structured args and predictable JSON results.
-- Easier to redact logs safely.
-- More deterministic prompts and fewer quoting/OS edge cases.
-
-Costs:
-
-- You must maintain a small stable tool surface as the Loom CLI evolves.

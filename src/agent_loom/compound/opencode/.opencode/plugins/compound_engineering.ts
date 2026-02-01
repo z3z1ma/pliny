@@ -2011,89 +2011,6 @@ export const CompoundEngineeringPlugin: Plugin = async ({ client, directory, wor
     },
   });
 
-  // CLI wrappers
-  const compound_ticket = tool({
-    description: "Run loom ticket with argv array.",
-    parameters: { argv: { type: "array", items: { type: "string" } } },
-    execute: async ({ argv }: any) => {
-      const ticket = await resolveTicketCli(sessionRoot);
-      const res = await runProcess({ cmd: ticket.cmd, args: [...ticket.args, ...argv] }, sessionRoot, 120000);
-      return JSON.stringify(res, null, 2);
-    },
-  });
-
-  const compound_workspace = tool({
-    description: "Run loom workspace with argv array.",
-    parameters: { argv: { type: "array", items: { type: "string" } } },
-    execute: async ({ argv }: any) => {
-      const ws = await resolveWorkspaceCli(sessionRoot);
-      const res = await runProcess({ cmd: ws.cmd, args: [...ws.args, ...argv] }, sessionRoot, 120000);
-      return JSON.stringify(res, null, 2);
-    },
-  });
-
-  const compound_memory_recall = tool({
-    description: "Recall memory notes using loom memory recall.",
-    parameters: {
-      query: { type: "string" },
-      command: { type: "string", optional: true },
-      scopes: { type: "array", items: { type: "string" }, optional: true },
-      tags: { type: "array", items: { type: "string" }, optional: true },
-      format: { type: "string", optional: true }, // json|jsonl|text|md|prompt
-      n: { type: "number", optional: true }, // maps to --limit
-      context: { type: "boolean", optional: true }, // maps to --context
-    },
-    execute: async ({ query, command, scopes, tags, format, n, context }: any) => {
-      const mem = await resolveMemoryCli(writeRoot);
-      const args = [...mem.args, "recall"];
-      if (query && String(query).trim()) args.push(String(query));
-      if (command) args.push("--command", String(command));
-      for (const s of Array.isArray(scopes) ? scopes : []) {
-        if (String(s).trim()) args.push("--scope", String(s).trim());
-      }
-      for (const t of Array.isArray(tags) ? tags : []) {
-        if (String(t).trim()) args.push("--tag", String(t).trim());
-      }
-      if (format) args.push("--format", String(format));
-      if (n) args.push("--limit", String(n));
-      if (context) args.push("--context");
-      const res = await runProcess({ cmd: mem.cmd, args }, writeRoot, 60000);
-      return JSON.stringify(res, null, 2);
-    },
-  });
-
-  const compound_memory_add = tool({
-    description: "Add a memory note using loom memory add.",
-    parameters: {
-      title: { type: "string" },
-      body: { type: "string" },
-      tags: { type: "array", items: { type: "string" }, optional: true },
-      scopes: { type: "array", items: { type: "string" }, optional: true },
-      command: { type: "string", optional: true }, // stored as --scope command:<value>
-      ticket: { type: "string", optional: true }, // stored as tag ticket_<id>
-      visibility: { type: "string", optional: true }, // shared|personal|ephemeral
-    },
-    execute: async ({ title, body, tags, scopes, command, ticket, visibility }: any) => {
-      const mem = await resolveMemoryCli(writeRoot);
-      const args = [...mem.args, "add", "--title", String(title), "--body", String(body)];
-      for (const t of Array.isArray(tags) ? tags : []) {
-        if (String(t).trim()) args.push("--tag", String(t).trim());
-      }
-      for (const s of Array.isArray(scopes) ? scopes : []) {
-        if (String(s).trim()) args.push("--scope", String(s).trim());
-      }
-      if (command) args.push("--scope", `command:${String(command)}`);
-      if (ticket) {
-        const safe = String(ticket).replace(/[^A-Za-z0-9_-]/g, "");
-        if (safe) args.push("--tag", `ticket_${safe}`);
-      }
-      if (visibility) args.push("--visibility", String(visibility));
-      const res = await runProcess({ cmd: mem.cmd, args }, writeRoot, 60000);
-      return JSON.stringify(res, null, 2);
-    },
-  });
-
-
   // -------- Events + hooks --------
 
   const recordEventObservation = async (event: any) => {
@@ -2264,10 +2181,6 @@ export const CompoundEngineeringPlugin: Plugin = async ({ client, directory, wor
       compound_autolearn_now,
       compound_observations_tail,
       compound_instincts,
-      compound_ticket,
-      compound_workspace,
-      compound_memory_recall,
-      compound_memory_add,
     },
   };
 };

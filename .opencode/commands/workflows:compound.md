@@ -21,9 +21,9 @@ Process:
 1) Run `compound_bootstrap`.
 2) Gather context:
    - `compound_git_summary()`
-   - If a ticket ID was provided, `compound_ticket(argv=["show", "$ARGUMENTS"])`
-3) Write 1-5 memory notes using `compound_memory_add`:
-   - Scope at least one note to `command:workflows:plan` (use `command="workflows:plan"`)
+   - If a ticket ID was provided, `loom ticket show $ARGUMENTS`
+3) Write 1-5 memory notes using `loom memory add`:
+   - Scope at least one note to `command:workflows:plan` (use `--scope command:workflows:plan`)
    - Add file/folder scopes for areas touched (e.g. `file:...`, `folder:...`, from changedFiles in git summary)
 4) Propose skill operations as a **CompoundSpec v2** JSON object:
    - Prefer **updating** existing skills over adding near-duplicates.

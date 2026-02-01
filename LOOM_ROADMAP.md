@@ -14,9 +14,9 @@ This is an evolving, empirical compass. Keep it short and stable.
 <!-- END:compound:roadmap-backlog -->
 
 <!-- BEGIN:compound:roadmap-ai-notes -->
-- Near-term: harden deterministic contracts (CLI UX, prompt rendering, install outputs) with focused pytest modules.
-- Keep the Compound mirror and generated artifacts in sync when touched.
-- Prefer compounding into small, triggerable skills over sprawling docs.
+- Reduce skill-source drift: consolidate on `.opencode/skills/*` and keep any templates/mirrors deterministic.
+- Keep learning loop tight: JSON-only specs, then `compound_apply()`; prefer updates over new skills.
+- Maintain contract surfaces: any UX/prompt changes must stay deterministic and covered by focused tests.
 <!-- END:compound:roadmap-ai-notes -->
 
 ## Changelog (AI-first)
@@ -27,6 +27,8 @@ It tracks changes to skills, instincts, and core context files.
 It is intentionally bounded. Do not write entries like "no changes".
 
 <!-- BEGIN:compound:changelog-entries -->
+- 2026-02-01T21:18:49.063Z Clarify Compound install/workflow doc mirroring and call out `.opencode/commands`/`.opencode/skills` as install-contract surfaces.
+- 2026-02-01T21:05:39.423Z Clarify that compound_apply consumes prior JSON-only output (no args) and reinforce .opencode as the canonical skills location.
 - 2026-02-01T18:01:22.323Z Clarify compound-apply-spec: background autolearn outputs JSON only (no compound_apply call).
 - 2026-02-01T17:58:07.931Z Reinforce plan-mode read-only and autolearn JSON-only output discipline.
 - 2026-02-01T17:23:11.689Z Reinforce workspace CLI output as a deterministic UX contract and re-affirm mirror-sync discipline when updating scaffolded .opencode templates.

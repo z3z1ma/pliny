@@ -23,6 +23,9 @@ Keep Compound installation outputs deterministic and regression-tested.
 
 1. Identify the install contract
    - What files must be created under `.opencode/`?
+   - Pay special attention to:
+     - `.opencode/skills/`
+     - `.opencode/commands/`
    - Which files are templates mirrored under `src/agent_loom/compound/opencode/.opencode/`?
    - Which files must be gitignored (for example `.opencode/memory/observations.jsonl`)?
 
