@@ -105,16 +105,10 @@ This block is maintained by the compound plugin.
 <!-- END:compound:workflow-commands -->
 
 <!-- BEGIN:compound:loom-core-context -->
-# Loom always-on context (second-order compression)
-
-This block is intentionally *small and stable*. Only update it when a principle has proven durable.
-
-- First-order: observations → instincts → skills.
-- Second-order: compress skills/instincts/patterns into a few fundamentals that are always-on.
-- Prefer agent-native primitives: ticket, memory, workspace, team.
-- Governance loop: Plan → Work → Review → Compound → Repeat.
-
-@ LOOM_ROADMAP.md
+- Greenfield: prioritize clarity and determinism; no backwards compatibility.
+- Tooling: use `uv run ...` for all Python commands; gate is basedpyright → ruff → targeted pytest.
+- Contracts: CLI output and prompts are deterministic and locked by focused contract tests.
+- Compound: Plan → Work → Review → Compound; extract durable procedure into skills.
 <!-- END:compound:loom-core-context -->
 
 <!-- BEGIN:compound:instincts-index -->
@@ -127,12 +121,12 @@ This block is intentionally *small and stable*. Only update it when a principle 
 - **cli-output-is-a-contract** (100%)
   - Trigger: When changing any CLI/user-facing output formatting (especially ticket/team UX)
   - Action: Make output deterministic (explicit ordering, stable formatting) and add a focused pytest contract test for the rendered text.
+- **plan-mode-readonly-no-edits** (97%)
+  - Trigger: System reminder says Plan Mode ACTIVE / READ-ONLY phase
+  - Action: Do not edit/create/delete files or run write-capable commands; only inspect/read/search and produce an execution plan or required JSON payload.
 - **prompt-changes-require-prompt-tests** (96%)
   - Trigger: When editing agent prompts or prompt assembly code
   - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
-- **plan-mode-readonly-no-edits** (96%)
-  - Trigger: System reminder says Plan Mode ACTIVE / READ-ONLY phase
-  - Action: Do not edit/create/delete files or run write-capable commands; only inspect/read/search and produce an execution plan or required JSON payload.
 - **workspace-cli-output-is-a-contract** (90%)
   - Trigger: When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py
   - Action: Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv…
@@ -175,9 +169,9 @@ This block is intentionally *small and stable*. Only update it when a principle 
 - **core-cli-changes-require-ux-contract-test** (72%)
   - Trigger: When editing user-visible output/flags/formatting in src/agent_loom/cli.py
   - Action: Make output deterministic and lock it with a focused pytest contract test (prefer tests/test_cli_ux.py or the existing CLI test module). Verify via: uv run basedpyright, uv run ruff check ., uv run py…
-- **ticket-frontmatter-changes-require-roundtrip-tests** (66%)
-  - Trigger: When editing src/agent_loom/ticket/frontmatter.py or changing the ticket on-disk format/serialization
-  - Action: Add/adjust round-trip tests that load+save+reload tickets; ensure parse errors include actionable context; run lsp_diagnostics on touched files, then `uv run ruff check .`, then the smallest relevant …
+- **core-docs-are-contracts** (68%)
+  - Trigger: When proposing or making changes to AGENTS.md, LOOM_PROJECT.md, or LOOM_ROADMAP.md (especially deletions or restructures)
+  - Action: Treat these files as contracts: avoid large deletions without replacement; keep always-on blocks short/stable; update AI-managed blocks via CompoundSpec v2 (docs.blocks.upsert + docs.sync); keep paths…
 <!-- END:compound:instincts-index -->
 
 <!-- BEGIN:compound:rules-index -->
