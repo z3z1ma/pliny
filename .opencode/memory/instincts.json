@@ -947,6 +947,23 @@
           "sessionID": "ses_3e4e1cdd2ffeV0Mgs0S3Z7BhfF"
         }
       ]
+    },
+    {
+      "id": "idle-autolearn-avoid-churn",
+      "title": "Avoid churn on idle autolearn",
+      "trigger": "Background autolearn runs with no git diffstat and no concrete new work artifacts.",
+      "action": "Do not propose skill/doc edits; at most create a small instinct if it prevents future failures (e.g., JSON-only output discipline). Otherwise emit an empty spec with docs.sync=false.",
+      "tags": [],
+      "confidence": 0.7,
+      "status": "active",
+      "created_at": "2026-02-01T23:53:01.330Z",
+      "updated_at": "2026-02-01T23:53:01.330Z",
+      "evidence": [
+        {
+          "ts": "2026-02-01T23:53:01.330Z",
+          "sessionID": "ses_3e4e1cdd2ffeV0Mgs0S3Z7BhfF"
+        }
+      ]
     }
   ]
 }

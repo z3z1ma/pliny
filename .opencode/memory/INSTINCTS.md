@@ -66,6 +66,9 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **compound-apply-follows-json-output** (72%)
   - Trigger: You just produced a CompoundSpec v2 JSON payload for learning updates
   - Action: Immediately call `compound_apply()` next; assume it consumes the prior JSON-only assistant output (no args).
+- **idle-autolearn-avoid-churn** (70%)
+  - Trigger: Background autolearn runs with no git diffstat and no concrete new work artifacts.
+  - Action: Do not propose skill/doc edits; at most create a small instinct if it prevents future failures (e.g., JSON-only output discipline). Otherwise emit an empty spec with docs.sync=false.
 - **core-docs-are-contracts** (68%)
   - Trigger: When proposing or making changes to AGENTS.md, LOOM_PROJECT.md, or LOOM_ROADMAP.md (especially deletions or restructures)
   - Action: Treat these files as contracts: avoid large deletions without replacement; keep always-on blocks short/stable; update AI-managed blocks via CompoundSpec v2 (docs.blocks.upsert + docs.sync); keep paths…
