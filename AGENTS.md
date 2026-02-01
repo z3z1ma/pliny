@@ -114,9 +114,7 @@ This block is intentionally *small and stable*. Only update it when a principle 
 - Prefer agent-native primitives: ticket, memory, workspace, team.
 - Governance loop: Plan → Work → Review → Compound → Repeat.
 
-@ LOOM_PROJECT.md
 @ LOOM_ROADMAP.md
-@ LOOM_CHANGELOG.md
 <!-- END:compound:loom-core-context -->
 
 <!-- BEGIN:compound:instincts-index -->
@@ -132,7 +130,7 @@ This block is intentionally *small and stable*. Only update it when a principle 
 - **prompt-changes-require-prompt-tests** (96%)
   - Trigger: When editing agent prompts or prompt assembly code
   - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
-- **plan-mode-readonly-no-edits** (91%)
+- **plan-mode-readonly-no-edits** (96%)
   - Trigger: System reminder says Plan Mode ACTIVE / READ-ONLY phase
   - Action: Do not edit/create/delete files or run write-capable commands; only inspect/read/search and produce an execution plan or required JSON payload.
 - **workspace-cli-output-is-a-contract** (90%)

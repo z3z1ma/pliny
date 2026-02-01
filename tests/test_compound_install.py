@@ -67,9 +67,9 @@ def test_compound_install_creates_loom_docs_if_missing(tmp_path: Path) -> None:
     dest = tmp_path
     install_opencode(dest=dest, dry_run=False)
 
-    assert (dest / "LOOM_PROJECT.md").exists()
     assert (dest / "LOOM_ROADMAP.md").exists()
-    assert (dest / "LOOM_CHANGELOG.md").exists()
+    assert not (dest / "LOOM_PROJECT.md").exists()
+    assert not (dest / "LOOM_CHANGELOG.md").exists()
 
 
 def test_compound_install_template_uses_compoundspec_v2(tmp_path: Path) -> None:
@@ -88,7 +88,7 @@ def test_compound_install_dry_run_does_not_write_files(tmp_path: Path) -> None:
 
     assert res.dry_run is True
     assert not (dest / ".opencode").exists()
-    assert not (dest / "LOOM_PROJECT.md").exists()
+    assert not (dest / "LOOM_ROADMAP.md").exists()
     assert not (dest / "AGENTS.md").exists()
 
     assert any(
@@ -98,15 +98,17 @@ def test_compound_install_dry_run_does_not_write_files(tmp_path: Path) -> None:
 
 def test_compound_install_ensures_loom_doc_fences(tmp_path: Path) -> None:
     dest = tmp_path
-    p = dest / "LOOM_PROJECT.md"
-    p.write_text("# LOOM_PROJECT\n", encoding="utf-8")
+    p = dest / "LOOM_ROADMAP.md"
+    p.write_text("# LOOM_ROADMAP\n", encoding="utf-8")
 
     install_opencode(dest=dest, dry_run=False)
     text = p.read_text(encoding="utf-8")
-    assert "<!-- BEGIN:compound:project-ai-constitution -->" in text
-    assert "<!-- END:compound:project-ai-constitution -->" in text
-    assert "<!-- BEGIN:compound:project-links -->" in text
-    assert "<!-- END:compound:project-links -->" in text
+    assert "<!-- BEGIN:compound:roadmap-backlog -->" in text
+    assert "<!-- END:compound:roadmap-backlog -->" in text
+    assert "<!-- BEGIN:compound:roadmap-ai-notes -->" in text
+    assert "<!-- END:compound:roadmap-ai-notes -->" in text
+    assert "<!-- BEGIN:compound:changelog-entries -->" in text
+    assert "<!-- END:compound:changelog-entries -->" in text
 
 
 def test_compound_install_never_overwrites_instincts_store(tmp_path: Path) -> None:

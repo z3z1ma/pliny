@@ -106,7 +106,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-30T19:57:13.467Z",
-      "updated_at": "2026-01-31T05:52:02.844Z",
+      "updated_at": "2026-02-01T17:58:06.796Z",
       "evidence": [
         {
           "ts": "2026-01-30T19:57:13.467Z",
@@ -151,6 +151,11 @@
           "ts": "2026-01-31T05:52:02.844Z",
           "sessionID": "ses_3edb9b07effeYs8LKpwXgcKxsL",
           "note": "Autolearn prompt explicitly requires JSON-only CompoundSpec v2 output (no commentary/code fences); reinforcing strict adherence prevents tool/application failures."
+        },
+        {
+          "ts": "2026-02-01T17:58:06.796Z",
+          "sessionID": "ses_3e5a56414ffeHlf5cl4304L2fC",
+          "note": "Background autolearn prompt required JSON-only output; reinforces strict output discipline."
         }
       ]
     },
@@ -420,10 +425,10 @@
       "trigger": "System reminder says Plan Mode ACTIVE / READ-ONLY phase",
       "action": "Do not edit/create/delete files or run write-capable commands; only inspect/read/search and produce an execution plan or required JSON payload.",
       "tags": [],
-      "confidence": 0.9100000000000001,
+      "confidence": 0.9600000000000002,
       "status": "active",
       "created_at": "2026-01-31T04:25:38.114Z",
-      "updated_at": "2026-02-01T15:09:48.219Z",
+      "updated_at": "2026-02-01T18:19:53.558Z",
       "evidence": [
         {
           "ts": "2026-01-31T04:25:38.114Z",
@@ -463,6 +468,16 @@
           "ts": "2026-02-01T15:09:48.219Z",
           "sessionID": "ses_3e8acef0bffebmMo8l1iU1ZNUA",
           "note": "Plan Mode READ-ONLY system reminder appeared during this session; reinforces that any write/edit tool use is forbidden in this phase."
+        },
+        {
+          "ts": "2026-02-01T17:58:06.796Z",
+          "sessionID": "ses_3e5a56414ffeHlf5cl4304L2fC",
+          "note": "Plan-mode system reminder present; reinforces read-only behavior during restricted phases."
+        },
+        {
+          "ts": "2026-02-01T18:19:53.558Z",
+          "sessionID": "ses_3e8acef0bffebmMo8l1iU1ZNUA",
+          "note": "System reminder explicitly enforced Plan Mode read-only: no edits, no write-capable commands, inspection only."
         }
       ]
     },

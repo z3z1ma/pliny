@@ -59,11 +59,14 @@ A **single JSON object** matching the v2 schema.
 
 When referencing repo files/dirs in markdown, use repo-root-relative paths (no absolute paths).
 
-### Autolearn constraints (when applicable)
+### Autolearn mode
 
-- Keep within prompt limits (for example: max skills per run, max instinct updates per run).
+When responding to a background autolearn prompt:
 
-## Apply
+- Produce the CompoundSpec v2 JSON object.
+- **Do not** call `compound_apply` in the same response.
+
+## Apply (interactive use)
 
 1. Produce the CompoundSpec v2 JSON object.
 2. Apply it via the tool call:

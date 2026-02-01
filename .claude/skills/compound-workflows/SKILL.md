@@ -65,8 +65,8 @@ The point is not vibes. The point is *reusable procedure*.
 
 This can:
 - create/update skills under `.opencode/skills/`
-- update AI-managed blocks in AGENTS.md / LOOM_PROJECT.md / LOOM_ROADMAP.md
-- append an agent-optimized LOOM_CHANGELOG note
+- update AI-managed blocks in AGENTS.md / LOOM_ROADMAP.md
+- append an agent-optimized changelog note in LOOM_ROADMAP.md
 - sync derived indexes
 
 ## Operational defaults

@@ -243,9 +243,10 @@ def install_opencode(
 
     # 2) Loom-scoped root docs
     doc_specs: list[tuple[str, list[str]]] = [
-        ("LOOM_PROJECT.md", ["project-ai-constitution", "project-links"]),
-        ("LOOM_ROADMAP.md", ["roadmap-backlog", "roadmap-ai-notes"]),
-        ("LOOM_CHANGELOG.md", ["changelog-entries"]),
+        (
+            "LOOM_ROADMAP.md",
+            ["roadmap-backlog", "roadmap-ai-notes", "changelog-entries"],
+        ),
     ]
     for name, required_ids in doc_specs:
         src_doc = src / name

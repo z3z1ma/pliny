@@ -43,9 +43,7 @@ def sync(
     # Deliberately scoped to compound-owned/AI-managed artifacts.
     pathspecs = [
         "AGENTS.md",
-        "LOOM_PROJECT.md",
         "LOOM_ROADMAP.md",
-        "LOOM_CHANGELOG.md",
         ".opencode/agents",
         ".opencode/memory",
         ".opencode/skills",

@@ -13,7 +13,7 @@ It supports:
 - ✅ **Automatic post-turn learning** on `session.idle`
   - extracts/updates **instincts**
   - creates/updates **skills**
-  - refreshes `AGENTS.md`, `LOOM_PROJECT.md`, `LOOM_ROADMAP.md`, `LOOM_CHANGELOG.md`
+  - refreshes `AGENTS.md` and `LOOM_ROADMAP.md`
 
 ---
 
@@ -36,13 +36,9 @@ Skills compound. That’s the entire trick.
 
 - `AGENTS.md`
   Rules, workflow pointers, and a small always-on core context (second-order compression).
-  Uses `@` pointers to include `LOOM_PROJECT.md`, `LOOM_ROADMAP.md`, and `LOOM_CHANGELOG.md`.
-- `LOOM_PROJECT.md`
-  Loom constitution and links (AI-managed sections).
 - `LOOM_ROADMAP.md`
   Loom direction as an empirical compass (AI-managed sections).
-- `LOOM_CHANGELOG.md`
-  AI-first log of Loom memory changes (bounded; no "no changes" entries).
+  Also contains an embedded AI-first changelog block (bounded; no "no changes" entries).
 
 ### Memory
 
@@ -186,7 +182,7 @@ Default upgrades are non-destructive:
 
 This plugin is intentionally limited:
 
-- ✅ Writes: skills, instincts, memos, AGENTS/PROJECT/ROADMAP/CHANGELOG
+ - ✅ Writes: skills, instincts, memos, AGENTS.md, LOOM_ROADMAP.md
 - ❌ Does **not** write product code
 
 If you want it to mutate application code automatically, you can do that, but you should probably also install a fire alarm and start journaling.
