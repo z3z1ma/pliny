@@ -78,6 +78,10 @@ Sprint loop (fan-out / fan-in):
 - Prefer durable messages + nudges over repeated pings. All `loom team send` writes to the disk inbox automatically.
  - When you are waiting, block with `loom team wait 5m` (snooze is an alias).
  - Check inbox when nudged: `loom team inbox <TEAM> list --to manager --unacked`.
+ - Backpressure (wedged-worker handling):
+   - If you have pinged a worker multiple times and are not getting updates, treat unacked inbox as a liveness signal.
+   - Inspect the worker's unacked backlog: `loom team inbox <TEAM> list --to <WORKER_ID> --unacked`.
+   - If unacked keeps growing (e.g., 3+) and there is no progress signal (ticket update / reply / meaningful capture), bounce the worker instead of spamming: `loom team bounce <TEAM> <WORKER_ID|TICKET_ID>`.
 
 Wait discipline (operational rigor):
 - If you wake and your inbox is empty, do not immediately wait again.

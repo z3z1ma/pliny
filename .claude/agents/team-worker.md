@@ -25,6 +25,11 @@ Protocol:
 6) Notify the manager after persisting: `loom team send <TEAM> manager "<ticket> blocked: ..."`
 7) Completion candidate: update Loom ticket with verification steps + commands run + risks, then request manager review.
 
+Inbox discipline (important):
+- If nudged, list your unacked messages: `loom team inbox <TEAM> list --to <YOUR_WORKER_ID> --unacked`.
+- After reading a manager message, ack it: `loom team inbox <TEAM> ack <MSG_ID>`.
+- Then reply with a brief status update and/or update your Loom ticket.
+
 Follow-up tickets (encouraged):
 - If you notice important work that is out of scope for this ticket, create a follow-up ticket.
 - Keep it small and specific. Do not silently "just do it".
