@@ -409,6 +409,7 @@
       z-index: 1;
     }
     tr:hover td{ background: var(--panel2); cursor:pointer; }
+    tr.wsSelected td{ background: var(--sel) !important; }
     .nowrap{ white-space:nowrap; }
 
     /* Tickets: split */
@@ -622,6 +623,89 @@
       white-space: pre;
       color: var(--fg);
     }
+
+    /* Loading */
+    .loadingCard{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 18px;
+      display:flex;
+      align-items:center;
+      gap: 12px;
+    }
+    .spinner{
+      width: 18px; height: 18px;
+      border-radius: 999px;
+      border: 2px solid var(--border2);
+      border-top-color: var(--blue);
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin{ to { transform: rotate(360deg); } }
+    @media (prefers-reduced-motion: reduce){ .spinner{ animation:none; } }
+
+    /* Diff accordions (GitHub-ish) */
+    .pill.active{ background: var(--sel); border-color: var(--border2); }
+    .diffMetaRow{ display:flex; flex-wrap:wrap; gap: 6px; align-items:center; }
+    .diffAcc{
+      border: 1px solid var(--border);
+      border-radius: var(--r2);
+      background: var(--panel2);
+      overflow:hidden;
+      margin-bottom: 10px;
+    }
+    .diffAcc details{ margin:0; }
+    .diffAcc summary{
+      list-style:none;
+      padding: 8px 10px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .diffAcc summary::-webkit-details-marker{ display:none; }
+    .diffAcc summary .path{ font-family: var(--mono); font-size: 11px; color: var(--fg2); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .diffAcc summary .stats{ margin-left:auto; display:flex; gap: 6px; align-items:center; }
+    .diffAcc .body{ overflow:auto; }
+    .diffTable{
+      width:100%;
+      border-collapse: collapse;
+      font-family: var(--mono);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .diffTable td{
+      padding: 0;
+      border-bottom: 1px solid rgba(0,0,0,0.0);
+      vertical-align: top;
+    }
+    .diffLn{
+      width: 54px;
+      text-align: right;
+      padding: 2px 8px 2px 6px;
+      color: var(--muted);
+      user-select:none;
+      border-right: 1px solid var(--border);
+      background: rgba(0,0,0,0.06);
+    }
+    :root[data-theme="light"] .diffLn{ background: rgba(0,0,0,0.03); }
+    .diffCode{
+      padding: 2px 10px;
+      white-space: pre;
+      overflow-wrap: normal;
+    }
+    .dr.ctx .diffCode{ background: transparent; }
+    .dr.add .diffCode{ background: rgba(167, 223, 121, 0.12); }
+    .dr.del .diffCode{ background: rgba(255, 123, 134, 0.12); }
+    .dr.hunk .diffCode{ background: rgba(213, 124, 237, 0.12); color: var(--fg2); }
+    .dr.meta .diffCode{ background: rgba(86, 182, 194, 0.08); color: var(--muted); }
+    .dr.add .diffLn.new{ background: rgba(167, 223, 121, 0.12); color: var(--green); }
+    .dr.del .diffLn.old{ background: rgba(255, 123, 134, 0.12); color: var(--red); }
+    .dr.hunk .diffLn{ background: rgba(213, 124, 237, 0.10); color: var(--purple); }
+    .dr.meta .diffLn{ background: rgba(86, 182, 194, 0.06); }
 
     .canvasWrap{
       border: 1px solid var(--border);
@@ -853,7 +937,7 @@
 
     teams: { selected: '', limit: '120' },
     memory: { vault: '.memory', q: '', limit: '10', tag: '', not_tag: '', scope: '', not_scope: '', visibility: '', expand: '0', context:'0', deterministic:'0', include_deprecated:'0' },
-    workspace: { mode: 'auto', root: '', q: '', dirty: '', group: '', repo: '', missing: '' },
+    workspace: { mode: 'auto', root: '', q: '', dirty: '', group: '', repo: '', missing: '', selectedPath: '', diffMode: 'cumulative', diffBase: '' },
     compound: { selectedSkill: '' },
     lastRoute: 'overview'
   };
@@ -1072,7 +1156,7 @@
     ticket: { id: '', show: null, view: null, dep: null },
     teams: { list: null, at: 0, bundle: null },
     memory: { results: null, note: null },
-    workspace: { meta:null, worktrees:null, services:null },
+    workspace: { meta:null, worktrees:null, services:null, diff:null, diffAt:0, diffKey:'', diffLoading:false },
     compound: { skills:null, skill:null, instincts:null }
   };
 
@@ -1139,6 +1223,18 @@
 
     $('#viewTitle').textContent = routes[route].title;
     setNavActive(route);
+
+    // Immediate loading indicator (prevents “blank” feel on slow routes)
+    content.innerHTML = `
+      <div class="loadingCard">
+        <div class="spinner"></div>
+        <div>
+          <div style="font-weight:760; color:var(--fg2)">Loading ${escapeHtml(routes[route].title)}…</div>
+          <div class="muted small">Fetching data from Loom API.</div>
+        </div>
+      </div>
+    `;
+    await new Promise(r => requestAnimationFrame(() => r()));
 
     // Save scroll state for current view components before re-render
     $$('.cols, .drawer, .content').forEach(el => {
@@ -2463,83 +2559,317 @@
     }
   }
 
+  async function loadWorktreeDiff(force=false){
+    const sel = (state.workspace.selectedPath || '').trim();
+    if (!sel){
+      data.workspace.diff = null;
+      data.workspace.diffKey = '';
+      data.workspace.diffLoading = false;
+      return;
+    }
+    const w = state.workspace;
+    const mode = (w.diffMode || 'cumulative').trim() || 'cumulative';
+    const base = (mode === 'cumulative') ? ((w.diffBase || '').trim()) : '';
+    const key = [sel, mode, base].join('|');
+    const fresh = (Date.now() - (data.workspace.diffAt || 0)) < 8000;
+    if (!force && data.workspace.diff && data.workspace.diffKey === key && fresh) return;
+    data.workspace.diffLoading = true;
+    data.workspace.diffKey = key;
+    updateWorkspaceDiffHeader();
+    updateWorkspaceDiffPane();
+    try{
+      const res = await api('/api/v1/workspace/worktree/diff', { query: {
+        mode: w.mode || 'auto',
+        ...(w.root ? { root: w.root } : {}),
+        path: sel,
+        diff_mode: mode,
+        ...(base ? { base } : {})
+      }});
+      data.workspace.diff = res;
+      data.workspace.diffAt = Date.now();
+    } catch (err){
+      data.workspace.diff = null;
+      toast('Diff failed','bad', err.message || String(err));
+    } finally {
+      data.workspace.diffLoading = false;
+      updateWorkspaceDiffHeader();
+      updateWorkspaceDiffPane();
+    }
+  }
+
+  function parseUnifiedDiffToRows(patch){
+    const rows = [];
+    const lines = (patch ?? '').toString().replaceAll('\r','').split('\n');
+    let oldNo = null;
+    let newNo = null;
+
+    for (const ln of lines){
+      if (ln.startsWith('diff --git ') || ln.startsWith('index ') || ln.startsWith('new file') || ln.startsWith('deleted file') || ln.startsWith('similarity index') || ln.startsWith('rename ')){
+        rows.push({ t:'meta', o:'', n:'', s: ln });
+        continue;
+      }
+      if (ln.startsWith('--- ') || ln.startsWith('+++ ')){
+        rows.push({ t:'meta', o:'', n:'', s: ln });
+        continue;
+      }
+      if (ln.startsWith('@@')){
+        const m = ln.match(/^@@\s+-(\d+)(?:,(\d+))?\s+\+(\d+)(?:,(\d+))?\s+@@/);
+        if (m){
+          oldNo = parseInt(m[1], 10);
+          newNo = parseInt(m[3], 10);
+        } else {
+          oldNo = null; newNo = null;
+        }
+        rows.push({ t:'hunk', o:'', n:'', s: ln });
+        continue;
+      }
+      if (ln.startsWith('+')){
+        rows.push({ t:'add', o:'', n: (newNo ?? ''), s: ln });
+        if (typeof newNo === 'number') newNo++;
+        continue;
+      }
+      if (ln.startsWith('-')){
+        rows.push({ t:'del', o: (oldNo ?? ''), n:'', s: ln });
+        if (typeof oldNo === 'number') oldNo++;
+        continue;
+      }
+      if (ln.startsWith(' ')){
+        rows.push({ t:'ctx', o: (oldNo ?? ''), n: (newNo ?? ''), s: ln });
+        if (typeof oldNo === 'number') oldNo++;
+        if (typeof newNo === 'number') newNo++;
+        continue;
+      }
+      if (!ln){
+        rows.push({ t:'ctx', o:'', n:'', s: '' });
+        continue;
+      }
+      rows.push({ t:'ctx', o:'', n:'', s: ln });
+    }
+    return rows;
+  }
+
+  function renderUnifiedDiffTable(patch){
+    const rows = parseUnifiedDiffToRows(patch);
+    return `
+      <table class="diffTable">
+        <tbody>
+          ${rows.map(r => {
+            const t = r.t || 'ctx';
+            const cls = (t === 'add') ? 'add' : (t === 'del') ? 'del' : (t === 'hunk') ? 'hunk' : (t === 'meta') ? 'meta' : 'ctx';
+            const o = (r.o === null || r.o === undefined) ? '' : String(r.o);
+            const n = (r.n === null || r.n === undefined) ? '' : String(r.n);
+            return `
+              <tr class="dr ${cls}">
+                <td class="diffLn old">${escapeHtml(o)}</td>
+                <td class="diffLn new">${escapeHtml(n)}</td>
+                <td class="diffCode">${escapeHtml((r.s ?? '').toString())}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  function renderWorkspaceDiffPane(){
+    const sel = (state.workspace.selectedPath || '').trim();
+    if (!sel){
+      return `<div class="muted small">Click a worktree row to load its diffs.</div>`;
+    }
+    if (data.workspace.diffLoading){
+      return `
+        <div class="loadingCard" style="padding:12px">
+          <div class="spinner"></div>
+          <div>
+            <div style="font-weight:760; color:var(--fg2)">Loading diff…</div>
+            <div class="muted small">Computing patch and splitting by file.</div>
+          </div>
+        </div>
+      `;
+    }
+    const diff = data.workspace.diff;
+    if (!diff || diff.worktree !== sel){
+      return `<div class="muted">No diff loaded yet.</div>`;
+    }
+
+    const files = diff.files || [];
+    const untracked = diff.untracked || [];
+    const truncated = !!diff.truncated;
+    const mode = (diff.diff_mode || state.workspace.diffMode || 'cumulative').toString();
+    const base = (diff.base || '').toString();
+    const mb = (diff.merge_base || '').toString();
+
+    const metaChips = [
+      `<span class="chip info">mode: <span class="mono">${escapeHtml(mode)}</span></span>`,
+      base ? `<span class="chip">base: <span class="mono">${escapeHtml(base)}</span></span>` : '',
+      (mode === 'cumulative' && mb) ? `<span class="chip">merge-base: <span class="mono">${escapeHtml(mb.slice(0,10))}</span></span>` : '',
+      truncated ? `<span class="chip warn">truncated</span>` : ''
+    ].filter(Boolean).join('');
+
+    return `
+      <div class="diffMetaRow">${metaChips}</div>
+      <div style="height:10px"></div>
+      ${untracked.length ? `<div class="chipRow">${untracked.slice(0, 30).map(x => `<span class="chip">untracked: <span class="mono">${escapeHtml(x)}</span></span>`).join('')}${untracked.length>30?`<span class="chip">+${untracked.length-30} more</span>`:''}</div><div style="height:10px"></div>` : ''}
+      ${(!files.length && !untracked.length) ? `<div class="chipRow"><span class="chip ok">clean</span><span class="chip">no changes</span></div>` : ''}
+      ${files.map((f, i) => {
+        const p = (f.path || '').toString();
+        const adds = String(f.adds ?? 0);
+        const dels = String(f.dels ?? 0);
+        return `
+          <div class="diffAcc">
+            <details class="diffDetails" open>
+              <summary>
+                <span class="path">${escapeHtml(p)}</span>
+                <span class="stats">
+                  <span class="chip ok">+${escapeHtml(adds)}</span>
+                  <span class="chip bad">-${escapeHtml(dels)}</span>
+                </span>
+              </summary>
+              <div class="body">${renderUnifiedDiffTable(f.patch || '')}</div>
+            </details>
+          </div>
+        `;
+      }).join('')}
+    `;
+  }
+
+  function updateWorkspaceDiffPane(){
+    const el = $('#wsDiffPane');
+    if (!el) return;
+    el.innerHTML = renderWorkspaceDiffPane();
+  }
+
+  function updateWorkspaceDiffHeader(){
+    const sel = (state.workspace.selectedPath || '').trim();
+    const title = $('#wsDiffTitle');
+    const sub = $('#wsDiffSub');
+    if (title) title.textContent = sel ? prettyPath(sel) : 'Select a worktree';
+    const dm = ((state.workspace.diffMode || 'cumulative').trim() || 'cumulative');
+    const base = ((state.workspace.diffBase || '').trim());
+    if (sub) sub.textContent = sel ? (`mode:${dm}` + (dm==='cumulative' && base ? ` · base:${base}` : '')) : '';
+    $('#wsDiffModeCum')?.classList.toggle('active', dm === 'cumulative');
+    $('#wsDiffModeDirty')?.classList.toggle('active', dm === 'dirty');
+  }
+
   async function renderWorkspace(){
     const meta = data.workspace.meta;
     const wt = data.workspace.worktrees;
     const sv = data.workspace.services;
 
+    const sel = (state.workspace.selectedPath || '').trim();
+    const diff = (data.workspace.diff && data.workspace.diff.worktree === sel) ? data.workspace.diff : null;
+    const files = diff?.files || [];
+    const untracked = diff?.untracked || [];
+    const truncated = !!diff?.truncated;
+    const baseShown = (state.workspace.diffBase || diff?.base || 'HEAD').toString();
+
     return `
-      <div class="card">
-        <div class="cardHeader">
-          <div class="cardTitle">Workspace <small>/api/v1/workspace/*</small></div>
-          <div class="row">
-            <button class="pill small" id="wsReload" type="button">reload</button>
-            <button class="pill small" id="wsJson" type="button">json</button>
+      <div class="split">
+        <div class="card">
+          <div class="cardHeader">
+            <div class="cardTitle">Workspace <small>/api/v1/workspace/*</small></div>
+            <div class="row">
+              <button class="pill small" id="wsReload" type="button">reload</button>
+              <button class="pill small" id="wsJson" type="button">json</button>
+            </div>
+          </div>
+          <div class="cardBody">
+            <div class="row wsControls">
+              <div class="field" style="min-width:160px">
+                <label>mode</label>
+                <select class="input" id="wsMode">
+                  <option value="auto" ${state.workspace.mode==='auto'?'selected':''}>auto</option>
+                  <option value="repo" ${state.workspace.mode==='repo'?'selected':''}>repo</option>
+                  <option value="poly" ${state.workspace.mode==='poly'?'selected':''}>poly</option>
+                </select>
+              </div>
+              <div class="field" style="flex:2 1 420px; min-width:240px">
+                <label>root</label>
+                <input class="input" id="wsRoot" value="${escapeHtml(state.workspace.root)}" placeholder="optional"/>
+              </div>
+              <div class="field" style="min-width:220px">
+                <label>q</label>
+                <input class="input" id="wsQ" value="${escapeHtml(state.workspace.q)}" placeholder="search path..."/>
+              </div>
+              <div class="field" style="min-width:150px">
+                <label>dirty (1/0)</label>
+                <input class="input" id="wsDirty" value="${escapeHtml(state.workspace.dirty)}"/>
+              </div>
+              <div class="field" style="min-width:150px">
+                <label>missing (1/0)</label>
+                <input class="input" id="wsMissing" value="${escapeHtml(state.workspace.missing)}"/>
+              </div>
+              <div class="field" style="min-width:220px">
+                <label>diff base</label>
+                <input class="input" id="wsDiffBase" value="${escapeHtml(state.workspace.diffBase)}" placeholder="optional (e.g. origin/main)"/>
+              </div>
+              <div class="field" style="flex:0 0 auto; min-width:160px">
+                <label>&nbsp;</label>
+                <button class="pill small ok" id="wsApply" type="button">apply</button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="cardHeader"><div class="cardTitle">worktrees <small>${wt?.count ?? 0}</small></div></div>
+              <div class="cardBody">
+                <table id="wsWorktreesTable">
+                  <thead><tr><th style="width:80px">mode</th><th>path</th><th style="width:80px">dirty</th><th style="width:90px">missing</th><th style="width:140px">branch</th></tr></thead>
+                  <tbody>
+                    ${(wt?.worktrees || []).slice(0, 300).map(w => {
+                      const p = (w.path || '').toString();
+                      const selected = (sel && p && sel === p);
+                      return `
+                        <tr class="${selected ? 'wsSelected' : ''}" data-wt-path="${escapeHtml(p)}">
+                          <td class="mono" style="color:var(--purple)">${escapeHtml(w.mode || '')}</td>
+                          <td>
+                            <span class="mono" style="color:var(--blue)">${escapeHtml(prettyPath(p))}</span>
+                            <div class="muted small mono">${escapeHtml(w.group ? (w.group + '/' + (w.repo||'')) : (w.ref || w.head || ''))}</div>
+                          </td>
+                          <td class="mono" style="color:${w.dirty?'var(--red)':'var(--muted)'}">${w.dirty ? 'yes' : 'no'}</td>
+                          <td class="mono" style="color:${w.missing?'var(--red)':'var(--muted)'}">${w.missing ? 'yes' : 'no'}</td>
+                          <td class="mono">${escapeHtml(w.branch || '')}</td>
+                        </tr>
+                      `;
+                    }).join('') || `<tr><td colspan="5" class="muted">No worktrees.</td></tr>`}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="split">
+              <div class="card">
+                <div class="cardHeader"><div class="cardTitle">meta</div></div>
+                <div class="cardBody"><pre class="monoBlock">${escapeHtml(JSON.stringify(meta, null, 2))}</pre></div>
+              </div>
+              <div class="card">
+                <div class="cardHeader"><div class="cardTitle">services index <small>poly only</small></div></div>
+                <div class="cardBody"><pre class="monoBlock">${escapeHtml(sv ? JSON.stringify(sv, null, 2) : 'Not available')}</pre></div>
+              </div>
+            </div>
           </div>
         </div>
-          <div class="cardBody">
-          <div class="row wsControls">
-            <div class="field" style="min-width:160px">
-              <label>mode</label>
-              <select class="input" id="wsMode">
-                <option value="auto" ${state.workspace.mode==='auto'?'selected':''}>auto</option>
-                <option value="repo" ${state.workspace.mode==='repo'?'selected':''}>repo</option>
-                <option value="poly" ${state.workspace.mode==='poly'?'selected':''}>poly</option>
-              </select>
+
+        <div class="card drawer">
+          <div class="head">
+            <div class="h">
+              <div class="id mono">diff</div>
+              <div class="title" id="wsDiffTitle">${sel ? escapeHtml(prettyPath(sel)) : 'Select a worktree'}</div>
+              <div class="muted small mono" id="wsDiffSub"></div>
             </div>
-            <div class="field" style="flex:2 1 420px; min-width:240px">
-              <label>root</label>
-              <input class="input" id="wsRoot" value="${escapeHtml(state.workspace.root)}" placeholder="optional"/>
-            </div>
-            <div class="field" style="min-width:220px">
-              <label>q</label>
-              <input class="input" id="wsQ" value="${escapeHtml(state.workspace.q)}" placeholder="search path..."/>
-            </div>
-            <div class="field" style="min-width:150px">
-              <label>dirty (1/0)</label>
-              <input class="input" id="wsDirty" value="${escapeHtml(state.workspace.dirty)}"/>
-            </div>
-            <div class="field" style="min-width:150px">
-              <label>missing (1/0)</label>
-              <input class="input" id="wsMissing" value="${escapeHtml(state.workspace.missing)}"/>
-            </div>
-            <div class="field" style="flex:0 0 auto; min-width:160px">
-              <label>&nbsp;</label>
-              <button class="pill small ok" id="wsApply" type="button">apply</button>
+            <div class="row">
+              <button class="pill small" id="wsDiffModeCum" type="button">cumulative</button>
+              <button class="pill small" id="wsDiffModeDirty" type="button">dirty</button>
+              <button class="pill small" id="wsDiffExpand" type="button">expand all</button>
+              <button class="pill small" id="wsDiffCollapse" type="button">collapse all</button>
+              <button class="pill small" id="wsDiffReload" type="button">reload</button>
+              <button class="pill small" id="wsDiffClear" type="button">clear</button>
+              <button class="pill small" id="wsDiffJson" type="button">json</button>
             </div>
           </div>
-
-          <div class="card">
-            <div class="cardHeader"><div class="cardTitle">worktrees <small>${wt?.count ?? 0}</small></div></div>
-            <div class="cardBody">
-              <table>
-                <thead><tr><th style="width:80px">mode</th><th>path</th><th style="width:80px">dirty</th><th style="width:90px">missing</th><th style="width:140px">branch</th></tr></thead>
-                <tbody>
-                  ${(wt?.worktrees || []).slice(0, 300).map(w => `
-                    <tr>
-                      <td class="mono" style="color:var(--purple)">${escapeHtml(w.mode || '')}</td>
-                       <td><span class="mono" style="color:var(--blue)">${escapeHtml(w.path || '')}</span><div class="muted small mono">${escapeHtml(w.group ? (w.group + '/' + (w.repo||'')) : (w.ref || w.head || ''))}</div></td>
-                      <td class="mono" style="color:${w.dirty?'var(--red)':'var(--muted)'}">${w.dirty ? 'yes' : 'no'}</td>
-                      <td class="mono" style="color:${w.missing?'var(--red)':'var(--muted)'}">${w.missing ? 'yes' : 'no'}</td>
-                      <td class="mono">${escapeHtml(w.branch || '')}</td>
-                    </tr>
-                  `).join('') || `<tr><td colspan="5" class="muted">No worktrees.</td></tr>`}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div style="height:10px"></div>
-
-          <div class="split">
-            <div class="card">
-              <div class="cardHeader"><div class="cardTitle">meta</div></div>
-              <div class="cardBody"><pre class="monoBlock">${escapeHtml(JSON.stringify(meta, null, 2))}</pre></div>
-            </div>
-            <div class="card">
-              <div class="cardHeader"><div class="cardTitle">services index <small>poly only</small></div></div>
-              <div class="cardBody"><pre class="monoBlock">${escapeHtml(sv ? JSON.stringify(sv, null, 2) : 'Not available')}</pre></div>
-            </div>
+          <div class="body">
+            <div id="wsDiffPane">${renderWorkspaceDiffPane()}</div>
           </div>
         </div>
       </div>
@@ -2553,6 +2883,7 @@
       state.workspace.q = ($('#wsQ')?.value || '').trim();
       state.workspace.dirty = ($('#wsDirty')?.value || '').trim();
       state.workspace.missing = ($('#wsMissing')?.value || '').trim();
+      state.workspace.diffBase = ($('#wsDiffBase')?.value || '').trim();
       save();
       await loadWorkspace(true);
       await renderRoute();
@@ -2565,6 +2896,88 @@
       bodyHTML: `<pre class="monoBlock">${escapeHtml(JSON.stringify(data.workspace, null, 2))}</pre>`,
       footHTML: `<button class="pill small" type="button" id="closeWJ">close</button>`
     }) || $('#closeWJ')?.addEventListener('click', closeDialog));
+
+    function setSelectedRow(path){
+      $$('#wsWorktreesTable tr[data-wt-path]').forEach(row => {
+        row.classList.toggle('wsSelected', (row.getAttribute('data-wt-path') || '') === path);
+      });
+    }
+
+    async function selectWorktree(p, { force=false } = {}){
+      const path = (p || '').toString().trim();
+      if (!path) return;
+      state.workspace.selectedPath = path;
+      save();
+      setSelectedRow(path);
+      updateWorkspaceDiffHeader();
+      updateWorkspaceDiffPane();
+      await loadWorktreeDiff(!!force);
+      toast('Diff loaded','ok', prettyPath(path));
+    }
+
+    $$('#wsWorktreesTable tr[data-wt-path]').forEach(tr => {
+      tr.addEventListener('click', () => {
+        const p = (tr.getAttribute('data-wt-path') || '').trim();
+        // Fire and forget: loadWorktreeDiff updates the diff pane live.
+        void selectWorktree(p, { force:true });
+      });
+    });
+
+    $('#wsDiffReload')?.addEventListener('click', () => {
+      void loadWorktreeDiff(true).then(() => toast('Diff reloaded','ok'));
+    });
+
+    $('#wsDiffClear')?.addEventListener('click', () => {
+      state.workspace.selectedPath = '';
+      data.workspace.diff = null;
+      data.workspace.diffKey = '';
+      data.workspace.diffLoading = false;
+      save();
+      setSelectedRow('');
+      updateWorkspaceDiffHeader();
+      updateWorkspaceDiffPane();
+    });
+
+    $('#wsDiffModeCum')?.addEventListener('click', () => {
+      state.workspace.diffMode = 'cumulative';
+      save();
+      updateWorkspaceDiffHeader();
+      updateWorkspaceDiffPane();
+      void loadWorktreeDiff(true);
+    });
+    $('#wsDiffModeDirty')?.addEventListener('click', () => {
+      state.workspace.diffMode = 'dirty';
+      save();
+      updateWorkspaceDiffHeader();
+      updateWorkspaceDiffPane();
+      void loadWorktreeDiff(true);
+    });
+
+    $('#wsDiffBase')?.addEventListener('change', () => {
+      state.workspace.diffBase = ($('#wsDiffBase')?.value || '').trim();
+      save();
+      updateWorkspaceDiffHeader();
+      if ((state.workspace.selectedPath || '').trim() && (state.workspace.diffMode || 'cumulative') === 'cumulative'){
+        void loadWorktreeDiff(true);
+      }
+    });
+
+    $('#wsDiffExpand')?.addEventListener('click', () => {
+      $$('#wsDiffPane details.diffDetails').forEach(d => { d.open = true; });
+    });
+    $('#wsDiffCollapse')?.addEventListener('click', () => {
+      $$('#wsDiffPane details.diffDetails').forEach(d => { d.open = false; });
+    });
+    $('#wsDiffJson')?.addEventListener('click', () => openDialog({
+      title: 'worktree-diff.json',
+      bodyHTML: `<pre class="monoBlock">${escapeHtml(JSON.stringify(data.workspace.diff, null, 2))}</pre>`,
+      footHTML: `<button class="pill small" type="button" id="closeWDJ">close</button>`
+    }) || $('#closeWDJ')?.addEventListener('click', closeDialog));
+
+    // Initial paint
+    updateWorkspaceDiffHeader();
+    updateWorkspaceDiffPane();
+    if ((state.workspace.selectedPath || '').trim()) void loadWorktreeDiff(false);
   }
 
   // Compound

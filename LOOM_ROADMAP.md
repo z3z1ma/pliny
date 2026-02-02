@@ -10,10 +10,9 @@ This is an evolving, empirical compass. Keep it short and stable.
 <!-- END:compound:roadmap-backlog -->
 
 <!-- BEGIN:compound:roadmap-ai-notes -->
-- Near-term: make server UI agent-legible (stable `data-*` anchors, deliberate section ordering).
-- Keep contracts small and specific: assert markers/ordering in `tests/test_server_api_contract.py`, avoid full-HTML snapshots.
-- Prefer determinism over convenience: explicit ordering, no timestamps/random IDs, no machine-specific absolute paths.
-- When changing scaffolded `.opencode/*`, keep the mirrored templates under `src/agent_loom/compound/opencode/.opencode/*` aligned.
+- Near-term focus: make workspace + dashboard UX deterministic and contract-tested (explicit ordering, stable anchors).
+- Treat dashboard HTML as an agent-facing API: prefer `data-*` anchors and section-level invariants over brittle snapshots.
+- Reduce ambiguity between dashboard vs server template sources by standardizing anchors and testing the served route.
 <!-- END:compound:roadmap-ai-notes -->
 
 ## Changelog (AI-first)
@@ -24,6 +23,9 @@ It tracks changes to skills, instincts, and core context files.
 It is intentionally bounded. Do not write entries like "no changes".
 
 <!-- BEGIN:compound:changelog-entries -->
+- 2026-02-02T23:18:30.672Z Reinforced the dashboard template anchor/contract instinct based on a real template edit.
+- 2026-02-02T23:14:26.285Z Reinforce determinism-as-contract for dashboard HTML and workspace diff/read outputs; add a focused skill + instinct for workspace diff ops testing.
+- 2026-02-02T22:25:58.047Z Reinforce dashboard/workspace UX contracts: clarify dashboard template source-of-truth, strengthen anchor-based HTML contract guidance, and bump related instinct confidence.
 - 2026-02-02T21:40:49.317Z Reinforced the dashboard CLI output-as-contract instinct based on recent dashboard CLI edits.
 - 2026-02-02T21:37:28.324Z Tighten dashboard template contract memory: treat both dashboard.html locations as anchor-and-test gated surfaces.
 - 2026-02-02T21:34:30.030Z Add dashboard CLI UX contract testing skill and instinct to keep src/agent_loom/dashboard/cli.py output deterministic and tested.

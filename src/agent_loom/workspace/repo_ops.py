@@ -26,6 +26,7 @@ from agent_loom.workspace.models import (
     RepoWorktreeListResult,
     RepoWorktreePruneResult,
     RepoWorktreeRemoveResult,
+    WorktreeDiffResult,
     WorktreeEnsureResult,
 )
 from agent_loom.workspace.state import fs_escape
@@ -37,6 +38,8 @@ from agent_loom.workspace.utils import (
     read_json,
     run,
 )
+
+from agent_loom.workspace.diff_ops import worktree_diff_by_file
 
 
 def repo_root() -> Path:
@@ -676,6 +679,42 @@ def repo_worktree_check_divergence(
         "behind": behind,
         "ok": behind == 0,
     }
+
+
+def repo_worktree_diff(
+    *,
+    worktree: str = "",
+    diff_mode: str = "dirty",
+    base: str = "",
+    max_patch_bytes: int = 2_000_000,
+    root: Optional[Path] = None,
+) -> WorktreeDiffResult:
+    repo = root.resolve() if root is not None else repo_root()
+    wt_path = _repo_resolve_worktree(repo, worktree)
+    if not wt_path.exists() or not is_git_repo(wt_path):
+        raise WorkspaceError(f"Not a git worktree: {wt_path}")
+
+    files, untracked, truncated, base_used, merge_base = worktree_diff_by_file(
+        worktree=wt_path,
+        diff_mode=str(diff_mode or "dirty"),
+        base_ref=str(base or "").strip() or None,
+        default_branch=repo_default_branch(wt_path),
+        max_patch_bytes=int(max_patch_bytes),
+    )
+
+    payload_files = [
+        {"path": f.path, "adds": f.adds, "dels": f.dels, "patch": f.patch}
+        for f in files
+    ]
+    return WorktreeDiffResult(
+        worktree=str(wt_path.resolve()),
+        diff_mode=str(diff_mode or "dirty"),
+        base=str(base_used or ""),
+        merge_base=str(merge_base or ""),
+        files=payload_files,
+        untracked=untracked,
+        truncated=bool(truncated),
+    )
 
 
 def _repo_states_dir(repo: Path) -> Path:

@@ -41,6 +41,7 @@ from agent_loom.workspace.core import (
     repo_worktree_add,
     repo_worktree_check_clean,
     repo_worktree_check_divergence,
+    repo_worktree_diff,
     repo_worktree_ensure,
     repo_worktree_ensure_detached,
     repo_worktree_ls,
@@ -57,6 +58,7 @@ from agent_loom.workspace.core import (
     worktree_add,
     worktree_group_check_clean,
     worktree_group_check_divergence,
+    worktree_group_diff,
     worktree_group_status,
     worktree_prune,
     worktree_ls,
@@ -111,8 +113,10 @@ from agent_loom.workspace.models import (
     StatusResult,
     SyncResult,
     WorktreeAddResult,
+    WorktreeDiffResult,
     WorktreeGcResult,
     WorktreeEnsureResult,
+    WorktreeGroupDiffResult,
     WorktreeGroupRemoveResult,
     WorktreeListResult,
     WorktreePushResult,
@@ -280,6 +284,40 @@ def _bool(value: bool) -> str:
 
 
 def _render_text(result: Any) -> str:
+    if isinstance(result, WorktreeDiffResult):
+        # Raw patch only; keep pipe-friendly.
+        chunks: list[str] = []
+        for f in result.files:
+            p = str((f or {}).get("patch") or "")
+            if p:
+                chunks.append(p.rstrip("\n") + "\n")
+        if not chunks:
+            return ""
+        return "".join(chunks)
+
+    if isinstance(result, WorktreeGroupDiffResult):
+        # Deterministic, repo-separated output.
+        lines: list[str] = []
+        for row in sorted(
+            result.results, key=lambda x: str((x or {}).get("repo") or "")
+        ):
+            if str((row or {}).get("status") or "") != "ok":
+                continue
+            repo = str((row or {}).get("repo") or "")
+            wt = str((row or {}).get("worktree") or "")
+            files = row.get("files") if isinstance(row, dict) else None
+            patches: list[str] = []
+            if isinstance(files, list):
+                for f in files:
+                    p = str((f or {}).get("patch") or "")
+                    if p:
+                        patches.append(p.rstrip("\n") + "\n")
+            if not patches:
+                continue
+            lines.append(f"===== {repo} ({wt}) =====\n")
+            lines.extend(patches)
+        return "".join(lines)
+
     if isinstance(result, RepoStatusResult):
         return (
             "\n".join(
@@ -797,6 +835,18 @@ def cmd_repo_worktree_check_divergence(args: argparse.Namespace) -> None:
     emit_result(args, root, res)
 
 
+def cmd_repo_worktree_diff(args: argparse.Namespace) -> None:
+    root = repo_root()
+    res = repo_worktree_diff(
+        worktree=str(getattr(args, "worktree", "") or ""),
+        diff_mode=str(getattr(args, "mode", "dirty") or "dirty"),
+        base=str(getattr(args, "base", "") or ""),
+        max_patch_bytes=int(getattr(args, "max_bytes", 2_000_000) or 2_000_000),
+        root=root,
+    )
+    emit_result(args, root, res)
+
+
 def cmd_repo_worktree_annotate(args: argparse.Namespace) -> None:
     root = repo_root()
     from agent_loom.workspace.worktree_meta import repo_worktree_annotate
@@ -1086,6 +1136,24 @@ def cmd_worktree_group_check_divergence(args: argparse.Namespace) -> None:
         sets=args.sets,
         tags=args.tags,
         allow_all=bool(args.all),
+        root=root,
+    )
+    emit_result(args, root, res)
+
+
+def cmd_worktree_group_diff(args: argparse.Namespace) -> None:
+    root = workspace_root()
+    res = worktree_group_diff(
+        group=str(args.group),
+        diff_mode=str(getattr(args, "mode", "dirty") or "dirty"),
+        base=str(getattr(args, "base", "") or ""),
+        repos=list(getattr(args, "repos", []) or []) or None,
+        sets=list(getattr(args, "sets", []) or []) or None,
+        tags=list(getattr(args, "tags", []) or []) or None,
+        allow_all=bool(getattr(args, "all", False)),
+        max_patch_bytes_per_repo=int(
+            getattr(args, "max_bytes", 2_000_000) or 2_000_000
+        ),
         root=root,
     )
     emit_result(args, root, res)
@@ -1729,6 +1797,41 @@ def _add_poly_parser(root_sub: Any) -> None:
     sp2.add_argument("--tag", dest="tags", action="append", help="Select repos by tag")
     sp2.set_defaults(func=cmd_worktree_group_status)
 
+    sp2 = sub2.add_parser(
+        "diff",
+        help="Print per-repo worktree diffs for a group (tracked files; requires explicit intent)",
+    )
+    sp2.add_argument("group")
+    sp2.add_argument(
+        "--mode",
+        default="dirty",
+        choices=["dirty", "cumulative"],
+        help="Diff mode: dirty (uncommitted) or cumulative (merge-base)",
+    )
+    sp2.add_argument(
+        "--base",
+        default="",
+        help="Base ref-ish (default: HEAD when available)",
+    )
+    sp2.add_argument(
+        "--max-bytes",
+        dest="max_bytes",
+        type=int,
+        default=2_000_000,
+        help="Max patch bytes per repo (default: 2000000)",
+    )
+    sp2.add_argument(
+        "--all",
+        action="store_true",
+        help="Confirm operating on multiple repos when no selection is provided",
+    )
+    sp2.add_argument(
+        "--repos", nargs="*", help="Subset of repos (default: all under group)"
+    )
+    sp2.add_argument("--set", dest="sets", action="append", help="Select repos by set")
+    sp2.add_argument("--tag", dest="tags", action="append", help="Select repos by tag")
+    sp2.set_defaults(func=cmd_worktree_group_diff)
+
     sp2 = sub2.add_parser("check-clean", help="Fail if any group worktree is dirty")
     sp2.add_argument("group")
     sp2.add_argument(
@@ -2009,6 +2112,32 @@ def build_parser() -> argparse.ArgumentParser:
         help="Branch name or path (default: repo root)",
     )
     sp2.set_defaults(func=cmd_repo_worktree_check_divergence)
+
+    sp2 = sub2.add_parser("diff", help="Print a worktree diff (tracked files)")
+    sp2.add_argument(
+        "--mode",
+        default="dirty",
+        choices=["dirty", "cumulative"],
+        help="Diff mode: dirty (uncommitted) or cumulative (merge-base)",
+    )
+    sp2.add_argument(
+        "--worktree",
+        default="",
+        help="Branch name or path (default: repo root)",
+    )
+    sp2.add_argument(
+        "--base",
+        default="",
+        help="Base ref-ish (default: HEAD when available)",
+    )
+    sp2.add_argument(
+        "--max-bytes",
+        dest="max_bytes",
+        type=int,
+        default=2_000_000,
+        help="Max patch bytes to include (default: 2000000)",
+    )
+    sp2.set_defaults(func=cmd_repo_worktree_diff)
 
     sp2 = sub2.add_parser(
         "annotate", help="Annotate a branch worktree with purpose/ttl"

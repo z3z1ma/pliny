@@ -46,6 +46,7 @@ from agent_loom.workspace.models import (
     SyncResult,
     WorktreeAddResult,
     WorktreeGroupRemoveResult,
+    WorktreeGroupDiffResult,
     WorktreeListResult,
     WorktreePushResult,
     WorktreeRebaseResult,
@@ -83,6 +84,8 @@ from agent_loom.workspace.utils import (
     run,
     short,
 )
+
+from agent_loom.workspace.diff_ops import worktree_diff_by_file
 
 
 def poly_init(*, root: Optional[Path] = None) -> PolyInitResult:
@@ -985,6 +988,107 @@ def worktree_group_check_divergence(
         )
 
     return {"group": group, "base": base_ref, "results": results}
+
+
+def worktree_group_diff(
+    *,
+    group: str,
+    diff_mode: str = "dirty",
+    base: str = "",
+    repos: Optional[Sequence[str]] = None,
+    sets: Optional[Sequence[str]] = None,
+    tags: Optional[Sequence[str]] = None,
+    allow_all: bool = False,
+    max_patch_bytes_per_repo: int = 2_000_000,
+    root: Optional[Path] = None,
+) -> WorktreeGroupDiffResult:
+    ws_root = root.resolve() if root is not None else workspace_root()
+    ws = load_workspace(ws_root)
+    repo_map = iter_repos(ws)
+    base_dir = worktrees_base(ws_root, ws, group)
+    if not base_dir.exists():
+        raise WorkspaceError(f"No worktrees found for: {group}")
+
+    # Diff output can be large; require explicit intent when targeting multiple repos.
+    if (repos is None or len(repos) == 0) and not poly_has_selection(
+        repos=repos, sets=sets, tags=tags, allow_all=allow_all
+    ):
+        # If the group contains exactly one worktree repo directory, allow it.
+        dirs = [p for p in base_dir.iterdir() if p.is_dir()]
+        if len(dirs) != 1:
+            raise WorkspaceError(
+                "Refusing to diff worktrees for multiple repos without explicit intent. "
+                "Pass --all, or select repos via --repos/--set/--tag."
+            )
+
+    if repos or sets or tags:
+        names = poly_resolve_repo_names(
+            ws,
+            repo_map,
+            repo_names=repos,
+            sets=sets,
+            tags=tags,
+            require_intent_for_multi=True,
+            allow_all=allow_all,
+        )
+        targets = [(n, base_dir / n) for n in names]
+    else:
+        targets = [(p.name, p) for p in base_dir.iterdir() if p.is_dir()]
+
+    base_ref = str(base or "").strip()
+    mode = str(diff_mode or "dirty").strip().lower()
+
+    results: list[dict[str, Any]] = []
+    for repo_name, wt_path in sorted(targets, key=lambda x: x[0]):
+        if not wt_path.exists():
+            results.append({"repo": repo_name, "status": "skip", "reason": "not_found"})
+            continue
+        if not is_git_repo(wt_path):
+            results.append(
+                {"repo": repo_name, "status": "skip", "reason": "not_a_repo"}
+            )
+            continue
+
+        r = repo_map.get(repo_name)
+        default_branch = str(getattr(r, "default_branch", "") or "main")
+        try:
+            files, untracked, truncated, base_used, merge_base = worktree_diff_by_file(
+                worktree=wt_path,
+                diff_mode=mode,
+                base_ref=base_ref or None,
+                default_branch=default_branch,
+                max_patch_bytes=int(max_patch_bytes_per_repo),
+            )
+        except Exception as e:
+            results.append(
+                {
+                    "repo": repo_name,
+                    "status": "fail",
+                    "error": str(e),
+                    "worktree": str(wt_path.resolve()),
+                }
+            )
+            continue
+
+        payload_files = [
+            {"path": f.path, "adds": f.adds, "dels": f.dels, "patch": f.patch}
+            for f in files
+        ]
+        results.append(
+            {
+                "repo": repo_name,
+                "status": "ok",
+                "worktree": str(wt_path.resolve()),
+                "diff_mode": mode,
+                "base": str(base_used or ""),
+                "merge_base": str(merge_base or ""),
+                "files": payload_files,
+                "untracked": untracked,
+                "truncated": bool(truncated),
+            }
+        )
+
+    return WorktreeGroupDiffResult(group=str(group), base=base_ref, results=results)
 
 
 def worktree_rebase(

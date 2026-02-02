@@ -117,11 +117,8 @@ This block is maintained by the compound plugin.
 - Greenfield: prioritize clarity and determinism; no backwards compatibility.
 - Tooling: use `uv run ...` for all Python commands; gate is basedpyright → ruff → targeted pytest.
 - Contracts: CLI output and prompts are deterministic and locked by focused contract tests.
-- Server templates: treat `src/agent_loom/server/templates/*.html` as a UX contract; prefer stable `data-*` anchors for agent parsing; add focused contract tests for stable markers/ordering.
-- Shipped templates: when changing `.opencode/*` that is installed/scaffolded, keep `src/agent_loom/compound/opencode/.opencode/*` in sync.
-- Tickets: treat ticket runtime + CLI as public API; keep output deterministic and cover with `tests/test_ticket_ux.py`.
-- Compound: Plan → Work → Review → Compound; extract durable procedure into skills.
-- Skills: treat `.opencode/skills/*` as canonical; avoid maintaining duplicates under `.claude/skills/*`.
+- HTML templates are contracts: treat `src/agent_loom/server/templates/*.html` and `src/agent_loom/dashboard/templates/*.html` as agent-parseable UX surfaces; preserve stable `data-*` anchors and deterministic ordering.
+- When HTML changes: update request-level invariants in `tests/test_server_api_contract.py` (prefer anchors/sections over full-HTML snapshots).
 <!-- END:compound:loom-core-context -->
 
 <!-- BEGIN:compound:instincts-index -->
@@ -146,21 +143,24 @@ This block is maintained by the compound plugin.
 - **prompt-changes-require-prompt-tests** (99%)
   - Trigger: When editing agent prompts or prompt assembly code
   - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
+- **workspace-cli-output-is-a-contract** (96%)
+  - Trigger: When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py
+  - Action: Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv…
+- **large-template-refactor-diff-hygiene** (96%)
+  - Trigger: You are about to make a large refactor in src/agent_loom/server/templates/*.html (especially dashboard.html) that could produce a huge diff.
+  - Action: Minimize formatting-only churn, preserve/introduce stable data-* anchors, and update tests/test_server_api_contract.py in the same change to assert invariant markers/sections (avoid full HTML snapshot…
 - **compound-template-mirror-must-stay-in-sync** (94%)
   - Trigger: When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy unde…
   - Action: Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_i…
-- **large-template-refactor-diff-hygiene** (93%)
-  - Trigger: You are about to make a large refactor in src/agent_loom/server/templates/*.html (especially dashboard.html) that could produce a huge diff.
-  - Action: Minimize formatting-only churn, preserve/introduce stable data-* anchors, and update tests/test_server_api_contract.py in the same change to assert invariant markers/sections (avoid full HTML snapshot…
-- **workspace-cli-output-is-a-contract** (90%)
-  - Trigger: When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py
-  - Action: Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv…
-- **server-html-changes-require-api-contract-test** (88%)
+- **server-html-changes-require-api-contract-test** (92%)
   - Trigger: When changing server-rendered HTML behavior (templates or the route that serves them), especially large refactors in src/agent_loom/server/templates/*.html
   - Action: Add/update a request-level contract test (prefer tests/test_server_api_contract.py) that asserts stable markers/sections and deterministic ordering; avoid brittle full-HTML snapshots; verify via uv ru…
 - **team-prompts-need-section-level-contracts** (86%)
   - Trigger: When adding or restructuring sections in src/agent_loom/team/prompts.py (or prompt assembly in src/agent_loom/team/core.py).
   - Action: Make prompt rendering deterministic (explicit ordering, stable headings) and add/expand section-level contract tests in tests/test_team_prompts.py that assert required sections/ordering without relyin…
+- **dashboard-template-edits-require-anchor-contracts** (85%)
+  - Trigger: You edit src/agent_loom/dashboard/templates/dashboard.html or src/agent_loom/server/templates/dashboard.html (especially adding/removing/reordering sections).
+  - Action: Preserve/add stable data-* anchors, keep section ordering deterministic, update request-level invariants in tests/test_server_api_contract.py, then run: uv run basedpyright; uv run ruff check .; uv ru…
 - **ticket-changes-require-ticket-ux-contract-test** (84%)
   - Trigger: You edit ticket runtime/UX code (src/agent_loom/ticket/*.py or src/agent_loom/ui/ticket_ui.*) or anything that changes rendered ticket text/sections.
   - Action: Treat ticket UX as a contract: make ordering deterministic, update/add focused assertions in tests/test_ticket_ux.py for required sections/lines (avoid nondeterministic values), then verify via `uv ru…
@@ -179,9 +179,6 @@ This block is maintained by the compound plugin.
 - **prefer-basedpyright-over-lsp-diagnostics** (78%)
   - Trigger: When about to check Python types/diagnostics (or an existing checklist says to run lsp_diagnostics)
   - Action: Run `uv run basedpyright` and fix findings before `uv run ruff check .` and targeted `uv run pytest ...`.
-- **dashboard-template-edits-require-anchor-contracts** (78%)
-  - Trigger: You edit src/agent_loom/dashboard/templates/dashboard.html or src/agent_loom/server/templates/dashboard.html (especially adding/removing/reordering sections).
-  - Action: Preserve/add stable data-* anchors, keep section ordering deterministic, update request-level invariants in tests/test_server_api_contract.py, then run: uv run basedpyright; uv run ruff check .; uv ru…
 - **team-spawn-integrator-changes-require-contract-test** (77%)
   - Trigger: When changing team spawn/integrator wiring (typically in src/agent_loom/team/core.py or src/agent_loom/team/cli.py), especially anything that boots an integrator or mediates agent process startup.
   - Action: Add/update a focused contract test in tests/test_team_spawn_integrator.py that asserts deterministic invariants (what starts, with what args/env, and what is persisted/returned), then run lsp_diagnost…

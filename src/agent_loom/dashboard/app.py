@@ -19,6 +19,7 @@ from agent_loom.dashboard.workspace_read import (
     poly_worktrees,
     repo_worktrees,
     services_index,
+    worktree_diff,
     workspace_meta,
 )
 
@@ -128,6 +129,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                         {"method": "GET", "path": "/api/v1/memory/notes/<id>"},
                         {"method": "GET", "path": "/api/v1/workspace/meta"},
                         {"method": "GET", "path": "/api/v1/workspace/worktrees"},
+                        {"method": "GET", "path": "/api/v1/workspace/worktree/diff"},
                         {"method": "GET", "path": "/api/v1/workspace/services/index"},
                         {"method": "GET", "path": "/api/v1/compound/skills"},
                         {"method": "GET", "path": "/api/v1/compound/skills/<name>"},
@@ -562,6 +564,36 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             return jsonify(ok(data={"index": idx}))
         except Exception as e:
             return jsonify(err(code="WS_ERROR", message=str(e))), 400
+
+    @app.get("/api/v1/workspace/worktree/diff")
+    def ws_worktree_diff() -> Any:
+        q = request.args
+        try:
+            mode, root = detect_workspace_mode(
+                cwd=cfg.repo_root,
+                mode=str(q.get("mode") or cfg.workspace_mode),
+                root_arg=str(
+                    q.get("root")
+                    or (str(cfg.workspace_root) if cfg.workspace_root else "")
+                ),
+            )
+            payload = worktree_diff(
+                mode=mode,
+                root=root,
+                path=str(q.get("path") or ""),
+                diff_mode=str(q.get("diff_mode") or "cumulative"),
+                base=str(q.get("base") or ""),
+                max_patch_bytes=(
+                    int(q.get("max_bytes") or 2_000_000)
+                    if str(q.get("max_bytes") or "").strip()
+                    else 2_000_000
+                ),
+            )
+        except WorkspaceReadError as e:
+            return jsonify(err(code="WS_ERROR", message=str(e))), 400
+        except Exception as e:
+            return jsonify(err(code="WS_ERROR", message=str(e))), 400
+        return jsonify(ok(data=payload))
 
     # -----------------
     # Compound

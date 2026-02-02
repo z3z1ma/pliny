@@ -5,6 +5,30 @@ from typing import Any, Dict, List, Optional
 
 
 @dataclass(frozen=True)
+class WorktreeDiffResult:
+    worktree: str
+    diff_mode: str
+    base: str
+    merge_base: str
+    files: List[Dict[str, Any]]
+    untracked: List[str]
+    truncated: bool
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
+class WorktreeGroupDiffResult:
+    group: str
+    base: str
+    results: List[Dict[str, Any]]
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+
+
+@dataclass(frozen=True)
 class WorktreeEnsureResult:
     branch: str
     path: str

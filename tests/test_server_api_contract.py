@@ -13,7 +13,16 @@ from agent_loom.ticket.api import create as ticket_create
 
 
 def _git_init(repo: Path) -> None:
-    subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "init", "-b", "main"], cwd=repo, check=True, capture_output=True
+    )
+    subprocess.run(
+        ["git", "config", "user.email", "test@example.com"], cwd=repo, check=True
+    )
+    subprocess.run(["git", "config", "user.name", "Test"], cwd=repo, check=True)
+    (repo / "README.md").write_text("hello\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=repo, check=True)
+    subprocess.run(["git", "commit", "-m", "init"], cwd=repo, check=True)
 
 
 @pytest.fixture()
@@ -73,6 +82,40 @@ def test_health_contract(client):
     assert data["ok"] is True
     assert isinstance(data["data"], dict)
     assert "repo_root" in data["data"]
+
+
+def test_capabilities_includes_worktree_diff(client):
+    res = client.get("/api/v1/capabilities")
+    assert res.status_code == 200
+    payload = res.get_json()
+    assert payload["ok"] is True
+    eps = payload["data"].get("endpoints") or []
+    assert any(
+        e.get("method") == "GET" and e.get("path") == "/api/v1/workspace/worktree/diff"
+        for e in eps
+        if isinstance(e, dict)
+    )
+
+
+def test_workspace_worktree_diff_endpoint(client):
+    # Modify tracked file in the repo root (main worktree)
+    # The app fixture repository is embedded in the client; fetch it from health.
+    h = client.get("/api/v1/health").get_json()["data"]
+    repo_root = Path(h["repo_root"]).resolve()
+    (repo_root / "README.md").write_text("hello\nworld\n", encoding="utf-8")
+
+    res = client.get(
+        "/api/v1/workspace/worktree/diff",
+        query_string={"mode": "repo", "path": str(repo_root)},
+    )
+    assert res.status_code == 200
+    payload = res.get_json()
+    assert payload["ok"] is True
+    data = payload["data"]
+    assert data["worktree"] == str(repo_root)
+    files = data.get("files") or []
+    assert files
+    assert "diff --git a/README.md b/README.md" in (files[0] or {}).get("patch", "")
 
 
 def test_tickets_list_and_show(client):

@@ -873,10 +873,10 @@
       "trigger": "When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py",
       "action": "Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv run ruff check ., uv run pytest tests/test_workspace_cli_ux.py.",
       "tags": [],
-      "confidence": 0.9000000000000001,
+      "confidence": 0.9600000000000002,
       "status": "active",
       "created_at": "2026-02-01T07:19:01.984Z",
-      "updated_at": "2026-02-01T17:23:10.436Z",
+      "updated_at": "2026-02-02T23:14:24.600Z",
       "evidence": [
         {
           "ts": "2026-02-01T07:19:01.984Z",
@@ -896,6 +896,16 @@
           "ts": "2026-02-01T17:23:10.436Z",
           "sessionID": "ses_3e8acef0bffebmMo8l1iU1ZNUA",
           "note": "Recent work changed src/agent_loom/workspace/cli.py and adjusted workspace CLI UX contract expectations; reinforces that workspace CLI output/formatting must remain deterministic and should be locked with focused tests."
+        },
+        {
+          "ts": "2026-02-02T22:25:56.810Z",
+          "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
+          "note": "Recent work added substantial workspace CLI UX surface; reinforces need for deterministic output + focused contract tests."
+        },
+        {
+          "ts": "2026-02-02T23:14:24.600Z",
+          "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
+          "note": "User-facing changes in src/agent_loom/workspace/cli.py confirm workspace CLI output/flags should remain deterministic and locked by a contract test."
         }
       ]
     },
@@ -1177,10 +1187,10 @@
       "trigger": "When changing server-rendered HTML behavior (templates or the route that serves them), especially large refactors in src/agent_loom/server/templates/*.html",
       "action": "Add/update a request-level contract test (prefer tests/test_server_api_contract.py) that asserts stable markers/sections and deterministic ordering; avoid brittle full-HTML snapshots; verify via uv run basedpyright, uv run ruff check ., and targeted uv run pytest.",
       "tags": [],
-      "confidence": 0.8800000000000001,
+      "confidence": 0.9200000000000002,
       "status": "active",
       "created_at": "2026-02-02T17:11:57.762Z",
-      "updated_at": "2026-02-02T20:07:38.171Z",
+      "updated_at": "2026-02-02T23:14:24.600Z",
       "evidence": [
         {
           "ts": "2026-02-02T17:11:57.762Z",
@@ -1215,6 +1225,16 @@
           "ts": "2026-02-02T20:07:38.171Z",
           "sessionID": "ses_3e011378effedoidu5iqE7NfSa",
           "note": "Server-rendered HTML behavior changed; strengthens the need for focused API/HTML contract tests asserting stable sections/anchors and deterministic ordering."
+        },
+        {
+          "ts": "2026-02-02T22:25:56.810Z",
+          "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
+          "note": "Dashboard HTML changes were accompanied by request-level contract test updates (tests/test_server_api_contract.py)."
+        },
+        {
+          "ts": "2026-02-02T23:14:24.600Z",
+          "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
+          "note": "Dashboard HTML churn underscores that server-/dashboard-rendered HTML needs request-level invariant tests (anchors/sections/order) rather than brittle full snapshots."
         }
       ]
     },
@@ -1227,7 +1247,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-02-02T17:53:40.739Z",
-      "updated_at": "2026-02-02T20:59:16.342Z",
+      "updated_at": "2026-02-02T22:25:56.810Z",
       "evidence": [
         {
           "ts": "2026-02-02T17:53:40.739Z",
@@ -1297,6 +1317,11 @@
           "ts": "2026-02-02T20:59:16.342Z",
           "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT",
           "note": "Recent edit to src/agent_loom/server/templates/dashboard.html reinforces that dashboard HTML changes should always be paired with a focused server contract test update."
+        },
+        {
+          "ts": "2026-02-02T22:25:56.810Z",
+          "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
+          "note": "Recent work made large dashboard template changes and updated tests/test_server_api_contract.py, reinforcing the contract-test pairing."
         }
       ]
     },
@@ -1323,10 +1348,10 @@
       "trigger": "You are about to make a large refactor in src/agent_loom/server/templates/*.html (especially dashboard.html) that could produce a huge diff.",
       "action": "Minimize formatting-only churn, preserve/introduce stable data-* anchors, and update tests/test_server_api_contract.py in the same change to assert invariant markers/sections (avoid full HTML snapshots).",
       "tags": [],
-      "confidence": 0.9300000000000002,
+      "confidence": 0.9600000000000002,
       "status": "active",
       "created_at": "2026-02-02T19:27:42.729Z",
-      "updated_at": "2026-02-02T20:59:16.342Z",
+      "updated_at": "2026-02-02T23:14:24.600Z",
       "evidence": [
         {
           "ts": "2026-02-02T19:27:42.729Z",
@@ -1376,6 +1401,11 @@
           "ts": "2026-02-02T20:59:16.342Z",
           "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT",
           "note": "Even small dashboard.html diffs benefit from low-churn edits and stable anchors to keep downstream parsing robust."
+        },
+        {
+          "ts": "2026-02-02T23:14:24.600Z",
+          "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
+          "note": "A large dashboard template diff (hundreds of lines) is exactly where minimizing formatting-only churn and preserving anchors prevents brittle reviews and tests."
         }
       ]
     },
@@ -1458,14 +1488,58 @@
       "trigger": "You edit src/agent_loom/dashboard/templates/dashboard.html or src/agent_loom/server/templates/dashboard.html (especially adding/removing/reordering sections).",
       "action": "Preserve/add stable data-* anchors, keep section ordering deterministic, update request-level invariants in tests/test_server_api_contract.py, then run: uv run basedpyright; uv run ruff check .; uv run pytest tests/test_server_api_contract.py.",
       "tags": [],
-      "confidence": 0.78,
+      "confidence": 0.8500000000000001,
       "status": "active",
       "created_at": "2026-02-02T21:37:27.048Z",
-      "updated_at": "2026-02-02T21:37:27.048Z",
+      "updated_at": "2026-02-02T23:18:29.514Z",
       "evidence": [
         {
           "ts": "2026-02-02T21:37:27.048Z",
           "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT"
+        },
+        {
+          "ts": "2026-02-02T23:14:24.600Z",
+          "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
+          "note": "Large edits in src/agent_loom/dashboard/templates/dashboard.html reinforce that stable data-* anchors + deterministic section ordering must be treated as a contract and protected by focused request-level tests."
+        },
+        {
+          "ts": "2026-02-02T23:18:29.514Z",
+          "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
+          "note": "Session included a (small) edit to src/agent_loom/dashboard/templates/dashboard.html; reinforces that even tiny dashboard template changes should preserve/add stable data-* anchors, keep ordering deterministic, and be paired with focused request-level invariants in tests/test_server_api_contract.py."
+        }
+      ]
+    },
+    {
+      "id": "dashboard-template-source-of-truth-check",
+      "title": "Dashboard Template Source Of Truth Check",
+      "trigger": "You edit dashboard HTML or dashboard-serving routes and there are multiple template locations (src/agent_loom/dashboard/templates/* and src/agent_loom/server/templates/*).",
+      "action": "Confirm which template is actually rendered by the route(s); keep stable data-* anchors consistent across any duplicated templates; update request-level invariants in tests/test_server_api_contract.py instead of snapshotting full HTML; run uv run basedpyright, uv run ruff check ., and uv run pytest tests/test_server_api_contract.py.",
+      "tags": [],
+      "confidence": 0.7,
+      "status": "active",
+      "created_at": "2026-02-02T22:25:56.810Z",
+      "updated_at": "2026-02-02T22:25:56.810Z",
+      "evidence": [
+        {
+          "ts": "2026-02-02T22:25:56.810Z",
+          "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2"
+        }
+      ]
+    },
+    {
+      "id": "workspace-diff-ops-changes-require-determinism-and-tests",
+      "title": "Workspace Diff Ops Need Determinism + Tests",
+      "trigger": "You edit workspace diff/read logic (for example src/agent_loom/workspace/diff_ops.py, src/agent_loom/workspace/repo_ops.py, src/agent_loom/workspace/poly_ops.py, src/agent_loom/dashboard/workspace_read.py) where ordering/paths/content can vary by machine or repo state.",
+      "action": "Make outputs deterministic (stable ordering, normalized/relative paths, explicit sorting), add/extend focused tests around invariants, then verify with: uv run basedpyright; uv run ruff check .; uv run pytest <smallest relevant module(s)>.",
+      "tags": [],
+      "confidence": 0.74,
+      "status": "active",
+      "created_at": "2026-02-02T23:14:24.600Z",
+      "updated_at": "2026-02-02T23:14:24.600Z",
+      "evidence": [
+        {
+          "ts": "2026-02-02T23:14:24.600Z",
+          "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2"
         }
       ]
     }
