@@ -111,7 +111,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-30T19:57:13.467Z",
-      "updated_at": "2026-02-01T21:05:38.095Z",
+      "updated_at": "2026-02-02T04:29:13.973Z",
       "evidence": [
         {
           "ts": "2026-01-30T19:57:13.467Z",
@@ -171,6 +171,11 @@
           "ts": "2026-02-01T21:05:38.095Z",
           "sessionID": "ses_3e4fa7035ffef9fueirYdJRAWg",
           "note": "Background autolearn prompt explicitly required JSON-only output; session followed that contract."
+        },
+        {
+          "ts": "2026-02-02T04:29:13.973Z",
+          "sessionID": "ses_3e3909915ffeQPxpsEGARkmO6s",
+          "note": "Background autolearn prompt explicitly required JSON-only output; reinforces strict output-discipline as a hard contract."
         }
       ]
     },
@@ -440,10 +445,10 @@
       "trigger": "System reminder says Plan Mode ACTIVE / READ-ONLY phase",
       "action": "Do not edit/create/delete files or run write-capable commands; only inspect/read/search and produce an execution plan or required JSON payload.",
       "tags": [],
-      "confidence": 0.9700000000000002,
+      "confidence": 0.9800000000000002,
       "status": "active",
       "created_at": "2026-01-31T04:25:38.114Z",
-      "updated_at": "2026-02-01T18:37:52.728Z",
+      "updated_at": "2026-02-02T04:29:13.973Z",
       "evidence": [
         {
           "ts": "2026-01-31T04:25:38.114Z",
@@ -498,6 +503,11 @@
           "ts": "2026-02-01T18:37:52.728Z",
           "sessionID": "ses_3e8acef0bffebmMo8l1iU1ZNUA",
           "note": "Plan Mode system reminder reiterated read-only constraints (no edits/tooling beyond inspection) during this autolearn prompt."
+        },
+        {
+          "ts": "2026-02-02T04:29:13.973Z",
+          "sessionID": "ses_3e3909915ffeQPxpsEGARkmO6s",
+          "note": "System reminder reiterated read-only constraints; reinforces that learning/spec output is allowed but no file/system modifications."
         }
       ]
     },

@@ -18,7 +18,7 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **prompt-changes-require-prompt-tests** (99%)
   - Trigger: When editing agent prompts or prompt assembly code
   - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
-- **plan-mode-readonly-no-edits** (97%)
+- **plan-mode-readonly-no-edits** (98%)
   - Trigger: System reminder says Plan Mode ACTIVE / READ-ONLY phase
   - Action: Do not edit/create/delete files or run write-capable commands; only inspect/read/search and produce an execution plan or required JSON payload.
 - **workspace-cli-output-is-a-contract** (90%)

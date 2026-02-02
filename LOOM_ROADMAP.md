@@ -22,6 +22,7 @@ It tracks changes to skills, instincts, and core context files.
 It is intentionally bounded. Do not write entries like "no changes".
 
 <!-- BEGIN:compound:changelog-entries -->
+- 2026-02-02T04:29:15.307Z Reinforced strict JSON-only learning output and plan-mode read-only discipline via instinct confidence bumps.
 - 2026-02-02T04:02:12.117Z Add ticket-runtime test/UX contract instincts; clarify ticket contract expectations in always-on context.
 - 2026-02-01T23:53:01.334Z Add an instinct to minimize memory churn during idle autolearn runs without repo changes.
 - 2026-02-01T21:38:43.454Z Add an instinct + skill to keep `.tickets/` changes consistent with dependency graph and status transitions.
