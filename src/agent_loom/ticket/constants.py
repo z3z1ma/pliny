@@ -12,7 +12,14 @@ CACHE_DIRNAME = ".cache"
 CONFIG_FILENAME = "config.yaml"
 AUDIT_DIRNAME = ".audit"
 
-VALID_STATUSES = ("open", "in_progress", "closed")
+VALID_STATUSES = ("open", "ready", "in_progress", "blocked", "review", "closed")
+
+TERMINAL_STATUSES = ("closed",)
+BACKLOG_STATUSES = ("open", "ready")
+ACTIVE_STATUSES = ("in_progress", "blocked", "review")
+NON_TERMINAL_STATUSES = ("open", "ready", "in_progress", "blocked", "review")
+
+STATUS_ORDER = ("open", "ready", "in_progress", "blocked", "review", "closed")
 
 TICKET_DIR_OVERRIDE: Optional[str] = None
 
@@ -28,6 +35,11 @@ __all__ = [
     "CONFIG_FILENAME",
     "AUDIT_DIRNAME",
     "VALID_STATUSES",
+    "TERMINAL_STATUSES",
+    "BACKLOG_STATUSES",
+    "ACTIVE_STATUSES",
+    "NON_TERMINAL_STATUSES",
+    "STATUS_ORDER",
     "TICKET_DIR_OVERRIDE",
     "AUDIT_MODE",
     "AUDIT_LOGGER",

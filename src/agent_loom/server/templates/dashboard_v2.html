@@ -866,6 +866,7 @@
       ready: list.filter(t => t.status === 'ready' || t.status === 'next'),
       doing: list.filter(t => ['doing','in_progress','progress'].includes(t.status)),
       blocked: list.filter(t => ['blocked','hold','waiting'].includes(t.status)),
+      review: list.filter(t => ['review','pr','ready_for_review'].includes(t.status)),
       done: list.filter(t => ['done','closed','merged','resolved'].includes(t.status))
     };
 
@@ -874,6 +875,7 @@
       { id: 'ready', title: 'Ready', items: buckets.ready, color: 'blue' },
       { id: 'doing', title: 'In Progress', items: buckets.doing, color: 'orange' },
       { id: 'blocked', title: 'Blocked', items: buckets.blocked, color: 'red' },
+      { id: 'review', title: 'Review', items: buckets.review, color: 'purple' },
       { id: 'done', title: 'Done', items: buckets.done, color: 'green' }
     ];
 

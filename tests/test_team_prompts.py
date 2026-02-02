@@ -204,10 +204,12 @@ class TestRenderWorkerPrompt(unittest.TestCase):
                 - Use Loom ticket to update progress after each major step or every ~15 minutes.
                 - Commit after each meaningful milestone (do not sit on uncommitted work).
                 - If blocked: write a structured escalation in Loom ticket (what was tried, what is needed, 2 options)
+                  - Set status: `loom ticket status mem-127d blocked`
                   and notify the manager via `loom team send CobraKai manager "mem-127d blocked: ..."`.
                 - Inbox discipline: when nudged, run `loom team inbox CobraKai list --to w5 --unacked` and ack messages you read with `loom team inbox CobraKai ack <MSG_ID>`.
                 - Then respond with a brief status update and/or a Loom ticket update.
-                - If completion candidate: provide verification steps + commands run + risks.
+                - If completion candidate: set status to review and provide verification steps + commands run + risks.
+                  - Set status: `loom ticket status mem-127d review`
 
                 Idling policy: if you have no concrete next command right now, run `loom team wait 15m` and stop output.
 
@@ -297,10 +299,12 @@ class TestRenderInvestigatorPrompt(unittest.TestCase):
                 - Use Loom ticket to update progress after each major step or every ~15 minutes.
                 - Commit after each meaningful milestone (do not sit on uncommitted work).
                 - If blocked: write a structured escalation in Loom ticket (what was tried, what is needed, 2 options)
+                  - Set status: `loom ticket status t-1 blocked`
                   and notify the manager via `loom team send CobraKai manager "t-1 blocked: ..."`.
                 - Inbox discipline: when nudged, run `loom team inbox CobraKai list --to w9 --unacked` and ack messages you read with `loom team inbox CobraKai ack <MSG_ID>`.
                 - Then respond with a brief status update and/or a Loom ticket update.
-                - If completion candidate: provide verification steps + commands run + risks.
+                - If completion candidate: set status to review and provide verification steps + commands run + risks.
+                  - Set status: `loom ticket status t-1 review`
 
                 Idling policy: if you have no concrete next command right now, run `loom team wait 15m` and stop output.
 
@@ -398,7 +402,7 @@ class TestEnsureOpenCodeAgents(unittest.TestCase):
             "team-integrator.md": "21a1e7d976e9a9f3a3020224efc58f451b8ad9b7839cbf800ab87468baca153e",
             "team-investigator.md": "d57403b3acfa0d557c7ac331f800a333640289fa34127837566c4b8f42eeab5d",
             "team-manager.md": "f47deba920a92ee1e57dcb63e488f1d657ea56ac5468c8ec4ce5a8060213feff",
-            "team-worker.md": "5024c54ce8abac069c553883e310e9d662a491bfcbe863bd1b6c7b66c959a4ee",
+            "team-worker.md": "a7c3f05d0208b24ad7874295f218d6210facba5c7c49f5f6cc18cdb318f933c6",
         }
 
         with tempfile.TemporaryDirectory() as d:

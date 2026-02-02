@@ -72,6 +72,8 @@ from agent_loom.ticket.constants import (
     TICKET_DIR_OVERRIDE,
     TICKET_DIRNAME,
     VALID_STATUSES,
+    STATUS_ORDER,
+    NON_TERMINAL_STATUSES,
 )
 from agent_loom.ticket.frontmatter import decanonicalize_frontmatter
 from agent_loom.ticket.graph import (
@@ -289,14 +291,29 @@ def require_status(s: str) -> str:
         raise TicketArgError(
             code="ARG",
             error=f"Invalid status {str(s).strip()!r}. Must be one of: {', '.join(VALID_STATUSES)}",
-            hint="Aliases: todo/new->open, wip/doing/started->in_progress, done/completed->closed.",
+            hint=(
+                "Aliases: todo/new/backlog->open, queued/next->ready, "
+                "wip/doing/started->in_progress, stuck/waiting->blocked, "
+                "pr/ready_for_review->review, done/completed->closed."
+            ),
             suggestions=[
                 "loom ticket status <id> open",
+                "loom ticket status <id> ready",
                 "loom ticket status <id> in_progress",
+                "loom ticket status <id> blocked",
+                "loom ticket status <id> review",
                 "loom ticket status <id> closed",
             ],
         )
     return s0
+
+
+def _status_rank(status: str) -> int:
+    try:
+        return STATUS_ORDER.index(str(status or ""))
+    except ValueError:
+        # Unknown statuses should sort last but remain deterministic.
+        return len(STATUS_ORDER)
 
 
 def _summary_for_ticket(
@@ -593,7 +610,7 @@ def list_tickets(
         return True
 
     tickets = [t for t in idx.tickets.values() if match(t)]
-    tickets.sort(key=lambda t: (t.status == "closed", t.priority, t.id))
+    tickets.sort(key=lambda t: (_status_rank(t.status), t.priority, t.id))
 
     if limit:
         tickets = tickets[:limit]
@@ -629,7 +646,9 @@ def ready(
 
     out: List[Ticket] = []
     for tid, t in idx.tickets.items():
-        if t.status not in {"open", "in_progress"}:
+        if t.status not in NON_TERMINAL_STATUSES:
+            continue
+        if t.status == "blocked":
             continue
 
         try:
@@ -673,7 +692,7 @@ def blocked(*, assignee: str = "", tag: str = "") -> TicketListResult:
 
     rows: List[Tuple[Ticket, List[str]]] = []
     for tid, t in idx.tickets.items():
-        if t.status not in {"open", "in_progress"}:
+        if t.status not in NON_TERMINAL_STATUSES:
             continue
         if assignee and str(t.fm.get("assignee") or "") != assignee:
             continue
@@ -682,10 +701,10 @@ def blocked(*, assignee: str = "", tag: str = "") -> TicketListResult:
             if tag not in tags:
                 continue
         bl = blockers_for(tid, idx)
-        if bl:
+        if t.status == "blocked" or bl:
             rows.append((t, bl))
 
-    rows.sort(key=lambda x: (x[0].priority, x[0].id))
+    rows.sort(key=lambda x: (_status_rank(x[0].status), x[0].priority, x[0].id))
 
     out_rows = [
         _summary_for_ticket(

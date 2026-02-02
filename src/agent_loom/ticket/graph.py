@@ -4,6 +4,7 @@ import dataclasses
 from typing import Any, Dict, List, Mapping, Sequence, Tuple
 
 from agent_loom.ticket.frontmatter import normalize_list_value
+from agent_loom.ticket.constants import NON_TERMINAL_STATUSES
 from agent_loom.ticket.models import Ticket
 
 
@@ -147,7 +148,11 @@ def is_ready(tid: str, idx: GraphIndex) -> bool:
     t = idx.ticket(tid)
     if not t:
         return False
-    if t.status not in {"open", "in_progress"}:
+    # Tickets can be "ready" due to deps even if their status is still open.
+    # Treat explicit "blocked" as not-ready, even if deps are empty.
+    if t.status == "blocked":
+        return False
+    if t.status not in NON_TERMINAL_STATUSES:
         return False
     return len(blockers_for(tid, idx)) == 0
 
@@ -156,7 +161,10 @@ def is_blocked(tid: str, idx: GraphIndex) -> bool:
     t = idx.ticket(tid)
     if not t:
         return False
-    if t.status not in {"open", "in_progress"}:
+    # Explicitly blocked tickets are always considered blocked.
+    if t.status == "blocked":
+        return True
+    if t.status not in NON_TERMINAL_STATUSES:
         return False
     return len(blockers_for(tid, idx)) > 0
 
@@ -242,7 +250,15 @@ def topo_layers_by_block_depth(
 
 
 def compute_health(nodes: set[str], idx: GraphIndex) -> Dict[str, Any]:
-    counts = {"open": 0, "in_progress": 0, "closed": 0, "missing": 0}
+    counts = {
+        "open": 0,
+        "ready": 0,
+        "in_progress": 0,
+        "blocked": 0,
+        "review": 0,
+        "closed": 0,
+        "missing": 0,
+    }
     blocked = 0
     ready = 0
     for n in sorted(nodes):

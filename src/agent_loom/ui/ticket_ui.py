@@ -248,7 +248,14 @@ class TicketUIHandler(BaseHTTPRequestHandler):
                 HTTPStatus.OK,
                 {
                     "ok": True,
-                    "statuses": ["open", "in_progress", "closed"],
+                    "statuses": [
+                        "open",
+                        "ready",
+                        "in_progress",
+                        "blocked",
+                        "review",
+                        "closed",
+                    ],
                     "types": ["task", "bug", "feature", "epic", "chore"],
                 },
             )

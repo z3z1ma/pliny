@@ -200,9 +200,9 @@ Protocol:
 2) When you begin real work, transition the ticket to in_progress via `loom ticket` (worker-owned).
 3) Update the ticket at least every ~15 minutes or after each major step.
 4) Commit after each meaningful milestone (do not sit on uncommitted work).
-5) If blocked: write a structured escalation into Loom ticket (what was tried, what is needed, 2 options).
+5) If blocked: set ticket status to blocked, then write a structured escalation into Loom ticket (what was tried, what is needed, 2 options).
 6) Notify the manager after persisting: `{cmd_worker_blocked}`
-7) Completion candidate: update Loom ticket with verification steps + commands run + risks, then request manager review.
+7) Completion candidate: set ticket status to review, then update Loom ticket with verification steps + commands run + risks, then request manager review.
 
 Inbox discipline (important):
 - If nudged, list your unacked messages: `loom team inbox <TEAM> list --to <YOUR_WORKER_ID> --unacked`.
@@ -547,6 +547,9 @@ def render_worker_prompt(
         "- If blocked: write a structured escalation in Loom ticket (what was tried, what is needed, 2 options)\n"
     )
     parts.append(
+        f"  - Set status: `loom ticket status {ticket_id or '<id>'} blocked`\n"
+    )
+    parts.append(
         f"  and notify the manager via `{_cmd_worker_blocked(team=team, ticket_id=ticket_id)}`.\n"
     )
     parts.append(
@@ -556,7 +559,10 @@ def render_worker_prompt(
         "- Then respond with a brief status update and/or a Loom ticket update.\n"
     )
     parts.append(
-        "- If completion candidate: provide verification steps + commands run + risks.\n\n"
+        "- If completion candidate: set status to review and provide verification steps + commands run + risks.\n"
+    )
+    parts.append(
+        f"  - Set status: `loom ticket status {ticket_id or '<id>'} review`\n\n"
     )
 
     parts.append(

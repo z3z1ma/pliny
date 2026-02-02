@@ -149,7 +149,7 @@ This block is maintained by the compound plugin.
 - **compound-template-mirror-must-stay-in-sync** (94%)
   - Trigger: When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy unde…
   - Action: Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_i…
-- **large-template-refactor-diff-hygiene** (92%)
+- **large-template-refactor-diff-hygiene** (93%)
   - Trigger: You are about to make a large refactor in src/agent_loom/server/templates/*.html (especially dashboard.html) that could produce a huge diff.
   - Action: Minimize formatting-only churn, preserve/introduce stable data-* anchors, and update tests/test_server_api_contract.py in the same change to assert invariant markers/sections (avoid full HTML snapshot…
 - **workspace-cli-output-is-a-contract** (90%)
@@ -161,6 +161,9 @@ This block is maintained by the compound plugin.
 - **team-prompts-need-section-level-contracts** (86%)
   - Trigger: When adding or restructuring sections in src/agent_loom/team/prompts.py (or prompt assembly in src/agent_loom/team/core.py).
   - Action: Make prompt rendering deterministic (explicit ordering, stable headings) and add/expand section-level contract tests in tests/test_team_prompts.py that assert required sections/ordering without relyin…
+- **ticket-changes-require-ticket-ux-contract-test** (84%)
+  - Trigger: You edit ticket runtime/UX code (src/agent_loom/ticket/*.py or src/agent_loom/ui/ticket_ui.*) or anything that changes rendered ticket text/sections.
+  - Action: Treat ticket UX as a contract: make ordering deterministic, update/add focused assertions in tests/test_ticket_ux.py for required sections/lines (avoid nondeterministic values), then verify via `uv ru…
 - **skills-canonical-location-is-opencode** (83%)
   - Trigger: When editing/creating skills and there are multiple skill directories (for example .opencode/skills and .claude/skills)
   - Action: Only propose skill changes under .opencode/skills/<name>/SKILL.md and rely on docs/index sync; avoid duplicating or manually maintaining mirror copies elsewhere.
@@ -182,9 +185,6 @@ This block is maintained by the compound plugin.
 - **workspace-core-changes-require-targeted-tests** (74%)
   - Trigger: When editing src/agent_loom/workspace/core.py, src/agent_loom/workspace/models.py, src/agent_loom/workspace/state.py, src/agent_loom/workspace/repo_ops.py, src/agent_loom/workspace/git_ops.py, src/age…
   - Action: Treat workspace as public API: add/adjust targeted pytest coverage for the behavior/contract being changed (CLI text, model serialization, ordering, guard failures). Run: uv run basedpyright, uv run r…
-- **loom-init-cli-changes-require-ux-contract-test** (74%)
-  - Trigger: When editing user-visible output/flags/formatting in src/agent_loom/init/cli.py (or init CLI output pathways).
-  - Action: Make output deterministic (stable ordering; no nondeterministic/machine-specific values) and add/update a focused pytest contract test (prefer tests/test_loom_init_cli_ux.py). Verify with: uv run base…
 <!-- END:compound:instincts-index -->
 
 <!-- BEGIN:compound:rules-index -->

@@ -1383,6 +1383,15 @@
     if (/ready/.test(s)) return 'ready';
     return 'backlog';
   }
+  function statusForBucket(bucket){
+    if (bucket === 'backlog') return 'open';
+    if (bucket === 'done') return 'closed';
+    if (bucket === 'ready') return 'ready';
+    if (bucket === 'in_progress') return 'in_progress';
+    if (bucket === 'blocked') return 'blocked';
+    if (bucket === 'review') return 'review';
+    return bucket;
+  }
   const BUCKET_ORDER = ['backlog','ready','in_progress','blocked','review','done'];
   const BUCKET_LABEL = {
     backlog: 'Backlog',
@@ -1972,8 +1981,8 @@
           }
           newStatus = targetCol;
         } else {
-          // smart bucket: use canonical bucket name as status (simple, consistent)
-          newStatus = targetCol;
+          // smart bucket: map to canonical status
+          newStatus = statusForBucket(targetCol);
         }
 
         // Optimistic update in local list

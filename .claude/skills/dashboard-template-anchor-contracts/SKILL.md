@@ -25,6 +25,7 @@ Make the rendered dashboard easy for both humans and agents to parse, and lock i
    - Use obvious, low-churn anchors like:
      - `data-section="..."` for major sections
      - `data-item="..."` for repeated rows/cards
+     - `data-field="..."` for key label/value pairs when adding new fields
    - Avoid relying on CSS classes or deep DOM structure as the contract.
 
 2. Diff hygiene (avoid churn)

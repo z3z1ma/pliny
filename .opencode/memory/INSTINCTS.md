@@ -30,7 +30,7 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **compound-template-mirror-must-stay-in-sync** (94%)
   - Trigger: When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy unde…
   - Action: Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_i…
-- **large-template-refactor-diff-hygiene** (92%)
+- **large-template-refactor-diff-hygiene** (93%)
   - Trigger: You are about to make a large refactor in src/agent_loom/server/templates/*.html (especially dashboard.html) that could produce a huge diff.
   - Action: Minimize formatting-only churn, preserve/introduce stable data-* anchors, and update tests/test_server_api_contract.py in the same change to assert invariant markers/sections (avoid full HTML snapshot…
 - **workspace-cli-output-is-a-contract** (90%)
@@ -42,6 +42,9 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **team-prompts-need-section-level-contracts** (86%)
   - Trigger: When adding or restructuring sections in src/agent_loom/team/prompts.py (or prompt assembly in src/agent_loom/team/core.py).
   - Action: Make prompt rendering deterministic (explicit ordering, stable headings) and add/expand section-level contract tests in tests/test_team_prompts.py that assert required sections/ordering without relyin…
+- **ticket-changes-require-ticket-ux-contract-test** (84%)
+  - Trigger: You edit ticket runtime/UX code (src/agent_loom/ticket/*.py or src/agent_loom/ui/ticket_ui.*) or anything that changes rendered ticket text/sections.
+  - Action: Treat ticket UX as a contract: make ordering deterministic, update/add focused assertions in tests/test_ticket_ux.py for required sections/lines (avoid nondeterministic values), then verify via `uv ru…
 - **skills-canonical-location-is-opencode** (83%)
   - Trigger: When editing/creating skills and there are multiple skill directories (for example .opencode/skills and .claude/skills)
   - Action: Only propose skill changes under .opencode/skills/<name>/SKILL.md and rely on docs/index sync; avoid duplicating or manually maintaining mirror copies elsewhere.
@@ -123,9 +126,6 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **team-start-merge-config-changes-require-contract-test** (57%)
   - Trigger: When changing team startup behavior or merge configuration wiring (typically in src/agent_loom/team/core.py and/or src/agent_loom/team/cli.py), especially any logic that selects/validates merge config…
   - Action: Treat it like a public contract: add/update tests/test_team_start_merge_config.py to lock expected invariants, clear lsp_diagnostics on touched files, then run `uv run ruff check .` and `uv run pytest…
-- **fix-lsp-before-committing** (47%)
-  - Trigger: After editing code or before declaring work complete
-  - Action: Run LSP diagnostics on touched files and fix errors/warnings before lint/tests; don’t defer LSP cleanup.
 
 ## Notes
 

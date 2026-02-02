@@ -1073,7 +1073,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-02-02T16:51:47.123Z",
-      "updated_at": "2026-02-02T20:31:08.208Z",
+      "updated_at": "2026-02-02T20:59:16.342Z",
       "evidence": [
         {
           "ts": "2026-02-02T16:51:47.123Z",
@@ -1153,6 +1153,11 @@
           "ts": "2026-02-02T20:31:08.208Z",
           "sessionID": "ses_3e011378effedoidu5iqE7NfSa",
           "note": "Server HTML changes continue to be high-churn/high-risk without explicit deterministic markers/ordering; treat templates as UX contracts."
+        },
+        {
+          "ts": "2026-02-02T20:59:16.342Z",
+          "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT",
+          "note": "Template tweaks are easy to ship without locking markers/ordering; reaffirm treating server-rendered HTML as a deterministic contract."
         }
       ]
     },
@@ -1212,7 +1217,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-02-02T17:53:40.739Z",
-      "updated_at": "2026-02-02T20:31:08.208Z",
+      "updated_at": "2026-02-02T20:59:16.342Z",
       "evidence": [
         {
           "ts": "2026-02-02T17:53:40.739Z",
@@ -1277,6 +1282,11 @@
           "ts": "2026-02-02T20:31:08.208Z",
           "sessionID": "ses_3e011378effedoidu5iqE7NfSa",
           "note": "Session changed src/agent_loom/server/templates/dashboard.html; this repeatedly correlates with needing request-level invariants in tests/test_server_api_contract.py."
+        },
+        {
+          "ts": "2026-02-02T20:59:16.342Z",
+          "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT",
+          "note": "Recent edit to src/agent_loom/server/templates/dashboard.html reinforces that dashboard HTML changes should always be paired with a focused server contract test update."
         }
       ]
     },
@@ -1303,10 +1313,10 @@
       "trigger": "You are about to make a large refactor in src/agent_loom/server/templates/*.html (especially dashboard.html) that could produce a huge diff.",
       "action": "Minimize formatting-only churn, preserve/introduce stable data-* anchors, and update tests/test_server_api_contract.py in the same change to assert invariant markers/sections (avoid full HTML snapshots).",
       "tags": [],
-      "confidence": 0.9200000000000002,
+      "confidence": 0.9300000000000002,
       "status": "active",
       "created_at": "2026-02-02T19:27:42.729Z",
-      "updated_at": "2026-02-02T20:31:08.208Z",
+      "updated_at": "2026-02-02T20:59:16.342Z",
       "evidence": [
         {
           "ts": "2026-02-02T19:27:42.729Z",
@@ -1351,6 +1361,11 @@
           "ts": "2026-02-02T20:31:08.208Z",
           "sessionID": "ses_3e011378effedoidu5iqE7NfSa",
           "note": "dashboard.html edits tend to create formatting churn; reiterate minimizing whitespace-only diffs and preserving stable anchors."
+        },
+        {
+          "ts": "2026-02-02T20:59:16.342Z",
+          "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT",
+          "note": "Even small dashboard.html diffs benefit from low-churn edits and stable anchors to keep downstream parsing robust."
         }
       ]
     },
@@ -1368,6 +1383,23 @@
         {
           "ts": "2026-02-02T20:11:48.678Z",
           "sessionID": "ses_3e011378effedoidu5iqE7NfSa"
+        }
+      ]
+    },
+    {
+      "id": "ticket-changes-require-ticket-ux-contract-test",
+      "title": "Ticket Changes Need UX Contract Test",
+      "trigger": "You edit ticket runtime/UX code (src/agent_loom/ticket/*.py or src/agent_loom/ui/ticket_ui.*) or anything that changes rendered ticket text/sections.",
+      "action": "Treat ticket UX as a contract: make ordering deterministic, update/add focused assertions in tests/test_ticket_ux.py for required sections/lines (avoid nondeterministic values), then verify via `uv run basedpyright`, `uv run ruff check .`, `uv run pytest tests/test_ticket_ux.py`.",
+      "tags": [],
+      "confidence": 0.84,
+      "status": "active",
+      "created_at": "2026-02-02T20:55:36.543Z",
+      "updated_at": "2026-02-02T20:55:36.543Z",
+      "evidence": [
+        {
+          "ts": "2026-02-02T20:55:36.543Z",
+          "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT"
         }
       ]
     }

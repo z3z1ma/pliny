@@ -161,6 +161,57 @@ class TestTicketUx(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(shown["ticket"]["status"], "closed")
 
+    def test_status_accepts_canonical_workflow_states(self) -> None:
+        with _temp_git_repo() as (root, env):
+            env = {**env, "TICKET_DIR": str(root / ".tickets")}
+
+            _, created = _ticket_json(
+                ["--json", "--no-audit", "create", "Test"], cwd=root, env=env
+            )
+            tid = str(created.get("id") or "")
+            self.assertTrue(tid)
+
+            for st in ["ready", "blocked", "review"]:
+                code, payload = _ticket_json(
+                    ["--json", "--no-audit", "status", tid, st], cwd=root, env=env
+                )
+                self.assertEqual(code, 0)
+                self.assertTrue(payload.get("ok"))
+                self.assertEqual(payload.get("status"), st)
+
+                code, shown = _ticket_json(
+                    ["--json", "--no-audit", "show", tid], cwd=root, env=env
+                )
+                self.assertEqual(code, 0)
+                self.assertTrue(shown.get("ok"))
+                self.assertEqual(shown["ticket"]["status"], st)
+
+    def test_status_rejects_invalid(self) -> None:
+        with _temp_git_repo() as (root, env):
+            env = {**env, "TICKET_DIR": str(root / ".tickets")}
+
+            _, created = _ticket_json(
+                ["--json", "--no-audit", "create", "Test"], cwd=root, env=env
+            )
+            tid = str(created.get("id") or "")
+
+            code, err = _ticket_json(
+                ["--json", "--no-audit", "status", tid, "nope"], cwd=root, env=env
+            )
+            self.assertEqual(code, 2)
+            self.assertFalse(err.get("ok"))
+            self.assertEqual(err.get("code"), "ARG")
+            msg = str(err.get("error") or "")
+            for required in [
+                "open",
+                "ready",
+                "in_progress",
+                "blocked",
+                "review",
+                "closed",
+            ]:
+                self.assertIn(required, msg)
+
     def test_create_title_flag_and_positional_conflict(self) -> None:
         with _temp_git_repo() as (root, env):
             env = {**env, "TICKET_DIR": str(root / ".tickets")}

@@ -24,6 +24,8 @@ It tracks changes to skills, instincts, and core context files.
 It is intentionally bounded. Do not write entries like "no changes".
 
 <!-- BEGIN:compound:changelog-entries -->
+- 2026-02-02T20:59:17.409Z Reinforce dashboard template anchor + contract testing discipline; bump confidence on server HTML contract instincts.
+- 2026-02-02T20:55:37.931Z Add instinct to lock ticket runtime/UX changes behind deterministic output + tests/test_ticket_ux.py gate.
 - 2026-02-02T20:31:09.235Z Reinforce server template contract discipline: stable data-* anchors + request-level invariants; slightly increase confidence on related instincts.
 - 2026-02-02T20:26:40.303Z Reinforce server template contract instincts (dashboard invariants, deterministic markers) based on recent dashboard.html edits.
 - 2026-02-02T20:19:32.304Z Reinforce dashboard/server HTML contract instincts: deterministic template output, diff hygiene, and server API contract tests on dashboard.html changes.

@@ -40,7 +40,7 @@ from agent_loom.ticket.store import (
 )
 from agent_loom.ticket.errors import TicketArgError
 from agent_loom.ticket.normalize import normalize_status
-from agent_loom.ticket.constants import VALID_STATUSES
+from agent_loom.ticket.constants import STATUS_ORDER, VALID_STATUSES
 from agent_loom.ticket.core import default_agent_id
 
 
@@ -210,9 +210,20 @@ def _require_status(s: str) -> str:
         raise TicketArgError(
             code="ARG",
             error=f"Invalid status {str(s).strip()!r}. Must be one of: {', '.join(VALID_STATUSES)}",
-            hint="Aliases: todo/new->open, wip/doing/started->in_progress, done/completed->closed.",
+            hint=(
+                "Aliases: todo/new/backlog->open, queued/next->ready, "
+                "wip/doing/started->in_progress, stuck/waiting->blocked, "
+                "pr/ready_for_review->review, done/completed->closed."
+            ),
         )
     return s0
+
+
+def _status_rank(status: str) -> int:
+    try:
+        return STATUS_ORDER.index(str(status or ""))
+    except ValueError:
+        return len(STATUS_ORDER)
 
 
 def list_tickets(
@@ -283,7 +294,7 @@ def list_tickets(
     tickets = [t for t in idx.tickets.values() if match(t)]
     tickets.sort(
         key=lambda t: (
-            getattr(t, "status", "") == "closed",
+            _status_rank(getattr(t, "status", "")),
             getattr(t, "priority", 2),
             getattr(t, "id", ""),
         )

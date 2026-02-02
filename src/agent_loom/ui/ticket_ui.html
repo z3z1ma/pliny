@@ -628,7 +628,10 @@
       transition: background 0.2s;
     }
     .ticket[data-status="open"]::before { background: var(--c-green); }
+    .ticket[data-status="ready"]::before { background: var(--c-orange); }
     .ticket[data-status="in_progress"]::before { background: var(--c-blue); }
+    .ticket[data-status="blocked"]::before { background: var(--c-red); }
+    .ticket[data-status="review"]::before { background: var(--c-purple); }
     .ticket[data-status="closed"]::before { background: var(--text-muted); }
 
     .ticketTitle {
@@ -674,10 +677,25 @@
       background: color-mix(in srgb, var(--success) var(--tint-a), transparent);
       border-color: color-mix(in srgb, var(--success) var(--tint-border), transparent);
     }
+    .chip.status-ready {
+      color: var(--warning);
+      background: color-mix(in srgb, var(--warning) var(--tint-a), transparent);
+      border-color: color-mix(in srgb, var(--warning) var(--tint-border), transparent);
+    }
     .chip.status-in_progress {
       color: var(--primary);
       background: color-mix(in srgb, var(--primary) var(--tint-a), transparent);
       border-color: color-mix(in srgb, var(--primary) var(--tint-border), transparent);
+    }
+    .chip.status-blocked {
+      color: var(--danger);
+      background: color-mix(in srgb, var(--danger) var(--tint-a), transparent);
+      border-color: color-mix(in srgb, var(--danger) var(--tint-border), transparent);
+    }
+    .chip.status-review {
+      color: var(--c-purple);
+      background: color-mix(in srgb, var(--c-purple) var(--tint-a), transparent);
+      border-color: color-mix(in srgb, var(--c-purple) var(--tint-border), transparent);
     }
     .chip.status-closed {
       color: var(--text-muted);
@@ -1067,8 +1085,11 @@
           <select id="f_status">
             <option value="">All Statuses</option>
             <option value="open">Open</option>
+            <option value="ready">Ready</option>
             <option value="in_progress">In Progress</option>
-            <option value="closed">Closed</option>
+            <option value="blocked">Blocked</option>
+            <option value="review">Review</option>
+            <option value="closed">Done</option>
           </select>
         </div>
 
@@ -1204,11 +1225,14 @@
         details: $('#details')
       };
 
-      const STATUS_ORDER = ['open','in_progress','closed'];
+      const STATUS_ORDER = ['open','ready','in_progress','blocked','review','closed'];
       const STATUS_LABEL = {
         open: 'Open',
+        ready: 'Ready',
         in_progress: 'In Progress',
-        closed: 'Closed'
+        blocked: 'Blocked',
+        review: 'Review',
+        closed: 'Done'
       };
 
       const state = {
@@ -1234,7 +1258,7 @@
         detailsReqId: 0,
         meta: { assignees: [], tags: [] },
         hadInitialLoad: false,
-        kanbanColScroll: { open: 0, in_progress: 0, closed: 0 },
+        kanbanColScroll: { open: 0, ready: 0, in_progress: 0, blocked: 0, review: 0, closed: 0 },
         restore: {
           done: false,
           selectedId: null,

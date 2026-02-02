@@ -56,7 +56,7 @@ def normalize_priority(value: Any) -> int:
 
 
 def normalize_status(value: Any) -> str:
-    """Normalize status inputs to open|in_progress|closed."""
+    """Normalize status inputs to open|ready|in_progress|blocked|review|closed."""
 
     s = str(value or "").strip().lower()
     if not s:
@@ -71,13 +71,25 @@ def normalize_status(value: Any) -> str:
         "wip": "in_progress",
         "doing": "in_progress",
         "started": "in_progress",
+        "progress": "in_progress",
+        "ready_for_review": "review",
+        "pr": "review",
         "open": "open",
         "todo": "open",
         "new": "open",
+        "backlog": "open",
+        "ready": "ready",
+        "next": "ready",
+        "queued": "ready",
         "closed": "closed",
         "done": "closed",
         "complete": "closed",
         "completed": "closed",
+        "blocked": "blocked",
+        "stuck": "blocked",
+        "waiting": "blocked",
+        "hold": "blocked",
+        "review": "review",
     }
     if s in aliases:
         return aliases[s]
