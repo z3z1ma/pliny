@@ -111,7 +111,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-30T19:57:13.467Z",
-      "updated_at": "2026-02-02T20:19:31.290Z",
+      "updated_at": "2026-02-02T21:24:36.939Z",
       "evidence": [
         {
           "ts": "2026-01-30T19:57:13.467Z",
@@ -191,6 +191,11 @@
           "ts": "2026-02-02T20:19:31.290Z",
           "sessionID": "ses_3e011378effedoidu5iqE7NfSa",
           "note": "Autolearn prompts require JSON-only output; reiterates strict output discipline for compound learning runs."
+        },
+        {
+          "ts": "2026-02-02T21:24:36.939Z",
+          "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT",
+          "note": "Background autolearn prompt reiterates JSON-only output discipline; treat as strict contract."
         }
       ]
     },
@@ -468,7 +473,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-31T04:25:38.114Z",
-      "updated_at": "2026-02-02T20:26:39.333Z",
+      "updated_at": "2026-02-02T21:24:36.939Z",
       "evidence": [
         {
           "ts": "2026-01-31T04:25:38.114Z",
@@ -548,6 +553,11 @@
           "ts": "2026-02-02T20:26:39.333Z",
           "sessionID": "ses_3e011378effedoidu5iqE7NfSa",
           "note": "This autolearn context is read-only; reinforces strict separation between plan/learn outputs and any write actions."
+        },
+        {
+          "ts": "2026-02-02T21:24:36.939Z",
+          "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT",
+          "note": "System reminder enforces read-only/plan mode; reinforces that autolearn responses must avoid any tool/file mutation."
         }
       ]
     },
@@ -1399,6 +1409,23 @@
       "evidence": [
         {
           "ts": "2026-02-02T20:55:36.543Z",
+          "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT"
+        }
+      ]
+    },
+    {
+      "id": "removing-cli-command-requires-contract-cleanup",
+      "title": "Removing CLI Commands Requires Contract Cleanup",
+      "trigger": "You delete an entire CLI command/module directory (for example removing src/agent_loom/init/* or a whole subcommand surface).",
+      "action": "Treat it like a contract change: remove entrypoints/exports, delete or update the command wiring, delete/update contract tests and skills that reference the removed surface, and then run the standard gate (uv run basedpyright; uv run ruff check .; uv run pytest <targeted>).",
+      "tags": [],
+      "confidence": 0.76,
+      "status": "active",
+      "created_at": "2026-02-02T21:09:13.325Z",
+      "updated_at": "2026-02-02T21:09:13.325Z",
+      "evidence": [
+        {
+          "ts": "2026-02-02T21:09:13.325Z",
           "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT"
         }
       ]

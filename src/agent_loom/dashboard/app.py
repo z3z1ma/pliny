@@ -8,12 +8,12 @@ from typing import Any
 
 from flask import Flask, Request, jsonify, render_template, request
 
-from agent_loom.server.auth import authorize_request
-from agent_loom.server.compound_fs import list_skills, read_instincts, read_skill
-from agent_loom.server.config import ServerConfig
-from agent_loom.server.http import err, ok
-from agent_loom.server.introspect import introspect_module
-from agent_loom.server.workspace_read import (
+from agent_loom.dashboard.auth import authorize_request
+from agent_loom.dashboard.compound_fs import list_skills, read_instincts, read_skill
+from agent_loom.dashboard.config import ServerConfig
+from agent_loom.dashboard.http import err, ok
+from agent_loom.dashboard.introspect import introspect_module
+from agent_loom.dashboard.workspace_read import (
     WorkspaceReadError,
     detect_workspace_mode,
     poly_worktrees,

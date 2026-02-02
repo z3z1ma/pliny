@@ -1,6 +1,6 @@
 ---
 name: loom-init-cli-ux-contract-testing
-description: Use when changing src/agent_loom/init/cli.py output/flags to keep loom init CLI UX deterministic and regression-tested in tests/test_loom_init_cli_ux.py.
+description: Use when reintroducing or refactoring a loom init-style flow so the CLI UX stays deterministic and regression-tested (deprecated while src/agent_loom/init/ is absent).
 license: MIT
 compatibility: opencode,claude
 metadata:
@@ -11,12 +11,17 @@ metadata:
 <!-- BEGIN:compound:skill-managed -->
 ## When to use
 
-- You changed user-visible output or flags in `src/agent_loom/init/cli.py`.
-- You changed init flow messaging (what happens, what gets created, what the user should do next).
+- You are (re)introducing an init/bootstrap flow (for example restoring `src/agent_loom/init/cli.py`).
+- You changed user-visible output or flags in an init/bootstrap command.
+
+## Status
+
+This checklist is **deprecated while `src/agent_loom/init/` does not exist**.
+If init is removed, use `cli-command-removal-contract-checklist` instead.
 
 ## Goal
 
-Keep `loom init` output stable, minimal, and deterministic.
+Keep `loom init` (or equivalent) output stable, minimal, and deterministic.
 
 ## Checklist
 

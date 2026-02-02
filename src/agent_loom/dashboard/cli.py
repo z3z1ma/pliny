@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import os
+import threading
+import time
+import webbrowser
 from pathlib import Path
 from typing import Optional, Sequence
 
 from agent_loom.core.git import git_repo_root
-from agent_loom.server.app import create_app
-from agent_loom.server.config import ServerConfig
+from agent_loom.dashboard.app import create_app
+from agent_loom.dashboard.config import ServerConfig
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -48,6 +52,11 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Require a token even when bound to loopback",
     )
+    start.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="Do not open the dashboard in a browser",
+    )
     return p
 
 
@@ -55,6 +64,21 @@ def _resolve_repo_root(arg: str) -> Path:
     p = Path(arg or ".").expanduser().resolve()
     gr = git_repo_root(p)
     return gr if gr is not None else p
+
+
+def _open_browser(host: str, port: int) -> None:
+    safe_host = str(host or "").strip()
+    if safe_host in {"", "0.0.0.0", "::"}:
+        safe_host = "127.0.0.1"
+    url = f"http://{safe_host}:{int(port)}/"
+
+    def _work() -> None:
+        time.sleep(0.3)
+        with contextlib.suppress(Exception):
+            webbrowser.open(url, new=2, autoraise=True)
+
+    t = threading.Thread(target=_work, name="loom_dashboard_open", daemon=True)
+    t.start()
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -75,6 +99,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             require_token=bool(args.require_token),
         )
         app = create_app(cfg=cfg)
+        if not bool(args.no_browser):
+            _open_browser(str(args.host), int(args.port))
         app.run(host=str(args.host), port=int(args.port), debug=False)
         return 0
 

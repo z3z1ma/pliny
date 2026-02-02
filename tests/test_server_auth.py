@@ -3,8 +3,8 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-from agent_loom.server.app import create_app
-from agent_loom.server.config import ServerConfig
+from agent_loom.dashboard.app import create_app
+from agent_loom.dashboard.config import ServerConfig
 
 
 def _git_init(repo: Path) -> None:

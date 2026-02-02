@@ -4,4 +4,4 @@ __all__ = [
     "create_app",
 ]
 
-from agent_loom.server.app import create_app
+from agent_loom.dashboard.app import create_app

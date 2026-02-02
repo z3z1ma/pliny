@@ -5,7 +5,7 @@ from typing import Optional, Sequence
 
 from agent_loom.compound.cli import main as compound_main
 from agent_loom.memory.cli import main as memory_main
-from agent_loom.server.cli import main as server_main
+from agent_loom.dashboard.cli import main as server_main
 from agent_loom.team.cli import main as team_main
 from agent_loom.ticket.cli import main as ticket_main
 from agent_loom.workspace.cli import main as workspace_main
@@ -45,7 +45,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     cmd, rest = args[0], args[1:]
 
     if cmd == "init":
-        from agent_loom.init.cli import main as init_main
+        from agent_loom.init import main as init_main
 
         return int(init_main(list(rest)))
 

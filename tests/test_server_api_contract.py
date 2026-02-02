@@ -7,8 +7,8 @@ import pytest
 
 from agent_loom.memory.core import add as memory_add
 from agent_loom.memory.core import init as memory_init
-from agent_loom.server.app import create_app
-from agent_loom.server.config import ServerConfig
+from agent_loom.dashboard.app import create_app
+from agent_loom.dashboard.config import ServerConfig
 from agent_loom.ticket.api import create as ticket_create
 
 
