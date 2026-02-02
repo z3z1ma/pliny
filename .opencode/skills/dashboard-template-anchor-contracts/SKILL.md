@@ -1,6 +1,6 @@
 ---
 name: dashboard-template-anchor-contracts
-description: Use when editing src/agent_loom/server/templates/dashboard.html (or adding/removing sections) to keep stable data-* anchors, deterministic ordering, and contract tests aligned.
+description: Use when editing the dashboard HTML template(s) to keep stable data-* anchors, deterministic ordering, and server contract tests aligned.
 license: MIT
 compatibility: opencode,claude
 metadata:
@@ -11,8 +11,9 @@ metadata:
 <!-- BEGIN:compound:skill-managed -->
 ## When to use
 
+- You changed `src/agent_loom/dashboard/templates/dashboard.html`.
 - You changed `src/agent_loom/server/templates/dashboard.html`.
-- You added/removed/reordered sections in a server template.
+- You added/removed/reordered sections in a dashboard template.
 
 ## Goal
 

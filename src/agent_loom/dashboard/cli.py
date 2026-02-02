@@ -82,10 +82,15 @@ def _open_browser(host: str, port: int) -> None:
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
-    args = build_parser().parse_args(list(argv) if argv is not None else None)
+    raw_args = list(argv) if argv is not None else []
+    if not raw_args:
+        raw_args = ["start"]
+    elif raw_args[0] in {"-h", "--help", "help"}:
+        pass
+    elif raw_args[0].startswith("-"):
+        raw_args = ["start", *raw_args]
 
-    if not getattr(args, "cmd", None):
-        args.cmd = "start"
+    args = build_parser().parse_args(raw_args)
 
     if args.cmd == "start":
         repo_root = _resolve_repo_root(str(args.repo_root))

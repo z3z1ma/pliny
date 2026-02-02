@@ -1436,13 +1436,35 @@
       "trigger": "When changing user-visible output or flags in src/agent_loom/dashboard/cli.py",
       "action": "Make output deterministic (stable ordering, no nondeterministic values) and add/update a focused pytest contract test asserting required lines/sections; verify via uv run basedpyright, uv run ruff check ., and targeted uv run pytest for the dashboard CLI test module.",
       "tags": [],
-      "confidence": 0.78,
+      "confidence": 0.8200000000000001,
       "status": "active",
       "created_at": "2026-02-02T21:34:28.663Z",
-      "updated_at": "2026-02-02T21:34:28.663Z",
+      "updated_at": "2026-02-02T21:40:49.310Z",
       "evidence": [
         {
           "ts": "2026-02-02T21:34:28.663Z",
+          "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT"
+        },
+        {
+          "ts": "2026-02-02T21:40:49.310Z",
+          "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT",
+          "note": "Recent changes in src/agent_loom/dashboard/cli.py reinforce that dashboard CLI output should be treated as a deterministic UX contract with focused regression tests."
+        }
+      ]
+    },
+    {
+      "id": "dashboard-template-edits-require-anchor-contracts",
+      "title": "Dashboard template edits need anchors + tests",
+      "trigger": "You edit src/agent_loom/dashboard/templates/dashboard.html or src/agent_loom/server/templates/dashboard.html (especially adding/removing/reordering sections).",
+      "action": "Preserve/add stable data-* anchors, keep section ordering deterministic, update request-level invariants in tests/test_server_api_contract.py, then run: uv run basedpyright; uv run ruff check .; uv run pytest tests/test_server_api_contract.py.",
+      "tags": [],
+      "confidence": 0.78,
+      "status": "active",
+      "created_at": "2026-02-02T21:37:27.048Z",
+      "updated_at": "2026-02-02T21:37:27.048Z",
+      "evidence": [
+        {
+          "ts": "2026-02-02T21:37:27.048Z",
           "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT"
         }
       ]

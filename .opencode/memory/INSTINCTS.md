@@ -51,15 +51,18 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **team-mounts-changes-require-contract-test** (83%)
   - Trigger: When editing team mount behavior (notably src/agent_loom/team/core.py) or adding/changing mounts-related logic and outputs.
   - Action: Lock the behavior with deterministic invariants and update/add coverage in tests/test_team_mounts.py; then run uv run basedpyright, uv run ruff check ., and uv run pytest tests/test_team_mounts.py.
+- **dashboard-cli-output-is-a-contract** (82%)
+  - Trigger: When changing user-visible output or flags in src/agent_loom/dashboard/cli.py
+  - Action: Make output deterministic (stable ordering, no nondeterministic values) and add/update a focused pytest contract test asserting required lines/sections; verify via uv run basedpyright, uv run ruff che…
 - **python-commands-use-uv-run** (80%)
   - Trigger: When about to run any Python command (tests, linters, scripts, REPL)
   - Action: Use `uv run ...` (never `python`, `pip`, or bare tool binaries). Prefer `uv run pytest`, `uv run ruff check .`, etc.
 - **prefer-basedpyright-over-lsp-diagnostics** (78%)
   - Trigger: When about to check Python types/diagnostics (or an existing checklist says to run lsp_diagnostics)
   - Action: Run `uv run basedpyright` and fix findings before `uv run ruff check .` and targeted `uv run pytest ...`.
-- **dashboard-cli-output-is-a-contract** (78%)
-  - Trigger: When changing user-visible output or flags in src/agent_loom/dashboard/cli.py
-  - Action: Make output deterministic (stable ordering, no nondeterministic values) and add/update a focused pytest contract test asserting required lines/sections; verify via uv run basedpyright, uv run ruff che…
+- **dashboard-template-edits-require-anchor-contracts** (78%)
+  - Trigger: You edit src/agent_loom/dashboard/templates/dashboard.html or src/agent_loom/server/templates/dashboard.html (especially adding/removing/reordering sections).
+  - Action: Preserve/add stable data-* anchors, keep section ordering deterministic, update request-level invariants in tests/test_server_api_contract.py, then run: uv run basedpyright; uv run ruff check .; uv ru…
 - **team-spawn-integrator-changes-require-contract-test** (77%)
   - Trigger: When changing team spawn/integrator wiring (typically in src/agent_loom/team/core.py or src/agent_loom/team/cli.py), especially anything that boots an integrator or mediates agent process startup.
   - Action: Add/update a focused contract test in tests/test_team_spawn_integrator.py that asserts deterministic invariants (what starts, with what args/env, and what is persisted/returned), then run lsp_diagnost…
@@ -123,9 +126,6 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **team-init-exports-are-public-api** (62%)
   - Trigger: When editing src/agent_loom/team/__init__.py exports or adding new team entrypoints
   - Action: Treat exports as a public contract: keep names stable, avoid side effects on import, and ensure tests cover expected import paths/entrypoints when behavior changes.
-- **ticket-core-changes-require-targeted-tests** (61%)
-  - Trigger: When editing src/agent_loom/ticket/cli.py, src/agent_loom/ticket/core.py, or src/agent_loom/ticket/store.py
-  - Action: Treat it like a public API: run lsp_diagnostics on touched files, fix issues, run `uv run ruff check .`, and add/run targeted pytest coverage for ticket CLI/core/store behavior before declaring done.
 
 ## Notes
 
