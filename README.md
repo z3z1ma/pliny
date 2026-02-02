@@ -35,7 +35,7 @@ Each subsystem has a CLI surface and an on-disk footprint.
 | Team | `loom team` | `.team/` | tmux-native orchestration: manager/workers/inbox/merge queue |
 | Memory | `loom memory` | `.memory/` | Obsidian-like Markdown notes; derived SQLite cache for recall |
 | Compound | `loom compound` | `.opencode/` | Compounding: skills as procedural memory (SKILL.md), plus tooling scaffolding |
-| Server | `loom server` | - | HTTP API for dashboards (see `docs/openapi.yaml`) |
+| Dashboard | `loom dashboard` | - | HTTP API for dashboards (see `docs/openapi.yaml`) |
 
 ## Install
 
@@ -177,7 +177,7 @@ This is also why Loom is opinionated about UX: it would rather accept plausible 
 ## Server API
 
 ```bash
-loom server start --host 127.0.0.1 --port 8764
+loom dashboard --host 127.0.0.1 --port 8764
 ```
 
 Spec: `docs/openapi.yaml`.

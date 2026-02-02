@@ -5,7 +5,7 @@ from typing import Optional, Sequence
 
 from agent_loom.compound.cli import main as compound_main
 from agent_loom.memory.cli import main as memory_main
-from agent_loom.dashboard.cli import main as server_main
+from agent_loom.dashboard.cli import main as dashboard_main
 from agent_loom.team.cli import main as team_main
 from agent_loom.ticket.cli import main as ticket_main
 from agent_loom.workspace.cli import main as workspace_main
@@ -24,7 +24,7 @@ def _print_root_help() -> None:
                 "  workspace  Workspace + worktree tooling (workspace.json + .loom/ + .loom-repo/)",
                 "  team       tmux-native orchestration (.team)",
                 "  compound   OpenCode compound integration (.opencode)",
-                "  server     HTTP server for the Loom API (for dashboards)",
+                "  dashboard  HTTP server for the Loom API (dashboard UI)",
                 "",
                 "Help:",
                 "  loom <command> -h",
@@ -68,8 +68,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if cmd == "compound":
         return int(compound_main(list(rest)))
 
-    if cmd == "server":
-        return int(server_main(list(rest)))
+    if cmd == "dashboard":
+        return int(dashboard_main(list(rest)))
 
     sys.stderr.write(f"Unknown command: {cmd}\n")
     _print_root_help()

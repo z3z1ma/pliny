@@ -57,6 +57,9 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **prefer-basedpyright-over-lsp-diagnostics** (78%)
   - Trigger: When about to check Python types/diagnostics (or an existing checklist says to run lsp_diagnostics)
   - Action: Run `uv run basedpyright` and fix findings before `uv run ruff check .` and targeted `uv run pytest ...`.
+- **dashboard-cli-output-is-a-contract** (78%)
+  - Trigger: When changing user-visible output or flags in src/agent_loom/dashboard/cli.py
+  - Action: Make output deterministic (stable ordering, no nondeterministic values) and add/update a focused pytest contract test asserting required lines/sections; verify via uv run basedpyright, uv run ruff che…
 - **team-spawn-integrator-changes-require-contract-test** (77%)
   - Trigger: When changing team spawn/integrator wiring (typically in src/agent_loom/team/core.py or src/agent_loom/team/cli.py), especially anything that boots an integrator or mediates agent process startup.
   - Action: Add/update a focused contract test in tests/test_team_spawn_integrator.py that asserts deterministic invariants (what starts, with what args/env, and what is persisted/returned), then run lsp_diagnost…
@@ -123,9 +126,6 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **ticket-core-changes-require-targeted-tests** (61%)
   - Trigger: When editing src/agent_loom/ticket/cli.py, src/agent_loom/ticket/core.py, or src/agent_loom/ticket/store.py
   - Action: Treat it like a public API: run lsp_diagnostics on touched files, fix issues, run `uv run ruff check .`, and add/run targeted pytest coverage for ticket CLI/core/store behavior before declaring done.
-- **team-ship-behavior-requires-ticket-sync-test** (57%)
-  - Trigger: When changing team ship/merge behavior in src/agent_loom/team/core.py, src/agent_loom/team/cli.py, or src/agent_loom/team/merge_queue.py
-  - Action: Add/update a focused contract test in tests/test_team_ship_ticket_sync.py and run `uv run pytest tests/test_team_ship_ticket_sync.py` plus `uv run ruff check .` (after clearing lsp_diagnostics on touc…
 
 ## Notes
 

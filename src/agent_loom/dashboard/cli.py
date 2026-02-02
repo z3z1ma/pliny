@@ -15,10 +15,10 @@ from agent_loom.dashboard.config import ServerConfig
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="server", description="Loom HTTP server")
-    sub = p.add_subparsers(dest="cmd", required=True)
+    p = argparse.ArgumentParser(prog="dashboard", description="Loom dashboard server")
+    sub = p.add_subparsers(dest="cmd")
 
-    start = sub.add_parser("start", help="Start the server")
+    start = sub.add_parser("start", help="Start the dashboard server")
     start.add_argument("--host", default="127.0.0.1", help="Bind address")
     start.add_argument("--port", type=int, default=8764, help="Bind port")
     start.add_argument(
@@ -83,6 +83,9 @@ def _open_browser(host: str, port: int) -> None:
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     args = build_parser().parse_args(list(argv) if argv is not None else None)
+
+    if not getattr(args, "cmd", None):
+        args.cmd = "start"
 
     if args.cmd == "start":
         repo_root = _resolve_repo_root(str(args.repo_root))

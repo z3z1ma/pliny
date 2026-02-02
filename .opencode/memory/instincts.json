@@ -1429,6 +1429,23 @@
           "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT"
         }
       ]
+    },
+    {
+      "id": "dashboard-cli-output-is-a-contract",
+      "title": "Dashboard CLI output is a contract",
+      "trigger": "When changing user-visible output or flags in src/agent_loom/dashboard/cli.py",
+      "action": "Make output deterministic (stable ordering, no nondeterministic values) and add/update a focused pytest contract test asserting required lines/sections; verify via uv run basedpyright, uv run ruff check ., and targeted uv run pytest for the dashboard CLI test module.",
+      "tags": [],
+      "confidence": 0.78,
+      "status": "active",
+      "created_at": "2026-02-02T21:34:28.663Z",
+      "updated_at": "2026-02-02T21:34:28.663Z",
+      "evidence": [
+        {
+          "ts": "2026-02-02T21:34:28.663Z",
+          "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT"
+        }
+      ]
     }
   ]
 }

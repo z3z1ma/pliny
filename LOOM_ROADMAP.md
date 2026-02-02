@@ -24,6 +24,7 @@ It tracks changes to skills, instincts, and core context files.
 It is intentionally bounded. Do not write entries like "no changes".
 
 <!-- BEGIN:compound:changelog-entries -->
+- 2026-02-02T21:34:30.030Z Add dashboard CLI UX contract testing skill and instinct to keep src/agent_loom/dashboard/cli.py output deterministic and tested.
 - 2026-02-02T21:24:36.942Z Reinforce JSON-only and read-only discipline for background autolearn/plan-mode contexts.
 - 2026-02-02T21:09:16.406Z Add a checklist + instinct for clean removal of entire CLI command surfaces; deprecate loom-init UX skill while init module is absent.
 - 2026-02-02T20:59:17.409Z Reinforce dashboard template anchor + contract testing discipline; bump confidence on server HTML contract instincts.
