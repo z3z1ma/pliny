@@ -646,6 +646,97 @@
 
     /* Diff accordions (GitHub-ish) */
     .pill.active{ background: var(--sel); border-color: var(--border2); }
+
+    /* Teams: live run UI */
+    .tabBar{ display:flex; flex-wrap:wrap; gap: 6px; }
+    .tabBar .pill{ border-radius: 999px; }
+    .tabBar .pill.active{ background: var(--sel); border-color: var(--border2); }
+
+    .kvGrid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px 12px;
+    }
+    @media (max-width: 980px){ .kvGrid{ grid-template-columns: 1fr; } }
+    .kv{
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      border-radius: var(--r2);
+      padding: 8px;
+    }
+    .kv .k{ color: var(--muted); font-size: 11px; margin-bottom: 4px; }
+    .kv .v{ font-family: var(--mono); font-size: 11px; color: var(--fg); overflow-wrap:anywhere; }
+
+    .callout{
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--border2);
+      background: var(--panel2);
+      border-radius: var(--r2);
+      padding: 8px 10px;
+    }
+    .callout.ok{ border-left-color: var(--ok); }
+    .callout.warn{ border-left-color: var(--warn); }
+    .callout.bad{ border-left-color: var(--bad); }
+    .callout .h{ font-weight: 760; color: var(--fg2); font-size: 12px; }
+    .callout .d{ margin-top: 4px; color: var(--muted); font-size: 12px; }
+
+    .teamListQ{ margin-bottom: 8px; }
+    .teamGrid{ display:grid; gap: 10px; }
+
+    .eventList{ display:flex; flex-direction:column; gap: 6px; }
+    details.eventItem{
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      border-radius: var(--r2);
+      overflow:hidden;
+    }
+    details.eventItem > summary{
+      list-style:none;
+      padding: 8px 10px;
+      cursor:pointer;
+      user-select:none;
+      display:flex;
+      align-items:flex-start;
+      gap: 10px;
+    }
+    details.eventItem > summary::-webkit-details-marker{ display:none; }
+    .eventDot{ width: 8px; height: 8px; border-radius: 999px; background: var(--muted); margin-top: 5px; flex: 0 0 auto; }
+    .eventDot.ok{ background: var(--ok); }
+    .eventDot.bad{ background: var(--bad); }
+    .eventTop{ display:flex; gap: 8px; align-items:center; min-width:0; }
+    .eventType{ font-family: var(--mono); font-size: 11px; color: var(--fg2); }
+    .eventTs{ font-family: var(--mono); font-size: 11px; color: var(--muted); white-space:nowrap; }
+    .eventSummary{ margin-top: 3px; color: var(--fg); font-size: 12px; overflow-wrap:anywhere; }
+    .eventBody{ padding: 8px 10px; border-top: 1px solid var(--border); }
+
+    .msgList{ display:flex; flex-direction:column; gap: 8px; }
+    .msgCard{
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      border-radius: var(--r2);
+      padding: 8px 10px;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+    }
+    .msgHead{ display:flex; align-items:center; gap: 8px; flex-wrap:wrap; }
+    .msgHead .meta{ margin-left:auto; display:flex; gap: 6px; align-items:center; flex-wrap:wrap; }
+    .msgBody{ color: var(--fg); font-size: 12px; white-space: pre-wrap; overflow-wrap:anywhere; }
+    .msgPreview{ color: var(--fg); font-size: 12px; overflow-wrap:anywhere; }
+
+    .capList{ display:flex; flex-direction:column; gap: 8px; }
+    .capCard{
+      border: 1px solid var(--border);
+      background: var(--panel2);
+      border-radius: var(--r2);
+      padding: 8px 10px;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+    }
+    .capHead{ display:flex; align-items:center; gap: 8px; flex-wrap:wrap; }
+    .capHead .meta{ margin-left:auto; display:flex; gap: 6px; align-items:center; flex-wrap:wrap; }
+    .capPath{ font-family: var(--mono); font-size: 11px; color: var(--muted); overflow-wrap:anywhere; }
     .diffMetaRow{ display:flex; flex-wrap:wrap; gap: 6px; align-items:center; }
     .diffAcc{
       border: 1px solid var(--border);
@@ -935,7 +1026,8 @@
       selectedId: ''
     },
 
-    teams: { selected: '', limit: '120' },
+    // Teams UI state (client-only)
+    teams: { selected: '', limit: '120', tab: 'overview', q: '', events_q: '', events_ok: 'all', inbox_view: 'unread', captures_q: '' },
     memory: { vault: '.memory', q: '', limit: '10', tag: '', not_tag: '', scope: '', not_scope: '', visibility: '', expand: '0', context:'0', deterministic:'0', include_deprecated:'0' },
     workspace: { mode: 'auto', root: '', q: '', dirty: '', group: '', repo: '', missing: '', selectedPath: '', diffMode: 'cumulative', diffBase: '' },
     compound: { selectedSkill: '' },
@@ -2211,78 +2303,452 @@
 
     const b = data.teams.bundle;
 
-    return `
-      <div class="split">
-        <div class="card">
-          <div class="cardHeader">
-            <div class="cardTitle">Teams <small>/api/v1/teams</small></div>
-            <div class="row">
-              <button class="pill small" id="teamsRefresh" type="button">refresh</button>
-              <button class="pill small" id="teamsJson" type="button">json</button>
+     const q = (state.teams.q || '').trim().toLowerCase();
+     const filtered = q
+       ? list.filter(t => (`${t.team || ''} ${t.objective || ''} ${t.session || ''}`).toLowerCase().includes(q))
+       : list;
+
+     const tab = (state.teams.tab || 'overview');
+
+     const status = b?.status || null;
+     const run = b?.run || null;
+     const events = (b?.events?.events || []);
+     const inbox = b?.inbox || { unread: [], read: [] };
+     const captures = (b?.captures?.captures || []);
+
+     const objective = clamp(String(run?.objective || ''), 180);
+     const warnings = (status?.warnings || []);
+
+     const workers = status?.workers || {};
+     const wList = Object.entries(workers).map(([id, w]) => ({ id, ...(w || {}) }));
+     const wActive = wList.filter(w => !w.retired);
+     const wAlive = wActive.filter(w => !!w.alive);
+
+     const inboxUnackedMgr = Number(status?.inbox?.unacked_to_manager || 0);
+     const inboxUnackedTotal = Number(status?.inbox?.unacked_total || 0);
+     const mergePending = Number(status?.merge_queue?.pending || 0);
+     const mergeQueued = Number(status?.merge_queue?.queued || 0);
+     const mergeClaimed = Number(status?.merge_queue?.claimed || 0);
+     const warningsCount = Array.isArray(warnings) ? warnings.length : 0;
+
+     function klassForWarnings(n){
+       if (!n) return 'ok';
+       if (n >= 3) return 'bad';
+       return 'warn';
+     }
+
+     function fmtBytes(n){
+       const x = Number(n || 0);
+       if (!isFinite(x) || x <= 0) return '0b';
+       if (x < 1024) return x + 'b';
+       if (x < 1024*1024) return (x/1024).toFixed(1) + 'kb';
+       return (x/(1024*1024)).toFixed(1) + 'mb';
+     }
+
+     function renderWarnings(){
+       if (!warningsCount) return `
+         <div class="callout ok" data-team-warnings>
+           <div class="h">No warnings</div>
+           <div class="d">Run state looks consistent with tmux and repo paths.</div>
+         </div>
+       `;
+       const rows = (warnings || []).slice(0, 12).map(w => {
+         const code = (w?.code || 'WARN').toString();
+         const msg = (w?.message || '').toString();
+         return `<div class="mono" style="font-size:11px;"><span style="color:var(--yellow)">${escapeHtml(code)}</span> ${escapeHtml(msg)}</div>`;
+       }).join('');
+       const extra = warningsCount > 12 ? `<div class="muted small" style="margin-top:6px">${warningsCount-12} more…</div>` : '';
+       return `
+         <div class="callout ${klassForWarnings(warningsCount)}" data-team-warnings>
+           <div class="h">Warnings (${warningsCount})</div>
+           <div class="d">${rows}${extra}</div>
+         </div>
+       `;
+     }
+
+     function renderOverviewPanel(){
+       return `
+         ${renderWarnings()}
+         <div style="height:10px"></div>
+         <div class="chipRow" data-team-metrics>
+           <span class="chip info">workers: ${wAlive.length}/${wActive.length}</span>
+           <span class="chip ${inboxUnackedMgr ? 'warn' : 'ok'}">inbox→manager: ${inboxUnackedMgr}</span>
+           <span class="chip ${inboxUnackedTotal ? 'warn' : 'ok'}">inbox total: ${inboxUnackedTotal}</span>
+           <span class="chip ${mergePending ? 'warn' : 'ok'}">merge pending: ${mergePending}</span>
+           <span class="chip">events: ${events.length}</span>
+           <span class="chip">captures: ${captures.length}</span>
+         </div>
+         <div style="height:10px"></div>
+         <div class="kvGrid" data-team-kv>
+           <div class="kv"><div class="k">session</div><div class="v">${escapeHtml(status?.session || run?.session || '')}</div></div>
+           <div class="kv"><div class="k">run_id</div><div class="v">${escapeHtml(status?.run_id || run?.run_id || '')}</div></div>
+           <div class="kv"><div class="k">repo_root</div><div class="v">${escapeHtml(prettyPath(status?.repo_root || run?.repo_root || ''))}</div></div>
+           <div class="kv"><div class="k">run_dir</div><div class="v">${escapeHtml(prettyPath(status?.run_dir || run?.run_dir || ''))}</div></div>
+           <div class="kv"><div class="k">tickets_dir</div><div class="v">${escapeHtml(prettyPath(status?.tickets_dir || run?.tickets_dir || ''))}</div></div>
+           <div class="kv"><div class="k">merge_queue</div><div class="v">pending=${mergePending} queued=${mergeQueued} claimed=${mergeClaimed}</div></div>
+         </div>
+       `;
+     }
+
+     function renderWorkersPanel(){
+       const mgr = status?.manager || {};
+       const mgrTmux = mgr?.tmux || {};
+
+       const rows = wList
+         .slice()
+         .sort((a,b) => String(a.id).localeCompare(String(b.id)))
+         .map(w => {
+           const alive = !!w.alive;
+           const cls = alive ? 'ok' : 'bad';
+           const role = (w.role || '').toString();
+           const win = (w.window || '').toString();
+           const pane = (w.pane_id || '').toString();
+           const ticket = (w.ticket_id || '').toString();
+           const wt = (w.worktree || '').toString();
+           const br = (w.branch || '').toString();
+           const retired = !!w.retired;
+           return `
+             <tr>
+               <td class="mono" style="color:var(--blue)">${escapeHtml(w.id)}</td>
+               <td><span class="chip ${retired ? '' : cls}">${retired ? 'retired' : (alive ? 'alive' : 'dead')}</span></td>
+               <td class="mono muted">${escapeHtml(role)}</td>
+               <td class="mono muted">${escapeHtml(ticket)}</td>
+               <td class="mono muted">${escapeHtml(win)}</td>
+               <td class="mono muted">${escapeHtml(pane)}</td>
+               <td class="mono muted wrap">${escapeHtml(prettyPath(wt))}</td>
+               <td class="mono muted">${escapeHtml(br)}</td>
+             </tr>
+           `;
+         }).join('') || `<tr><td colspan="8" class="muted">No workers.</td></tr>`;
+
+       return `
+         <div class="row" style="justify-content:space-between;">
+           <div class="chipRow">
+             <span class="chip info">workers alive: ${wAlive.length}/${wActive.length}</span>
+             <span class="chip">total workers: ${wList.length}</span>
+           </div>
+         </div>
+         <div style="height:10px"></div>
+         <div class="callout" data-team-manager>
+           <div class="h">Manager</div>
+           <div class="d">
+             <div class="chipRow">
+               <span class="chip">pane: <span class="mono">${escapeHtml(mgr?.pane_id || '')}</span></span>
+               <span class="chip">window: <span class="mono">${escapeHtml(mgr?.window || '')}</span></span>
+               <span class="chip">host: <span class="mono">${escapeHtml(mgrTmux?.host || '')}</span></span>
+             </div>
+           </div>
+         </div>
+         <div style="height:10px"></div>
+         <table data-team-workers>
+           <thead>
+             <tr>
+               <th style="width:130px">worker</th>
+               <th style="width:90px">state</th>
+               <th style="width:120px">role</th>
+               <th style="width:140px">ticket</th>
+               <th style="width:120px">window</th>
+               <th style="width:120px">pane</th>
+               <th>worktree</th>
+               <th style="width:140px">branch</th>
+             </tr>
+           </thead>
+           <tbody>${rows}</tbody>
+         </table>
+       `;
+     }
+
+     function renderEventsPanel(){
+       const eq = (state.teams.events_q || '').trim().toLowerCase();
+       const okf = (state.teams.events_ok || 'all');
+       const filteredEvents = events.filter(ev => {
+         if (okf === 'ok' && !ev.ok) return false;
+         if (okf === 'bad' && ev.ok) return false;
+         if (!eq) return true;
+         const hay = `${ev.type||''} ${ev.summary||''} ${(ev.actor?.role||'')} ${(ev.actor?.worker_id||'')} ${(ev.actor?.ticket_id||'')} ${(ev.refs ? JSON.stringify(ev.refs) : '')}`.toLowerCase();
+         return hay.includes(eq);
+       });
+
+       const items = filteredEvents.slice(0, 120).map(ev => {
+         const dot = ev.ok ? 'ok' : 'bad';
+         const ts = String(ev.ts || '');
+         const type = String(ev.type || 'event');
+         const sum = String(ev.summary || '');
+         const actor = ev.actor || {};
+         const refs = ev.refs || {};
+         const op = ev.op || {};
+         const err = ev.error || {};
+         const dat = ev.data || {};
+         return `
+           <details class="eventItem" data-team-event>
+             <summary>
+               <span class="eventDot ${dot}"></span>
+               <div style="min-width:0; flex:1 1 auto;">
+                 <div class="eventTop">
+                   <span class="eventTs">${escapeHtml(ts)}</span>
+                   <span class="eventType">${escapeHtml(type)}</span>
+                   <span class="chip ${ev.ok ? 'ok' : 'bad'}">${ev.ok ? 'ok' : 'bad'}</span>
+                 </div>
+                 <div class="eventSummary">${escapeHtml(sum || '(no summary)')}</div>
+               </div>
+             </summary>
+             <div class="eventBody">
+               <div class="chipRow">
+                 ${actor.role ? `<span class="chip">role: <span class="mono">${escapeHtml(actor.role)}</span></span>` : ''}
+                 ${actor.worker_id ? `<span class="chip">worker: <span class="mono">${escapeHtml(actor.worker_id)}</span></span>` : ''}
+                 ${actor.ticket_id ? `<span class="chip">ticket: <span class="mono">${escapeHtml(actor.ticket_id)}</span></span>` : ''}
+                 ${actor.pane_id ? `<span class="chip">pane: <span class="mono">${escapeHtml(actor.pane_id)}</span></span>` : ''}
+                 ${op.op_id ? `<span class="chip">op: <span class="mono">${escapeHtml(op.op_id)}</span></span>` : ''}
+                 ${op.parent_op_id ? `<span class="chip">parent: <span class="mono">${escapeHtml(op.parent_op_id)}</span></span>` : ''}
+               </div>
+               <div style="height:8px"></div>
+               <div class="kvGrid">
+                 <div class="kv"><div class="k">refs</div><div class="v">${escapeHtml(JSON.stringify(refs || {}, null, 2))}</div></div>
+                 <div class="kv"><div class="k">data</div><div class="v">${escapeHtml(JSON.stringify(dat || {}, null, 2))}</div></div>
+                 <div class="kv"><div class="k">error</div><div class="v">${escapeHtml(JSON.stringify(err || {}, null, 2))}</div></div>
+               </div>
+             </div>
+           </details>
+         `;
+       }).join('') || `<div class="muted small">No events.</div>`;
+
+       const shown = Math.min(filteredEvents.length, 120);
+       return `
+         <div class="row" style="align-items:flex-end;">
+           <div class="field" style="flex: 2 1 340px; min-width:220px;">
+             <label>filter</label>
+             <input class="input" id="teamEventQ" value="${escapeHtml(state.teams.events_q || '')}" placeholder="type, summary, worker, ticket…" />
+           </div>
+           <div class="field" style="flex:0 0 160px; min-width:160px;">
+             <label>ok</label>
+             <select class="input" id="teamEventOk">
+               <option value="all" ${okf==='all'?'selected':''}>all</option>
+               <option value="ok" ${okf==='ok'?'selected':''}>ok only</option>
+               <option value="bad" ${okf==='bad'?'selected':''}>bad only</option>
+             </select>
+           </div>
+           <div class="field" style="flex:0 0 auto; min-width:160px;">
+             <label>&nbsp;</label>
+             <button class="pill small" id="teamEventsJson" type="button">json</button>
+           </div>
+         </div>
+         <div class="muted small" style="margin-top:8px">Showing ${shown}/${filteredEvents.length} events (newest first).</div>
+         <div style="height:10px"></div>
+         <div class="eventList" data-team-events>${items}</div>
+       `;
+     }
+
+     function renderInboxPanel(){
+       const view = (state.teams.inbox_view || 'unread');
+       const unread = Array.isArray(inbox.unread) ? inbox.unread : [];
+       const read = Array.isArray(inbox.read) ? inbox.read : [];
+       const items = (view === 'read') ? read : (view === 'all' ? [...unread, ...read] : unread);
+       const cards = items.slice(0, 80).map(m => {
+         const id = String(m.id || '');
+         const to = String(m.to || '');
+         const from = String(m.from || '');
+         const kind = String(m.kind || '');
+         const created = String(m.created_at || '');
+         const ack = String(m.acked_at || '');
+         const msg = String(m.message || '');
+         const preview = clamp(msg.replace(/\s+/g,' ').trim(), 240);
+         return `
+           <div class="msgCard" data-team-msg>
+             <div class="msgHead">
+               <span class="chip info">${escapeHtml(kind || 'msg')}</span>
+               <span class="chip">to: <span class="mono">${escapeHtml(to)}</span></span>
+               <span class="chip">from: <span class="mono">${escapeHtml(from)}</span></span>
+               ${ack ? `<span class="chip ok">acked</span>` : `<span class="chip warn">unacked</span>`}
+               <div class="meta">
+                 <span class="chip"><span class="mono">${escapeHtml(created)}</span></span>
+                 <button class="pill small" type="button" data-team-msg-open="${escapeHtml(id)}">open</button>
+               </div>
+             </div>
+             <div class="msgPreview">${escapeHtml(preview || '(empty)')}</div>
+           </div>
+         `;
+       }).join('') || `<div class="muted small">No messages.</div>`;
+
+       return `
+         <div class="row" style="justify-content:space-between;">
+           <div class="tabBar" data-team-inbox-tabs>
+             <button class="pill small ${view==='unread'?'active':''}" data-team-inbox-view="unread" type="button">unread (${unread.length})</button>
+             <button class="pill small ${view==='read'?'active':''}" data-team-inbox-view="read" type="button">read (${read.length})</button>
+             <button class="pill small ${view==='all'?'active':''}" data-team-inbox-view="all" type="button">all</button>
+           </div>
+           <div class="row">
+             <button class="pill small" id="teamInboxJson" type="button">json</button>
+           </div>
+         </div>
+         <div style="height:10px"></div>
+         <div class="msgList" data-team-inbox>${cards}</div>
+       `;
+     }
+
+     function renderCapturesPanel(){
+       const cq = (state.teams.captures_q || '').trim().toLowerCase();
+       const filteredCaps = captures.filter(c => {
+         if (!cq) return true;
+         const t = c.target || {};
+         const pane = c.pane || {};
+         const hay = `${c._meta||''} ${c.id||''} ${c.captured_at||''} ${(t.worker_id||'')} ${(t.role||'')} ${(pane.pane_id||'')} ${(pane.window_name||'')} ${(c.output_file||'')}`.toLowerCase();
+         return hay.includes(cq);
+       });
+       const cards = filteredCaps.slice(0, 80).map(c => {
+         const meta = String(c._meta || '');
+         const capAt = String(c.captured_at || '');
+         const bytes = fmtBytes(c.bytes || 0);
+         const lines = Number(c.lines || 0);
+         const tgt = c.target || {};
+         const wid = String(tgt.worker_id || '');
+         const role = String(tgt.role || '');
+         const pane = c.pane || {};
+         const paneId = String(pane.pane_id || tgt.pane_id || '');
+         const outFile = String(c.output_file || '');
+         return `
+           <div class="capCard" data-team-capture>
+             <div class="capHead">
+               <span class="chip info">capture</span>
+               ${wid ? `<span class="chip">worker: <span class="mono">${escapeHtml(wid)}</span></span>` : ''}
+               ${role ? `<span class="chip">role: <span class="mono">${escapeHtml(role)}</span></span>` : ''}
+               ${paneId ? `<span class="chip">pane: <span class="mono">${escapeHtml(paneId)}</span></span>` : ''}
+               <span class="chip">lines: <span class="mono">${isFinite(lines) ? lines : 0}</span></span>
+               <span class="chip">size: <span class="mono">${escapeHtml(bytes)}</span></span>
+               <div class="meta">
+                 <span class="chip"><span class="mono">${escapeHtml(capAt)}</span></span>
+                 ${meta ? `<button class="pill small" type="button" data-team-capture-view="${escapeHtml(meta)}">view</button>` : ''}
+                 <button class="pill small" type="button" data-team-capture-json="${escapeHtml(meta)}">json</button>
+               </div>
+             </div>
+             ${outFile ? `<div class="capPath">${escapeHtml(prettyPath(outFile))}</div>` : ''}
+           </div>
+         `;
+       }).join('') || `<div class="muted small">No captures.</div>`;
+
+       return `
+         <div class="row" style="align-items:flex-end;">
+           <div class="field" style="flex:2 1 340px; min-width:220px;">
+             <label>filter</label>
+             <input class="input" id="teamCapturesQ" value="${escapeHtml(state.teams.captures_q || '')}" placeholder="worker, pane, file…" />
+           </div>
+           <div class="field" style="flex:0 0 auto; min-width:160px;">
+             <label>&nbsp;</label>
+             <button class="pill small" id="teamCapturesJson" type="button">json</button>
+           </div>
+         </div>
+         <div class="muted small" style="margin-top:8px">Showing ${Math.min(filteredCaps.length, 80)}/${filteredCaps.length} captures (newest first).</div>
+         <div style="height:10px"></div>
+         <div class="capList" data-team-captures>${cards}</div>
+       `;
+     }
+
+     function renderRunPanel(){
+       if (!run) return `<div class="muted small">No run.json payload.</div>`;
+       const rj = escapeHtml(JSON.stringify(run, null, 2));
+       return `
+         <div class="callout" data-team-run>
+           <div class="h">Run</div>
+           <div class="d">Durable run state from <span class="mono">run.json</span>. This is what the tmux team is anchored to.</div>
+         </div>
+         <div style="height:10px"></div>
+         <div class="kvGrid">
+           <div class="kv"><div class="k">created_at</div><div class="v">${escapeHtml(String(run.created_at || ''))}</div></div>
+           <div class="kv"><div class="k">updated_at</div><div class="v">${escapeHtml(String(run.updated_at || ''))}</div></div>
+           <div class="kv"><div class="k">objective</div><div class="v">${escapeHtml(String(run.objective || ''))}</div></div>
+           <div class="kv"><div class="k">session</div><div class="v">${escapeHtml(String(run.session || ''))}</div></div>
+         </div>
+         <div style="height:10px"></div>
+         <button class="pill small" id="teamRunJson" type="button">json</button>
+         <div style="height:10px"></div>
+         <pre class="monoBlock" style="max-height:360px">${rj}</pre>
+       `;
+     }
+
+     function renderTabPanel(){
+       if (!sel || !b) return `<div class="muted small">Pick a team to watch. Live mode will poll the selected team bundle.</div>`;
+       if (!status) return `<div class="muted small">No status snapshot yet. Try reload.</div>`;
+       if (tab === 'workers') return renderWorkersPanel();
+       if (tab === 'events') return renderEventsPanel();
+       if (tab === 'inbox') return renderInboxPanel();
+       if (tab === 'captures') return renderCapturesPanel();
+       if (tab === 'run') return renderRunPanel();
+       return renderOverviewPanel();
+     }
+
+      return `
+        <div class="split">
+          <div class="card">
+            <div class="cardHeader">
+              <div class="cardTitle">Teams <small>/api/v1/teams</small></div>
+              <div class="row">
+                <button class="pill small" id="teamsRefresh" type="button">refresh</button>
+                <button class="pill small" id="teamsJson" type="button">json</button>
+              </div>
+            </div>
+            <div class="cardBody">
+              <input class="input teamListQ" id="teamListQ" placeholder="filter teams…" value="${escapeHtml(state.teams.q || '')}" />
+              <div class="row">
+                <div class="field" style="min-width:180px">
+                  <label>events limit</label>
+                  <input class="input" id="teamLimit" value="${escapeHtml(state.teams.limit)}"/>
+                </div>
+                <div class="field" style="flex:0 0 auto; min-width:160px">
+                  <label>&nbsp;</label>
+                  <button class="pill small ok" id="applyTeamLimit" type="button">apply</button>
+                </div>
+              </div>
+              <div style="height:10px"></div>
+              <table id="teamsTable">
+                <thead><tr><th>team</th><th style="width:170px">updated</th></tr></thead>
+                <tbody>
+                  ${filtered.map(t => `
+                    <tr data-team="${escapeHtml(t.team)}" class="${(sel && t.team === sel) ? 'wsSelected' : ''}">
+                      <td><span class="mono" style="color:var(--blue)">${escapeHtml(t.team)}</span><div class="muted small">${escapeHtml(clamp(t.objective || '', 120))}</div></td>
+                      <td class="mono muted">${escapeHtml(t.updated_at || '')}</td>
+                    </tr>
+                  `).join('') || `<tr><td colspan="2" class="muted">No teams.</td></tr>`}
+                </tbody>
+              </table>
             </div>
           </div>
-          <div class="cardBody">
-            <div class="row">
-              <div class="field" style="min-width:180px">
-                <label>events limit</label>
-                <input class="input" id="teamLimit" value="${escapeHtml(state.teams.limit)}"/>
+
+          <div class="card drawer">
+            <div class="head">
+              <div class="h">
+                <div class="id mono" style="color:var(--blue)">${sel ? escapeHtml(sel) : 'team'}</div>
+                <div class="title" style="color:var(--fg2)">${sel ? 'Live team' : 'Select a team'}</div>
+                ${sel && objective ? `<div class="muted small" style="margin-top:4px">${escapeHtml(objective)}</div>` : ''}
               </div>
-              <div class="field" style="flex:0 0 auto; min-width:160px">
-                <label>&nbsp;</label>
-                <button class="pill small ok" id="applyTeamLimit" type="button">apply</button>
+              <div class="row">
+                <button class="pill small" id="teamReload" type="button">reload</button>
+                <button class="pill small" id="teamBundleJson" type="button">json</button>
               </div>
             </div>
-            <div style="height:10px"></div>
-            <table id="teamsTable">
-              <thead><tr><th>team</th><th style="width:170px">updated</th></tr></thead>
-              <tbody>
-                ${list.map(t => `
-                  <tr data-team="${escapeHtml(t.team)}">
-                    <td><span class="mono" style="color:var(--blue)">${escapeHtml(t.team)}</span><div class="muted small">${escapeHtml(clamp(t.objective || '', 120))}</div></td>
-                    <td class="mono muted">${escapeHtml(t.updated_at || '')}</td>
-                  </tr>
-                `).join('') || `<tr><td colspan="2" class="muted">No teams.</td></tr>`}
-              </tbody>
-            </table>
+            <div class="body">
+              <div class="chipRow" style="margin-bottom:10px" data-team-top-chips>
+                <span class="chip ${warningsCount ? 'warn' : 'ok'}">warnings:${warningsCount}</span>
+                <span class="chip info">workers:${wAlive.length}/${wActive.length}</span>
+                <span class="chip ${inboxUnackedMgr ? 'warn' : 'ok'}">inbox→mgr:${inboxUnackedMgr}</span>
+                <span class="chip ${mergePending ? 'warn' : 'ok'}">merge:${mergePending}</span>
+                <span class="chip">events:${events.length}</span>
+                <span class="chip">captures:${captures.length}</span>
+              </div>
+
+              <div class="tabBar" data-team-tabs>
+                <button class="pill small ${tab==='overview'?'active':''}" data-team-tab="overview" type="button">overview</button>
+                <button class="pill small ${tab==='workers'?'active':''}" data-team-tab="workers" type="button">workers</button>
+                <button class="pill small ${tab==='events'?'active':''}" data-team-tab="events" type="button">events</button>
+                <button class="pill small ${tab==='inbox'?'active':''}" data-team-tab="inbox" type="button">inbox</button>
+                <button class="pill small ${tab==='captures'?'active':''}" data-team-tab="captures" type="button">captures</button>
+                <button class="pill small ${tab==='run'?'active':''}" data-team-tab="run" type="button">run</button>
+              </div>
+
+              <div style="height:10px"></div>
+              <div data-team-panel="${escapeHtml(tab)}">${renderTabPanel()}</div>
+            </div>
           </div>
         </div>
-
-        <div class="card drawer">
-          <div class="head">
-            <div class="h">
-              <div class="id mono" style="color:var(--blue)">${sel ? escapeHtml(sel) : 'team'}</div>
-              <div class="title" style="color:var(--fg2)">${sel ? 'Live run state' : 'Select a team'}</div>
-            </div>
-            <div class="row">
-              <button class="pill small" id="teamReload" type="button">reload</button>
-              <button class="pill small" id="teamBundleJson" type="button">json</button>
-            </div>
-          </div>
-          <div class="body">
-            ${sel && b ? `
-              <div class="chipRow">
-                <span class="chip">events:${(b.events?.events || []).length}</span>
-                <span class="chip">unread:${(b.inbox?.unread || []).length}</span>
-                <span class="chip">captures:${(b.captures?.captures || []).length}</span>
-              </div>
-
-              <div class="cardTitle" style="margin: 6px 0 4px;">status snapshot</div>
-              <pre class="monoBlock">${escapeHtml(JSON.stringify(b.status, null, 2))}</pre>
-
-              <div class="cardTitle" style="margin: 6px 0 4px;">events (tail)</div>
-              <pre class="monoBlock">${escapeHtml(JSON.stringify((b.events?.events || []).slice(0, 60), null, 2))}</pre>
-
-              <div class="cardTitle" style="margin: 6px 0 4px;">inbox</div>
-              <pre class="monoBlock">${escapeHtml(JSON.stringify({ unread: (b.inbox?.unread || []).slice(0, 20), read: (b.inbox?.read || []).slice(0, 20) }, null, 2))}</pre>
-
-              <div class="cardTitle" style="margin: 6px 0 4px;">captures</div>
-              <pre class="monoBlock">${escapeHtml(JSON.stringify((b.captures?.captures || []).slice(0, 30), null, 2))}</pre>
-
-            ` : `<div class="muted small">Pick a team to watch. This is the closest thing to “realtime unfolding” the API gives us without websockets.</div>`}
-          </div>
-        </div>
-      </div>
-    `;
+      `;
   }
 
   function bindTeams(){
@@ -2302,15 +2768,152 @@
       } else toast('Saved', 'ok');
     });
 
+     $('#teamListQ')?.addEventListener('input', async (e) => {
+       state.teams.q = (e.target.value || '').toString();
+       save();
+       if (routeFromHash() === 'teams') await renderRoute();
+     });
+
     $$('#teamsTable tr[data-team]').forEach(tr => {
       tr.addEventListener('click', async () => {
         const team = tr.getAttribute('data-team');
         state.teams.selected = team;
+        if (!state.teams.tab) state.teams.tab = 'overview';
         save();
         await loadTeamBundle(team);
         await renderRoute();
       });
     });
+
+     $$('[data-team-tab]').forEach(btn => {
+       btn.addEventListener('click', async () => {
+         const t = btn.getAttribute('data-team-tab');
+         state.teams.tab = (t || 'overview');
+         save();
+         if (routeFromHash() === 'teams') await renderRoute();
+       });
+     });
+
+     $('#teamEventQ')?.addEventListener('input', async (e) => {
+       state.teams.events_q = (e.target.value || '').toString();
+       save();
+       if (routeFromHash() === 'teams') await renderRoute();
+     });
+     $('#teamEventOk')?.addEventListener('change', async (e) => {
+       state.teams.events_ok = (e.target.value || 'all').toString();
+       save();
+       if (routeFromHash() === 'teams') await renderRoute();
+     });
+
+     $$('[data-team-inbox-view]').forEach(btn => {
+       btn.addEventListener('click', async () => {
+         state.teams.inbox_view = (btn.getAttribute('data-team-inbox-view') || 'unread');
+         save();
+         if (routeFromHash() === 'teams') await renderRoute();
+       });
+     });
+
+     $('#teamCapturesQ')?.addEventListener('input', async (e) => {
+       state.teams.captures_q = (e.target.value || '').toString();
+       save();
+       if (routeFromHash() === 'teams') await renderRoute();
+     });
+
+     $('#teamEventsJson')?.addEventListener('click', () => openDialog({
+       title: 'team.events.json',
+       bodyHTML: `<pre class="monoBlock">${escapeHtml(JSON.stringify((data.teams.bundle?.events?.events || []), null, 2))}</pre>`,
+       footHTML: `<button class="pill small" type="button" id="closeTEJ">close</button>`
+     }) || $('#closeTEJ')?.addEventListener('click', closeDialog));
+
+     $('#teamInboxJson')?.addEventListener('click', () => openDialog({
+       title: 'team.inbox.json',
+       bodyHTML: `<pre class="monoBlock">${escapeHtml(JSON.stringify((data.teams.bundle?.inbox || {}), null, 2))}</pre>`,
+       footHTML: `<button class="pill small" type="button" id="closeTIJ">close</button>`
+     }) || $('#closeTIJ')?.addEventListener('click', closeDialog));
+
+     $('#teamCapturesJson')?.addEventListener('click', () => openDialog({
+       title: 'team.captures.json',
+       bodyHTML: `<pre class="monoBlock">${escapeHtml(JSON.stringify((data.teams.bundle?.captures || {}), null, 2))}</pre>`,
+       footHTML: `<button class="pill small" type="button" id="closeTCJ">close</button>`
+     }) || $('#closeTCJ')?.addEventListener('click', closeDialog));
+
+     $('#teamRunJson')?.addEventListener('click', () => openDialog({
+       title: 'team.run.json',
+       bodyHTML: `<pre class="monoBlock">${escapeHtml(JSON.stringify((data.teams.bundle?.run || {}), null, 2))}</pre>`,
+       footHTML: `<button class="pill small" type="button" id="closeTRJ">close</button>`
+     }) || $('#closeTRJ')?.addEventListener('click', closeDialog));
+
+     $$('[data-team-msg-open]').forEach(btn => {
+       btn.addEventListener('click', () => {
+         const id = btn.getAttribute('data-team-msg-open') || '';
+         const inbox = data.teams.bundle?.inbox || { unread: [], read: [] };
+         const all = [...(inbox.unread || []), ...(inbox.read || [])];
+         const msg = all.find(x => String(x?.id || '') === id) || null;
+         if (!msg){ toast('Message not found','warn'); return; }
+         openDialog({
+           title: `inbox ${id}`,
+           bodyHTML: `
+             <div class="chipRow">
+               <span class="chip">to: <span class="mono">${escapeHtml(String(msg.to || ''))}</span></span>
+               <span class="chip">from: <span class="mono">${escapeHtml(String(msg.from || ''))}</span></span>
+               <span class="chip">kind: <span class="mono">${escapeHtml(String(msg.kind || ''))}</span></span>
+               <span class="chip">created: <span class="mono">${escapeHtml(String(msg.created_at || ''))}</span></span>
+               ${msg.acked_at ? `<span class="chip ok">acked: <span class="mono">${escapeHtml(String(msg.acked_at || ''))}</span></span>` : `<span class="chip warn">unacked</span>`}
+             </div>
+             <div style="height:10px"></div>
+             <div class="monoBlock" style="white-space:pre-wrap; max-height:360px">${escapeHtml(String(msg.message || ''))}</div>
+             <div style="height:10px"></div>
+             <pre class="monoBlock" style="max-height:280px">${escapeHtml(JSON.stringify(msg.meta || {}, null, 2))}</pre>
+           `,
+           footHTML: `<button class="pill small" type="button" id="closeMsg">close</button>`
+         });
+         $('#closeMsg')?.addEventListener('click', closeDialog);
+       });
+     });
+
+     $$('[data-team-capture-json]').forEach(btn => {
+       btn.addEventListener('click', () => {
+         const meta = btn.getAttribute('data-team-capture-json') || '';
+         const caps = (data.teams.bundle?.captures?.captures || []);
+         const cap = caps.find(x => String(x?._meta || '') === meta) || null;
+         openDialog({
+           title: 'capture.meta.json',
+           bodyHTML: `<pre class="monoBlock">${escapeHtml(JSON.stringify(cap || {}, null, 2))}</pre>`,
+           footHTML: `<button class="pill small" type="button" id="closeCMJ">close</button>`
+         });
+         $('#closeCMJ')?.addEventListener('click', closeDialog);
+       });
+     });
+
+     $$('[data-team-capture-view]').forEach(btn => {
+       btn.addEventListener('click', async () => {
+         const team = state.teams.selected;
+         const meta = btn.getAttribute('data-team-capture-view') || '';
+         if (!team || !meta){ toast('Missing capture meta','warn'); return; }
+         try{
+           const res = await api(`/api/v1/teams/${encodeURIComponent(team)}/captures/text`, { query: { meta } });
+           const txt = String(res?.text || '');
+           const capAt = String(res?.captured_at || '');
+           const truncated = !!res?.truncated;
+           openDialog({
+             title: `capture ${meta}`,
+             bodyHTML: `
+               <div class="chipRow">
+                 ${capAt ? `<span class="chip"><span class="mono">${escapeHtml(capAt)}</span></span>` : ''}
+                 <span class="chip">meta: <span class="mono">${escapeHtml(meta)}</span></span>
+                 ${truncated ? `<span class="chip warn">truncated</span>` : `<span class="chip ok">full</span>`}
+               </div>
+               <div style="height:10px"></div>
+               <pre class="monoBlock" style="max-height:420px">${escapeHtml(txt || '')}</pre>
+             `,
+             footHTML: `<button class="pill small" type="button" id="closeCap">close</button>`
+           });
+           $('#closeCap')?.addEventListener('click', closeDialog);
+         } catch (err){
+           toast('Capture read failed','bad', err.message || String(err));
+         }
+       });
+     });
 
     $('#teamReload')?.addEventListener('click', async () => {
       const team = state.teams.selected;

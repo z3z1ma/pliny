@@ -23,6 +23,7 @@ It tracks changes to skills, instincts, and core context files.
 It is intentionally bounded. Do not write entries like "no changes".
 
 <!-- BEGIN:compound:changelog-entries -->
+- 2026-02-02T23:45:29.308Z Reinforce dashboard template + server API contract test coupling via instinct confidence bumps; no new skills needed because existing dashboard anchor/contract skill already covers this workflow.
 - 2026-02-02T23:18:30.672Z Reinforced the dashboard template anchor/contract instinct based on a real template edit.
 - 2026-02-02T23:14:26.285Z Reinforce determinism-as-contract for dashboard HTML and workspace diff/read outputs; add a focused skill + instinct for workspace diff ops testing.
 - 2026-02-02T22:25:58.047Z Reinforce dashboard/workspace UX contracts: clarify dashboard template source-of-truth, strengthen anchor-based HTML contract guidance, and bump related instinct confidence.

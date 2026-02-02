@@ -125,6 +125,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                         {"method": "GET", "path": "/api/v1/teams/<team>/events"},
                         {"method": "GET", "path": "/api/v1/teams/<team>/inbox"},
                         {"method": "GET", "path": "/api/v1/teams/<team>/captures"},
+                        {"method": "GET", "path": "/api/v1/teams/<team>/captures/text"},
                         {"method": "GET", "path": "/api/v1/memory/recall"},
                         {"method": "GET", "path": "/api/v1/memory/notes/<id>"},
                         {"method": "GET", "path": "/api/v1/workspace/meta"},
@@ -433,6 +434,70 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             if len(out) >= limit:
                 break
         return jsonify(ok(data={"captures": out, "count": len(out)}))
+
+    @app.get("/api/v1/teams/<team>/captures/text")
+    def team_capture_text(team: str) -> Any:
+        """Return capture text for a capture meta filename.
+
+        This keeps captures usable in the dashboard without exposing arbitrary file reads.
+        """
+
+        from agent_loom.team.constants import DEFAULT_RUNS_DIR
+
+        meta = str(request.args.get("meta") or "").strip()
+        if not meta:
+            return jsonify(err(code="ARG", message="missing meta")), 400
+
+        mp = Path(meta)
+        if mp.name != meta or mp.suffix != ".json":
+            return jsonify(err(code="ARG", message="invalid meta")), 400
+
+        captures_dir = cfg.repo_root / DEFAULT_RUNS_DIR / str(team) / "captures"
+        meta_file = captures_dir / meta
+        if not meta_file.exists():
+            return jsonify(err(code="NOT_FOUND", message="capture meta not found")), 404
+
+        txt_file = meta_file.with_suffix(".txt")
+        if not txt_file.exists():
+            return jsonify(err(code="NOT_FOUND", message="capture text not found")), 404
+
+        # Guardrail: prevent gigantic reads in the UI.
+        cap_bytes = 200_000
+        raw = b""
+        truncated = False
+        try:
+            with open(txt_file, "rb") as f:
+                raw = f.read(cap_bytes + 1)
+        except Exception as e:
+            return jsonify(err(code="READ_FAILED", message=str(e))), 400
+
+        if len(raw) > cap_bytes:
+            truncated = True
+            raw = raw[:cap_bytes]
+
+        meta_payload: dict[str, Any] = {}
+        try:
+            import json
+
+            meta_payload0 = json.loads(
+                meta_file.read_text(encoding="utf-8", errors="replace")
+            )
+            if isinstance(meta_payload0, dict):
+                meta_payload = meta_payload0
+        except Exception:
+            meta_payload = {}
+
+        text = raw.decode("utf-8", errors="replace")
+        payload = {
+            "meta": meta,
+            "captured_at": str(meta_payload.get("captured_at") or ""),
+            "target": dict(meta_payload.get("target") or {}),
+            "pane": dict(meta_payload.get("pane") or {}),
+            "text": text,
+            "bytes": len(raw),
+            "truncated": truncated,
+        }
+        return jsonify(ok(data=payload))
 
     # -----------------
     # Memory

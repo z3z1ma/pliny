@@ -10,6 +10,7 @@ from agent_loom.memory.core import init as memory_init
 from agent_loom.dashboard.app import create_app
 from agent_loom.dashboard.config import ServerConfig
 from agent_loom.ticket.api import create as ticket_create
+from agent_loom.team.constants import DEFAULT_RUNS_DIR
 
 
 def _git_init(repo: Path) -> None:
@@ -175,3 +176,44 @@ def test_dashboard_template_contract(client):
     assert 'id="content"' in html
     assert 'id="liveBtn"' in html
     assert "const $ =" in html
+
+    # Teams UI anchors (render templates are embedded in JS)
+    assert 'id="teamsTable"' in html
+    assert "data-team-tabs" in html
+    assert "data-team-panel" in html
+
+
+def test_team_capture_text_endpoint(client):
+    h = client.get("/api/v1/health").get_json()["data"]
+    repo_root = Path(h["repo_root"]).resolve()
+
+    team = "alpha"
+    run_dir = repo_root / DEFAULT_RUNS_DIR / team
+    captures_dir = run_dir / "captures"
+    captures_dir.mkdir(parents=True, exist_ok=True)
+
+    # Ensure the team exists for list surfaces.
+    (run_dir / "run.json").write_text(
+        '{"team":"alpha","created_at":"2026-01-01T00:00:00Z","updated_at":"2026-01-01T00:00:00Z","session":"s"}\n',
+        encoding="utf-8",
+    )
+
+    meta_name = "20260101T000000Z_deadbeefcafe_manager.json"
+    txt_name = "20260101T000000Z_deadbeefcafe_manager.txt"
+
+    (captures_dir / meta_name).write_text(
+        '{"id":"deadbeefcafe","captured_at":"2026-01-01T00:00:00Z","lines":3,"bytes":12,"output_file":"./dummy.txt"}\n',
+        encoding="utf-8",
+    )
+    (captures_dir / txt_name).write_text("hello capture\n", encoding="utf-8")
+
+    res = client.get(
+        f"/api/v1/teams/{team}/captures/text",
+        query_string={"meta": meta_name},
+    )
+    assert res.status_code == 200
+    payload = res.get_json()
+    assert payload["ok"] is True
+    data = payload["data"]
+    assert data["meta"] == meta_name
+    assert "hello capture" in data["text"]

@@ -401,7 +401,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-31T03:33:28.939Z",
-      "updated_at": "2026-02-02T17:37:41.423Z",
+      "updated_at": "2026-02-02T23:45:28.328Z",
       "evidence": [
         {
           "ts": "2026-01-31T03:33:28.939Z",
@@ -461,6 +461,11 @@
           "ts": "2026-02-02T17:37:41.423Z",
           "sessionID": "ses_3e0aaf312ffeIrs1flMshFCA6m",
           "note": "Ongoing edits to core docs and user-facing surfaces reinforce the repo norm: user-visible output is a public contract and must stay deterministic."
+        },
+        {
+          "ts": "2026-02-02T23:45:28.328Z",
+          "sessionID": "ses_3df49988cffeI4ckdZlKDF8bcE",
+          "note": "Reinforced by adjacent contract-test mindset applied to HTML/UX: deterministic, parseable outputs guarded by focused tests."
         }
       ]
     },
@@ -1187,10 +1192,10 @@
       "trigger": "When changing server-rendered HTML behavior (templates or the route that serves them), especially large refactors in src/agent_loom/server/templates/*.html",
       "action": "Add/update a request-level contract test (prefer tests/test_server_api_contract.py) that asserts stable markers/sections and deterministic ordering; avoid brittle full-HTML snapshots; verify via uv run basedpyright, uv run ruff check ., and targeted uv run pytest.",
       "tags": [],
-      "confidence": 0.9200000000000002,
+      "confidence": 0.9400000000000002,
       "status": "active",
       "created_at": "2026-02-02T17:11:57.762Z",
-      "updated_at": "2026-02-02T23:14:24.600Z",
+      "updated_at": "2026-02-02T23:45:28.328Z",
       "evidence": [
         {
           "ts": "2026-02-02T17:11:57.762Z",
@@ -1235,6 +1240,11 @@
           "ts": "2026-02-02T23:14:24.600Z",
           "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
           "note": "Dashboard HTML churn underscores that server-/dashboard-rendered HTML needs request-level invariant tests (anchors/sections/order) rather than brittle full snapshots."
+        },
+        {
+          "ts": "2026-02-02T23:45:28.328Z",
+          "sessionID": "ses_3df49988cffeI4ckdZlKDF8bcE",
+          "note": "Server-facing HTML behavior changed via dashboard template/app wiring and was validated by updating tests/test_server_api_contract.py (request-level invariants)."
         }
       ]
     },
@@ -1247,7 +1257,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-02-02T17:53:40.739Z",
-      "updated_at": "2026-02-02T22:25:56.810Z",
+      "updated_at": "2026-02-02T23:45:28.328Z",
       "evidence": [
         {
           "ts": "2026-02-02T17:53:40.739Z",
@@ -1322,6 +1332,11 @@
           "ts": "2026-02-02T22:25:56.810Z",
           "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
           "note": "Recent work made large dashboard template changes and updated tests/test_server_api_contract.py, reinforcing the contract-test pairing."
+        },
+        {
+          "ts": "2026-02-02T23:45:28.328Z",
+          "sessionID": "ses_3df49988cffeI4ckdZlKDF8bcE",
+          "note": "Recent change set updated src/agent_loom/dashboard/templates/dashboard.html and also updated tests/test_server_api_contract.py, reinforcing the invariant that dashboard template edits must be paired with a server API contract test update."
         }
       ]
     },
@@ -1488,10 +1503,10 @@
       "trigger": "You edit src/agent_loom/dashboard/templates/dashboard.html or src/agent_loom/server/templates/dashboard.html (especially adding/removing/reordering sections).",
       "action": "Preserve/add stable data-* anchors, keep section ordering deterministic, update request-level invariants in tests/test_server_api_contract.py, then run: uv run basedpyright; uv run ruff check .; uv run pytest tests/test_server_api_contract.py.",
       "tags": [],
-      "confidence": 0.8500000000000001,
+      "confidence": 0.8800000000000001,
       "status": "active",
       "created_at": "2026-02-02T21:37:27.048Z",
-      "updated_at": "2026-02-02T23:18:29.514Z",
+      "updated_at": "2026-02-02T23:45:28.328Z",
       "evidence": [
         {
           "ts": "2026-02-02T21:37:27.048Z",
@@ -1506,6 +1521,11 @@
           "ts": "2026-02-02T23:18:29.514Z",
           "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
           "note": "Session included a (small) edit to src/agent_loom/dashboard/templates/dashboard.html; reinforces that even tiny dashboard template changes should preserve/add stable data-* anchors, keep ordering deterministic, and be paired with focused request-level invariants in tests/test_server_api_contract.py."
+        },
+        {
+          "ts": "2026-02-02T23:45:28.328Z",
+          "sessionID": "ses_3df49988cffeI4ckdZlKDF8bcE",
+          "note": "Large diff in src/agent_loom/dashboard/templates/dashboard.html accompanied by a focused update to tests/test_server_api_contract.py, matching the anchor/section invariant approach instead of full snapshots."
         }
       ]
     },
