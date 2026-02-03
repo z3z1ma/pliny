@@ -1691,6 +1691,23 @@
           "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3"
         }
       ]
+    },
+    {
+      "id": "memory-cli-output-is-a-contract",
+      "title": "Memory CLI output is a contract",
+      "trigger": "When changing user-visible output/flags in src/agent_loom/memory/cli.py (or ordering/sections it prints).",
+      "action": "Make output deterministic (explicit ordering; no timestamps/random IDs/absolute paths). Add/update focused invariants in tests/test_memory_cli_ux.py. Verify with: uv run basedpyright; uv run ruff check .; uv run pytest tests/test_memory_cli_ux.py.",
+      "tags": [],
+      "confidence": 0.86,
+      "status": "active",
+      "created_at": "2026-02-03T06:42:10.044Z",
+      "updated_at": "2026-02-03T06:42:10.044Z",
+      "evidence": [
+        {
+          "ts": "2026-02-03T06:42:10.044Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3"
+        }
+      ]
     }
   ]
 }

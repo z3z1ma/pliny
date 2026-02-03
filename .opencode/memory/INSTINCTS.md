@@ -48,6 +48,9 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **dashboard-template-edits-require-anchor-contracts** (88%)
   - Trigger: You edit src/agent_loom/dashboard/templates/dashboard.html or src/agent_loom/server/templates/dashboard.html (especially adding/removing/reordering sections).
   - Action: Preserve/add stable data-* anchors, keep section ordering deterministic, update request-level invariants in tests/test_server_api_contract.py, then run: uv run basedpyright; uv run ruff check .; uv ru…
+- **memory-cli-output-is-a-contract** (86%)
+  - Trigger: When changing user-visible output/flags in src/agent_loom/memory/cli.py (or ordering/sections it prints).
+  - Action: Make output deterministic (explicit ordering; no timestamps/random IDs/absolute paths). Add/update focused invariants in tests/test_memory_cli_ux.py. Verify with: uv run basedpyright; uv run ruff chec…
 - **python-commands-use-uv-run** (83%)
   - Trigger: When about to run any Python command (tests, linters, scripts, REPL)
   - Action: Use `uv run ...` (never `python`, `pip`, or bare tool binaries). Prefer `uv run pytest`, `uv run ruff check .`, etc.
@@ -123,9 +126,6 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **ticket-frontmatter-changes-require-roundtrip-tests** (66%)
   - Trigger: When editing src/agent_loom/ticket/frontmatter.py or changing the ticket on-disk format/serialization
   - Action: Add/adjust round-trip tests that load+save+reload tickets; ensure parse errors include actionable context; run lsp_diagnostics on touched files, then `uv run ruff check .`, then the smallest relevant …
-- **cli-environment-output-must-be-sanitized** (64%)
-  - Trigger: When adding CLI output that prints runtime environment or model identifiers (e.g., model id, working directory, platform, dates)
-  - Action: Avoid secrets and machine-specific absolute paths; prefer minimal, stable fields; keep formatting deterministic; add/adjust a contract test asserting stable invariants rather than full dumps.
 
 ## Notes
 

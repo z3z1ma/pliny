@@ -11,9 +11,7 @@ from pathlib import Path
 from typing import Any, Optional, Sequence
 
 from agent_loom.memory.constants import (
-    DB_FILENAME,
     DEFAULT_VAULT_DIR,
-    META_FILENAME,
     STATUSES,
     SUBSYSTEM_NAME,
     VISIBILITIES,
@@ -226,67 +224,14 @@ def render_recall_results(results: list[dict[str, Any]], *, fmt: str) -> str:
     return "\n".join(lines2).rstrip() + "\n"
 
 
-def render_prime_text() -> str:
-    return (
-        "\n".join(
-            [
-                "Memory operating manual",
-                "",
-                "Purpose: Obsidian-for-agents memory as Markdown on disk.",
-                "",
-                "Agent-first defaults:",
-                "- No editor opens unless you pass --interactive.",
-                "- Default output is JSON (safe for agents).",
-                "- Use recall --context for prompt-ready context packs.",
-                "- Select a vault with --vault (or MEMORY_VAULT).",
-                "",
-                "Vault layout (default: .memory/)",
-                f"- {DEFAULT_VAULT_DIR}/notes/                     (shared, committed)",
-                f"- {DEFAULT_VAULT_DIR}/personal/notes/            (personal, gitignored)",
-                f"- {DEFAULT_VAULT_DIR}/personal/ephemeral/notes/  (ephemeral, gitignored)",
-                f"- {DEFAULT_VAULT_DIR}/{META_FILENAME}                  (committed config)",
-                f"- {DEFAULT_VAULT_DIR}/{DB_FILENAME}                (derived cache, gitignored)",
-                "",
-                "Frontmatter schema",
-                "- required: id, title, created_at, updated_at",
-                "- optional: tags[], aliases[], scopes[], links[], visibility, status",
-                "",
-                "Scopes (kind:value)",
-                "- file:memory/core.py | folder:src/ | glob:src/**/*.py | filetype:py | command:pytest -q | tag:infra",
-                "",
-                "Links (Obsidian-style wikilinks)",
-                "- outbound: [[note-id]] or [[note-id|alias text]]",
-                "- vault-relative: [[notes/<folder>/<note-id>]] (basename stem must equal id)",
-                "- backlinks: derived via `memory link backlinks <id>`",
-                "",
-                "Quickstart",
-                "- memory init",
-                "- echo 'Body' | memory add --title 'Title' --tag infra --scope file:memory/core.py",
-                "- memory add --title 'Title' --body 'Body' --tag infra --scope file:memory/core.py",
-                "- memory recall retries --scope file:memory/core.py",
-                "- memory recall retries --scope file:memory/core.py --context --expand 1 --format text",
-                "- memory link backlinks <id>",
-                "- memory edit <id> --append 'New context'",
-                "- memory janitor report  # stale file scopes",
-                "",
-                "Organize notes into subfolders (ids stay path-independent)",
-                "- memory add --folder infra/retries --title 'Retry behavior' --body '...'",
-                "",
-                "Notes",
-                "- Path is the effective visibility; frontmatter mismatch emits a SAFETY warning.",
-                "",
-                "Copy/paste for AGENTS.md",
-                "- Run: memory prime",
-                "",
-            ]
-        ).rstrip()
-        + "\n"
-    )
-
-
 def payload_for(obj: Any, *, fmt: str) -> Any:
     if isinstance(obj, PrimeResult):
-        return obj.payload if fmt in ("json", "jsonl") else render_prime_text()
+        if fmt in ("json", "jsonl"):
+            return obj.payload
+        text = str(obj.payload.get("markdown") or "")
+        if text:
+            return text.rstrip() + "\n"
+        return ""
     if isinstance(obj, RecallResult):
         if obj.context_text:
             return obj.context_text
@@ -360,7 +305,7 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_parser(
         "prime",
         parents=[common_sub],
-        help="Print operating manual (schema, layout, CLI) for agents",
+        help="Print memory cookbook",
     )
 
     sp.add_parser(
@@ -723,6 +668,8 @@ def _effective_format(args: argparse.Namespace) -> str:
         and args.cmd == "recall"
         and bool(getattr(args, "context", False))
     ):
+        return "text"
+    if args.format is None and args.cmd == "prime":
         return "text"
     return args.format or "json"
 

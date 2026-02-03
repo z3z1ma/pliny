@@ -29,6 +29,7 @@ metadata:
      - `uv run pytest tests/test_team_cli_ux.py`
      - `uv run pytest tests/test_team_prompts.py`
      - `uv run pytest tests/test_team_disband.py`
+     - `uv run pytest tests/test_memory_cli_ux.py`
 
 ## Notes
 

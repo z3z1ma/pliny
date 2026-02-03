@@ -21,6 +21,13 @@ def _run_json(argv: list[str]) -> tuple[int, dict]:
     return rc, (json.loads(payload) if payload else {})
 
 
+def _run_text(argv: list[str]) -> tuple[int, str]:
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        rc = memory_cli(argv)
+    return rc, buf.getvalue()
+
+
 class TestMemoryCliUx(unittest.TestCase):
     def test_unknown_command_is_structured_json_error(self) -> None:
         rc, payload = _run_json(["nope"])
@@ -72,3 +79,16 @@ class TestMemoryCliUx(unittest.TestCase):
             self.assertFalse(payload.get("ok"))
             self.assertEqual(payload.get("code"), "ARG")
             self.assertIn("stdin", str(payload.get("error") or "").lower())
+
+    def test_prime_prints_cookbook(self) -> None:
+        rc, text = _run_text(["prime"])
+        self.assertEqual(rc, 0)
+        self.assertIn("Memory Cookbook", text)
+        self.assertIn("loom memory add", text)
+
+    def test_prime_json_includes_markdown(self) -> None:
+        rc, payload = _run_json(["prime", "--format", "json"])
+        self.assertEqual(rc, 0)
+        self.assertTrue(payload.get("ok"))
+        content = str(payload.get("markdown") or "")
+        self.assertIn("Memory Cookbook", content)

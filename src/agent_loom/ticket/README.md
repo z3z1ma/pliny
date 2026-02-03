@@ -480,7 +480,7 @@ Note: `--json` output cannot be YAML.
 
 ### prime
 
-Print canonical usage and schema in one place.
+Print this built-in operating manual.
 
 ```
 loom ticket prime

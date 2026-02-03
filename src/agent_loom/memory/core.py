@@ -30,6 +30,7 @@ By default, recall only returns visibility=shared.
 from __future__ import annotations
 
 import contextlib
+import importlib.resources as resources
 import json
 import os
 import shutil
@@ -39,10 +40,8 @@ from typing import Any, Dict, List, Optional, Sequence
 from agent_loom.memory.constants import (
     DB_FILENAME,
     DEFAULT_VAULT_DIR,
-    META_FILENAME,
     RE_NOTE_ID,
     SCHEMA_VERSION,
-    SCOPE_KINDS,
     STATUSES,
     VISIBILITIES,
 )
@@ -234,74 +233,22 @@ def init(*, vault: Optional[str] = None) -> InitResult:
     )
 
 
-def _prime_payload() -> Dict[str, Any]:
-    return {
-        "ok": True,
-        "schema_version": SCHEMA_VERSION,
-        "env": {
-            "MEMORY_VAULT": "Default vault root (same as --vault)",
-            "MEMORY_EDITOR": "Editor for --interactive (falls back to VISUAL/EDITOR)",
-        },
-        "layout": {
-            "shared_notes": f"{DEFAULT_VAULT_DIR}/notes/**/<id>.md",
-            "personal_notes": f"{DEFAULT_VAULT_DIR}/personal/notes/**/<id>.md",
-            "ephemeral_notes": f"{DEFAULT_VAULT_DIR}/personal/ephemeral/notes/**/<id>.md",
-            "meta": f"{DEFAULT_VAULT_DIR}/{META_FILENAME}",
-            "derived_index": f"{DEFAULT_VAULT_DIR}/{DB_FILENAME}",
-        },
-        "frontmatter": {
-            "required": ["id", "title", "created_at", "updated_at"],
-            "optional": [
-                "tags",
-                "aliases",
-                "scopes",
-                "links",
-                "visibility",
-                "status",
-            ],
-        },
-        "scopes": {
-            "kinds": list(SCOPE_KINDS),
-            "examples": [
-                "file:memory/core.py",
-                "folder:src/",
-                "glob:src/**/*.py",
-                "filetype:py",
-                "command:pytest -q",
-                "tag:infra",
-            ],
-        },
-        "links": {
-            "wikilink": "[[note-id]] or [[Some Title|alias]]",
-            "mdlink": "[text](note-id) or [text](path/to/note.md)",
-        },
-        "examples": {
-            "add_stdin": "echo 'Body' | memory add --title 'Title' --tag infra --scope file:memory/core.py",
-            "add_body": "memory add --title 'Title' --body 'Body' --tag infra --scope file:memory/core.py",
-            "recall_json": "memory recall 'retries' --scope file:memory/core.py --limit 10",
-            "context_pack": "memory recall 'retries' --scope file:memory/core.py --context --expand 1 --format text",
-            "backlinks": "memory link backlinks <id>",
-        },
-        "commands": [
-            "memory init",
-            "memory add",
-            "memory edit <id>",
-            "memory recall [query]",
-            "memory link ...",
-            "memory recall [query] --context",
-            "memory reindex",
-            "memory janitor ...",
-        ],
-        "defaults": {
-            "visibility": "shared",
-            "recall_default_limit": 8,
-            "output": "json by default (use recall --context for prompt packs)",
-        },
-    }
-
-
 def prime() -> PrimeResult:
-    return PrimeResult(payload=_prime_payload())
+    try:
+        text = (
+            resources.files("agent_loom.memory")
+            .joinpath("README.md")
+            .read_text(encoding="utf-8")
+        )
+    except FileNotFoundError as exc:
+        raise MemoryError(
+            "Memory cookbook not found in package data",
+            code="NOT_FOUND",
+            exit_code=2,
+            hint="Reinstall the package or verify README is bundled.",
+        ) from exc
+
+    return PrimeResult(payload={"ok": True, "markdown": text})
 
 
 # -----------------------------

@@ -164,6 +164,9 @@ This block is maintained by the compound plugin.
 - **dashboard-template-edits-require-anchor-contracts** (88%)
   - Trigger: You edit src/agent_loom/dashboard/templates/dashboard.html or src/agent_loom/server/templates/dashboard.html (especially adding/removing/reordering sections).
   - Action: Preserve/add stable data-* anchors, keep section ordering deterministic, update request-level invariants in tests/test_server_api_contract.py, then run: uv run basedpyright; uv run ruff check .; uv ru…
+- **memory-cli-output-is-a-contract** (86%)
+  - Trigger: When changing user-visible output/flags in src/agent_loom/memory/cli.py (or ordering/sections it prints).
+  - Action: Make output deterministic (explicit ordering; no timestamps/random IDs/absolute paths). Add/update focused invariants in tests/test_memory_cli_ux.py. Verify with: uv run basedpyright; uv run ruff chec…
 - **python-commands-use-uv-run** (83%)
   - Trigger: When about to run any Python command (tests, linters, scripts, REPL)
   - Action: Use `uv run ...` (never `python`, `pip`, or bare tool binaries). Prefer `uv run pytest`, `uv run ruff check .`, etc.
@@ -179,9 +182,6 @@ This block is maintained by the compound plugin.
 - **prefer-basedpyright-over-lsp-diagnostics** (80%)
   - Trigger: When about to check Python types/diagnostics (or an existing checklist says to run lsp_diagnostics)
   - Action: Run `uv run basedpyright` and fix findings before `uv run ruff check .` and targeted `uv run pytest ...`.
-- **team-init-agents-changes-require-contract-test** (78%)
-  - Trigger: You change team startup/init-agent wiring or defaults (especially in src/agent_loom/team/core.py or src/agent_loom/team/cli.py).
-  - Action: Treat agent initialization as a UX+behavior contract: update/add focused assertions in tests/test_team_init_agents.py (and prompt tests if prompts changed), then run the gate: uv run basedpyright; uv …
 <!-- END:compound:instincts-index -->
 
 <!-- BEGIN:compound:rules-index -->
