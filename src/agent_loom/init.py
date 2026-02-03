@@ -12,9 +12,13 @@ from typing import Any, Dict, Optional, Sequence
 from agent_loom.compound.install import install_opencode
 from agent_loom.core.git import git_repo_root
 from agent_loom.memory.core import init as memory_init
+from agent_loom.memory.core import prime as memory_prime
 from agent_loom.team.core import init_agents
+from agent_loom.team.prime import prime as team_prime
 from agent_loom.ticket.core import init as ticket_init
+from agent_loom.ticket.core import prime as ticket_prime
 from agent_loom.workspace.poly_ops import poly_init
+from agent_loom.workspace.prime import prime as workspace_prime
 from agent_loom.workspace.repo_ops import repo_init
 
 
@@ -57,6 +61,78 @@ class LoomInitResult:
     warnings: list[str]
     error: str
     meta: Dict[str, Any]
+
+
+def _prime_markdown_by_subsystem() -> tuple[Dict[str, str], list[str]]:
+    warnings: list[str] = []
+    out: Dict[str, str] = {}
+
+    # Deterministic order.
+    subsystems = [
+        ("memory", memory_prime),
+        ("team", team_prime),
+        ("ticket", ticket_prime),
+        ("workspace", workspace_prime),
+    ]
+
+    for name, fn in subsystems:
+        try:
+            res = fn()
+        except Exception as e:
+            warnings.append(f"rules: prime failed for {name}: {e}")
+            out[name] = ""
+            continue
+
+        md = ""
+        if isinstance(getattr(res, "payload", None), dict):
+            md = str((res.payload or {}).get("markdown") or "")
+        else:
+            md = str(getattr(res, "markdown", "") or "")
+
+        if not md.strip():
+            warnings.append(f"rules: prime returned empty markdown for {name}")
+        out[name] = md
+
+    return out, warnings
+
+
+def _write_opencode_rules(root: Path) -> Dict[str, Any]:
+    md_by_subsystem, warns = _prime_markdown_by_subsystem()
+
+    rules_dir = root / ".opencode" / "rules"
+    wrote: list[str] = []
+    write_warnings: list[str] = list(warns)
+
+    try:
+        rules_dir.mkdir(parents=True, exist_ok=True)
+    except Exception as e:
+        # If we cannot create the directory, stop but report.
+        write_warnings.append(f"rules: failed to create {rules_dir}: {e}")
+        return {
+            "ok": False,
+            "dir": ".opencode/rules",
+            "wrote": [],
+            "warnings": sorted({w for w in write_warnings if w}),
+        }
+
+    for subsystem in sorted(md_by_subsystem.keys()):
+        text = md_by_subsystem.get(subsystem, "")
+        p = rules_dir / f"{subsystem}.md"
+        try:
+            # Ensure trailing newline for POSIX-friendly files.
+            p.write_text(text.rstrip() + "\n", encoding="utf-8")
+            wrote.append(f"{subsystem}.md")
+        except Exception as e:
+            write_warnings.append(
+                f"rules: failed to write .opencode/rules/{subsystem}.md: {e}"
+            )
+
+    return {
+        "ok": len(wrote) > 0,
+        "dir": ".opencode/rules",
+        "wrote": sorted(wrote),
+        "warnings": sorted({w for w in write_warnings if w}),
+    }
 
 
 def detect_git_root(cwd: Path) -> Optional[Path]:
@@ -138,6 +214,9 @@ def run_init(opts: LoomInitOptions) -> LoomInitResult:
                 )
         else:
             results["team"] = {"skipped": True}
+
+        # Always write OpenCode preload rule files.
+        results["rules"] = _write_opencode_rules(opts.root)
     except Exception as e:
         ok = False
         err = str(e)
@@ -153,6 +232,10 @@ def run_init(opts: LoomInitOptions) -> LoomInitResult:
     if isinstance(results.get("compound"), dict):
         cw = list((results.get("compound") or {}).get("warnings") or [])
         warnings.extend([str(w) for w in cw if str(w)])
+
+    if isinstance(results.get("rules"), dict):
+        rw = list((results.get("rules") or {}).get("warnings") or [])
+        warnings.extend([str(w) for w in rw if str(w)])
 
     warnings = sorted({w for w in warnings if w})
     return LoomInitResult(
@@ -420,6 +503,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             sys.stdout.write(f"- {name}: skipped\n")
         else:
             sys.stdout.write(f"- {name}: ok\n")
+
+    rr = res.results.get("rules")
+    if isinstance(rr, dict):
+        wrote = list(rr.get("wrote") or [])
+        if wrote:
+            sys.stdout.write(f"- rules: wrote {len(wrote)} file(s)\n")
+        else:
+            sys.stdout.write("- rules: none\n")
+
+    sys.stdout.write("\nTo preload context, add any of these to AGENTS.md:\n")
+    for subsystem in ["memory", "ticket", "workspace", "team"]:
+        sys.stdout.write(f"- @.opencode/rules/{subsystem}.md\n")
+
     if res.warnings:
         sys.stdout.write("warnings:\n")
         for w in res.warnings:

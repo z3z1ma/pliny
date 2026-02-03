@@ -66,6 +66,29 @@ class TestLoomInitCliUx(unittest.TestCase):
             self.assertTrue((root / ".opencode" / "agents").exists())
             self.assertTrue((root / ".claude" / "agents").exists())
 
+            # Prime rule files (OpenCode preload).
+            self.assertTrue((root / ".opencode" / "rules" / "ticket.md").exists())
+            self.assertTrue((root / ".opencode" / "rules" / "memory.md").exists())
+            self.assertTrue((root / ".opencode" / "rules" / "workspace.md").exists())
+            self.assertTrue((root / ".opencode" / "rules" / "team.md").exists())
+
+            self.assertIn(
+                "# Ticket Cookbook",
+                (root / ".opencode" / "rules" / "ticket.md").read_text("utf-8"),
+            )
+            self.assertIn(
+                "# Memory Cookbook",
+                (root / ".opencode" / "rules" / "memory.md").read_text("utf-8"),
+            )
+            self.assertIn(
+                "# Workspace Cookbook",
+                (root / ".opencode" / "rules" / "workspace.md").read_text("utf-8"),
+            )
+            self.assertIn(
+                "# Team Cookbook",
+                (root / ".opencode" / "rules" / "team.md").read_text("utf-8"),
+            )
+
     def test_init_yes_json_outside_git_skips_team(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
@@ -81,6 +104,11 @@ class TestLoomInitCliUx(unittest.TestCase):
             self.assertTrue((root / ".tickets").exists())
             self.assertTrue((root / ".memory" / "meta.json").exists())
             self.assertTrue((root / ".opencode").exists())
+
+            self.assertTrue((root / ".opencode" / "rules" / "ticket.md").exists())
+            self.assertTrue((root / ".opencode" / "rules" / "memory.md").exists())
+            self.assertTrue((root / ".opencode" / "rules" / "workspace.md").exists())
+            self.assertTrue((root / ".opencode" / "rules" / "team.md").exists())
 
             selected = payload.get("selected") or {}
             self.assertFalse(bool(selected.get("team")))
@@ -103,3 +131,26 @@ class TestLoomInitCliUx(unittest.TestCase):
                 sys.stdin = old_stdin
                 os.chdir(old)
             self.assertEqual(rc, 0)
+            self.assertIn("@.opencode/rules/ticket.md", out.getvalue())
+
+    def test_init_no_compound_still_writes_rules(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            rc, payload = _run_root_json(
+                [
+                    "init",
+                    "--yes",
+                    "--json",
+                    "--no-compound",
+                    "--workspace-mode",
+                    "poly",
+                ],
+                cwd=root,
+            )
+            self.assertEqual(rc, 0)
+            self.assertTrue(bool(payload.get("ok")))
+
+            self.assertTrue((root / ".opencode" / "rules" / "ticket.md").exists())
+            self.assertTrue((root / ".opencode" / "rules" / "memory.md").exists())
+            self.assertTrue((root / ".opencode" / "rules" / "workspace.md").exists())
+            self.assertTrue((root / ".opencode" / "rules" / "team.md").exists())
