@@ -963,10 +963,10 @@
       "trigger": "When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py",
       "action": "Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv run ruff check ., uv run pytest tests/test_workspace_cli_ux.py.",
       "tags": [],
-      "confidence": 0.9600000000000002,
+      "confidence": 0.9800000000000002,
       "status": "active",
       "created_at": "2026-02-01T07:19:01.984Z",
-      "updated_at": "2026-02-02T23:14:24.600Z",
+      "updated_at": "2026-02-03T06:52:47.239Z",
       "evidence": [
         {
           "ts": "2026-02-01T07:19:01.984Z",
@@ -996,6 +996,11 @@
           "ts": "2026-02-02T23:14:24.600Z",
           "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2",
           "note": "User-facing changes in src/agent_loom/workspace/cli.py confirm workspace CLI output/flags should remain deterministic and locked by a contract test."
+        },
+        {
+          "ts": "2026-02-03T06:52:47.239Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "Recent session included a large deletion/refactor in src/agent_loom/workspace/cli.py, reinforcing that workspace CLI output/behavior needs deterministic rendering plus focused contract tests."
         }
       ]
     },
@@ -1705,6 +1710,23 @@
       "evidence": [
         {
           "ts": "2026-02-03T06:42:10.044Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3"
+        }
+      ]
+    },
+    {
+      "id": "workspace-prime-changes-require-targeted-tests",
+      "title": "Workspace Prime Changes Need Targeted Tests",
+      "trigger": "You edit src/agent_loom/workspace/prime.py (especially refactors or behavior deletions).",
+      "action": "Treat prime behavior as a contract: make outputs/order deterministic, add or update a focused pytest module covering the changed semantics (prefer workspace-focused tests), then run the repo gate: uv run basedpyright -> uv run ruff check . -> uv run pytest <smallest relevant module(s)>.",
+      "tags": [],
+      "confidence": 0.74,
+      "status": "active",
+      "created_at": "2026-02-03T06:52:47.239Z",
+      "updated_at": "2026-02-03T06:52:47.239Z",
+      "evidence": [
+        {
+          "ts": "2026-02-03T06:52:47.239Z",
           "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3"
         }
       ]

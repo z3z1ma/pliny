@@ -23,6 +23,7 @@ It tracks changes to skills, instincts, and core context files.
 It is intentionally bounded. Do not write entries like "no changes".
 
 <!-- BEGIN:compound:changelog-entries -->
+- 2026-02-03T06:52:48.295Z Add a prime-specific testing instinct; reinforce workspace CLI UX contract discipline after major workspace CLI refactor.
 - 2026-02-03T06:42:11.141Z Add instinct for memory CLI UX determinism + contract test; extend repo gate skill with memory CLI test example.
 - 2026-02-03T06:27:19.025Z Codified a practice: simplify ticket runtime while locking deterministic UX via focused contract tests; added an instinct to replace deleted cookbooks with tests; reinforced template-mirror determinism.
 - 2026-02-03T06:23:48.841Z Reinforced ticket UX contract habit: boosted related instinct confidence and expanded the standard verification gate examples to include ticket UX contract tests.

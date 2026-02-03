@@ -201,70 +201,10 @@ def emit_error(
 
 
 def _render_prime_text(payload: dict[str, Any]) -> str:
-    md: list[str] = []
-    md.append(f"# loom workspace (v{payload['tool']['version']})")
-    md.append("")
-    md.append("Run `loom workspace -h` for help.")
-    md.append("Run `loom workspace <command> -h` for command-specific help.")
-    md.append("Run `loom workspace poly -h` for poly workspace help.")
-    md.append("")
-
-    md.append("## Purpose")
-    md.append(f"- {payload['purpose']}")
-    md.append("")
-
-    md.append("## Zen")
-    md.extend([f"- {x}" for x in payload["zen"]])
-    md.append("")
-
-    md.append("## Storage")
-    md.append("- poly control plane")
-    md.append(
-        f"  - root markers: `{', '.join(payload['storage']['poly_control_plane']['root_markers'])}`"
-    )
-    md.append(
-        f"  - internal dir: `{payload['storage']['poly_control_plane']['internal_dir']}/`"
-    )
-    md.append(
-        f"  - repos/worktrees defaults: `{payload['storage']['poly_control_plane']['repos_dir_default']}/`, `{payload['storage']['poly_control_plane']['worktrees_dir_default']}/`"
-    )
-    md.append("- repo mode")
-    md.append(f"  - internal dir: `{payload['storage']['repo_mode']['internal_dir']}/`")
-    md.append(f"  - ignore: {payload['storage']['repo_mode']['git_exclude']}")
-    md.append("")
-
-    md.append("## Dispatch")
-    md.append("- explicit:")
-    md.extend([f"  - {x}" for x in payload["dispatch"]["explicit"]])
-    md.append("")
-
-    md.append("## Output")
-    md.append(f"- default: {payload['output']['default']}")
-    md.append(f"- json: {payload['output']['json']}")
-    md.append("")
-
-    md.append("## Safety")
-    md.append(f"- {payload['safety']['worktree_rm']}")
-    md.append(f"- {payload['safety']['merge_force_clean']}")
-    md.append(f"- {payload['safety']['poly_guardrails']}")
-    md.append("")
-
-    md.append("## Copy/paste")
-    md.extend(payload["examples"]["copy_paste_for_agents_md"])
-    md.append("")
-
-    md.append("## Canonical examples")
-    for section, cmds in payload["examples"].items():
-        if section == "copy_paste_for_agents_md":
-            continue
-        md.append(f"### {section}")
-        md.extend([f"- `{c}`" for c in cmds])
-        md.append("")
-
-    md.append("tip: run `loom workspace -h` or `loom workspace poly -h`.")
-    md.append("")
-
-    return "\n".join(md).rstrip() + "\n"
+    text = str(payload.get("markdown") or "")
+    if text:
+        return text.rstrip() + "\n"
+    return ""
 
 
 def _render_services_index_text(index: dict[str, Any]) -> str:
