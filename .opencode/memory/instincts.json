@@ -136,7 +136,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-30T19:57:13.467Z",
-      "updated_at": "2026-02-02T21:24:36.939Z",
+      "updated_at": "2026-02-03T07:06:13.378Z",
       "evidence": [
         {
           "ts": "2026-01-30T19:57:13.467Z",
@@ -221,6 +221,11 @@
           "ts": "2026-02-02T21:24:36.939Z",
           "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT",
           "note": "Background autolearn prompt reiterates JSON-only output discipline; treat as strict contract."
+        },
+        {
+          "ts": "2026-02-03T07:06:13.378Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "Background autolearn prompt explicitly required JSON-only CompoundSpec v2 output; treating this as recurring enforcement."
         }
       ]
     },
@@ -233,7 +238,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-30T20:09:25.396Z",
-      "updated_at": "2026-02-03T01:37:14.552Z",
+      "updated_at": "2026-02-03T07:18:28.213Z",
       "evidence": [
         {
           "ts": "2026-01-30T20:09:25.396Z",
@@ -348,6 +353,11 @@
           "ts": "2026-02-03T01:37:14.552Z",
           "sessionID": "ses_3df363547ffe9UJUtV4RePTANc",
           "note": "Recent changes touched src/agent_loom/team/core.py and were paired with focused prompt contract updates in tests/test_team_prompts.py, reinforcing the need to always lock team-core behavior with targeted tests."
+        },
+        {
+          "ts": "2026-02-03T07:18:28.213Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "Recent edits touched src/agent_loom/team/cli.py and added/updated tests/test_team_cli_ux.py, reinforcing the pattern that team surface changes should be locked with targeted contract tests."
         }
       ]
     },
@@ -451,7 +461,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-31T03:33:28.939Z",
-      "updated_at": "2026-02-03T06:27:17.971Z",
+      "updated_at": "2026-02-03T07:18:28.213Z",
       "evidence": [
         {
           "ts": "2026-01-31T03:33:28.939Z",
@@ -521,6 +531,11 @@
           "ts": "2026-02-03T06:27:17.971Z",
           "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
           "note": "User-visible ticket CLI output changed; contract-style tests were added/updated to lock output invariants."
+        },
+        {
+          "ts": "2026-02-03T07:18:28.213Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "Team CLI UX changes were paired with a focused UX contract test (tests/test_team_cli_ux.py) and deterministic, user-visible output work in src/agent_loom/team/cli.py."
         }
       ]
     },
@@ -533,7 +548,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-31T04:25:38.114Z",
-      "updated_at": "2026-02-02T21:24:36.939Z",
+      "updated_at": "2026-02-03T07:06:13.378Z",
       "evidence": [
         {
           "ts": "2026-01-31T04:25:38.114Z",
@@ -618,6 +633,11 @@
           "ts": "2026-02-02T21:24:36.939Z",
           "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT",
           "note": "System reminder enforces read-only/plan mode; reinforces that autolearn responses must avoid any tool/file mutation."
+        },
+        {
+          "ts": "2026-02-03T07:06:13.378Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "System reminder indicated Plan Mode READ-ONLY with strict prohibition on edits/commands that modify state; reinforces treating plan-mode as hard gate."
         }
       ]
     },

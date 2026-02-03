@@ -67,6 +67,7 @@ from agent_loom.team.core import (
 from agent_loom.team.errors import TeamError
 from agent_loom.team.exec import _require_bin, _run
 from agent_loom.team.output import _emit_error, _emit_json
+from agent_loom.team.prime import prime
 from agent_loom.team.strings import message_preview, sanitize
 
 
@@ -1149,6 +1150,16 @@ def cmd_tui(args: argparse.Namespace) -> None:
     )
 
 
+def cmd_prime(args: argparse.Namespace) -> None:
+    res = prime()
+    if args.json:
+        emit_json_result(res)
+        return
+    text = str(getattr(res, "markdown", "") or "")
+    if text:
+        sys.stdout.write(text.rstrip() + "\n")
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = TeamArgumentParser(
         prog="team",
@@ -1474,6 +1485,9 @@ def build_parser() -> argparse.ArgumentParser:
         "--disband-resend-s", type=float, default=DEFAULT_DISBAND_REMINDER_RESEND_S
     )
     tui_cmd.set_defaults(func=cmd_tui)
+
+    prm = sub.add_parser("prime", help="Operating manual + canonical examples")
+    prm.set_defaults(func=cmd_prime)
 
     # Inbox: loom team inbox <TEAM> <cmd> ...
     ib = sub.add_parser("inbox", help="Disk-backed inbox (durable messages)")

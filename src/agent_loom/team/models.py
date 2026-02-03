@@ -18,6 +18,11 @@ class StartResult:
 
 
 @dataclass(frozen=True)
+class PrimeResult:
+    markdown: str
+
+
+@dataclass(frozen=True)
 class InitAgentsResult:
     repo_root: str
     wrote: List[str]
@@ -309,6 +314,7 @@ class InboxSendResult:
 
 __all__ = [
     "InitAgentsResult",
+    "PrimeResult",
     "AttachResult",
     "CaptureResult",
     "DisbandResult",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from agent_loom.team.cli import main as cli
+from agent_loom.team.prime import prime
 from agent_loom.team.core import (
     init_agents,
     attach,
@@ -39,6 +40,7 @@ from agent_loom.team.core import (
 __all__ = [
     "cli",
     "init_agents",
+    "prime",
     "attach",
     "bounce",
     "capture",

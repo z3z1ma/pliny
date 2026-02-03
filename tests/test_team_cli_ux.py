@@ -374,3 +374,17 @@ class TestTeamCliUx(unittest.TestCase):
         msg = payload.get("message") or {}
         self.assertEqual(str(msg.get("id") or ""), "abc123")
         self.assertEqual(str(msg.get("message") or ""), "hello\nthere")
+
+    def test_prime_prints_cookbook(self) -> None:
+        code, out, err = _team_text(["prime"])
+        self.assertEqual(code, 0)
+        self.assertEqual(err, "")
+        self.assertIn("Team Cookbook", out)
+        self.assertIn("loom team start", out)
+
+    def test_prime_json_includes_markdown(self) -> None:
+        code, payload = _team_json(["--json", "prime"])
+        self.assertEqual(code, 0)
+        self.assertTrue(payload.get("ok"))
+        content = str(payload.get("markdown") or "")
+        self.assertIn("Team Cookbook", content)
