@@ -25,6 +25,7 @@ metadata:
 
 3. Targeted tests
    - Run the smallest relevant suite, for example:
+     - `uv run pytest tests/test_ticket_ux.py`
      - `uv run pytest tests/test_team_cli_ux.py`
      - `uv run pytest tests/test_team_prompts.py`
      - `uv run pytest tests/test_team_disband.py`
@@ -33,6 +34,7 @@ metadata:
 
 - Always prefer `uv run ...` for all Python tooling.
 - Do not use `lsp_diagnostics` in this repository.
+- If your change affects user-visible text/ordering, prefer a focused UX contract test module (for example `tests/test_ticket_ux.py`).
 <!-- END:compound:skill-managed -->
 
 ## Manual notes

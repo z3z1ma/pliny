@@ -31,6 +31,9 @@ agent-loom-team = "agent_loom.team.cli:main"
 requires = ["uv_build>=0.9.16,<0.10.0"]
 build-backend = "uv_build"
 
+[tool.uv.build-backend]
+source-include = ["src/agent_loom/ticket/README.md"]
+
 [tool.pyright]
 typeCheckingMode = "basic"
 reportAny = "none"

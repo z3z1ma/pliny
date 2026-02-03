@@ -7,14 +7,19 @@
       "trigger": "When about to run any Python command (tests, linters, scripts, REPL)",
       "action": "Use `uv run ...` (never `python`, `pip`, or bare tool binaries). Prefer `uv run pytest`, `uv run ruff check .`, etc.",
       "tags": [],
-      "confidence": 0.8,
+      "confidence": 0.8300000000000001,
       "status": "active",
       "created_at": "2026-01-30T19:57:13.467Z",
-      "updated_at": "2026-01-30T19:57:13.467Z",
+      "updated_at": "2026-02-03T06:17:13.429Z",
       "evidence": [
         {
           "ts": "2026-01-30T19:57:13.467Z",
           "sessionID": "ses_3f019dd30ffer3m8Tz52bCQMPh"
+        },
+        {
+          "ts": "2026-02-03T06:17:13.429Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "Session context explicitly reasserts: use uv for everything; run Python tooling via `uv run` (no exceptions)."
         }
       ]
     },
@@ -446,7 +451,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-31T03:33:28.939Z",
-      "updated_at": "2026-02-02T23:45:28.328Z",
+      "updated_at": "2026-02-03T06:27:17.971Z",
       "evidence": [
         {
           "ts": "2026-01-31T03:33:28.939Z",
@@ -511,6 +516,11 @@
           "ts": "2026-02-02T23:45:28.328Z",
           "sessionID": "ses_3df49988cffeI4ckdZlKDF8bcE",
           "note": "Reinforced by adjacent contract-test mindset applied to HTML/UX: deterministic, parseable outputs guarded by focused tests."
+        },
+        {
+          "ts": "2026-02-03T06:27:17.971Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "User-visible ticket CLI output changed; contract-style tests were added/updated to lock output invariants."
         }
       ]
     },
@@ -801,14 +811,19 @@
       "trigger": "When about to check Python types/diagnostics (or an existing checklist says to run lsp_diagnostics)",
       "action": "Run `uv run basedpyright` and fix findings before `uv run ruff check .` and targeted `uv run pytest ...`.",
       "tags": [],
-      "confidence": 0.78,
+      "confidence": 0.8,
       "status": "active",
       "created_at": "2026-02-01T02:50:11.295Z",
-      "updated_at": "2026-02-01T02:50:11.295Z",
+      "updated_at": "2026-02-03T06:17:13.429Z",
       "evidence": [
         {
           "ts": "2026-02-01T02:50:11.295Z",
           "sessionID": "ses_3e8f9eb96ffedix8V6RSVbkyiA"
+        },
+        {
+          "ts": "2026-02-03T06:17:13.429Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "Session context explicitly reasserts: avoid `lsp_diagnostics`; use `uv run basedpyright` as the typecheck gate."
         }
       ]
     },
@@ -818,10 +833,10 @@
       "trigger": "When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy under src/agent_loom/compound/opencode/.",
       "action": "Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_install.py to lock the expected installed files/contents.",
       "tags": [],
-      "confidence": 0.9400000000000002,
+      "confidence": 0.9700000000000002,
       "status": "active",
       "created_at": "2026-02-01T04:25:40.315Z",
-      "updated_at": "2026-02-02T19:44:49.394Z",
+      "updated_at": "2026-02-03T06:27:17.971Z",
       "evidence": [
         {
           "ts": "2026-02-01T04:25:40.315Z",
@@ -856,6 +871,11 @@
           "ts": "2026-02-02T19:44:49.394Z",
           "sessionID": "ses_3e0371aa5ffeG1WkT34x2lOeuU",
           "note": "Both .opencode/skills/server-api-contract-testing/SKILL.md and src/agent_loom/compound/opencode/.opencode/skills/server-api-contract-testing/SKILL.md changed together, validating the mirror-sync rule."
+        },
+        {
+          "ts": "2026-02-03T06:27:17.971Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "Skill edits were mirrored in both .opencode and the scaffold/template copy, reinforcing deterministic install outputs."
         }
       ]
     },
@@ -1512,14 +1532,24 @@
       "trigger": "You edit ticket runtime/UX code (src/agent_loom/ticket/*.py or src/agent_loom/ui/ticket_ui.*) or anything that changes rendered ticket text/sections.",
       "action": "Treat ticket UX as a contract: make ordering deterministic, update/add focused assertions in tests/test_ticket_ux.py for required sections/lines (avoid nondeterministic values), then verify via `uv run basedpyright`, `uv run ruff check .`, `uv run pytest tests/test_ticket_ux.py`.",
       "tags": [],
-      "confidence": 0.84,
+      "confidence": 0.95,
       "status": "active",
       "created_at": "2026-02-02T20:55:36.543Z",
-      "updated_at": "2026-02-02T20:55:36.543Z",
+      "updated_at": "2026-02-03T06:27:17.971Z",
       "evidence": [
         {
           "ts": "2026-02-02T20:55:36.543Z",
           "sessionID": "ses_3dfee2890ffeBUCnpGXBYN24LT"
+        },
+        {
+          "ts": "2026-02-03T06:23:47.845Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "Recent work changed ticket runtime/UX (src/agent_loom/ticket/core.py, src/agent_loom/ticket/cli.py) and added/expanded a focused contract test module (tests/test_ticket_ux.py), reinforcing that ticket UX changes should be locked by deterministic, focused pytest contracts."
+        },
+        {
+          "ts": "2026-02-03T06:27:17.971Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3",
+          "note": "Ticket runtime/CLI changes landed alongside a focused UX contract test module (tests/test_ticket_ux.py)."
         }
       ]
     },
@@ -1642,6 +1672,23 @@
         {
           "ts": "2026-02-03T00:28:12.733Z",
           "sessionID": "ses_3df363547ffe9UJUtV4RePTANc"
+        }
+      ]
+    },
+    {
+      "id": "cookbook-deletions-need-contract-tests",
+      "title": "Cookbook deletions need contract tests",
+      "trigger": "You delete or heavily shrink a cookbook/how-to doc (especially under cookbooks/) that previously described runtime behavior.",
+      "action": "Replace the lost safety net with a focused contract test module asserting the same invariants (prefer UX contract tests like tests/test_ticket_ux.py) and run the verification gate.",
+      "tags": [],
+      "confidence": 0.7,
+      "status": "active",
+      "created_at": "2026-02-03T06:27:17.971Z",
+      "updated_at": "2026-02-03T06:27:17.971Z",
+      "evidence": [
+        {
+          "ts": "2026-02-03T06:27:17.971Z",
+          "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3"
         }
       ]
     }

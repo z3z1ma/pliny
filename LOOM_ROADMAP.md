@@ -10,10 +10,9 @@ This is an evolving, empirical compass. Keep it short and stable.
 <!-- END:compound:roadmap-backlog -->
 
 <!-- BEGIN:compound:roadmap-ai-notes -->
-- Near-term focus: harden team runtime determinism (init/spawn defaults, prompt assembly, stable output) with focused contract tests.
-- Prefer narrow, invariant-based pytest contracts over full snapshots for prompts/HTML.
-- Keep the developer loop strict and repeatable: `uv run basedpyright` -> `uv run ruff check .` -> targeted `uv run pytest`.
-- Continue tightening “agent-legible UX” surfaces: stable anchors/sections, explicit ordering, and minimal nondeterminism.
+- Keep ticket runtime minimal: fewer concepts, clearer state transitions, stable rendered UX.
+- Replace procedural cookbooks with executable contracts (focused pytest modules) to prevent drift.
+- Maintain install determinism: keep `.opencode/` sources and `src/agent_loom/compound/opencode/.opencode/` mirrors in sync.
 <!-- END:compound:roadmap-ai-notes -->
 
 ## Changelog (AI-first)
@@ -24,6 +23,9 @@ It tracks changes to skills, instincts, and core context files.
 It is intentionally bounded. Do not write entries like "no changes".
 
 <!-- BEGIN:compound:changelog-entries -->
+- 2026-02-03T06:27:19.025Z Codified a practice: simplify ticket runtime while locking deterministic UX via focused contract tests; added an instinct to replace deleted cookbooks with tests; reinforced template-mirror determinism.
+- 2026-02-03T06:23:48.841Z Reinforced ticket UX contract habit: boosted related instinct confidence and expanded the standard verification gate examples to include ticket UX contract tests.
+- 2026-02-03T06:17:16.103Z Reinforced the repo-wide verification posture: `uv run` for all Python commands and `basedpyright` over LSP diagnostics.
 - 2026-02-03T01:37:15.816Z Reinforce team core + prompt contract instincts; keep docs in sync.
 - 2026-02-03T01:00:59.243Z Reinforce team-core + prompt-contract discipline (determinism + targeted prompt tests) in instincts and always-on context.
 - 2026-02-03T00:55:39.333Z Reinforce that team core/prompt changes must be locked with targeted prompt contract tests.

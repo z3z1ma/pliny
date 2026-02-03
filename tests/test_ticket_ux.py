@@ -77,6 +77,25 @@ def _ticket_json(
     return code, (json.loads(payload) if payload else {})
 
 
+def _ticket_text(argv: list[str], *, cwd: Path, env: dict[str, str]) -> tuple[int, str]:
+    out = io.StringIO()
+    err = io.StringIO()
+    cwd0 = Path.cwd()
+    try:
+        os.chdir(cwd)
+        with _patched_env(env):
+            with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+                try:
+                    _ticket_cli(argv)
+                    code = 0
+                except SystemExit as e:
+                    code = int(e.code or 0)
+    finally:
+        os.chdir(cwd0)
+
+    return code, out.getvalue()
+
+
 class TestTicketUx(unittest.TestCase):
     def test_priority_accepts_p_prefix_and_words(self) -> None:
         with _temp_git_repo() as (root, env):
@@ -566,6 +585,21 @@ class TestTicketUx(unittest.TestCase):
             self.assertEqual(code, 2)
             self.assertEqual(payload.get("code"), "PERMISSION")
             self.assertIn("claim", str(payload.get("error") or "").lower())
+
+    def test_prime_prints_cookbook(self) -> None:
+        with _temp_git_repo() as (root, env):
+            code, text = _ticket_text(["prime"], cwd=root, env=env)
+            self.assertEqual(code, 0)
+            self.assertIn("Ticket Cookbook", text)
+            self.assertIn("loom ticket create", text)
+
+    def test_prime_json_includes_markdown(self) -> None:
+        with _temp_git_repo() as (root, env):
+            code, payload = _ticket_json(["--json", "prime"], cwd=root, env=env)
+            self.assertEqual(code, 0)
+            self.assertTrue(payload.get("ok"))
+            content = str((payload.get("payload") or {}).get("markdown") or "")
+            self.assertIn("Ticket Cookbook", content)
 
 
 if __name__ == "__main__":

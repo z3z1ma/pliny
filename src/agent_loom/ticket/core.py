@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import datetime as dt
 import hashlib
+import importlib.resources as resources
 import os
 import re
 import socket
@@ -61,12 +62,8 @@ from agent_loom.ticket.adapters import (
     JiraIssueAdapter,
 )
 from agent_loom.ticket.constants import (
-    AUDIT_DIRNAME,
     AUDIT_LOGGER,
     AUDIT_MODE,
-    CACHE_DIRNAME,
-    CONFIG_FILENAME,
-    LOCKS_DIRNAME,
     SUBSYSTEM_NAME,
     SUBSYSTEM_VERSION,
     TICKET_DIR_OVERRIDE,
@@ -1375,116 +1372,17 @@ def query(*, jmes: str = "") -> TicketQueryResult:
 
 
 def prime() -> TicketPrimeResult:
-    payload = {
-        "tool": {"name": SUBSYSTEM_NAME, "version": SUBSYSTEM_VERSION},
-        "purpose": "File-backed tickets for human+agent workflows (Markdown + YAML frontmatter)",
-        "zen": [
-            "One file. One storage format.",
-            "One global --json contract.",
-            "Prefer atomic updates (loom ticket update) over editing files by hand.",
-        ],
-        "storage": {
-            "tickets_dir": f"{TICKET_DIRNAME}/ (repo-local)",
-            "ticket_files": f"{TICKET_DIRNAME}/<id>.md",
-            "locks": f"{TICKET_DIRNAME}/{LOCKS_DIRNAME}/ (leases for claims)",
-            "audit": f"{TICKET_DIRNAME}/{AUDIT_DIRNAME}/ (append-only run logs)",
-            "cache": f"{TICKET_DIRNAME}/{CACHE_DIRNAME}/ (derived caches)",
-            "config": f"{TICKET_DIRNAME}/{CONFIG_FILENAME} (optional)",
-        },
-        "output": {
-            "default": "human-readable text",
-            "json": "--json emits machine-readable JSON with ok/error keys",
-            "errors": {"ok": False, "error": "string", "code": "string"},
-        },
-        "concurrency": {
-            "claims": "loom ticket claim creates/refreshes a lease; loom ticket heartbeat extends it; loom ticket release removes it",
-            "enforcement": "Set TK_REQUIRE_CLAIM=1 to require the current agent to hold the claim for writes",
-        },
-        "env": {
-            "TICKET_DIR": "Override tickets directory (absolute or repo-root-relative)",
-            "TICKET_AGENT": "Agent identifier for claims (default: user@host:pid)",
-            "TK_REQUIRE_CLAIM": "If set to 1, require current agent claim for write commands",
-            "TK_AUDIT_MODE": "Audit mode: all|writes|off (default all)",
-            "TEAM_SPRINT_TAG": "If set, loom ticket create auto-adds this tag (override with --no-sprint-tag)",
-            "GITHUB_TOKEN": "Optional GitHub token for external sync",
-            "TK_GITHUB_REPO": "Default repo (owner/repo) for gh-123 shorthand",
-        },
-        "schema": {
-            "frontmatter": {
-                "id": "string (filename stem)",
-                "status": list(VALID_STATUSES),
-                "priority": "int 0..4 (0 highest)",
-                "type": "task|bug|feature|epic|chore",
-                "deps": "list[id] (this ticket depends on these)",
-                "links": "list[id] (symmetric loose relationships)",
-                "parent": "id (parent/child work hierarchy)",
-                "tags": "list[str]",
-                "assignee": "string",
-                "external-ref": "string (e.g., gh:owner/repo#123, url)",
-                "claimed-by": "string (agent id)",
-                "claim-expires": "RFC3339 / ISO8601",
-                "heartbeat": "RFC3339 / ISO8601",
-                "external": "dict (sync cache)",
-            }
-        },
-        "examples": {
-            "copy_paste_for_agents_md": [
-                "# Tickets",
-                "- Run: loom ticket prime",
-                "- Prefer JSON: loom ticket --json list | loom ticket --json show <id>",
-                "- Help: loom ticket -h and loom ticket <command> -h",
-            ],
-            "happy_path": [
-                "loom ticket init",
-                "loom ticket create 'Title' -t task -p 2 --tags infra",
-                "loom ticket ready",
-                "loom ticket claim <id> --ttl 45m",
-                "loom ticket update <id> --status in_progress",
-                "loom ticket add-note <id> 'Progress update...'",
-                "loom ticket close <id>",
-                "loom ticket release <id>",
-                "loom ticket sync -m 'chore: tickets'",
-            ],
-            "bootstrap": [
-                "loom ticket -h",
-                "loom ticket init",
-                'loom ticket create "Implement orchestration layer" -p 1 -t epic --tags ai,infra',
-                'loom ticket create "Investigate flaky CI" -t bug -p 1 --tags ci,infra -d "Observed intermittent failures in unit tests when run in parallel. Collect failing logs, identify race, and propose minimal fix."',
-            ],
-            "work": [
-                "loom ticket list --status open",
-                "loom ticket ready",
-                "loom ticket blocked",
-                "loom ticket show <id>",
-                "loom ticket view <id>",
-            ],
-            "deps": [
-                "loom ticket dep <id>",
-                "loom ticket dep-add <id> <dep-id>",
-                "loom ticket dep-rm <id> <dep-id>",
-                "loom ticket dep-cycle",
-            ],
-            "mutation": [
-                "loom ticket claim <id> --ttl 45m",
-                "loom ticket heartbeat <id>",
-                "loom ticket update <id> --status in_progress",
-                'loom ticket update <id> --title "New title"',
-                'loom ticket add-note <id> "Started investigation. Next: reproduce locally and capture stacktrace."',
-                "cat new_body.md | loom ticket update <id>",
-                "loom ticket release <id>",
-            ],
-            "machine": [
-                "loom ticket --json list",
-                "loom ticket --json show <id>",
-                "loom ticket --json view <id>",
-                "loom ticket --json query --format json",
-            ],
-            "help": [
-                "loom ticket -h",
-                "loom ticket <command> -h",
-                "loom ticket prime --json",
-            ],
-        },
-    }
+    try:
+        text = (
+            resources.files("agent_loom.ticket")
+            .joinpath("README.md")
+            .read_text(encoding="utf-8")
+        )
+    except FileNotFoundError as exc:
+        raise TicketArgError(
+            code="NOT_FOUND",
+            error="Ticket cookbook not found in package data",
+            hint="Reinstall the package or verify cookbooks are bundled.",
+        ) from exc
 
-    return TicketPrimeResult(payload=payload)
+    return TicketPrimeResult(payload={"markdown": text})

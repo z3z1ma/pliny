@@ -27,27 +27,30 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **dashboard-template-changes-require-server-contract-test** (100%)
   - Trigger: You change src/agent_loom/server/templates/dashboard.html (especially large refactors or section reshuffles).
   - Action: Update/add request-level invariants in tests/test_server_api_contract.py (stable markers/sections + deterministic ordering; avoid full-HTML snapshots) and verify with: uv run basedpyright; uv run ruff…
+- **compound-template-mirror-must-stay-in-sync** (97%)
+  - Trigger: When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy unde…
+  - Action: Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_i…
 - **workspace-cli-output-is-a-contract** (96%)
   - Trigger: When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py
   - Action: Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv…
 - **large-template-refactor-diff-hygiene** (96%)
   - Trigger: You are about to make a large refactor in src/agent_loom/server/templates/*.html (especially dashboard.html) that could produce a huge diff.
   - Action: Minimize formatting-only churn, preserve/introduce stable data-* anchors, and update tests/test_server_api_contract.py in the same change to assert invariant markers/sections (avoid full HTML snapshot…
+- **ticket-changes-require-ticket-ux-contract-test** (95%)
+  - Trigger: You edit ticket runtime/UX code (src/agent_loom/ticket/*.py or src/agent_loom/ui/ticket_ui.*) or anything that changes rendered ticket text/sections.
+  - Action: Treat ticket UX as a contract: make ordering deterministic, update/add focused assertions in tests/test_ticket_ux.py for required sections/lines (avoid nondeterministic values), then verify via `uv ru…
 - **team-prompts-need-section-level-contracts** (94%)
   - Trigger: When adding or restructuring sections in src/agent_loom/team/prompts.py (or prompt assembly in src/agent_loom/team/core.py).
   - Action: Make prompt rendering deterministic (explicit ordering, stable headings) and add/expand section-level contract tests in tests/test_team_prompts.py that assert required sections/ordering without relyin…
-- **compound-template-mirror-must-stay-in-sync** (94%)
-  - Trigger: When editing Compound plugin/skill/docs behavior that is shipped via a template (for example .opencode/plugins/compound_engineering.ts or .opencode/skills/*) and the repo contains a scaffold copy unde…
-  - Action: Update both the repo-root .opencode/* sources and the scaffolded template under src/agent_loom/compound/opencode/.opencode/* to keep installation output deterministic; add/adjust tests/test_compound_i…
 - **server-html-changes-require-api-contract-test** (94%)
   - Trigger: When changing server-rendered HTML behavior (templates or the route that serves them), especially large refactors in src/agent_loom/server/templates/*.html
   - Action: Add/update a request-level contract test (prefer tests/test_server_api_contract.py) that asserts stable markers/sections and deterministic ordering; avoid brittle full-HTML snapshots; verify via uv ru…
 - **dashboard-template-edits-require-anchor-contracts** (88%)
   - Trigger: You edit src/agent_loom/dashboard/templates/dashboard.html or src/agent_loom/server/templates/dashboard.html (especially adding/removing/reordering sections).
   - Action: Preserve/add stable data-* anchors, keep section ordering deterministic, update request-level invariants in tests/test_server_api_contract.py, then run: uv run basedpyright; uv run ruff check .; uv ru…
-- **ticket-changes-require-ticket-ux-contract-test** (84%)
-  - Trigger: You edit ticket runtime/UX code (src/agent_loom/ticket/*.py or src/agent_loom/ui/ticket_ui.*) or anything that changes rendered ticket text/sections.
-  - Action: Treat ticket UX as a contract: make ordering deterministic, update/add focused assertions in tests/test_ticket_ux.py for required sections/lines (avoid nondeterministic values), then verify via `uv ru…
+- **python-commands-use-uv-run** (83%)
+  - Trigger: When about to run any Python command (tests, linters, scripts, REPL)
+  - Action: Use `uv run ...` (never `python`, `pip`, or bare tool binaries). Prefer `uv run pytest`, `uv run ruff check .`, etc.
 - **skills-canonical-location-is-opencode** (83%)
   - Trigger: When editing/creating skills and there are multiple skill directories (for example .opencode/skills and .claude/skills)
   - Action: Only propose skill changes under .opencode/skills/<name>/SKILL.md and rely on docs/index sync; avoid duplicating or manually maintaining mirror copies elsewhere.
@@ -57,10 +60,7 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **dashboard-cli-output-is-a-contract** (82%)
   - Trigger: When changing user-visible output or flags in src/agent_loom/dashboard/cli.py
   - Action: Make output deterministic (stable ordering, no nondeterministic values) and add/update a focused pytest contract test asserting required lines/sections; verify via uv run basedpyright, uv run ruff che…
-- **python-commands-use-uv-run** (80%)
-  - Trigger: When about to run any Python command (tests, linters, scripts, REPL)
-  - Action: Use `uv run ...` (never `python`, `pip`, or bare tool binaries). Prefer `uv run pytest`, `uv run ruff check .`, etc.
-- **prefer-basedpyright-over-lsp-diagnostics** (78%)
+- **prefer-basedpyright-over-lsp-diagnostics** (80%)
   - Trigger: When about to check Python types/diagnostics (or an existing checklist says to run lsp_diagnostics)
   - Action: Run `uv run basedpyright` and fix findings before `uv run ruff check .` and targeted `uv run pytest ...`.
 - **team-init-agents-changes-require-contract-test** (78%)
@@ -114,6 +114,9 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **dashboard-template-source-of-truth-check** (70%)
   - Trigger: You edit dashboard HTML or dashboard-serving routes and there are multiple template locations (src/agent_loom/dashboard/templates/* and src/agent_loom/server/templates/*).
   - Action: Confirm which template is actually rendered by the route(s); keep stable data-* anchors consistent across any duplicated templates; update request-level invariants in tests/test_server_api_contract.py…
+- **cookbook-deletions-need-contract-tests** (70%)
+  - Trigger: You delete or heavily shrink a cookbook/how-to doc (especially under cookbooks/) that previously described runtime behavior.
+  - Action: Replace the lost safety net with a focused contract test module asserting the same invariants (prefer UX contract tests like tests/test_ticket_ux.py) and run the verification gate.
 - **core-docs-are-contracts** (68%)
   - Trigger: When proposing or making changes to AGENTS.md, LOOM_PROJECT.md, or LOOM_ROADMAP.md (especially deletions or restructures)
   - Action: Treat these files as contracts: avoid large deletions without replacement; keep always-on blocks short/stable; update AI-managed blocks via CompoundSpec v2 (docs.blocks.upsert + docs.sync); keep paths…
@@ -123,9 +126,6 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **cli-environment-output-must-be-sanitized** (64%)
   - Trigger: When adding CLI output that prints runtime environment or model identifiers (e.g., model id, working directory, platform, dates)
   - Action: Avoid secrets and machine-specific absolute paths; prefer minimal, stable fields; keep formatting deterministic; add/adjust a contract test asserting stable invariants rather than full dumps.
-- **ticket-edits-require-dep-status-sanity** (64%)
-  - Trigger: When a change set primarily touches `.tickets/*.md` (creating/updating multiple tickets).
-  - Action: Treat tickets as the execution graph: validate dependency edges and status transitions with `loom ticket dep <id>`, keep status consistent with deps (don't mark `in_progress` if blocked), and add a sh…
 
 ## Notes
 

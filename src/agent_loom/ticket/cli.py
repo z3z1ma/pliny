@@ -584,7 +584,7 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("jmes", nargs="?", default="")
     sp.add_argument("--format", default="jsonl", choices=["jsonl", "json", "yaml"])
 
-    sub.add_parser("prime", parents=[common], help="Explain canonical usage")
+    sub.add_parser("prime", parents=[common], help="Print ticket cookbook")
 
     return p
 
@@ -1158,7 +1158,9 @@ def _handle_prime(_args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
     if json_mode:
         _emit_json(_payload(response))
     else:
-        sys.stdout.write(_render_prime_text(response.payload))
+        text = str(response.payload.get("markdown") or "")
+        if text:
+            sys.stdout.write(text.rstrip() + "\n")
     return 0
 
 
