@@ -76,10 +76,6 @@ type PluginState = {
     lastObservationHash?: string;
     lastOutcome?: "noop" | "applied" | "error";
     lastError?: string;
-    capabilities?: {
-      tool_calls_supported?: boolean;
-      last_probe_at?: ISODate;
-    };
   };
 };
 
@@ -1130,13 +1126,6 @@ This block is intentionally *small and stable*. Only update it when a principle 
 `);
 }
 
-function renderSkillsIndex(skills: Array<{ name: string; description: string; path: string; version?: string }>): string {
-  if (!skills.length) return "- _(none yet)_";
-  return skills
-    .map((s) => `- **${s.name}**${s.version ? ` (v${s.version})` : ""}: ${s.description}\n  - ${s.path.replace(/\\/g, "/")}`)
-    .join("\n");
-}
-
 async function renderRoadmapBacklog(root: string): Promise<string> {
   // Best-effort: use loom ticket list. If not available, leave placeholder.
   const ticket = await resolveTicketCli(root);
@@ -1291,12 +1280,12 @@ Budget (hard caps):
 - Max memos per run: ${AUTO_MAX_MEMOS_PER_RUN}
 
 Tools to use:
-- `compound_skill_upsert` (create/update a skill)
-- `compound_instinct_upsert` (create/update an instinct)
-- `compound_docblock_upsert` (AGENTS.md/loom-core-context or LOOM_ROADMAP.md/roadmap-ai-notes only)
-- `compound_memo_add` (add a Loom memory note; use sparingly)
-- `compound_changelog_append` (short AI-first memory delta)
-- `compound_sync` (refresh indexes after you make changes)
+- \`compound_skill_upsert\` (create/update a skill)
+- \`compound_instinct_upsert\` (create/update an instinct)
+- \`compound_docblock_upsert\` (AGENTS.md/loom-core-context or LOOM_ROADMAP.md/roadmap-ai-notes only)
+- \`compound_memo_add\` (add a Loom memory note; use sparingly)
+- \`compound_changelog_append\` (short AI-first memory delta)
+- \`compound_sync\` (refresh indexes after you make changes)
 
 Rules:
 - Prefer updating an existing skill over creating a near-duplicate.
@@ -1391,63 +1380,6 @@ function consumeAutolearnChangelogOp(): void {
   activeAutolearn.writes.changelog += 1;
 }
 
-async function ensureAutolearnToolCallsSupported(
-  sessionRoot: string,
-  client: any,
-  activeSessionID: string
-): Promise<boolean> {
-  const state = await loadState(sessionRoot);
-  const existing = state.autolearn?.capabilities?.tool_calls_supported;
-  if (existing === true || existing === false) return existing;
-
-  const beforeProbeAt = state.autolearn?.capabilities?.last_probe_at ?? "";
-  const ephemeralSessionID = await createEphemeralSession(client, activeSessionID);
-  if (!ephemeralSessionID) return false;
-
-  try {
-    await client.session.prompt({
-      path: { id: ephemeralSessionID },
-      body: {
-        agent: "plan",
-        parts: [
-          {
-            type: "text",
-            text: normalizeNewlines(`You are running a capability probe.
-
-Call the tool \`compound_autolearn_probe\` exactly once.
-Then respond with a single line: PROBED
-`),
-          },
-        ],
-      },
-    });
-  } finally {
-    try {
-      await client.session.delete({ path: { id: ephemeralSessionID } });
-    } catch {}
-  }
-
-  const after = await loadState(sessionRoot);
-  const ok =
-    after.autolearn?.capabilities?.tool_calls_supported === true &&
-    (after.autolearn?.capabilities?.last_probe_at ?? "") !== beforeProbeAt;
-  if (ok) return true;
-
-  const next: PluginState = {
-    ...after,
-    autolearn: {
-      ...(after.autolearn ?? {}),
-      capabilities: {
-        ...((after.autolearn ?? {}).capabilities ?? {}),
-        tool_calls_supported: false,
-        last_probe_at: nowIso(),
-      },
-    },
-  };
-  await saveState(sessionRoot, next);
-  return false;
-}
-
 async function autoLearnIfNeeded(
   sessionRoot: string,
   writeRoot: string,
@@ -1473,7 +1405,7 @@ async function autoLearnIfNeeded(
     if (reason === "session.idle") {
       if (!lastCmdAt || now - lastCmdAt > 10 * 60 * 1000) return;
       if (!lastCmdName) return;
-      if (/^compound_(apply|sync|autolearn_now|bootstrap)$/.test(lastCmdName)) return;
+      if (lastCmdName.startsWith("compound_")) return;
     }
 
     const obsCount = await countObservations(sessionRoot);
@@ -1489,28 +1421,9 @@ async function autoLearnIfNeeded(
       if (!diff && !looksLikeWorkflow) return;
     }
 
-    const toolCallsSupported = await ensureAutolearnToolCallsSupported(sessionRoot, client, sessionID);
-
     const recentObs = await readObservationsTail(sessionRoot, AUTO_MAX_OBSERVATIONS_IN_PROMPT);
     const instincts = await loadInstincts(writeRoot);
     const skills = await scanSkills(writeRoot);
-
-    if (!toolCallsSupported) {
-      const next: PluginState = {
-        ...state,
-        autolearn: {
-          ...(state.autolearn ?? {}),
-          lastRunAt: nowIso(),
-          lastRunSessionID: sessionID ?? null,
-          lastObservationCount: obsCount.count,
-          lastObservationHash: obsCount.tailHash,
-          lastOutcome: "error",
-          lastError: "tool-calling not supported in background sessions",
-        },
-      };
-      await saveState(sessionRoot, next);
-      return;
-    }
 
     const promptTemplate = await safeReadFile(
       path.join(writeRoot, AUTOLEARN_PROMPT_FILE),
@@ -1948,27 +1861,6 @@ export const CompoundEngineeringPlugin: Plugin = async ({ client, directory, wor
     },
   });
 
-  const compound_autolearn_probe = tool({
-    description: "Internal: probe whether background sessions can execute tool calls.",
-    parameters: {},
-    execute: async () => {
-      const state = await loadState(sessionRoot);
-      const next: PluginState = {
-        ...state,
-        autolearn: {
-          ...(state.autolearn ?? {}),
-          capabilities: {
-            ...((state.autolearn ?? {}).capabilities ?? {}),
-            tool_calls_supported: true,
-            last_probe_at: nowIso(),
-          },
-        },
-      };
-      await saveState(sessionRoot, next);
-      return "ok";
-    },
-  });
-
   const compound_autolearn_now = tool({
     description: "Force an autolearn run now (same as session.idle background), using recent observations.",
     parameters: { sessionID: { type: "string", optional: true }, reason: { type: "string", optional: true } },
@@ -2175,7 +2067,6 @@ export const CompoundEngineeringPlugin: Plugin = async ({ client, directory, wor
       compound_docblock_upsert,
       compound_changelog_append,
       compound_memo_add,
-      compound_autolearn_probe,
       compound_autolearn_now,
       compound_observations_tail,
       compound_instincts,

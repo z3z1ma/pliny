@@ -1,5 +1,6 @@
 declare module "node:fs" { export const promises: any; }
+declare module "node:fs/promises" { const x: any; export = x; }
 declare module "node:path" { const x: any; export = x; }
 declare module "node:child_process" { export const spawn: any; }
-declare module "node:crypto" { export const randomUUID: any; }
+declare module "node:crypto" { export const randomUUID: any; export const createHash: any; }
 declare const process: any;

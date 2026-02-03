@@ -6,24 +6,24 @@ The source of truth is `.opencode/memory/instincts.json`.
 <!-- BEGIN:compound:instincts-md -->
 ## Active instincts (top confidence)
 
-- **cli-output-is-a-contract** (100%)
-  - Trigger: When changing any CLI/user-facing output formatting (especially ticket/team UX)
-  - Action: Make output deterministic (explicit ordering, stable formatting) and add a focused pytest contract test for the rendered text.
-- **dashboard-template-changes-require-server-contract-test** (100%)
-  - Trigger: You change src/agent_loom/server/templates/dashboard.html (especially large refactors or section reshuffles).
-  - Action: Update/add request-level invariants in tests/test_server_api_contract.py (stable markers/sections + deterministic ordering; avoid full-HTML snapshots) and verify with: uv run basedpyright; uv run ruff…
-- **plan-mode-readonly-no-edits** (100%)
-  - Trigger: System reminder says Plan Mode ACTIVE / READ-ONLY phase
-  - Action: Do not edit/create/delete files or run write-capable commands; only inspect/read/search and produce an execution plan or required JSON payload.
 - **prompt-changes-require-prompt-tests** (100%)
   - Trigger: When editing agent prompts or prompt assembly code
   - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
-- **server-template-output-is-a-contract** (100%)
-  - Trigger: When changing src/agent_loom/server/templates/*.html (especially large refactors like dashboard.html).
-  - Action: Treat rendered HTML as a deterministic UX contract: ensure stable ordering/no nondeterministic values, add/update a focused pytest contract test for required markers/sections, then run `uv run basedpy…
 - **team-core-changes-require-targeted-tests** (100%)
   - Trigger: When editing src/agent_loom/team/core.py, src/agent_loom/team/prompts.py, or src/agent_loom/team/cli.py
   - Action: Update/add focused tests covering the changed behavior (especially prompt contracts) and run `uv run pytest` for the relevant test module(s) plus `uv run ruff check .` before calling the work done.
+- **cli-output-is-a-contract** (100%)
+  - Trigger: When changing any CLI/user-facing output formatting (especially ticket/team UX)
+  - Action: Make output deterministic (explicit ordering, stable formatting) and add a focused pytest contract test for the rendered text.
+- **plan-mode-readonly-no-edits** (100%)
+  - Trigger: System reminder says Plan Mode ACTIVE / READ-ONLY phase
+  - Action: Do not edit/create/delete files or run write-capable commands; only inspect/read/search and produce an execution plan or required JSON payload.
+- **server-template-output-is-a-contract** (100%)
+  - Trigger: When changing src/agent_loom/server/templates/*.html (especially large refactors like dashboard.html).
+  - Action: Treat rendered HTML as a deterministic UX contract: ensure stable ordering/no nondeterministic values, add/update a focused pytest contract test for required markers/sections, then run `uv run basedpy…
+- **dashboard-template-changes-require-server-contract-test** (100%)
+  - Trigger: You change src/agent_loom/server/templates/dashboard.html (especially large refactors or section reshuffles).
+  - Action: Update/add request-level invariants in tests/test_server_api_contract.py (stable markers/sections + deterministic ordering; avoid full-HTML snapshots) and verify with: uv run basedpyright; uv run ruff…
 - **workspace-cli-output-is-a-contract** (98%)
   - Trigger: When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py
   - Action: Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv…
@@ -36,12 +36,12 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **ticket-changes-require-ticket-ux-contract-test** (95%)
   - Trigger: You edit ticket runtime/UX code (src/agent_loom/ticket/*.py or src/agent_loom/ui/ticket_ui.*) or anything that changes rendered ticket text/sections.
   - Action: Treat ticket UX as a contract: make ordering deterministic, update/add focused assertions in tests/test_ticket_ux.py for required sections/lines (avoid nondeterministic values), then verify via `uv ru…
-- **server-html-changes-require-api-contract-test** (94%)
-  - Trigger: When changing server-rendered HTML behavior (templates or the route that serves them), especially large refactors in src/agent_loom/server/templates/*.html
-  - Action: Add/update a request-level contract test (prefer tests/test_server_api_contract.py) that asserts stable markers/sections and deterministic ordering; avoid brittle full-HTML snapshots; verify via uv ru…
 - **team-prompts-need-section-level-contracts** (94%)
   - Trigger: When adding or restructuring sections in src/agent_loom/team/prompts.py (or prompt assembly in src/agent_loom/team/core.py).
   - Action: Make prompt rendering deterministic (explicit ordering, stable headings) and add/expand section-level contract tests in tests/test_team_prompts.py that assert required sections/ordering without relyin…
+- **server-html-changes-require-api-contract-test** (94%)
+  - Trigger: When changing server-rendered HTML behavior (templates or the route that serves them), especially large refactors in src/agent_loom/server/templates/*.html
+  - Action: Add/update a request-level contract test (prefer tests/test_server_api_contract.py) that asserts stable markers/sections and deterministic ordering; avoid brittle full-HTML snapshots; verify via uv ru…
 - **dashboard-template-edits-require-anchor-contracts** (88%)
   - Trigger: You edit src/agent_loom/dashboard/templates/dashboard.html or src/agent_loom/server/templates/dashboard.html (especially adding/removing/reordering sections).
   - Action: Preserve/add stable data-* anchors, keep section ordering deterministic, update request-level invariants in tests/test_server_api_contract.py, then run: uv run basedpyright; uv run ruff check .; uv ru…
@@ -66,21 +66,21 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **team-init-agents-changes-require-contract-test** (78%)
   - Trigger: You change team startup/init-agent wiring or defaults (especially in src/agent_loom/team/core.py or src/agent_loom/team/cli.py).
   - Action: Treat agent initialization as a UX+behavior contract: update/add focused assertions in tests/test_team_init_agents.py (and prompt tests if prompts changed), then run the gate: uv run basedpyright; uv …
-- **compound-install-changes-require-install-contract-test** (77%)
-  - Trigger: When changing src/agent_loom/compound/install.py or src/agent_loom/compound/cli.py (or any behavior that affects generated .opencode/* files).
-  - Action: Update/add assertions in tests/test_compound_install.py for deterministic outputs; then run uv run basedpyright, uv run ruff check ., and uv run pytest tests/test_compound_install.py before calling th…
 - **team-spawn-integrator-changes-require-contract-test** (77%)
   - Trigger: When changing team spawn/integrator wiring (typically in src/agent_loom/team/core.py or src/agent_loom/team/cli.py), especially anything that boots an integrator or mediates agent process startup.
   - Action: Add/update a focused contract test in tests/test_team_spawn_integrator.py that asserts deterministic invariants (what starts, with what args/env, and what is persisted/returned), then run lsp_diagnost…
+- **compound-install-changes-require-install-contract-test** (77%)
+  - Trigger: When changing src/agent_loom/compound/install.py or src/agent_loom/compound/cli.py (or any behavior that affects generated .opencode/* files).
+  - Action: Update/add assertions in tests/test_compound_install.py for deterministic outputs; then run uv run basedpyright, uv run ruff check ., and uv run pytest tests/test_compound_install.py before calling th…
 - **removing-cli-command-requires-contract-cleanup** (76%)
   - Trigger: You delete an entire CLI command/module directory (for example removing src/agent_loom/init/* or a whole subcommand surface).
   - Action: Treat it like a contract change: remove entrypoints/exports, delete or update the command wiring, delete/update contract tests and skills that reference the removed surface, and then run the standard …
-- **loom-init-cli-changes-require-ux-contract-test** (74%)
-  - Trigger: When editing user-visible output/flags/formatting in src/agent_loom/init/cli.py (or init CLI output pathways).
-  - Action: Make output deterministic (stable ordering; no nondeterministic/machine-specific values) and add/update a focused pytest contract test (prefer tests/test_loom_init_cli_ux.py). Verify with: uv run base…
 - **workspace-core-changes-require-targeted-tests** (74%)
   - Trigger: When editing src/agent_loom/workspace/core.py, src/agent_loom/workspace/models.py, src/agent_loom/workspace/state.py, src/agent_loom/workspace/repo_ops.py, src/agent_loom/workspace/git_ops.py, src/age…
   - Action: Treat workspace as public API: add/adjust targeted pytest coverage for the behavior/contract being changed (CLI text, model serialization, ordering, guard failures). Run: uv run basedpyright, uv run r…
+- **loom-init-cli-changes-require-ux-contract-test** (74%)
+  - Trigger: When editing user-visible output/flags/formatting in src/agent_loom/init/cli.py (or init CLI output pathways).
+  - Action: Make output deterministic (stable ordering; no nondeterministic/machine-specific values) and add/update a focused pytest contract test (prefer tests/test_loom_init_cli_ux.py). Verify with: uv run base…
 - **workspace-diff-ops-changes-require-determinism-and-tests** (74%)
   - Trigger: You edit workspace diff/read logic (for example src/agent_loom/workspace/diff_ops.py, src/agent_loom/workspace/repo_ops.py, src/agent_loom/workspace/poly_ops.py, src/agent_loom/dashboard/workspace_rea…
   - Action: Make outputs deterministic (stable ordering, normalized/relative paths, explicit sorting), add/extend focused tests around invariants, then verify with: uv run basedpyright; uv run ruff check .; uv ru…
@@ -90,30 +90,30 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **team-expansion-requires-contract-tests-and-ruff** (73%)
   - Trigger: When adding or significantly expanding team runtime (new CLI entrypoints, inbox loop, or new team modules like inbox/models/constants)
   - Action: Treat it like a public API: add/adjust prompt-contract tests, run `uv run ruff check .`, run targeted `uv run pytest` for the changed surface area, and clear LSP diagnostics on touched files before ca…
-- **core-cli-changes-require-ux-contract-test** (72%)
-  - Trigger: When editing user-visible output/flags/formatting in src/agent_loom/cli.py
-  - Action: Make output deterministic and lock it with a focused pytest contract test (prefer tests/test_cli_ux.py or the existing CLI test module). Verify via: uv run basedpyright, uv run ruff check ., uv run py…
-- **server-html-tests-should-assert-markers-not-whitespace** (72%)
-  - Trigger: You write or modify tests that validate server-rendered HTML.
-  - Action: Assert stable markers (data-* hooks, headings/labels) and ordering for repeated items; avoid brittle full-string/whitespace snapshots unless explicitly intended as the contract.
 - **team-disband-changes-require-disband-tests** (72%)
   - Trigger: When changing team shutdown/disband behavior (especially in src/agent_loom/team/core.py) or introducing a new disband pathway
   - Action: Add/adjust focused tests covering disband semantics in tests/test_team_disband.py; keep teardown deterministic; run uv run pytest tests/test_team_disband.py and uv run ruff check . before calling work…
+- **core-cli-changes-require-ux-contract-test** (72%)
+  - Trigger: When editing user-visible output/flags/formatting in src/agent_loom/cli.py
+  - Action: Make output deterministic and lock it with a focused pytest contract test (prefer tests/test_cli_ux.py or the existing CLI test module). Verify via: uv run basedpyright, uv run ruff check ., uv run py…
 - **ticket-cli-output-is-a-contract** (72%)
   - Trigger: When changing any user-visible output/formatting in src/agent_loom/ticket/cli.py.
   - Action: Make output deterministic (explicit ordering; avoid nondeterministic/machine-specific values) and lock invariants in tests/test_ticket_ux.py; verify with uv run basedpyright, uv run ruff check ., uv r…
-- **cookbook-deletions-need-contract-tests** (70%)
-  - Trigger: You delete or heavily shrink a cookbook/how-to doc (especially under cookbooks/) that previously described runtime behavior.
-  - Action: Replace the lost safety net with a focused contract test module asserting the same invariants (prefer UX contract tests like tests/test_ticket_ux.py) and run the verification gate.
-- **dashboard-template-source-of-truth-check** (70%)
-  - Trigger: You edit dashboard HTML or dashboard-serving routes and there are multiple template locations (src/agent_loom/dashboard/templates/* and src/agent_loom/server/templates/*).
-  - Action: Confirm which template is actually rendered by the route(s); keep stable data-* anchors consistent across any duplicated templates; update request-level invariants in tests/test_server_api_contract.py…
+- **server-html-tests-should-assert-markers-not-whitespace** (72%)
+  - Trigger: You write or modify tests that validate server-rendered HTML.
+  - Action: Assert stable markers (data-* hooks, headings/labels) and ordering for repeated items; avoid brittle full-string/whitespace snapshots unless explicitly intended as the contract.
 - **idle-autolearn-avoid-churn** (70%)
   - Trigger: Background autolearn runs with no git diffstat and no concrete new work artifacts.
   - Action: Do not propose skill/doc edits; at most create a small instinct if it prevents future failures (e.g., JSON-only output discipline). Otherwise emit an empty spec with docs.sync=false.
 - **server-template-changes-require-ux-contract-test** (70%)
   - Trigger: You changed server-rendered HTML templates under src/agent_loom/server/templates/ (especially large diffs like dashboard.html).
   - Action: Treat rendered HTML as a contract: add/update a focused pytest that renders/requests the template and asserts stable markers/ordering; avoid nondeterministic output (timestamps/random ids) and machine…
+- **dashboard-template-source-of-truth-check** (70%)
+  - Trigger: You edit dashboard HTML or dashboard-serving routes and there are multiple template locations (src/agent_loom/dashboard/templates/* and src/agent_loom/server/templates/*).
+  - Action: Confirm which template is actually rendered by the route(s); keep stable data-* anchors consistent across any duplicated templates; update request-level invariants in tests/test_server_api_contract.py…
+- **cookbook-deletions-need-contract-tests** (70%)
+  - Trigger: You delete or heavily shrink a cookbook/how-to doc (especially under cookbooks/) that previously described runtime behavior.
+  - Action: Replace the lost safety net with a focused contract test module asserting the same invariants (prefer UX contract tests like tests/test_ticket_ux.py) and run the verification gate.
 - **ticket-frontmatter-changes-require-roundtrip-tests** (66%)
   - Trigger: When editing src/agent_loom/ticket/frontmatter.py or changing the ticket on-disk format/serialization
   - Action: Add/adjust round-trip tests that load+save+reload tickets; ensure parse errors include actionable context; run lsp_diagnostics on touched files, then `uv run ruff check .`, then the smallest relevant …
@@ -123,9 +123,9 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **ticket-edits-require-dep-status-sanity** (64%)
   - Trigger: When a change set primarily touches `.tickets/*.md` (creating/updating multiple tickets).
   - Action: Treat tickets as the execution graph: validate dependency edges and status transitions with `loom ticket dep <id>`, keep status consistent with deps (don't mark `in_progress` if blocked), and add a sh…
-- **merge-queue-changes-require-determinism-and-tests** (62%)
-  - Trigger: When adding/changing merge queue behavior in src/agent_loom/team/merge_queue.py (or wiring it from src/agent_loom/team/core.py).
-  - Action: Make ordering deterministic (explicit sorting/tie-breaks, no set/dict iteration) and add/update focused pytest coverage for the queue semantics; verify with uv run basedpyright then uv run ruff check …
+- **ui-changes-require-lsp-ruff-and-targeted-tests** (62%)
+  - Trigger: After editing Python UI code under src/agent_loom/ui/ (for example src/agent_loom/ui/ticket_ui.py)
+  - Action: Run lsp_diagnostics on touched UI files, fix all findings, then run `uv run ruff check .` and the smallest relevant `uv run pytest ...` subset (or full suite if unsure).
 
 ## Notes
 

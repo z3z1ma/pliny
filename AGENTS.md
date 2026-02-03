@@ -179,6 +179,9 @@ This block is maintained by the compound plugin.
 - **prefer-basedpyright-over-lsp-diagnostics** (80%)
   - Trigger: When about to check Python types/diagnostics (or an existing checklist says to run lsp_diagnostics)
   - Action: Run `uv run basedpyright` and fix findings before `uv run ruff check .` and targeted `uv run pytest ...`.
+- **team-init-agents-changes-require-contract-test** (78%)
+  - Trigger: You change team startup/init-agent wiring or defaults (especially in src/agent_loom/team/core.py or src/agent_loom/team/cli.py).
+  - Action: Treat agent initialization as a UX+behavior contract: update/add focused assertions in tests/test_team_init_agents.py (and prompt tests if prompts changed), then run the gate: uv run basedpyright; uv …
 <!-- END:compound:instincts-index -->
 
 <!-- BEGIN:compound:rules-index -->
