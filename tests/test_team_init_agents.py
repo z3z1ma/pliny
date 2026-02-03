@@ -87,6 +87,26 @@ class TestTeamInitAgents(unittest.TestCase):
             again = agent_path.read_text(encoding="utf-8")
             self.assertIn("<!-- user-managed:", again)
 
+    def test_force_overrides_user_managed_files(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            repo_root = Path(td)
+            with mock.patch.object(team, "canonical_repo_root", return_value=repo_root):
+                team.init_agents(repo=repo_root, create_missing=True)
+
+            agent_path = (
+                repo_root / ".opencode" / "agents" / f"{team.DEFAULT_MANAGER_AGENT}.md"
+            )
+            raw = agent_path.read_text(encoding="utf-8")
+            # Remove managed-by marker to opt out.
+            raw2 = raw.replace("<!-- managed-by:", "<!-- user-managed:", 1)
+            agent_path.write_text(raw2, encoding="utf-8")
+
+            with mock.patch.object(team, "canonical_repo_root", return_value=repo_root):
+                team.init_agents(repo=repo_root, create_missing=True, force=True)
+
+            updated = agent_path.read_text(encoding="utf-8")
+            self.assertIn("<!-- managed-by: agent-loom-team", updated)
+
 
 if __name__ == "__main__":
     unittest.main()

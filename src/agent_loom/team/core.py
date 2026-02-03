@@ -436,6 +436,61 @@ def _message_preview(text: str, *, max_len: int = 100) -> str:
 
 
 # -----------------------------
+# Role guards (harness-independent)
+# -----------------------------
+
+
+def _team_role_from_env() -> str:
+    return str(os.getenv(ENV_TEAM_ROLE) or "").strip().lower()
+
+
+def _team_worker_id_from_env() -> str:
+    return sanitize(str(os.getenv(ENV_TEAM_WORKER_ID) or ""), max_len=48)
+
+
+def _deny_if_role_set(*, action: str) -> None:
+    role = _team_role_from_env()
+    if role:
+        raise TeamError(
+            f"Refusing to run '{action}' from inside a team pane (role={role})",
+            code="PERMISSION",
+            exit_code=2,
+            hint=(
+                "Run this command from outside tmux (human shell), or ask the manager to do it."
+            ),
+        )
+
+
+def _require_role(*, action: str, allowed_roles: set[str]) -> None:
+    role = _team_role_from_env()
+    if not role:
+        return
+    if role not in allowed_roles:
+        allowed = ", ".join(sorted(allowed_roles))
+        raise TeamError(
+            f"Permission denied for '{action}' (role={role}; allowed={allowed})",
+            code="PERMISSION",
+            exit_code=2,
+            hint="Ask the manager to run it, or run from outside tmux if you are a human operator.",
+        )
+
+
+def _require_self_worker_id(*, action: str, requested_worker_id: str) -> None:
+    role = _team_role_from_env()
+    if not role or role == ROLE_MANAGER:
+        return
+    mine = _team_worker_id_from_env()
+    req = sanitize(str(requested_worker_id or ""), max_len=48)
+    if mine and req and mine != req:
+        raise TeamError(
+            f"Permission denied for '{action}': can only target your own worker_id (you={mine} requested={req})",
+            code="PERMISSION",
+            exit_code=2,
+            hint="Ask the manager if another worker needs to be retired.",
+        )
+
+
+# -----------------------------
 # Agent bootstrapping
 # -----------------------------
 
@@ -511,17 +566,155 @@ def _agent_file_content(
     return "\n".join(lines)
 
 
+def _opencode_team_agent_permissions() -> Dict[str, Dict[str, Any]]:
+    """Return OpenCode permission profiles for Team agents.
+
+    Notes:
+    - These permissions are for OpenCode agents only (YAML frontmatter `permission:`).
+    - Matching is last-rule-wins; put catch-alls first.
+    - Workers need broad shell access for real work, but must not operate Team.
+    """
+
+    # Manager: orchestrate via loom team + ticket; avoid direct coding.
+    manager_permission: Dict[str, Any] = {
+        "*": "allow",
+        "doom_loop": "deny",
+        "edit": "deny",
+        "external_directory": "deny",
+        "task": "deny",
+        "bash": {
+            "*": "deny",
+            # Manager operational surface.
+            "loom team *": "allow",
+            "uv run loom team *": "allow",
+            "loom ticket *": "allow",
+            "uv run loom ticket *": "allow",
+            "loom memory *": "allow",
+            "uv run loom memory *": "allow",
+            "loom compound sync*": "allow",
+            "uv run loom compound sync*": "allow",
+            # Allow read-only git inspection.
+            "git status*": "allow",
+            "git diff*": "allow",
+            "git log*": "allow",
+            "git show*": "allow",
+            "git branch*": "allow",
+            "git fetch*": "allow",
+            # allow some git basics for reconciliation of local changes like auto learned skills
+            "git commit*": "allow",
+            "git add*": "allow",
+            # ws may be useful for inspection, but manager should prefer team commands.
+            "ws repo status*": "allow",
+            "ws repo worktree ls*": "allow",
+            # Explicit footgun blocks.
+            "tmux *": "deny",
+            "git push*": "deny",
+            "git merge*": "deny",
+            "git rebase*": "deny",
+            # Manager should not start/attach a new team from inside a running manager.
+            "loom team start*": "deny",
+            "uv run loom team start*": "deny",
+            "loom team attach*": "deny",
+            "uv run loom team attach*": "deny",
+            "loom team tui*": "deny",
+            "uv run loom team tui*": "deny",
+            # Force all sleeps through loom team wait/snooze.
+            "sleep *": "deny",
+        },
+    }
+
+    # Worker-like roles: allow broad bash, but block orchestration footguns.
+    worker_permission: Dict[str, Any] = {
+        "*": "allow",
+        "doom_loop": "deny",
+        "external_directory": "deny",
+        "bash": {
+            "*": "allow",
+            # Force all tmux interaction through Team CLI.
+            "tmux *": "deny",
+            # Only the manager commits compound changes.
+            "loom compound sync*": "deny",
+            "uv run loom compound sync*": "deny",
+            # Block team lifecycle and orchestration.
+            "loom team start*": "deny",
+            "uv run loom team start*": "deny",
+            "loom team attach*": "deny",
+            "uv run loom team attach*": "deny",
+            "loom team disband*": "deny",
+            "uv run loom team disband*": "deny",
+            "loom team ship*": "deny",
+            "uv run loom team ship*": "deny",
+            "loom team spawn*": "deny",
+            "uv run loom team spawn*": "deny",
+            "loom team spawn-integrator*": "deny",
+            "uv run loom team spawn-integrator*": "deny",
+            "loom team bounce*": "deny",
+            "uv run loom team bounce*": "deny",
+            "loom team janitor*": "deny",
+            "uv run loom team janitor*": "deny",
+            "loom team mark-retirable*": "deny",
+            "uv run loom team mark-retirable*": "deny",
+            "loom team objective *": "deny",
+            "uv run loom team objective *": "deny",
+            "loom team sprint *": "deny",
+            "uv run loom team sprint *": "deny",
+            "loom team prep-sprint*": "deny",
+            "uv run loom team prep-sprint*": "deny",
+            "loom team merge *": "deny",
+            "uv run loom team merge *": "deny",
+        },
+    }
+
+    integrator_permission: Dict[str, Any] = {
+        **worker_permission,
+        "bash": {
+            **dict(worker_permission.get("bash") or {}),
+            # Integrator may operate merge queue primitives only.
+            "loom team merge *": "deny",
+            "uv run loom team merge *": "deny",
+            "loom team merge list*": "allow",
+            "uv run loom team merge list*": "allow",
+            "loom team merge next*": "allow",
+            "uv run loom team merge next*": "allow",
+            "loom team merge done*": "allow",
+            "uv run loom team merge done*": "allow",
+        },
+    }
+
+    # Investigator is a planning worker; same as worker restrictions.
+    investigator_permission: Dict[str, Any] = dict(worker_permission)
+
+    return {
+        "manager": manager_permission,
+        "worker": worker_permission,
+        "investigator": investigator_permission,
+        "integrator": integrator_permission,
+    }
+
+
 def _claude_agent_file_content(
     *,
     name: str,
     description: str,
     prompt: str,
+    tools: Optional[list[str]] = None,
+    disallowed_tools: Optional[list[str]] = None,
+    model: str = "inherit",
+    permission_mode: str = "dontAsk",
 ) -> str:
     # Claude Code agents are markdown with YAML frontmatter in `.claude/agents/`.
     # Prompt body stays identical to the OpenCode agents.
     lines: List[str] = ["---"]
     lines.append(f"name: {_yaml_quote(name)}")
     lines.append(f"description: {_yaml_quote(description)}")
+    if tools:
+        lines.append(f"tools: {', '.join(tools)}")
+    if disallowed_tools:
+        lines.append(f"disallowedTools: {', '.join(disallowed_tools)}")
+    if model:
+        lines.append(f"model: {str(model)}")
+    if permission_mode:
+        lines.append(f"permissionMode: {str(permission_mode)}")
     lines.append("---")
     lines.append(_managed_by_marker(name=name))
     lines.append("")
@@ -549,6 +742,7 @@ def _sync_agent_file(
     desired_prompt: str,
     create_missing: bool,
     create_content: str,
+    force: bool,
 ) -> str:
     """Sync the managed prompt block for a single agent file.
 
@@ -567,6 +761,11 @@ def _sync_agent_file(
         path.parent.mkdir(parents=True, exist_ok=True)
         _atomic_write_text(path, create_content, encoding="utf-8")
         return "wrote"
+
+    if force:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        _atomic_write_text(path, create_content, encoding="utf-8")
+        return "updated"
 
     try:
         raw = path.read_text(encoding="utf-8")
@@ -644,7 +843,7 @@ def _sync_agent_file(
 
 
 def init_agents(
-    *, repo: Optional[Path] = None, create_missing: bool = True
+    *, repo: Optional[Path] = None, create_missing: bool = True, force: bool = False
 ) -> InitAgentsResult:
     """Initialize/sync Team agent definitions in the canonical repo root.
 
@@ -665,61 +864,11 @@ def init_agents(
     investigator_prompt = prompts["investigator"]
     integrator_prompt = prompts["integrator"]
 
-    # Permission profiles (agent-specific overrides). See https://opencode.ai/docs/permissions/
-    # Keep these non-interactive: avoid "ask" so the system can run overnight.
-    manager_permission: Dict[str, Any] = {
-        "*": "allow",
-        "doom_loop": "deny",
-        "edit": "deny",
-        "external_directory": "deny",
-        "task": "deny",
-        "bash": {
-            "*": "deny",
-            # loom team + loom ticket are the manager's operational surface.
-            "loom team *": "allow",
-            "loom ticket *": "allow",
-            "loom compound sync*": "allow",
-            # loom ticket sync is used to repair ticket drift by committing .tickets changes.
-            "loom ticket sync*": "allow",
-            # Allow read-only git inspection.
-            "git status*": "allow",
-            "git diff*": "allow",
-            "git log*": "allow",
-            "git show*": "allow",
-            "git branch*": "allow",
-            "git fetch*": "allow",
-            # allow some git basics for reconciliation of local changes like auto learned skills
-            "git commit*": "allow",
-            "git add*": "allow",
-            # ws may be useful for inspection, but manager should prefer team commands.
-            "ws repo status*": "allow",
-            "ws repo worktree ls*": "allow",
-            # Explicit footgun blocks.
-            "tmux *": "deny",
-            "git push*": "deny",
-            "git merge*": "deny",
-            "git rebase*": "deny",
-            # Force all sleeps through loom team wait/snooze.
-            "sleep *": "deny",
-        },
-    }
-
-    worker_permission: Dict[str, Any] = {
-        "*": "allow",
-        "doom_loop": "deny",
-        # Keep workers inside the repo; do not allow external directory access.
-        "external_directory": "deny",
-        "bash": {
-            "*": "allow",
-            # Force all tmux interaction through Team CLI.
-            "tmux *": "deny",
-            # Only the manager commits compound changes.
-            "loom compound sync*": "deny",
-        },
-    }
-
-    investigator_permission = dict(worker_permission)
-    integrator_permission = dict(worker_permission)
+    perms = _opencode_team_agent_permissions()
+    manager_permission = perms["manager"]
+    worker_permission = perms["worker"]
+    investigator_permission = perms["investigator"]
+    integrator_permission = perms["integrator"]
 
     opencode_defs = [
         (
@@ -748,26 +897,36 @@ def init_agents(
         ),
     ]
 
+    # Claude Code agent capabilities.
+    # Tools are an allowlist; permissionMode=dontAsk means denied by default when prompts would occur.
     claude_defs = [
         (
             DEFAULT_MANAGER_AGENT,
             "Primary manager agent for Team orchestration",
             manager_prompt,
+            ["Read", "Glob", "Grep", "Bash"],
+            ["Edit", "Write"],
         ),
         (
             DEFAULT_WORKER_AGENT,
             "General-purpose worker agent for executing a loom ticket in a worktree",
             worker_prompt,
+            ["Read", "Glob", "Grep", "Bash", "Edit", "Write"],
+            [],
         ),
         (
             DEFAULT_INVESTIGATOR_AGENT,
             "Investigator worker for creating/refining loom tickets from objectives",
             investigator_prompt,
+            ["Read", "Glob", "Grep", "Bash"],
+            ["Edit", "Write"],
         ),
         (
             DEFAULT_INTEGRATOR_AGENT,
             "Integrator (fan-in): serial merges + ticket updates",
             integrator_prompt,
+            ["Read", "Glob", "Grep", "Bash", "Edit", "Write"],
+            [],
         ),
     ]
 
@@ -788,6 +947,7 @@ def init_agents(
             desired_prompt=prompt,
             create_missing=create_missing,
             create_content=content,
+            force=bool(force),
         )
         rel = p.relative_to(root).as_posix()
         if r == "wrote":
@@ -799,15 +959,24 @@ def init_agents(
         else:
             skipped.append(rel)
 
-    for name, desc, prompt in claude_defs:
+    for name, desc, prompt, tools, disallowed in claude_defs:
         p = root / ".claude" / "agents" / f"{name}.md"
-        content = _claude_agent_file_content(name=name, description=desc, prompt=prompt)
+        content = _claude_agent_file_content(
+            name=name,
+            description=desc,
+            prompt=prompt,
+            tools=list(tools) if tools else None,
+            disallowed_tools=list(disallowed) if disallowed else None,
+            model="inherit",
+            permission_mode="dontAsk",
+        )
         r = _sync_agent_file(
             path=p,
             name=name,
             desired_prompt=prompt,
             create_missing=create_missing,
             create_content=content,
+            force=bool(force),
         )
         rel = p.relative_to(root).as_posix()
         if r == "wrote":
@@ -875,61 +1044,11 @@ def _ensure_opencode_agents(
     investigator_prompt = prompts["investigator"]
     integrator_prompt = prompts["integrator"]
 
-    # Permission profiles (agent-specific overrides). See https://opencode.ai/docs/permissions/
-    # Keep these non-interactive: avoid "ask" so the system can run overnight.
-    manager_permission: Dict[str, Any] = {
-        "*": "allow",
-        "doom_loop": "deny",
-        "edit": "deny",
-        "external_directory": "deny",
-        "task": "deny",
-        "bash": {
-            "*": "deny",
-            # loom team + loom ticket are the manager's operational surface.
-            "loom team *": "allow",
-            "loom ticket *": "allow",
-            "loom compound sync*": "allow",
-            # loom ticket sync is used to repair ticket drift by committing .tickets changes.
-            "loom ticket sync*": "allow",
-            # Allow read-only git inspection.
-            "git status*": "allow",
-            "git diff*": "allow",
-            "git log*": "allow",
-            "git show*": "allow",
-            "git branch*": "allow",
-            "git fetch*": "allow",
-            # allow some git basics for reconciliation of local changes like auto learned skills
-            "git commit*": "allow",
-            "git add*": "allow",
-            # ws may be useful for inspection, but manager should prefer team commands.
-            "ws repo status*": "allow",
-            "ws repo worktree ls*": "allow",
-            # Explicit footgun blocks.
-            "tmux *": "deny",
-            "git push*": "deny",
-            "git merge*": "deny",
-            "git rebase*": "deny",
-            # Force all sleeps through loom team wait/snooze.
-            "sleep *": "deny",
-        },
-    }
-
-    worker_permission: Dict[str, Any] = {
-        "*": "allow",
-        "doom_loop": "deny",
-        # Keep workers inside the repo; do not allow external directory access.
-        "external_directory": "deny",
-        "bash": {
-            "*": "allow",
-            # Force all tmux interaction through Team CLI.
-            "tmux *": "deny",
-            # Only the manager commits compound changes.
-            "loom compound sync*": "deny",
-        },
-    }
-
-    investigator_permission = dict(worker_permission)
-    integrator_permission = dict(worker_permission)
+    perms = _opencode_team_agent_permissions()
+    manager_permission = perms["manager"]
+    worker_permission = perms["worker"]
+    investigator_permission = perms["investigator"]
+    integrator_permission = perms["integrator"]
 
     agent_defs = [
         (
@@ -1473,7 +1592,7 @@ def _claude_tui_argv(
     bin: str = "claude",
 ) -> List[str]:
     _require_bin(bin)
-    argv: List[str] = [bin, "--dangerously-skip-permissions"]
+    argv: List[str] = [bin]
     if model:
         argv.append(f"--model={model}")
     if agent:
@@ -2390,6 +2509,7 @@ def start(
     repo: Optional[Path] = None,
 ) -> StartResult:
     _require_bin("tmux")
+    _deny_if_role_set(action="loom team start")
 
     if max_headcount is not None:
         max_headcount = int(max_headcount)
@@ -2901,6 +3021,7 @@ def start(
 
 def attach(*, team: str) -> AttachResult:
     _require_bin("tmux")
+    _deny_if_role_set(action="loom team attach")
     team_or_session = str(team).strip()
     if not team_or_session:
         raise TeamError("Missing <team>", code="ARG", exit_code=2)
@@ -3099,6 +3220,7 @@ def objective_set(
     force: bool = False,
     repo: Optional[Path] = None,
 ) -> ObjectiveUpdateResult:
+    _require_role(action="loom team objective set", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     text = _read_text_input(
         message=str(message or ""),
@@ -3135,6 +3257,7 @@ def objective_append(
     force: bool = False,
     repo: Optional[Path] = None,
 ) -> ObjectiveUpdateResult:
+    _require_role(action="loom team objective append", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     text = _read_text_input(
         message=str(message or ""),
@@ -3366,6 +3489,7 @@ def janitor(
     keep_retired_workers: bool = False,
     repo: Optional[Path] = None,
 ) -> JanitorResult:
+    _require_role(action="loom team janitor", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     older_than_s = _parse_duration_seconds(str(older_than or "7d"))
     dry_run = bool(dry_run)
@@ -3566,6 +3690,7 @@ def disband(
     repo: Optional[Path] = None,
 ) -> DisbandResult:
     _require_bin("tmux")
+    _require_role(action="loom team disband", allowed_roles={ROLE_MANAGER})
     team_or_session = str(team).strip()
     if not team_or_session:
         raise TeamError("Missing <team>", code="ARG", exit_code=2)
@@ -3713,6 +3838,7 @@ def pause_team(*, team: str, repo: Optional[Path] = None) -> PauseResult:
     """Pause a team run (clock-out): stop tmux session, keep state on disk."""
 
     _require_bin("tmux")
+    _require_role(action="loom team clock-out", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     paused_at = _iso_z()
 
@@ -3889,6 +4015,7 @@ def resume_team(*, team: str, repo: Optional[Path] = None) -> ResumeTeamResult:
     """Resume a paused team run (clock-in): recreate tmux session and respawn workers."""
 
     _require_bin("tmux")
+    _require_role(action="loom team clock-in", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
 
     # Require a durable run.json. Resuming should not implicitly create a new run.
@@ -4130,6 +4257,7 @@ def spawn(
     repo: Optional[Path] = None,
 ) -> SpawnResult:
     _require_bin("tmux")
+    _require_role(action="loom team spawn", allowed_roles={ROLE_MANAGER})
 
     paths = _paths_for(team=team, repo=repo)
 
@@ -4491,6 +4619,7 @@ def resume_worker(
 ) -> SpawnResult:
     """Resume a retired worker in its existing worktree."""
 
+    _require_role(action="loom team resume-worker", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     run = load_run(paths)
     raw_workers = run.get("workers")
@@ -4536,6 +4665,7 @@ def prep_sprint(
 ) -> PrepSprintResult:
     """Set the current sprint and kick off fan-out via an investigator ticket."""
 
+    _require_role(action="loom team prep-sprint", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     sprint_name = str(name or "").strip()
     if not sprint_name:
@@ -4712,6 +4842,7 @@ def sprint_set(
     repo: Optional[Path] = None,
 ) -> SprintSetResult:
     """Update sprint metadata (name and/or tag) without spawning tickets."""
+    _require_role(action="loom team sprint set", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     sprint_name = str(name or "").strip()
     if not sprint_name:
@@ -4761,6 +4892,7 @@ def sprint_clear(
     repo: Optional[Path] = None,
 ) -> SprintClearResult:
     """Clear sprint metadata from the run."""
+    _require_role(action="loom team sprint clear", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     with locked_run(paths) as run:
         existing = run.get("sprint") if isinstance(run.get("sprint"), dict) else {}
@@ -4804,6 +4936,7 @@ def spawn_integrator(
     """
 
     _require_bin("tmux")
+    _require_role(action="loom team spawn-integrator", allowed_roles={ROLE_MANAGER})
 
     paths = _paths_for(team=team, repo=repo)
 
@@ -6069,6 +6202,7 @@ def merge_enqueue(
     nudge: bool = True,
     repo: Optional[Path] = None,
 ) -> MergeEnqueueResult:
+    _require_role(action="loom team merge enqueue", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     branch = str(branch or "").strip()
     if not branch:
@@ -6136,6 +6270,9 @@ def merge_list(
 def merge_next(
     *, team: str, claim_by: str = "", repo: Optional[Path] = None
 ) -> MergeNextResult:
+    _require_role(
+        action="loom team merge next", allowed_roles={ROLE_MANAGER, ROLE_INTEGRATOR}
+    )
     paths = _paths_for(team=team, repo=repo)
     claimed_by = str(claim_by or "").strip()
     with locked_run(paths) as run:
@@ -6170,6 +6307,9 @@ def merge_done(
     repo: Optional[Path] = None,
 ) -> MergeDoneResult:
     _require_bin("tmux")
+    _require_role(
+        action="loom team merge done", allowed_roles={ROLE_MANAGER, ROLE_INTEGRATOR}
+    )
     paths = _paths_for(team=team, repo=repo)
     item_id = str(item_id or "").strip()
     if not item_id:
@@ -6257,6 +6397,8 @@ def ship(
 
     Nothing is shipped until the manager runs this.
     """
+
+    _require_role(action="loom team ship", allowed_roles={ROLE_MANAGER})
 
     _require_bin("git")
 
@@ -6424,6 +6566,7 @@ def retire(
     repo: Optional[Path] = None,
 ) -> RetireResult:
     _require_bin("tmux")
+    _require_self_worker_id(action="loom team retire", requested_worker_id=worker_id)
 
     paths = _paths_for(team=team, repo=repo)
 
@@ -6485,6 +6628,7 @@ def mark_retirable(
 ) -> MarkRetirableResult:
     """Mark a retired worker's worktree as eligible for janitor deletion."""
 
+    _require_role(action="loom team mark-retirable", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     wid = str(worker_id).strip()
     if not wid:
@@ -6538,6 +6682,7 @@ def bounce(
     """
 
     _require_bin("tmux")
+    _require_role(action="loom team bounce", allowed_roles={ROLE_MANAGER})
 
     paths = _paths_for(team=team, repo=repo)
     run = load_run(paths)

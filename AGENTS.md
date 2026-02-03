@@ -117,11 +117,15 @@ This block is maintained by the compound plugin.
 - Greenfield: prioritize clarity and determinism; no backwards compatibility.
 - Tooling: use `uv run ...` for all Python commands; gate is basedpyright → ruff → targeted pytest.
 - Contracts: CLI output and prompts are deterministic and locked by focused contract tests.
+- Team initialization is a contract: keep agent init/spawn defaults deterministic and covered (prefer `tests/test_team_init_agents.py`, plus prompt tests when prompts change).
 - HTML templates are contracts: treat `src/agent_loom/server/templates/*.html` and `src/agent_loom/dashboard/templates/*.html` as agent-parseable UX surfaces; preserve stable `data-*` anchors and deterministic ordering.
 - When HTML changes: update request-level invariants in `tests/test_server_api_contract.py` (prefer anchors/sections over full-HTML snapshots).
 <!-- END:compound:loom-core-context -->
 
 <!-- BEGIN:compound:instincts-index -->
+- **prompt-changes-require-prompt-tests** (100%)
+  - Trigger: When editing agent prompts or prompt assembly code
+  - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
 - **compound-learning-output-is-compoundspec-v2-json-only** (100%)
   - Trigger: When responding to a background autolearn prompt
   - Action: Output only valid JSON matching CompoundSpec v2; no commentary, no code fences, no product-code edits.
@@ -140,9 +144,6 @@ This block is maintained by the compound plugin.
 - **dashboard-template-changes-require-server-contract-test** (100%)
   - Trigger: You change src/agent_loom/server/templates/dashboard.html (especially large refactors or section reshuffles).
   - Action: Update/add request-level invariants in tests/test_server_api_contract.py (stable markers/sections + deterministic ordering; avoid full-HTML snapshots) and verify with: uv run basedpyright; uv run ruff…
-- **prompt-changes-require-prompt-tests** (99%)
-  - Trigger: When editing agent prompts or prompt assembly code
-  - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
 - **workspace-cli-output-is-a-contract** (96%)
   - Trigger: When changing user-visible output/flags/formatting in src/agent_loom/workspace/cli.py
   - Action: Make output deterministic (explicit ordering; no timestamps/randomness/absolute paths). Add/update a focused contract test (prefer tests/test_workspace_cli_ux.py). Verify with: uv run basedpyright, uv…
@@ -179,9 +180,9 @@ This block is maintained by the compound plugin.
 - **prefer-basedpyright-over-lsp-diagnostics** (78%)
   - Trigger: When about to check Python types/diagnostics (or an existing checklist says to run lsp_diagnostics)
   - Action: Run `uv run basedpyright` and fix findings before `uv run ruff check .` and targeted `uv run pytest ...`.
-- **team-spawn-integrator-changes-require-contract-test** (77%)
-  - Trigger: When changing team spawn/integrator wiring (typically in src/agent_loom/team/core.py or src/agent_loom/team/cli.py), especially anything that boots an integrator or mediates agent process startup.
-  - Action: Add/update a focused contract test in tests/test_team_spawn_integrator.py that asserts deterministic invariants (what starts, with what args/env, and what is persisted/returned), then run lsp_diagnost…
+- **team-init-agents-changes-require-contract-test** (78%)
+  - Trigger: You change team startup/init-agent wiring or defaults (especially in src/agent_loom/team/core.py or src/agent_loom/team/cli.py).
+  - Action: Treat agent initialization as a UX+behavior contract: update/add focused assertions in tests/test_team_init_agents.py (and prompt tests if prompts changed), then run the gate: uv run basedpyright; uv …
 <!-- END:compound:instincts-index -->
 
 <!-- BEGIN:compound:rules-index -->

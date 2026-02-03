@@ -51,10 +51,10 @@
       "trigger": "When editing agent prompts or prompt assembly code",
       "action": "Update/add focused tests covering the prompt contract and run the prompt test suite.",
       "tags": [],
-      "confidence": 0.9900000000000002,
+      "confidence": 1,
       "status": "active",
       "created_at": "2026-01-30T19:57:13.467Z",
-      "updated_at": "2026-02-01T19:14:15.264Z",
+      "updated_at": "2026-02-03T00:16:52.461Z",
       "evidence": [
         {
           "ts": "2026-01-30T19:57:13.467Z",
@@ -99,6 +99,11 @@
           "ts": "2026-02-01T19:14:15.264Z",
           "sessionID": "ses_3e56af781ffeyuFUyUyQzJFmJB",
           "note": "Prompt-facing behavior change (team prompts) was validated via targeted prompt tests, matching the intended gate of updating tests/test_team_prompts.py alongside prompt changes."
+        },
+        {
+          "ts": "2026-02-03T00:16:52.461Z",
+          "sessionID": "ses_3df363547ffe9UJUtV4RePTANc",
+          "note": "Changes touching team orchestration/prompt assembly were paired with tests/test_team_prompts.py updates, reinforcing prompt contract coverage whenever prompt-facing behavior shifts."
         }
       ]
     },
@@ -208,7 +213,7 @@
       "confidence": 1,
       "status": "active",
       "created_at": "2026-01-30T20:09:25.396Z",
-      "updated_at": "2026-02-01T06:00:43.221Z",
+      "updated_at": "2026-02-03T00:16:52.461Z",
       "evidence": [
         {
           "ts": "2026-01-30T20:09:25.396Z",
@@ -298,6 +303,11 @@
           "ts": "2026-02-01T06:00:43.221Z",
           "sessionID": "ses_3e8acef0bffebmMo8l1iU1ZNUA",
           "note": "Large edits in src/agent_loom/team/core.py landed alongside focused contract tests (CLI UX, prompts, spawn/integrator, mounts, start/merge config) to keep behavior deterministic."
+        },
+        {
+          "ts": "2026-02-03T00:16:52.461Z",
+          "sessionID": "ses_3df363547ffe9UJUtV4RePTANc",
+          "note": "Recent work made substantial edits in src/agent_loom/team/core.py and updated tests/test_team_prompts.py alongside it, reinforcing the need to lock core team behavior with focused tests."
         }
       ]
     },
@@ -1560,6 +1570,23 @@
         {
           "ts": "2026-02-02T23:14:24.600Z",
           "sessionID": "ses_3dfa3e9eeffe5LLnBDwS4LX0C2"
+        }
+      ]
+    },
+    {
+      "id": "team-init-agents-changes-require-contract-test",
+      "title": "Team Init Agents Needs Contract Tests",
+      "trigger": "You change team startup/init-agent wiring or defaults (especially in src/agent_loom/team/core.py or src/agent_loom/team/cli.py).",
+      "action": "Treat agent initialization as a UX+behavior contract: update/add focused assertions in tests/test_team_init_agents.py (and prompt tests if prompts changed), then run the gate: uv run basedpyright; uv run ruff check .; uv run pytest tests/test_team_init_agents.py (plus any directly affected team test modules).",
+      "tags": [],
+      "confidence": 0.78,
+      "status": "active",
+      "created_at": "2026-02-03T00:28:12.733Z",
+      "updated_at": "2026-02-03T00:28:12.733Z",
+      "evidence": [
+        {
+          "ts": "2026-02-03T00:28:12.733Z",
+          "sessionID": "ses_3df363547ffe9UJUtV4RePTANc"
         }
       ]
     }

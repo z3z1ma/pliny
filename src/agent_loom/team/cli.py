@@ -456,7 +456,7 @@ def cmd_start(args: argparse.Namespace) -> None:
 
 def cmd_init(args: argparse.Namespace) -> None:
     repo = Path(args.repo).resolve() if args.repo else None
-    res = init_agents(repo=repo, create_missing=True)
+    res = init_agents(repo=repo, create_missing=True, force=bool(args.force))
     if args.json:
         emit_json_result(res)
         return
@@ -1176,6 +1176,11 @@ def build_parser() -> argparse.ArgumentParser:
     ini = sub.add_parser(
         "init",
         help="Install/sync Team agent definitions (.opencode/agents and .claude/agents)",
+    )
+    ini.add_argument(
+        "--force",
+        action="store_true",
+        help="Overwrite existing agent definitions on disk",
     )
     ini.set_defaults(func=cmd_init)
 

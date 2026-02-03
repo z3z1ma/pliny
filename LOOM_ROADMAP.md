@@ -10,9 +10,9 @@ This is an evolving, empirical compass. Keep it short and stable.
 <!-- END:compound:roadmap-backlog -->
 
 <!-- BEGIN:compound:roadmap-ai-notes -->
-- Near-term focus: make workspace + dashboard UX deterministic and contract-tested (explicit ordering, stable anchors).
-- Treat dashboard HTML as an agent-facing API: prefer `data-*` anchors and section-level invariants over brittle snapshots.
-- Reduce ambiguity between dashboard vs server template sources by standardizing anchors and testing the served route.
+- Near-term focus: harden team boot/init determinism (agents, ordering, config) and treat it as a first-class contract with focused tests.
+- Keep prompts, CLI surfaces, and server-rendered HTML agent-legible via stable sections/anchors and deterministic ordering.
+- Prefer small, explicit contract tests over broad snapshots; expand coverage only when a surface becomes user/agent-critical.
 <!-- END:compound:roadmap-ai-notes -->
 
 ## Changelog (AI-first)
@@ -23,6 +23,8 @@ It tracks changes to skills, instincts, and core context files.
 It is intentionally bounded. Do not write entries like "no changes".
 
 <!-- BEGIN:compound:changelog-entries -->
+- 2026-02-03T00:28:13.735Z Add contract memory for deterministic team init agents (new instinct + skill) and reinforce docs around team boot determinism and focused tests.
+- 2026-02-03T00:16:55.004Z Reinforced instincts to always couple team core/prompt changes with deterministic prompt contract tests.
 - 2026-02-02T23:45:29.308Z Reinforce dashboard template + server API contract test coupling via instinct confidence bumps; no new skills needed because existing dashboard anchor/contract skill already covers this workflow.
 - 2026-02-02T23:18:30.672Z Reinforced the dashboard template anchor/contract instinct based on a real template edit.
 - 2026-02-02T23:14:26.285Z Reinforce determinism-as-contract for dashboard HTML and workspace diff/read outputs; add a focused skill + instinct for workspace diff ops testing.

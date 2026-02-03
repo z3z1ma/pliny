@@ -399,10 +399,10 @@ class TestRenderMergeWorkerPrompt(unittest.TestCase):
 class TestEnsureOpenCodeAgents(unittest.TestCase):
     def test_default_agent_markdown_snapshot_sha256(self) -> None:
         expected = {
-            "team-integrator.md": "21a1e7d976e9a9f3a3020224efc58f451b8ad9b7839cbf800ab87468baca153e",
-            "team-investigator.md": "d57403b3acfa0d557c7ac331f800a333640289fa34127837566c4b8f42eeab5d",
-            "team-manager.md": "f47deba920a92ee1e57dcb63e488f1d657ea56ac5468c8ec4ce5a8060213feff",
-            "team-worker.md": "a7c3f05d0208b24ad7874295f218d6210facba5c7c49f5f6cc18cdb318f933c6",
+            "team-integrator.md": "81046d35a480932b00d75e5ce419828e63ace159b87518c6ee744f9b20294254",
+            "team-investigator.md": "bc406d1c0c8c3f25ce989f4d56661245c8024a1d9e9c7fa22e06490f6b7ca2a1",
+            "team-manager.md": "6f901208c21ca7f816477f4e9722a41c3bf84adf1793ca14f5ebf966c33ccbb3",
+            "team-worker.md": "1ed3d842c0383dd1f111b3fd5a997b73dd53ca632cf59a826756ab51f61ad796",
         }
 
         with tempfile.TemporaryDirectory() as d:
@@ -410,6 +410,28 @@ class TestEnsureOpenCodeAgents(unittest.TestCase):
             with mock.patch.object(team, "canonical_repo_root", return_value=workdir):
                 init_agents(repo=workdir, create_missing=True)
             agents_dir = workdir / ".opencode" / "agents"
+
+            got = {}
+            for p in sorted(agents_dir.glob("*.md")):
+                got[p.name] = _sha256_text(p.read_text(encoding="utf-8"))
+
+        self.assertEqual(got, expected)
+
+
+class TestEnsureClaudeAgents(unittest.TestCase):
+    def test_default_agent_markdown_snapshot_sha256(self) -> None:
+        expected = {
+            "team-integrator.md": "8315f3000d14ef6e9125b03d3ea88aff36e25b9d40f41611b968247c30016ceb",
+            "team-investigator.md": "c08b5945c48baf75374f2ed829a422dca285da48911ffda6a0e717d2d06dcf1b",
+            "team-manager.md": "57c3f9954ac11bcd8166658290439b3f4416438a5a6c466ca7330669696f5d5e",
+            "team-worker.md": "090227e294fa0b322c951657edf97f6c8284702d9ecf954c56cb27cbf88f8959",
+        }
+
+        with tempfile.TemporaryDirectory() as d:
+            workdir = Path(d)
+            with mock.patch.object(team, "canonical_repo_root", return_value=workdir):
+                init_agents(repo=workdir, create_missing=True)
+            agents_dir = workdir / ".claude" / "agents"
 
             got = {}
             for p in sorted(agents_dir.glob("*.md")):
