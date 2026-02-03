@@ -45,6 +45,9 @@ const AUTO_MIN_NEW_OBSERVATIONS = intEnv("COMPOUND_AUTO_MIN_NEW_OBSERVATIONS", 1
 const AUTO_MAX_OBSERVATIONS_IN_PROMPT = intEnv("COMPOUND_AUTO_MAX_OBSERVATIONS_IN_PROMPT", 80);
 const AUTO_MAX_SKILLS_PER_RUN = intEnv("COMPOUND_AUTO_MAX_SKILLS_PER_RUN", 3);
 const AUTO_MAX_INSTINCT_UPDATES_PER_RUN = intEnv("COMPOUND_AUTO_MAX_INSTINCT_UPDATES_PER_RUN", 8);
+const AUTO_MAX_DOC_BLOCKS_PER_RUN = intEnv("COMPOUND_AUTO_MAX_DOC_BLOCKS_PER_RUN", 3);
+const AUTO_MAX_MEMOS_PER_RUN = intEnv("COMPOUND_AUTO_MAX_MEMOS_PER_RUN", 4);
+const AUTO_MAX_TOOL_CALLS_PER_RUN = intEnv("COMPOUND_AUTO_MAX_TOOL_CALLS_PER_RUN", 18);
 const AUTO_PROMPT_MAX_CHARS = intEnv("COMPOUND_AUTO_PROMPT_MAX_CHARS", 18000);
 
 const CHANGELOG_MAX_ENTRIES = intEnv("COMPOUND_CHANGELOG_MAX_ENTRIES", 120);
@@ -71,6 +74,12 @@ type PluginState = {
     lastRunSessionID?: string | null;
     lastObservationCount?: number;
     lastObservationHash?: string;
+    lastOutcome?: "noop" | "applied" | "error";
+    lastError?: string;
+    capabilities?: {
+      tool_calls_supported?: boolean;
+      last_probe_at?: ISODate;
+    };
   };
 };
 
@@ -140,48 +149,10 @@ type InstinctUpdateSpec = {
   evidence_note?: string;
 };
 
-type MemosAddSpec = {
-  title: string;
-  body: string;
-  tags?: string[];
-  scopes?: string[]; // raw scope strings, eg "command:workflows:plan" or "file:src/foo.ts"
-  command?: string; // convenience: stored as scope command:<value>
-  ticket?: string; // convenience: stored as scope ticket:<id>
-  visibility?: string; // shared|personal|ephemeral (optional)
+type InstinctChanges = {
+  create?: InstinctCreateSpec[];
+  update?: InstinctUpdateSpec[];
 };
-
-type DocBlockUpsertSpec = {
-  file: string; // repo-root-relative (eg "AGENTS.md")
-  id: string; // compound managed block id (eg "roadmap-ai-notes")
-  content: string;
-};
-
-type CompoundSpecV1 = {
-  schema_version: 1;
-  skills?: {
-    create?: SkillSpec[];
-    update?: SkillUpdateSpec[];
-    deprecate?: Array<{ name: string; reason: string; replacement?: string }>;
-  };
-  docs?: { sync?: boolean; blocks?: { upsert?: DocBlockUpsertSpec[] } };
-  memos?: { add?: MemosAddSpec[] };
-  changelog?: { note?: string };
-};
-
-type CompoundSpecV2 = {
-  schema_version: 2;
-  auto?: { reason?: string; sessionID?: string | null };
-  skills?: CompoundSpecV1["skills"];
-  docs?: CompoundSpecV1["docs"];
-  memos?: CompoundSpecV1["memos"];
-  changelog?: CompoundSpecV1["changelog"];
-  instincts?: {
-    create?: InstinctCreateSpec[];
-    update?: InstinctUpdateSpec[];
-  };
-};
-
-type CompoundSpec = CompoundSpecV1 | CompoundSpecV2;
 
 type Observation = Record<string, unknown> & {
   id: string;
@@ -402,22 +373,19 @@ function extractSessionID(resp: any): string {
   return typeof id === "string" ? id : "";
 }
 
-async function forkEphemeralSession(client: any, activeSessionID: string): Promise<string> {
-  if (!activeSessionID) return "";
-
-  // Prefer a fork, since it preserves message history.
+async function createEphemeralSession(client: any, activeSessionID: string | null | undefined): Promise<string> {
+  // Prefer a standalone session so we don't inherit user chat history.
   try {
-    const forkFn = client?.session?.fork;
-    if (typeof forkFn === "function") {
-      const resp = await forkFn({ path: { id: activeSessionID }, body: {} });
-      const id = extractSessionID(resp);
-      if (id) return id;
-    }
+    const resp = await client.session.create({ body: { title: "compound-autolearn" } });
+    const id = extractSessionID(resp);
+    if (id) return id;
   } catch {}
 
-  // Fallback: create a child session (may not inherit full message history, but avoids polluting the active chat).
+  // Fallback: attach to the active session if OpenCode requires a parent.
   try {
-    const resp = await client.session.create({ body: { parentID: activeSessionID, title: "compound-autolearn" } });
+    const pid = String(activeSessionID ?? "");
+    if (!pid) return "";
+    const resp = await client.session.create({ body: { parentID: pid, title: "compound-autolearn" } });
     const id = extractSessionID(resp);
     if (id) return id;
   } catch {}
@@ -643,7 +611,7 @@ ${blockMarkers("instincts-md").end}
   await atomicWrite(mdPath, md);
 }
 
-function applyInstinctChanges(store: InstinctStore, changes?: CompoundSpecV2["instincts"], sessionID?: string | null): { created: number; updated: number } {
+function applyInstinctChanges(store: InstinctStore, changes?: InstinctChanges, sessionID?: string | null): { created: number; updated: number } {
   let created = 0;
   let updated = 0;
   if (!changes) return { created, updated };
@@ -1294,203 +1262,6 @@ async function appendChangelog(root: string, line: string): Promise<void> {
 }
 
 // -----------------------------
-// Apply CompoundSpec
-// -----------------------------
-
-function coerceSpec(obj: any): CompoundSpec {
-  if (!obj || typeof obj !== "object") throw new Error("spec must be an object");
-  const v = obj.schema_version ?? 1;
-  if (v !== 1 && v !== 2) throw new Error("unsupported schema_version");
-  obj.schema_version = v;
-  return obj as CompoundSpec;
-}
-
-async function applySpec(root: string, spec: CompoundSpec, mode: "auto" | "manual" = "manual"): Promise<{ skills: Array<{ name: string; action: string }>; instincts: { created: number; updated: number } }> {
-  await requireInstalled(root);
-
-  const results: Array<{ name: string; action: string }> = [];
-  const autoSessionID =
-    spec.schema_version === 2 ? (spec as CompoundSpecV2).auto?.sessionID ?? null : null;
-  const skillLimit = mode === "auto" ? AUTO_MAX_SKILLS_PER_RUN : Number.MAX_SAFE_INTEGER;
-  const memoLimit = mode === "auto" ? 6 : Number.MAX_SAFE_INTEGER;
-  const instinctLimit = mode === "auto" ? AUTO_MAX_INSTINCT_UPDATES_PER_RUN : Number.MAX_SAFE_INTEGER;
-
-  const docBlockLimit = mode === "auto" ? 3 : Number.MAX_SAFE_INTEGER;
-  let docBlocksApplied = 0;
-  let memosAttempted = 0;
-
-  const allowedDocBlocks: Record<string, Set<string>> = {
-    "AGENTS.md": new Set(["loom-core-context"]),
-    "LOOM_ROADMAP.md": new Set(["roadmap-ai-notes"]),
-  };
-
-  const applyDocBlockUpsert = async (u: DocBlockUpsertSpec): Promise<void> => {
-    const file = String(u?.file ?? "").trim().replace(/\\/g, "/");
-    const id = String(u?.id ?? "").trim();
-    let content = normalizeNewlines(String(u?.content ?? "")).trim();
-    if (!file || !id || !content) return;
-
-    if (content.length > DOC_BLOCK_MAX_CHARS) {
-      content = content.slice(0, DOC_BLOCK_MAX_CHARS).trimEnd() + "\n";
-    }
-    content = rewriteRepoAbsolutePaths(root, content);
-
-    if (file.startsWith("/") || file.includes("..")) {
-      throw new Error(`doc.blocks.upsert.file must be repo-relative (got: ${file})`);
-    }
-    if (!(file in allowedDocBlocks) || !allowedDocBlocks[file]?.has(id)) {
-      throw new Error(`doc.blocks.upsert target not allowed: ${file}#${id}`);
-    }
-
-    const abs = path.resolve(root, file);
-    const rel = path.relative(root, abs);
-    if (!rel || rel.startsWith("..") || path.isAbsolute(rel)) {
-      throw new Error(`doc.blocks.upsert.file escapes repo root: ${file}`);
-    }
-
-    const existing = await safeReadFile(abs, "");
-    const updated = upsertManagedBlock(existing || "", id, content);
-    if (updated !== existing) {
-      await atomicWrite(abs, updated);
-      docBlocksApplied += 1;
-    }
-  };
-
-  // Skills
-  if (spec.skills?.create) {
-    for (const s of spec.skills.create.slice(0, skillLimit)) {
-      try {
-        const r = await writeOrUpdateSkill(root, s);
-        results.push({ name: s.name, action: r.action });
-      } catch (e) {
-        if (mode !== "auto") throw e;
-        const msg = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
-        await recordAutolearnFailure(root, autoSessionID, `skill.create failed (${s.name}): ${msg}`);
-      }
-    }
-  }
-  if (spec.skills?.update) {
-    for (const u of spec.skills.update.slice(0, skillLimit)) {
-      // Need existing description if not provided
-      const skillPath = path.join(root, SKILLS_DIR, u.name, "SKILL.md");
-      let description = u.description;
-      if (!description && (await pathExists(skillPath))) {
-        const raw = await fs.readFile(skillPath, "utf8");
-        const parsed = parseFrontmatter(raw);
-        description = parsed.fm.description ?? `Skill: ${u.name}`;
-      }
-      if (!description) description = `Skill: ${u.name}`;
-      try {
-        const r = await writeOrUpdateSkill(root, { ...u, description });
-        results.push({ name: u.name, action: r.action });
-      } catch (e) {
-        if (mode !== "auto") throw e;
-        const msg = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
-        await recordAutolearnFailure(root, autoSessionID, `skill.update failed (${u.name}): ${msg}`);
-      }
-    }
-  }
-  if (spec.skills?.deprecate) {
-    for (const d of spec.skills.deprecate) {
-      await deprecateSkill(root, d.name, d.reason, d.replacement);
-      results.push({ name: d.name, action: "deprecated" });
-    }
-  }
-
-  // Instincts (v2 only)
-  let instinctDelta = { created: 0, updated: 0 };
-  if (spec.schema_version === 2) {
-    const store = await loadInstincts(root);
-    const rawChanges = (spec as CompoundSpecV2).instincts;
-    const limitedChanges = rawChanges
-      ? {
-          create: rawChanges.create?.slice(0, instinctLimit),
-          update: rawChanges.update?.slice(0, instinctLimit),
-        }
-      : undefined;
-    instinctDelta = applyInstinctChanges(store, limitedChanges, (spec as CompoundSpecV2).auto?.sessionID ?? null);
-    if (instinctDelta.created || instinctDelta.updated) {
-      await saveInstincts(root, store);
-    }
-  }
-
-  // Memory notes (optional, best-effort)
-  if (spec.memos?.add?.length) {
-    const mem = await resolveMemoryCli(root);
-    for (const m of spec.memos.add.slice(0, memoLimit)) {
-      // loom memory add --title ... --body ... --tag ... --scope ...
-      const args = [...mem.args, "add", "--title", m.title, "--body", m.body];
-
-      for (const t of m.tags ?? []) {
-        if (String(t).trim()) args.push("--tag", String(t).trim());
-      }
-
-      for (const s of m.scopes ?? []) {
-        if (String(s).trim()) args.push("--scope", String(s).trim());
-      }
-
-      if (m.command) args.push("--scope", `command:${m.command}`);
-      if (m.ticket) {
-        const safe = String(m.ticket).replace(/[^A-Za-z0-9_-]/g, "");
-        if (safe) args.push("--tag", `ticket_${safe}`);
-      }
-      if (m.visibility) args.push("--visibility", String(m.visibility));
-
-      await runProcess({ cmd: mem.cmd, args }, root, 30000);
-      memosAttempted += 1;
-    }
-  }
-
-  // Targeted doc block updates (bounded allowlist)
-  if (spec.docs?.blocks?.upsert?.length) {
-    for (const u of spec.docs.blocks.upsert.slice(0, docBlockLimit)) {
-      try {
-        await applyDocBlockUpsert(u);
-      } catch (e) {
-        if (mode !== "auto") throw e;
-        const msg = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
-        await recordAutolearnFailure(root, autoSessionID, `docs.blocks.upsert failed: ${msg}`);
-      }
-    }
-  }
-
-  // Docs sync
-  if (spec.docs?.sync) {
-    await syncDocs(root);
-  }
-
-  // Changelog note
-  const note = spec.changelog?.note;
-  const usableNote = note && note.trim() && !isTrivialChangelogNote(note.trim()) ? note.trim() : "";
-
-  const significantChanges =
-    results.length > 0 ||
-    instinctDelta.created > 0 ||
-    instinctDelta.updated > 0 ||
-    docBlocksApplied > 0 ||
-    memosAttempted > 0;
-
-  if (!significantChanges) {
-    // Even if the model emits a note, avoid log spam.
-    return { skills: results, instincts: instinctDelta };
-  }
-
-  if (usableNote) {
-    await appendChangelog(root, usableNote);
-  } else {
-    const summary = [
-      results.length ? `skills: ${results.map((r) => `${r.name}(${r.action})`).join(", ")}` : null,
-      instinctDelta.created || instinctDelta.updated ? `instincts: +${instinctDelta.created}/~${instinctDelta.updated}` : null,
-      docBlocksApplied > 0 ? `docs: blocks=${docBlocksApplied}` : null,
-      memosAttempted > 0 ? `memos: +${memosAttempted}` : null,
-    ].filter(Boolean).join(" | ");
-    if (summary) await appendChangelog(root, summary);
-  }
-
-  return { skills: results, instincts: instinctDelta };
-}
-
-// -----------------------------
 // Auto-learn (session.idle)
 // -----------------------------
 
@@ -1499,88 +1270,184 @@ function defaultAutolearnPrompt(): string {
 
 You are a background "learning" agent for an agentic coding system.
 
-Your job is to propose **memory updates** from the recent activity:
-- **Instincts**: small heuristics (trigger → action), with confidence.
-- **Skills**: durable procedural memory stored under .opencode/skills/<name>/SKILL.md.
-- **Docs**: keep AGENTS.md and LOOM_ROADMAP.md consistent.
+Your job is to apply **memory-only updates** from the recent activity:
+- **Skills** (procedural memory) under .opencode/skills/<name>/SKILL.md
+- **Instincts** (trigger -> action) in .opencode/memory/instincts.json
+- **Docs blocks** in AGENTS.md and LOOM_ROADMAP.md (allowed blocks only)
+- Optional: memory notes via the Loom CLI if you are explicitly instructed
 
-Focus:
-- Prioritize *second-order compression*: distill stable fundamentals into always-on context (AGENTS.md).
+You must NOT propose or write product code.
 
-Rules:
-- ONLY propose changes to: skills, instincts, memory notes, AGENTS.md, LOOM_ROADMAP.md.
-- Do NOT propose changes to product code.
-- Prefer updating an existing skill over creating a duplicate.
-- Skills must be specific, not generic. The description should clearly indicate when to use it.
-- Keep bodies short and checklist-like when possible.
-- Do not write changelog entries like "no changes".
+How to act:
+- Prefer calling tools.
+- If there are durable learnings, apply them using the granular tools below.
+- If there is nothing worth persisting, do nothing.
 
-Output format:
-- Output **only** valid JSON (no code fences, no commentary).
-- Use this schema (CompoundSpec v2):
-
-{
-  "schema_version": 2,
-  "auto": { "reason": "why", "sessionID": "ses_..." },
-  "instincts": {
-    "create": [ { "id": "...", "title": "...", "trigger": "...", "action": "...", "confidence": 0.6 } ],
-    "update": [ { "id": "...", "confidence_delta": 0.1, "evidence_note": "..." } ]
-  },
-  "skills": {
-    "create": [ { "name": "...", "description": "...", "body": "..." } ],
-    "update": [ { "name": "...", "body": "...", "description": "..." } ]
-  },
-  "docs": {
-    "sync": true,
-    "blocks": {
-      "upsert": [
-        { "file": "AGENTS.md", "id": "loom-core-context", "content": "always-on context..." },
-        { "file": "LOOM_ROADMAP.md", "id": "roadmap-ai-notes", "content": "empirical compass..." }
-      ]
-    }
-  },
-  "changelog": { "note": "short AI-first memory delta" }
-}
-
-Constraints:
+Budget (hard caps):
+- Max tool calls per run: ${AUTO_MAX_TOOL_CALLS_PER_RUN}
 - Max skills per run: ${AUTO_MAX_SKILLS_PER_RUN}
 - Max instinct updates per run: ${AUTO_MAX_INSTINCT_UPDATES_PER_RUN}
+- Max doc-block upserts per run: ${AUTO_MAX_DOC_BLOCKS_PER_RUN}
+- Max memos per run: ${AUTO_MAX_MEMOS_PER_RUN}
 
-Skill update rule (MANDATORY):
-- For skills.update[], body MUST be the entire, final managed body for the skill.
-- Do NOT output snippets, diffs, or partial sections. Re-emit the whole managed body with your edits applied.
-- Start from the existing skill managed bodies provided in the prompt context.
+Tools to use:
+- `compound_skill_upsert` (create/update a skill)
+- `compound_instinct_upsert` (create/update an instinct)
+- `compound_docblock_upsert` (AGENTS.md/loom-core-context or LOOM_ROADMAP.md/roadmap-ai-notes only)
+- `compound_memo_add` (add a Loom memory note; use sparingly)
+- `compound_changelog_append` (short AI-first memory delta)
+- `compound_sync` (refresh indexes after you make changes)
 
-Path rule (MANDATORY):
-- Whenever you reference repository files or directories in any markdown you output, use repo-root-relative paths (no absolute paths).
-- Example good: src/app.py, .opencode/skills/foo/SKILL.md
-- Example bad: <ABSOLUTE_PATH>/src/app.py
+Rules:
+- Prefer updating an existing skill over creating a near-duplicate.
+- Skills must be procedural and short.
+- Use repo-root-relative paths in markdown.
+- Do not write changelog notes like "no changes".
 
-Docs blocks guidance:
-- Update AGENTS.md/loom-core-context only when a principle has stabilized.
-- Update LOOM_ROADMAP.md/roadmap-ai-notes as a compass: themes, direction, near-term focus.
-- Keep both blocks short. Prefer bullets.
+Response:
+- If you made any changes, respond with a single line: APPLIED
+- If you made no changes, respond with a single line: NOOP
 `);
 }
 
-function extractJsonObject(text: string): any | null {
-  const s = text.trim();
-  // Try direct parse first.
-  try {
-    return JSON.parse(s);
-  } catch {}
-  // Otherwise, best-effort: first {...last}
-  const first = s.indexOf("{");
-  const last = s.lastIndexOf("}");
-  if (first === -1 || last === -1 || last <= first) return null;
-  try {
-    return JSON.parse(s.slice(first, last + 1));
-  } catch {
-    return null;
-  }
+let autolearnInFlight = false;
+
+type AutolearnBudget = {
+  sessionID: string;
+  reason: string;
+  remaining_tool_calls: number;
+  remaining_skill_ops: number;
+  remaining_instinct_ops: number;
+  remaining_doc_ops: number;
+  remaining_memo_ops: number;
+  writes: {
+    tool_calls: number;
+    skills: number;
+    instincts: number;
+    docs: number;
+    memos: number;
+    changelog: number;
+  };
+};
+
+let activeAutolearn: AutolearnBudget | null = null;
+
+function beginAutolearnBudget(sessionID: string, reason: string): void {
+  activeAutolearn = {
+    sessionID,
+    reason,
+    remaining_tool_calls: AUTO_MAX_TOOL_CALLS_PER_RUN,
+    remaining_skill_ops: AUTO_MAX_SKILLS_PER_RUN,
+    remaining_instinct_ops: AUTO_MAX_INSTINCT_UPDATES_PER_RUN,
+    remaining_doc_ops: AUTO_MAX_DOC_BLOCKS_PER_RUN,
+    remaining_memo_ops: AUTO_MAX_MEMOS_PER_RUN,
+    writes: { tool_calls: 0, skills: 0, instincts: 0, docs: 0, memos: 0, changelog: 0 },
+  };
 }
 
-let autolearnInFlight = false;
+function endAutolearnBudget(): AutolearnBudget | null {
+  const b = activeAutolearn;
+  activeAutolearn = null;
+  return b;
+}
+
+function consumeAutolearnToolCall(): void {
+  if (!activeAutolearn) return;
+  if (activeAutolearn.remaining_tool_calls <= 0) throw new Error("autolearn tool-call budget exceeded");
+  activeAutolearn.remaining_tool_calls -= 1;
+  activeAutolearn.writes.tool_calls += 1;
+}
+
+function consumeAutolearnSkillOp(): void {
+  if (!activeAutolearn) return;
+  if (activeAutolearn.remaining_skill_ops <= 0) throw new Error("autolearn skill budget exceeded");
+  activeAutolearn.remaining_skill_ops -= 1;
+  activeAutolearn.writes.skills += 1;
+}
+
+function consumeAutolearnInstinctOp(): void {
+  if (!activeAutolearn) return;
+  if (activeAutolearn.remaining_instinct_ops <= 0) throw new Error("autolearn instinct budget exceeded");
+  activeAutolearn.remaining_instinct_ops -= 1;
+  activeAutolearn.writes.instincts += 1;
+}
+
+function consumeAutolearnDocOp(): void {
+  if (!activeAutolearn) return;
+  if (activeAutolearn.remaining_doc_ops <= 0) throw new Error("autolearn doc-block budget exceeded");
+  activeAutolearn.remaining_doc_ops -= 1;
+  activeAutolearn.writes.docs += 1;
+}
+
+function consumeAutolearnMemoOp(): void {
+  if (!activeAutolearn) return;
+  if (activeAutolearn.remaining_memo_ops <= 0) throw new Error("autolearn memo budget exceeded");
+  activeAutolearn.remaining_memo_ops -= 1;
+  activeAutolearn.writes.memos += 1;
+}
+
+function consumeAutolearnChangelogOp(): void {
+  if (!activeAutolearn) return;
+  activeAutolearn.writes.changelog += 1;
+}
+
+async function ensureAutolearnToolCallsSupported(
+  sessionRoot: string,
+  client: any,
+  activeSessionID: string
+): Promise<boolean> {
+  const state = await loadState(sessionRoot);
+  const existing = state.autolearn?.capabilities?.tool_calls_supported;
+  if (existing === true || existing === false) return existing;
+
+  const beforeProbeAt = state.autolearn?.capabilities?.last_probe_at ?? "";
+  const ephemeralSessionID = await createEphemeralSession(client, activeSessionID);
+  if (!ephemeralSessionID) return false;
+
+  try {
+    // If tool-calling is supported, this will flip the bit in state.
+    await client.session.prompt({
+      path: { id: ephemeralSessionID },
+      body: {
+        agent: "plan",
+        parts: [
+          {
+            type: "text",
+            text: normalizeNewlines(`You are running a capability probe.
+
+Call the tool \`compound_autolearn_probe\` exactly once.
+Then respond with a single line: PROBED
+`),
+          },
+        ],
+      },
+    });
+  } finally {
+    try {
+      await client.session.delete({ path: { id: ephemeralSessionID } });
+    } catch {}
+  }
+
+  const after = await loadState(sessionRoot);
+  const ok =
+    after.autolearn?.capabilities?.tool_calls_supported === true &&
+    (after.autolearn?.capabilities?.last_probe_at ?? "") !== beforeProbeAt;
+  if (ok) return true;
+
+  const next: PluginState = {
+    ...after,
+    autolearn: {
+      ...(after.autolearn ?? {}),
+      capabilities: {
+        ...((after.autolearn ?? {}).capabilities ?? {}),
+        tool_calls_supported: false,
+        last_probe_at: nowIso(),
+      },
+    },
+  };
+  await saveState(sessionRoot, next);
+  return false;
+}
 
 async function autoLearnIfNeeded(
   sessionRoot: string,
@@ -1593,34 +1460,72 @@ async function autoLearnIfNeeded(
   if (autolearnInFlight) return;
 
   autolearnInFlight = true;
+  let autolearnBudget: AutolearnBudget | null = null;
   try {
     const state = await loadState(sessionRoot);
     if (!sessionID) return;
+
+    const lastCmdName = String(state.lastCommand?.name ?? "").trim();
+    const lastCmdAt = state.lastCommand?.at ? Date.parse(state.lastCommand.at) : 0;
     const last = state.autolearn?.lastRunAt ? Date.parse(state.autolearn.lastRunAt) : 0;
     const now = Date.now();
     if (last && now - last < AUTO_COOLDOWN_SECONDS * 1000) return;
 
+    // session.idle is noisy; only run if we've seen a recent user-driven action.
+    if (reason === "session.idle") {
+      if (!lastCmdAt || now - lastCmdAt > 10 * 60 * 1000) return;
+      if (!lastCmdName) return;
+      if (/^compound_(apply|sync|autolearn_now|bootstrap)$/.test(lastCmdName)) return;
+    }
+
     const obsCount = await countObservations(sessionRoot);
     const lastCount = state.autolearn?.lastObservationCount ?? 0;
     const newObs = obsCount.count - lastCount;
-
-    // If events are noisy, prefer hash change as signal.
     const hashChanged = obsCount.tailHash && obsCount.tailHash !== state.autolearn?.lastObservationHash;
-
     if (newObs < AUTO_MIN_NEW_OBSERVATIONS && !hashChanged) return;
+
+    const g = await gitSummary(sessionRoot);
+    if (reason === "session.idle") {
+      const diff = String(g.diffStat ?? "").trim();
+      const looksLikeWorkflow = lastCmdName.startsWith("workflows:");
+      if (!diff && !looksLikeWorkflow) return;
+    }
+
+    const toolCallsSupported = await ensureAutolearnToolCallsSupported(sessionRoot, client, sessionID);
 
     const recentObs = await readObservationsTail(sessionRoot, AUTO_MAX_OBSERVATIONS_IN_PROMPT);
     const instincts = await loadInstincts(writeRoot);
     const skills = await scanSkills(writeRoot);
-    const g = await gitSummary(sessionRoot);
+
+    if (!toolCallsSupported) {
+      const next: PluginState = {
+        ...state,
+        autolearn: {
+          ...(state.autolearn ?? {}),
+          lastRunAt: nowIso(),
+          lastRunSessionID: sessionID ?? null,
+          lastObservationCount: obsCount.count,
+          lastObservationHash: obsCount.tailHash,
+          lastOutcome: "error",
+          lastError: "tool-calling not supported in background sessions",
+        },
+      };
+      await saveState(sessionRoot, next);
+      return;
+    }
 
     const promptTemplate = await safeReadFile(
       path.join(writeRoot, AUTOLEARN_PROMPT_FILE),
       defaultAutolearnPrompt()
     );
 
-    const skillsContext = skills
-      .slice(0, 25)
+    const skillsIndex = skills
+      .slice(0, 30)
+      .map((s) => `- ${s.name}: ${oneLine(s.description ?? "", 120)}`)
+      .join("\n");
+
+    const skillsBodies = skills
+      .slice(0, 8)
       .map((s) => {
         const body = s.managedBody?.trim() ?? "";
         return [`-- skill: ${s.name}`, `description: ${s.description}`, "managed_body:", body || "(empty)", "-- end skill"].join("\n");
@@ -1638,8 +1543,11 @@ changed_files: ${g.ok ? g.changedFiles.length : "n/a"}
 diffstat:
 ${g.diffStat || "(none)"}
 
-### Existing skills (managed bodies)
-${skillsContext || "(none)"}
+### Existing skills (index)
+${skillsIndex || "- (none)"}
+
+### Existing skills (managed bodies; limited)
+${skillsBodies || "(none)"}
 
 ### Existing instincts (top)
 ${renderInstinctsIndex(instincts.instincts, 20)}
@@ -1656,14 +1564,9 @@ ${recentObs
   .join("\n")}
 `).trim() + "\n";
 
-    const finalPrompt = truncate(
-      promptTemplate.trim() + "\n\n" + context,
-      AUTO_PROMPT_MAX_CHARS
-    );
+    const finalPrompt = truncate(promptTemplate.trim() + "\n\n" + context, AUTO_PROMPT_MAX_CHARS);
 
-    // Ask the model for a CompoundSpec v2 in an ephemeral forked session so the gigantic
-    // autolearn prompt doesn't pollute the user's active chat.
-    const ephemeralSessionID = await forkEphemeralSession(client, sessionID);
+    const ephemeralSessionID = await createEphemeralSession(client, sessionID);
     if (!ephemeralSessionID) {
       await recordAutolearnFailure(sessionRoot, sessionID, "failed to create ephemeral autolearn session");
       await tuiToast(client, "Compound autolearn failed (could not create background session)", "error");
@@ -1672,71 +1575,73 @@ ${recentObs
 
     let resp: any;
     try {
+      beginAutolearnBudget(sessionID, reason);
       resp = await client.session.prompt({
         path: { id: ephemeralSessionID },
         body: {
-          // Use read-only agent if available; it's fine if ignored.
           agent: "plan",
           parts: [{ type: "text", text: finalPrompt }],
         },
       });
     } finally {
-      // Best-effort: keep autolearn invisible by deleting the fork.
+      autolearnBudget = endAutolearnBudget();
       try {
         await client.session.delete({ path: { id: ephemeralSessionID } });
       } catch {}
     }
 
     const text = extractTextFromMessage(resp);
-    const parsed = extractJsonObject(text);
-    if (!parsed) {
-      await recordAutolearnFailure(sessionRoot, sessionID, text);
-      await tuiToast(client, "Compound autolearn failed (invalid JSON spec)", "error");
-      return;
-    }
+    if (!text) await recordAutolearnFailure(sessionRoot, sessionID, "empty autolearn response");
 
-    const spec = coerceSpec(parsed);
-    // Force safety rails in auto mode:
-    if (spec.schema_version === 2) {
-      (spec as CompoundSpecV2).auto = { reason, sessionID: sessionID ?? null };
-    }
-
-    // Apply spec (memory only)
-    const applyRes = await applySpec(writeRoot, spec, "auto");
-
-    // Always sync docs after autolearn, to keep indexes fresh.
-    await syncDocs(writeRoot);
-    await syncClaudeSkillsMirror(writeRoot);
-
-    // Notify only on meaningful changes.
-    try {
-      const skillChanges = Array.isArray((applyRes as any)?.skills) ? (applyRes as any).skills.length : 0;
-      const instinctsCreated = Number((applyRes as any)?.instincts?.created ?? 0);
-      const instinctsUpdated = Number((applyRes as any)?.instincts?.updated ?? 0);
-      if (skillChanges > 0 || instinctsCreated > 0 || instinctsUpdated > 0) {
+    let outcome: "noop" | "applied" | "error" = "noop";
+    const w = autolearnBudget?.writes ?? { tool_calls: 0, skills: 0, instincts: 0, docs: 0, memos: 0, changelog: 0 };
+    const didWrite = w.skills + w.instincts + w.docs + w.memos + w.changelog > 0;
+    if (didWrite) {
+      await syncDocs(writeRoot);
+      await syncClaudeSkillsMirror(writeRoot);
+      outcome = "applied";
+      try {
         const bits: string[] = [];
-        if (skillChanges > 0) bits.push(`skills=${skillChanges}`);
-        if (instinctsCreated + instinctsUpdated > 0)
-          bits.push(`instincts=+${instinctsCreated}/~${instinctsUpdated}`);
-        await tuiToast(client, `Compound autolearn applied (${bits.join(" ")})`, "success");
-      }
-    } catch {}
+        if (w.skills) bits.push(`skills=${w.skills}`);
+        if (w.instincts) bits.push(`instincts=${w.instincts}`);
+        if (w.docs) bits.push(`docs=${w.docs}`);
+        if (w.memos) bits.push(`memos=${w.memos}`);
+        if (w.changelog) bits.push(`changelog=${w.changelog}`);
+        if (bits.length) await tuiToast(client, `Compound autolearn applied (${bits.join(" ")})`, "success");
+      } catch {}
+    }
 
-    state.autolearn = {
-      lastRunAt: nowIso(),
-      lastRunSessionID: sessionID ?? null,
-      lastObservationCount: obsCount.count,
-      lastObservationHash: obsCount.tailHash,
+    const next: PluginState = {
+      ...state,
+      autolearn: {
+        ...(state.autolearn ?? {}),
+        lastRunAt: nowIso(),
+        lastRunSessionID: sessionID ?? null,
+        lastObservationCount: obsCount.count,
+        lastObservationHash: obsCount.tailHash,
+        lastOutcome: outcome,
+        lastError: "",
+      },
     };
-    await saveState(sessionRoot, state);
+    await saveState(sessionRoot, next);
   } catch (e) {
-    // Keep it quiet, but leave breadcrumbs for debugging.
     try {
       const msg = e instanceof Error ? `${e.name}: ${e.message}\n${e.stack ?? ""}` : String(e);
       await recordAutolearnFailure(sessionRoot, sessionID, msg);
+      const state = await loadState(sessionRoot);
+      const next: PluginState = {
+        ...state,
+        autolearn: {
+          ...(state.autolearn ?? {}),
+          lastOutcome: "error",
+          lastError: oneLine(msg, 800),
+        },
+      };
+      await saveState(sessionRoot, next);
       await tuiToast(client, "Compound autolearn failed", "error");
     } catch {}
   } finally {
+    endAutolearnBudget();
     autolearnInFlight = false;
   }
 }
@@ -1825,6 +1730,7 @@ export const CompoundEngineeringPlugin: Plugin = async ({ client, directory, wor
     parameters: {},
     execute: async () => {
       await syncDocs(writeRoot);
+      await syncClaudeSkillsMirror(writeRoot);
       return "compound_sync complete";
     },
   });
@@ -1857,17 +1763,211 @@ export const CompoundEngineeringPlugin: Plugin = async ({ client, directory, wor
     execute: async () => JSON.stringify(await gitSummary(sessionRoot), null, 2),
   });
 
-  const compound_apply = tool({
-    description: "Apply a CompoundSpec (JSON) to update skills/instincts/docs/memos/changelog. Writes memory files only.",
-    parameters: { spec_json: { type: "string" } },
-    execute: async ({ spec_json }: any) => {
+  const compound_skill_upsert = tool({
+    description: "Create/update a skill (procedural memory).",
+    parameters: {
+      name: { type: "string" },
+      description: { type: "string", optional: true },
+      body: { type: "string" },
+    },
+    execute: async ({ name, description, body }: any) => {
       await requireInstalled(writeRoot);
-      const parsed = JSON.parse(spec_json);
-      const spec = coerceSpec(parsed);
-      const r = await applySpec(writeRoot, spec, "manual");
-      await syncDocs(writeRoot);
+      consumeAutolearnToolCall();
+
+      const n = String(name ?? "").trim();
+      const b = String(body ?? "");
+      const d = String(description ?? "").trim();
+      if (!n) throw new Error("skill.name is required");
+      if (!b.trim()) throw new Error("skill.body is required");
+
+      let desc = d;
+      if (!desc) {
+        const skillPath = path.join(writeRoot, SKILLS_DIR, n, "SKILL.md");
+        if (await pathExists(skillPath)) {
+          const raw = await fs.readFile(skillPath, "utf8");
+          const parsed = parseFrontmatter(raw);
+          desc = parsed.fm.description ?? "";
+        }
+      }
+      if (!desc) desc = `Skill: ${n}`;
+
+      const r = await writeOrUpdateSkill(writeRoot, { name: n, description: desc, body: b });
+      consumeAutolearnSkillOp();
       await syncClaudeSkillsMirror(writeRoot);
       return JSON.stringify(r, null, 2);
+    },
+  });
+
+  const compound_instinct_upsert = tool({
+    description: "Create/update an instinct (trigger -> action heuristic).",
+    parameters: {
+      operation: { type: "string" },
+      id: { type: "string" },
+      title: { type: "string", optional: true },
+      trigger: { type: "string", optional: true },
+      action: { type: "string", optional: true },
+      confidence: { type: "number", optional: true },
+      confidence_delta: { type: "number", optional: true },
+      evidence_note: { type: "string", optional: true },
+    },
+    execute: async (input: any) => {
+      await requireInstalled(writeRoot);
+      consumeAutolearnToolCall();
+
+      const op = String(input?.operation ?? "").trim().toLowerCase();
+      const id = String(input?.id ?? "").trim();
+      if (!op || !["create", "update"].includes(op)) {
+        throw new Error("operation must be 'create' or 'update'");
+      }
+      if (!id) throw new Error("id is required");
+
+      const store = await loadInstincts(writeRoot);
+      const sid = activeAutolearn?.sessionID ?? null;
+      let delta = { created: 0, updated: 0 };
+      if (op === "create") {
+        const title = String(input?.title ?? "").trim();
+        const trigger = String(input?.trigger ?? "").trim();
+        const action = String(input?.action ?? "").trim();
+        const confidence = Number(input?.confidence ?? NaN);
+        if (!title || !trigger || !action) throw new Error("create requires title, trigger, action");
+        if (!Number.isFinite(confidence)) throw new Error("create requires confidence (number)");
+        delta = applyInstinctChanges(store, { create: [{ id, title, trigger, action, confidence }] }, sid);
+      } else {
+        const confidence_delta = input?.confidence_delta;
+        const evidence_note = input?.evidence_note;
+        delta = applyInstinctChanges(
+          store,
+          { update: [{ id, confidence_delta, evidence_note }] },
+          sid
+        );
+      }
+
+      if (delta.created || delta.updated) {
+        await saveInstincts(writeRoot, store);
+        consumeAutolearnInstinctOp();
+      }
+      return JSON.stringify(delta, null, 2);
+    },
+  });
+
+  const compound_docblock_upsert = tool({
+    description: "Upsert an allowed AI-managed doc block.",
+    parameters: {
+      file: { type: "string" },
+      id: { type: "string" },
+      content: { type: "string" },
+    },
+    execute: async ({ file, id, content }: any) => {
+      await requireInstalled(writeRoot);
+      consumeAutolearnToolCall();
+
+      const f = String(file ?? "").trim().replace(/\\/g, "/");
+      const blockID = String(id ?? "").trim();
+      let c = normalizeNewlines(String(content ?? "")).trim();
+      if (!f || !blockID || !c) throw new Error("file, id, and content are required");
+
+      if (c.length > DOC_BLOCK_MAX_CHARS) {
+        c = c.slice(0, DOC_BLOCK_MAX_CHARS).trimEnd() + "\n";
+      }
+      c = rewriteRepoAbsolutePaths(writeRoot, c);
+
+      const allowed: Record<string, Set<string>> = {
+        "AGENTS.md": new Set(["loom-core-context"]),
+        "LOOM_ROADMAP.md": new Set(["roadmap-ai-notes"]),
+      };
+      if (!(f in allowed) || !allowed[f]?.has(blockID)) {
+        throw new Error(`doc block not allowed: ${f}#${blockID}`);
+      }
+      if (f.startsWith("/") || f.includes("..")) throw new Error("file must be repo-relative");
+
+      const abs = path.resolve(writeRoot, f);
+      const rel = path.relative(writeRoot, abs);
+      if (!rel || rel.startsWith("..") || path.isAbsolute(rel)) {
+        throw new Error("file escapes repo root");
+      }
+
+      const existing = await safeReadFile(abs, "");
+      const updated = upsertManagedBlock(existing || "", blockID, c);
+      if (updated !== existing) {
+        await atomicWrite(abs, updated);
+        consumeAutolearnDocOp();
+        return JSON.stringify({ ok: true, changed: true }, null, 2);
+      }
+      return JSON.stringify({ ok: true, changed: false }, null, 2);
+    },
+  });
+
+  const compound_changelog_append = tool({
+    description: "Append a short AI-first memory delta to LOOM_ROADMAP.md.",
+    parameters: { note: { type: "string" } },
+    execute: async ({ note }: any) => {
+      await requireInstalled(writeRoot);
+      consumeAutolearnToolCall();
+      const n = String(note ?? "").trim();
+      if (!n) throw new Error("note is required");
+      if (isTrivialChangelogNote(n)) return "skipped";
+      await appendChangelog(writeRoot, n);
+      consumeAutolearnChangelogOp();
+      return "ok";
+    },
+  });
+
+  const compound_memo_add = tool({
+    description: "Add a Loom memory note (use sparingly; scoped).",
+    parameters: {
+      title: { type: "string" },
+      body: { type: "string" },
+      tags: { type: "array", optional: true },
+      scopes: { type: "array", optional: true },
+      visibility: { type: "string", optional: true },
+    },
+    execute: async (input: any) => {
+      await requireInstalled(writeRoot);
+      consumeAutolearnToolCall();
+
+      const title = String(input?.title ?? "").trim();
+      const body = String(input?.body ?? "").trim();
+      if (!title || !body) throw new Error("title and body are required");
+
+      const mem = await resolveMemoryCli(writeRoot);
+      const args = [...mem.args, "add", "--title", title, "--body", body];
+      const tags = Array.isArray(input?.tags) ? input.tags : [];
+      const scopes = Array.isArray(input?.scopes) ? input.scopes : [];
+      for (const t of tags) {
+        const s = String(t ?? "").trim();
+        if (s) args.push("--tag", s);
+      }
+      for (const s0 of scopes) {
+        const s = String(s0 ?? "").trim();
+        if (s) args.push("--scope", s);
+      }
+      if (input?.visibility) args.push("--visibility", String(input.visibility));
+
+      const res = await runProcess({ cmd: mem.cmd, args }, writeRoot, 30000);
+      if (res.code !== 0) throw new Error(`loom memory add failed (exit=${res.code})`);
+      consumeAutolearnMemoOp();
+      return "ok";
+    },
+  });
+
+  const compound_autolearn_probe = tool({
+    description: "Internal: probe whether background sessions can execute tool calls.",
+    parameters: {},
+    execute: async () => {
+      const state = await loadState(sessionRoot);
+      const next: PluginState = {
+        ...state,
+        autolearn: {
+          ...(state.autolearn ?? {}),
+          capabilities: {
+            ...((state.autolearn ?? {}).capabilities ?? {}),
+            tool_calls_supported: true,
+            last_probe_at: nowIso(),
+          },
+        },
+      };
+      await saveState(sessionRoot, next);
+      return "ok";
     },
   });
 
@@ -2072,7 +2172,12 @@ export const CompoundEngineeringPlugin: Plugin = async ({ client, directory, wor
       compound_sync,
       compound_status,
       compound_git_summary,
-      compound_apply,
+      compound_skill_upsert,
+      compound_instinct_upsert,
+      compound_docblock_upsert,
+      compound_changelog_append,
+      compound_memo_add,
+      compound_autolearn_probe,
       compound_autolearn_now,
       compound_observations_tail,
       compound_instincts,

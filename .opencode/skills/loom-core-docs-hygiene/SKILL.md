@@ -27,7 +27,7 @@ Keep core docs stable, agent-legible, and safe to evolve.
 
 2. Respect AI-managed fences
    - Do not hand-edit inside `BEGIN/END` AI-managed fences.
-   - Prefer `docs.blocks.upsert[]` entries in a CompoundSpec v2 to change managed content.
+   - Prefer `compound_docblock_upsert` to change managed content.
 
 3. Make changes additive and minimal
    - Prefer adding or refining bullets over deleting large sections.
@@ -46,7 +46,7 @@ Keep core docs stable, agent-legible, and safe to evolve.
    - Avoid timestamps or other nondeterministic text in "contract" blocks.
 
 7. Sync after doc changes
-   - Set `docs.sync: true` in the CompoundSpec v2 so derived indexes stay consistent.
+   - Run `compound_sync` so derived indexes stay consistent.
 <!-- END:compound:skill-managed -->
 
 ## Manual notes

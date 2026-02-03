@@ -60,12 +60,13 @@ The point is not vibes. The point is *reusable procedure*.
 ### `/workflows:compound <ticket-id>`
 
 - Write memory notes (loom memory) that future planning can recall.
-- Propose skill changes as a **CompoundSpec v2** JSON object.
-- Call `compound_apply(spec_json=...)` to make it real:
-  - create/update skills under `.opencode/skills/`
-  - update AI-managed blocks in AGENTS/PROJECT/ROADMAP
-  - append an agent-optimized CHANGELOG entry
-  - sync derived indexes
+- Apply durable learnings using the compound tools:
+  - `compound_skill_upsert` (new/updated procedural skills)
+  - `compound_instinct_upsert` (new/updated heuristics)
+  - `compound_docblock_upsert` (allowed blocks only)
+  - `compound_memo_add` (sparingly; scoped)
+  - `compound_changelog_append` (short memory delta)
+- Finish with `compound_sync`.
 
 ## Operational defaults
 

@@ -22,16 +22,15 @@ Process:
 2) Gather context:
    - `compound_git_summary()`
    - If a ticket ID was provided, `loom ticket show $ARGUMENTS`
-3) Write 1-5 memory notes using `loom memory add`:
-   - Scope at least one note to `command:workflows:plan` (use `--scope command:workflows:plan`)
-   - Add file/folder scopes for areas touched (e.g. `file:...`, `folder:...`, from changedFiles in git summary)
-4) Propose skill operations as a **CompoundSpec v2** JSON object:
-   - Prefer **updating** existing skills over adding near-duplicates.
-   - Skills must be procedural: steps, examples, gotchas.
-   - Each skill body is markdown **without** frontmatter.
-5) Call `compound_apply` with `spec_json` set to the JSON string.
-6) Finish with `compound_sync`.
+3) Write 1-5 memory notes using `compound_memo_add`:
+   - Scope at least one note to `command:workflows:plan`
+   - Add file/folder scopes for areas touched (from changedFiles in git summary)
+4) Create/update skills using `compound_skill_upsert`.
+5) Create/update instincts using `compound_instinct_upsert` (only if the heuristic is durable).
+6) Update doc blocks using `compound_docblock_upsert` (allowed blocks only).
+7) Append a short entry using `compound_changelog_append`.
+8) Finish with `compound_sync`.
 
 Required output:
 - A short “Compound report” section (what we learned).
-- The exact JSON spec you applied (for auditability).
+- A short list of changes applied (skills/instincts/docs/memos).

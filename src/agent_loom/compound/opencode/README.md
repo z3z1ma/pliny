@@ -103,9 +103,8 @@ When the session goes idle (agent has finished a turn):
   - current skills list
   - current top instincts
 - It prompts the model using `.opencode/compound/prompts/autolearn.md`
-- The model returns a **CompoundSpec v2 JSON**
+- The model calls granular tools to persist learnings (tools-first)
 - The plugin applies it (skills/instincts/memos/docs/changelog only)
-- It refreshes indexes (`compound_sync` behavior)
 
 ---
 

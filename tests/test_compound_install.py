@@ -72,14 +72,30 @@ def test_compound_install_creates_loom_docs_if_missing(tmp_path: Path) -> None:
     assert not (dest / "LOOM_CHANGELOG.md").exists()
 
 
-def test_compound_install_template_uses_compoundspec_v2(tmp_path: Path) -> None:
+def test_compound_install_does_not_install_compoundspec_skill(tmp_path: Path) -> None:
     dest = tmp_path
     install_opencode(dest=dest, dry_run=False)
 
-    skill = dest / ".opencode" / "skills" / "compound-apply-spec" / "SKILL.md"
-    text = skill.read_text(encoding="utf-8")
-    assert "schema_version" in text
-    assert "CompoundSpec v1" not in text
+    assert not (
+        dest / ".opencode" / "skills" / "compound-apply-spec" / "SKILL.md"
+    ).exists()
+
+
+def test_compound_install_template_autolearn_prompt_is_tools_first(
+    tmp_path: Path,
+) -> None:
+    dest = tmp_path
+    install_opencode(dest=dest, dry_run=False)
+
+    prompt = (dest / ".opencode" / "compound" / "prompts" / "autolearn.md").read_text(
+        encoding="utf-8"
+    )
+    assert "compound_skill_upsert" in prompt
+    assert "compound_instinct_upsert" in prompt
+    assert "compound_docblock_upsert" in prompt
+    assert "compound_memo_add" in prompt
+    assert "compound_changelog_append" in prompt
+    assert "Output **only** valid JSON" not in prompt
 
 
 def test_compound_install_provides_plugin_required_scaffolding(tmp_path: Path) -> None:

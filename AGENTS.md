@@ -125,9 +125,6 @@ This block is maintained by the compound plugin.
 - **prompt-changes-require-prompt-tests** (100%)
   - Trigger: When editing agent prompts or prompt assembly code
   - Action: Update/add focused tests covering the prompt contract and run the prompt test suite.
-- **compound-learning-output-is-compoundspec-v2-json-only** (100%)
-  - Trigger: When responding to a background autolearn prompt
-  - Action: Output only valid JSON matching CompoundSpec v2; no commentary, no code fences, no product-code edits.
 - **team-core-changes-require-targeted-tests** (100%)
   - Trigger: When editing src/agent_loom/team/core.py, src/agent_loom/team/prompts.py, or src/agent_loom/team/cli.py
   - Action: Update/add focused tests covering the changed behavior (especially prompt contracts) and run `uv run pytest` for the relevant test module(s) plus `uv run ruff check .` before calling the work done.
