@@ -493,6 +493,7 @@
       gap: 8px;
       overflow:auto;
       height:100%;
+      position: relative;
     }
     .dropHint{
       border: 1px dashed var(--border2);
@@ -501,9 +502,18 @@
       color: var(--muted);
       font-size: 11px;
       text-align:center;
-      display:none;
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      top: 8px;
+      z-index: 1;
+      pointer-events:none;
+      opacity: 0;
+      transform: translateY(-4px);
+      background: var(--panel);
+      transition: opacity .12s ease, transform .12s ease;
     }
-    .col.dragover .dropHint{ display:block; }
+    .col.dragover .dropHint{ opacity: 1; transform: translateY(0); }
     .cardT{
       border: 1px solid var(--border);
       background: var(--panel2);
@@ -1331,11 +1341,58 @@
 
   const content = $('#content');
   let scrollPos = {};
+  let dragActive = false;
+
+  function captureScrollState(){
+    scrollPos = {};
+    if (content) scrollPos['content'] = { top: content.scrollTop, left: content.scrollLeft };
+    content.querySelectorAll('.cols').forEach((el, idx) => {
+      scrollPos[`cols:${idx}`] = { top: el.scrollTop, left: el.scrollLeft };
+    });
+    content.querySelectorAll('.drawer').forEach((el, idx) => {
+      scrollPos[`drawer:${idx}`] = { top: el.scrollTop, left: el.scrollLeft };
+    });
+    content.querySelectorAll('.colBody').forEach(el => {
+      const col = el.closest('.col')?.getAttribute('data-col') || '';
+      if (!col) return;
+      scrollPos[`colBody:${col}`] = { top: el.scrollTop, left: el.scrollLeft };
+    });
+  }
+
+  function restoreScrollState(){
+    const posContent = scrollPos['content'];
+    if (content && posContent){
+      content.scrollTop = posContent.top || 0;
+      content.scrollLeft = posContent.left || 0;
+    }
+    content.querySelectorAll('.cols').forEach((el, idx) => {
+      const pos = scrollPos[`cols:${idx}`];
+      if (!pos) return;
+      el.scrollTop = pos.top || 0;
+      el.scrollLeft = pos.left || 0;
+    });
+    content.querySelectorAll('.drawer').forEach((el, idx) => {
+      const pos = scrollPos[`drawer:${idx}`];
+      if (!pos) return;
+      el.scrollTop = pos.top || 0;
+      el.scrollLeft = pos.left || 0;
+    });
+    content.querySelectorAll('.colBody').forEach(el => {
+      const col = el.closest('.col')?.getAttribute('data-col') || '';
+      if (!col) return;
+      const pos = scrollPos[`colBody:${col}`];
+      if (!pos) return;
+      el.scrollTop = pos.top || 0;
+      el.scrollLeft = pos.left || 0;
+    });
+  }
 
   async function renderRoute(){
     const route = routeFromHash();
     state.lastRoute = route;
     save();
+
+    if (route === 'tickets') livePendingTicketsRender = false;
 
     $('#viewTitle').textContent = routes[route].title;
     setNavActive(route);
@@ -1353,9 +1410,7 @@
     await new Promise(r => requestAnimationFrame(() => r()));
 
     // Save scroll state for current view components before re-render
-    $$('.cols, .drawer, .content').forEach(el => {
-      if (el.scrollTop > 0) scrollPos[el.className] = el.scrollTop;
-    });
+    captureScrollState();
 
     await loadHealthCaps(false);
 
@@ -1374,10 +1429,7 @@
 
     // Restore scroll state
     requestAnimationFrame(() => {
-      Object.entries(scrollPos).forEach(([cls, top]) => {
-        const el = content.querySelector('.' + cls.split(' ').join('.'));
-        if (el) el.scrollTop = top;
-      });
+      restoreScrollState();
     });
   }
 
@@ -1550,31 +1602,56 @@
     };
   }
 
+  function ticketsFingerprint(list){
+    return (list || []).map(t => {
+      const parts = [t.id, t.status, t.priority, t.mtime, t.assignee, t.title];
+      return parts.map(x => (x ?? '').toString()).join('|');
+    }).join('||');
+  }
+
+  function ticketDetailFingerprint(show, view){
+    try{
+      return JSON.stringify({ show, view });
+    } catch {
+      return String(Date.now());
+    }
+  }
+
   async function loadTickets(force=false){
     await loadHealthCaps(false);
     const age = Date.now() - data.tickets.at;
-    if (!force && data.tickets.list && age < 6000) return;
+    if (!force && data.tickets.list && age < 6000) return false;
     try{
       const res = await api('/api/v1/tickets', { query: ticketQueryFromState() });
-      data.tickets.list = res.tickets || [];
+      const list = res.tickets || [];
+      const nextHash = ticketsFingerprint(list);
+      const changed = nextHash !== data.tickets._hash;
+      data.tickets.list = list;
       data.tickets.count = res.count || data.tickets.list.length;
       data.tickets.at = Date.now();
+      data.tickets._hash = nextHash;
+      return changed;
     } catch (err){
       toast('Tickets failed', 'bad', err.message || String(err));
+      return false;
     }
   }
 
   async function loadTicketDetails(id, force=false){
-    if (!id) return;
-    if (!force && data.ticket.id === id && data.ticket.show && data.ticket.view) return;
+    if (!id) return false;
+    if (!force && data.ticket.id === id && data.ticket.show && data.ticket.view) return false;
     try{
       const [show, view] = await Promise.all([
         api(`/api/v1/tickets/${encodeURIComponent(id)}`),
         api(`/api/v1/tickets/${encodeURIComponent(id)}/view`)
       ]);
-      data.ticket = { id, show, view, dep: null };
+      const nextHash = ticketDetailFingerprint(show, view);
+      const changed = nextHash !== data.ticket._hash;
+      data.ticket = { id, show, view, dep: null, _hash: nextHash };
+      return changed;
     } catch (err){
       toast('Ticket detail failed', 'bad', err.message || String(err));
+      return false;
     }
   }
 
@@ -2170,24 +2247,48 @@
   function bindBoardDnD(){
     const cards = $$('.cardT');
     const cols = $$('.col');
+    const enterCounts = new Map();
+
+    const clearDragOver = () => {
+      cols.forEach(col => {
+        col.classList.remove('dragover');
+        enterCounts.set(col, 0);
+      });
+    };
 
     cards.forEach(c => {
       c.addEventListener('dragstart', (e) => {
+        dragActive = true;
         e.dataTransfer.setData('text/plain', c.getAttribute('data-id'));
         e.dataTransfer.effectAllowed = 'move';
+      });
+      c.addEventListener('dragend', () => {
+        dragActive = false;
+        clearDragOver();
       });
     });
 
     cols.forEach(col => {
+      enterCounts.set(col, 0);
+      col.addEventListener('dragenter', (e) => {
+        e.preventDefault();
+        const count = (enterCounts.get(col) || 0) + 1;
+        enterCounts.set(col, count);
+        col.classList.add('dragover');
+      });
+      col.addEventListener('dragleave', () => {
+        const count = Math.max((enterCounts.get(col) || 1) - 1, 0);
+        enterCounts.set(col, count);
+        if (!count) col.classList.remove('dragover');
+      });
       col.addEventListener('dragover', (e) => {
         e.preventDefault();
-        col.classList.add('dragover');
         e.dataTransfer.dropEffect = 'move';
       });
-      col.addEventListener('dragleave', () => col.classList.remove('dragover'));
       col.addEventListener('drop', async (e) => {
         e.preventDefault();
-        col.classList.remove('dragover');
+        dragActive = false;
+        clearDragOver();
         const id = e.dataTransfer.getData('text/plain');
         const targetCol = col.getAttribute('data-col');
         if (!id || !targetCol) return;
@@ -3990,6 +4091,7 @@
 
   // Live polling
   let liveTimer = null;
+  let livePendingTicketsRender = false;
 
   function setLive(on){
     state.live = !!on;
@@ -4000,18 +4102,37 @@
     else stopLive();
   }
 
+  function shouldSkipLiveRender(){
+    if (dragActive) return true;
+    const ae = document.activeElement;
+    if (!ae || !content.contains(ae)) return false;
+    const tag = (ae.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return true;
+    if (ae.isContentEditable) return true;
+    return false;
+  }
+
   function startLive(){
     stopLive();
     const tick = async () => {
       // Light touch: tickets + selected team bundle
       if (routeFromHash() === 'tickets' || state.lastRoute === 'tickets'){
         data.tickets.at = 0;
-        await loadTickets(true);
+        const listChanged = await loadTickets(true);
         // refresh selected ticket details less aggressively
+        let detailChanged = false;
         if (state.tickets.selectedId){
-          await loadTicketDetails(state.tickets.selectedId, true);
+          detailChanged = await loadTicketDetails(state.tickets.selectedId, true);
         }
-        if (routeFromHash() === 'tickets') await renderRoute();
+        const needsRender = listChanged || detailChanged || livePendingTicketsRender;
+        if (routeFromHash() === 'tickets' && needsRender){
+          if (shouldSkipLiveRender()){
+            livePendingTicketsRender = true;
+          } else {
+            livePendingTicketsRender = false;
+            await renderRoute();
+          }
+        }
       }
       if (state.teams.selected){
         await loadTeamBundle(state.teams.selected);
