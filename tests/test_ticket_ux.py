@@ -157,6 +157,172 @@ class TestTicketUx(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(int(shown["ticket"]["priority"]), 3)
 
+    def test_update_allows_parent_deps_and_links(self) -> None:
+        with _temp_git_repo() as (root, env):
+            env = {**env, "TICKET_DIR": str(root / ".tickets")}
+
+            _, created_a = _ticket_json(
+                ["--json", "--no-audit", "create", "A"], cwd=root, env=env
+            )
+            _, created_b = _ticket_json(
+                ["--json", "--no-audit", "create", "B"], cwd=root, env=env
+            )
+            _, created_c = _ticket_json(
+                ["--json", "--no-audit", "create", "C"], cwd=root, env=env
+            )
+            a = str(created_a.get("id") or "")
+            b = str(created_b.get("id") or "")
+            c = str(created_c.get("id") or "")
+            self.assertTrue(a and b and c)
+
+            code, upd = _ticket_json(
+                [
+                    "--json",
+                    "--no-audit",
+                    "update",
+                    a,
+                    "--parent",
+                    b,
+                    "--deps",
+                    f"{b},{c}",
+                    "--links",
+                    b,
+                ],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertTrue(upd.get("ok"))
+
+            _, shown_a = _ticket_json(
+                ["--json", "--no-audit", "show", a], cwd=root, env=env
+            )
+            self.assertEqual(shown_a["ticket"]["parent"], b)
+            self.assertEqual(sorted(shown_a["ticket"]["deps"]), sorted([b, c]))
+            self.assertEqual(sorted(shown_a["relationships"]["linked"]), [b])
+            self.assertEqual(
+                sorted(shown_a["relationships"]["blockers"]), sorted([b, c])
+            )
+
+            _, shown_b = _ticket_json(
+                ["--json", "--no-audit", "show", b], cwd=root, env=env
+            )
+            # Link symmetry is derived at read-time.
+            self.assertIn(a, list(shown_b["relationships"]["linked"]))
+
+    def test_update_deps_rejects_cycles(self) -> None:
+        with _temp_git_repo() as (root, env):
+            env = {**env, "TICKET_DIR": str(root / ".tickets")}
+
+            _, created_a = _ticket_json(
+                ["--json", "--no-audit", "create", "A"], cwd=root, env=env
+            )
+            _, created_b = _ticket_json(
+                ["--json", "--no-audit", "create", "B"], cwd=root, env=env
+            )
+            a = str(created_a.get("id") or "")
+            b = str(created_b.get("id") or "")
+
+            code, _ = _ticket_json(
+                ["--json", "--no-audit", "update", a, "--deps", b],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 0)
+
+            code, err = _ticket_json(
+                ["--json", "--no-audit", "update", b, "--deps", a],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 2)
+            self.assertFalse(err.get("ok"))
+            self.assertEqual(err.get("code"), "ARG")
+
+    def test_update_add_and_remove_link_are_symmetric(self) -> None:
+        with _temp_git_repo() as (root, env):
+            env = {**env, "TICKET_DIR": str(root / ".tickets")}
+
+            _, created_a = _ticket_json(
+                ["--json", "--no-audit", "create", "A"], cwd=root, env=env
+            )
+            _, created_b = _ticket_json(
+                ["--json", "--no-audit", "create", "B"], cwd=root, env=env
+            )
+            a = str(created_a.get("id") or "")
+            b = str(created_b.get("id") or "")
+            self.assertTrue(a and b)
+
+            code, payload = _ticket_json(
+                ["--json", "--no-audit", "update", a, "--add-link", b],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertTrue(payload.get("ok"))
+
+            _, shown_b = _ticket_json(
+                ["--json", "--no-audit", "show", b], cwd=root, env=env
+            )
+            # Symmetry is derived at read-time, but add-link should also persist the reverse edge.
+            self.assertIn(a, list(shown_b["relationships"]["linked"]))
+
+            code, payload2 = _ticket_json(
+                ["--json", "--no-audit", "update", a, "--remove-link", b],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertTrue(payload2.get("ok"))
+
+            _, shown_a2 = _ticket_json(
+                ["--json", "--no-audit", "show", a], cwd=root, env=env
+            )
+            _, shown_b2 = _ticket_json(
+                ["--json", "--no-audit", "show", b], cwd=root, env=env
+            )
+            self.assertNotIn(b, list(shown_a2["relationships"]["linked"]))
+            self.assertNotIn(a, list(shown_b2["relationships"]["linked"]))
+
+    def test_update_add_and_remove_dep(self) -> None:
+        with _temp_git_repo() as (root, env):
+            env = {**env, "TICKET_DIR": str(root / ".tickets")}
+
+            _, created_a = _ticket_json(
+                ["--json", "--no-audit", "create", "A"], cwd=root, env=env
+            )
+            _, created_b = _ticket_json(
+                ["--json", "--no-audit", "create", "B"], cwd=root, env=env
+            )
+            a = str(created_a.get("id") or "")
+            b = str(created_b.get("id") or "")
+
+            code, payload = _ticket_json(
+                ["--json", "--no-audit", "update", a, "--add-dep", b],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertTrue(payload.get("ok"))
+
+            _, shown_a = _ticket_json(
+                ["--json", "--no-audit", "show", a], cwd=root, env=env
+            )
+            self.assertIn(b, list(shown_a["ticket"]["deps"]))
+
+            code, payload2 = _ticket_json(
+                ["--json", "--no-audit", "update", a, "--remove-dep", b],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertTrue(payload2.get("ok"))
+
+            _, shown_a2 = _ticket_json(
+                ["--json", "--no-audit", "show", a], cwd=root, env=env
+            )
+            self.assertNotIn(b, list(shown_a2["ticket"]["deps"]))
+
     def test_status_accepts_common_aliases(self) -> None:
         with _temp_git_repo() as (root, env):
             env = {**env, "TICKET_DIR": str(root / ".tickets")}

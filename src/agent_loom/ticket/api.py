@@ -11,6 +11,7 @@ from agent_loom.ticket.graph import (
     build_index,
     closure_from,
     compute_health,
+    has_cycle,
     predecessors,
 )
 from agent_loom.ticket.models import (
@@ -335,6 +336,9 @@ def update(
     assignee: str = "",
     tags: Optional[str] = None,
     external_ref: Optional[str] = None,
+    parent: Optional[str] = None,
+    deps: Optional[str] = None,
+    links: Optional[str] = None,
     body_text: Optional[str] = None,
     force: bool = False,
 ) -> TicketUpdateResult:
@@ -356,6 +360,86 @@ def update(
         t.fm["tags"] = [x.strip() for x in (tags or "").split(",") if x.strip()]
     if external_ref is not None:
         t.fm["external_ref"] = str(external_ref or "").strip()
+
+    def _is_clear_token(s: str) -> bool:
+        return s.strip().lower() in {"", "none", "null", "(none)", "-"}
+
+    def _parse_ref_list(raw: str) -> list[str]:
+        parts = [p for p in re.split(r"[,\s]+", str(raw or "").strip()) if p.strip()]
+        out: list[str] = []
+        for p in parts:
+            out.append(store.resolve_id(p))
+        return sorted(set(out))
+
+    def _validate_parent_chain(ticket_id0: str, parent_id0: str) -> None:
+        cur = parent_id0
+        seen: set[str] = set()
+        while cur:
+            if cur == ticket_id0:
+                raise TicketArgError(
+                    code="ARG",
+                    error="Parent would create a cycle",
+                    hint=f"Setting parent={parent_id0} would make {ticket_id0} its own ancestor.",
+                )
+            if cur in seen:
+                return
+            seen.add(cur)
+            try:
+                pt = store.load_ticket_by_id(cur)
+            except Exception:
+                return
+            nxt = str(pt.fm.get("parent") or "").strip()
+            if not nxt:
+                return
+            cur = nxt
+
+    if parent is not None:
+        p = str(parent or "").strip()
+        if _is_clear_token(p):
+            t.fm["parent"] = ""
+        else:
+            pid = store.resolve_id(p)
+            if pid == t.id:
+                raise TicketArgError(
+                    code="ARG",
+                    error="A ticket cannot be its own parent",
+                    hint=f"Both references resolved to {t.id}.",
+                )
+            _validate_parent_chain(t.id, pid)
+            t.fm["parent"] = pid
+
+    if deps is not None:
+        d_raw = str(deps or "")
+        dep_ids = [] if _is_clear_token(d_raw) else _parse_ref_list(d_raw)
+        if t.id in dep_ids:
+            raise TicketArgError(
+                code="ARG",
+                error="A ticket cannot depend on itself",
+                hint=f"Both references resolved to {t.id}.",
+            )
+        idx = build_index(store)
+        deps_map = {k: list(v) for k, v in idx.deps.items()}
+        deps_map.setdefault(t.id, [])
+        deps_map[t.id] = list(dep_ids)
+        if has_cycle(deps_map):
+            raise TicketArgError(
+                code="ARG",
+                error=f"Dependency update would create a cycle for {t.id}",
+                hint="Inspect cycles with `loom ticket dep-cycle`.",
+                suggestions=["loom ticket dep-cycle"],
+            )
+        t.fm["deps"] = dep_ids
+
+    if links is not None:
+        l_raw = str(links or "")
+        link_ids = [] if _is_clear_token(l_raw) else _parse_ref_list(l_raw)
+        if t.id in link_ids:
+            raise TicketArgError(
+                code="ARG",
+                error="A ticket cannot link to itself",
+                hint=f"Both references resolved to {t.id}.",
+            )
+        t.fm["links"] = link_ids
 
     with store.lock_for_ticket(t.id, agent):
         if body_text is not None:

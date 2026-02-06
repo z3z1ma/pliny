@@ -790,6 +790,14 @@ def update(
     assignee: str = "",
     tags: Optional[str] = None,
     external_ref: Optional[str] = None,
+    parent: Optional[str] = None,
+    remove_parent: bool = False,
+    deps: Optional[str] = None,
+    add_deps: Optional[List[str]] = None,
+    remove_deps: Optional[List[str]] = None,
+    links: Optional[str] = None,
+    add_links: Optional[List[str]] = None,
+    remove_links: Optional[List[str]] = None,
     body: Optional[str] = None,
     force: bool = False,
 ) -> TicketUpdateResult:
@@ -798,6 +806,74 @@ def update(
 
     t = store.load_ticket(ticket)
     write_guard(store, t, agent, force=bool(force))
+
+    add_deps = list(add_deps or [])
+    remove_deps = list(remove_deps or [])
+    add_links = list(add_links or [])
+    remove_links = list(remove_links or [])
+
+    if remove_parent and parent is not None:
+        raise TicketArgError(
+            code="ARG",
+            error="--remove-parent cannot be combined with --parent",
+            hint="Use either --remove-parent, or set --parent (use 'none' to clear).",
+        )
+
+    if deps is not None and (add_deps or remove_deps):
+        raise TicketArgError(
+            code="ARG",
+            error="--deps cannot be combined with --add-dep/--remove-dep",
+            hint="Use --deps to replace the full list, or --add-dep/--remove-dep for incremental edits.",
+        )
+    if links is not None and (add_links or remove_links):
+        raise TicketArgError(
+            code="ARG",
+            error="--links cannot be combined with --add-link/--remove-link",
+            hint="Use --links to replace the full list, or --add-link/--remove-link for incremental edits.",
+        )
+
+    def _is_clear_token(s: str) -> bool:
+        return s.strip().lower() in {"", "none", "null", "(none)", "-"}
+
+    def _parse_ref_list(raw: str) -> list[str]:
+        parts = [p for p in re.split(r"[,\s]+", str(raw or "").strip()) if p.strip()]
+        out: list[str] = []
+        for p in parts:
+            out.append(store.resolve_id(p))
+        return sorted(set(out))
+
+    def _resolve_many(patterns: List[str]) -> list[str]:
+        out: list[str] = []
+        for p in patterns:
+            s = str(p or "").strip()
+            if not s:
+                continue
+            out.append(store.resolve_id(s))
+        return sorted(set(out))
+
+    def _validate_parent_chain(ticket_id: str, parent_id: str) -> None:
+        # Prevent simple parent cycles: A cannot be its own ancestor.
+        cur = parent_id
+        seen: set[str] = set()
+        while cur:
+            if cur == ticket_id:
+                raise TicketArgError(
+                    code="ARG",
+                    error="Parent would create a cycle",
+                    hint=f"Setting parent={parent_id} would make {ticket_id} its own ancestor.",
+                )
+            if cur in seen:
+                # Existing parent chain is already cyclic; stop before looping.
+                return
+            seen.add(cur)
+            try:
+                pt = store.load_ticket_by_id(cur)
+            except Exception:
+                return
+            nxt = str(pt.fm.get("parent") or "").strip()
+            if not nxt:
+                return
+            cur = nxt
 
     if status:
         t.fm["status"] = require_status(status)
@@ -812,19 +888,178 @@ def update(
     if external_ref is not None:
         t.fm["external_ref"] = str(external_ref or "").strip()
 
+    if remove_parent:
+        t.fm["parent"] = ""
+
+    if parent is not None:
+        p = str(parent or "").strip()
+        if _is_clear_token(p):
+            t.fm["parent"] = ""
+        else:
+            pid = store.resolve_id(p)
+            if pid == t.id:
+                raise TicketArgError(
+                    code="ARG",
+                    error="A ticket cannot be its own parent",
+                    hint=f"Both references resolved to {t.id}.",
+                )
+            _validate_parent_chain(t.id, pid)
+            t.fm["parent"] = pid
+
+    if deps is not None:
+        d_raw = str(deps or "")
+        dep_ids = [] if _is_clear_token(d_raw) else _parse_ref_list(d_raw)
+        if t.id in dep_ids:
+            raise TicketArgError(
+                code="ARG",
+                error="A ticket cannot depend on itself",
+                hint=f"Both references resolved to {t.id}.",
+            )
+        idx = build_index(store)
+        deps_map = {k: list(v) for k, v in idx.deps.items()}
+        deps_map.setdefault(t.id, [])
+        deps_map[t.id] = list(dep_ids)
+        if has_cycle(deps_map):
+            raise TicketArgError(
+                code="ARG",
+                error=f"Dependency update would create a cycle for {t.id}",
+                hint="Inspect cycles with `loom ticket dep-cycle`.",
+                suggestions=["loom ticket dep-cycle"],
+            )
+        t.fm["deps"] = dep_ids
+
+    if deps is None and (add_deps or remove_deps):
+        cur = [str(x) for x in (t.fm.get("deps") or [])]
+        cur_set = set([d for d in cur if d])
+        add_ids = _resolve_many(add_deps)
+        rm_ids = _resolve_many(remove_deps)
+
+        if t.id in add_ids:
+            raise TicketArgError(
+                code="ARG",
+                error="A ticket cannot depend on itself",
+                hint=f"Both references resolved to {t.id}.",
+            )
+
+        for rid in rm_ids:
+            if rid not in cur_set:
+                from agent_loom.ticket.errors import TicketNotFoundError
+
+                raise TicketNotFoundError(
+                    code="NOT_FOUND",
+                    error="Dependency not found",
+                    hint=f"{t.id} does not depend on {rid}.",
+                    details={"ticket": t.id, "dependency": rid},
+                    suggestions=[
+                        "loom ticket show <id>",
+                        "loom ticket --json show <id>",
+                    ],
+                )
+
+        next_set = (cur_set | set(add_ids)) - set(rm_ids)
+        dep_ids = sorted(next_set)
+        idx = build_index(store)
+        deps_map = {k: list(v) for k, v in idx.deps.items()}
+        deps_map.setdefault(t.id, [])
+        deps_map[t.id] = list(dep_ids)
+        if has_cycle(deps_map):
+            raise TicketArgError(
+                code="ARG",
+                error=f"Dependency update would create a cycle for {t.id}",
+                hint="Inspect cycles with `loom ticket dep-cycle`.",
+                suggestions=["loom ticket dep-cycle"],
+            )
+        t.fm["deps"] = dep_ids
+
+    tickets_to_save: Dict[str, Ticket] = {t.id: t}
+
+    if links is not None:
+        l_raw = str(links or "")
+        link_ids = [] if _is_clear_token(l_raw) else _parse_ref_list(l_raw)
+        if t.id in link_ids:
+            raise TicketArgError(
+                code="ARG",
+                error="A ticket cannot link to itself",
+                hint=f"Both references resolved to {t.id}.",
+            )
+        t.fm["links"] = link_ids
+
+    if links is None and (add_links or remove_links):
+        add_ids = _resolve_many(add_links)
+        rm_ids = _resolve_many(remove_links)
+
+        if t.id in add_ids or t.id in rm_ids:
+            raise TicketArgError(
+                code="ARG",
+                error="A ticket cannot link to itself",
+                hint=f"Both references resolved to {t.id}.",
+            )
+
+        # Load target tickets and enforce write guards.
+        targets: Dict[str, Ticket] = {}
+        for tid in sorted(set(add_ids + rm_ids)):
+            tt = store.load_ticket_by_id(tid)
+            write_guard(store, tt, agent, force=bool(force))
+            targets[tid] = tt
+            tickets_to_save[tid] = tt
+
+        # Apply symmetric link updates.
+        t_links = set([str(x) for x in (t.fm.get("links") or []) if str(x)])
+
+        changed_any = False
+
+        for tid in add_ids:
+            other = targets[tid]
+            o_links = set([str(x) for x in (other.fm.get("links") or []) if str(x)])
+
+            if tid not in t_links:
+                t_links.add(tid)
+                changed_any = True
+            if t.id not in o_links:
+                o_links.add(t.id)
+                other.fm["links"] = sorted(o_links)
+                changed_any = True
+
+        for tid in rm_ids:
+            other = targets[tid]
+            o_links = set([str(x) for x in (other.fm.get("links") or []) if str(x)])
+
+            before_a = tid in t_links
+            before_b = t.id in o_links
+            t_links.discard(tid)
+            o_links.discard(t.id)
+            other.fm["links"] = sorted(o_links)
+            if before_a or before_b:
+                changed_any = True
+
+        if rm_ids and not changed_any:
+            from agent_loom.ticket.errors import TicketNotFoundError
+
+            # If we got here, none of the removals matched either direction.
+            raise TicketNotFoundError(
+                code="NOT_FOUND",
+                error="Link not found",
+                hint=f"No link existed between {t.id} and the requested target(s).",
+                suggestions=["loom ticket show <id>", "loom ticket --json show <id>"],
+            )
+
+        t.fm["links"] = sorted(t_links)
+
     new_body = body
 
-    with store.lock_for_ticket(t.id, agent):
-        if new_body is not None:
-            t.body = new_body if new_body.endswith("\n") else (new_body + "\n")
-        if title:
-            if re.search(r"(?m)^#\s+.*$", t.body):
-                t.body = re.sub(r"(?m)^#\s+.*$", f"# {title}", t.body, count=1)
-            else:
-                t.body = f"# {title}\n\n" + t.body.lstrip("\n")
-            t.body = t.body.rstrip() + "\n"
+    if new_body is not None:
+        t.body = new_body if new_body.endswith("\n") else (new_body + "\n")
+    if title:
+        if re.search(r"(?m)^#\s+.*$", t.body):
+            t.body = re.sub(r"(?m)^#\s+.*$", f"# {title}", t.body, count=1)
+        else:
+            t.body = f"# {title}\n\n" + t.body.lstrip("\n")
+        t.body = t.body.rstrip() + "\n"
 
-        store.save_ticket(t)
+    for tid in sorted(tickets_to_save.keys()):
+        tt = tickets_to_save[tid]
+        with store.lock_for_ticket(tt.id, agent):
+            store.save_ticket(tt)
 
     return TicketUpdateResult(id=t.id)
 

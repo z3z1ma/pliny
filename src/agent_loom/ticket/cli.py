@@ -487,6 +487,54 @@ def build_parser() -> argparse.ArgumentParser:
     sp.add_argument("--assignee", default="")
     sp.add_argument("--tags", default=None)
     sp.add_argument("--external-ref", dest="external_ref", default=None)
+    sp.add_argument(
+        "--parent",
+        default=None,
+        help="Set parent ticket (id/ref). Use 'none' to clear.",
+    )
+    sp.add_argument(
+        "--remove-parent",
+        action="store_true",
+        help="Clear parent ticket (equivalent to --parent none).",
+    )
+    sp.add_argument(
+        "--deps",
+        default=None,
+        help="Replace deps list (comma/space separated ids/refs). Use 'none' to clear.",
+    )
+    sp.add_argument(
+        "--add-dep",
+        action="append",
+        default=[],
+        dest="add_deps",
+        help="Add a dependency (repeatable).",
+    )
+    sp.add_argument(
+        "--remove-dep",
+        action="append",
+        default=[],
+        dest="remove_deps",
+        help="Remove a dependency (repeatable).",
+    )
+    sp.add_argument(
+        "--links",
+        default=None,
+        help="Replace links list (comma/space separated ids/refs). Use 'none' to clear.",
+    )
+    sp.add_argument(
+        "--add-link",
+        action="append",
+        default=[],
+        dest="add_links",
+        help="Add a link to another ticket (repeatable).",
+    )
+    sp.add_argument(
+        "--remove-link",
+        action="append",
+        default=[],
+        dest="remove_links",
+        help="Remove a link to another ticket (repeatable).",
+    )
     sp.add_argument("--body", default=None)
     sp.add_argument(
         "--add-note",
@@ -881,6 +929,14 @@ def _handle_update(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
                 bool(args.assignee),
                 args.tags is not None,
                 args.external_ref is not None,
+                args.parent is not None,
+                bool(args.remove_parent),
+                args.deps is not None,
+                bool(args.add_deps),
+                bool(args.remove_deps),
+                args.links is not None,
+                bool(args.add_links),
+                bool(args.remove_links),
                 args.body is not None,
             ]
         )
@@ -917,6 +973,14 @@ def _handle_update(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
         assignee=args.assignee or "",
         tags=args.tags,
         external_ref=args.external_ref,
+        parent=args.parent,
+        remove_parent=bool(args.remove_parent),
+        deps=args.deps,
+        add_deps=list(getattr(args, "add_deps", []) or []),
+        remove_deps=list(getattr(args, "remove_deps", []) or []),
+        links=args.links,
+        add_links=list(getattr(args, "add_links", []) or []),
+        remove_links=list(getattr(args, "remove_links", []) or []),
         body=body,
         force=bool(args.force),
     )

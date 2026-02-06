@@ -272,6 +272,25 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                     if "external_ref" in body
                     else None
                 ),
+                parent=(str(body.get("parent") or "") if "parent" in body else None),
+                deps=(
+                    (
+                        ",".join([str(x) for x in (body.get("deps") or [])])
+                        if isinstance(body.get("deps"), list)
+                        else str(body.get("deps") or "")
+                    )
+                    if "deps" in body
+                    else None
+                ),
+                links=(
+                    (
+                        ",".join([str(x) for x in (body.get("links") or [])])
+                        if isinstance(body.get("links"), list)
+                        else str(body.get("links") or "")
+                    )
+                    if "links" in body
+                    else None
+                ),
                 body_text=(str(body.get("body")) if "body" in body else None),
                 force=bool(body.get("force")),
             )
