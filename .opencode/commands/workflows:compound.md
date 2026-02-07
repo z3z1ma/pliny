@@ -27,7 +27,7 @@ Process:
    - `instinct_candidates`: list of `{id,title,trigger,action,confidence,tags}`
    - `skill_candidates`: list of `{name,description,body,tags,source_instinct_ids}`
 4) Apply deterministically (this writes the Episode and compiles outputs):
-   - Run via bash: `loom compound run --proposals '<json>'`
+   - Run via bash: `loom compound learn --proposals '<json>'`
 5) Optional compaction memo:
    - Run via bash: `loom memory add --title ... --body ... --tag compound --scope repo:.`
 

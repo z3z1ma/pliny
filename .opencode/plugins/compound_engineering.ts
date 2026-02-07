@@ -20,6 +20,7 @@ import * as path from "node:path";
 const MEMORY_DIR = path.join(".opencode", "memory");
 const OBSERVATIONS_FILE = path.join(MEMORY_DIR, "observations.jsonl");
 const AUTOLEARN_PROMPT_FILE = path.join(".opencode", "compound", "prompts", "autolearn.md");
+const AUTOLEARN_STATUS_FILE = path.join(".opencode", "compound", "autolearn_status.json");
 
 const DEFAULT_LOOM_BIN = process.env.COMPOUND_LOOM_BIN ?? "loom";
 
@@ -370,8 +371,47 @@ ${recentObs
       ? parts.map((p: any) => (p?.type === "text" ? String(p.text ?? "") : "")).join("\n").trim()
       : String(msg?.content ?? "").trim();
 
-    if (text === "APPLIED") {
+    let proposals: any = null;
+    try {
+      proposals = text ? JSON.parse(text) : null;
+    } catch {
+      proposals = null;
+    }
+
+    const wroteStatus = async (payload: any) => {
+      try {
+        await ensureDir(path.join(sessionRoot, ".opencode", "compound"));
+        await fs.writeFile(path.join(sessionRoot, AUTOLEARN_STATUS_FILE), JSON.stringify(payload, null, 2) + "\n", "utf8");
+      } catch {}
+    };
+
+    if (!proposals || typeof proposals !== "object" || Array.isArray(proposals)) {
+      await wroteStatus({ ok: false, ts: nowIso(), error: "invalid_json", raw_len: text.length });
+      return;
+    }
+
+    const isEmpty = Object.keys(proposals).length === 0;
+    if (isEmpty) {
+      await wroteStatus({ ok: true, ts: nowIso(), applied: false, reason: "noop" });
+      return;
+    }
+
+    const loom = await resolveLoom(sessionRoot);
+    const learnRes = await runProcess(
+      {
+        cmd: loom.cmd,
+        args: [...loom.args, "compound", "learn", "--auto", "--proposals", JSON.stringify(proposals), "--json"],
+      },
+      sessionRoot,
+      120000
+    );
+
+    if (learnRes.code === 0) {
       await tuiToast(client, "Compound autolearn applied", "success");
+      await wroteStatus({ ok: true, ts: nowIso(), applied: true, exit_code: learnRes.code, stdout: truncate(String(learnRes.stdout || ""), 4000) });
+    } else {
+      await tuiToast(client, "Compound autolearn failed", "error");
+      await wroteStatus({ ok: false, ts: nowIso(), applied: false, exit_code: learnRes.code, stdout: truncate(String(learnRes.stdout || ""), 4000), stderr: truncate(String(learnRes.stderr || ""), 4000) });
     }
   } catch {
     // swallow
