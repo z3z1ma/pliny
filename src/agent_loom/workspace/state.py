@@ -9,6 +9,7 @@ from agent_loom.core.io import atomic_write_json, read_json
 
 from agent_loom.workspace.constants import (
     DEFAULT_DEFAULT_BRANCH,
+    INTERNAL_DIR,
     REPO_NAME_RE,
     REPOS_DIR,
     SERVICES_DIR,
@@ -43,7 +44,26 @@ def validate_repo_name(name: str) -> None:
 
 
 def worktrees_base(root: Path, ws: dict, group: str) -> Path:
-    return root / ws_worktrees_dir(ws) / fs_escape(group)
+    default = root / ws_worktrees_dir(ws) / fs_escape(group)
+
+    # Optional per-group override (persisted in group metadata).
+    meta = root / INTERNAL_DIR / "meta" / "groups" / f"{fs_escape(group)}.json"
+    if meta.exists():
+        try:
+            data = read_json(meta)
+        except Exception:
+            data = {}
+        if isinstance(data, dict):
+            raw = str(data.get("worktrees_base_path") or "").strip()
+            if raw:
+                p = Path(raw).expanduser()
+                if not p.is_absolute():
+                    p = (root / p).resolve()
+                else:
+                    p = p.resolve()
+                return p
+
+    return default
 
 
 def snapshot_path(root: Path, ws: dict, name: str) -> Path:

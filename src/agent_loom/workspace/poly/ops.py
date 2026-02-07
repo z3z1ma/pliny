@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from agent_loom.core.concurrent import parallel_map
-from agent_loom.core.fs import ensure_dir, fs_unescape
+from agent_loom.core.fs import ensure_dir, fs_escape, fs_unescape
 from agent_loom.core.git import is_git_repo
 from agent_loom.core.io import atomic_write_json, atomic_write_text, read_json
 from agent_loom.core.time import now_iso
@@ -92,6 +92,32 @@ def _touch_group_meta(*, ws_root: Path, group: str) -> None:
         poly_group_touch(ws_root=ws_root, group=group)
     except Exception:
         return
+
+
+def _iter_group_bases(*, ws_root: Path, ws: dict) -> List[tuple[str, Path]]:
+    groups: Dict[str, Path] = {}
+
+    wt_dir = ws_root / ws_worktrees_dir(ws)
+    if wt_dir.exists():
+        for group_dir in sorted(p for p in wt_dir.iterdir() if p.is_dir()):
+            group = fs_unescape(group_dir.name)
+            groups[group] = group_dir.resolve()
+
+    meta_dir = (ws_root / INTERNAL_DIR / "meta" / "groups").resolve()
+    if meta_dir.exists():
+        for p in sorted(meta_dir.glob("*.json")):
+            try:
+                meta = read_json(p)
+            except Exception:
+                continue
+            if not isinstance(meta, dict):
+                continue
+            group = str(meta.get("group") or "").strip() or fs_unescape(p.stem)
+            if not group:
+                continue
+            groups[group] = worktrees_base(ws_root, ws, group).resolve()
+
+    return sorted(groups.items(), key=lambda x: x[0])
 
 
 def poly_init(*, root: Optional[Path] = None) -> PolyInitResult:
@@ -369,32 +395,27 @@ def context(
     idx_path = service_index_path(ws_root, ws)
     services_index = read_json(idx_path) if idx_path.exists() else None
 
-    wt_dir = ws_root / ws_worktrees_dir(ws)
     worktrees: List[dict] = []
-    if wt_dir.exists():
-        for group_dir in sorted(wt_dir.iterdir()):
-            if not group_dir.is_dir():
-                continue
-            group = fs_unescape(group_dir.name)
-            for repo_dir in sorted(group_dir.iterdir()):
-                if not repo_dir.is_dir():
-                    continue
-                repo = repo_dir.name
-                entry: dict = {
-                    "group": group,
-                    "repo": repo,
-                    "path": str(repo_dir.resolve()),
-                    "is_repo": is_git_repo(repo_dir),
-                }
-                if entry["is_repo"]:
-                    entry.update(
-                        {
-                            "branch": git_current_branch(repo_dir),
-                            "commit": git_head_sha(repo_dir),
-                            "dirty": git_is_dirty(repo_dir),
-                        }
-                    )
-                worktrees.append(entry)
+    for group, group_dir in _iter_group_bases(ws_root=ws_root, ws=ws):
+        if not group_dir.exists() or not group_dir.is_dir():
+            continue
+        for repo_dir in sorted(p for p in group_dir.iterdir() if p.is_dir()):
+            repo = repo_dir.name
+            entry: dict = {
+                "group": group,
+                "repo": repo,
+                "path": str(repo_dir.resolve()),
+                "is_repo": is_git_repo(repo_dir),
+            }
+            if entry["is_repo"]:
+                entry.update(
+                    {
+                        "branch": git_current_branch(repo_dir),
+                        "commit": git_head_sha(repo_dir),
+                        "dirty": git_is_dirty(repo_dir),
+                    }
+                )
+            worktrees.append(entry)
 
     return ContextResult(
         workspace={
@@ -596,6 +617,7 @@ def worktree_add(
     *,
     group: str,
     base_ref: Optional[str] = None,
+    path: Optional[str] = None,
     claim: bool = False,
     clone: bool = False,
     allow_dirty: bool = False,
@@ -624,6 +646,54 @@ def worktree_add(
         require_intent_for_multi=True,
         allow_all=allow_all,
     )
+
+    raw_path = str(path or "").strip()
+    if raw_path:
+        # The harness needs to be able to control where group worktrees live.
+        # This is stored in group metadata so subsequent group operations remain coherent.
+        desired = Path(raw_path).expanduser()
+        desired = (desired if desired.is_absolute() else (ws_root / desired)).resolve()
+
+        default_base = (ws_root / ws_worktrees_dir(ws) / fs_escape(group)).resolve()
+        if default_base.exists() and any(p.is_dir() for p in default_base.iterdir()):
+            raise WorkspaceError(
+                "Refusing to change group worktree base when default group dir already exists. "
+                "Pick a new group name or remove existing worktrees first."
+            )
+
+        try:
+            from agent_loom.workspace.worktree_meta import poly_group_meta_path
+
+            mp = poly_group_meta_path(ws_root, group)
+            if mp.exists():
+                try:
+                    meta = read_json(mp)
+                except Exception:
+                    meta = {}
+                if isinstance(meta, dict):
+                    existing_raw = str(meta.get("worktrees_base_path") or "").strip()
+                    if existing_raw:
+                        existing_p = Path(existing_raw).expanduser()
+                        existing_p = (
+                            existing_p
+                            if existing_p.is_absolute()
+                            else (ws_root / existing_p)
+                        ).resolve()
+                        if existing_p != desired:
+                            raise WorkspaceError(
+                                "Group already has a configured worktrees base path; refusing to change it. "
+                                f"group={group} existing={existing_p} requested={desired}"
+                            )
+        except WorkspaceError:
+            raise
+        except Exception:
+            pass
+
+        from agent_loom.workspace.worktree_meta import poly_group_set_worktrees_base
+
+        poly_group_set_worktrees_base(
+            ws_root=ws_root, group=group, base_path=str(desired)
+        )
 
     created: List[dict] = []
     for name in names:
@@ -756,19 +826,12 @@ def worktree_rm(
 def worktree_ls(*, root: Optional[Path] = None) -> WorktreeListResult:
     ws_root = root.resolve() if root is not None else workspace_root()
     ws = load_workspace(ws_root)
-    wt_dir = ws_root / ws_worktrees_dir(ws)
-
-    if not wt_dir.exists():
-        return WorktreeListResult(worktrees=[])
 
     rows: List[Tuple[str, str, str, str, str]] = []
-    for group_dir in sorted(wt_dir.iterdir()):
-        if not group_dir.is_dir():
+    for group, group_dir in _iter_group_bases(ws_root=ws_root, ws=ws):
+        if not group_dir.exists() or not group_dir.is_dir():
             continue
-        group = fs_unescape(group_dir.name)
-        for repo_dir in sorted(group_dir.iterdir()):
-            if not repo_dir.is_dir():
-                continue
+        for repo_dir in sorted(p for p in group_dir.iterdir() if p.is_dir()):
             repo = repo_dir.name
             if not is_git_repo(repo_dir):
                 rows.append((group, repo, "NOT_A_REPO", "-", "-"))

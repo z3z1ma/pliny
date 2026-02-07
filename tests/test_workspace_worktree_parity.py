@@ -74,3 +74,36 @@ class TestWorkspaceWorktreeParity(unittest.TestCase):
             )
             self.assertEqual(rc, 0)
             self.assertTrue(out.get("ok"))
+
+    def test_harness_worktree_add_accepts_path_override(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            ws_root = Path(td) / "ws"
+            ws_root.mkdir(parents=True, exist_ok=True)
+            _run_json(["harness", "init"], ws_root)
+
+            remotes = ws_root / "_remotes"
+            r1 = remotes / "one"
+            _git_init_repo(r1)
+            _run_json(["harness", "add", "one", str(r1), "--clone"], ws_root)
+
+            base = ws_root / "_custom_worktrees" / "g1"
+            rc1, out1 = _run_json(
+                ["harness", "worktree", "add", "g1", "--all", "--path", str(base)],
+                ws_root,
+            )
+            self.assertEqual(rc1, 0)
+            self.assertTrue(out1.get("ok"))
+
+            wt = base / "one"
+            self.assertTrue(wt.exists())
+            self.assertTrue((wt / ".git").exists())
+
+            # Group status should resolve the overridden base path.
+            rc2, out2 = _run_json(
+                ["harness", "worktree", "status", "g1", "--all"], ws_root
+            )
+            self.assertEqual(rc2, 0)
+            data2 = out2.get("data") or {}
+            rows = data2.get("worktrees") or []
+            self.assertTrue(bool(rows))
+            self.assertEqual(str((rows[0] or {}).get("path") or ""), str(wt.resolve()))

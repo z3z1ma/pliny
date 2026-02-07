@@ -1029,6 +1029,7 @@ def cmd_worktree_add(args: argparse.Namespace) -> None:
     res = worktree_add(
         group=args.group,
         base_ref=args.base_ref,
+        path=str(getattr(args, "path", "") or "").strip() or None,
         claim=bool(getattr(args, "claim", False)),
         clone=bool(args.clone),
         allow_dirty=bool(args.allow_dirty),
@@ -1715,6 +1716,11 @@ def _add_poly_parser(
     sp2 = sub2.add_parser("add", help="Add worktrees under worktrees/<group>/<repo>")
     sp2.add_argument("group")
     sp2.add_argument(
+        "--path",
+        default="",
+        help="Override group worktrees base dir (creates worktrees under <path>/<repo>)",
+    )
+    sp2.add_argument(
         "--all",
         action="store_true",
         help="Confirm operating on multiple repos when no selection is provided",
@@ -1743,6 +1749,11 @@ def _add_poly_parser(
         help="Ensure worktrees exist under worktrees/<group>/<repo> (resumable)",
     )
     sp2.add_argument("group")
+    sp2.add_argument(
+        "--path",
+        default="",
+        help="Override group worktrees base dir (creates worktrees under <path>/<repo>)",
+    )
     sp2.add_argument(
         "--all",
         action="store_true",

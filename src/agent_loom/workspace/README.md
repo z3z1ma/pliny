@@ -301,6 +301,11 @@ Create or remove a worktree group under `worktrees/<group>/<repo>`.
 ```
 loom workspace poly worktree add sprint-42 --all --clone
 loom workspace poly worktree add sprint-42 --repos api billing --base-ref main
+
+# Override where the group's worktrees are created (path/<repo>).
+# This is useful for integration with Loom Team and other orchestrators.
+loom workspace harness worktree add sprint-42 --all --path ../team-runs/sprint-42
+
 loom workspace poly worktree rm sprint-42 --repos api --yes
 loom workspace poly worktree rm sprint-42 --all --yes --force
 loom workspace poly worktree ls
