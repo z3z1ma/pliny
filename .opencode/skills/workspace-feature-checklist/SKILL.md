@@ -5,8 +5,8 @@ license: MIT
 compatibility: opencode,claude
 metadata:
   created_at: "2026-02-01T07:19:01.983Z"
-  updated_at: "2026-02-01T07:19:01.983Z"
-  version: "1"
+  updated_at: "2026-02-07T15:05:48.054314Z"
+  version: "3"
 ---
 <!-- BEGIN:compound:skill-managed -->
 ## When to use
@@ -27,9 +27,11 @@ Ship workspace features with deterministic behavior, clear failure modes, and fa
 2. Guardrails & errors
    - Ensure guard failures explain what to do next.
    - Avoid partial state updates on failure; keep operations atomic where possible.
+   - If accepting TTL/duration inputs, validate strictly and make errors list supported units (`s|m|h|d|w`).
 
 3. State & models
    - If you changed any on-disk representation or serialization, add a round-trip test.
+   - If you moved/renamed persisted paths (dirs/files), keep reads backward-compatible or implement an idempotent best-effort migration (move old files); add a focused upgrade test.
    - Keep schema evolution simple; avoid implicit migrations unless required.
 
 4. CLI contract (if CLI changed)
@@ -44,6 +46,7 @@ Ship workspace features with deterministic behavior, clear failure modes, and fa
 
 - Workspace features are agent-facing infrastructure: treat the CLI + state format as public API.
 - Prefer stable, explicit behavior over clever inference.
+- Prefer shared primitives from `src/agent_loom/core/` (fs escape/unescape, atomic IO, exec wrappers, concurrency helpers) over duplicating helpers under workspace.
 <!-- END:compound:skill-managed -->
 
 ## Manual notes

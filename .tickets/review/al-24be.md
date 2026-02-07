@@ -1,6 +1,6 @@
 ---
 "id": "al-24be"
-"status": "open"
+"status": "review"
 "deps":
 - "al-0e62"
 "links": []
@@ -60,3 +60,17 @@ Non-goals:
 - TTL cleanup semantics are consistent across repo + poly and share one implementation.
 - Poly mode has an explicit TTL-driven cleanup pathway (suggest/apply or gc flag).
 - Tests cover: (a) TTL expiry deletes unclaimed groups, (b) claimed groups are skipped, (c) metadata is removed.
+
+## Notes
+
+**2026-02-07T07:11:52Z**
+
+Starting: unify TTL cleanup semantics across repo + poly (TTL vs last_used_at), respect leases for poly group deletion, ensure metadata cleanup on removal, and add explicit poly TTL cleanup commands (suggest/apply) with deterministic output + tests.
+
+**2026-02-07T07:19:29Z**
+
+Done: unified TTL expiration semantics via workspace.lifecycle.meta_is_expired across repo cleanup + poly sandbox gc + new poly TTL cleanup. Added poly TTL cleanup commands:  (apply requires --yes; skips claimed groups by default). Ensured metadata + stale lease cleanup when group becomes empty (poly worktree rm + poly worktree gc) and when repo worktrees are removed (repo worktree rm/rm-path + repo cleanup apply). Added regression test: tests/test_workspace_poly_cleanup_ttl.py (expires g1/g2, claims g1, asserts cleanup removes only unclaimed g2 + deletes meta). Verified: uv run basedpyright; uv run ruff check .; uv run pytest tests/test_workspace_*.py.
+
+**2026-02-07T07:19:52Z**
+
+Detail: added poly TTL cleanup commands: loom workspace poly cleanup suggest; loom workspace poly cleanup apply --id <group> --yes [--force].

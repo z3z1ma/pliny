@@ -5,16 +5,16 @@ High-level direction and priorities.
 This is an evolving, empirical compass. Keep it short and stable.
 
 <!-- BEGIN:compound:roadmap-backlog -->
-- al-0e62 [open] (p1) Workspace: lifecycle/annotations schema v2 + clean metadata storage
-- al-1f81 [open] (p1) Workspace: refactor structure + clarify value proposition
-- al-33c8 [open] (p1) Workspace: unify git plumbing layer (dedupe git_ops/diff_ops/core.git)
-- al-97e8 [open] (p1) Core: extract shared exec/fs/time helpers used by workspace
-- al-e024 [open] (p1) Workspace: reorganize package layout + split CLI
-- al-24be [open] (p2) Workspace: unify cleanup/GC story (TTL, leases, metadata) across repo + poly
 - al-3063 [open] (p2) Workspace: change/impact analysis across repos (snapshots + service deps)
 - al-7d77 [open] (p2) Workspace: dial in polyrepo harness value prop + naming (poly vs harness)
 - al-1450 [open] (p3) Workspace: optional canonical locations for harness roots/clones/worktrees
+- al-1f81 [in_progress] (p1) Workspace: refactor structure + clarify value proposition
 - al-768c [in_progress] (p1) Sprint prep: Documentation Foundation
+- al-0e62 [review] (p1) Workspace: lifecycle/annotations schema v2 + clean metadata storage
+- al-33c8 [review] (p1) Workspace: unify git plumbing layer (dedupe git_ops/diff_ops/core.git)
+- al-97e8 [review] (p1) Core: extract shared exec/fs/time helpers used by workspace
+- al-e024 [review] (p1) Workspace: reorganize package layout + split CLI
+- al-24be [review] (p2) Workspace: unify cleanup/GC story (TTL, leases, metadata) across repo + poly
 <!-- END:compound:roadmap-backlog -->
 
 <!-- BEGIN:compound:roadmap-ai-notes -->
@@ -31,6 +31,7 @@ It tracks changes to skills, instincts, and core context files.
 It is intentionally bounded. Do not write entries like "no changes".
 
 <!-- BEGIN:compound:changelog-entries -->
+- 2026-02-07T15:05:48.336700Z Extend workspace feature checklist with stricter TTL/duration validation, idempotent persisted-path migration guidance, and preference for shared core primitives.
 - 2026-02-03T07:18:29.138Z Reinforce that team CLI/output changes require deterministic UX + targeted contract tests.
 - 2026-02-03T07:06:13.382Z Reinforce JSON-only autolearn output and strict plan-mode read-only discipline.
 - 2026-02-03T06:52:48.295Z Add a prime-specific testing instinct; reinforce workspace CLI UX contract discipline after major workspace CLI refactor.
