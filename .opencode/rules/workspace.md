@@ -7,10 +7,27 @@ the workspace module.
 ## Mental model
 
 - Two modes, intentionally orthogonal:
-  - `loom workspace poly` manages a polyrepo workspace at a control-plane root.
+  - `loom workspace harness` manages a polyrepo workspace at a control-plane root.
+    - Alias: `loom workspace poly`
   - `loom workspace` (repo mode) manages worktrees inside a single git repo.
 - The modes never dispatch into each other automatically.
 - JSON is always available via `--json` (anywhere on the command line).
+
+## Why use workspace harness (beyond git)
+
+- Annotations + TTL: purpose/ticket/owner/ttl on worktrees and groups.
+- Safe cleanup/GC: TTL-based suggest/apply flows that avoid surprise deletions.
+- Deterministic multi-repo intent: explicit selection (`--repos`, `--set`, `--tag`, `--all`).
+- Cross-repo exec + context: run commands across repos/groups with stable summaries.
+- Snapshots: capture/diff/restore branch/sha/dirty state for recovery and audit.
+- Services/deps context: human-editable service metadata with a derived index.
+
+## User stories
+
+- Sprint work: create a group worktree for a sprint branch across a repo set.
+- Incident response: create a short-lived sandbox group with an expiry TTL.
+- Agent fanout: run tests/lints across a tag/set with bounded parallelism.
+- Cleanup day: suggest/apply removal of expired groups/worktrees, respecting leases.
 
 ## Storage layout
 
@@ -21,6 +38,9 @@ workspace.json
 .loom/
 repos/
 worktrees/
+meta/
+  groups/
+leases/
 states/
 services/
   index.json
@@ -31,16 +51,18 @@ Repo mode (inside a git repo):
 ```
 .loom-repo/
   worktrees/
+  meta/
+    worktrees/
 .git/info/exclude  # ignore .loom-repo/
 ```
 
 ## Guardrails and dispatch rules
 
-- `workspace poly` requires BOTH `workspace.json` and `.loom/` at the root.
-- `workspace poly` refuses to run from within managed repos or worktrees.
+- `workspace harness` (and `workspace poly`) requires BOTH `workspace.json` and `.loom/` at the root.
+- `workspace harness` (and `workspace poly`) refuses to run from within managed repos or worktrees.
 - `workspace` (repo mode) must run inside a git repository.
 - No implicit dispatch: running `loom workspace status` in a poly root is not
-  allowed and will error. Use `loom workspace poly status` instead.
+  allowed and will error. Use `loom workspace harness status` (or `poly`) instead.
 
 ## Global JSON contract
 
@@ -195,12 +217,53 @@ loom workspace snapshot restore baseline --yes --force-clean
 
 ## Poly workspace commands
 
+All `loom workspace poly ...` commands are available under `loom workspace harness ...`.
+
+## Leases (harness coordination)
+
+Leases are a harness-only coordination primitive stored under `.loom/leases/`.
+
+- They are NOT related to ticket claims and are not automatically tied to tickets.
+- They do NOT prevent parallel work on multiple branches/worktrees.
+- They are an *optional* exclusive coordination lock for higher-level harness operations.
+- Leases are time-bound by default (TTL); renew them if a long-running process needs the hold.
+
+Primary use cases:
+- Protect a group from automated cleanup/GC while it is actively in use.
+- Avoid two orchestrators/agents mutating the same group concurrently.
+
+Examples:
+
+```
+# Mark a group in-use so cleanup/GC can skip it (default TTL: 8h).
+loom workspace harness lease acquire group:sprint-42
+
+# Explicit TTL (or disable expiry).
+loom workspace harness lease acquire group:sprint-42 --ttl 2h
+loom workspace harness lease acquire group:sprint-42 --ttl none
+
+# Renew (bumps updated_at; optionally change TTL).
+loom workspace harness lease renew group:sprint-42
+loom workspace harness lease renew group:sprint-42 --ttl 4h
+
+# Inspect.
+loom workspace harness lease show group:sprint-42
+
+# Release when done.
+loom workspace harness lease release group:sprint-42
+
+# List current leases.
+loom workspace harness lease ls
+```
+
 ### poly init
 
 Initialize a poly workspace control plane.
 
 ```
-loom workspace poly init
+loom workspace harness init
+loom workspace harness init --root /path/to/my-harness
+loom workspace poly init  # alias
 ```
 
 ### poly add / rm / list
@@ -275,6 +338,14 @@ Create or remove a worktree group under `worktrees/<group>/<repo>`.
 ```
 loom workspace poly worktree add sprint-42 --all --clone
 loom workspace poly worktree add sprint-42 --repos api billing --base-ref main
+
+# Override where the group's worktrees are created (path/<repo>).
+# This is useful for integration with Loom Team and other orchestrators.
+loom workspace harness worktree add sprint-42 --all --path ../team-runs/sprint-42
+
+loom workspace harness lease acquire group:sprint-42
+loom workspace harness worktree rm sprint-42 --all --yes --require-lease group:sprint-42
+
 loom workspace poly worktree rm sprint-42 --repos api --yes
 loom workspace poly worktree rm sprint-42 --all --yes --force
 loom workspace poly worktree ls
@@ -300,7 +371,7 @@ loom workspace poly worktree rebase sprint-42 --base-ref main --all
 loom workspace poly worktree push sprint-42 --all --set-upstream
 loom workspace poly worktree push sprint-42 --all --force --yes
 loom workspace poly worktree gc --older-than 14 --yes
-loom workspace poly worktree gc --older-than 30 --unclaimed-only --yes
+loom workspace poly worktree gc --older-than 30 --skip-leased --yes
 ```
 
 ### poly snapshot capture / diff / restore
@@ -317,7 +388,8 @@ loom workspace poly snapshot restore sprint-42 --yes --force-clean
 
 ### poly lease acquire / release / ls
 
-Leases are agent-safe locks stored under `.loom/leases`.
+Leases are optional coordination locks stored under `.loom/leases`.
+They are primarily used to mark a group in-use so cleanup/GC can skip it.
 
 ```
 loom workspace poly lease acquire group:sprint-42
@@ -350,6 +422,19 @@ loom workspace poly deps closure api
 loom workspace poly deps impacted api
 ```
 
+### impact
+
+Impact analysis answers: "Given these changed repos, what services are impacted?".
+It uses `services/index.json` (forward deps + reverse deps) and emits a deterministic report.
+
+```
+loom workspace harness impact repos api
+loom workspace harness impact repos api billing
+
+loom workspace harness snapshot capture pre-rebase --group sprint-42 --all
+loom workspace harness impact snapshot pre-rebase
+```
+
 ### poly deepen
 
 Deepen history for shallow clones.
@@ -376,7 +461,7 @@ loom workspace poly exec --set backend --jobs 4 -- uv run pytest -q
 ### Discover impacted services from a change
 
 ```
-loom workspace poly deps impacted api | jq -r '.impacted[]'
+loom workspace harness impact repos api | jq -r '.impacted[]'
 ```
 
 ### Record a snapshot before a risky rebase
@@ -398,7 +483,7 @@ loom workspace poly worktree push sprint-42 --all
 
 ```
 loom workspace poly lease acquire group:sprint-42
-loom workspace poly worktree gc --unclaimed-only --yes
+loom workspace poly worktree gc --skip-leased --yes
 ```
 
 ## Troubleshooting

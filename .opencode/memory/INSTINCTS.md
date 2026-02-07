@@ -63,6 +63,9 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **prefer-basedpyright-over-lsp-diagnostics** (80%)
   - Trigger: When about to check Python types/diagnostics (or an existing checklist says to run lsp_diagnostics)
   - Action: Run `uv run basedpyright` and fix findings before `uv run ruff check .` and targeted `uv run pytest ...`.
+- **derived-context-lives-in-loom-context** (80%)
+  - Trigger: When adding/updating AI-managed always-on context blocks or docblocks (or when tempted to put compound-managed fences into AGENTS.md)
+  - Action: Put derived always-on context in LOOM_CONTEXT.md (and roadmap notes in LOOM_ROADMAP.md), keep AGENTS.md stable/human-owned, and run loom compound update to regenerate derived artifacts (docs, rules, m...
 - **team-init-agents-changes-require-contract-test** (78%)
   - Trigger: You change team startup/init-agent wiring or defaults (especially in src/agent_loom/team/core.py or src/agent_loom/team/cli.py).
   - Action: Treat agent initialization as a UX+behavior contract: update/add focused assertions in tests/test_team_init_agents.py (and prompt tests if prompts changed), then run the gate: uv run basedpyright; uv ...
@@ -123,9 +126,6 @@ The source of truth is `.opencode/memory/instincts.json`.
 - **ticket-edits-require-dep-status-sanity** (64%)
   - Trigger: When a change set primarily touches `.tickets/*.md` (creating/updating multiple tickets).
   - Action: Treat tickets as the execution graph: validate dependency edges and status transitions with `loom ticket dep <id>`, keep status consistent with deps (don't mark `in_progress` if blocked), and add a sh...
-- **ui-changes-require-lsp-ruff-and-targeted-tests** (62%)
-  - Trigger: After editing Python UI code under src/agent_loom/ui/ (for example src/agent_loom/ui/ticket_ui.py)
-  - Action: Run `uv run basedpyright`, fix all findings, then run `uv run ruff check .` and the smallest relevant `uv run pytest ...` subset (or full suite if unsure).
 
 ## Notes
 

@@ -1632,6 +1632,29 @@
           "sessionID": "ses_3ded0a7d4ffeKAhR7bRA5GjLk3"
         }
       ]
+    },
+    {
+      "id": "derived-context-lives-in-loom-context",
+      "title": "Derived always-on context lives in LOOM_CONTEXT",
+      "trigger": "When adding/updating AI-managed always-on context blocks or docblocks (or when tempted to put compound-managed fences into AGENTS.md)",
+      "action": "Put derived always-on context in LOOM_CONTEXT.md (and roadmap notes in LOOM_ROADMAP.md), keep AGENTS.md stable/human-owned, and run loom compound update to regenerate derived artifacts (docs, rules, mirrors).",
+      "tags": [],
+      "confidence": 0.8,
+      "status": "active",
+      "created_at": "2026-02-07T19:15:22.487736Z",
+      "updated_at": "2026-02-07T19:15:55.358558Z",
+      "evidence": [
+        {
+          "ts": "2026-02-07T19:15:22.487736Z",
+          "sessionID": "ses_3c6a4f581ffeozBgHx7dUNscK1",
+          "note": "Compound scaffolding refactor: derived fenced blocks moved out of AGENTS.md into LOOM_CONTEXT.md; refresh consolidated into compound update: wrote 4 rules file(s)."
+        },
+        {
+          "ts": "2026-02-07T19:15:55.358212Z",
+          "sessionID": "ses_3c6a4f581ffeozBgHx7dUNscK1",
+          "note": "Fix: prior create used shell backticks; action/evidence were mangled. Durable rule: derived compound fences live in LOOM_CONTEXT.md; regenerate with loom compound update."
+        }
+      ]
     }
   ]
 }
