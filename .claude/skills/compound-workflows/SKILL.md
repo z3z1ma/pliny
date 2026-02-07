@@ -59,13 +59,14 @@ The point is not vibes. The point is *reusable procedure*.
 ### `/workflows:compound <ticket-id>`
 
 - Write memory notes (loom memory) that future planning can recall.
-- Apply durable learnings using the compound tools:
-  - `compound_skill_upsert` (new/updated procedural skills)
-  - `compound_instinct_upsert` (new/updated heuristics)
-  - `compound_docblock_upsert` (allowed blocks only)
-  - `compound_memo_add` (sparingly; scoped)
-  - `compound_changelog_append` (short memory delta)
-- Finish with `compound_sync`.
+- Apply durable learnings using Loom (run via bash):
+  - `loom compound skill upsert <name> --description ... --body ...` (or pipe stdin)
+  - `loom compound instinct upsert create|update <id> ...`
+  - `loom compound docblock upsert --file AGENTS.md --id loom-core-context --content ...`
+  - `loom compound docblock upsert --file LOOM_ROADMAP.md --id roadmap-ai-notes --content ...`
+  - `loom compound changelog append --note "..."`
+  - `loom memory add --title ... --body ... --scope command:workflows:plan` (sparingly)
+- Finish with `loom compound refresh`.
 
 ## Operational defaults
 
