@@ -83,6 +83,7 @@ def _is_scaffold_file(rel: str) -> bool:
             ".opencode/commands/",
             ".opencode/agents/",
             ".opencode/compound/prompts/",
+            ".loom/compound/",
         )
     )
 
@@ -92,6 +93,11 @@ def _is_persistent_memory_file(rel: str) -> bool:
         ".opencode/memory/instincts.json",
         ".opencode/memory/INSTINCTS.md",
     )
+
+
+def _is_persistent_evidence_file(rel: str) -> bool:
+    # Episodes are committed evidence capsules and must never be overwritten.
+    return rel.startswith(".loom/compound/episodes/") and rel.endswith(".json")
 
 
 def _is_skill_file(rel: str) -> bool:
@@ -167,6 +173,7 @@ def install_opencode(
                 dest=dst,
                 required_lines=[
                     "state.json",
+                    "autolearn_status.json",
                     "*.tmp.*",
                 ],
                 dry_run=dry_run,
@@ -193,6 +200,32 @@ def install_opencode(
 
         status = _copy_file(src=p, dest=dst, overwrite=overwrite, dry_run=dry_run)
         (wrote if status == "wrote" else skipped).append(rel_str)
+
+    # 1b) Merge .loom/compound (evidence + minimal docs)
+    src_loom_compound = src / ".loom" / "compound"
+    if src_loom_compound.exists() and src_loom_compound.is_dir():
+        for p in sorted(src_loom_compound.rglob("*")):
+            if p.is_dir():
+                continue
+            rel = p.relative_to(src)
+            rel_str = _rel_posix(rel)
+            dst = dest / rel
+
+            # Never overwrite committed evidence capsules.
+            if _is_persistent_evidence_file(rel_str):
+                if dst.exists():
+                    skipped.append(rel_str)
+                    continue
+                status = _copy_file(src=p, dest=dst, overwrite=False, dry_run=dry_run)
+                (wrote if status == "wrote" else skipped).append(rel_str)
+                continue
+
+            overwrite = bool(force and _is_scaffold_file(rel_str))
+            if dst.exists() and not overwrite:
+                skipped.append(rel_str)
+                continue
+            status = _copy_file(src=p, dest=dst, overwrite=overwrite, dry_run=dry_run)
+            (wrote if status == "wrote" else skipped).append(rel_str)
 
     # 2) Loom-scoped root docs
     doc_specs: list[tuple[str, list[str]]] = [

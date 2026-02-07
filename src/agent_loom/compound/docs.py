@@ -56,6 +56,8 @@ This block is maintained by the compound system.
 - **Observations** are logged automatically from tool calls and session events.
 - **Instincts** are small heuristics extracted from observations.
 - **Skills** are durable procedural memory (directory + SKILL.md) and are the primary compounding mechanism.
+- **Episodes** are immutable evidence capsules. If a patch is too large to inline, the full patch is stored as a blob.
+- **Decisions** are append-only records of normalized ops applied to instincts/skills (governance; replayable).
 
 **Non-negotiables:**
 - Keep skills small, specific, and triggerable from the `description`.
@@ -66,6 +68,9 @@ This block is maintained by the compound system.
 - Skills: `.opencode/skills/<name>/SKILL.md`
 - Instincts: `.opencode/memory/instincts.json` (index at `.opencode/memory/INSTINCTS.md`)
 - Observations: `.opencode/memory/observations.jsonl` (gitignored by default)
+- Episodes: `.loom/compound/episodes/YYYY/MM/<episode_id>.json` (committed evidence)
+- Blobs: `.loom/compound/blobs/<sha256>.<ext>` (full patches, raw proposals, prompt snapshots)
+- Decisions: `.loom/compound/decisions/YYYY/MM/<decision_id>.json` (append-only ops log)
 
 **Core docs:**
 - `AGENTS.md` (stable human-owned overview)

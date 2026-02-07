@@ -4,7 +4,7 @@ import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Dict, Iterable, Optional, Tuple
 
 from agent_loom.compound.blocks import block_markers
 
@@ -174,6 +174,20 @@ def build_skill_markdown(
     return fm + managed + "\n\n" + tail
 
 
+def _parse_csv(s: str) -> list[str]:
+    parts = [p.strip() for p in str(s or "").split(",")]
+    return [p for p in parts if p]
+
+
+def _format_csv(items: Iterable[str]) -> str:
+    out: list[str] = []
+    for it in items:
+        s = str(it or "").strip()
+        if s and s not in out:
+            out.append(s)
+    return ",".join(out)
+
+
 def _looks_like_diff_or_patch(text: str) -> bool:
     t = _normalize_newlines(text)
     if "```diff" in t:
@@ -222,6 +236,13 @@ def write_or_update_skill(
     description: str,
     body: str,
     mirror_claude_dir: Optional[Path] = None,
+    tags: Optional[list[str]] = None,
+    metadata: Optional[Dict[str, str]] = None,
+    source_episode_ids: Optional[list[str]] = None,
+    source_instinct_ids: Optional[list[str]] = None,
+    created_at: Optional[str] = None,
+    updated_at: Optional[str] = None,
+    version: Optional[int] = None,
 ) -> Tuple[str, Path]:
     n = validate_skill_name(name)
     desc = str(description or "").strip() or f"Skill: {n}"
@@ -233,8 +254,8 @@ def write_or_update_skill(
     skill_path = skill_dir / "SKILL.md"
 
     exists = skill_path.exists()
-    version = 1
-    created_at = None
+    next_version = int(version) if version is not None else 1
+    next_created_at: Optional[str] = str(created_at) if created_at else None
     manual_notes = None
     existing_fm: Dict[str, object] = {}
     existing_body = ""
@@ -247,11 +268,18 @@ def write_or_update_skill(
         meta: Dict[str, object] = meta_obj if isinstance(meta_obj, dict) else {}
         existing_meta = {str(k): str(v) for k, v in meta.items()}
         try:
-            version = int(str(meta.get("version") or "1")) + 1
+            if version is None:
+                next_version = int(str(meta.get("version") or "1")) + 1
         except Exception:
-            version = 2
-        created_at = str(meta.get("created_at") or "") or None
+            if version is None:
+                next_version = 2
+        if not next_created_at:
+            next_created_at = str(meta.get("created_at") or "") or None
         manual_notes = parsed.manual_notes
+
+    tags_final: Optional[list[str]] = tags
+    if tags_final is None:
+        tags_final = _parse_csv(existing_meta.get("tags", "")) or None
 
     if exists and existing_body and _looks_like_partial_body_update(existing_body, b):
         raise ValueError(
@@ -264,14 +292,68 @@ def write_or_update_skill(
         body=b,
         license=str(existing_fm.get("license") or "MIT"),
         compatibility=str(existing_fm.get("compatibility") or "opencode,claude"),
-        version=version,
-        created_at=created_at,
-        updated_at=_now_iso(),
+        version=int(next_version),
+        created_at=(next_created_at or _now_iso()),
+        updated_at=(str(updated_at) if updated_at else _now_iso()),
+        tags=tags_final,
         manual_notes=manual_notes,
         metadata={
             k: v
             for k, v in existing_meta.items()
-            if k not in {"created_at", "updated_at", "version", "tags"}
+            if k
+            not in {
+                "created_at",
+                "updated_at",
+                "version",
+                "tags",
+                "source_episode_ids",
+                "source_instinct_ids",
+            }
+        }
+        | {
+            **({str(k): str(v) for k, v in (metadata or {}).items()}),
+            **(
+                {
+                    "source_episode_ids": _format_csv(
+                        [
+                            *_parse_csv(existing_meta.get("source_episode_ids", "")),
+                            *(
+                                [
+                                    str(x)
+                                    for x in (source_episode_ids or [])
+                                    if str(x).strip()
+                                ]
+                            ),
+                        ]
+                    )
+                }
+                if (
+                    source_episode_ids is not None
+                    or existing_meta.get("source_episode_ids")
+                )
+                else {}
+            ),
+            **(
+                {
+                    "source_instinct_ids": _format_csv(
+                        [
+                            *_parse_csv(existing_meta.get("source_instinct_ids", "")),
+                            *(
+                                [
+                                    str(x)
+                                    for x in (source_instinct_ids or [])
+                                    if str(x).strip()
+                                ]
+                            ),
+                        ]
+                    )
+                }
+                if (
+                    source_instinct_ids is not None
+                    or existing_meta.get("source_instinct_ids")
+                )
+                else {}
+            ),
         }
         or None,
     )

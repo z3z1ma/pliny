@@ -86,7 +86,7 @@ def test_compound_install_does_not_install_compoundspec_skill(tmp_path: Path) ->
     ).exists()
 
 
-def test_compound_install_template_autolearn_prompt_is_tools_first(
+def test_compound_install_template_autolearn_prompt_is_json_only(
     tmp_path: Path,
 ) -> None:
     dest = tmp_path
@@ -95,15 +95,9 @@ def test_compound_install_template_autolearn_prompt_is_tools_first(
     prompt = (dest / ".opencode" / "compound" / "prompts" / "autolearn.md").read_text(
         encoding="utf-8"
     )
-    assert "bash" in prompt
-    assert "loom compound skill upsert" in prompt
-    assert "loom compound instinct upsert" in prompt
-    assert "loom compound docblock upsert" in prompt
-    assert "LOOM_CONTEXT.md" in prompt
-    assert "loom compound changelog append" in prompt
-    assert "loom compound update" in prompt
-    assert "loom memory add" in prompt
-    assert "Output **only** valid JSON" not in prompt
+    assert ".loom/compound/episodes" in prompt
+    assert "Output **only** valid JSON" in prompt
+    assert "Do not run any tools" in prompt
 
 
 def test_compound_install_provides_plugin_required_scaffolding(tmp_path: Path) -> None:
@@ -114,6 +108,7 @@ def test_compound_install_provides_plugin_required_scaffolding(tmp_path: Path) -
         dest / "AGENTS.md",
         dest / "LOOM_CONTEXT.md",
         dest / "LOOM_ROADMAP.md",
+        dest / ".loom" / "compound" / "README.md",
         dest / ".opencode" / "commands" / "workflows:plan.md",
         dest / ".opencode" / "compound" / "prompts" / "autolearn.md",
         dest / ".opencode" / "memory" / ".gitignore",
@@ -142,6 +137,7 @@ def test_compound_install_dry_run_does_not_write_files(tmp_path: Path) -> None:
 
     assert res.dry_run is True
     assert not (dest / ".opencode").exists()
+    assert not (dest / ".loom").exists()
     assert not (dest / "LOOM_CONTEXT.md").exists()
     assert not (dest / "LOOM_ROADMAP.md").exists()
     assert not (dest / "AGENTS.md").exists()

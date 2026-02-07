@@ -161,6 +161,125 @@ def build_parser() -> argparse.ArgumentParser:
         help="Emit machine-readable JSON",
     )
 
+    run = sub.add_parser(
+        "run",
+        help="Package evidence into an Episode and (optionally) compile/apply proposals deterministically",
+    )
+    run.add_argument(
+        "--repo",
+        default=None,
+        help="Path inside repo (defaults to CWD; resolves git root)",
+    )
+    run.add_argument(
+        "--auto",
+        action="store_true",
+        help="Auto mode (thresholded, quiet-friendly; intended for background use)",
+    )
+    run.add_argument(
+        "--no-ai",
+        action="store_true",
+        help="Do not accept proposals; only package an Episode and advance cursors",
+    )
+    run.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would happen without writing files",
+    )
+    run.add_argument(
+        "--proposals",
+        default=None,
+        help="JSON proposals payload. If omitted and stdin is piped, stdin is used.",
+    )
+    run.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit machine-readable JSON",
+    )
+
+    learn = sub.add_parser(
+        "learn",
+        help="Seal an Episode and apply proposals (records a Decision + blobs for no-loss evidence)",
+    )
+    learn.add_argument(
+        "--repo",
+        default=None,
+        help="Path inside repo (defaults to CWD; resolves git root)",
+    )
+    learn.add_argument(
+        "--auto",
+        action="store_true",
+        help="Auto mode (thresholded, quiet-friendly; intended for background use)",
+    )
+    learn.add_argument(
+        "--no-ai",
+        action="store_true",
+        help="Do not accept proposals; only package an Episode and advance cursors",
+    )
+    learn.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would happen without writing files",
+    )
+    learn.add_argument(
+        "--proposals",
+        default=None,
+        help="JSON proposals payload. If omitted and stdin is piped, stdin is used.",
+    )
+    learn.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit machine-readable JSON",
+    )
+
+    triage = sub.add_parser(
+        "triage",
+        help="Accept/reject/tag Episodes (edits the Episode JSON; deterministic)",
+    )
+    triage_sub = triage.add_subparsers(dest="triage_cmd", required=True)
+    triage_set = triage_sub.add_parser("set", help="Set triage status/tags/notes")
+    triage_set.add_argument(
+        "episode_id",
+        help="Episode id (sha256 hex)",
+    )
+    triage_set.add_argument(
+        "--repo",
+        default=None,
+        help="Path inside repo (defaults to CWD; resolves git root)",
+    )
+    triage_set.add_argument(
+        "--status",
+        choices=["pending", "accepted", "rejected"],
+        default=None,
+    )
+    triage_set.add_argument(
+        "--tag",
+        action="append",
+        default=[],
+        help="Tag to add (repeatable)",
+    )
+    triage_set.add_argument(
+        "--note",
+        default=None,
+        help="Note text (replaces existing). If omitted: keep existing.",
+    )
+    triage_set.add_argument("--json", action="store_true", help="Emit JSON")
+
+    replay = sub.add_parser(
+        "replay",
+        help="Replay compilation/apply from an existing Episode id",
+    )
+    replay.add_argument(
+        "episode_id",
+        help="Episode id (sha256 hex)",
+    )
+    replay.add_argument(
+        "--repo",
+        default=None,
+        help="Path inside repo (defaults to CWD; resolves git root)",
+    )
+    replay.add_argument("--dry-run", action="store_true")
+    replay.add_argument("--json", action="store_true", help="Emit JSON")
+
     obs = sub.add_parser(
         "observations",
         help="Observations utilities (read-only)",
@@ -175,6 +294,35 @@ def build_parser() -> argparse.ArgumentParser:
     )
     obs_tail.add_argument("--n", type=int, default=30, help="Number of records")
     obs_tail.add_argument("--json", action="store_true", help="Emit JSON")
+
+    doctor = sub.add_parser("doctor", help="Check compound integrity invariants")
+    doctor.add_argument(
+        "--repo",
+        default=None,
+        help="Path inside repo (defaults to CWD; resolves git root)",
+    )
+    doctor.add_argument("--json", action="store_true", help="Emit JSON")
+
+    rebuild = sub.add_parser(
+        "rebuild",
+        help="Rebuild products from Decisions (writes to --dest; defaults to repo)",
+    )
+    rebuild.add_argument(
+        "--repo",
+        default=None,
+        help="Path inside repo (defaults to CWD; resolves git root)",
+    )
+    rebuild.add_argument(
+        "--dest",
+        default=None,
+        help="Destination directory for rebuilt products (default: repo root)",
+    )
+    rebuild.add_argument(
+        "--no-clean",
+        action="store_true",
+        help="Do not delete destination directory before rebuild (only used when --dest is set)",
+    )
+    rebuild.add_argument("--json", action="store_true", help="Emit JSON")
 
     skill = sub.add_parser("skill", help="Skill operations")
     skill_sub = skill.add_subparsers(dest="skill_cmd", required=True)
@@ -444,6 +592,112 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             sys.stdout.write(json.dumps(payload, indent=2) + "\n")
         return 0
 
+    if args.cmd in {"run", "learn"}:
+        repo = _resolve_repo_root(getattr(args, "repo", None))
+        require_scaffold_installed(repo)
+        from agent_loom.compound.engine import run_compound
+
+        proposals = getattr(args, "proposals", None)
+        if proposals is None:
+            proposals = (
+                sys.stdin.read()
+                if sys.stdin is not None and not sys.stdin.isatty()
+                else None
+            )
+
+        res = run_compound(
+            root=repo,
+            proposals_json=str(proposals) if proposals is not None else None,
+            auto=bool(getattr(args, "auto", False)),
+            no_ai=bool(getattr(args, "no_ai", False)),
+            dry_run=bool(getattr(args, "dry_run", False)),
+            mirror_claude=(str(os.environ.get("COMPOUND_MIRROR_CLAUDE", "1")) != "0"),
+        )
+        payload = dataclasses.asdict(res)
+        if bool(getattr(args, "json", False)):
+            _emit_json(payload)
+        else:
+            sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+        return 0
+
+    if args.cmd == "triage" and args.triage_cmd == "set":
+        repo = _resolve_repo_root(getattr(args, "repo", None))
+        require_scaffold_installed(repo)
+        from agent_loom.compound.episodes import (
+            find_episode_by_id,
+            load_episode,
+            write_episode,
+        )
+
+        paths = compound_paths(repo)
+        p = find_episode_by_id(
+            episodes_dir=paths.episodes_dir, episode_id=str(args.episode_id)
+        )
+        if p is None:
+            raise ValueError("Episode not found")
+        ep = load_episode(p)
+        next_status = str(getattr(args, "status", None) or ep.triage.status)
+        tags = sorted(
+            {
+                *ep.triage.tags,
+                *[str(t).strip() for t in (args.tag or []) if str(t).strip()],
+            }
+        )
+        note = ep.triage.notes
+        if getattr(args, "note", None) is not None:
+            note = str(args.note or "")
+
+        from agent_loom.compound.episodes import EpisodeTriage, Episode
+
+        ep2 = Episode(
+            version=ep.version,
+            episode_id=ep.episode_id,
+            created_at=ep.created_at,
+            git=ep.git,
+            observations=ep.observations,
+            proposals=ep.proposals,
+            triage=EpisodeTriage(status=next_status, tags=tags, notes=note),
+        )
+        if not bool(getattr(args, "dry_run", False)):
+            write_episode(p, ep2, overwrite=True)
+        payload = {
+            "ok": True,
+            "episode_id": ep2.episode_id,
+            "path": str(p),
+            "status": next_status,
+            "tags": tags,
+        }
+        if bool(getattr(args, "json", False)):
+            _emit_json(payload)
+        else:
+            sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+        return 0
+
+    if args.cmd == "replay":
+        repo = _resolve_repo_root(getattr(args, "repo", None))
+        require_scaffold_installed(repo)
+        from agent_loom.compound.engine import replay_episode
+        from agent_loom.compound.episodes import find_episode_by_id
+
+        paths = compound_paths(repo)
+        p = find_episode_by_id(
+            episodes_dir=paths.episodes_dir, episode_id=str(args.episode_id)
+        )
+        if p is None:
+            raise ValueError("Episode not found")
+        res = replay_episode(
+            root=repo,
+            episode_path=p,
+            dry_run=bool(getattr(args, "dry_run", False)),
+            mirror_claude=(str(os.environ.get("COMPOUND_MIRROR_CLAUDE", "1")) != "0"),
+        )
+        payload = dataclasses.asdict(res)
+        if bool(getattr(args, "json", False)):
+            _emit_json(payload)
+        else:
+            sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+        return 0
+
     if args.cmd == "observations" and args.obs_cmd == "tail":
         repo = _resolve_repo_root(getattr(args, "repo", None))
         paths = compound_paths(repo)
@@ -452,6 +706,37 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             _emit_json(tail)
         else:
             sys.stdout.write(json.dumps(tail, indent=2) + "\n")
+        return 0
+
+    if args.cmd == "doctor":
+        repo = _resolve_repo_root(getattr(args, "repo", None))
+        from agent_loom.compound.doctor import doctor
+
+        res = doctor(root=repo)
+        payload = {"ok": bool(res.ok), "errors": res.errors, "warnings": res.warnings}
+        if bool(getattr(args, "json", False)):
+            _emit_json(payload)
+        else:
+            sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+        return 0 if res.ok else 1
+
+    if args.cmd == "rebuild":
+        repo = _resolve_repo_root(getattr(args, "repo", None))
+        from agent_loom.compound.rebuild import rebuild_products
+
+        dest = getattr(args, "dest", None)
+        dest_path = Path(dest).expanduser().resolve() if dest else None
+        res = rebuild_products(
+            root=repo,
+            dest=dest_path,
+            clean_dest=(not bool(getattr(args, "no_clean", False))),
+            mirror_claude=(str(os.environ.get("COMPOUND_MIRROR_CLAUDE", "0")) != "0"),
+        )
+        payload = dataclasses.asdict(res)
+        if bool(getattr(args, "json", False)):
+            _emit_json({"ok": True, **payload})
+        else:
+            sys.stdout.write(json.dumps({"ok": True, **payload}, indent=2) + "\n")
         return 0
 
     if args.cmd == "skill" and args.skill_cmd == "upsert":

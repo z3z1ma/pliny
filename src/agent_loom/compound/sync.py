@@ -44,6 +44,7 @@ def sync(
     pathspecs = [
         "LOOM_CONTEXT.md",
         "LOOM_ROADMAP.md",
+        ".loom/compound",
         ".opencode/agents",
         ".opencode/memory",
         ".opencode/skills",

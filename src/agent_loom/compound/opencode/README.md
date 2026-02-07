@@ -53,6 +53,11 @@ Skills compound. That’s the entire trick.
 - `.opencode/memory/observations.jsonl`
   Append-only observation log (**gitignored by default**)
 
+### Evidence (Episodes)
+
+- `.loom/compound/episodes/YYYY/MM/<episode_id>.json`
+  Committed evidence capsules built from (observations + git diff). These are the durable, lossless-ish bridge between runtime telemetry and compiled instincts/skills.
+
 ### Plugin + commands
 
 - `.opencode/plugins/compound_engineering.ts`
@@ -99,14 +104,9 @@ These go into `.opencode/memory/observations.jsonl`.
 
 When the session goes idle (agent has finished a turn):
 
-- The plugin packages:
-  - recent observations
-  - git diffstat + changed files
-  - current skills list
-  - current top instincts
-- It prompts the model using `.opencode/compound/prompts/autolearn.md`
-- The model calls granular tools to persist learnings (tools-first)
-- The plugin applies it (skills/instincts/memos/docs/changelog only)
+- The plugin packages a small context snapshot (recent observations + git diffstat).
+- The model generates structured proposals (instinct/skill candidates).
+- Loom applies them deterministically via `loom compound learn` and records an Episode under `.loom/compound/episodes/...`.
 
 ---
 

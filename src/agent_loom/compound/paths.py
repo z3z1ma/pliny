@@ -20,6 +20,13 @@ class CompoundPaths:
     prompts_dir: Path
     autolearn_prompt_file: Path
 
+    # Evidence (committed)
+    loom_dir: Path
+    loom_compound_dir: Path
+    episodes_dir: Path
+    blobs_dir: Path
+    decisions_dir: Path
+
     # Docs
     agents_md: Path
     context_md: Path
@@ -38,6 +45,12 @@ def compound_paths(root: Path) -> CompoundPaths:
     prompts_dir = compound_dir / "prompts"
     autolearn_prompt_file = prompts_dir / "autolearn.md"
 
+    loom_dir = root / ".loom"
+    loom_compound_dir = loom_dir / "compound"
+    episodes_dir = loom_compound_dir / "episodes"
+    blobs_dir = loom_compound_dir / "blobs"
+    decisions_dir = loom_compound_dir / "decisions"
+
     agents_md = root / "AGENTS.md"
     context_md = root / "LOOM_CONTEXT.md"
     roadmap_md = root / "LOOM_ROADMAP.md"
@@ -52,6 +65,11 @@ def compound_paths(root: Path) -> CompoundPaths:
         compound_dir=compound_dir,
         prompts_dir=prompts_dir,
         autolearn_prompt_file=autolearn_prompt_file,
+        loom_dir=loom_dir,
+        loom_compound_dir=loom_compound_dir,
+        episodes_dir=episodes_dir,
+        blobs_dir=blobs_dir,
+        decisions_dir=decisions_dir,
         agents_md=agents_md,
         context_md=context_md,
         roadmap_md=roadmap_md,
@@ -64,6 +82,7 @@ def required_scaffold_paths() -> list[str]:
         "AGENTS.md",
         "LOOM_CONTEXT.md",
         "LOOM_ROADMAP.md",
+        ".loom/compound/README.md",
         ".opencode/commands/workflows:plan.md",
         ".opencode/compound/prompts/autolearn.md",
         ".opencode/memory/.gitignore",
