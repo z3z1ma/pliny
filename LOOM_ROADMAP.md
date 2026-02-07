@@ -5,7 +5,6 @@ High-level direction and priorities.
 This is an evolving, empirical compass. Keep it short and stable.
 
 <!-- BEGIN:compound:roadmap-backlog -->
-- al-3063 [open] (p2) Workspace: change/impact analysis across repos (snapshots + service deps)
 - al-1450 [open] (p3) Workspace: optional canonical locations for harness roots/clones/worktrees
 - al-1f81 [in_progress] (p1) Workspace: refactor structure + clarify value proposition
 - al-768c [in_progress] (p1) Sprint prep: Documentation Foundation
@@ -15,6 +14,7 @@ This is an evolving, empirical compass. Keep it short and stable.
 - al-e024 [review] (p1) Workspace: reorganize package layout + split CLI
 - al-24be [review] (p2) Workspace: unify cleanup/GC story (TTL, leases, metadata) across repo + poly
 - al-7d77 [review] (p2) Workspace: dial in polyrepo harness value prop + naming (poly vs harness)
+- al-3063 [review] (p2) Workspace: change/impact analysis across repos (snapshots + service deps)
 <!-- END:compound:roadmap-backlog -->
 
 <!-- BEGIN:compound:roadmap-ai-notes -->

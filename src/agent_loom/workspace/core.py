@@ -45,6 +45,7 @@ from agent_loom.workspace.poly.ops import (
 from agent_loom.workspace.poly.exec import poly_exec
 from agent_loom.workspace.poly.cleanup import poly_cleanup_apply, poly_cleanup_suggest
 from agent_loom.workspace.poly.deps import deps_closure, deps_impacted
+from agent_loom.workspace.poly.impact import poly_impact_repos, poly_impact_snapshot
 from agent_loom.workspace.poly.gc import worktree_gc
 from agent_loom.workspace.poly.leases import lease_acquire, lease_list, lease_release
 from agent_loom.workspace.poly.meta import (
@@ -125,6 +126,8 @@ __all__ = [
     "deps_who_uses",
     "deps_closure",
     "deps_impacted",
+    "poly_impact_repos",
+    "poly_impact_snapshot",
     "deepen",
     "poly_repo_edit",
     "poly_set_upsert",

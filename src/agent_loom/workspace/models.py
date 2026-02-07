@@ -287,6 +287,15 @@ class DepsWhoUsesResult:
 
 
 @dataclass(frozen=True)
+class ImpactResult:
+    source: Dict[str, Any]
+    changed: List[str]
+    unknown: List[str]
+    impacted: List[str]
+    all: List[str]
+
+
+@dataclass(frozen=True)
 class DeepenResult:
     repo: str
     depth: int = 0
@@ -301,6 +310,7 @@ __all__ = [
     "DeepenResult",
     "DepsShowResult",
     "DepsWhoUsesResult",
+    "ImpactResult",
     "ListReposResult",
     "LeaseAcquireResult",
     "LeaseListResult",

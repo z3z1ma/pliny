@@ -26,6 +26,8 @@ from agent_loom.workspace.core import (
     poly_exec,
     poly_cleanup_apply,
     poly_cleanup_suggest,
+    poly_impact_repos,
+    poly_impact_snapshot,
     poly_init,
     poly_repo_edit,
     poly_set_ls,
@@ -92,6 +94,7 @@ from agent_loom.workspace.models import (
     DeepenResult,
     DepsShowResult,
     DepsWhoUsesResult,
+    ImpactResult,
     LeaseAcquireResult,
     LeaseListResult,
     LeaseReleaseResult,
@@ -150,6 +153,8 @@ def _cmd_name(args: argparse.Namespace) -> str:
             cmd = f"sandbox {getattr(args, 'sandbox_cmd', '')}".strip()
         elif cmd == "cleanup":
             cmd = f"cleanup {getattr(args, 'cleanup_cmd', '')}".strip()
+        elif cmd == "impact":
+            cmd = f"impact {getattr(args, 'impact_cmd', '')}".strip()
         return f"{top} {cmd}".strip()
 
     cmd = top
@@ -646,6 +651,30 @@ def _render_text(result: Any) -> str:
             ).rstrip()
             + "\n"
         )
+
+    if isinstance(result, ImpactResult):
+        src = result.source or {}
+        out_lines: list[str] = []
+        kind = str(src.get("kind") or "").strip()
+        if kind:
+            out_lines.append(f"source: {kind}")
+        if kind == "snapshot":
+            name = str(src.get("name") or "").strip()
+            if name:
+                out_lines.append(f"snapshot: {name}")
+
+        out_lines.append(f"changed: {len(result.changed)}")
+        for s in result.changed:
+            out_lines.append(f"- {s}")
+        if result.unknown:
+            out_lines.append(f"unknown: {len(result.unknown)}")
+            for s in result.unknown:
+                out_lines.append(f"- {s}")
+        out_lines.append(f"impacted: {len(result.impacted)}")
+        for s in result.impacted:
+            out_lines.append(f"- {s}")
+        out_lines.append(f"all: {len(result.all)}")
+        return "\n".join(out_lines).rstrip() + "\n"
 
     if isinstance(result, DeepenResult):
         lines = [f"repo: {result.repo}"]
@@ -1255,6 +1284,22 @@ def cmd_deps_closure(args: argparse.Namespace) -> None:
 def cmd_deps_impacted(args: argparse.Namespace) -> None:
     root = workspace_root()
     res = deps_impacted(service=args.service, root=root)
+    emit_result(args, root, res)
+
+
+def cmd_poly_impact_repos(args: argparse.Namespace) -> None:
+    root = workspace_root()
+    res = poly_impact_repos(changed=list(args.changed or []), root=root)
+    emit_result(args, root, res)
+
+
+def cmd_poly_impact_snapshot(args: argparse.Namespace) -> None:
+    root = workspace_root()
+    res = poly_impact_snapshot(
+        name=str(args.name),
+        include_missing=not bool(getattr(args, "no_missing", False)),
+        root=root,
+    )
     emit_result(args, root, res)
 
 
@@ -2000,6 +2045,27 @@ def _add_poly_parser(
     sp4.add_argument("service")
     sp4.set_defaults(func=cmd_deps_impacted)
 
+    sp = sub.add_parser(
+        "impact",
+        help="Impact analysis: changed repos -> impacted services (from services/index.json)",
+    )
+    subi = sp.add_subparsers(dest="impact_cmd", required=True)
+
+    spi = subi.add_parser("repos", help="Report impacted services from changed repos")
+    spi.add_argument("changed", nargs="+", help="Changed repo/service names")
+    spi.set_defaults(func=cmd_poly_impact_repos)
+
+    spi = subi.add_parser(
+        "snapshot", help="Report impacted services from snapshot diff"
+    )
+    spi.add_argument("name", help="Snapshot name")
+    spi.add_argument(
+        "--no-missing",
+        action="store_true",
+        help="Do not treat missing repos/worktrees as changed",
+    )
+    spi.set_defaults(func=cmd_poly_impact_snapshot)
+
     sp = sub.add_parser("deepen", help="Deepen history of a shallow repo")
     sp.add_argument("repo", help="Repo name")
     sp.add_argument(
@@ -2293,3 +2359,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+    (poly_impact_repos,)
+    (poly_impact_snapshot,)
+    (ImpactResult,)

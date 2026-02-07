@@ -60,3 +60,24 @@ class TestWorkspaceDeps(unittest.TestCase):
             self.assertEqual(rc2, 0)
             data2 = out2.get("data") or {}
             self.assertIn("a", data2.get("impacted") or [])
+
+    def test_impact_repos_reports_reverse_deps(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            ws_root = Path(td) / "ws"
+            ws_root.mkdir(parents=True, exist_ok=True)
+
+            _run_json(["harness", "init"], ws_root)
+            _run_json(["harness", "add", "a", "file:///tmp/a"], ws_root)
+            _run_json(["harness", "add", "b", "file:///tmp/b"], ws_root)
+
+            svc_a = ws_root / "services" / "a.md"
+            text = svc_a.read_text(encoding="utf-8")
+            text = text.replace("- (list other service repo names)", "- b")
+            svc_a.write_text(text, encoding="utf-8")
+            _run_json(["harness", "services", "refresh-index"], ws_root)
+
+            rc, out = _run_json(["harness", "impact", "repos", "b"], ws_root)
+            self.assertEqual(rc, 0)
+            data = out.get("data") or {}
+            self.assertEqual(data.get("changed") or [], ["b"])
+            self.assertIn("a", data.get("impacted") or [])

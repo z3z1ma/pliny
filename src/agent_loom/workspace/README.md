@@ -375,6 +375,19 @@ loom workspace poly deps closure api
 loom workspace poly deps impacted api
 ```
 
+### impact
+
+Impact analysis answers: "Given these changed repos, what services are impacted?".
+It uses `services/index.json` (forward deps + reverse deps) and emits a deterministic report.
+
+```
+loom workspace harness impact repos api
+loom workspace harness impact repos api billing
+
+loom workspace harness snapshot capture pre-rebase --group sprint-42 --all
+loom workspace harness impact snapshot pre-rebase
+```
+
 ### poly deepen
 
 Deepen history for shallow clones.
@@ -401,7 +414,7 @@ loom workspace poly exec --set backend --jobs 4 -- uv run pytest -q
 ### Discover impacted services from a change
 
 ```
-loom workspace poly deps impacted api | jq -r '.impacted[]'
+loom workspace harness impact repos api | jq -r '.impacted[]'
 ```
 
 ### Record a snapshot before a risky rebase
