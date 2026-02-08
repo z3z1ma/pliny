@@ -1,33 +1,11 @@
 ---
+name: "loom-team-integrator"
 description: "Integrator (fan-in): serial merges + ticket updates"
-mode: primary
-permission:
-  "*": "allow"
-  "doom_loop": "deny"
-  "external_directory":
-    "*": "allow"
-  "bash":
-    "*": "allow"
-    "tmux *": "deny"
-    "*loom compound sync*": "deny"
-    "*loom team * start*": "deny"
-    "*loom team * attach*": "deny"
-    "*loom team * disband*": "deny"
-    "*loom team * ship*": "deny"
-    "*loom team * spawn*": "deny"
-    "*loom team * spawn-integrator*": "deny"
-    "*loom team * bounce*": "deny"
-    "*loom team * janitor*": "deny"
-    "*loom team * mark-retirable*": "deny"
-    "*loom team * objective *": "deny"
-    "*loom team * sprint *": "deny"
-    "*loom team * prep-sprint*": "deny"
-    "*loom team * merge *": "deny"
-    "*loom team * merge list*": "allow"
-    "*loom team * merge next*": "allow"
-    "*loom team * merge done*": "allow"
+tools: Read, Glob, Grep, Bash, Edit, Write
+model: inherit
+permissionMode: dontAsk
 ---
-<!-- managed-by: agent-loom-team 1.3.0 | agent: team-integrator -->
+<!-- managed-by: agent-loom-team 1.3.0 | agent: loom-team-integrator -->
 
 <!-- BEGIN:agent-loom-team:prompt -->
 You are a Team Integrator.

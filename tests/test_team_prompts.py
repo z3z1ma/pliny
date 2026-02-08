@@ -41,7 +41,7 @@ class TestYamlLines(unittest.TestCase):
 class TestAgentFileContent(unittest.TestCase):
     def test_renders_managed_frontmatter_and_marker(self) -> None:
         out = team._agent_file_content(
-            name="team-worker",
+            name="loom-team-worker",
             description="Team worker agent.",
             prompt="You are a worker.\n",
             permission={
@@ -63,7 +63,7 @@ class TestAgentFileContent(unittest.TestCase):
                     "*": "deny"
                     "team *": "allow"
                 ---
-                <!-- managed-by: agent-loom-team 1.3.0 | agent: team-worker -->
+                <!-- managed-by: agent-loom-team 1.3.0 | agent: loom-team-worker -->
 
                 <!-- BEGIN:agent-loom-team:prompt -->
                 You are a worker.
@@ -399,10 +399,10 @@ class TestRenderMergeWorkerPrompt(unittest.TestCase):
 class TestEnsureOpenCodeAgents(unittest.TestCase):
     def test_default_agent_markdown_snapshot_sha256(self) -> None:
         expected = {
-            "team-integrator.md": "aa05794cf2a346dce420ee17e2cc96757a226e8748229ac7cdb0e8c6f6c90c7c",
-            "team-investigator.md": "0622f89918e43d794d1dbfa81fbd8034824e7ec2fc55130c31fd83574c19598b",
-            "team-manager.md": "a38e37eedb8cfb066d6c1c64d7c11e232e712db1179e2ef430b58a0dc3b89508",
-            "team-worker.md": "c04dfeafea8dc32d4f8225fdc9e25cc6ff80ba7c5006921dd1cc3aa1e80d4423",
+            "loom-team-integrator.md": "117230b87c34c0d6899724e29c116e998cc9449826c74aad084a52616bfc72fd",
+            "loom-team-investigator.md": "881d415404583cad546a89f9a3eeff83fafda1fd2becf0581dbf18c71d32c362",
+            "loom-team-manager.md": "7c793fa4008d779eade0b8fe42751fa3cf834718c3b47a0c5eba69737be46c8c",
+            "loom-team-worker.md": "fee615d58bad875867da00045fc0972f4df707eb8f9d709975b286644739370c",
         }
 
         with tempfile.TemporaryDirectory() as d:
@@ -421,10 +421,10 @@ class TestEnsureOpenCodeAgents(unittest.TestCase):
 class TestEnsureClaudeAgents(unittest.TestCase):
     def test_default_agent_markdown_snapshot_sha256(self) -> None:
         expected = {
-            "team-integrator.md": "8315f3000d14ef6e9125b03d3ea88aff36e25b9d40f41611b968247c30016ceb",
-            "team-investigator.md": "c08b5945c48baf75374f2ed829a422dca285da48911ffda6a0e717d2d06dcf1b",
-            "team-manager.md": "57c3f9954ac11bcd8166658290439b3f4416438a5a6c466ca7330669696f5d5e",
-            "team-worker.md": "090227e294fa0b322c951657edf97f6c8284702d9ecf954c56cb27cbf88f8959",
+            "loom-team-integrator.md": "61439d8e9cdbaaee174586fe87b180308fd1483e4e6fb0a6f0fc543d7cafa8a9",
+            "loom-team-investigator.md": "65c4f842e63425e298d3009d1588168ed1063725223a2da95886e642f7575340",
+            "loom-team-manager.md": "6ee872b81946f9ec1057350df5c4485a3bc06419f0be0e41cb84ea43e77ee4fc",
+            "loom-team-worker.md": "64f05ce16a1752644bff56f965ed6be0358b8c3861f983ae984bf3bf5c0d527e",
         }
 
         with tempfile.TemporaryDirectory() as d:

@@ -1,12 +1,30 @@
 ---
-name: "team-investigator"
 description: "Investigator worker for creating/refining loom tickets from objectives"
-tools: Read, Glob, Grep, Bash
-disallowedTools: Edit, Write
-model: inherit
-permissionMode: dontAsk
+mode: primary
+permission:
+  "*": "allow"
+  "doom_loop": "deny"
+  "external_directory":
+    "*": "allow"
+  "bash":
+    "*": "allow"
+    "tmux *": "deny"
+    "*loom compound sync*": "deny"
+    "*loom team * start*": "deny"
+    "*loom team * attach*": "deny"
+    "*loom team * disband*": "deny"
+    "*loom team * ship*": "deny"
+    "*loom team * spawn*": "deny"
+    "*loom team * spawn-integrator*": "deny"
+    "*loom team * bounce*": "deny"
+    "*loom team * janitor*": "deny"
+    "*loom team * mark-retirable*": "deny"
+    "*loom team * objective *": "deny"
+    "*loom team * sprint *": "deny"
+    "*loom team * prep-sprint*": "deny"
+    "*loom team * merge *": "deny"
 ---
-<!-- managed-by: agent-loom-team 1.3.0 | agent: team-investigator -->
+<!-- managed-by: agent-loom-team 1.3.0 | agent: loom-team-investigator -->
 
 <!-- BEGIN:agent-loom-team:prompt -->
 You are a Team Investigator.

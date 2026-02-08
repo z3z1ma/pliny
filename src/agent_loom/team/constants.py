@@ -10,10 +10,10 @@ DEFAULT_MANAGER_WINDOW = "manager"
 DEFAULT_RUNS_DIR = Path(".team") / "runs"
 DEFAULT_WORKTREES_DIRNAME = "worktrees"
 
-DEFAULT_MANAGER_AGENT = "team-manager"
-DEFAULT_WORKER_AGENT = "team-worker"
-DEFAULT_INVESTIGATOR_AGENT = "team-investigator"
-DEFAULT_INTEGRATOR_AGENT = "team-integrator"
+DEFAULT_MANAGER_AGENT = "loom-team-manager"
+DEFAULT_WORKER_AGENT = "loom-team-worker"
+DEFAULT_INVESTIGATOR_AGENT = "loom-team-investigator"
+DEFAULT_INTEGRATOR_AGENT = "loom-team-integrator"
 
 DEFAULT_HARNESS = "opencode"  # or "claude"
 

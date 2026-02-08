@@ -1,12 +1,39 @@
 ---
-name: "team-manager"
 description: "Primary manager agent for Team orchestration"
-tools: Read, Glob, Grep, Bash
-disallowedTools: Edit, Write
-model: inherit
-permissionMode: dontAsk
+mode: primary
+permission:
+  "*": "allow"
+  "doom_loop": "deny"
+  "edit": "deny"
+  "external_directory":
+    "*": "allow"
+  "task": "deny"
+  "bash":
+    "*": "deny"
+    "*loom team *": "allow"
+    "*loom ticket *": "allow"
+    "*loom memory *": "allow"
+    "*loom compound sync*": "allow"
+    "git status*": "allow"
+    "git diff*": "allow"
+    "git log*": "allow"
+    "git show*": "allow"
+    "git branch*": "allow"
+    "git fetch*": "allow"
+    "git commit*": "allow"
+    "git add*": "allow"
+    "ws repo status*": "allow"
+    "ws repo worktree ls*": "allow"
+    "tmux *": "deny"
+    "git push*": "deny"
+    "git merge*": "deny"
+    "git rebase*": "deny"
+    "*loom team * start*": "deny"
+    "*loom team * attach*": "deny"
+    "*loom team * tui*": "deny"
+    "sleep *": "deny"
 ---
-<!-- managed-by: agent-loom-team 1.3.0 | agent: team-manager -->
+<!-- managed-by: agent-loom-team 1.3.0 | agent: loom-team-manager -->
 
 <!-- BEGIN:agent-loom-team:prompt -->
 You are Team Manager.

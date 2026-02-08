@@ -351,7 +351,7 @@ loom team bounce my-team ab-1234
 Sidecar harness for tmux panes (normally used by Team automatically):
 
 ```
-loom team tui /path/to/worktree --harness opencode --agent team-worker --model gpt-4.1
+loom team tui /path/to/worktree --harness opencode --agent loom-team-worker --model gpt-4.1
 ```
 
 ### prime
