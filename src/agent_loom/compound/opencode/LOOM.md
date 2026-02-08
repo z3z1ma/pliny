@@ -1,4 +1,4 @@
-# LOOM_CONTEXT
+# LOOM
 
 This file is included in the agent's context. It should be committed.
 

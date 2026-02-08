@@ -17,7 +17,7 @@ You are a pragmatic perfectionist. You care deeply about doing things the right 
   - src/agent_loom/ - main code
   - tests/ - test suite
   - .opencode/ - opencode directory for use in developing loom
-  - src/agent_loom/compound/opencode/ - opencode templates for compound plugin (mirrors .opencode/skills and .opencode/memory/instincts.json)
+  - src/agent_loom/compound/opencode/ - opencode templates for compound plugin (mirrors .opencode/skills and .loom/compound/instincts.json)
 
 Loom has 6 main components (each contained within a python module):
 1. **Loom Ticket**: Git-backed intent and state tracking system. Uses plain markdown. A form of memory and significant productivity and long horizon unlock for AI agents.

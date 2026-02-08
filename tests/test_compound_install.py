@@ -54,7 +54,7 @@ def test_compound_install_patches_agents_md_without_clobbering(tmp_path: Path) -
     # install must not patch or overwrite an existing AGENTS.md
     assert new == "# AGENTS\n\nhello\n"
 
-    ctx = (dest / "LOOM_CONTEXT.md").read_text(encoding="utf-8")
+    ctx = (dest / "LOOM.md").read_text(encoding="utf-8")
     required = [
         "agents-ai-behavior",
         "workflow-commands",
@@ -71,8 +71,8 @@ def test_compound_install_creates_loom_docs_if_missing(tmp_path: Path) -> None:
     dest = tmp_path
     install_opencode(dest=dest, dry_run=False)
 
-    assert (dest / "LOOM_CONTEXT.md").exists()
-    assert (dest / "LOOM_ROADMAP.md").exists()
+    assert (dest / "LOOM.md").exists()
+    assert (dest / ".loom" / "compound" / "ROADMAP.md").exists()
     assert not (dest / "LOOM_PROJECT.md").exists()
     assert not (dest / "LOOM_CHANGELOG.md").exists()
 
@@ -92,8 +92,8 @@ def test_compound_install_provides_plugin_required_scaffolding(tmp_path: Path) -
 
     required = [
         dest / "AGENTS.md",
-        dest / "LOOM_CONTEXT.md",
-        dest / "LOOM_ROADMAP.md",
+        dest / "LOOM.md",
+        dest / ".loom" / "compound" / "ROADMAP.md",
         dest / ".loom" / "compound" / "README.md",
         dest / ".opencode" / "commands" / "workflow-plan.md",
         dest / ".opencode" / "commands" / "workflow-work.md",
@@ -125,8 +125,8 @@ def test_compound_install_dry_run_does_not_write_files(tmp_path: Path) -> None:
     assert res.dry_run is True
     assert not (dest / ".opencode").exists()
     assert not (dest / ".loom").exists()
-    assert not (dest / "LOOM_CONTEXT.md").exists()
-    assert not (dest / "LOOM_ROADMAP.md").exists()
+    assert not (dest / "LOOM.md").exists()
+    assert not (dest / ".loom" / "compound" / "ROADMAP.md").exists()
     assert not (dest / "AGENTS.md").exists()
 
     assert any(
@@ -136,10 +136,11 @@ def test_compound_install_dry_run_does_not_write_files(tmp_path: Path) -> None:
 
 def test_compound_install_ensures_loom_doc_fences(tmp_path: Path) -> None:
     dest = tmp_path
-    roadmap = dest / "LOOM_ROADMAP.md"
-    roadmap.write_text("# LOOM_ROADMAP\n", encoding="utf-8")
-    ctx = dest / "LOOM_CONTEXT.md"
-    ctx.write_text("# LOOM_CONTEXT\n", encoding="utf-8")
+    roadmap = dest / ".loom" / "compound" / "ROADMAP.md"
+    roadmap.parent.mkdir(parents=True, exist_ok=True)
+    roadmap.write_text("# ROADMAP\n", encoding="utf-8")
+    ctx = dest / "LOOM.md"
+    ctx.write_text("# LOOM\n", encoding="utf-8")
 
     install_opencode(dest=dest, dry_run=False)
     text = roadmap.read_text(encoding="utf-8")
@@ -166,7 +167,7 @@ def test_compound_install_never_overwrites_instincts_store(tmp_path: Path) -> No
     dest = tmp_path
     install_opencode(dest=dest, dry_run=False)
 
-    instincts = dest / ".opencode" / "memory" / "instincts.json"
+    instincts = dest / ".loom" / "compound" / "instincts.json"
     instincts.write_text(
         '{"version": 1, "instincts": [{"id": "x"}]}\n', encoding="utf-8"
     )

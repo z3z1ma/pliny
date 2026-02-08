@@ -43,8 +43,7 @@ def sync(
     # Deliberately scoped to compound-owned/AI-managed artifacts.
     # Note: git pathspecs that do not exist are treated as errors by `git add`.
     pathspecs = [
-        "LOOM_CONTEXT.md",
-        "LOOM_ROADMAP.md",
+        "LOOM.md",
         ".loom/compound",
         ".opencode/agents",
         ".opencode/memory",

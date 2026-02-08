@@ -13,10 +13,12 @@ severity: medium
 tags: [compound, opencode-plugin, installer, template-mirror, loom-roadmap, changelog]
 ---
 
-# Troubleshooting: Remove LOOM_PROJECT.md and embed changelog in LOOM_ROADMAP.md
+# Troubleshooting: Remove LOOM_PROJECT.md and embed changelog in ROADMAP.md
 
 ## Problem
 The compound integration maintained three separate “core docs” (`LOOM_PROJECT.md`, `LOOM_ROADMAP.md`, `LOOM_CHANGELOG.md`). That split the always-on context and memory deltas across multiple files and made the compound scaffolding harder to keep consistent.
+
+We now keep direction + backlog + changelog in a single canonical file: `.loom/compound/ROADMAP.md`.
 
 ## Environment
 - Module: Loom
@@ -39,28 +41,28 @@ Make the “core docs” model explicit and consistent everywhere:
 
 1) Only two canonical docs exist:
 - `AGENTS.md`
-- `LOOM_ROADMAP.md` (includes a managed changelog block)
+- `.loom/compound/ROADMAP.md` (includes a managed changelog block)
 
 2) Update the OpenCode compound plugin (and its packaged mirror) to:
 - stop bootstrapping `LOOM_PROJECT.md` and `LOOM_CHANGELOG.md`
 - stop syncing `LOOM_PROJECT.md`
-- append changelog entries into `LOOM_ROADMAP.md` in a managed block (`compound:changelog-entries`)
+- append changelog entries into `.loom/compound/ROADMAP.md` in a managed block (`compound:changelog-entries`)
 
 ```ts
 // .opencode/plugins/compound_engineering.ts
 
 // ensureBootstrap(): stop creating LOOM_PROJECT.md / LOOM_CHANGELOG.md
 // roadmapSkeleton(): includes `<!-- BEGIN:compound:changelog-entries -->`
-// appendChangelog(): writes to LOOM_ROADMAP.md (bounded + deduped)
+// appendChangelog(): writes to .loom/compound/ROADMAP.md (bounded + deduped)
 ```
 
-3) Update the Python installer to only ensure fences in `LOOM_ROADMAP.md`:
+3) Update the Python installer to only ensure fences in `.loom/compound/ROADMAP.md`:
 
 ```py
 # src/agent_loom/compound/install.py
 
 doc_specs = [
-  ("LOOM_ROADMAP.md", ["roadmap-backlog", "roadmap-ai-notes", "changelog-entries"]),
+  (".loom/compound/ROADMAP.md", ["roadmap-backlog", "roadmap-ai-notes", "changelog-entries"]),
 ]
 ```
 
@@ -71,7 +73,7 @@ doc_specs = [
 
 pathspecs = [
   "AGENTS.md",
-  "LOOM_ROADMAP.md",
+  ".loom/compound/ROADMAP.md",
   ".opencode/agents",
   ".opencode/memory",
   ".opencode/skills",
@@ -86,16 +88,16 @@ pathspecs = [
 
 6) Update tests to lock the new contract:
 - `tests/test_compound_install.py` asserts:
-  - installer creates `LOOM_ROADMAP.md`
+  - installer creates `.loom/compound/ROADMAP.md`
   - installer does NOT create `LOOM_PROJECT.md` / `LOOM_CHANGELOG.md`
-  - `LOOM_ROADMAP.md` contains `compound:changelog-entries`
+  - `.loom/compound/ROADMAP.md` contains `compound:changelog-entries`
 
-7) (Repo) Move existing changelog entries into `LOOM_ROADMAP.md` and delete old root docs:
+7) (Repo) Move existing changelog entries into `.loom/compound/ROADMAP.md` and delete old root docs:
 - delete `LOOM_PROJECT.md`
 - delete `LOOM_CHANGELOG.md`
 
 ## Why This Works
-- One canonical place for always-on context (`AGENTS.md`) and one canonical place for direction + deltas (`LOOM_ROADMAP.md`) reduces drift.
+- One canonical place for always-on context (`AGENTS.md`) and one canonical place for direction + deltas (`.loom/compound/ROADMAP.md`) reduces drift.
 - The plugin, installer template, sync allowlist, and autolearn constraints now agree on the same file surface.
 - The changelog append logic remains bounded and deduped, but now lives where agents also read direction/backlog.
 
@@ -104,7 +106,7 @@ pathspecs = [
   - keep `.opencode/plugins/compound_engineering.ts` mirrored with `src/agent_loom/compound/opencode/.opencode/plugins/compound_engineering.ts`
   - keep `.opencode/compound/prompts/autolearn.md` mirrored with `src/agent_loom/compound/opencode/.opencode/compound/prompts/autolearn.md`
 - Add a “forbidden references” test (or CI grep) to ensure no scaffold files mention `LOOM_PROJECT.md` or `LOOM_CHANGELOG.md`.
-- Add/keep contract tests ensuring `LOOM_ROADMAP.md` contains `changelog-entries` fences after install.
+- Add/keep contract tests ensuring `.loom/compound/ROADMAP.md` contains `changelog-entries` fences after install.
 
 ## Related Issues
 No related issues documented yet.
@@ -114,5 +116,5 @@ No related issues documented yet.
 - `src/agent_loom/compound/opencode/.opencode/plugins/compound_engineering.ts`
 - `src/agent_loom/compound/install.py`
 - `src/agent_loom/compound/sync.py`
-- `src/agent_loom/compound/opencode/LOOM_ROADMAP.md`
+- `src/agent_loom/compound/opencode/.loom/compound/ROADMAP.md`
 - `tests/test_compound_install.py`

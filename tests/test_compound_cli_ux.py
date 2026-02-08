@@ -152,7 +152,7 @@ class TestCompoundCliUx(unittest.TestCase):
                 self.assertTrue(str(p2.get("episode_path") or ""))
 
                 # sync (commit compound-owned paths)
-                ctx = root / "LOOM_CONTEXT.md"
+                ctx = root / "LOOM.md"
                 ctx.write_text(
                     ctx.read_text(encoding="utf-8") + "\n# touched\n",
                     encoding="utf-8",

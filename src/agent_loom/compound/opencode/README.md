@@ -13,7 +13,7 @@ It supports:
 - ✅ **Automatic post-turn learning** on `session.idle`
   - extracts/updates **instincts**
   - creates/updates **skills**
-  - refreshes derived docs (`LOOM_CONTEXT.md`, `LOOM_ROADMAP.md`, `.opencode/memory/INSTINCTS.md`)
+  - refreshes derived docs (`LOOM.md`, `.loom/compound/ROADMAP.md`, `.loom/compound/INSTINCTS.md`)
 
 ---
 
@@ -36,9 +36,9 @@ Skills compound. That’s the entire trick.
 
 - `AGENTS.md`
   Human-owned overview and stable project guardrails.
-- `LOOM_CONTEXT.md`
+- `LOOM.md`
   Derived always-on context (compound-managed) including workflow pointers, core context, and a small instincts summary.
-- `LOOM_ROADMAP.md`
+- `.loom/compound/ROADMAP.md`
   Loom direction as an empirical compass (AI-managed sections).
   Also contains an embedded AI-first changelog block (bounded; no "no changes" entries).
 
@@ -46,9 +46,9 @@ Skills compound. That’s the entire trick.
 
 - `.opencode/skills/<skill-name>/SKILL.md`
   OpenCode skills (primary source of procedural memory)
-- `.opencode/memory/instincts.json`
+- `.loom/compound/instincts.json`
   Source of truth for instincts
-- `.opencode/memory/INSTINCTS.md`
+- `.loom/compound/INSTINCTS.md`
   Index view (AI-managed)
 - `.opencode/memory/observations.jsonl`
   Append-only observation log (**gitignored by default**)
@@ -79,7 +79,7 @@ Treat these as three classes:
 2) Persistent cognitive state (do not overwrite during upgrades):
 
 - `.opencode/skills/**` (procedural memory)
-- `.opencode/memory/instincts.json` and `.opencode/memory/INSTINCTS.md` (instinct store + index)
+- `.loom/compound/instincts.json` and `.loom/compound/INSTINCTS.md` (instinct store + index)
 
 3) Runtime-only artifacts (should be gitignored):
 

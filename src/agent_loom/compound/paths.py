@@ -27,7 +27,7 @@ class CompoundPaths:
 
     # Docs
     agents_md: Path
-    context_md: Path
+    loom_md: Path
     roadmap_md: Path
 
 
@@ -36,8 +36,6 @@ def compound_paths(root: Path) -> CompoundPaths:
     skills_dir = root / ".opencode" / "skills"
     memory_dir = root / ".opencode" / "memory"
     observations_file = memory_dir / "observations.jsonl"
-    instincts_file = memory_dir / "instincts.json"
-    instincts_md = memory_dir / "INSTINCTS.md"
 
     compound_dir = root / ".opencode" / "compound"
 
@@ -47,9 +45,12 @@ def compound_paths(root: Path) -> CompoundPaths:
     blobs_dir = loom_compound_dir / "blobs"
     decisions_dir = loom_compound_dir / "decisions"
 
+    instincts_file = loom_compound_dir / "instincts.json"
+    instincts_md = loom_compound_dir / "INSTINCTS.md"
+
     agents_md = root / "AGENTS.md"
-    context_md = root / "LOOM_CONTEXT.md"
-    roadmap_md = root / "LOOM_ROADMAP.md"
+    loom_md = root / "LOOM.md"
+    roadmap_md = loom_compound_dir / "ROADMAP.md"
 
     return CompoundPaths(
         root=root,
@@ -65,7 +66,7 @@ def compound_paths(root: Path) -> CompoundPaths:
         blobs_dir=blobs_dir,
         decisions_dir=decisions_dir,
         agents_md=agents_md,
-        context_md=context_md,
+        loom_md=loom_md,
         roadmap_md=roadmap_md,
     )
 
@@ -74,8 +75,8 @@ def required_scaffold_paths() -> list[str]:
     # These should be installed via `loom compound init`.
     return [
         "AGENTS.md",
-        "LOOM_CONTEXT.md",
-        "LOOM_ROADMAP.md",
+        "LOOM.md",
+        ".loom/compound/ROADMAP.md",
         ".loom/compound/README.md",
         ".opencode/commands/workflow-plan.md",
         ".opencode/commands/workflow-work.md",

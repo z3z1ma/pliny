@@ -196,4 +196,4 @@ uv run pytest
 
 - `AGENTS.md` (agent primitives)
 - `LOOM.md` (system context)
-- `LOOM_ROADMAP.md` (direction + changelog)
+- `.loom/compound/ROADMAP.md` (direction + changelog)

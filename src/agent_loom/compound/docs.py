@@ -66,7 +66,7 @@ This block is maintained by the compound system.
 
 **Where things live:**
 - Skills: `.opencode/skills/<name>/SKILL.md`
-- Instincts: `.opencode/memory/instincts.json` (index at `.opencode/memory/INSTINCTS.md`)
+- Instincts: `.loom/compound/instincts.json` (index at `.loom/compound/INSTINCTS.md`)
 - Observations: `.opencode/memory/observations.jsonl` (gitignored by default)
 - Episodes: `.loom/compound/episodes/YYYY/MM/<episode_id>.json` (committed evidence)
 - Blobs: `.loom/compound/blobs/<sha256>.<ext>` (full patches, raw proposals, prompt snapshots)
@@ -74,8 +74,8 @@ This block is maintained by the compound system.
 
 **Core docs:**
 - `AGENTS.md` (stable human-owned overview)
-- `LOOM_CONTEXT.md` (derived always-on context + instincts summary)
-- `LOOM_ROADMAP.md` (direction + backlog + changelog)
+- `LOOM.md` (derived always-on context + instincts summary)
+- `.loom/compound/ROADMAP.md` (direction + backlog + changelog)
 """
     )
 
@@ -101,7 +101,7 @@ This block is intentionally *small and stable*. Only update it when a principle 
 - Prefer agent-native primitives: ticket, memory, workspace, team.
 - Governance loop: Plan -> Work -> Review -> Compound -> Repeat.
 
-@LOOM_ROADMAP.md
+@.loom/compound/ROADMAP.md
 """
     )
 
@@ -124,7 +124,7 @@ def render_rules_index(root: Path) -> str:
 
 
 def sync_instincts_markdown(*, root: Path, store: InstinctStore) -> None:
-    md_path = root / ".opencode" / "memory" / "INSTINCTS.md"
+    md_path = root / ".loom" / "compound" / "INSTINCTS.md"
     existing = _read_text(
         md_path,
         fallback=_normalize_newlines(
@@ -155,17 +155,17 @@ def sync_instincts_markdown(*, root: Path, store: InstinctStore) -> None:
 def sync_docs(*, root: Path) -> None:
     require_scaffold_installed(root)
 
-    instincts = load_instincts(root / ".opencode" / "memory" / "instincts.json")
+    instincts = load_instincts(root / ".loom" / "compound" / "instincts.json")
 
-    # LOOM_CONTEXT.md (derived, AI-managed)
-    ctx_path = root / "LOOM_CONTEXT.md"
-    ctx = _read_text(ctx_path, fallback="# LOOM_CONTEXT\n")
+    # LOOM.md (derived, AI-managed)
+    ctx_path = root / "LOOM.md"
+    ctx = _read_text(ctx_path, fallback="# LOOM\n")
     ctx = upsert_managed_block(ctx, "agents-ai-behavior", render_agents_ai_behavior())
     ctx = upsert_managed_block(ctx, "workflow-commands", render_workflow_commands())
     ctx = upsert_managed_block_preserving_non_placeholder(
         ctx, "loom-core-context", render_loom_core_context()
     )
-    # Keep this small to reduce churn; the full index lives at .opencode/memory/INSTINCTS.md.
+    # Keep this small to reduce churn; the full index lives at .loom/compound/INSTINCTS.md.
     ctx = upsert_managed_block(
         ctx,
         "instincts-index",
@@ -174,8 +174,8 @@ def sync_docs(*, root: Path) -> None:
     ctx = upsert_managed_block(ctx, "rules-index", render_rules_index(root))
     _write_text(ctx_path, ctx)
 
-    # LOOM_ROADMAP.md
-    roadmap_path = root / "LOOM_ROADMAP.md"
+    # ROADMAP.md
+    roadmap_path = root / ".loom" / "compound" / "ROADMAP.md"
     roadmap = _read_text(roadmap_path)
 
     from agent_loom.compound.roadmap import (

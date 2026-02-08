@@ -11,7 +11,7 @@ Core loop:
 Where things live:
 
 - Skills: `.opencode/skills/<name>/SKILL.md`
-- Instincts: `.opencode/memory/instincts.json` (index: `.opencode/memory/INSTINCTS.md`)
+- Instincts: `.loom/compound/instincts.json` (index: `.loom/compound/INSTINCTS.md`)
 - Observations: `.opencode/memory/observations.jsonl` (gitignored)
 - Episodes (evidence): `.loom/compound/episodes/YYYY/MM/<episode_id>.json`
 - Decisions (ops log): `.loom/compound/decisions/YYYY/MM/<decision_id>.json`

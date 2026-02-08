@@ -90,8 +90,8 @@ def _is_scaffold_file(rel: str) -> bool:
 
 def _is_persistent_memory_file(rel: str) -> bool:
     return rel in (
-        ".opencode/memory/instincts.json",
-        ".opencode/memory/INSTINCTS.md",
+        ".loom/compound/instincts.json",
+        ".loom/compound/INSTINCTS.md",
     )
 
 
@@ -209,6 +209,15 @@ def install_opencode(
             rel_str = _rel_posix(rel)
             dst = dest / rel
 
+            # Never overwrite persistent state.
+            if _is_persistent_memory_file(rel_str):
+                if dst.exists():
+                    skipped.append(rel_str)
+                    continue
+                status = _copy_file(src=p, dest=dst, overwrite=False, dry_run=dry_run)
+                (wrote if status == "wrote" else skipped).append(rel_str)
+                continue
+
             # Never overwrite committed evidence capsules.
             if _is_persistent_evidence_file(rel_str):
                 if dst.exists():
@@ -225,10 +234,10 @@ def install_opencode(
             status = _copy_file(src=p, dest=dst, overwrite=overwrite, dry_run=dry_run)
             (wrote if status == "wrote" else skipped).append(rel_str)
 
-    # 2) Loom-scoped root docs
+    # 2) Loom-owned docs (derived, AI-managed)
     doc_specs: list[tuple[str, list[str]]] = [
         (
-            "LOOM_CONTEXT.md",
+            "LOOM.md",
             [
                 "agents-ai-behavior",
                 "workflow-commands",
@@ -238,38 +247,38 @@ def install_opencode(
             ],
         ),
         (
-            "LOOM_ROADMAP.md",
+            ".loom/compound/ROADMAP.md",
             ["roadmap-backlog", "roadmap-ai-notes", "changelog-entries"],
         ),
     ]
-    for name, required_ids in doc_specs:
-        src_doc = src / name
+    for rel, required_ids in doc_specs:
+        src_doc = src / rel
         if not _is_file(src_doc):
-            raise FileNotFoundError(f"Template missing {name}: {src_doc}")
+            raise FileNotFoundError(f"Template missing {rel}: {src_doc}")
 
-        dst_doc = dest / name
+        dst_doc = dest / rel
 
         if not dst_doc.exists():
             status = _copy_file(
                 src=src_doc, dest=dst_doc, overwrite=False, dry_run=dry_run
             )
-            (wrote if status == "wrote" else skipped).append(name)
+            (wrote if status == "wrote" else skipped).append(rel)
             continue
 
         raw = dst_doc.read_text(encoding="utf-8")
         new, changed = _ensure_doc_fences(raw, ids=required_ids)
         if not changed:
-            skipped.append(name)
+            skipped.append(rel)
             continue
 
         if dry_run:
-            wrote.append(name)
+            wrote.append(rel)
         else:
             dst_doc.write_text(new, encoding="utf-8")
-            wrote.append(name)
+            wrote.append(rel)
 
     # 3) Ensure AGENTS.md exists, but never patch/overwrite it.
-    #    (Derived context lives in LOOM_CONTEXT.md.)
+    #    (Derived context lives in LOOM.md.)
     agents = dest / "AGENTS.md"
     if agents.exists():
         skipped.append("AGENTS.md")
@@ -281,8 +290,8 @@ def install_opencode(
                 "This file is included in the agent's context. It should be committed.",
                 "",
                 "For derived and frequently-updated context, see:",
-                "- LOOM_CONTEXT.md",
-                "- LOOM_ROADMAP.md",
+                "- LOOM.md",
+                "- .loom/compound/ROADMAP.md",
                 "",
             ]
         )

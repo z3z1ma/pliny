@@ -108,7 +108,7 @@ def test_compound_run_writes_episode_and_applies_proposals() -> None:
         assert res.decision_path
         assert Path(res.decision_path).exists()
 
-        instincts_path = root / ".opencode" / "memory" / "instincts.json"
+        instincts_path = root / ".loom" / "compound" / "instincts.json"
         assert instincts_path.exists()
         store = json.loads(instincts_path.read_text(encoding="utf-8"))
         ids = [i.get("id") for i in store.get("instincts", [])]

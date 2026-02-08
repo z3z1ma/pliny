@@ -141,8 +141,8 @@ async function resolveRepoRoot(start: string): Promise<string> {
 async function checkInstalled(root: string): Promise<{ ok: boolean; missing: string[] }> {
   const required = [
     "AGENTS.md",
-    "LOOM_CONTEXT.md",
-    "LOOM_ROADMAP.md",
+    "LOOM.md",
+    ".loom/compound/ROADMAP.md",
     ".loom/compound/README.md",
     ".opencode/commands/workflow-plan.md",
     ".opencode/commands/workflow-work.md",
@@ -567,8 +567,8 @@ export const CompoundEngineeringPlugin: Plugin = async ({ client, directory, wor
         [
           "## Persistent repo context (compound-engineering)",
           "- Read AGENTS.md (stable human-owned overview).",
-          "- Read LOOM_CONTEXT.md (derived always-on context + instincts summary).",
-          "- Read LOOM_ROADMAP.md (direction + backlog + changelog).",
+          "- Read LOOM.md (derived always-on context + instincts summary).",
+          "- Read .loom/compound/ROADMAP.md (direction + backlog + changelog).",
           "- Rules/cookbooks may be written to .opencode/rules/*.md via `loom compound update`.",
           "- Skills live under .opencode/skills/<name>/SKILL.md (mirrored to .claude/skills/ when enabled).",
           "- This plugin logs observations and may trigger a background autolearn on session idle.",
