@@ -1,5 +1,5 @@
 <golden_rule>
-Show your skill to someone with minimal context and ask them to follow the instructions. If they're confused, Claude will likely be too.
+Show your skill to someone with minimal context and ask them to follow the instructions. If they're confused, the agent will likely be too.
 </golden_rule>
 
 <overview>
@@ -8,14 +8,14 @@ Clarity and directness are fundamental to effective skill authoring. Clear instr
 
 <guidelines>
 <contextual_information>
-Give Claude contextual information that frames the task:
+Give the agent contextual information that frames the task:
 
 - What the task results will be used for
 - What audience the output is meant for
 - What workflow the task is part of
 - The end goal or what successful completion looks like
 
-Context helps Claude make better decisions and produce more appropriate outputs.
+Context helps the agent make better decisions and produce more appropriate outputs.
 
 <example>
 ```xml
@@ -27,7 +27,7 @@ This analysis will be presented to investors who value transparency and actionab
 </contextual_information>
 
 <specificity>
-Be specific about what you want Claude to do. If you want code only and nothing else, say so.
+Be specific about what you want the agent to do. If you want code only and nothing else, say so.
 
 **Vague**: "Help with the report"
 **Specific**: "Generate a markdown report with three sections: Executive Summary, Key Findings, Recommendations"
@@ -51,7 +51,7 @@ Provide instructions as sequential steps. Use numbered lists or bullet points.
 </workflow>
 ```
 
-Sequential steps create clear expectations and reduce the chance Claude skips important operations.
+Sequential steps create clear expectations and reduce the chance the agent skips important operations.
 </sequential_steps>
 </guidelines>
 
@@ -115,7 +115,7 @@ The clear version:
 - Specifies edge cases (product names, no PII found)
 - Includes success criteria
 
-The unclear version leaves all these decisions to Claude, increasing the chance of misalignment with expectations.
+The unclear version leaves all these decisions to the agent, increasing the chance of misalignment with expectations.
 </key_differences>
 
 <show_dont_just_tell>
@@ -170,7 +170,7 @@ Examples communicate nuances that text descriptions can't:
 - Level of detail
 - Pattern across multiple cases
 
-Claude learns patterns from examples more reliably than from descriptions.
+The agent learns patterns from examples more reliably than from descriptions.
 </why_showing_works>
 </show_dont_just_tell>
 
@@ -189,7 +189,7 @@ Eliminate words and phrases that create ambiguity or leave decisions open.
 ❌ **"Generally..."** - When are exceptions allowed?
 ✅ **"Always... except when..."** - Clear rule with explicit exceptions
 
-❌ **"Consider..."** - Should Claude always do this or only sometimes?
+❌ **"Consider..."** - Should the agent always do this or only sometimes?
 ✅ **"If X, then Y"** or **"Always..."** - Clear conditions
 </ambiguous_phrases>
 
@@ -218,7 +218,7 @@ If validation fails, fix errors and re-validate. Only proceed when validation pa
 
 <define_edge_cases>
 <principle>
-Anticipate edge cases and define how to handle them. Don't leave Claude guessing.
+Anticipate edge cases and define how to handle them. Don't leave the agent guessing.
 </principle>
 
 <without_edge_cases>
@@ -310,7 +310,7 @@ Generate a markdown report with this exact structure:
 
 <decision_criteria>
 <principle>
-When Claude must make decisions, provide clear criteria.
+When the agent must make decisions, provide clear criteria.
 </principle>
 
 <no_criteria>
@@ -347,7 +347,7 @@ Analyze the data and select appropriate visualization:
 </workflow>
 ```
 
-**Benefits**: Claude has objective criteria for making the decision rather than guessing.
+**Benefits**: The agent has objective criteria for making the decision rather than guessing.
 </with_criteria>
 </decision_criteria>
 
@@ -399,7 +399,7 @@ The report should include financial data, customer metrics, and market analysis.
 
 <success_criteria>
 <principle>
-Define what success looks like. How will Claude know it succeeded?
+Define what success looks like. How will the agent know it succeeded?
 </principle>
 
 <without_success_criteria>
@@ -445,7 +445,7 @@ Test your instructions by asking: "Could I hand these instructions to a junior d
 5. Test with someone who doesn't have your context
 6. Iterate based on their questions and confusion
 
-If a human with minimal context struggles, Claude will too.
+If a human with minimal context struggles, the agent will too.
 </testing_process>
 </testing_clarity>
 

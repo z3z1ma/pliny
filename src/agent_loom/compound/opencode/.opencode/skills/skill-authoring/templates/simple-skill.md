@@ -8,7 +8,7 @@ description: {{What it does}} Use when {{trigger conditions}}.
 </objective>
 
 <quick_start>
-{{Immediate actionable guidance - what Claude should do first}}
+{{Immediate actionable guidance - what the agent should do first}}
 </quick_start>
 
 <process>

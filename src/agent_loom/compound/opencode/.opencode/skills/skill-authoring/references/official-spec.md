@@ -1,6 +1,6 @@
-# Anthropic Official Skill Specification
+# Skill Specification (Practical Summary)
 
-Source: [code.claude.com/docs/en/skills](https://code.claude.com/docs/en/skills)
+Source: https://agentskills.io/home
 
 ## SKILL.md File Structure
 
@@ -17,7 +17,7 @@ description: Brief description of what this Skill does and when to use it
 # Your Skill Name
 
 ## Instructions
-Provide clear, step-by-step guidance for Claude.
+Provide clear, step-by-step guidance for the agent.
 
 ## Examples
 Show concrete examples of using this Skill.
@@ -28,8 +28,8 @@ Show concrete examples of using this Skill.
 | Field | Required | Description |
 |-------|----------|-------------|
 | `name` | Yes | Skill name using lowercase letters, numbers, and hyphens only (max 64 characters). Should match the directory name. |
-| `description` | Yes | What the Skill does and when to use it (max 1024 characters). Claude uses this to decide when to apply the Skill. |
-| `allowed-tools` | No | Tools Claude can use without asking permission when this Skill is active. Example: `Read, Grep, Glob` |
+| `description` | Yes | What the Skill does and when to use it (max 1024 characters). The runtime uses this for skill discovery. |
+| `allowed-tools` | No | Tools the agent can use without asking permission when this Skill is active. Example: `Read, Grep, Glob` |
 | `model` | No | Specific model to use when this Skill is active (e.g., `openai/gpt-5.3-codex`). Defaults to the conversation's model. |
 
 ## Skill Locations & Priority
@@ -47,11 +47,11 @@ Enterprise (highest priority) → Personal → Project → Plugin (lowest priori
 
 ## How Skills Work
 
-1. **Discovery**: Claude loads only name and description at startup
-2. **Activation**: When your request matches a Skill's description, Claude asks for confirmation
-3. **Execution**: Claude follows the Skill's instructions and loads referenced files
+1. **Discovery**: Most runtimes index skill `name` and `description` for discovery
+2. **Activation**: When your request matches a Skill's description, the runtime may ask for confirmation
+3. **Execution**: The agent follows the Skill's instructions and loads referenced files
 
-**Key Principle**: Skills are **model-invoked** — Claude automatically decides which Skills to use based on your request.
+**Key Principle**: Skills are **runtime-invoked** — the runtime decides which Skills to suggest/activate based on your request.
 
 ## Progressive Disclosure Pattern
 

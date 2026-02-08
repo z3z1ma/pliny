@@ -1,18 +1,18 @@
 # Skill Authoring Best Practices
 
-Source: [platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
+Source: https://agentskills.io/home
 
 ## Core Principles
 
 ### Concise is Key
 
-The context window is a public good. Your Skill shares the context window with everything else Claude needs to know.
+The context window is a public good. Your Skill shares the context window with everything else the agent needs to know.
 
-**Default assumption**: Claude is already very smart. Only add context Claude doesn't already have.
+**Default assumption**: The agent is already very smart. Only add context the agent doesn't already have.
 
 Challenge each piece of information:
-- "Does Claude really need this explanation?"
-- "Can I assume Claude knows this?"
+- "Does the agent really need this explanation?"
+- "Can I assume the agent knows this?"
 - "Does this paragraph justify its token cost?"
 
 **Good example (concise, ~50 tokens):**
@@ -77,13 +77,13 @@ python scripts/migrate.py --verify --backup
 Do not modify the command or add flags.
 ```
 
-### Test With All Models
+### Test With Your Target Models
 
-Skills act as additions to models. Test with Haiku, Sonnet, and Opus.
+Skills act as additions to models. Test with the models you actually expect to run.
 
-- **Haiku**: Does the Skill provide enough guidance?
-- **Sonnet**: Is the Skill clear and efficient?
-- **Opus**: Does the Skill avoid over-explaining?
+At a minimum, test with:
+- one fast/cheap model
+- one strong reasoning model
 
 ## Naming Conventions
 
@@ -103,7 +103,7 @@ Use **gerund form** (verb + -ing) for Skill names:
 **Avoid:**
 - Vague: `helper`, `utils`, `tools`
 - Generic: `documents`, `data`, `files`
-- Reserved: `anthropic-*`, `claude-*`
+- Avoid vendor/runtime-prefixed names
 
 ## Writing Effective Descriptions
 
@@ -187,7 +187,7 @@ For simple edits, modify the XML directly.
 
 ## Keep References One Level Deep
 
-Claude may partially read files when they're referenced from other referenced files.
+The agent may partially read files when they're referenced from other referenced files.
 
 **Bad (too deep):**
 ```markdown

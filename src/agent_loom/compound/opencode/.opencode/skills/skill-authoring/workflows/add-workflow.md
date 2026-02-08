@@ -12,7 +12,7 @@
 **DO NOT use AskUserQuestion** - there may be many skills.
 
 ```bash
-ls ~/.claude/skills/
+ ls .opencode/skills/
 ```
 
 Present numbered list, ask: "Which skill needs a new workflow?"
@@ -21,8 +21,8 @@ Present numbered list, ask: "Which skill needs a new workflow?"
 
 Read the skill:
 ```bash
-cat ~/.claude/skills/{skill-name}/SKILL.md
-ls ~/.claude/skills/{skill-name}/workflows/ 2>/dev/null
+ cat .opencode/skills/{skill-name}/SKILL.md
+ ls .opencode/skills/{skill-name}/workflows/ 2>/dev/null
 ```
 
 Determine:

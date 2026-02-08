@@ -2,7 +2,7 @@
 name: skill-authoring
 description: "Create high-quality skills: scoped, procedural, and durable. Prefer updates over duplicates. Use when working with SKILL.md files, authoring new skills, improving existing skills, or understanding skill structure and best practices."
 license: MIT
-compatibility: opencode,claude
+compatibility: opencode
 metadata:
   created_at: "2026-01-27T17:03:09.731823+00:00"
   updated_at: "2026-01-27T17:03:09.731823+00:00"
@@ -13,13 +13,13 @@ metadata:
 <!-- BEGIN:compound:skill-managed -->
 # Creating Agent Skills
 
-This skill teaches how to create effective Claude Code Skills following Anthropic's official specification.
+This skill teaches how to create effective OpenCode skills following the skill format used in this repository.
 
 ## Core Principles
 
 ### 1. Skills Are Prompts
 
-All prompting best practices apply. Be clear, be direct. Assume Claude is smart - only add context Claude doesn't have.
+All prompting best practices apply. Be clear, be direct. Assume the agent is smart - only add context the agent doesn't have.
 
 ### 2. Standard Markdown Format
 
@@ -77,7 +77,7 @@ description: Helps with documents
 |-------|----------|------------|-------------|
 | `name` | Yes | 64 chars | Lowercase letters, numbers, hyphens only |
 | `description` | Yes | 1024 chars | What it does AND when to use it |
-| `allowed-tools` | No | - | Tools Claude can use without asking |
+| `allowed-tools` | No | - | Tools the agent can use without asking |
 | `model` | No | - | Specific model to use |
 
 ### Naming Conventions
@@ -89,7 +89,7 @@ Use **gerund form** (verb + -ing) for skill names:
 - `generating-commit-messages`
 - `reviewing-code`
 
-Avoid: `helper`, `utils`, `tools`, `anthropic-*`, `claude-*`
+Avoid: `helper`, `utils`, `tools`, vendor/runtime-prefixed names
 
 ### Body Structure
 
@@ -102,7 +102,7 @@ Use standard markdown headings:
 Fastest path to value...
 
 ## Instructions
-Core guidance Claude follows...
+Core guidance the agent follows...
 
 ## Examples
 Input/output pairs showing expected behavior...
@@ -199,9 +199,9 @@ python scripts/analyze.py input.pdf > fields.json
 ### Step 5: Test With Real Usage
 
 1. Test with actual tasks, not test scenarios
-2. Observe where Claude struggles
+2. Observe where the agent struggles
 3. Refine based on real behavior
-4. Test with Haiku, Sonnet, and Opus
+4. Test across multiple models (at least one fast/cheap and one strong)
 
 ## Auditing Existing Skills
 
@@ -281,14 +281,14 @@ Guide through decision points:
 - **Deep nesting** - Keep references one level from SKILL.md
 - **Too many options** - Provide a default with escape hatch
 - **Windows paths** - Always use forward slashes
-- **Punting to Claude** - Scripts should handle errors
+- **Punting to the agent** - Scripts should handle errors
 - **Time-sensitive info** - Use "old patterns" section instead
 
 ## Reference Files
 
 For detailed guidance, see:
 
-- [official-spec.md](references/official-spec.md) - Anthropic's official skill specification
+- [official-spec.md](references/official-spec.md) - Skill file format and discovery basics (runtime-dependent)
 - [best-practices.md](references/best-practices.md) - Skill authoring best practices
 
 ## Success Criteria
@@ -302,9 +302,8 @@ A well-structured skill:
 - Has been tested with real usage
 
 Sources:
-- [Agent Skills - Claude Code Docs](https://code.claude.com/docs/en/skills)
-- [Skill authoring best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
-- [GitHub - anthropics/skills](https://github.com/anthropics/skills)
+- https://agentskills.io/home
+- Your agent runtime's skill documentation
 <!-- END:compound:skill-managed -->
 
 ## Manual notes

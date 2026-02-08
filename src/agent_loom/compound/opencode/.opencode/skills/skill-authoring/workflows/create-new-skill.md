@@ -90,13 +90,13 @@ See references/recommended-structure.md for templates.
 ## Step 4: Create Directory
 
 ```bash
-mkdir -p ~/.claude/skills/{skill-name}
+ mkdir -p .opencode/skills/{skill-name}
 # If complex:
-mkdir -p ~/.claude/skills/{skill-name}/workflows
-mkdir -p ~/.claude/skills/{skill-name}/references
+ mkdir -p .opencode/skills/{skill-name}/workflows
+ mkdir -p .opencode/skills/{skill-name}/references
 # If needed:
-mkdir -p ~/.claude/skills/{skill-name}/templates  # for output structures
-mkdir -p ~/.claude/skills/{skill-name}/scripts    # for reusable code
+ mkdir -p .opencode/skills/{skill-name}/templates  # for output structures
+ mkdir -p .opencode/skills/{skill-name}/scripts    # for reusable code
 ```
 
 ## Step 5: Write SKILL.md
@@ -154,7 +154,7 @@ Check:
 ## Step 9: Create Slash Command
 
 ```bash
-cat > ~/.claude/commands/{skill-name}.md << 'EOF'
+ cat > .opencode/commands/{skill-name}.md << 'EOF'
 ---
 description: {Brief description}
 argument-hint: [{argument hint}]

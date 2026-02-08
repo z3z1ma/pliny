@@ -130,7 +130,7 @@ Never skip validation. Catching errors early prevents corrupted output files.
 
 <plan_validate_execute_pattern>
 <principle>
-When Claude performs complex, open-ended tasks, create a plan in a structured format, validate it, then execute.
+When the agent performs complex, open-ended tasks, create a plan in a structured format, validate it, then execute.
 
 Workflow: analyze → **create plan file** → **validate plan** → execute → verify
 </principle>
@@ -197,7 +197,7 @@ Make validation scripts verbose with specific error messages:
 **Bad error message**:
 "Invalid field"
 
-Specific errors help Claude fix issues without guessing.
+Specific errors help the agent fix issues without guessing.
 </implementation_tip>
 
 <when_to_use>
@@ -212,7 +212,7 @@ Use plan-validate-execute when:
 
 <conditional_workflows>
 <principle>
-Guide Claude through decision points with clear branching logic.
+Guide the agent through decision points with clear branching logic.
 </principle>
 
 <document_modification_example>
@@ -264,13 +264,13 @@ Use conditional workflows when:
 - Different task types require different approaches
 - Decision points are clear and well-defined
 - Workflows are mutually exclusive
-- Guiding Claude to correct path improves outcomes
+- Guiding the agent to the correct path improves outcomes
 </when_to_use>
 </conditional_workflows>
 
 <validation_scripts>
 <principles>
-Validation scripts are force multipliers. They catch errors that Claude might miss and provide actionable feedback for fixing issues.
+Validation scripts are force multipliers. They catch errors the agent might miss and provide actionable feedback for fixing issues.
 </principles>
 
 <characteristics_of_good_validation>
@@ -279,7 +279,7 @@ Validation scripts are force multipliers. They catch errors that Claude might mi
 
 **Bad**: "Invalid field"
 
-Verbose errors help Claude fix issues in one iteration instead of multiple rounds of guessing.
+Verbose errors help the agent fix issues in one iteration instead of multiple rounds of guessing.
 </verbose_errors>
 
 <specific_feedback>
@@ -295,7 +295,7 @@ Specific feedback pinpoints exact location and nature of the problem.
 
 **Bad**: "Missing required field"
 
-Actionable suggestions show Claude exactly what to fix.
+Actionable suggestions show the agent exactly what to fix.
 </actionable_suggestions>
 
 <available_options>
@@ -405,7 +405,7 @@ Use iterative refinement when:
 
 <checkpoint_pattern>
 <principle>
-For long workflows, add checkpoints where Claude can pause and verify progress before continuing.
+For long workflows, add checkpoints where the agent can pause and verify progress before continuing.
 </principle>
 
 <implementation_example>
@@ -463,7 +463,7 @@ At each checkpoint:
 
 <error_recovery>
 <principle>
-Design workflows with clear error recovery paths. Claude should know what to do when things go wrong.
+Design workflows with clear error recovery paths. The agent should know what to do when things go wrong.
 </principle>
 
 <implementation_example>
