@@ -26,25 +26,81 @@
       ]
     },
     {
+      "id": "agile-pack-invariants-first",
+      "title": "Treat loom-agile invariants tests as the contract",
+      "trigger": "When changing loom-agile pack content (skills/agents) or any pack loading/validation logic that touches loom-agile",
+      "action": "Read/align against tests/test_pack_loom_agile_core_invariants.py first; ensure skills and agent definitions satisfy the invariants instead of weakening the tests unless the contract is intentionally changing.",
+      "tags": [
+        "contract-tests",
+        "loom-agile",
+        "packs",
+        "stability"
+      ],
+      "confidence": 0.76,
+      "status": "active",
+      "created_at": "2026-02-09T17:11:23.591265Z",
+      "updated_at": "2026-02-09T17:11:23.591265Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T17:11:23.591265Z",
+          "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "f4852f7c4de8a9e9be4b41ccdb5f57bd415263d28ae19b364a8839191f89df91"
+        }
+      ]
+    },
+    {
       "id": "avoid-lsp-diagnostics-use-basedpyright",
-      "title": "Do not rely on LSP diagnostics for typing status",
-      "trigger": "When tempted to check typing errors via editor/LSP or `lsp_diagnostics`",
-      "action": "Use `uv run basedpyright` as the source of truth; treat LSP output as advisory only.",
+      "title": "Prefer basedpyright over LSP diagnostics for Python gates",
+      "trigger": "When you need to assess/resolve Python type issues in a repo that treats basedpyright as a required gate (or explicitly instructs to use it).",
+      "action": "Run `uv run basedpyright` and fix reported issues; do not rely on editor/LSP diagnostics or the `lsp_diagnostics` tool as a substitute for the gate.",
       "tags": [
         "python",
-        "quality",
-        "typing"
+        "quality-gates",
+        "type-checking",
+        "uv",
+        "workflow"
       ],
-      "confidence": 0.86,
+      "confidence": 0.85,
       "status": "active",
       "created_at": "2026-02-09T04:23:39.443272Z",
-      "updated_at": "2026-02-09T04:23:39.443272Z",
+      "updated_at": "2026-02-09T07:55:14.004273Z",
       "evidence": [
         {
           "ts": "2026-02-09T04:23:39.443272Z",
           "episode_id": "e73f6556efab5a08fe44febbe2ba7d245b558f059154ad39c13d6adedb7d42b2",
           "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
           "patch_sha256": "396d4064e16aedb39f74ca438e10beeef645fa829af509b251fa619bcf0e084d"
+        },
+        {
+          "ts": "2026-02-09T07:55:14.004273Z",
+          "episode_id": "834fb5a23c311e9a9a380277a96c859037a344dd48f48206d91642bd05e867e2",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "c5f8d5e8229818a616f0966c4fe052e4708d76c77b0afd028678e78c83e7f403"
+        }
+      ]
+    },
+    {
+      "id": "avoid-meta-proposal-skills",
+      "title": "Avoid shipping skills that only describe proposing skills",
+      "trigger": "When considering adding a skill whose primary purpose is to generate/propose other skills/instincts (meta-process rather than an engineering workflow)",
+      "action": "Do not add it unless it encodes a repeatable, durable workflow that cannot live as instincts; otherwise keep the process in instincts and episodes, not as a user-invokable skill.",
+      "tags": [
+        "compound",
+        "hygiene",
+        "process",
+        "skills"
+      ],
+      "confidence": 0.62,
+      "status": "active",
+      "created_at": "2026-02-09T17:11:23.591265Z",
+      "updated_at": "2026-02-09T17:11:23.591265Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T17:11:23.591265Z",
+          "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "f4852f7c4de8a9e9be4b41ccdb5f57bd415263d28ae19b364a8839191f89df91"
         }
       ]
     },
@@ -193,6 +249,54 @@
       ]
     },
     {
+      "id": "compound-autolearn-json-only",
+      "title": "Compound autolearn responses are JSON-only and tool-free",
+      "trigger": "When acting as the background autolearn/compound learning agent producing memory-only updates.",
+      "action": "Do not run any tools; output exactly one valid JSON object (no markdown). If there is no durable learning worth persisting, output `{}`. Keep within budgets and avoid proposing product code changes.",
+      "tags": [
+        "autolearn",
+        "compound",
+        "io-contract",
+        "memory",
+        "process"
+      ],
+      "confidence": 0.92,
+      "status": "active",
+      "created_at": "2026-02-09T07:55:14.004273Z",
+      "updated_at": "2026-02-09T07:55:14.004273Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T07:55:14.004273Z",
+          "episode_id": "834fb5a23c311e9a9a380277a96c859037a344dd48f48206d91642bd05e867e2",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "c5f8d5e8229818a616f0966c4fe052e4708d76c77b0afd028678e78c83e7f403"
+        }
+      ]
+    },
+    {
+      "id": "compound-avoid-vendor-names-in-internal-guides",
+      "title": "Use vendor-neutral wording in compound guidance",
+      "trigger": "When writing skills/prompts/docs that will be reused across environments or toolchains",
+      "action": "Avoid vendor/product-specific language and paths (e.g. naming a specific assistant or referencing `.claude/...`); write instructions in tool-agnostic terms that map to Loom/OpenCode primitives (`.opencode/skills`, `.loom/compound/...`, instincts/episodes) so guidance survives migrations.",
+      "tags": [
+        "compound",
+        "docs",
+        "portability"
+      ],
+      "confidence": 0.63,
+      "status": "active",
+      "created_at": "2026-02-09T16:40:22.666667Z",
+      "updated_at": "2026-02-09T16:40:22.666667Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T16:40:22.666667Z",
+          "episode_id": "6a4117725a084c05cdce9801bb473fb22173324aec75cff3a0e07fa306c445e7",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "eea72696af4ec22904d0da9b4e8bcaa573c956609dd65febceaec4c8ab608ad1"
+        }
+      ]
+    },
+    {
       "id": "compound-instincts-sync",
       "title": "Keep instincts docs and compiled JSON in sync",
       "trigger": "When adding or editing any Compound instinct.",
@@ -212,6 +316,77 @@
           "episode_id": "3a041417a4e53b44eba76c7207d0fd7913dd9b5f79cc33443de6f61afaa9dad8",
           "head_sha": "fd11881c724ec177afb9793ee355528f46f63286",
           "patch_sha256": "2b739a8231c6031ee25bc96ebbe1436a00521c016ddadb42a37b514d0e320431"
+        }
+      ]
+    },
+    {
+      "id": "compound-skill-dedup-preference",
+      "title": "Prefer consolidating skills over creating near-duplicates",
+      "trigger": "When adding or revising skills under .opencode/skills/ and you notice overlapping scope or repeated procedure",
+      "action": "Update the most canonical existing skill (better name, better adoption surface) and remove the redundant one; keep a single durable procedure per workflow.",
+      "tags": [
+        "compound",
+        "deduplication",
+        "maintenance",
+        "skills"
+      ],
+      "confidence": 0.67,
+      "status": "active",
+      "created_at": "2026-02-09T17:11:23.591265Z",
+      "updated_at": "2026-02-09T17:11:23.591265Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T17:11:23.591265Z",
+          "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "f4852f7c4de8a9e9be4b41ccdb5f57bd415263d28ae19b364a8839191f89df91"
+        }
+      ]
+    },
+    {
+      "id": "compound-skill-path-source-of-truth",
+      "title": "Treat .opencode/skills as the canonical skill location",
+      "trigger": "When reading, updating, or proposing skills for Loom / OpenCode",
+      "action": "Prefer `.opencode/skills/<name>/SKILL.md` as the source-of-truth; if a parallel legacy path exists (e.g. `.claude/skills/...`), do not create/maintain duplicates\u2014converge on the `.opencode/skills` copy and scrub references to legacy locations in guidance.",
+      "tags": [
+        "compound",
+        "repo-hygiene",
+        "skills"
+      ],
+      "confidence": 0.71,
+      "status": "active",
+      "created_at": "2026-02-09T16:40:22.666667Z",
+      "updated_at": "2026-02-09T16:40:22.666667Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T16:40:22.666667Z",
+          "episode_id": "6a4117725a084c05cdce9801bb473fb22173324aec75cff3a0e07fa306c445e7",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "eea72696af4ec22904d0da9b4e8bcaa573c956609dd65febceaec4c8ab608ad1"
+        }
+      ]
+    },
+    {
+      "id": "compound-sync-instincts-md-json",
+      "title": "Keep compound instincts docs + JSON in lockstep",
+      "trigger": "When adding/removing/editing a compound instinct (or changing its id/title/action)",
+      "action": "Update both `.loom/compound/INSTINCTS.md` (human-readable catalog) and `.loom/compound/instincts.json` (compiled/consumed form) in the same change; ensure ids are kebab-case, stable, and referenced consistently across skills/episodes; avoid near-duplicates by merging semantics into one instinct when possible.",
+      "tags": [
+        "compound",
+        "docs",
+        "hygiene",
+        "loom"
+      ],
+      "confidence": 0.74,
+      "status": "active",
+      "created_at": "2026-02-09T16:40:22.666667Z",
+      "updated_at": "2026-02-09T16:40:22.666667Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T16:40:22.666667Z",
+          "episode_id": "6a4117725a084c05cdce9801bb473fb22173324aec75cff3a0e07fa306c445e7",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "eea72696af4ec22904d0da9b4e8bcaa573c956609dd65febceaec4c8ab608ad1"
         }
       ]
     },
@@ -306,6 +481,29 @@
           "episode_id": "8b9d287c8371fa5c2a007b3e600278223256c6ef8a0e529b9ac018277992691f",
           "head_sha": "46275a6608cf9f9c995ca68f04bebbc4a37f6a7b",
           "patch_sha256": "84e71a91e1e26ec3f1b6b967ca3d7886fab6af87f7c068d77916806997d69ef7"
+        }
+      ]
+    },
+    {
+      "id": "git-preflight-status-diff-log",
+      "title": "Git preflight: status + diff + log before commit/PR work",
+      "trigger": "When asked to create a commit or a PR, or when preparing to stage changes",
+      "action": "Run `git status`, `git diff` (staged+unstaged), and `git log -n ...` early to understand scope/style; avoid staging secrets and avoid destructive git operations unless explicitly requested",
+      "tags": [
+        "git",
+        "safety",
+        "workflow"
+      ],
+      "confidence": 0.7,
+      "status": "active",
+      "created_at": "2026-02-09T07:25:31.253613Z",
+      "updated_at": "2026-02-09T07:25:31.253613Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T07:25:31.253613Z",
+          "episode_id": "1df927bbce4dd1de6f9852dcc11fa41a066020502fed0dfe2a8cb12a99ac0cc1",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "a028e6551913fb20e48a0114be8e874e8246bb26f174e320cb239cd29e6c4cb2"
         }
       ]
     },
@@ -475,6 +673,55 @@
       ]
     },
     {
+      "id": "pack-change-sync-sample-and-tests",
+      "title": "Sync pack sample + tests whenever pack code changes",
+      "trigger": "When editing any pack implementation under src/agent_loom/pack/ (core/lock/packs/cli) or changing pack behaviors/validation",
+      "action": "Update the reference pack at src/agent_loom/pack/packs/sample/pack.yaml and any sample command/docs under src/agent_loom/pack/packs/sample/files/ to match the new behavior, then adjust tests in tests/test_pack_lifecycle.py and tests/test_pack_loom_agile_core_invariants.py to reflect intended invariants.",
+      "tags": [
+        "consistency",
+        "packs",
+        "regression",
+        "sample-data",
+        "tests"
+      ],
+      "confidence": 0.72,
+      "status": "active",
+      "created_at": "2026-02-09T17:11:23.591265Z",
+      "updated_at": "2026-02-09T17:11:23.591265Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T17:11:23.591265Z",
+          "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "f4852f7c4de8a9e9be4b41ccdb5f57bd415263d28ae19b364a8839191f89df91"
+        }
+      ]
+    },
+    {
+      "id": "plan-mode-submit-plan-before-implementation",
+      "title": "Submit plan and wait for approval before implementation",
+      "trigger": "When operating under Plan Mode / read-only constraints or when a plan is explicitly requested as a gate before coding",
+      "action": "Do only inspection/analysis; produce a concrete, executable plan; call `submit_plan` with plan+summary; do not edit files or run write-capable tools until the plan is approved",
+      "tags": [
+        "planning",
+        "process",
+        "safety",
+        "workflow"
+      ],
+      "confidence": 0.86,
+      "status": "active",
+      "created_at": "2026-02-09T07:25:31.253613Z",
+      "updated_at": "2026-02-09T07:25:31.253613Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T07:25:31.253613Z",
+          "episode_id": "1df927bbce4dd1de6f9852dcc11fa41a066020502fed0dfe2a8cb12a99ac0cc1",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "a028e6551913fb20e48a0114be8e874e8246bb26f174e320cb239cd29e6c4cb2"
+        }
+      ]
+    },
+    {
       "id": "post-refactor-quality-gates",
       "title": "Run Quality Gates Immediately After Refactors",
       "trigger": "After a broad refactor that touches many files and tests",
@@ -591,6 +838,56 @@
           "episode_id": "9ab03e71ade631a0d3bf8b48dc47183684f6ab3d335e96c44ec1d9307d0171b7",
           "head_sha": "fd11881c724ec177afb9793ee355528f46f63286",
           "patch_sha256": "498d72b84d957b97977d837d501afa645452709e17517a544f393586df79b5e6"
+        }
+      ]
+    },
+    {
+      "id": "python-change-run-gates-even-for-doc-heavy-prs",
+      "title": "Run python quality gates even when most changes are docs/skills",
+      "trigger": "When a change set includes any Python edits (even small ones) alongside lots of markdown/skill edits",
+      "action": "Run uv-based gates in order: `uv run ruff check .` then `uv run basedpyright` then relevant `uv run pytest` subset (at least pack tests if pack touched). Fix warnings/errors instead of deferring.",
+      "tags": [
+        "basedpyright",
+        "python",
+        "quality",
+        "ruff",
+        "tests"
+      ],
+      "confidence": 0.74,
+      "status": "active",
+      "created_at": "2026-02-09T17:11:23.591265Z",
+      "updated_at": "2026-02-09T17:11:23.591265Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T17:11:23.591265Z",
+          "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "f4852f7c4de8a9e9be4b41ccdb5f57bd415263d28ae19b364a8839191f89df91"
+        }
+      ]
+    },
+    {
+      "id": "python-quality-gates-before-tests",
+      "title": "Run typecheck + lint gates before tests",
+      "trigger": "After making Python code changes (or before declaring work done) in Loom",
+      "action": "Run `uv run basedpyright` then `uv run ruff check .` and address issues; only then run `uv run pytest`",
+      "tags": [
+        "lint",
+        "python",
+        "quality",
+        "tests",
+        "typecheck"
+      ],
+      "confidence": 0.78,
+      "status": "active",
+      "created_at": "2026-02-09T07:25:31.253613Z",
+      "updated_at": "2026-02-09T07:25:31.253613Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T07:25:31.253613Z",
+          "episode_id": "1df927bbce4dd1de6f9852dcc11fa41a066020502fed0dfe2a8cb12a99ac0cc1",
+          "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+          "patch_sha256": "a028e6551913fb20e48a0114be8e874e8246bb26f174e320cb239cd29e6c4cb2"
         }
       ]
     },

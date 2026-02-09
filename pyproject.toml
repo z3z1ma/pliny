@@ -32,7 +32,11 @@ requires = ["uv_build>=0.9.16,<0.10.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
-source-include = ["src/agent_loom/*/README.md"]
+source-include = [
+    "src/agent_loom/*/README.md",
+    "src/agent_loom/compound/opencode/**",
+    "src/agent_loom/pack/packs/**",
+]
 
 [tool.pyright]
 typeCheckingMode = "basic"

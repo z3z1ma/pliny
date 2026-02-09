@@ -1,0 +1,15 @@
+id: loom-agile-core
+version: "0.1.0"
+description: "Loom Agile Core: role agents + workflows as skills (OpenCode-first, language-agnostic)"
+install_roots:
+  - .opencode/agents
+  - .opencode/commands
+  - .opencode/skills
+managed_globs:
+  - ".opencode/agents/**"
+  - ".opencode/commands/**"
+  - ".opencode/skills/**"
+protected_globs:
+  - ".loom/**"
+  - ".git/**"
+  - ".gitignore"

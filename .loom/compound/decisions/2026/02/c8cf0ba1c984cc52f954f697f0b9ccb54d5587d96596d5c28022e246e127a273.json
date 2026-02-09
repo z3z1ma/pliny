@@ -1,0 +1,115 @@
+{
+  "created_at": "2026-02-09T17:11:23.591265Z",
+  "decision_id": "c8cf0ba1c984cc52f954f697f0b9ccb54d5587d96596d5c28022e246e127a273",
+  "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+  "ops": [
+    {
+      "action": "Read/align against tests/test_pack_loom_agile_core_invariants.py first; ensure skills and agent definitions satisfy the invariants instead of weakening the tests unless the contract is intentionally changing.",
+      "confidence": 0.76,
+      "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+      "id": "agile-pack-invariants-first",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "contract-tests",
+        "loom-agile",
+        "packs",
+        "stability"
+      ],
+      "title": "Treat loom-agile invariants tests as the contract",
+      "trigger": "When changing loom-agile pack content (skills/agents) or any pack loading/validation logic that touches loom-agile",
+      "ts": "2026-02-09T17:11:23.591265Z"
+    },
+    {
+      "action": "Do not add it unless it encodes a repeatable, durable workflow that cannot live as instincts; otherwise keep the process in instincts and episodes, not as a user-invokable skill.",
+      "confidence": 0.62,
+      "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+      "id": "avoid-meta-proposal-skills",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "compound",
+        "hygiene",
+        "process",
+        "skills"
+      ],
+      "title": "Avoid shipping skills that only describe proposing skills",
+      "trigger": "When considering adding a skill whose primary purpose is to generate/propose other skills/instincts (meta-process rather than an engineering workflow)",
+      "ts": "2026-02-09T17:11:23.591265Z"
+    },
+    {
+      "action": "Update the most canonical existing skill (better name, better adoption surface) and remove the redundant one; keep a single durable procedure per workflow.",
+      "confidence": 0.67,
+      "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+      "id": "compound-skill-dedup-preference",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "compound",
+        "deduplication",
+        "maintenance",
+        "skills"
+      ],
+      "title": "Prefer consolidating skills over creating near-duplicates",
+      "trigger": "When adding or revising skills under .opencode/skills/ and you notice overlapping scope or repeated procedure",
+      "ts": "2026-02-09T17:11:23.591265Z"
+    },
+    {
+      "action": "Update the reference pack at src/agent_loom/pack/packs/sample/pack.yaml and any sample command/docs under src/agent_loom/pack/packs/sample/files/ to match the new behavior, then adjust tests in tests/test_pack_lifecycle.py and tests/test_pack_loom_agile_core_invariants.py to reflect intended invariants.",
+      "confidence": 0.72,
+      "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+      "id": "pack-change-sync-sample-and-tests",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "consistency",
+        "packs",
+        "regression",
+        "sample-data",
+        "tests"
+      ],
+      "title": "Sync pack sample + tests whenever pack code changes",
+      "trigger": "When editing any pack implementation under src/agent_loom/pack/ (core/lock/packs/cli) or changing pack behaviors/validation",
+      "ts": "2026-02-09T17:11:23.591265Z"
+    },
+    {
+      "action": "Run uv-based gates in order: `uv run ruff check .` then `uv run basedpyright` then relevant `uv run pytest` subset (at least pack tests if pack touched). Fix warnings/errors instead of deferring.",
+      "confidence": 0.74,
+      "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+      "id": "python-change-run-gates-even-for-doc-heavy-prs",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "basedpyright",
+        "python",
+        "quality",
+        "ruff",
+        "tests"
+      ],
+      "title": "Run python quality gates even when most changes are docs/skills",
+      "trigger": "When a change set includes any Python edits (even small ones) alongside lots of markdown/skill edits",
+      "ts": "2026-02-09T17:11:23.591265Z"
+    },
+    {
+      "body": "# Pack Change Workflow\n\nWhen you touch pack behavior, keep the repo's three references in lockstep: implementation, sample pack content, and tests.\n\n## Use When\n- You change anything under `src/agent_loom/pack/`.\n- You change pack validation rules, lock behavior, or pack CLI UX.\n- You update the loom-agile pack content under `src/agent_loom/pack/packs/`.\n\n## Procedure\n1. Identify the contract surface you changed.\n   - Implementation: `src/agent_loom/pack/core.py`, `src/agent_loom/pack/lock.py`, `src/agent_loom/pack/packs.py`, `src/agent_loom/pack/cli.py`.\n   - Public entrypoint (if relevant): `src/agent_loom/cli.py`.\n2. Update the reference sample pack.\n   - Keep `src/agent_loom/pack/packs/sample/pack.yaml` valid and representative of the current rules.\n   - If the pack relies on files shipped with it, update `src/agent_loom/pack/packs/sample/files/` accordingly.\n3. Re-align the tests to the intended contract.\n   - Lifecycle/behavior: `tests/test_pack_lifecycle.py`.\n   - Core invariants (especially loom-agile): `tests/test_pack_loom_agile_core_invariants.py`.\n   - Prefer tightening tests to express the contract clearly; only relax if you intentionally broaden behavior.\n4. Sweep docs that anchor user expectations.\n   - If the pack UX changed, update `src/agent_loom/pack/README.md`.\n5. Verify in this order.\n   - `uv run ruff check .`\n   - `uv run basedpyright`\n   - `uv run pytest tests/test_pack_lifecycle.py tests/test_pack_loom_agile_core_invariants.py`\n\n## Pitfalls\n- Updating pack code without updating `src/agent_loom/pack/packs/sample/pack.yaml` creates silent drift: tests may pass while the sample misleads users.\n- Weakening invariants tests to \"unblock\" a change usually hides a real contract decision; make the contract explicit instead.",
+      "description": "Procedure for changing Loom packs while keeping sample content and invariant tests aligned.",
+      "episode_id": "5dfc6781237a6acefa31edefa0ee4f60e94438077468b740966caa758a3c31bf",
+      "name": "pack-change-workflow",
+      "op": "skill.upsert",
+      "source_instinct_ids": [
+        "agile-pack-invariants-first",
+        "pack-change-sync-sample-and-tests",
+        "python-change-run-gates-even-for-doc-heavy-prs"
+      ],
+      "tags": [
+        "contract",
+        "packs",
+        "testing",
+        "workflow"
+      ],
+      "ts": "2026-02-09T17:11:23.591265Z"
+    }
+  ],
+  "proposal_blob_sha256": "f3f1476e0bfc8d8a1c8ed380f8b2a4513b57bdd06a373b0f841882b1a3416c4f",
+  "version": 1
+}

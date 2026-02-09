@@ -1,0 +1,11 @@
+id: sample
+version: "0.0.1"
+description: "Sample pack for tests"
+install_roots:
+  - .opencode/commands
+managed_globs:
+  - ".opencode/commands/**"
+protected_globs:
+  - ".loom/**"
+upstream:
+  kind: "builtin"

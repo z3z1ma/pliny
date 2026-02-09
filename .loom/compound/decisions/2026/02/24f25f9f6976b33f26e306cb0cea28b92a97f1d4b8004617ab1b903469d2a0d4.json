@@ -1,0 +1,60 @@
+{
+  "created_at": "2026-02-09T07:25:31.253613Z",
+  "decision_id": "24f25f9f6976b33f26e306cb0cea28b92a97f1d4b8004617ab1b903469d2a0d4",
+  "episode_id": "1df927bbce4dd1de6f9852dcc11fa41a066020502fed0dfe2a8cb12a99ac0cc1",
+  "ops": [
+    {
+      "action": "Run `git status`, `git diff` (staged+unstaged), and `git log -n ...` early to understand scope/style; avoid staging secrets and avoid destructive git operations unless explicitly requested",
+      "confidence": 0.7,
+      "episode_id": "1df927bbce4dd1de6f9852dcc11fa41a066020502fed0dfe2a8cb12a99ac0cc1",
+      "id": "git-preflight-status-diff-log",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "git",
+        "safety",
+        "workflow"
+      ],
+      "title": "Git preflight: status + diff + log before commit/PR work",
+      "trigger": "When asked to create a commit or a PR, or when preparing to stage changes",
+      "ts": "2026-02-09T07:25:31.253613Z"
+    },
+    {
+      "action": "Do only inspection/analysis; produce a concrete, executable plan; call `submit_plan` with plan+summary; do not edit files or run write-capable tools until the plan is approved",
+      "confidence": 0.86,
+      "episode_id": "1df927bbce4dd1de6f9852dcc11fa41a066020502fed0dfe2a8cb12a99ac0cc1",
+      "id": "plan-mode-submit-plan-before-implementation",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "planning",
+        "process",
+        "safety",
+        "workflow"
+      ],
+      "title": "Submit plan and wait for approval before implementation",
+      "trigger": "When operating under Plan Mode / read-only constraints or when a plan is explicitly requested as a gate before coding",
+      "ts": "2026-02-09T07:25:31.253613Z"
+    },
+    {
+      "action": "Run `uv run basedpyright` then `uv run ruff check .` and address issues; only then run `uv run pytest`",
+      "confidence": 0.78,
+      "episode_id": "1df927bbce4dd1de6f9852dcc11fa41a066020502fed0dfe2a8cb12a99ac0cc1",
+      "id": "python-quality-gates-before-tests",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "lint",
+        "python",
+        "quality",
+        "tests",
+        "typecheck"
+      ],
+      "title": "Run typecheck + lint gates before tests",
+      "trigger": "After making Python code changes (or before declaring work done) in Loom",
+      "ts": "2026-02-09T07:25:31.253613Z"
+    }
+  ],
+  "proposal_blob_sha256": "291fdcbaee6580c80a0a6abe1d6461a2533c3ecddb8055b6b033d5a596072016",
+  "version": 1
+}

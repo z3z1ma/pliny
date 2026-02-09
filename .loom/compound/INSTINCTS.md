@@ -3,15 +3,21 @@
 <!-- BEGIN:compound:instincts-md -->
 ## Active instincts (top confidence)
 
+- **compound-autolearn-json-only** (92%) [autolearn, compound, io-contract, memory, process]
+  - Trigger: When acting as the background autolearn/compound learning agent producing memory-only updates.
+  - Action: Do not run any tools; output exactly one valid JSON object (no markdown). If there is no durable learning worth persisting, output `{}`. Keep within budgets and avoid proposing product code changes.
 - **avoid-tooling-artifacts-in-templates** (90%) [compound, hygiene, templates]
   - Trigger: When adding or reviewing files under template trees like src/agent_loom/compound/opencode/ (or other scaffolded outputs).
   - Action: Exclude tool-specific project files (e.g., `.serena/*`, local IDE metadata, assistant-runner configs) from templates and committed scaffolds unless they are a deliberate product feature; prefer removi...
-- **avoid-lsp-diagnostics-use-basedpyright** (86%) [python, quality, typing]
-  - Trigger: When tempted to check typing errors via editor/LSP or `lsp_diagnostics`
-  - Action: Use `uv run basedpyright` as the source of truth; treat LSP output as advisory only.
+- **plan-mode-submit-plan-before-implementation** (86%) [planning, process, safety, workflow]
+  - Trigger: When operating under Plan Mode / read-only constraints or when a plan is explicitly requested as a gate before coding
+  - Action: Do only inspection/analysis; produce a concrete, executable plan; call `submit_plan` with plan+summary; do not edit files or run write-capable tools until the plan is approved
 - **post-refactor-quality-gates** (86%) [lint, quality, tests, typing, uv]
   - Trigger: After a broad refactor that touches many files and tests
   - Action: Run `uv run ruff check .`, `uv run basedpyright`, then `uv run pytest`; treat failures as part of the refactor (not follow-up work).
+- **avoid-lsp-diagnostics-use-basedpyright** (85%) [python, quality-gates, type-checking, uv, workflow]
+  - Trigger: When you need to assess/resolve Python type issues in a repo that treats basedpyright as a required gate (or explicitly instructs to use it).
+  - Action: Run `uv run basedpyright` and fix reported issues; do not rely on editor/LSP diagnostics or the `lsp_diagnostics` tool as a substitute for the gate.
 - **add-cli-ux-tests-when-output-changes** (82%) [cli, stability, tests, ux]
   - Trigger: When changing any CLI command behavior (stdout/stderr text, exit codes, help output, error messages)
   - Action: Add or update a focused CLI UX test that asserts exit code and a small set of stable substrings/lines (not full output), covering both success and failure cases; avoid brittle assertions on whitespace...
@@ -39,6 +45,9 @@
 - **cli-ux-tests-for-new-commands** (78%) [cli, pytest, testing, ux]
   - Trigger: When adding or changing a CLI command/subcommand (new noun/verb, flags, output text, exit behavior)
   - Action: Add/adjust a UX regression test that asserts (1) exit code, (2) key stdout/stderr lines, and (3) a stable error message for failure paths. Prefer partial/regex assertions and avoid brittle full-output...
+- **python-quality-gates-before-tests** (78%) [lint, python, quality, tests, typecheck]
+  - Trigger: After making Python code changes (or before declaring work done) in Loom
+  - Action: Run `uv run basedpyright` then `uv run ruff check .` and address issues; only then run `uv run pytest`
 - **refactor-delete-module-chase-imports** (78%) [maintenance, python, refactor]
   - Trigger: A refactor removes/renames modules (large deletions or package reshapes)
   - Action: Search for old module names and key symbols (e.g. with ripgrep/grep), update imports, docs, and tests together; ensure no dead entrypoints remain.
@@ -48,6 +57,9 @@
 - **template-docs-use-root-relative-paths** (78%) [compound, docs, portability]
   - Trigger: When editing README/docs content that will be scaffolded into a repo (e.g., src/agent_loom/compound/opencode/README.md, src/agent_loom/compound/opencode/.loom/compound/README.md, `.opencode/commands/*...
   - Action: Write links and references using repo-root-relative paths (no absolute machine paths, no editor URIs) and avoid references to removed/retired template files (e.g., AGENTS.md copies) to keep docs porta...
+- **agile-pack-invariants-first** (76%) [contract-tests, loom-agile, packs, stability]
+  - Trigger: When changing loom-agile pack content (skills/agents) or any pack loading/validation logic that touches loom-agile
+  - Action: Read/align against tests/test_pack_loom_agile_core_invariants.py first; ensure skills and agent definitions satisfy the invariants instead of weakening the tests unless the contract is intentionally c...
 - **keep-openapi-and-ui-in-sync** (76%) [api, contract, dashboard, openapi]
   - Trigger: When changing server routes, request/response shapes, or endpoint behavior
   - Action: Update `docs/openapi.yaml` in the same change and verify any dashboard readers/clients that depend on those endpoints still work; treat schema drift as a bug.
@@ -57,6 +69,9 @@
 - **cli-ux-change-needs-tests** (74%) [cli, regression, tests, ux]
   - Trigger: When modifying CLI output, help text, defaults, or command structure
   - Action: Update/extend UX-focused tests to lock in the intended ergonomics and prevent regressions; avoid untested copy changes that silently degrade UX.
+- **compound-sync-instincts-md-json** (74%) [compound, docs, hygiene, loom]
+  - Trigger: When adding/removing/editing a compound instinct (or changing its id/title/action)
+  - Action: Update both `.loom/compound/INSTINCTS.md` (human-readable catalog) and `.loom/compound/instincts.json` (compiled/consumed form) in the same change; ensure ids are kebab-case, stable, and referenced co...
 - **large-change-update-cli-ux-tests** (74%) [cli, tests, ux]
   - Trigger: Any change to CLI output, flags, or subcommand routing
   - Action: Locate and update the UX snapshot/expectation tests (e.g. `tests/test_*_cli_ux.py`) in the same change; ensure wording is intentional and stable.
@@ -66,6 +81,9 @@
 - **prefer-command-docs-over-embedded-skill-copies** (74%) [commands, compound, docs, skills]
   - Trigger: When documenting workflows for end-users inside compound-installed `.opencode/` trees.
   - Action: Put loom command guidance in `.opencode/commands/loom-*.md` (command-discoverable docs) and avoid duplicating full skill content inside the compound template unless required; keep skills procedural an...
+- **python-change-run-gates-even-for-doc-heavy-prs** (74%) [basedpyright, python, quality, ruff, tests]
+  - Trigger: When a change set includes any Python edits (even small ones) alongside lots of markdown/skill edits
+  - Action: Run uv-based gates in order: `uv run ruff check .` then `uv run basedpyright` then relevant `uv run pytest` subset (at least pack tests if pack touched). Fix warnings/errors instead of deferring.
 - **sync-distributed-opencode-plugin** (74%) [compound, distribution, drift-prevention, opencode]
   - Trigger: When editing `.opencode/plugins/compound_engineering.ts` or any opencode plugin that is also shipped under `src/agent_loom/**/opencode/plugins/`
   - Action: Treat the plugin as having a source-of-truth and a distributed copy: update both copies in the same change, or consolidate to a single source and add a deterministic sync step + a check (e.g., CI/test...
@@ -75,9 +93,18 @@
 - **document-new-subsystem-entrypoints** (72%) [architecture, docs, onboarding]
   - Trigger: When adding a new subsystem or expanding an existing one with multiple new modules (e.g., `core.py`, `models.py`, `cli.py`, `recall.py`)
   - Action: Add/update a subsystem README that explains: the user-facing commands, where data is stored, primary module responsibilities, and the quickest 'smoke path' to validate behavior.
+- **pack-change-sync-sample-and-tests** (72%) [consistency, packs, regression, sample-data, tests]
+  - Trigger: When editing any pack implementation under src/agent_loom/pack/ (core/lock/packs/cli) or changing pack behaviors/validation
+  - Action: Update the reference pack at src/agent_loom/pack/packs/sample/pack.yaml and any sample command/docs under src/agent_loom/pack/packs/sample/files/ to match the new behavior, then adjust tests in tests/...
+- **compound-skill-path-source-of-truth** (71%) [compound, repo-hygiene, skills]
+  - Trigger: When reading, updating, or proposing skills for Loom / OpenCode
+  - Action: Prefer `.opencode/skills/<name>/SKILL.md` as the source-of-truth; if a parallel legacy path exists (e.g. `.claude/skills/...`), do not create/maintain duplicates—converge on the `.opencode/skills` cop...
 - **deterministic-cli-output** (71%) [cli, determinism, ux]
   - Trigger: When a CLI command prints lists, tables, multi-item sections, or derived metadata (IDs, paths, counts).
   - Action: Ensure ordering is explicit and stable (sort inputs, stable iteration, deterministic grouping). Normalize or avoid non-deterministic content (timestamps, random IDs). Make newline behavior consistent ...
+- **git-preflight-status-diff-log** (70%) [git, safety, workflow]
+  - Trigger: When asked to create a commit or a PR, or when preparing to stage changes
+  - Action: Run `git status`, `git diff` (staged+unstaged), and `git log -n ...` early to understand scope/style; avoid staging secrets and avoid destructive git operations unless explicitly requested
 - **greenfield-no-backcompat-language** (70%) [design, docs, product]
   - Trigger: Writing docs, flags, deprecations, or migration behaviors in early-stage systems
   - Action: Prefer clean breaks and simple interfaces; remove/avoid 'backcompat' language unless there is a real external user contract that requires it.
@@ -87,18 +114,15 @@
 - **prefer-ux-tests-over-broad-internals** (70%) [cli, maintainability, testing]
   - Trigger: When adding tests for command behavior
   - Action: Test through the CLI boundary (command invocation) rather than deep internal functions; assert the minimal observable behavior that matters (selected lines, not full dumps).
+- **compound-skill-dedup-preference** (67%) [compound, deduplication, maintenance, skills]
+  - Trigger: When adding or revising skills under .opencode/skills/ and you notice overlapping scope or repeated procedure
+  - Action: Update the most canonical existing skill (better name, better adoption surface) and remove the redundant one; keep a single durable procedure per workflow.
 - **compound-instincts-sync** (66%) [compound, docs, process]
   - Trigger: When adding or editing any Compound instinct.
   - Action: Update `.loom/compound/INSTINCTS.md` and regenerate/adjust `.loom/compound/instincts.json` in the same change. Verify IDs are unique, kebab-case, and identical across doc + JSON; ensure any new instin...
 - **doc-and-core-parity-for-new-subcommands** (66%) [architecture, cli, docs, testing]
   - Trigger: When introducing a new subcommand or expanding a subsystem CLI (e.g., `loom memory ...`)
   - Action: Update subsystem README/help docs alongside the CLI wiring, and factor logic into a testable core module so UX tests can stay thin; ensure docs mention common workflows and error modes, and add at lea...
-- **openapi-keep-spec-deterministic** (66%) [api, docs, openapi]
-  - Trigger: Editing `docs/openapi.yaml` during endpoint/schema updates
-  - Action: Avoid volatile fields like timestamps; keep component and path ordering stable; validate references and schema names stay consistent with the code.
-- **stabilize-cli-output-contract** (66%) [cli, determinism, ux-contract]
-  - Trigger: When printing structured lists/summaries in CLI
-  - Action: Ensure ordering and formatting are deterministic (sorting, fixed labels); avoid including volatile fields in user-facing output unless explicitly requested, and ensure tests lock the contract.
 
 ## Notes
 

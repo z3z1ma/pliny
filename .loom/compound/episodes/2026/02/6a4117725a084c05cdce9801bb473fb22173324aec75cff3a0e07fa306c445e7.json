@@ -1,0 +1,5282 @@
+{
+  "created_at": "2026-02-09T16:40:22.666667Z",
+  "episode_id": "6a4117725a084c05cdce9801bb473fb22173324aec75cff3a0e07fa306c445e7",
+  "git": {
+    "base_ref": "origin/main",
+    "base_sha": "6326ff91e85ca070eab9b926434399720801b107",
+    "changed_files": [
+      ".loom/compound/INSTINCTS.md",
+      ".loom/compound/instincts.json",
+      "pyproject.toml",
+      "src/agent_loom/cli.py"
+    ],
+    "diffstat": ".loom/compound/INSTINCTS.md   |  18 +++++--\n .loom/compound/instincts.json | 119 +++++++++++++++++++++++++++++++++++++++---\n pyproject.toml                |   6 ++-\n src/agent_loom/cli.py         |   5 ++\n 4 files changed, 137 insertions(+), 11 deletions(-)",
+    "diffstat_sha256": "b83273c352d3d6e8157ac1bd5397e9f50fc94692657d2de83f90d10990dd97a2",
+    "dirty": true,
+    "head_sha": "6326ff91e85ca070eab9b926434399720801b107",
+    "patch": "diff --git a/.loom/compound/INSTINCTS.md b/.loom/compound/INSTINCTS.md\nindex 8ee006e..8c83a12 100644\n--- a/.loom/compound/INSTINCTS.md\n+++ b/.loom/compound/INSTINCTS.md\n@@ -3,15 +3,21 @@\n <!-- BEGIN:compound:instincts-md -->\n ## Active instincts (top confidence)\n \n+- **compound-autolearn-json-only** (92%) [autolearn, compound, io-contract, memory, process]\n+  - Trigger: When acting as the background autolearn/compound learning agent producing memory-only updates.\n+  - Action: Do not run any tools; output exactly one valid JSON object (no markdown). If there is no durable learning worth persisting, output `{}`. Keep within budgets and avoid proposing product code changes.\n - **avoid-tooling-artifacts-in-templates** (90%) [compound, hygiene, templates]\n   - Trigger: When adding or reviewing files under template trees like src/agent_loom/compound/opencode/ (or other scaffolded outputs).\n   - Action: Exclude tool-specific project files (e.g., `.serena/*`, local IDE metadata, assistant-runner configs) from templates and committed scaffolds unless they are a deliberate product feature; prefer removi...\n-- **avoid-lsp-diagnostics-use-basedpyright** (86%) [python, quality, typing]\n-  - Trigger: When tempted to check typing errors via editor/LSP or `lsp_diagnostics`\n-  - Action: Use `uv run basedpyright` as the source of truth; treat LSP output as advisory only.\n+- **plan-mode-submit-plan-before-implementation** (86%) [planning, process, safety, workflow]\n+  - Trigger: When operating under Plan Mode / read-only constraints or when a plan is explicitly requested as a gate before coding\n+  - Action: Do only inspection/analysis; produce a concrete, executable plan; call `submit_plan` with plan+summary; do not edit files or run write-capable tools until the plan is approved\n - **post-refactor-quality-gates** (86%) [lint, quality, tests, typing, uv]\n   - Trigger: After a broad refactor that touches many files and tests\n   - Action: Run `uv run ruff check .`, `uv run basedpyright`, then `uv run pytest`; treat failures as part of the refactor (not follow-up work).\n+- **avoid-lsp-diagnostics-use-basedpyright** (85%) [python, quality-gates, type-checking, uv, workflow]\n+  - Trigger: When you need to assess/resolve Python type issues in a repo that treats basedpyright as a required gate (or explicitly instructs to use it).\n+  - Action: Run `uv run basedpyright` and fix reported issues; do not rely on editor/LSP diagnostics or the `lsp_diagnostics` tool as a substitute for the gate.\n - **add-cli-ux-tests-when-output-changes** (82%) [cli, stability, tests, ux]\n   - Trigger: When changing any CLI command behavior (stdout/stderr text, exit codes, help output, error messages)\n   - Action: Add or update a focused CLI UX test that asserts exit code and a small set of stable substrings/lines (not full output), covering both success and failure cases; avoid brittle assertions on whitespace...\n@@ -39,6 +45,9 @@\n - **cli-ux-tests-for-new-commands** (78%) [cli, pytest, testing, ux]\n   - Trigger: When adding or changing a CLI command/subcommand (new noun/verb, flags, output text, exit behavior)\n   - Action: Add/adjust a UX regression test that asserts (1) exit code, (2) key stdout/stderr lines, and (3) a stable error message for failure paths. Prefer partial/regex assertions and avoid brittle full-output...\n+- **python-quality-gates-before-tests** (78%) [lint, python, quality, tests, typecheck]\n+  - Trigger: After making Python code changes (or before declaring work done) in Loom\n+  - Action: Run `uv run basedpyright` then `uv run ruff check .` and address issues; only then run `uv run pytest`\n - **refactor-delete-module-chase-imports** (78%) [maintenance, python, refactor]\n   - Trigger: A refactor removes/renames modules (large deletions or package reshapes)\n   - Action: Search for old module names and key symbols (e.g. with ripgrep/grep), update imports, docs, and tests together; ensure no dead entrypoints remain.\n@@ -78,6 +87,9 @@\n - **deterministic-cli-output** (71%) [cli, determinism, ux]\n   - Trigger: When a CLI command prints lists, tables, multi-item sections, or derived metadata (IDs, paths, counts).\n   - Action: Ensure ordering is explicit and stable (sort inputs, stable iteration, deterministic grouping). Normalize or avoid non-deterministic content (timestamps, random IDs). Make newline behavior consistent ...\n+- **git-preflight-status-diff-log** (70%) [git, safety, workflow]\n+  - Trigger: When asked to create a commit or a PR, or when preparing to stage changes\n+  - Action: Run `git status`, `git diff` (staged+unstaged), and `git log -n ...` early to understand scope/style; avoid staging secrets and avoid destructive git operations unless explicitly requested\n - **greenfield-no-backcompat-language** (70%) [design, docs, product]\n   - Trigger: Writing docs, flags, deprecations, or migration behaviors in early-stage systems\n   - Action: Prefer clean breaks and simple interfaces; remove/avoid 'backcompat' language unless there is a real external user contract that requires it.\ndiff --git a/.loom/compound/instincts.json b/.loom/compound/instincts.json\nindex ab5f453..0c0e994 100644\n--- a/.loom/compound/instincts.json\n+++ b/.loom/compound/instincts.json\n@@ -27,24 +27,32 @@\n     },\n     {\n       \"id\": \"avoid-lsp-diagnostics-use-basedpyright\",\n-      \"title\": \"Do not rely on LSP diagnostics for typing status\",\n-      \"trigger\": \"When tempted to check typing errors via editor/LSP or `lsp_diagnostics`\",\n-      \"action\": \"Use `uv run basedpyright` as the source of truth; treat LSP output as advisory only.\",\n+      \"title\": \"Prefer basedpyright over LSP diagnostics for Python gates\",\n+      \"trigger\": \"When you need to assess/resolve Python type issues in a repo that treats basedpyright as a required gate (or explicitly instructs to use it).\",\n+      \"action\": \"Run `uv run basedpyright` and fix reported issues; do not rely on editor/LSP diagnostics or the `lsp_diagnostics` tool as a substitute for the gate.\",\n       \"tags\": [\n         \"python\",\n-        \"quality\",\n-        \"typing\"\n+        \"quality-gates\",\n+        \"type-checking\",\n+        \"uv\",\n+        \"workflow\"\n       ],\n-      \"confidence\": 0.86,\n+      \"confidence\": 0.85,\n       \"status\": \"active\",\n       \"created_at\": \"2026-02-09T04:23:39.443272Z\",\n-      \"updated_at\": \"2026-02-09T04:23:39.443272Z\",\n+      \"updated_at\": \"2026-02-09T07:55:14.004273Z\",\n       \"evidence\": [\n         {\n           \"ts\": \"2026-02-09T04:23:39.443272Z\",\n           \"episode_id\": \"e73f6556efab5a08fe44febbe2ba7d245b558f059154ad39c13d6adedb7d42b2\",\n           \"head_sha\": \"3ed17ac0cb1119ce9355d2fab7e7000e1791a59a\",\n           \"patch_sha256\": \"396d4064e16aedb39f74ca438e10beeef645fa829af509b251fa619bcf0e084d\"\n+        },\n+        {\n+          \"ts\": \"2026-02-09T07:55:14.004273Z\",\n+          \"episode_id\": \"834fb5a23c311e9a9a380277a96c859037a344dd48f48206d91642bd05e867e2\",\n+          \"head_sha\": \"6326ff91e85ca070eab9b926434399720801b107\",\n+          \"patch_sha256\": \"c5f8d5e8229818a616f0966c4fe052e4708d76c77b0afd028678e78c83e7f403\"\n         }\n       ]\n     },\n@@ -192,6 +200,31 @@\n         }\n       ]\n     },\n+    {\n+      \"id\": \"compound-autolearn-json-only\",\n+      \"title\": \"Compound autolearn responses are JSON-only and tool-free\",\n+      \"trigger\": \"When acting as the background autolearn/compound learning agent producing memory-only updates.\",\n+      \"action\": \"Do not run any tools; output exactly one valid JSON object (no markdown). If there is no durable learning worth persisting, output `{}`. Keep within budgets and avoid proposing product code changes.\",\n+      \"tags\": [\n+        \"autolearn\",\n+        \"compound\",\n+        \"io-contract\",\n+        \"memory\",\n+        \"process\"\n+      ],\n+      \"confidence\": 0.92,\n+      \"status\": \"active\",\n+      \"created_at\": \"2026-02-09T07:55:14.004273Z\",\n+      \"updated_at\": \"2026-02-09T07:55:14.004273Z\",\n+      \"evidence\": [\n+        {\n+          \"ts\": \"2026-02-09T07:55:14.004273Z\",\n+          \"episode_id\": \"834fb5a23c311e9a9a380277a96c859037a344dd48f48206d91642bd05e867e2\",\n+          \"head_sha\": \"6326ff91e85ca070eab9b926434399720801b107\",\n+          \"patch_sha256\": \"c5f8d5e8229818a616f0966c4fe052e4708d76c77b0afd028678e78c83e7f403\"\n+        }\n+      ]\n+    },\n     {\n       \"id\": \"compound-instincts-sync\",\n       \"title\": \"Keep instincts docs and compiled JSON in sync\",\n@@ -309,6 +342,29 @@\n         }\n       ]\n     },\n+    {\n+      \"id\": \"git-preflight-status-diff-log\",\n+      \"title\": \"Git preflight: status + diff + log before commit/PR work\",\n+      \"trigger\": \"When asked to create a commit or a PR, or when preparing to stage changes\",\n+      \"action\": \"Run `git status`, `git diff` (staged+unstaged), and `git log -n ...` early to understand scope/style; avoid staging secrets and avoid destructive git operations unless explicitly requested\",\n+      \"tags\": [\n+        \"git\",\n+        \"safety\",\n+        \"workflow\"\n+      ],\n+      \"confidence\": 0.7,\n+      \"status\": \"active\",\n+      \"created_at\": \"2026-02-09T07:25:31.253613Z\",\n+      \"updated_at\": \"2026-02-09T07:25:31.253613Z\",\n+      \"evidence\": [\n+        {\n+          \"ts\": \"2026-02-09T07:25:31.253613Z\",\n+          \"episode_id\": \"1df927bbce4dd1de6f9852dcc11fa41a066020502fed0dfe2a8cb12a99ac0cc1\",\n+          \"head_sha\": \"6326ff91e85ca070eab9b926434399720801b107\",\n+          \"patch_sha256\": \"a028e6551913fb20e48a0114be8e874e8246bb26f174e320cb239cd29e6c4cb2\"\n+        }\n+      ]\n+    },\n     {\n       \"id\": \"greenfield-no-backcompat-language\",\n       \"title\": \"Avoid backcompat framing in greenfield code/docs\",\n@@ -474,6 +530,30 @@\n         }\n       ]\n     },\n+    {\n+      \"id\": \"plan-mode-submit-plan-before-implementation\",\n+      \"title\": \"Submit plan and wait for approval before implementation\",\n+      \"trigger\": \"When operating under Plan Mode / read-only constraints or when a plan is explicitly requested as a gate before coding\",\n+      \"action\": \"Do only inspection/analysis; produce a concrete, executable plan; call `submit_plan` with plan+summary; do not edit files or run write-capable tools until the plan is approved\",\n+      \"tags\": [\n+        \"planning\",\n+        \"process\",\n+        \"safety\",\n+        \"workflow\"\n+      ],\n+      \"confidence\": 0.86,\n+      \"status\": \"active\",\n+      \"created_at\": \"2026-02-09T07:25:31.253613Z\",\n+      \"updated_at\": \"2026-02-09T07:25:31.253613Z\",\n+      \"evidence\": [\n+        {\n+          \"ts\": \"2026-02-09T07:25:31.253613Z\",\n+          \"episode_id\": \"1df927bbce4dd1de6f9852dcc11fa41a066020502fed0dfe2a8cb12a99ac0cc1\",\n+          \"head_sha\": \"6326ff91e85ca070eab9b926434399720801b107\",\n+          \"patch_sha256\": \"a028e6551913fb20e48a0114be8e874e8246bb26f174e320cb239cd29e6c4cb2\"\n+        }\n+      ]\n+    },\n     {\n       \"id\": \"post-refactor-quality-gates\",\n       \"title\": \"Run Quality Gates Immediately After Refactors\",\n@@ -594,6 +674,31 @@\n         }\n       ]\n     },\n+    {\n+      \"id\": \"python-quality-gates-before-tests\",\n+      \"title\": \"Run typecheck + lint gates before tests\",\n+      \"trigger\": \"After making Python code changes (or before declaring work done) in Loom\",\n+      \"action\": \"Run `uv run basedpyright` then `uv run ruff check .` and address issues; only then run `uv run pytest`\",\n+      \"tags\": [\n+        \"lint\",\n+        \"python\",\n+        \"quality\",\n+        \"tests\",\n+        \"typecheck\"\n+      ],\n+      \"confidence\": 0.78,\n+      \"status\": \"active\",\n+      \"created_at\": \"2026-02-09T07:25:31.253613Z\",\n+      \"updated_at\": \"2026-02-09T07:25:31.253613Z\",\n+      \"evidence\": [\n+        {\n+          \"ts\": \"2026-02-09T07:25:31.253613Z\",\n+          \"episode_id\": \"1df927bbce4dd1de6f9852dcc11fa41a066020502fed0dfe2a8cb12a99ac0cc1\",\n+          \"head_sha\": \"6326ff91e85ca070eab9b926434399720801b107\",\n+          \"patch_sha256\": \"a028e6551913fb20e48a0114be8e874e8246bb26f174e320cb239cd29e6c4cb2\"\n+        }\n+      ]\n+    },\n     {\n       \"id\": \"refactor-delete-module-chase-imports\",\n       \"title\": \"After deleting a module, systematically eliminate all references\",\ndiff --git a/pyproject.toml b/pyproject.toml\nindex 1e5e355..018d886 100644\n--- a/pyproject.toml\n+++ b/pyproject.toml\n@@ -32,7 +32,11 @@ requires = [\"uv_build>=0.9.16,<0.10.0\"]\n build-backend = \"uv_build\"\n \n [tool.uv.build-backend]\n-source-include = [\"src/agent_loom/*/README.md\"]\n+source-include = [\n+    \"src/agent_loom/*/README.md\",\n+    \"src/agent_loom/compound/opencode/**\",\n+    \"src/agent_loom/depot/packs/**\",\n+]\n \n [tool.pyright]\n typeCheckingMode = \"basic\"\ndiff --git a/src/agent_loom/cli.py b/src/agent_loom/cli.py\nindex 3955d6e..8f98ee1 100644\n--- a/src/agent_loom/cli.py\n+++ b/src/agent_loom/cli.py\n@@ -4,6 +4,7 @@ import sys\n from typing import Optional, Sequence\n \n from agent_loom.compound.cli import main as compound_main\n+from agent_loom.depot.cli import main as depot_main\n from agent_loom.memory.cli import main as memory_main\n from agent_loom.dashboard.cli import main as dashboard_main\n from agent_loom.team.cli import main as team_main\n@@ -24,6 +25,7 @@ def _print_root_help() -> None:\n                 \"  workspace  Workspace + worktree tooling (.loom/workspaces/workspace.json + .loom/workspace/)\",\n                 \"  team       tmux-native orchestration (.loom/team)\",\n                 \"  compound   OpenCode compound integration (.opencode)\",\n+                \"  depot      Packs (agents/skills/commands)\",\n                 \"  dashboard  HTTP server for the Loom API (dashboard UI)\",\n                 \"\",\n                 \"Help:\",\n@@ -68,6 +70,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:\n     if cmd == \"compound\":\n         return int(compound_main(list(rest)))\n \n+    if cmd == \"depot\":\n+        return int(depot_main(list(rest)))\n+\n     if cmd == \"dashboard\":\n         return int(dashboard_main(list(rest)))\n",
+    "patch_omitted": false,
+    "patch_sha256": "eea72696af4ec22904d0da9b4e8bcaa573c956609dd65febceaec4c8ab608ad1"
+  },
+  "observations": {
+    "cursor": {
+      "end_count": 92548,
+      "end_offset_bytes": 16211895,
+      "file_prefix_sha256": "ea08844a853b43d8b06f8d9d28a0a9f67156d83075061a491564d6b3cbe1350f",
+      "reset_detected": false,
+      "start_count": 92079,
+      "start_offset_bytes": 16109408,
+      "tail_sha256": "b4d8f41452d4ec238e488c2eae58354273df8dc0d044e935d9e09cfea9c349ae"
+    },
+    "included": [
+      {
+        "id": "97661807-5f66-4097-b37a-83eec54d81be",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T07:55:13.817Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "7012f822-5bbf-48cf-bbac-91d06fcdeb95",
+        "properties": {
+          "keys": [
+            "message",
+            "variant",
+            "duration"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T07:55:14.047Z",
+        "type": "tui.toast.show"
+      },
+      {
+        "id": "11051763-0406-4345-b6e3-fb5b8566d05f",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:29:21.258Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "aec9e797-3c1d-4407-af36-bae08aae8551",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:29:21.272Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "47361eb3-eaf2-4ae2-ad25-83b6d3e35a11",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:29:21.275Z",
+        "type": "session.status"
+      },
+      {
+        "id": "7acc530d-8a9a-4ed4-bcc7-7704ad8dc675",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:29:21.568Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "b64a1716-ef68-41e4-af50-a7ffe5e1ad57",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:29:22.756Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "deffb4a7-bed2-464d-91ff-4d857873fa19",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:29:22.821Z",
+        "type": "session.status"
+      },
+      {
+        "id": "462d3c12-9d77-49f0-af88-7fcd54a677dc",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:29:22.835Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "2f5b65d5-8cbc-48da-b95d-daceeb610f1a",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:29:22.834Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "fa7123d5-00d1-450c-846f-fa81b8eb8e36",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:29:25.147Z",
+        "type": "message.updated"
+      },
+      {
+        "args": {
+          "format": "markdown",
+          "timeout": 120,
+          "url": "https://opencode.ai/docs/agents/#markdown"
+        },
+        "id": "7b243e94-f481-4bf4-b87f-ea3117828e82",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "url=https://opencode.ai/docs/agents/#markdown",
+        "tool": "webfetch",
+        "ts": "2026-02-09T16:30:10.730Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "pattern": "src/agent_loom/compound/opencode/skills/*/SKILL.md"
+        },
+        "id": "3c4bf3c9-b54b-42a9-a61e-ffa57198069b",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "pattern=src/agent_loom/compound/opencode/skills/*/SKILL.md",
+        "tool": "glob",
+        "ts": "2026-02-09T16:30:10.731Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "pattern": ".opencode/skills/*/SKILL.md"
+        },
+        "id": "648a4763-1303-47de-83e4-30a16ba00e69",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "pattern=.opencode/skills/*/SKILL.md",
+        "tool": "glob",
+        "ts": "2026-02-09T16:30:10.731Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "b2e5ab7c-9f2c-440c-ad24-8bd7b4cf04ec",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "glob",
+        "ts": "2026-02-09T16:30:10.838Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "2f24a6eb-3e64-4d15-81a2-bdd96e707299",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "glob",
+        "ts": "2026-02-09T16:30:10.838Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "58d00ce7-fcb7-467d-b1b8-b03ac246ab91",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "webfetch",
+        "ts": "2026-02-09T16:30:10.886Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "39378ea5-b9be-4c18-ae43-cadd5e3ece19",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:11.079Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "ec979507-ef54-4137-b82c-b3a8a595cf44",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:11.086Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "5249991a-bfef-405b-ac57-81bbb329c1ff",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:11.086Z",
+        "type": "session.status"
+      },
+      {
+        "id": "fcbd6733-e5e7-4f62-8414-2b5183dcba62",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:11.193Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "8eb31bf5-e44b-4458-988d-ce7403078e8a",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:11.312Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "5b9c9a16-1074-4a9a-baad-2ff35ea447af",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:30:11.313Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "1f7f9d46-6d46-4230-b1c0-c7e80566e815",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:11.313Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "d357660f-e999-4c31-8812-5aa0207ff409",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:12.148Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "filePath": "/Users/alexanderbutler/code_projects/personal/agent-loom/.opencode/skills/cli-ux-regression-tests/SKILL.md",
+          "limit": 80
+        },
+        "id": "e67c5b41-0938-4335-b9c6-f2c566ddcc74",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "filePath=/Users/alexanderbutler/code_projects/personal/agent-loom/.opencode/skills/cli-ux-regression-tests/SKILL.md",
+        "tool": "read",
+        "ts": "2026-02-09T16:30:17.679Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "f058caed-4529-4a6e-a32c-4647db04da82",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "read",
+        "ts": "2026-02-09T16:30:17.684Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "b4f6d77b-b803-4e1f-9812-9b4863ba195f",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:17.698Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "64a6beb6-ca4a-46e9-a5c3-845507475b34",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:17.704Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "225c4c47-b6b2-40c2-9b8a-c1a2cac7b954",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:17.704Z",
+        "type": "session.status"
+      },
+      {
+        "id": "e2b89d9a-6d52-4ba1-938a-6b0b093489e0",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:17.803Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "108ede0c-c83b-465b-b1d3-92b5e607a9cd",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:17.920Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "63025bb1-bc7e-45b2-a0d3-de07c90bf0a2",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:30:17.920Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "d9085f86-64aa-48c7-8c21-d54e32c50bf0",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:17.921Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "5baf221a-165b-42d4-970d-04a2c341b12d",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:18.422Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "format": "markdown",
+          "timeout": 120,
+          "url": "https://opencode.ai/docs/skills/"
+        },
+        "id": "2e032046-38ff-4a50-80a2-19b3d6d04bc1",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "url=https://opencode.ai/docs/skills/",
+        "tool": "webfetch",
+        "ts": "2026-02-09T16:30:29.372Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "c0732b44-2dfb-4657-b931-fcedd01733e5",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "webfetch",
+        "ts": "2026-02-09T16:30:29.600Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "5f0a7415-21a7-46b0-a018-4feb55d2502d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:29.606Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2554c434-d024-4e4c-9434-e44bc4b0d232",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:29.609Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "545905a6-000f-4e2a-8f3c-778b50185bcd",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:29.609Z",
+        "type": "session.status"
+      },
+      {
+        "id": "f7b61266-5520-41a4-81ee-d7da7fdd3b56",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:29.702Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "f3d8bfbf-4eb6-4773-928a-f7c2c942e72d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:29.821Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "ecb92bd7-b845-46a9-b65f-c7dfdbaa3c31",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:29.821Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "e546389e-c677-4231-a74e-9875193be234",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:30:29.821Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "7ec91bde-6b03-42f4-adc0-0b8bdd078b5a",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:30.343Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "filePath": "/Users/alexanderbutler/code_projects/personal/agent-loom/src/agent_loom/compound/opencode/commands/loom-work.md",
+          "limit": 120
+        },
+        "id": "c20912b0-5ba2-4602-9f60-acdfa8958e60",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "filePath=/Users/alexanderbutler/code_projects/personal/agent-loom/src/agent_loom/compound/opencode/commands/loom-work.md",
+        "tool": "read",
+        "ts": "2026-02-09T16:30:48.619Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "8d11d4a5-3c3a-4713-b9e7-7997438581da",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "read",
+        "ts": "2026-02-09T16:30:48.623Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "56f054a1-5eb7-4e8d-bc3c-0ba158b78656",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:48.669Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "8b48383b-2597-4cbd-a0a5-bcefd55ff449",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:48.674Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d5c2cfbe-0a26-44d5-8451-660182a853ca",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:48.675Z",
+        "type": "session.status"
+      },
+      {
+        "id": "53f49b41-0b89-4108-b8e1-99c7ebe9ed6c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:48.792Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "87907e3a-eea6-4733-89e9-37194f15f43b",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:30:48.909Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "932e1474-2be5-4653-8017-fee6bfa02610",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:48.909Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "2e36ccb3-f19c-4b74-af05-6222c651fd53",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:30:48.909Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "e6445414-e571-4ff6-8ae0-a9d22f2064f8",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:30:49.567Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "pattern": "src/agent_loom/depot/packs/loom-method/**/*"
+        },
+        "id": "10f8466e-95fd-401b-9005-d9dca455ca2d",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "pattern=src/agent_loom/depot/packs/loom-method/**/*",
+        "tool": "glob",
+        "ts": "2026-02-09T16:31:12.505Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "97a43b6d-2c98-49e6-9b0f-7171d9ff0cdd",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "glob",
+        "ts": "2026-02-09T16:31:12.550Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "5308dbb2-1513-4e48-8438-093d69105976",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:31:12.554Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "0fc5ba91-ad80-4491-857e-9bae284f7ed6",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:31:12.557Z",
+        "type": "session.status"
+      },
+      {
+        "id": "8a319f47-ddb6-4ef0-8dc5-2bc0afc1680d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:31:12.557Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "5aceb4ed-f991-4ff0-bb86-35eed6f1e43e",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:31:12.652Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "1fd7145b-658f-4902-97ba-171bfd9e1b46",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:31:12.775Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "71f88ddd-3540-4076-ae22-d3abbcceb2ef",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:31:12.775Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "2b912301-83c5-48ad-80b6-33a65e845863",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:31:12.775Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "72f94750-0553-47c9-a7cf-3fc5d15c4620",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:31:13.267Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/agents/loom-method-architect.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/agents/loom-method-dev.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/agents/loom-method-pm.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/commands/loom-method-architecture.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/commands/loom-method-brief.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/commands/loom-method-help.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/commands/loom-method-implement.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/commands/loom-method-plan.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/commands/loom-method-prd.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/commands/loom-method-retro.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/files/.opencode/commands/loom-method-review.md\n*** Delete File: src/agent_loom/depot/packs/loom-method/pack.yaml\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/pack.yaml\n+id: loom-agile-core\n+version: \"0.1.0\"\n+description: \"Loom Agile Core: role agents + workflows as skills (OpenCode-first, language-agnostic)\"\n+install_roots:\n+  - .opencode/agents\n+  - .opencode/commands\n+  - .opencode/skills\n+managed_globs:\n+  - \".opencode/agents/**\"\n+  - \".opencode/commands/**\"\n+  - \".opencode/skills/**\"\n+protected_globs:\n+  - \".loom/**\"\n+  - \".git/**\"\n+  - \".gitignore\"\n+\n*** End Patch"
+        },
+        "id": "bb85607e-9b88-4ad2-adc3-14166c1155bf",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:32:20.116Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "f16c0416-57c4-499a-a760-e666adeac9e6",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.139Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "58706d8a-2925-47c0-b570-be8883353f38",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.137Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "0d44bd6e-ba01-4836-a856-47f9f3901bca",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.190Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "fefd7879-3f86-43d7-93db-354609a12cee",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.230Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "1f82c159-6902-429a-9d7f-53df7f86ba25",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.264Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "91c1591c-3783-4e57-8f44-ef6f39eb93e9",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.286Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "8b75004b-2ee5-4eca-863e-0e47778e0075",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.305Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "01cb63dc-1f9d-4bed-aa3c-82f2f03b1756",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.325Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "57943cb4-81ba-4ac0-b451-67da266b3a53",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.343Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "02764662-d497-458d-a878-d72f709c6421",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.368Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "e5d4c5d6-5b9b-4ebd-9663-9fe529026ff2",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.389Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "7c88cd9a-6e7d-48fc-9754-951207b3092e",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.413Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "59229849-e46e-4c8a-9868-900c1caed869",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.439Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "4937eeae-0620-4413-9dda-004304fb001d",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.463Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "b1fb51ba-9a04-4e62-88b0-5c7ceab3f219",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.693Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": null,
+        "id": "c5addc33-c360-4dcd-9390-caff83a62eaf",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:32:20.848Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "b8214b52-bee5-4224-b04c-64d9af393ab2",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.857Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "edc71c05-da37-4697-983e-32730757b460",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:20.861Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "c78b0493-7dc5-4653-92d6-313d6bc5f168",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:32:20.862Z",
+        "type": "session.status"
+      },
+      {
+        "id": "0bc78bee-c5b9-4b9b-8c07-689c750ef9d8",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:21.052Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "400ea20b-301e-4946-83aa-d20f3d3ec752",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:32:21.360Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "4c188fa9-a1dc-4928-b1ee-ca3d7d61b412",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:32:21.360Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "f68596cb-61e3-4395-a1bb-a3852c5ab843",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:32:21.360Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "84b7f53e-b4c3-4b6f-8870-a01a28d21318",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:32:21.889Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/commands/loom-agile-help.md\n+---\n+description: Loom Agile help (route to the right workflow)\n+---\n+\n+You are running Loom Agile Help.\n+\n+Goal: route the user to the smallest next workflow and keep the work anchored in Loom.\n+\n+1) Ensure there is a Loom ticket.\n+   - If the user has a ticket id: `loom ticket show <id>`\n+   - Otherwise: `loom ticket create \"<short title>\" --status in_progress`\n+\n+2) Ask 1-3 targeted questions if intent is unclear.\n+\n+3) Choose the next command and output the exact slash command:\n+- Brainstorming a new project: `/loom-agile-brainstorm-project <ticket-id>`\n+- Need research: `/loom-agile-research <ticket-id>`\n+- Need a brief: `/loom-agile-create-brief <ticket-id>`\n+- Need a PRD: `/loom-agile-create-prd <ticket-id>`\n+- Need to validate/edit a PRD: `/loom-agile-validate-prd <ticket-id>` or `/loom-agile-edit-prd <ticket-id>`\n+- Need architecture: `/loom-agile-create-architecture <ticket-id>`\n+- Need epics/stories: `/loom-agile-create-epics-and-stories <ticket-id>`\n+- Ready to implement: `/loom-agile-dev-story <ticket-id>` (or `/loom-agile-quick-dev <ticket-id>`)\n+- Need code review: `/loom-agile-code-review <ticket-id>`\n+- Drifted / needs replan: `/loom-agile-correct-course <ticket-id>`\n+\n+4) Update the ticket with the chosen next step:\n+   - `loom ticket add-note <ticket-id> \"Next: <command> (why)\"`\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/commands/loom-agile-brainstorm-project.md\n+---\n+description: Brainstorm a project direction and next steps\n+---\n+\n+Ticket:\n+$ARGUMENTS\n+\n+Use the skill tool:\n+- Load `loom-agile-brainstorm-project` and follow it.\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/commands/loom-agile-research.md\n+---\n+description: Run structured research (domain, market, or technical)\n+---\n+\n+Ticket... (truncated, len=8593)"
+        },
+        "id": "cb2db162-cbdb-4c94-a85a-244e35520f91",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:33:15.733Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "fdfbcaae-77f2-428b-b3ba-fc57328c5546",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.745Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "ea0fff47-9206-4855-a752-44f8d1cbccc1",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.745Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "767c5405-95ce-4826-82bb-4d95bb2ee1bd",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.746Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "a24fa190-e9fe-45df-89c2-c19a95f5b495",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.747Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "85ad379c-ceb7-409e-899b-21fc2cf69340",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.747Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "e5ca78e1-f6a7-4dbe-8b97-2c67ed917d97",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.748Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "6ab9d0a4-0e96-4163-9cb5-28619d02be95",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.749Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "2789a13f-8275-4d95-9169-429f585c6a4a",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.749Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "07ec4ef1-faa9-434b-9f6f-3a683f3cfb02",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.750Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "87c5ff70-10d6-4e2a-9b6e-02fc162e861c",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.751Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "795828b6-913c-4eee-810b-b2b8e5e263a3",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.752Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "d68dbca7-5f1b-4cd6-afeb-2f1908bef06b",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.752Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "46cea31f-9732-4f20-9ee8-b96d8036067d",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.753Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "b7ffb937-fb3f-464e-9608-6c45c133ede3",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.754Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "be3b9de9-d908-423b-96eb-1db9c45ca6a6",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.755Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "b82b6e5e-62d2-4ab9-b9a4-74fc1db5a867",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.756Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "c2588573-d814-449d-9a13-82053c2d34fd",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.756Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "1bdb1811-6729-4971-88e7-b2a4ed1bc1f7",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.759Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "85c1d5f5-1ae4-4b72-91ae-6aeb894c4ac6",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.760Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "7c87e9df-d855-4a82-b7a2-8a95695b1084",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.761Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "5b10a8ca-7719-45d7-bc51-d1d5791b4adc",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.761Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "f56c2314-ff50-45ad-a970-d62d03fe5f2d",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.762Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "7c7bcc50-9bee-4c13-9089-25d94266314f",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.762Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "dcaede18-4fce-410b-8d4a-ec3d2e16d914",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.763Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "ac00e179-186d-4190-bf32-d1a4ed07ef0b",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.764Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "3c0baf2e-20e8-48c3-ae74-cd6fa53533e3",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.765Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "86cf9bbc-cdd7-4550-9dd2-80bada6ab689",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.768Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "5017c9ce-df47-4e5a-8c29-1c81b389bf89",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.831Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "6499654a-339c-4d00-b932-287599359691",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.880Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "eaaeb28e-9c76-43a6-ac6c-fa7781366be7",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.927Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "56e69ece-a3cb-4c73-ac3f-46de0329ed33",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.959Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "110d3549-49a1-4503-8338-96ac6c4e7310",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:15.984Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "578cc859-8f82-4f6f-b4e2-4777913d82fa",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.007Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "7c263350-3acb-4beb-9707-260c455c81b5",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.029Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "c25276d4-225b-443b-8c34-766899af807d",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.058Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "fa6bb30e-c2e5-48e4-b15d-f3bf897b2211",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.088Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "4dce09ae-6680-4c2f-9fee-6c7d1cb8c801",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.109Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "c8b05af2-0b3f-4290-b42f-270fda7dff1a",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.130Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "17796096-9c14-42b0-8cad-e4e013b85ffd",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.149Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "a4066043-3ea5-40ec-8f82-513d918269d8",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.170Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "259f1ed3-197c-402d-adf9-7cb021811148",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.190Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "49e9df4d-423d-4d59-b162-c47cb7d5e818",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.211Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "5e3e4bdb-4ca9-4736-897a-25fad3dd70de",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.233Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "b306e298-fdaa-4019-b2be-c46c9dc5eed5",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.252Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "c239c410-96de-4396-9fe2-2afb83293513",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.271Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "c23b9a9f-0212-4ac4-824b-fe0950dbfed5",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.290Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "9e46607d-8acb-46ea-a929-854def49bd99",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.309Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "fa810a2b-09c7-4dd0-b6e6-2afd805824f9",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.328Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "3bb488bb-1e80-4bf1-b02c-f4d632afa160",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.348Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "93d07213-d067-40da-b5bb-fc0ac9e8043f",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.367Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "27b5d199-65a2-41e4-bb7b-d5f788bdd4b0",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.388Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "72fcac36-36cf-4782-b528-68dbe18bd844",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:16.411Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "args": null,
+        "id": "1c4070e2-2487-4c60-9f35-3ee54ee05860",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:33:16.430Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "c35e55c5-97da-408e-bb22-e0176664c81a",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:17.763Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a968644e-aa8c-4327-971c-efcdca90c0b6",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:17.766Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "ce6ad521-43b5-4a78-b874-cd298d7f9248",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:33:17.766Z",
+        "type": "session.status"
+      },
+      {
+        "id": "4fe0740f-f53c-4bc7-84f6-c1ee327df978",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:17.970Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "818ca125-9eae-45a0-b158-71d2e4caba36",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:33:18.247Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "d5b07647-6816-4d51-9517-b63a196dd0bf",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:33:18.247Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "cf5a2114-061d-4da3-8cc4-7ce13d6d688a",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:18.247Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "82990374-7aef-45e2-90fc-81c5265240f0",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:33:18.580Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/agents/loom-agile-analyst.md\n+---\n+description: Analyst (brainstorming, research, briefs, project documentation)\n+mode: primary\n+---\n+\n+You are the Analyst.\n+\n+Core job:\n+- Turn ambiguity into crisp options and next actions.\n+- Keep the work anchored in a Loom ticket.\n+\n+Triggers:\n+- BP: Brainstorm Project -> `/loom-agile-brainstorm-project <ticket-id>`\n+- RS: Research -> `/loom-agile-research <ticket-id>`\n+- CB: Create Brief -> `/loom-agile-create-brief <ticket-id>`\n+- DP: Document Project -> `/loom-agile-document-project <ticket-id>`\n+\n+Operating contract:\n+- If there is no ticket, create one: `loom ticket create \"<title>\" --status in_progress`.\n+- After each deliverable, add a short ticket note describing what was produced and where it lives.\n+\n+If the user says something else:\n+- Run `/loom-agile-help` to route.\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/agents/loom-agile-product-manager.md\n+---\n+description: Product Manager (PRD, epics/stories, readiness, course correction)\n+mode: primary\n+---\n+\n+You are the Product Manager.\n+\n+Core job:\n+- Define scope and acceptance.\n+- Make tradeoffs explicit.\n+\n+Triggers:\n+- CP: Create PRD -> `/loom-agile-create-prd <ticket-id>`\n+- VP: Validate PRD -> `/loom-agile-validate-prd <ticket-id>`\n+- EP: Edit PRD -> `/loom-agile-edit-prd <ticket-id>`\n+- CE: Create Epics and Stories -> `/loom-agile-create-epics-and-stories <ticket-id>`\n+- IR: Implementation Readiness -> `/loom-agile-implementation-readiness <ticket-id>`\n+- CC: Correct Course -> `/loom-agile-correct-course <ticket-id>`\n+\n+Operating contract:\n+- Every artifact should end in explicit acceptance criteria.\n+- Use Loom tickets as the unit of work; link follow-up tickets when scope splits.\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/agents/loom-... (truncated, len=5973)"
+        },
+        "id": "590f527d-8485-4934-9eba-bc2d6e189313",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:33:54.634Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "400f2c47-2897-43f7-9f56-2d9ed7fd9668",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.641Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "968f4e91-06cf-47bb-9240-a8eaadb2e3af",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.642Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "058247f5-ef31-4d17-b07b-5fca40aace4b",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.642Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "7863e572-cbd3-401f-8283-3f452eb672c4",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.643Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "c86b1f4e-c045-4f29-bfd8-4aef58f8b583",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.643Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "f16e1d20-ad6b-40ef-9d9a-1d9f5abfa5d5",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.644Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "fff50a79-96d8-42ad-9672-9f542b3a8dfc",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.645Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "cb403a16-cd44-41b6-9c8e-e6f44276ab45",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.645Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "30e603b9-bacd-41e5-9bb9-42d48aebcd6d",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.645Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "7d93ca5b-d658-4666-a778-d0df412dd958",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.648Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "cb147a7c-ab6b-48f1-805a-69fc5b1ace2a",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.691Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "8eadebb7-afe6-4857-899c-b320db3a7005",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.737Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "188c45b0-5585-477b-892d-51e355bd23fe",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.793Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "6c38238d-daa8-4a47-91a7-8c5b6d2e3636",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.829Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "6701280d-b338-4456-a914-60953a797faf",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.890Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "c27356fe-bce1-42c8-8151-5b44b764d7e3",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.921Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "3ab7b369-a16f-4301-bea1-b241524e39a6",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:54.961Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "8cc6c336-7681-4442-ac81-5b3c6a78668f",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:55.004Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "args": null,
+        "id": "eb761cb1-1e93-488d-88bf-0b0ec48474ce",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:33:55.025Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "2620eb6d-0530-44e1-a981-3324edbb27dd",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:55.029Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "8928a0aa-4dc0-417a-985b-031231abf5ea",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:55.030Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "83cdd302-5093-4e76-92f5-c66b846c5ec1",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:33:55.030Z",
+        "type": "session.status"
+      },
+      {
+        "id": "35ba6f49-b505-40d8-88ad-8498adaad808",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:55.117Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "57dbb385-0cdd-4e05-ba42-43ce4559ee25",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:33:55.243Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "9e74b4a6-9645-439a-a762-b96509a1fbbd",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:33:55.243Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "f158fc68-7310-4922-ac5f-5ac6e17f8360",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:33:55.243Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "c7f283ea-f3a0-4c7f-ba7b-403f2f5c87fb",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:33:55.747Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-brainstorm-project/SKILL.md\n+---\n+name: loom-agile-brainstorm-project\n+description: Brainstorm project direction and pick concrete next steps.\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Outcomes\n+- A short list of viable directions\n+- A recommended direction (with why)\n+- The next 1-3 concrete steps\n+\n+## Inputs\n+- Ticket id (recommended)\n+- Any constraints (time, budget, platform, compliance)\n+\n+## Procedure\n+1) Anchor the work\n+   - If there is no ticket: `loom ticket create \"<title>\" --status in_progress`\n+   - If there is a ticket: `loom ticket show <id>`\n+\n+2) Frame the problem\n+   - What is the user trying to achieve?\n+   - Who is it for?\n+   - What is success (measurable)?\n+\n+3) Generate options (3-7)\n+   - Include one conservative option and one bold option.\n+   - Keep options mutually distinct.\n+\n+4) Evaluate and narrow\n+   - Score each option on impact, feasibility, risk.\n+   - Pick one recommendation.\n+\n+5) Produce next steps\n+   - Choose one of:\n+     - `/loom-agile-create-brief <id>`\n+     - `/loom-agile-research <id>`\n+     - `/loom-agile-create-prd <id>`\n+\n+6) Update the ticket\n+   - `loom ticket add-note <id> \"Options: ... | Recommend: ... | Next: ...\"`\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-research/SKILL.md\n+---\n+name: loom-agile-research\n+description: Structured research with synthesis (domain, market, or technical).\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Outcomes\n+- A synthesis (not a link dump)\n+- Decision-relevant conclusions\n+- Open questions + recommended follow-ups\n+\n+## Procedure\n+1) Define research type\n+   - Domain: concepts, stakeholders, constraints\n+   - Market: competitors, alternatives, pricing, adoption\n+   - Technical: libraries, architectures, tradeoffs, integration patterns\n+... (truncated, len=3815)"
+        },
+        "id": "9eb1e57d-584d-43f4-b7be-f7138c57d130",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:34:20.947Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "85d0ca25-bffb-437c-90e7-03478cdab540",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:20.958Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "2f091313-71e6-4dc0-9437-2947160cf914",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:20.961Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "9465a597-32ba-4b75-8a38-e2017f11c281",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:20.962Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "57ab1da6-a7b7-4e89-b604-d97fd6dae927",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:20.963Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "ec150923-fc1a-4dc9-9c6f-2992d06212b4",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:20.964Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "ff29fa93-3d1b-4431-955e-9ad1a557b126",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:21.001Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "387af24b-c8f8-4a33-ab2e-513366c44d48",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:21.047Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "ff55c78e-135c-46f7-a4be-fabb8d663ae6",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:21.092Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "args": null,
+        "id": "acc56d26-7c7c-4a3d-b591-ae0d8a98335b",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:34:21.125Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "e8b82639-f5f9-4d98-a6e7-e4185de646ea",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:21.130Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "29b18cfa-5560-449b-918c-7d239e015608",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:21.135Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "c712800e-a8a0-40aa-9f4d-fc102bcf3625",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:34:21.135Z",
+        "type": "session.status"
+      },
+      {
+        "id": "5c34e260-2498-4e59-98c9-1ce13942fe36",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:21.230Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "e3965b0b-0a1d-4c01-a68d-8459d6cf2990",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:21.357Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "dc9544fd-5f42-4e39-82d4-cd3638cfb997",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:34:21.357Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "fccda3a4-158b-4497-b68c-c36371b9dfea",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:34:21.357Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "2a1c32de-5348-4aa0-a6e7-90bd3fa1da0f",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:34:21.833Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-create-prd/SKILL.md\n+---\n+name: loom-agile-create-prd\n+description: Create a PRD with scope, requirements, and acceptance criteria.\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Outcomes\n+- A PRD that separates requirements from implementation\n+- Clear acceptance criteria\n+- Open questions captured explicitly\n+\n+## Procedure\n+1) Anchor\n+   - `loom ticket show <id>`\n+   - `loom ticket update <id> --status in_progress`\n+\n+2) Capture the problem\n+   - User + context\n+   - Pain + impact\n+   - Desired outcomes (measurable)\n+\n+3) Define scope\n+   - In scope\n+   - Out of scope\n+   - Constraints\n+\n+4) Define journeys\n+   - Happy path\n+   - 1-3 critical edge cases\n+\n+5) Requirements\n+   - Functional requirements as numbered bullets\n+   - Non-functional requirements (performance, security, reliability, UX)\n+\n+6) Acceptance criteria\n+   - Testable statements\n+\n+7) Open questions\n+   - List unknowns that block implementation\n+\n+8) Persist\n+   - Store PRD in a repo file if long; then:\n+     - `loom ticket add-note <id> \"PRD drafted: <path>\"`\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-validate-prd/SKILL.md\n+---\n+name: loom-agile-validate-prd\n+description: Validate a PRD for completeness, measurability, and implementation leakage.\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Checks\n+1) Completeness\n+   - Goals/success metrics present\n+   - Scope boundaries explicit\n+   - Non-goals stated\n+   - Open questions listed\n+\n+2) Measurability\n+   - Success metrics are measurable\n+   - Acceptance criteria are testable\n+\n+3) Traceability\n+   - Requirements map to acceptance criteria\n+   - Major journeys map to requirements\n+\n+4) Implementation leakage\n+   - PRD does not force tech choices unless constraints require it\n+\n+## Procedure\n+1) Read the PR... (truncated, len=2819)"
+        },
+        "id": "0619ef95-28ca-4781-8247-fcb1b27880b3",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:34:42.237Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "315d6d48-9167-4877-ab68-9a5a9debce7b",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:42.240Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "d74af20b-92a1-4097-9456-0603e261220f",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:42.241Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "976985de-9e92-4d19-94b2-c2e0dedb289a",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:42.242Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "a0faa5fa-fa2f-4660-a847-79bdbfb95b1d",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:42.244Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "2703722e-2dd0-450b-afbd-569babdfaa3d",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:42.281Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "bf9901ba-a475-4075-9253-8311f334eb14",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:42.308Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "args": null,
+        "id": "a4a68ec5-b7bd-40ad-8dee-6fbac892a430",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:34:42.331Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "550cd26f-bdf6-43f7-a8d0-784d9345db20",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:42.334Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "c7412bb2-f381-440c-a255-d5125735af76",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:42.336Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "469c23eb-7909-4887-8613-baadfcb8ebeb",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:34:42.336Z",
+        "type": "session.status"
+      },
+      {
+        "id": "c343d0cd-7290-4445-b140-36dca3b8400f",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:42.417Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "b1fd8a0a-a976-45f6-8b19-29d9c57b9180",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:42.544Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "f293ef64-2757-46c2-9cdd-c905ea67b77a",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:34:42.544Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "c63e9983-1433-4154-b195-e91db2a1929e",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:34:42.544Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "a9e673bc-8640-4bb6-9610-fe929ca20d58",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:34:43.057Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-create-epics-and-stories/SKILL.md\n+---\n+name: loom-agile-create-epics-and-stories\n+description: Derive epics and stories from a PRD with clear done criteria.\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Outcomes\n+- A small set of epics\n+- Stories that are implementation-ready\n+- A clear dependency order\n+\n+## Procedure\n+1) Prerequisites\n+   - Ensure PRD exists and is validated enough to build from.\n+\n+2) Create epics (3-8)\n+   - Each epic has a measurable outcome.\n+\n+3) Create stories per epic\n+   - Each story has:\n+     - short title\n+     - user-facing value\n+     - acceptance criteria\n+     - implementation notes only if necessary\n+\n+4) Sequence and split\n+   - Split any story that cannot be completed in a short loop.\n+   - Mark dependencies explicitly.\n+\n+5) Map to Loom tickets\n+   - Create tickets for the next executable stories.\n+   - Link dependencies:\n+     - `loom ticket dep-add <child> <parent>`\n+\n+6) Persist\n+   - Add a ticket note summarizing the epic/story breakdown.\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-implementation-readiness/SKILL.md\n+---\n+name: loom-agile-implementation-readiness\n+description: Check readiness to implement (inputs, risks, sequencing, test plan).\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Readiness checklist\n+- Requirements are clear enough to build\n+- Acceptance criteria are testable\n+- Key risks identified\n+- Dependencies known\n+- A test/verification approach exists\n+\n+## Procedure\n+1) Review current artifacts (brief/PRD/architecture)\n+2) Produce a readiness report:\n+   - Ready: yes/no\n+   - Blockers\n+   - Risks\n+   - Next action\n+3) Add the report to the ticket.\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-correct-course/SKILL.md\n+---... (truncated, len=2541)"
+        },
+        "id": "17c35917-caee-4dd4-8ef5-d8b992aa7b3e",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:34:59.392Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "e6ec7bfb-2e99-41fe-8457-7f2b0d3fc770",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:59.397Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "67008387-791a-4563-9fc4-bb3486c43ce0",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:59.398Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "41f701ea-dfd8-4a1b-b917-6bde3585aa02",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:59.399Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "78ce661d-6107-4015-9e5e-07751e87f348",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:59.403Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "f8e2d1ba-fb98-4359-bc17-d349655dd0ac",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:59.448Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "14dccb79-5af9-467e-a87e-850ab5742a45",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:59.485Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "args": null,
+        "id": "0e87d826-9bdc-454c-a763-470fbac72ca7",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:34:59.514Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "c7c422e2-fc7e-4742-853b-b584f5572b4b",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:59.518Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2caa28ed-814d-485a-8fca-3502509b5b41",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:59.519Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "e3a6ae46-fec9-430a-b7f5-7fdcbfe3aa75",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:34:59.519Z",
+        "type": "session.status"
+      },
+      {
+        "id": "3e6363a8-3325-4929-8259-5ebef3fe74ab",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:59.602Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "e0a9ac58-ac0c-47c0-b89b-a63f7ba5cefa",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:34:59.720Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a5ec4aa8-32d3-4efe-a123-41f9c3f683af",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:34:59.720Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "21381ced-a48e-48e0-ac1f-61f79173c059",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:34:59.720Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "c3d7d18d-4334-43de-8e14-455d463a9811",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:35:00.242Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-create-architecture/SKILL.md\n+---\n+name: loom-agile-create-architecture\n+description: Produce a minimal architecture plan with explicit decisions and tradeoffs.\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Outcomes\n+- A clear approach that enables implementation\n+- Decisions + tradeoffs captured\n+- A verification strategy\n+\n+## Procedure\n+1) Context\n+   - Constraints and non-negotiables\n+   - Existing system boundaries\n+\n+2) Proposed design\n+   - Components and responsibilities\n+   - Data flow\n+   - Interfaces (only as detailed as needed)\n+\n+3) Decisions\n+   - For each major decision: options, decision, why\n+   - Record durable decisions in Loom memory when useful:\n+     - `loom memory add --title \"...\" --body \"...\"`\n+\n+4) Risks and failure modes\n+5) Test/verification plan (language/toolchain agnostic)\n+6) Persist\n+   - Add a ticket note linking the architecture artifact.\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-sprint-planning/SKILL.md\n+---\n+name: loom-agile-sprint-planning\n+description: Plan a sprint (capacity, scope, sequencing, definition of done).\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Procedure\n+1) Confirm objective\n+2) Inventory candidate stories/tickets\n+3) Capacity + constraints\n+4) Select scope\n+5) Sequence work and identify dependencies\n+6) Define done criteria\n+7) Update tickets\n+   - set selected tickets to `ready` or `in_progress`\n+   - add notes for sequencing and dependencies\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-create-story/SKILL.md\n+---\n+name: loom-agile-create-story\n+description: Create an implementation-ready story with acceptance criteria and tasks.\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Story format\n+- Title\n+- Context\n+- Accept... (truncated, len=2829)"
+        },
+        "id": "e79a9bad-317d-4142-b4ba-f23e84eeeaf3",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:35:18.417Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "26d18e71-c069-44df-9ddd-c9a9f22beb6d",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.421Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "7110382d-c050-49dc-bdc1-18ef45f5d4ae",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.422Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "dd09a1fc-43a5-47f6-863a-679950318dc8",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.422Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "b9c05978-3861-4f63-89ac-f2389b4ced3b",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.423Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "c363daf7-9f74-4e74-9a3f-2a03951b580d",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.426Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "c00459fc-5d9e-46a7-ac06-a7c2e4a552dd",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.473Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "591f2a8c-4409-40d9-864d-76cfad9a158e",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.506Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "e41ae18d-58da-4aeb-9db9-cdc5488185c0",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.531Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "args": null,
+        "id": "1833937e-3480-4710-b8ba-b74e014e12cb",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:35:18.554Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "396b527d-5bc2-446f-a873-f49f8474ccb4",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.557Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "87dad76a-cde7-4e45-9442-41b0fead1663",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:35:18.559Z",
+        "type": "session.status"
+      },
+      {
+        "id": "a7995458-64e4-4050-bd97-329a030b9144",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.559Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "89c1bf9d-3a24-42e7-861b-60cd00bd9b62",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.637Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "f1ab6b32-d584-4cd4-9638-464ed6cdf0e1",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:18.751Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "ec729cc3-ad96-469b-af78-c49cfdee5706",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:35:18.752Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "d08f1969-fd5b-49e7-9600-9f05cbe2845c",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:35:18.752Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "d0afe8e8-3e8d-4c8d-8eb1-32a9647e565d",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:35:19.243Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-dev-story/SKILL.md\n+---\n+name: loom-agile-dev-story\n+description: Implement a story/ticket in a worktree with tight feedback loops.\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Procedure\n+1) Read the ticket\n+   - `loom ticket show <id>`\n+   - `loom ticket update <id> --status in_progress`\n+\n+2) Ensure a worktree\n+   - `loom workspace worktree ensure ticket-<id> --base-ref main`\n+\n+3) Implement in small steps\n+   - After each step, update the ticket:\n+     - `loom ticket add-note <id> \"<what changed> | <what remains>\"`\n+\n+4) Verify\n+   - Discover the repo's canonical checks (Makefile/just/package scripts/go/cargo/mvn/gradle/etc).\n+   - Run the smallest set of checks that gives confidence.\n+\n+5) Close out\n+   - `loom ticket update <id> --status closed`\n+   - Capture durable learnings in Loom memory when appropriate.\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-code-review/SKILL.md\n+---\n+name: loom-agile-code-review\n+description: Perform a structured review (correctness, quality, security, docs, tests).\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Review dimensions\n+1) Correctness\n+2) Maintainability\n+3) Security\n+4) Tests\n+5) Docs\n+\n+## Procedure\n+1) Establish scope (what is being reviewed?)\n+2) Review the change diff and key files\n+3) List findings:\n+   - Must-fix\n+   - Should-fix\n+   - Nice-to-have\n+4) Persist:\n+   - `loom ticket add-note <id> \"Review: must-fix ...\"`\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-qa-automate/SKILL.md\n+---\n+name: loom-agile-qa-automate\n+description: Add high-signal automated tests for existing behavior.\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Procedure\n+1) Identify critical behavior\n+2) Identify edge cases and regressions\n+3) Add determin... (truncated, len=3015)"
+        },
+        "id": "e7833d69-e54a-4413-8af5-ec14f6d97b1e",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:35:40.912Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "afe96d8e-8d9a-4c66-8d4b-ae0f72093685",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:40.926Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "bc7eb5cb-0a9b-4532-a5a4-985f83171c73",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:40.927Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "97bb239a-174d-4e54-8eb6-fe77df98469e",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:40.928Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "2764f81c-24b6-48e4-b419-2bb9e5823e43",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:40.928Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "59830f02-62f3-435b-b974-60c48a0e7a20",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:40.933Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "a7fbc0e3-cbab-4936-b30f-268fd3466660",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:40.928Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "909312c5-ca6f-494c-85c0-c1a39a9a498c",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:40.963Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "c8fe4389-a803-4220-af94-aeaae334fa59",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:40.995Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "43c587b3-1d83-4ce7-ac36-def7f965e18d",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:41.040Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "d3db099b-3867-483b-8d0e-dce2ec02ea1c",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:41.078Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "args": null,
+        "id": "714a733b-2cb7-4547-b720-f136f7743ab4",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:35:41.120Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "34d828a7-7084-416a-a350-a2d4ad4c8d28",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:41.560Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "99b2e818-ea53-4a63-8924-e670dc34eeed",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:41.562Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "6044b22c-e6f2-4ee2-b7f2-dcb5afd69638",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:35:41.563Z",
+        "type": "session.status"
+      },
+      {
+        "id": "3d650490-553a-4666-9ec6-161d9e7292f0",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:41.662Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "f258f328-b6d0-4138-8221-78d6089b3dfb",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:35:41.777Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "109af82a-98ca-4530-be34-2158d5c99db0",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:35:41.777Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "d97ffa94-c151-4505-b2d1-320ecdfa4fba",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:35:41.777Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "a55445fb-f81c-4a47-a0f6-6d24be2809bf",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:35:42.352Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-create-ux-design/SKILL.md\n+---\n+name: loom-agile-create-ux-design\n+description: Create UX design deliverables that are implementable (flows, IA, UI direction).\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Outcomes\n+- Key user flows\n+- Information architecture\n+- UI direction (components, states, accessibility)\n+\n+## Procedure\n+1) Clarify target users and success metrics\n+2) Define flows (happy path + critical edge cases)\n+3) Define IA and navigation\n+4) Define UI direction\n+   - states\n+   - error handling\n+   - responsive behavior\n+   - accessibility constraints\n+5) Persist and link from the ticket\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-write-document/SKILL.md\n+---\n+name: loom-agile-write-document\n+description: Write a document with structure, examples, and review pass.\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Procedure\n+1) Define audience and purpose\n+2) Outline headings\n+3) Draft content with examples\n+4) Run an editorial pass (clarity, concision)\n+5) Validate technical claims\n+6) Add a ticket note linking the doc\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-update-standards/SKILL.md\n+---\n+name: loom-agile-update-standards\n+description: Update documentation standards and templates based on learnings.\n+license: MIT\n+compatibility: opencode\n+---\n+\n+## Procedure\n+1) Identify what standard needs to change\n+2) Propose the minimal update\n+3) Apply to templates and one representative doc\n+4) Add a ticket note summarizing the standard change\n+\n*** Add File: src/agent_loom/depot/packs/loom-agile-core/files/.opencode/skills/loom-agile-mermaid-generate/SKILL.md\n+---\n+name: loom-agile-mermaid-generate\n+description: Generate Mermaid diagrams (sequence, flow, architecture) from a... (truncated, len=3110)"
+        },
+        "id": "252a2b6d-c8a0-41b6-bd10-d898f1bcacb5",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:36:01.643Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "62f0c26c-f5db-49de-9adf-1604da00fdd5",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.650Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "7b416643-e9d3-4c2f-aec7-ec13d8809daa",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.651Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "a9aa6a8d-4a83-4d4e-b2a2-168e2b950905",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.652Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "c35e4bfb-4ecb-4e3c-bfb5-24ef54f99450",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.652Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "de626a0c-9f86-4318-aac4-dfee460c362b",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.653Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "0ef685e6-07f5-4b43-925c-cd3bec8ec49b",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.654Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "9a80d2d4-97cd-4887-99e1-b79efafa89f3",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.655Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "01f3fc76-b637-41a4-9419-eb4bb741cfbf",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.715Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "8e5a40c2-23ab-4162-b571-70cbff24d5d4",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.766Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "05868b89-c119-4649-99c0-14fab8cf7457",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.816Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "57716193-4205-42fa-a14c-343e959cd229",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.860Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "59d0c50d-095f-4b57-ac49-35c2706979d0",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.898Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "args": null,
+        "id": "dd6e8ac1-5959-41db-99b5-75e791c78ab4",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:36:01.938Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "60a72f6c-a0e9-4325-932d-d71d52cc5895",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.943Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d903118e-15de-41f9-b821-8bf65b82ace5",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:01.952Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "16a52c26-705b-4c02-b201-040eac840426",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:01.952Z",
+        "type": "session.status"
+      },
+      {
+        "id": "0152f3d9-8944-45a2-bde5-c263bc412681",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:02.048Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "e7fad302-0167-4e59-b830-e244012fefb0",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:02.177Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "866d5b9c-eb47-40ee-be0d-c9d1739e5331",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:36:02.177Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "5a1566ef-e817-45c5-9c6e-5ae20aebf47a",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:02.178Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "0be1c378-ce6f-4ce4-a6c9-64efbcede7cd",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:02.688Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "path": "src/agent_loom/depot/packs",
+          "pattern": "loom-method"
+        },
+        "id": "c4cd8ab3-8f15-4c0c-855c-d48082ccf16e",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "pattern=loom-method",
+        "tool": "grep",
+        "ts": "2026-02-09T16:36:06.474Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "750485fa-261e-42d0-858f-f93a3f6d6fcc",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "grep",
+        "ts": "2026-02-09T16:36:06.527Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "b0c18d2c-18e7-43f1-a963-e33f7750d452",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:06.530Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "50bfc60a-619c-4fff-bdc7-07529cbead6d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:06.532Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "0539ea07-9d40-439f-9a0f-d2a70c49da4c",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:06.532Z",
+        "type": "session.status"
+      },
+      {
+        "id": "03a821cf-a941-4d48-8b59-6692ae4cacae",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:06.642Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2a507108-7035-43e8-8148-bcd99e911b60",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:06.754Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "4c64c94d-e3d4-453d-b343-0b48c35d0aa0",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:36:06.754Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "3a27a004-61be-402d-933a-75f73c6253ad",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:06.755Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "674fe008-fc92-4c98-bca5-403225dc6e6d",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:07.312Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Update File: src/agent_loom/depot/README.md\n@@\n ### Included packs\n \n-- `loom-method`: lightweight role + flow pack (OpenCode-first)\n+- `loom-agile-core`: role agents + workflow skills (OpenCode-first, language-agnostic)\n \n*** End Patch"
+        },
+        "id": "1ac6bf20-c5c0-4b79-9ea2-ef55d88244b7",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:36:11.469Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "752b8ed3-aa2a-4536-ba3e-87b3fea4940c",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:11.478Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "26f2dc10-d105-4b18-afb9-b4ec572f8eab",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:11.480Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "args": null,
+        "id": "94fbdc7f-eff8-4c07-921e-fe51d6235819",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:36:11.540Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "9f570a55-2058-4e52-af5a-8de05319fdc4",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:11.544Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "db053520-70aa-41f5-aeb2-d9f3fc7866c9",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:11.549Z",
+        "type": "session.status"
+      },
+      {
+        "id": "b7ca3fe5-c473-4065-89fc-8e2bf74e3ee5",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:11.549Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "6ac2b48d-9a0f-4095-b060-ae40babccdb5",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:11.674Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "3d9c3dea-e133-4e42-94f3-720437246ce1",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:11.786Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "7ef8137b-4800-4d9e-96f6-ac2a539f6712",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:36:11.787Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "6a7751f5-f328-4b31-bf1c-b8bb36121190",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:11.787Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "84128ab3-2da5-4315-81f0-beaf8ba686fc",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:12.306Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Update File: tests/test_depot_pack_lifecycle.py\n@@\n def test_depot_install_loom_method_pack(tmp_path: Path) -> None:\n     repo = tmp_path\n-    res = install_pack(repo_root=repo, pack_id=\"loom-method\", dry_run=False)\n+    res = install_pack(repo_root=repo, pack_id=\"loom-agile-core\", dry_run=False)\n     assert res.ok is True\n-    assert (repo / \".opencode\" / \"commands\" / \"loom-method-help.md\").exists()\n-    assert (repo / \".opencode\" / \"agents\" / \"loom-method-dev.md\").exists()\n+    assert (repo / \".opencode\" / \"commands\" / \"loom-agile-help.md\").exists()\n+    assert (repo / \".opencode\" / \"agents\" / \"loom-agile-developer.md\").exists()\n*** End Patch"
+        },
+        "id": "bcbed905-539c-4a66-bd72-5f84c40c09d4",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:36:19.880Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "af579eb7-365f-4ac7-9fc6-bf6fdbf442e8",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:19.894Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "7fcd2cc3-e9e2-4103-bd78-32ad95f81850",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:20.159Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "066a11df-9b7b-459c-8cbc-a841947777e3",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:20.527Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": null,
+        "id": "c43c3fa3-23e7-4b60-a3c3-e6b7198a903c",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:36:20.680Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "fef47745-d823-4361-ae76-bd67cdb81ff3",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:20.685Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "b8083190-8f3c-4486-80e8-e41ff767b6a7",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:20.687Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "3f79d50f-3a4d-42ac-b5b1-9e7324ab305f",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:20.687Z",
+        "type": "session.status"
+      },
+      {
+        "id": "850f54a7-9a00-4672-b1a2-135d588718da",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:20.811Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "678e47cf-83b8-496f-8995-95d8eeccdaa1",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:20.932Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "93cd0f07-4855-4dc1-96f4-8259d8fb6c56",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:36:20.932Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "6222b66d-e881-45bd-b60c-5bc958484ad7",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:20.932Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "82ef12c4-83e2-4b61-808b-416ee9f15484",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:21.485Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Update File: tests/test_depot_loom_method_pack_invariants.py\n@@\n def test_loom_method_pack_is_listed_and_loadable() -> None:\n-    assert \"loom-method\" in list_pack_ids()\n-    mf = load_manifest(\"loom-method\")\n-    assert mf.id == \"loom-method\"\n+    assert \"loom-agile-core\" in list_pack_ids()\n+    mf = load_manifest(\"loom-agile-core\")\n+    assert mf.id == \"loom-agile-core\"\n     assert mf.install_roots\n@@\n def test_loom_method_pack_contains_expected_commands_and_agents() -> None:\n-    files = dict(iter_pack_files(\"loom-method\"))\n-    assert \".opencode/commands/loom-method-help.md\" in files\n-    assert \".opencode/commands/loom-method-implement.md\" in files\n-    assert \".opencode/agents/loom-method-dev.md\" in files\n+    files = dict(iter_pack_files(\"loom-agile-core\"))\n+    assert \".opencode/commands/loom-agile-help.md\" in files\n+    assert \".opencode/commands/loom-agile-dev-story.md\" in files\n+    assert \".opencode/agents/loom-agile-developer.md\" in files\n+    assert \".opencode/skills/loom-agile-create-prd/SKILL.md\" in files\n@@\n def test_loom_method_pack_is_language_agnostic_and_not_bmad_branded() -> None:\n@@\n-    for rel, p in iter_pack_files(\"loom-method\"):\n+    for rel, p in iter_pack_files(\"loom-agile-core\"):\n         ext = Path(rel).suffix.lower()\n         if ext not in {\".md\", \".txt\", \".yaml\", \".yml\", \".xml\", \".json\"}:\n             continue\n         text = p.read_text(encoding=\"utf-8\", errors=\"replace\")\n         for rx in forbidden:\n             assert not rx.search(text), f\"forbidden {rx.pattern} in {rel}\"\n*** End Patch"
+        },
+        "id": "895bbc70-78c5-4d3a-9976-2013ecd57514",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:36:33.444Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "84cb9d61-75a1-4bb8-afe6-43dc6cbb9789",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:33.453Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "97285a03-3777-4140-8d24-1c506b5b1956",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:33.478Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "0576dcef-6889-4918-aa70-e0e00d1e0060",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:33.817Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": null,
+        "id": "ae38e92a-8417-481f-b374-2c0d2d78a3a5",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:36:33.969Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "ab579598-110c-4052-8fb6-a11e31194cc6",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:33.982Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "4354232f-8c0f-469c-9f01-586be985f36a",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:33.984Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "fadb2b5c-4e84-4ad2-a410-dbe6af4276fd",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:33.984Z",
+        "type": "session.status"
+      },
+      {
+        "id": "1093e703-fce3-4563-9947-154d57ddffc4",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:34.108Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "3d1ba170-0860-4ca3-947f-a93c06c603e2",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:34.229Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2a5eb92f-e816-40e7-a66d-8dbba85b3156",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:34.230Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "21b83a2b-0f10-4869-8f3b-45fcee08d1d9",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:36:34.230Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "d6107d8b-36a6-4909-9a68-28fd80cfe73f",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:34.751Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 96,
+          "command_sha256": "124c17249e54b9ee04dfb3014af313ba98eb60490fdee580df12ea0eca8a2530",
+          "redacted": true
+        },
+        "id": "d22d5332-e702-4efb-aca5-28afa801a2fe",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "command_sha256=124c17249e54b9ee04dfb3014af313ba98eb60490fdee580df12ea0eca8a2530 command_len=96",
+        "tool": "bash",
+        "ts": "2026-02-09T16:36:39.515Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "c4fd7347-611d-41e8-8f1a-7512ccd06cd1",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "bash",
+        "ts": "2026-02-09T16:36:40.666Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "39cde022-0dc5-4309-9a82-94c8de5d6d73",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:40.672Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "f60f5e5e-ae7e-4c44-b89c-4a3b4849e69c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:40.674Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "4c818800-a276-4a21-bb9e-f2d6fa3406d9",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:40.674Z",
+        "type": "session.status"
+      },
+      {
+        "id": "593b6a87-6612-4617-8fe6-3b8712f114e8",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:40.779Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a34fb807-787d-4fde-b1b6-e0967f76f1aa",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:36:40.900Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "fc448dcd-bf9c-40b9-93ba-fc3193066ab7",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:40.900Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "8c7d1253-13dd-4c8f-9aa5-5db2ce9716af",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:40.900Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2889ec88-eefa-4900-a976-f8f8df357d77",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:41.403Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 22,
+          "command_sha256": "f04914b1037e35dee6d085321fe021d8b9d7ac0f4b5ed60f8088bd07763f6bc5",
+          "redacted": true
+        },
+        "id": "9a027e85-5d12-4868-9eed-800f9fe59b2a",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "command_sha256=f04914b1037e35dee6d085321fe021d8b9d7ac0f4b5ed60f8088bd07763f6bc5 command_len=22",
+        "tool": "bash",
+        "ts": "2026-02-09T16:36:49.335Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "00e2e7d6-9cac-4b06-a1c0-dffe3ed05922",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "bash",
+        "ts": "2026-02-09T16:36:49.855Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "5e31a3a3-aa32-4c5e-8cd3-8fe5bdd20a17",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:49.857Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d18bb0d7-e9c4-4551-911b-f25af635dc44",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:49.861Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "40e98efd-4c17-42b3-b937-767955f1764c",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:49.861Z",
+        "type": "session.status"
+      },
+      {
+        "id": "a831bc7c-4a41-4b91-9d7a-5a1298717b58",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:49.954Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "b284274f-dd49-48b0-8ade-db6091deb7e5",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:36:50.073Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "ec3967ed-ca8b-4e90-a9ae-4eae7d737f8e",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:50.074Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "dc68c532-0e28-4992-ab99-12eaca729a86",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:36:50.074Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "465327c1-101c-4a52-bcf6-e03d5e6d94b5",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:36:50.577Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 19,
+          "command_sha256": "64776c1ca0c426f361df9362b24f35323bd843c12b79af437d10aa080db1b36f",
+          "redacted": true
+        },
+        "id": "5a75c32a-984a-4529-ac0a-d81d99a60f4c",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "command_sha256=64776c1ca0c426f361df9362b24f35323bd843c12b79af437d10aa080db1b36f command_len=19",
+        "tool": "bash",
+        "ts": "2026-02-09T16:36:55.334Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "command_len": 19,
+          "command_sha256": "abbdbe7f68d529e81b887d45d3a9d58969b565b523ce5753aacc4dfe0b9e8a63",
+          "redacted": true
+        },
+        "id": "7abe61e8-74c8-4c7d-a1bf-c13aed6f55f7",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "command_sha256=abbdbe7f68d529e81b887d45d3a9d58969b565b523ce5753aacc4dfe0b9e8a63 command_len=19",
+        "tool": "bash",
+        "ts": "2026-02-09T16:36:55.335Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "command_len": 13,
+          "command_sha256": "efbb60d087c678d2718a428ddea96c5458e79f8f334c3141eb3ddacd55ae91d8",
+          "redacted": true
+        },
+        "id": "fdb3dc66-a09a-48d7-b0a5-1bac58d6c26f",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "command_sha256=efbb60d087c678d2718a428ddea96c5458e79f8f334c3141eb3ddacd55ae91d8 command_len=13",
+        "tool": "bash",
+        "ts": "2026-02-09T16:36:55.336Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "3c367350-bbaf-4a98-a507-779e20b8231f",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "bash",
+        "ts": "2026-02-09T16:36:55.730Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "5888c2f9-308f-4a0b-882c-611574279f53",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "bash",
+        "ts": "2026-02-09T16:37:01.482Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "7609913e-a678-4535-8d09-239108dd91cb",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "bash",
+        "ts": "2026-02-09T16:37:30.175Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "e31e86c0-aad7-4687-acf9-78b37b91ee81",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:30.183Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "dcdfd2c0-6dc6-4f43-a1a2-ff1b6d4f4b6c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:30.185Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "e0937207-a93d-4458-8ec3-a7090949070d",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:37:30.185Z",
+        "type": "session.status"
+      },
+      {
+        "id": "2a9fecdd-bc4f-4a08-92e7-c6081815e266",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:30.379Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "da77ad82-bc3c-4ef4-a323-cf13b5887e83",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:30.661Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d49c5e45-b05c-4ead-b32a-4463d5612038",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:37:30.661Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "7a7f2437-d741-47f1-98bd-ab2f73adcbd6",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:37:30.661Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "f91bbf08-a8fc-4c08-a2e7-69c9423152a7",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:37:31.010Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 22,
+          "command_sha256": "ca225b06d4162d1658e5ddabe3f0616050b0a0a408204115fa1d8ba30ad0da4f",
+          "redacted": true
+        },
+        "id": "7959ab13-8f78-45b1-8d6d-7424517497bc",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "command_sha256=ca225b06d4162d1658e5ddabe3f0616050b0a0a408204115fa1d8ba30ad0da4f command_len=22",
+        "tool": "bash",
+        "ts": "2026-02-09T16:37:34.333Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "54c5ec29-b773-47c6-9850-47de77a61064",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "bash",
+        "ts": "2026-02-09T16:37:34.417Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "a0205427-0440-4594-97bc-ee507ac28b27",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:34.421Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "9563a417-e49b-42f5-a9f4-5530ffccc5d6",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:37:34.423Z",
+        "type": "session.status"
+      },
+      {
+        "id": "d17057b2-37f0-4737-8b88-a0e55ad2499a",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:34.423Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "0bd13a83-c00e-441f-a93d-761c17d9af35",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:34.428Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "bc720980-7577-4f4d-a909-e3398d3fe0d8",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:34.531Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2497c86e-263b-43dd-967f-0900dc3b25f5",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:34.647Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "21c728b2-b176-4068-9d91-49a21f54089a",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:37:34.647Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "b31c6831-02f1-44cd-89c8-c830beb78214",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:37:34.647Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "0d935579-9f54-4705-8491-c1589f147881",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:37:35.174Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "filePath": "/Users/alexanderbutler/code_projects/personal/agent-loom/.opencode/skills/compound-autolearn-proposal/SKILL.md",
+          "limit": 40
+        },
+        "id": "2e75ab6e-4211-4b25-a87f-fd8d92ce6a95",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "filePath=/Users/alexanderbutler/code_projects/personal/agent-loom/.opencode/skills/compound-autolearn-proposal/SKILL.md",
+        "tool": "read",
+        "ts": "2026-02-09T16:37:42.174Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "filePath": "/Users/alexanderbutler/code_projects/personal/agent-loom/.claude/skills/compound-autolearn-proposal/SKILL.md",
+          "limit": 40
+        },
+        "id": "de0a5aed-ac78-4659-8687-dcd29b64d8ce",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "filePath=/Users/alexanderbutler/code_projects/personal/agent-loom/.claude/skills/compound-autolearn-proposal/SKILL.md",
+        "tool": "read",
+        "ts": "2026-02-09T16:37:42.174Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "7c0d82e1-892b-4154-a650-4123b8ab8b23",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "read",
+        "ts": "2026-02-09T16:37:42.180Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "fad7eb96-13b7-4770-9b8f-0e96f095ded4",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "read",
+        "ts": "2026-02-09T16:37:42.179Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "aca3943e-2847-4f7d-80db-ec519791fd0a",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:42.790Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "6ba2d39b-cabc-4fda-acec-331f3434e460",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:37:42.794Z",
+        "type": "session.status"
+      },
+      {
+        "id": "402b9572-9c2c-4e37-8268-ed543c2e2292",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:42.793Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "75e48070-3b9c-44d5-ad14-d4dc295860b4",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:42.920Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "4fdcaed4-3325-4466-8ba5-51b3257c3bf0",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:37:43.030Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2267b66a-67dd-42ae-8289-f80969c120bc",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:37:43.030Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "8863555e-fecf-4a8c-860e-2c85e87d901d",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:37:43.030Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "ce5ba071-0d91-4cc9-a142-c0dcb958f8f5",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:37:43.544Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "path": "src/agent_loom/depot/packs/loom-agile-core",
+          "pattern": "uv run|basedpyright|ruff"
+        },
+        "id": "a0c8778c-a7b2-450a-9577-d73aa696e763",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "pattern=uv run|basedpyright|ruff",
+        "tool": "grep",
+        "ts": "2026-02-09T16:38:11.391Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "path": "src/agent_loom/depot/packs/loom-agile-core",
+          "pattern": "\\bBMad\\b|\\bbmad\\b|\\.claude/|\\bClaude\\b|anthropic"
+        },
+        "id": "3a38c926-78d7-4793-9a07-dc359ac83fac",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "pattern=\\bBMad\\b|\\bbmad\\b|\\.claude/|\\bClaude\\b|anthropic",
+        "tool": "grep",
+        "ts": "2026-02-09T16:38:11.392Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "390c675e-b44e-4a5a-94e2-8eeaa85c3f02",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "grep",
+        "ts": "2026-02-09T16:38:11.430Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "99ccf521-70a9-41e5-ab15-ef6bc30117d2",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "grep",
+        "ts": "2026-02-09T16:38:11.430Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "1c3630e6-90f2-4c0e-afff-cacd4249fa24",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:11.974Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "3ed4b1ef-d7d5-41e7-bf3d-3418fb295da9",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:11.985Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "5494dd0e-9556-485e-a046-d38cf1d84f53",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:11.985Z",
+        "type": "session.status"
+      },
+      {
+        "id": "b8565634-90e8-4a84-8c52-ee2bb86d042f",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:12.115Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "1e0f3af7-7aee-44c5-a143-18691028509c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:12.259Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "b39f4e9c-9820-43cf-bcab-30aeaf530922",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:12.260Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "328858f7-4ebd-4ab0-a35a-e7472bab24f6",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:38:12.260Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "a71d1496-f94a-4b8f-a809-757dfc20d061",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:12.829Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Delete File: .opencode/skills/compound-autolearn-proposal/SKILL.md\n*** Delete File: .claude/skills/compound-autolearn-proposal/SKILL.md\n*** End Patch"
+        },
+        "id": "64b67d32-b8ee-4b66-a0ac-a727c47f304a",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:38:39.050Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "b9819871-6379-4cfa-a957-3a3416d29178",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:39.056Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "63139023-c5d1-46fc-8aa2-e97e073e8d48",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:39.107Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "args": null,
+        "id": "5dfdd436-adc0-46f3-97a1-f5ac0ab2b30a",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T16:38:39.176Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "7be07e67-9168-4d14-b015-113fe7dc462b",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:39.180Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "9f544b75-acde-4ff0-834f-8e7334709bc3",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:39.183Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d3f96672-d7ac-43e1-a70b-fac59ba80da6",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:39.183Z",
+        "type": "session.status"
+      },
+      {
+        "id": "12f2726d-f833-41ff-abec-3f221006ee42",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:39.284Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "5966f556-1087-4347-a1d2-e08cef8e0f0e",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:38:39.407Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "6a59b0f5-47cf-408d-b05e-a2b6d406fc5e",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:39.407Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "c0ace324-4465-467e-abbc-7da56254a3c7",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:39.406Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "5020262f-82ef-467a-8c72-6bee985c4a98",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:39.928Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 142,
+          "command_sha256": "23db728d5a10e8c839f4e993abb3860481f63aa36217e452051fbd2f8391ef47",
+          "redacted": true
+        },
+        "id": "1c1b5757-6ccf-4b98-ba49-a45d46251e40",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "command_sha256=23db728d5a10e8c839f4e993abb3860481f63aa36217e452051fbd2f8391ef47 command_len=142",
+        "tool": "bash",
+        "ts": "2026-02-09T16:38:44.089Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "a0dfb668-b835-4f60-88ff-27a5786477b6",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "bash",
+        "ts": "2026-02-09T16:38:52.134Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "a807e90e-0528-4cec-bcef-9e89c8c25e47",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:52.143Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2fdcbc0e-8f37-489c-b86b-b64d16bac578",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:52.152Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d63bea7d-227e-4097-b4ea-f4b6ce5f67af",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:52.152Z",
+        "type": "session.status"
+      },
+      {
+        "id": "2a171a49-5fab-466f-8b9c-881a7dfbaf01",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:52.398Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "7edacf3d-ea57-455f-a370-65eec74196fd",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:38:52.855Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "5232c1b7-4c14-4b30-86ed-85a4b23e5989",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:52.855Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "51948f4f-c9b5-4bf0-9f21-d4f8a469b925",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:52.854Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "cb9e1b2a-4404-4fb7-8779-11bb8f13ac05",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:53.033Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 22,
+          "command_sha256": "ca225b06d4162d1658e5ddabe3f0616050b0a0a408204115fa1d8ba30ad0da4f",
+          "redacted": true
+        },
+        "id": "2bf92ccc-57f7-48b4-b3ec-f9ff00b142e6",
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "summary": "command_sha256=ca225b06d4162d1658e5ddabe3f0616050b0a0a408204115fa1d8ba30ad0da4f command_len=22",
+        "tool": "bash",
+        "ts": "2026-02-09T16:38:56.814Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "04aa8ba9-1d3d-446b-a9e8-0796bc9c9b06",
+        "ok": null,
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "tool": "bash",
+        "ts": "2026-02-09T16:38:56.887Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "fdca69a2-24cc-4c45-ae1a-549f59b69295",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:56.892Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "cac26e37-53fc-4466-89d0-b63acf3dc825",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:56.893Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2098515a-f65c-4136-bdff-e8e642cdeb7d",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:56.893Z",
+        "type": "session.status"
+      },
+      {
+        "id": "aaeb414a-cb85-44b9-b1d8-5e1ebc9aa2ac",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:56.901Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "2dc6667a-9b1a-4c8f-8d7a-863a40f6d40a",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:57.013Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "1b6f8479-030a-48b9-ab57-ab0c1eb60a48",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:38:57.137Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "35d13014-84b0-4167-ba29-39aeb4025a27",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:38:57.138Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "cfa39d39-498c-4d94-a232-58198f6cf7a1",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:57.138Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "9adc59c7-0599-41ed-8912-add57b08b788",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:38:57.650Z",
+        "type": "session.status"
+      },
+      {
+        "id": "da10e6af-d6c6-48f3-8756-396218d8bce1",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:39:27.066Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a6ee52e9-3293-4360-a7de-c428d062c568",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:39:27.073Z",
+        "type": "session.status"
+      },
+      {
+        "id": "459a76f7-7d25-4a70-934a-3c20e0cb26e7",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:39:27.073Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "3245b3d3-fbbf-4dcd-9810-25089ac6ee9e",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:39:27.215Z",
+        "type": "session.status"
+      },
+      {
+        "id": "2c0c1d05-52a3-4506-947c-bf1903426b62",
+        "properties": {
+          "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk"
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:39:27.218Z",
+        "type": "session.idle"
+      },
+      {
+        "id": "2a05f196-1c16-4b13-989e-c3fc0fb111ce",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:39:27.273Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "b93574f9-4df5-4296-863c-5298de785560",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:39:27.303Z",
+        "type": "session.created"
+      },
+      {
+        "id": "f6dcabe0-988e-43cc-abf4-fdeb09df2a00",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:39:27.303Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "613a90d8-229a-42db-9a23-63716dc8d93d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:39:27.306Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "acf27053-9fa7-4f3d-85bc-8be28d26fbb8",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:39:27.308Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "9761933d-43ae-4030-8478-b335e0da1f03",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bcba4cb9ffeceJoHSRnrnZeGl",
+        "ts": "2026-02-09T16:39:27.308Z",
+        "type": "session.status"
+      },
+      {
+        "id": "7737c79e-6ca6-46c2-a7f5-8a13b6183793",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:39:27.315Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "77b02e4c-0cf5-4225-a284-c93121cacd9c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:39:27.393Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "bfd5ac65-595f-42f1-b6c4-65308392b982",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:39:27.393Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "97085d46-e6ec-4198-b8d6-548f6a3c8d6b",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bf3c7ae7ffeh1QPiuLmVDIRrk",
+        "ts": "2026-02-09T16:39:27.393Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "65f00041-8427-4943-b9a1-742c559f73a6",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bcba4cb9ffeceJoHSRnrnZeGl",
+        "ts": "2026-02-09T16:39:27.667Z",
+        "type": "session.status"
+      },
+      {
+        "id": "e433aacd-e6a7-44e8-ad03-37491e141f91",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bcba4cb9ffeceJoHSRnrnZeGl",
+        "ts": "2026-02-09T16:39:27.670Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "86aabdfb-cda0-4288-a58d-be2d7cc54c7d",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:39:27.669Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "780e86ed-9293-48f1-a95b-0df557e0f9eb",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:39:27.668Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "58cf3eff-538d-4d01-a99c-19156b885afc",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:39:29.941Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d1edf1df-e8be-46bf-948a-beecec9fb7c7",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:40:21.276Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "e0c5428d-50ab-4217-a545-899efd4101ba",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:40:21.281Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "24a2d418-0a77-4a2d-805f-270190c7db9f",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bcba4cb9ffeceJoHSRnrnZeGl",
+        "ts": "2026-02-09T16:40:21.282Z",
+        "type": "session.status"
+      },
+      {
+        "id": "2fa6bd10-cd23-447d-9223-6dd500525aea",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:40:21.283Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "c62153ae-c48d-4e91-b6cb-c78429f70f5f",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T16:40:21.284Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "6874b79f-6996-4226-b5ca-bca98a79a221",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bcba4cb9ffeceJoHSRnrnZeGl",
+        "ts": "2026-02-09T16:40:21.285Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "a56637ad-3b26-4b3d-9e49-fdda1368eade",
+        "properties": {
+          "sessionID": "ses_3bcba4cb9ffeceJoHSRnrnZeGl"
+        },
+        "sessionID": "ses_3bcba4cb9ffeceJoHSRnrnZeGl",
+        "ts": "2026-02-09T16:40:21.290Z",
+        "type": "session.idle"
+      },
+      {
+        "id": "ee1282af-bf5d-4fe6-a43b-b9f92170403b",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bcba4cb9ffeceJoHSRnrnZeGl",
+        "ts": "2026-02-09T16:40:21.290Z",
+        "type": "session.status"
+      },
+      {
+        "id": "87f3c325-0bff-4b85-bc92-959b0b680155",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T16:40:21.378Z",
+        "type": "session.deleted"
+      }
+    ],
+    "omitted": false
+  },
+  "proposals": {
+    "instinct_candidates": [
+      {
+        "action": "Update both `.loom/compound/INSTINCTS.md` (human-readable catalog) and `.loom/compound/instincts.json` (compiled/consumed form) in the same change; ensure ids are kebab-case, stable, and referenced consistently across skills/episodes; avoid near-duplicates by merging semantics into one instinct when possible.",
+        "confidence": 0.74,
+        "id": "compound-sync-instincts-md-json",
+        "tags": [
+          "loom",
+          "compound",
+          "docs",
+          "hygiene"
+        ],
+        "title": "Keep compound instincts docs + JSON in lockstep",
+        "trigger": "When adding/removing/editing a compound instinct (or changing its id/title/action)"
+      },
+      {
+        "action": "Prefer `.opencode/skills/<name>/SKILL.md` as the source-of-truth; if a parallel legacy path exists (e.g. `.claude/skills/...`), do not create/maintain duplicates\u2014converge on the `.opencode/skills` copy and scrub references to legacy locations in guidance.",
+        "confidence": 0.71,
+        "id": "compound-skill-path-source-of-truth",
+        "tags": [
+          "skills",
+          "compound",
+          "repo-hygiene"
+        ],
+        "title": "Treat .opencode/skills as the canonical skill location",
+        "trigger": "When reading, updating, or proposing skills for Loom / OpenCode"
+      },
+      {
+        "action": "Avoid vendor/product-specific language and paths (e.g. naming a specific assistant or referencing `.claude/...`); write instructions in tool-agnostic terms that map to Loom/OpenCode primitives (`.opencode/skills`, `.loom/compound/...`, instincts/episodes) so guidance survives migrations.",
+        "confidence": 0.63,
+        "id": "compound-avoid-vendor-names-in-internal-guides",
+        "tags": [
+          "docs",
+          "compound",
+          "portability"
+        ],
+        "title": "Use vendor-neutral wording in compound guidance",
+        "trigger": "When writing skills/prompts/docs that will be reused across environments or toolchains"
+      }
+    ],
+    "skill_candidates": [
+      {
+        "body": "# Compound Autolearn Proposal (Memory-Only)\n\nPurpose: propose durable memory updates (instincts/skills) from the provided session context. Do not write product code.\n\n## Hard Rules\n- Do not run tools.\n- Do not propose product code changes.\n- Output a single JSON object only; if nothing durable, output `{}`.\n- Prefer updating an existing skill over creating near-duplicates.\n- Keep within caps: max 3 skills, max 8 instincts.\n\n## Inputs You Can Use\n- `AUTOLEARN CONTEXT` block (git summary + recent observations).\n- Any explicit file paths mentioned.\n\n## Procedure\n1) Scan the git summary for what actually changed.\n- If changes are mostly churn (formatting, renames, one-off experiment), bias toward `{}`.\n- If changes show repeated patterns (new instincts added, duplicated skill paths, repeated grep for certain terms), consider an instinct.\n\n2) Extract 1-3 durable learnings.\n- Durable = likely to recur across sessions and materially improves quality/consistency.\n- Not durable = task-specific decision, one-off fix, or anything depending on hidden context.\n\n3) Propose instinct candidates.\n- Use stable kebab-case ids.\n- Write triggers that are easy to recognize (\"when adding an instinct\", \"when proposing skills\").\n- Actions should be specific and operational (what to do, where).\n\n4) Propose skill updates only if needed.\n- Only create/replace a skill when the procedure itself is missing or drifting.\n- Keep skills short and procedural.\n- Include full body (this file) as the managed content.\n\n## Quality Checklist (before output)\n- Does each proposal reduce future confusion or drift?\n- Does it avoid duplicating an existing concept?\n- Are paths repo-root-relative (e.g. `.opencode/skills/...`, `.loom/compound/...`)?\n- Are confidence scores honest (0.5 = weak signal; 0.8+ = strong evidence)?\n\n## Output Format\nReturn a JSON object with optional keys:\n- `instinct_candidates`: list of `{ id, title, trigger, action, confidence, tags }`\n- `skill_candidates`: list of `{ name, description, body, tags, source_instinct_ids }`\n\nIf nothing durable: `{}`\n",
+        "description": "Generate durable, memory-only instinct/skill proposals from session context; output strict JSON only and do nothing when learning is not durable.",
+        "name": "compound-autolearn-proposal",
+        "source_instinct_ids": [
+          "compound-skill-path-source-of-truth",
+          "compound-sync-instincts-md-json",
+          "compound-avoid-vendor-names-in-internal-guides"
+        ],
+        "tags": [
+          "loom",
+          "compound",
+          "autolearn",
+          "skills",
+          "instincts"
+        ]
+      }
+    ]
+  },
+  "triage": {
+    "notes": "",
+    "status": "accepted",
+    "tags": []
+  },
+  "version": 1
+}
