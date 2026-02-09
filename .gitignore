@@ -14,7 +14,5 @@
 .loom/workspaces/worktrees/
 .loom/workspaces/states/
 .loom/workspaces/components/index.json
-.loom/ticket/
-.loom/memory/
 .loom/workspaces/meta/
 .loom/workspaces/leases/

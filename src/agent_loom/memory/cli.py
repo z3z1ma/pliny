@@ -108,15 +108,39 @@ def _normalize_argv(argv: list[str]) -> list[str]:
 
     # Positional fallbacks:
     # memory add <title>  ->  memory add --title <title>
+    # memory add <title> <body>  ->  memory add --title <title> --body <body>
     for add_cmd in ("add", "note", "save"):
         if add_cmd not in out:
             continue
         idx = out.index(add_cmd)
-        has_title = "--title" in out[idx:]
-        if not has_title and idx + 1 < len(out):
-            nxt = out[idx + 1]
-            if nxt and not nxt.startswith("-"):
-                out = out[: idx + 1] + ["--title", nxt] + out[idx + 2 :]
+        tail = out[idx:]
+
+        # Gather positional tokens immediately after the subcommand (stop at first flag).
+        pos: list[str] = []
+        j = idx + 1
+        while j < len(out):
+            tok = out[j]
+            if not tok or tok.startswith("-"):
+                break
+            pos.append(tok)
+            j += 1
+
+        has_title = "--title" in tail
+        has_body = "--body" in tail
+
+        # Only apply the two-positional shortcut when it is unambiguous.
+        if not has_title and pos:
+            # Rewrite first positional into --title.
+            out = out[: idx + 1] + ["--title", pos[0]] + out[idx + 2 :]
+
+            # If the user provided exactly two positional tokens, treat second as body.
+            if not has_body and len(pos) == 2:
+                # After inserting --title, the second positional shifts by +1.
+                body_idx = idx + 3
+                if body_idx < len(out) and out[body_idx] == pos[1]:
+                    out = (
+                        out[:body_idx] + ["--body", out[body_idx]] + out[body_idx + 1 :]
+                    )
         break
 
     # memory link validate <id>  ->  memory link validate --id <id>
