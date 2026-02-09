@@ -52,6 +52,7 @@ class AddResult:
     path: str
     visibility: str
     links: Dict[str, Any]
+    hydration: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -63,6 +64,7 @@ class EditResult:
     updated: bool
     warnings: List[str]
     links: Dict[str, Any]
+    hydration: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)

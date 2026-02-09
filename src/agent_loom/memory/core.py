@@ -100,6 +100,7 @@ from agent_loom.memory.scopes import (
     validate_file_scopes_exist,
 )
 from agent_loom.memory.utils import format_json, now_iso, safe_mkdir
+from agent_loom.memory.hydrate import hydrate_wikilinks
 from agent_loom.memory.vault import (
     choose_base_dir,
     edit_text_in_editor,
@@ -389,11 +390,19 @@ def add(
     if link_items:
         fm_extra["links"] = link_items
 
+    hydrated_body, hydration = hydrate_wikilinks(
+        vault_root=vp.root,
+        body=body_text,
+        visibility=visibility,
+        created_at=created_at,
+        updated_at=updated_at,
+    )
+
     p = write_note_file(
         vp,
         note_id=note_id,
         title=title,
-        body=body_text,
+        body=hydrated_body,
         tags=tags,
         aliases=aliases,
         scopes=scopes,
@@ -413,6 +422,7 @@ def add(
         path=note_rel_path(vp, p),
         visibility=visibility,
         links=links_info,
+        hydration=hydration,
     )
 
 
@@ -664,6 +674,18 @@ def edit(
         fm["status"] = status
         changed = True
 
+    hydration_now = now_iso()
+    hydrated_body, hydration = hydrate_wikilinks(
+        vault_root=vp.root,
+        body=body,
+        visibility=str(fm.get("visibility") or default_vis),
+        created_at=hydration_now,
+        updated_at=hydration_now,
+    )
+    if hydrated_body != body:
+        body = hydrated_body
+        changed = True
+
     if changed:
         fm["updated_at"] = now_iso()
         rewrite_note_frontmatter(p, new_fm=fm, body=body)
@@ -706,6 +728,7 @@ def edit(
         updated=changed,
         warnings=warns,
         links=compute_link_diagnostics(vp, note_id),
+        hydration=hydration,
     )
 
 

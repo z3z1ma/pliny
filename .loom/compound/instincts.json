@@ -651,6 +651,32 @@
       ]
     },
     {
+      "id": "hydrate-wikilinks-on-memory-write",
+      "title": "Hydrate wikilinks when writing Loom memory",
+      "trigger": "When adding/updating Loom memory notes that contain `[[wikilinks]]` via CLI or core APIs",
+      "action": "Resolve referenced wikilinks during the write path (not only at recall time): normalize link tokens, ensure referenced note ids exist (create placeholders if intended), and persist hydrated link metadata so recall/grep/backlinks are consistent; update golden tests to lock in the user-visible behavior.",
+      "tags": [
+        "cli",
+        "durability",
+        "loom",
+        "memory",
+        "tests",
+        "wikilinks"
+      ],
+      "confidence": 0.74,
+      "status": "active",
+      "created_at": "2026-02-09T20:36:30.408023Z",
+      "updated_at": "2026-02-09T20:36:30.408023Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T20:36:30.408023Z",
+          "episode_id": "e4839371bc5f19fceb720ecfddf70204dd97ec7a826c7875562727706e171b17",
+          "head_sha": "b9d5425eaf3f48722085d51d3b63d91b7afe92bc",
+          "patch_sha256": "a369471bc9e156b48091fd90a5cab6fc53aeb4a7e80c52ede83553c0caec6d3d"
+        }
+      ]
+    },
+    {
       "id": "ignore-new-persistent-artifacts",
       "title": "Ignore new persistent artifacts in git",
       "trigger": "When introducing any persistent local artifact (sqlite db, index, cache dir, logs, tmp files) as part of a new subsystem",
@@ -790,6 +816,31 @@
           "episode_id": "bff9823012420bd7cf1a60643401fd63d759d5e9f72788820421fceb2a78cf42",
           "head_sha": "1018c233ca213cd0b298cc539d660cab64741147",
           "patch_sha256": "3ebc4a1ffb2cacacaa6879b1adb1ca0a6d3a888a2d46ed9d85054c592c1ca6be"
+        }
+      ]
+    },
+    {
+      "id": "memory-golden-tests-for-ux",
+      "title": "Use golden tests to lock memory CLI UX deltas",
+      "trigger": "When changing memory note serialization, parsing, or CLI output formatting",
+      "action": "Add/adjust a focused golden test that asserts the stable, user-visible output (stdout/stderr + ordering) for the exact scenario that changed; keep fixtures minimal and deterministic so future diffs are high-signal.",
+      "tags": [
+        "cli-ux",
+        "golden-tests",
+        "loom",
+        "memory",
+        "testing"
+      ],
+      "confidence": 0.71,
+      "status": "active",
+      "created_at": "2026-02-09T20:36:30.408023Z",
+      "updated_at": "2026-02-09T20:36:30.408023Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T20:36:30.408023Z",
+          "episode_id": "e4839371bc5f19fceb720ecfddf70204dd97ec7a826c7875562727706e171b17",
+          "head_sha": "b9d5425eaf3f48722085d51d3b63d91b7afe92bc",
+          "patch_sha256": "a369471bc9e156b48091fd90a5cab6fc53aeb4a7e80c52ede83553c0caec6d3d"
         }
       ]
     },

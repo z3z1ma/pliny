@@ -84,6 +84,9 @@
 - **compound-sync-instincts-md-json** (74%) [compound, docs, hygiene, loom]
   - Trigger: When adding/removing/editing a compound instinct (or changing its id/title/action)
   - Action: Update both `.loom/compound/INSTINCTS.md` (human-readable catalog) and `.loom/compound/instincts.json` (compiled/consumed form) in the same change; ensure ids are kebab-case, stable, and referenced co...
+- **hydrate-wikilinks-on-memory-write** (74%) [cli, durability, loom, memory, tests, wikilinks]
+  - Trigger: When adding/updating Loom memory notes that contain `[[wikilinks]]` via CLI or core APIs
+  - Action: Resolve referenced wikilinks during the write path (not only at recall time): normalize link tokens, ensure referenced note ids exist (create placeholders if intended), and persist hydrated link metad...
 - **large-change-update-cli-ux-tests** (74%) [cli, tests, ux]
   - Trigger: Any change to CLI output, flags, or subcommand routing
   - Action: Locate and update the UX snapshot/expectation tests (e.g. `tests/test_*_cli_ux.py`) in the same change; ensure wording is intentional and stable.
@@ -120,9 +123,6 @@
 - **compound-skill-path-source-of-truth** (71%) [compound, repo-hygiene, skills]
   - Trigger: When reading, updating, or proposing skills for Loom / OpenCode
   - Action: Prefer `.opencode/skills/<name>/SKILL.md` as the source-of-truth; if a parallel legacy path exists (e.g. `.claude/skills/...`), do not create/maintain duplicates—converge on the `.opencode/skills` cop...
-- **deterministic-cli-output** (71%) [cli, determinism, ux]
-  - Trigger: When a CLI command prints lists, tables, multi-item sections, or derived metadata (IDs, paths, counts).
-  - Action: Ensure ordering is explicit and stable (sort inputs, stable iteration, deterministic grouping). Normalize or avoid non-deterministic content (timestamps, random IDs). Make newline behavior consistent ...
 
 ## Notes
 

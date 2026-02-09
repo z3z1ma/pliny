@@ -91,7 +91,8 @@ class TestFormats(unittest.TestCase):
                     "validate",
                 ]
             )
-            self.assertIn("- a -> nope", out)
+            # Wikilink hydration auto-creates stubs, so this is no longer missing.
+            self.assertEqual(out.strip(), "")
 
 
 if __name__ == "__main__":

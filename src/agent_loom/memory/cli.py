@@ -446,7 +446,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Allow file: scopes that do not exist on disk",
     )
 
-    edit_p = sp.add_parser("edit", parents=[common_sub], help="Edit a note by id")
+    edit_p = sp.add_parser(
+        "edit",
+        parents=[common_sub],
+        help="Edit a note by id",
+        aliases=["update"],
+    )
     edit_p.add_argument("id", help="Note id")
     edit_p.add_argument(
         "--body",
@@ -1177,7 +1182,7 @@ def _run_with_args(args: argparse.Namespace, *, fmt: str) -> int:
         emit(payload_for(res, fmt=fmt), fmt)
         return 0
 
-    if args.cmd == "edit":
+    if args.cmd in {"edit", "update"}:
         if bool(args.from_stdin) and bool(args.append_from_stdin):
             raise MemoryError(
                 "edit: cannot combine --from-stdin and --append-from-stdin",

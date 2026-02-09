@@ -1,0 +1,66 @@
+{
+  "created_at": "2026-02-09T20:36:30.408023Z",
+  "decision_id": "58ab866006281e5d79cffe972f826932fcdec8af88415203d06347f42f5adb5c",
+  "episode_id": "e4839371bc5f19fceb720ecfddf70204dd97ec7a826c7875562727706e171b17",
+  "ops": [
+    {
+      "action": "Resolve referenced wikilinks during the write path (not only at recall time): normalize link tokens, ensure referenced note ids exist (create placeholders if intended), and persist hydrated link metadata so recall/grep/backlinks are consistent; update golden tests to lock in the user-visible behavior.",
+      "confidence": 0.74,
+      "episode_id": "e4839371bc5f19fceb720ecfddf70204dd97ec7a826c7875562727706e171b17",
+      "id": "hydrate-wikilinks-on-memory-write",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "cli",
+        "durability",
+        "loom",
+        "memory",
+        "tests",
+        "wikilinks"
+      ],
+      "title": "Hydrate wikilinks when writing Loom memory",
+      "trigger": "When adding/updating Loom memory notes that contain `[[wikilinks]]` via CLI or core APIs",
+      "ts": "2026-02-09T20:36:30.408023Z"
+    },
+    {
+      "action": "Add/adjust a focused golden test that asserts the stable, user-visible output (stdout/stderr + ordering) for the exact scenario that changed; keep fixtures minimal and deterministic so future diffs are high-signal.",
+      "confidence": 0.71,
+      "episode_id": "e4839371bc5f19fceb720ecfddf70204dd97ec7a826c7875562727706e171b17",
+      "id": "memory-golden-tests-for-ux",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "cli-ux",
+        "golden-tests",
+        "loom",
+        "memory",
+        "testing"
+      ],
+      "title": "Use golden tests to lock memory CLI UX deltas",
+      "trigger": "When changing memory note serialization, parsing, or CLI output formatting",
+      "ts": "2026-02-09T20:36:30.408023Z"
+    },
+    {
+      "body": "# Loom Memory Wikilink Hydration\n\n## Goal\nWhen a memory note is written (create/update), `[[wikilinks]]` are resolved in the write path so recall/backlinks/search behave consistently and deterministically.\n\n## When to use\n- You add/modify `loom memory add/update` behavior.\n- You change parsing/serialization in `src/agent_loom/memory/*`.\n- You introduce any new metadata derived from note content (links, tags, scopes).\n\n## Procedure\n1. Identify the write entrypoint(s)\n   - Locate the CLI command handler and the core function that persists a note.\n   - Ensure all write paths (create and update) flow through one hydration function.\n\n2. Define the hydration contract\n   - Parse the note body for `[[wikilinks]]`.\n   - Normalize link tokens consistently (trim whitespace, keep case rules consistent with existing behavior).\n   - Decide what \u201cresolution\u201d means:\n     - If a link points to an existing note-id, attach that id.\n     - If it points to a title/slug and you support implicit creation, create a referenced note-id deterministically.\n   - Persist the hydrated link set (and any necessary mapping) as part of the stored note model.\n\n3. Keep it deterministic\n   - Stable ordering of links (e.g., sorted by normalized token) before persisting or rendering.\n   - Avoid time-dependent or path-dependent behavior in hydration.\n\n4. Update user-visible behaviors\n   - Ensure `loom memory recall` and related commands reflect hydrated links consistently.\n   - If output format changes, update tests to match the intended UX (not internal implementation details).\n\n5. Add/adjust a golden UX test\n   - Add a fixture note with multiple wikilinks, including edge cases (duplicates, whitespace, mixed casing if supported).\n   - Assert the exact CLI output expected for the changed scenario.\n   - Keep the fixture small and deterministic; avoid brittle snapshots of unrelated output.\n\n6. Gate checks\n   - Run: `uv run ruff check .`\n   - Run: `uv run basedpyright`\n   - Run: `uv run pytest`\n\n## Done means\n- Wikilinks are hydrated on write for all paths.\n- Output and behavior are deterministic.\n- Golden test(s) cover the precise UX delta.\n- Ruff + basedpyright + pytest pass.",
+      "description": "Procedure for making Loom memory writes hydrate `[[wikilinks]]` deterministically, with stable UX tests.",
+      "episode_id": "e4839371bc5f19fceb720ecfddf70204dd97ec7a826c7875562727706e171b17",
+      "name": "loom-memory-wikilink-hydration",
+      "op": "skill.upsert",
+      "source_instinct_ids": [
+        "hydrate-wikilinks-on-memory-write",
+        "memory-golden-tests-for-ux"
+      ],
+      "tags": [
+        "cli",
+        "loom",
+        "memory",
+        "python",
+        "tests",
+        "wikilinks"
+      ],
+      "ts": "2026-02-09T20:36:30.408023Z"
+    }
+  ],
+  "proposal_blob_sha256": "40c84d90f0116126e3e6e1c19ff3112a0f596bf381ff9ab29fa9b6e427d753be",
+  "version": 1
+}
