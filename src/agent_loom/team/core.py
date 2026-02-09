@@ -1135,7 +1135,7 @@ def _run_paths_from_env() -> Optional[RunPaths]:
     run_dir = Path(run_dir_raw).expanduser().resolve()
     # Expected: <repo_root>/.loom/team/runs/<team>
     try:
-        repo_root = run_dir.parent.parent.parent.resolve()
+        repo_root = run_dir.parent.parent.parent.parent.resolve()
     except Exception:
         repo_root = None
     if repo_root and (run_dir / "run.json").exists():
