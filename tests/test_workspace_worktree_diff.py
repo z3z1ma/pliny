@@ -73,26 +73,26 @@ def test_repo_worktree_diff_json_contract() -> None:
         assert "UNTRACKED.txt" in (data.get("untracked") or [])
 
 
-def test_poly_worktree_group_diff_json_contract() -> None:
+def test_harness_worktree_group_diff_json_contract() -> None:
     with tempfile.TemporaryDirectory() as td:
         ws_root = Path(td) / "ws"
         ws_root.mkdir(parents=True, exist_ok=True)
-        _run_json(["poly", "init"], ws_root)
+        _run_json(["harness", "init"], ws_root)
 
         remotes = ws_root / "_remotes"
         r1 = remotes / "one"
         _git_init_repo(r1)
-        _run_json(["poly", "add", "one", str(r1), "--clone"], ws_root)
+        _run_json(["harness", "add", "one", str(r1), "--clone"], ws_root)
 
-        _run_json(["poly", "worktree", "ensure", "g1", "--all"], ws_root)
+        _run_json(["harness", "worktree", "ensure", "g1", "--all"], ws_root)
 
-        wt_repo = ws_root / "worktrees" / "g1" / "one"
+        wt_repo = ws_root / ".loom" / "workspaces" / "worktrees" / "g1" / "one"
         assert wt_repo.exists()
-        (wt_repo / "README.md").write_text("hello\npoly\n", encoding="utf-8")
+        (wt_repo / "README.md").write_text("hello\nharness\n", encoding="utf-8")
 
         rc, out = _run_json(
             [
-                "poly",
+                "harness",
                 "worktree",
                 "diff",
                 "g1",

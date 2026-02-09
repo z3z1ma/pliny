@@ -2,6 +2,29 @@
   "version": 1,
   "instincts": [
     {
+      "id": "avoid-lsp-diagnostics-use-basedpyright",
+      "title": "Do not rely on LSP diagnostics for typing status",
+      "trigger": "When tempted to check typing errors via editor/LSP or `lsp_diagnostics`",
+      "action": "Use `uv run basedpyright` as the source of truth; treat LSP output as advisory only.",
+      "tags": [
+        "python",
+        "quality",
+        "typing"
+      ],
+      "confidence": 0.86,
+      "status": "active",
+      "created_at": "2026-02-09T04:23:39.443272Z",
+      "updated_at": "2026-02-09T04:23:39.443272Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:23:39.443272Z",
+          "episode_id": "e73f6556efab5a08fe44febbe2ba7d245b558f059154ad39c13d6adedb7d42b2",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "396d4064e16aedb39f74ca438e10beeef645fa829af509b251fa619bcf0e084d"
+        }
+      ]
+    },
+    {
       "id": "avoid-tooling-artifacts-in-templates",
       "title": "Do not ship editor/agent tool artifacts in templates",
       "trigger": "When adding or reviewing files under template trees like src/agent_loom/compound/opencode/ (or other scaffolded outputs).",
@@ -21,6 +44,30 @@
           "episode_id": "a8b5ac3ffe5219232c3770309945487b6529be88e9f52cf834208c21bdd88e3d",
           "head_sha": "4f98369282b323883f43073b37e0506c3ab64249",
           "patch_sha256": "742213b0caf9e2d73477a9c67da02f1028c4bc4ca41ae9315da1472bf28ce322"
+        }
+      ]
+    },
+    {
+      "id": "cli-ux-change-needs-tests",
+      "title": "CLI UX Changes Need Targeted UX Tests",
+      "trigger": "When modifying CLI output, help text, defaults, or command structure",
+      "action": "Update/extend UX-focused tests to lock in the intended ergonomics and prevent regressions; avoid untested copy changes that silently degrade UX.",
+      "tags": [
+        "cli",
+        "regression",
+        "tests",
+        "ux"
+      ],
+      "confidence": 0.74,
+      "status": "active",
+      "created_at": "2026-02-09T04:04:39.675559Z",
+      "updated_at": "2026-02-09T04:04:39.675559Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:04:39.675559Z",
+          "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "324dc48717dad74f886f10cc65e5f70d8db467bcdd3b77b618c8ec03e14a383c"
         }
       ]
     },
@@ -49,6 +96,124 @@
       ]
     },
     {
+      "id": "greenfield-no-backcompat-language",
+      "title": "Avoid backcompat framing in greenfield code/docs",
+      "trigger": "Writing docs, flags, deprecations, or migration behaviors in early-stage systems",
+      "action": "Prefer clean breaks and simple interfaces; remove/avoid 'backcompat' language unless there is a real external user contract that requires it.",
+      "tags": [
+        "design",
+        "docs",
+        "product"
+      ],
+      "confidence": 0.7,
+      "status": "active",
+      "created_at": "2026-02-09T04:23:39.443272Z",
+      "updated_at": "2026-02-09T04:23:39.443272Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:23:39.443272Z",
+          "episode_id": "e73f6556efab5a08fe44febbe2ba7d245b558f059154ad39c13d6adedb7d42b2",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "396d4064e16aedb39f74ca438e10beeef645fa829af509b251fa619bcf0e084d"
+        }
+      ]
+    },
+    {
+      "id": "keep-openapi-and-ui-in-sync",
+      "title": "Keep OpenAPI and Dashboard Consumers in Sync",
+      "trigger": "When changing server routes, request/response shapes, or endpoint behavior",
+      "action": "Update `docs/openapi.yaml` in the same change and verify any dashboard readers/clients that depend on those endpoints still work; treat schema drift as a bug.",
+      "tags": [
+        "api",
+        "contract",
+        "dashboard",
+        "openapi"
+      ],
+      "confidence": 0.76,
+      "status": "active",
+      "created_at": "2026-02-09T04:04:39.675559Z",
+      "updated_at": "2026-02-09T04:04:39.675559Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:04:39.675559Z",
+          "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "324dc48717dad74f886f10cc65e5f70d8db467bcdd3b77b618c8ec03e14a383c"
+        }
+      ]
+    },
+    {
+      "id": "large-change-update-cli-ux-tests",
+      "title": "Update CLI UX tests alongside CLI behavior changes",
+      "trigger": "Any change to CLI output, flags, or subcommand routing",
+      "action": "Locate and update the UX snapshot/expectation tests (e.g. `tests/test_*_cli_ux.py`) in the same change; ensure wording is intentional and stable.",
+      "tags": [
+        "cli",
+        "tests",
+        "ux"
+      ],
+      "confidence": 0.74,
+      "status": "active",
+      "created_at": "2026-02-09T04:23:39.443272Z",
+      "updated_at": "2026-02-09T04:23:39.443272Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:23:39.443272Z",
+          "episode_id": "e73f6556efab5a08fe44febbe2ba7d245b558f059154ad39c13d6adedb7d42b2",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "396d4064e16aedb39f74ca438e10beeef645fa829af509b251fa619bcf0e084d"
+        }
+      ]
+    },
+    {
+      "id": "openapi-keep-spec-deterministic",
+      "title": "Keep OpenAPI spec deterministic and non-generated where possible",
+      "trigger": "Editing `docs/openapi.yaml` during endpoint/schema updates",
+      "action": "Avoid volatile fields like timestamps; keep component and path ordering stable; validate references and schema names stay consistent with the code.",
+      "tags": [
+        "api",
+        "docs",
+        "openapi"
+      ],
+      "confidence": 0.66,
+      "status": "active",
+      "created_at": "2026-02-09T04:23:39.443272Z",
+      "updated_at": "2026-02-09T04:23:39.443272Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:23:39.443272Z",
+          "episode_id": "e73f6556efab5a08fe44febbe2ba7d245b558f059154ad39c13d6adedb7d42b2",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "396d4064e16aedb39f74ca438e10beeef645fa829af509b251fa619bcf0e084d"
+        }
+      ]
+    },
+    {
+      "id": "post-refactor-quality-gates",
+      "title": "Run Quality Gates Immediately After Refactors",
+      "trigger": "After a broad refactor that touches many files and tests",
+      "action": "Run `uv run ruff check .`, `uv run basedpyright`, then `uv run pytest`; treat failures as part of the refactor (not follow-up work).",
+      "tags": [
+        "lint",
+        "quality",
+        "tests",
+        "typing",
+        "uv"
+      ],
+      "confidence": 0.86,
+      "status": "active",
+      "created_at": "2026-02-09T04:04:39.675559Z",
+      "updated_at": "2026-02-09T04:04:39.675559Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:04:39.675559Z",
+          "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "324dc48717dad74f886f10cc65e5f70d8db467bcdd3b77b618c8ec03e14a383c"
+        }
+      ]
+    },
+    {
       "id": "prefer-command-docs-over-embedded-skill-copies",
       "title": "Prefer workflow command docs over duplicating skills in templates",
       "trigger": "When documenting workflows for end-users inside compound-installed `.opencode/` trees.",
@@ -69,6 +234,103 @@
           "episode_id": "a8b5ac3ffe5219232c3770309945487b6529be88e9f52cf834208c21bdd88e3d",
           "head_sha": "4f98369282b323883f43073b37e0506c3ab64249",
           "patch_sha256": "742213b0caf9e2d73477a9c67da02f1028c4bc4ca41ae9315da1472bf28ce322"
+        }
+      ]
+    },
+    {
+      "id": "prefer-uv-gates-before-tests",
+      "title": "Run typecheck + lint gates before pytest",
+      "trigger": "After non-trivial Python edits (new modules, refactors, deletes) and before running tests or claiming done",
+      "action": "Run `uv run basedpyright` then `uv run ruff check .` and fix all issues before `uv run pytest`.",
+      "tags": [
+        "python",
+        "quality",
+        "tooling",
+        "uv"
+      ],
+      "confidence": 0.82,
+      "status": "active",
+      "created_at": "2026-02-09T04:23:39.443272Z",
+      "updated_at": "2026-02-09T04:23:39.443272Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:23:39.443272Z",
+          "episode_id": "e73f6556efab5a08fe44febbe2ba7d245b558f059154ad39c13d6adedb7d42b2",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "396d4064e16aedb39f74ca438e10beeef645fa829af509b251fa619bcf0e084d"
+        }
+      ]
+    },
+    {
+      "id": "refactor-delete-module-chase-imports",
+      "title": "After deleting a module, systematically eliminate all references",
+      "trigger": "A refactor removes/renames modules (large deletions or package reshapes)",
+      "action": "Search for old module names and key symbols (e.g. with ripgrep/grep), update imports, docs, and tests together; ensure no dead entrypoints remain.",
+      "tags": [
+        "maintenance",
+        "python",
+        "refactor"
+      ],
+      "confidence": 0.78,
+      "status": "active",
+      "created_at": "2026-02-09T04:23:39.443272Z",
+      "updated_at": "2026-02-09T04:23:39.443272Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:23:39.443272Z",
+          "episode_id": "e73f6556efab5a08fe44febbe2ba7d245b558f059154ad39c13d6adedb7d42b2",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "396d4064e16aedb39f74ca438e10beeef645fa829af509b251fa619bcf0e084d"
+        }
+      ]
+    },
+    {
+      "id": "remove-orphans-after-large-deletions",
+      "title": "Remove Orphaned Package Surface After Large Deletions",
+      "trigger": "When removing many files or an entire subtree (e.g., `.../poly/*`)",
+      "action": "Check `__init__.py` exports, public module surface, and docs/README links for orphans; ensure imports fail nowhere and no dead entrypoints remain.",
+      "tags": [
+        "cleanup",
+        "packaging",
+        "python",
+        "refactor"
+      ],
+      "confidence": 0.8,
+      "status": "active",
+      "created_at": "2026-02-09T04:04:39.675559Z",
+      "updated_at": "2026-02-09T04:04:39.675559Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:04:39.675559Z",
+          "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "324dc48717dad74f886f10cc65e5f70d8db467bcdd3b77b618c8ec03e14a383c"
+        }
+      ]
+    },
+    {
+      "id": "subsystem-removal-sweep",
+      "title": "Subsystem Removal Requires Repo-Wide Sweep",
+      "trigger": "When deleting or deprecating a substantial module/package (especially with many submodules)",
+      "action": "Immediately sweep for imports/exports, docs references, CLI help/examples, tests, and any API schemas; remove or rewrite references so the repo remains coherent and discoverable.",
+      "tags": [
+        "deletion",
+        "docs",
+        "maintenance",
+        "python",
+        "refactor",
+        "tests"
+      ],
+      "confidence": 0.82,
+      "status": "active",
+      "created_at": "2026-02-09T04:04:39.675559Z",
+      "updated_at": "2026-02-09T04:04:39.675559Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T04:04:39.675559Z",
+          "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+          "head_sha": "3ed17ac0cb1119ce9355d2fab7e7000e1791a59a",
+          "patch_sha256": "324dc48717dad74f886f10cc65e5f70d8db467bcdd3b77b618c8ec03e14a383c"
         }
       ]
     },

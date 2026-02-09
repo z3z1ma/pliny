@@ -21,7 +21,7 @@ def _print_root_help() -> None:
                 "  init       Initialize all Loom subsystems (workspace/ticket/memory/team/compound)",
                 "  ticket     Git-backed ticket system (.loom/ticket)",
                 "  memory     Git-backed memory vault (.loom/memory)",
-                "  workspace  Workspace + worktree tooling (workspace.json + .loom/ + .loom/workspace/)",
+                "  workspace  Workspace + worktree tooling (.loom/workspaces/workspace.json + .loom/workspace/)",
                 "  team       tmux-native orchestration (.loom/team)",
                 "  compound   OpenCode compound integration (.opencode)",
                 "  dashboard  HTTP server for the Loom API (dashboard UI)",

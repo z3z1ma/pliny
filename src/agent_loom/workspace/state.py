@@ -9,10 +9,11 @@ from agent_loom.core.io import atomic_write_json, read_json
 
 from agent_loom.workspace.constants import (
     DEFAULT_DEFAULT_BRANCH,
+    HARNESS_DIR,
     INTERNAL_DIR,
     REPO_NAME_RE,
+    COMPONENTS_DIR,
     REPOS_DIR,
-    SERVICES_DIR,
     STATES_DIR,
     WORKSPACE_FILE,
     WORKTREES_DIR,
@@ -50,7 +51,7 @@ def worktrees_base(root: Path, ws: dict, group: str) -> Path:
     meta = (
         root
         / INTERNAL_DIR
-        / "workspace"
+        / HARNESS_DIR
         / "meta"
         / "groups"
         / f"{fs_escape(group)}.json"
@@ -96,8 +97,8 @@ def ws_states_dir(ws: dict) -> str:
     return _ws_str(ws, "states_dir", STATES_DIR)
 
 
-def ws_services_dir(ws: dict) -> str:
-    return _ws_str(ws, "services_dir", SERVICES_DIR)
+def ws_components_dir(ws: dict) -> str:
+    return _ws_str(ws, "components_dir", COMPONENTS_DIR)
 
 
 def default_workspace_json() -> dict:
@@ -106,7 +107,7 @@ def default_workspace_json() -> dict:
         "repos_dir": REPOS_DIR,
         "worktrees_dir": WORKTREES_DIR,
         "states_dir": STATES_DIR,
-        "services_dir": SERVICES_DIR,
+        "components_dir": COMPONENTS_DIR,
         "repo_sets": {},
         "repos": {
             # "billing": {"remote": "git@github.com:org/billing.git", "default_branch": "main"}
@@ -150,7 +151,7 @@ def validate_workspace(root: Path, data: dict) -> dict:
     data.setdefault("repos_dir", REPOS_DIR)
     data.setdefault("worktrees_dir", WORKTREES_DIR)
     data.setdefault("states_dir", STATES_DIR)
-    data.setdefault("services_dir", SERVICES_DIR)
+    data.setdefault("components_dir", COMPONENTS_DIR)
     data.setdefault("repo_sets", {})
     data.setdefault("repos", {})
 
@@ -174,15 +175,25 @@ def validate_workspace(root: Path, data: dict) -> dict:
         root, "worktrees_dir", ws_worktrees_dir(data)
     )
     data["states_dir"] = _require_rel_dir(root, "states_dir", ws_states_dir(data))
-    data["services_dir"] = _require_rel_dir(root, "services_dir", ws_services_dir(data))
+    data["components_dir"] = _require_rel_dir(
+        root, "components_dir", ws_components_dir(data)
+    )
     return data
 
 
+def harness_state_dir(root: Path) -> Path:
+    return (root / INTERNAL_DIR / HARNESS_DIR).resolve()
+
+
+def harness_manifest_path(root: Path) -> Path:
+    return harness_state_dir(root) / WORKSPACE_FILE
+
+
 def load_workspace(root: Path) -> dict:
-    wf = root / WORKSPACE_FILE
+    wf = harness_manifest_path(root)
     if not wf.exists():
         raise WorkspaceError(
-            f"Missing {WORKSPACE_FILE}. Run `loom workspace poly init` first."
+            f"Missing {wf.relative_to(root)}. Run `loom workspace harness init` first."
         )
     data = read_json(wf)
     return validate_workspace(root, data)
@@ -190,7 +201,9 @@ def load_workspace(root: Path) -> dict:
 
 def save_workspace(root: Path, data: dict) -> None:
     validate_workspace(root, data)
-    atomic_write_json(root / WORKSPACE_FILE, data)
+    wf = harness_manifest_path(root)
+    wf.parent.mkdir(parents=True, exist_ok=True)
+    atomic_write_json(wf, data)
 
 
 def iter_repos(ws: dict) -> Dict[str, Repo]:

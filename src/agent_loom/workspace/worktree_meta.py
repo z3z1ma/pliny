@@ -9,7 +9,7 @@ from typing import Any
 from agent_loom.core.io import atomic_write_json, read_json
 from agent_loom.core.fs import fs_escape
 from agent_loom.core.time import now_iso, parse_duration_seconds
-from agent_loom.workspace.constants import INTERNAL_DIR, REPO_INTERNAL_DIR
+from agent_loom.workspace.constants import HARNESS_DIR, INTERNAL_DIR, REPO_INTERNAL_DIR
 from agent_loom.workspace.errors import WorkspaceError
 
 
@@ -43,17 +43,17 @@ def repo_worktree_meta_path(repo_root: Path, branch: str) -> Path:
     return repo_worktree_meta_dir(repo_root) / f"{fs_escape(b)}.json"
 
 
-def poly_group_meta_dir(ws_root: Path) -> Path:
-    d = (ws_root / INTERNAL_DIR / "workspace" / "meta" / "groups").resolve()
+def harness_group_meta_dir(ws_root: Path) -> Path:
+    d = (ws_root / INTERNAL_DIR / HARNESS_DIR / "meta" / "groups").resolve()
     d.mkdir(parents=True, exist_ok=True)
     return d
 
 
-def poly_group_meta_path(ws_root: Path, group: str) -> Path:
+def harness_group_meta_path(ws_root: Path, group: str) -> Path:
     g = str(group or "").strip()
     if not g:
         raise WorkspaceError("Missing group")
-    return poly_group_meta_dir(ws_root) / f"{fs_escape(g)}.json"
+    return harness_group_meta_dir(ws_root) / f"{fs_escape(g)}.json"
 
 
 def _touch_meta(path: Path) -> dict:
@@ -110,7 +110,7 @@ def repo_worktree_annotate(
     return {"meta_path": str(path.resolve()), "meta": data}
 
 
-def poly_group_annotate(
+def harness_group_annotate(
     *,
     ws_root: Path,
     group: str,
@@ -120,7 +120,7 @@ def poly_group_annotate(
     ttl: str = "",
     kind: str = "normal",
 ) -> dict:
-    path = poly_group_meta_path(ws_root, group)
+    path = harness_group_meta_path(ws_root, group)
     path.parent.mkdir(parents=True, exist_ok=True)
     data = _touch_meta(path)
 
@@ -152,15 +152,17 @@ def repo_worktree_touch(*, repo_root: Path, branch: str) -> None:
     atomic_write_json(path, data)
 
 
-def poly_group_touch(*, ws_root: Path, group: str) -> None:
-    path = poly_group_meta_path(ws_root, group)
+def harness_group_touch(*, ws_root: Path, group: str) -> None:
+    path = harness_group_meta_path(ws_root, group)
     if not path.exists():
         return
     data = _touch_meta(path)
     atomic_write_json(path, data)
 
 
-def poly_group_set_worktrees_base(*, ws_root: Path, group: str, base_path: str) -> dict:
+def harness_group_set_worktrees_base(
+    *, ws_root: Path, group: str, base_path: str
+) -> dict:
     g = str(group or "").strip()
     if not g:
         raise WorkspaceError("Missing group")
@@ -175,7 +177,7 @@ def poly_group_set_worktrees_base(*, ws_root: Path, group: str, base_path: str) 
     else:
         p = p.resolve()
 
-    meta_path = poly_group_meta_path(ws_root, g)
+    meta_path = harness_group_meta_path(ws_root, g)
     meta_path.parent.mkdir(parents=True, exist_ok=True)
     data = _touch_meta(meta_path)
     data["group"] = g

@@ -40,32 +40,30 @@ def _git_init_repo(path: Path) -> None:
 
 
 class TestWorkspaceInit(unittest.TestCase):
-    def test_poly_init_is_idempotent_and_updates_gitignore(self) -> None:
+    def test_harness_init_is_idempotent_and_updates_gitignore(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            rc1, out1 = _run_json(["poly", "init"], root)
+            rc1, out1 = _run_json(["harness", "init"], root)
             self.assertEqual(rc1, 0)
             self.assertTrue(out1.get("ok"))
 
             gi = root / ".gitignore"
             self.assertTrue(gi.exists())
             text1 = gi.read_text(encoding="utf-8")
-            self.assertIn("repos/", text1)
-            self.assertIn("worktrees/", text1)
-            self.assertIn("states/", text1)
-            self.assertIn("services/index.json", text1)
-            self.assertIn(".loom/", text1)
+            self.assertIn(".loom/workspaces/repos/", text1)
+            self.assertIn(".loom/workspaces/worktrees/", text1)
+            self.assertIn(".loom/workspaces/states/", text1)
+            self.assertIn(".loom/workspaces/components/index.json", text1)
 
             # Re-run should not duplicate baseline lines.
-            rc2, out2 = _run_json(["poly", "init"], root)
+            rc2, out2 = _run_json(["harness", "init"], root)
             self.assertEqual(rc2, 0)
             self.assertTrue(out2.get("ok"))
             text2 = gi.read_text(encoding="utf-8")
-            self.assertEqual(text2.count("repos/"), 1)
-            self.assertEqual(text2.count("worktrees/"), 1)
-            self.assertEqual(text2.count("states/"), 1)
-            self.assertEqual(text2.count("services/index.json"), 1)
-            self.assertEqual(text2.count(".loom/"), 1)
+            self.assertEqual(text2.count(".loom/workspaces/repos/"), 1)
+            self.assertEqual(text2.count(".loom/workspaces/worktrees/"), 1)
+            self.assertEqual(text2.count(".loom/workspaces/states/"), 1)
+            self.assertEqual(text2.count(".loom/workspaces/components/index.json"), 1)
 
     def test_harness_init_root_flag_initializes_target_dir(self) -> None:
         with tempfile.TemporaryDirectory() as td:
@@ -77,7 +75,9 @@ class TestWorkspaceInit(unittest.TestCase):
             rc, out = _run_json(["harness", "init", "--root", str(target)], cwd)
             self.assertEqual(rc, 0)
             self.assertTrue(out.get("ok"))
-            self.assertTrue((target / "workspace.json").exists())
+            self.assertTrue(
+                (target / ".loom" / "workspaces" / "workspace.json").exists()
+            )
             self.assertTrue((target / ".loom").exists())
             self.assertFalse((cwd / "workspace.json").exists())
 
@@ -97,14 +97,14 @@ class TestWorkspaceInit(unittest.TestCase):
             self.assertTrue(exclude.exists())
             self.assertIn(".loom/workspace/", exclude.read_text(encoding="utf-8"))
 
-    def test_no_implicit_dispatch_from_poly_root(self) -> None:
+    def test_no_implicit_dispatch_from_harness_root(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
-            rc0, out0 = _run_json(["poly", "init"], root)
+            rc0, out0 = _run_json(["harness", "init"], root)
             self.assertEqual(rc0, 0)
             self.assertTrue(out0.get("ok"))
 
-            # `loom workspace status` is repo-local and should not behave like poly.
+            # `loom workspace status` is repo-local and should not behave like harness.
             rc1, out1 = _run_json(["status"], root)
             self.assertEqual(rc1, 2)
             self.assertFalse(bool(out1.get("ok")))

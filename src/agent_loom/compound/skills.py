@@ -81,7 +81,7 @@ def parse_skill_markdown(md: str) -> ParsedSkill:
         manual = rest[e + len(end_marker) :].strip()
         return ParsedSkill(fm=fm, managed_body=body, manual_notes=manual)
 
-    # Back-compat: older skills may have "## Manual notes" instead of explicit markers.
+    # Fallback: treat a "## Manual notes" heading as the manual section delimiter.
     m2 = re.search(r"(^|\n)##\s+manual\s+notes\b", rest, flags=re.IGNORECASE)
     if m2:
         idx = int(m2.start())

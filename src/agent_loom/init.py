@@ -14,7 +14,7 @@ from agent_loom.core.git import git_repo_root
 from agent_loom.memory.core import init as memory_init
 from agent_loom.team.core import init_agents
 from agent_loom.ticket.core import init as ticket_init
-from agent_loom.workspace.poly.core import poly_init
+from agent_loom.workspace.harness.core import harness_init
 from agent_loom.workspace.repo.core import repo_init
 
 
@@ -41,7 +41,7 @@ class LoomInitSelection:
 class LoomInitOptions:
     root: Path
     git_root: Optional[Path]
-    workspace_mode: str  # repo|poly
+    workspace_mode: str  # repo|harness
     selection: LoomInitSelection
     memory_vault: str
     compound_force: bool
@@ -82,8 +82,8 @@ def run_init(opts: LoomInitOptions) -> LoomInitResult:
     }
 
     ws_mode = str(opts.workspace_mode or "").strip().lower()
-    if opts.selection.workspace and ws_mode not in {"repo", "poly"}:
-        raise ValueError("workspace_mode must be 'repo' or 'poly'")
+    if opts.selection.workspace and ws_mode not in {"repo", "harness"}:
+        raise ValueError("workspace_mode must be 'repo' or 'harness'")
 
     # Execute in deterministic order.
     try:
@@ -92,10 +92,10 @@ def run_init(opts: LoomInitOptions) -> LoomInitResult:
                 if opts.git_root is None:
                     raise ValueError("workspace repo init requires a git repository")
                 results["workspace"] = as_dict(repo_init(root=opts.git_root))
-            elif ws_mode == "poly":
-                results["workspace"] = as_dict(poly_init(root=opts.root))
+            elif ws_mode == "harness":
+                results["workspace"] = as_dict(harness_init(root=opts.root))
             else:
-                raise ValueError("workspace_mode must be 'repo' or 'poly'")
+                raise ValueError("workspace_mode must be 'repo' or 'harness'")
         else:
             results["workspace"] = {"skipped": True}
 
@@ -226,8 +226,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--workspace-mode",
         default=None,
-        choices=["repo", "poly"],
-        help="Workspace init mode (repo or poly). Required for non-interactive runs.",
+        choices=["repo", "harness"],
+        help="Workspace init mode (repo or harness). Required for non-interactive runs.",
     )
 
     def add_toggle(name: str, dest: str) -> None:
@@ -312,20 +312,20 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             else _ask_yes_no("Initialize workspace?", default=True)
         )
         if do_workspace:
-            default_mode = "repo" if git_root is not None else "poly"
+            default_mode = "repo" if git_root is not None else "harness"
             while True:
                 choice = (
                     _ask_text(
-                        "Workspace mode (repo|poly)",
+                        "Workspace mode (repo|harness)",
                         default=default_mode,
                     )
                     .strip()
                     .lower()
                 )
-                if choice in {"repo", "poly"}:
+                if choice in {"repo", "harness"}:
                     workspace_mode = choice
                     break
-                sys.stdout.write("Please enter 'repo' or 'poly'.\n")
+                sys.stdout.write("Please enter 'repo' or 'harness'.\n")
         do_ticket = (
             do_ticket
             if getattr(args, "do_ticket", None) is not None
@@ -362,8 +362,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
         sys.stdout.write("\n")
 
-    if not interactive and do_workspace and workspace_mode not in {"repo", "poly"}:
-        hint = "Pass --workspace-mode repo or --workspace-mode poly (required for non-interactive loom init)."
+    if not interactive and do_workspace and workspace_mode not in {"repo", "harness"}:
+        hint = "Pass --workspace-mode repo or --workspace-mode harness (required for non-interactive loom init)."
         if bool(args.json):
             _emit_json(
                 {

@@ -5,7 +5,7 @@ from pathlib import Path
 
 from agent_loom.core.fs import fs_escape
 from agent_loom.workspace.worktree_meta import (
-    poly_group_annotate,
+    harness_group_annotate,
     repo_worktree_annotate,
 )
 
@@ -35,13 +35,13 @@ class TestWorkspaceMetaStorage(unittest.TestCase):
             )
             self.assertFalse(old.exists())
 
-    def test_poly_group_meta_writes_under_meta_dir(self) -> None:
+    def test_harness_group_meta_writes_under_meta_dir(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             ws = Path(td) / "ws"
             ws.mkdir(parents=True, exist_ok=True)
             group = "g/one"
 
-            res = poly_group_annotate(
+            res = harness_group_annotate(
                 ws_root=ws,
                 group=group,
                 purpose="test",
@@ -50,7 +50,7 @@ class TestWorkspaceMetaStorage(unittest.TestCase):
             meta_path = Path(str(res.get("meta_path") or "")).resolve()
             self.assertTrue(meta_path.exists())
             self.assertIn(
-                str(ws / ".loom" / "workspace" / "meta" / "groups"),
+                str(ws / ".loom" / "workspaces" / "meta" / "groups"),
                 str(meta_path),
             )
 

@@ -21,7 +21,7 @@ You are a pragmatic perfectionist. You care deeply about doing things the right 
 
 Loom has 6 main components (each contained within a python module):
 1. **Loom Ticket**: Git-backed intent and state tracking system. Uses plain markdown. A form of memory and significant productivity and long horizon unlock for AI agents.
-2. **Loom Workspace**: Git worktree-based isolation and lifecycle management. Supports coordinating batch operations in a polyrepo harness. Manages worktrees with annotations, lifecycles, etc.
+2. **Loom Workspace**: Git worktree-based isolation and lifecycle management. Supports coordinating batch operations in a multi-repo harness. Manages worktrees with annotations, lifecycles, etc.
 3. **Loom Team**: Tmux-based orchestration and coordination layer. Orchestrates multiple TUIs and allows them to communicate via durable inboxes and signals. Gives them roles (manager, worker, investigator, integrator).
 4. **Loom Memory**: Associative, scoped, obsidian inspired memory system. Uses plain markdown plus sqlite index and used for open ended long horizon memories optionally scoped to specific files, folders, commands with temporal and associative expansion.
 5. **Loom Compound**: Skill extraction, institutional memory, and progressive disclosure for learning and self-improvement.

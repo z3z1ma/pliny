@@ -57,19 +57,19 @@ class TestWorkspaceWorktreeParity(unittest.TestCase):
             self.assertTrue(wt_path.exists())
             self.assertTrue((wt_path / ".git").exists())
 
-    def test_poly_worktree_ensure_alias_exists(self) -> None:
+    def test_harness_worktree_ensure_alias_exists(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             ws_root = Path(td) / "ws"
             ws_root.mkdir(parents=True, exist_ok=True)
-            _run_json(["poly", "init"], ws_root)
+            _run_json(["harness", "init"], ws_root)
 
             remotes = ws_root / "_remotes"
             r1 = remotes / "one"
             _git_init_repo(r1)
-            _run_json(["poly", "add", "one", str(r1), "--clone"], ws_root)
+            _run_json(["harness", "add", "one", str(r1), "--clone"], ws_root)
 
             rc, out = _run_json(
-                ["poly", "worktree", "ensure", "g1", "--all"],
+                ["harness", "worktree", "ensure", "g1", "--all"],
                 ws_root,
             )
             self.assertEqual(rc, 0)

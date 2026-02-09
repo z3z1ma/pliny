@@ -1,0 +1,138 @@
+{
+  "created_at": "2026-02-09T04:04:39.675559Z",
+  "decision_id": "7c950f30dd1262f6b6f01a1b56b631b306f2c2a5640376e058e192cc2b2493b4",
+  "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+  "ops": [
+    {
+      "action": "Update/extend UX-focused tests to lock in the intended ergonomics and prevent regressions; avoid untested copy changes that silently degrade UX.",
+      "confidence": 0.74,
+      "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+      "id": "cli-ux-change-needs-tests",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "cli",
+        "regression",
+        "tests",
+        "ux"
+      ],
+      "title": "CLI UX Changes Need Targeted UX Tests",
+      "trigger": "When modifying CLI output, help text, defaults, or command structure",
+      "ts": "2026-02-09T04:04:39.675559Z"
+    },
+    {
+      "action": "Update `docs/openapi.yaml` in the same change and verify any dashboard readers/clients that depend on those endpoints still work; treat schema drift as a bug.",
+      "confidence": 0.76,
+      "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+      "id": "keep-openapi-and-ui-in-sync",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "api",
+        "contract",
+        "dashboard",
+        "openapi"
+      ],
+      "title": "Keep OpenAPI and Dashboard Consumers in Sync",
+      "trigger": "When changing server routes, request/response shapes, or endpoint behavior",
+      "ts": "2026-02-09T04:04:39.675559Z"
+    },
+    {
+      "action": "Run `uv run ruff check .`, `uv run basedpyright`, then `uv run pytest`; treat failures as part of the refactor (not follow-up work).",
+      "confidence": 0.86,
+      "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+      "id": "post-refactor-quality-gates",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "lint",
+        "quality",
+        "tests",
+        "typing",
+        "uv"
+      ],
+      "title": "Run Quality Gates Immediately After Refactors",
+      "trigger": "After a broad refactor that touches many files and tests",
+      "ts": "2026-02-09T04:04:39.675559Z"
+    },
+    {
+      "action": "Check `__init__.py` exports, public module surface, and docs/README links for orphans; ensure imports fail nowhere and no dead entrypoints remain.",
+      "confidence": 0.8,
+      "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+      "id": "remove-orphans-after-large-deletions",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "cleanup",
+        "packaging",
+        "python",
+        "refactor"
+      ],
+      "title": "Remove Orphaned Package Surface After Large Deletions",
+      "trigger": "When removing many files or an entire subtree (e.g., `.../poly/*`)",
+      "ts": "2026-02-09T04:04:39.675559Z"
+    },
+    {
+      "action": "Immediately sweep for imports/exports, docs references, CLI help/examples, tests, and any API schemas; remove or rewrite references so the repo remains coherent and discoverable.",
+      "confidence": 0.82,
+      "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+      "id": "subsystem-removal-sweep",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "deletion",
+        "docs",
+        "maintenance",
+        "python",
+        "refactor",
+        "tests"
+      ],
+      "title": "Subsystem Removal Requires Repo-Wide Sweep",
+      "trigger": "When deleting or deprecating a substantial module/package (especially with many submodules)",
+      "ts": "2026-02-09T04:04:39.675559Z"
+    },
+    {
+      "body": "# Contract Sync (Server <-> OpenAPI <-> UI)\n\nUse this when touching endpoints, payload shapes, or workspace/dashboard read paths.\n\n## Steps\n\n1. Change the server behavior\n- Make the route/handler changes first.\n\n2. Update `docs/openapi.yaml` immediately\n- Reflect request/response shapes and status codes.\n- Keep names consistent (path params, query params, fields).\n\n3. Update UI/dashboard consumers\n- Update any readers/clients that depend on the endpoint.\n- Prefer failing fast on missing/renamed fields rather than silently ignoring.\n\n4. Lock it with tests\n- Add/adjust tests that would fail if the contract drifted again.\n\n5. Run gates\n- `uv run ruff check .`\n- `uv run basedpyright`\n- `uv run pytest`",
+      "description": "Micro-procedure for preventing API schema drift between server behavior, OpenAPI, and UI readers.",
+      "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+      "name": "contract-sync-openapi",
+      "op": "skill.upsert",
+      "source_instinct_ids": [
+        "keep-openapi-and-ui-in-sync",
+        "post-refactor-quality-gates"
+      ],
+      "tags": [
+        "api",
+        "contract",
+        "dashboard",
+        "openapi",
+        "testing"
+      ],
+      "ts": "2026-02-09T04:04:39.675559Z"
+    },
+    {
+      "body": "# Subsystem Removal Checklist\n\nUse this when deleting or deprecating a substantial subsystem (package/module tree).\n\n## Steps\n\n1. Identify the public surface\n- Find entrypoints, CLI commands, and any `__init__.py` exports that reference the subsystem.\n\n2. Remove code and update imports\n- Delete the subtree.\n- Update all import sites and re-home any still-needed utilities.\n- Fix `__init__.py` re-exports so the package surface stays accurate.\n\n3. Update docs and examples\n- Remove/replace references in README/docs.\n- Update any CLI usage examples and expected outputs.\n\n4. Update API contracts (if applicable)\n- If endpoints or payloads changed, update `docs/openapi.yaml` in the same change.\n- Ensure any dashboard/server consumers are updated to match.\n\n5. Update and/or rewrite tests\n- Remove tests for deleted behavior.\n- Add/adjust tests to validate replacement behavior and CLI UX.\n\n6. Run gates\n- `uv run ruff check .`\n- `uv run basedpyright`\n- `uv run pytest`\n\n## Done Criteria\n- No remaining references to deleted modules.\n- Docs and OpenAPI reflect current behavior.\n- All gates pass.",
+      "description": "Procedural checklist for safely removing a major module/package without leaving broken imports, stale docs, or drifting contracts.",
+      "episode_id": "3a49e37b2714b270438b82f96000a53a401f9d577d6a7ca6976af7f4eb510cdb",
+      "name": "subsystem-removal-checklist",
+      "op": "skill.upsert",
+      "source_instinct_ids": [
+        "cli-ux-change-needs-tests",
+        "keep-openapi-and-ui-in-sync",
+        "post-refactor-quality-gates",
+        "remove-orphans-after-large-deletions",
+        "subsystem-removal-sweep"
+      ],
+      "tags": [
+        "docs",
+        "maintenance",
+        "refactor",
+        "tests",
+        "uv"
+      ],
+      "ts": "2026-02-09T04:04:39.675559Z"
+    }
+  ],
+  "proposal_blob_sha256": "cbc42d3d4f1beb4eea1f84f01f3566d64c1fbd803343e17cef3dc43cf37fa997",
+  "version": 1
+}

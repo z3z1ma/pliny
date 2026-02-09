@@ -44,32 +44,32 @@ class TestWorkspaceLeasesGc(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             ws_root = Path(td) / "ws"
             ws_root.mkdir(parents=True, exist_ok=True)
-            _run_json(["poly", "init"], ws_root)
+            _run_json(["harness", "init"], ws_root)
 
             remotes = ws_root / "_remotes"
             r1 = remotes / "one"
             _git_init_repo(r1)
 
-            _run_json(["poly", "add", "one", str(r1), "--clone"], ws_root)
+            _run_json(["harness", "add", "one", str(r1), "--clone"], ws_root)
 
-            _run_json(["poly", "worktree", "add", "g1", "--all"], ws_root)
-            _run_json(["poly", "worktree", "add", "g2", "--all"], ws_root)
+            _run_json(["harness", "worktree", "add", "g1", "--all"], ws_root)
+            _run_json(["harness", "worktree", "add", "g2", "--all"], ws_root)
 
             # Claim g1
-            rc1, out1 = _run_json(["poly", "lease", "acquire", "group:g1"], ws_root)
+            rc1, out1 = _run_json(["harness", "lease", "acquire", "group:g1"], ws_root)
             self.assertEqual(rc1, 0)
             self.assertTrue(out1.get("ok"))
 
             # GC skip-leased should remove g2's worktree but skip g1.
             rc2, out2 = _run_json(
-                ["poly", "worktree", "gc", "--skip-leased", "--yes"],
+                ["harness", "worktree", "gc", "--skip-leased", "--yes"],
                 ws_root,
             )
             self.assertEqual(rc2, 0)
             self.assertTrue(out2.get("ok"))
 
-            wt_g1 = ws_root / "worktrees" / "g1" / "one"
-            wt_g2 = ws_root / "worktrees" / "g2" / "one"
+            wt_g1 = ws_root / ".loom" / "workspaces" / "worktrees" / "g1" / "one"
+            wt_g2 = ws_root / ".loom" / "workspaces" / "worktrees" / "g2" / "one"
             self.assertTrue(wt_g1.exists())
             self.assertFalse(wt_g2.exists())
 
@@ -90,7 +90,7 @@ class TestWorkspaceLeasesGc(unittest.TestCase):
             _run_json(
                 ["harness", "lease", "acquire", "group:g1", "--ttl", "1s"], ws_root
             )
-            leases_dir = ws_root / ".loom" / "leases"
+            leases_dir = ws_root / ".loom" / "workspaces" / "leases"
             lease_files = list(leases_dir.glob("*.json"))
             self.assertTrue(bool(lease_files))
 
@@ -123,7 +123,7 @@ class TestWorkspaceLeasesGc(unittest.TestCase):
             )
             self.assertEqual(rc_gc, 0)
             self.assertTrue(out_gc.get("ok"))
-            wt_g1 = ws_root / "worktrees" / "g1" / "one"
+            wt_g1 = ws_root / ".loom" / "workspaces" / "worktrees" / "g1" / "one"
             self.assertFalse(wt_g1.exists())
 
     def test_require_lease_blocks_worktree_rm(self) -> None:
@@ -138,7 +138,7 @@ class TestWorkspaceLeasesGc(unittest.TestCase):
             _run_json(["harness", "add", "one", str(r1), "--clone"], ws_root)
 
             _run_json(["harness", "worktree", "add", "g1", "--all"], ws_root)
-            wt_g1 = ws_root / "worktrees" / "g1" / "one"
+            wt_g1 = ws_root / ".loom" / "workspaces" / "worktrees" / "g1" / "one"
             self.assertTrue(wt_g1.exists())
 
             # Without the lease, --require-lease should fail and not delete.

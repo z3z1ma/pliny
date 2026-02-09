@@ -32,13 +32,19 @@ class TestWorkspaceMetadata(unittest.TestCase):
             ws_root = Path(td) / "ws"
             ws_root.mkdir(parents=True, exist_ok=True)
 
-            rc0, out0 = _run_json(["poly", "init"], ws_root)
+            rc0, out0 = _run_json(["harness", "init"], ws_root)
             self.assertEqual(rc0, 0)
             self.assertTrue(out0.get("ok"))
 
             # Add a repo entry without cloning
             rc1, out1 = _run_json(
-                ["poly", "add", "svc", "file:///tmp/does-not-need-to-exist", "--force"],
+                [
+                    "harness",
+                    "add",
+                    "svc",
+                    "file:///tmp/does-not-need-to-exist",
+                    "--force",
+                ],
                 ws_root,
             )
             self.assertEqual(rc1, 0)
@@ -46,7 +52,7 @@ class TestWorkspaceMetadata(unittest.TestCase):
 
             rc2, out2 = _run_json(
                 [
-                    "poly",
+                    "harness",
                     "repo",
                     "edit",
                     "svc",
@@ -64,12 +70,12 @@ class TestWorkspaceMetadata(unittest.TestCase):
             self.assertIn("core", entry.get("tags") or [])
 
             rc3, out3 = _run_json(
-                ["poly", "set", "upsert", "backend", "svc"],
+                ["harness", "set", "upsert", "backend", "svc"],
                 ws_root,
             )
             self.assertEqual(rc3, 0)
             self.assertTrue(out3.get("ok"))
 
-            rc4, out4 = _run_json(["poly", "set", "show", "backend"], ws_root)
+            rc4, out4 = _run_json(["harness", "set", "show", "backend"], ws_root)
             self.assertEqual(rc4, 0)
             self.assertEqual((out4.get("data") or {}).get("items"), ["svc"])

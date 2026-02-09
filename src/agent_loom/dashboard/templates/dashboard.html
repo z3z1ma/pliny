@@ -1282,7 +1282,7 @@
     ticket: { id: '', show: null, view: null, dep: null },
     teams: { list: null, at: 0, bundle: null },
     memory: { results: null, note: null },
-    workspace: { meta:null, worktrees:null, services:null, diff:null, diffAt:0, diffKey:'', diffLoading:false },
+    workspace: { meta:null, worktrees:null, components:null, diff:null, diffAt:0, diffKey:'', diffLoading:false },
     compound: { skills:null, skill:null, instincts:null }
   };
 
@@ -3299,7 +3299,7 @@
   async function loadWorkspace(force=false){
     try{
       const w = state.workspace;
-      const [meta, worktrees, services] = await Promise.all([
+      const [meta, worktrees, components] = await Promise.all([
         api('/api/v1/workspace/meta', { query: { mode: w.mode || 'auto', ...(w.root ? { root: w.root } : {}) } }),
         api('/api/v1/workspace/worktrees', { query: {
           mode: w.mode || 'auto',
@@ -3310,11 +3310,11 @@
           ...(w.repo ? { repo: w.repo } : {}),
           ...(w.missing ? { missing: w.missing } : {})
         }}),
-        api('/api/v1/workspace/services/index', { query: { mode: w.mode || 'auto', ...(w.root ? { root: w.root } : {}) } }).catch(() => null)
+        api('/api/v1/workspace/components/index', { query: { mode: w.mode || 'auto', ...(w.root ? { root: w.root } : {}) } }).catch(() => null)
       ]);
       data.workspace.meta = meta;
       data.workspace.worktrees = worktrees;
-      data.workspace.services = services;
+      data.workspace.components = components;
     } catch (err){
       toast('Workspace failed','bad', err.message || String(err));
     }
@@ -3515,7 +3515,7 @@
   async function renderWorkspace(){
     const meta = data.workspace.meta;
     const wt = data.workspace.worktrees;
-    const sv = data.workspace.services;
+    const sv = data.workspace.components;
 
     const sel = (state.workspace.selectedPath || '').trim();
     const diff = (data.workspace.diff && data.workspace.diff.worktree === sel) ? data.workspace.diff : null;
@@ -3542,7 +3542,7 @@
                 <select class="input" id="wsMode">
                   <option value="auto" ${state.workspace.mode==='auto'?'selected':''}>auto</option>
                   <option value="repo" ${state.workspace.mode==='repo'?'selected':''}>repo</option>
-                  <option value="poly" ${state.workspace.mode==='poly'?'selected':''}>poly</option>
+                  <option value="harness" ${state.workspace.mode==='harness'?'selected':''}>harness</option>
                 </select>
               </div>
               <div class="field" style="flex:2 1 420px; min-width:240px">
@@ -3606,7 +3606,7 @@
                 <div class="cardBody"><pre class="monoBlock">${escapeHtml(JSON.stringify(meta, null, 2))}</pre></div>
               </div>
               <div class="card">
-                <div class="cardHeader"><div class="cardTitle">services index <small>poly only</small></div></div>
+                <div class="cardHeader"><div class="cardTitle">components index <small>harness only</small></div></div>
                 <div class="cardBody"><pre class="monoBlock">${escapeHtml(sv ? JSON.stringify(sv, null, 2) : 'Not available')}</pre></div>
               </div>
             </div>

@@ -31,7 +31,7 @@ Each subsystem has a CLI surface and an on-disk footprint.
 | Subsystem | CLI | On disk | What it's for |
 | --- | --- | --- | --- |
 | Ticket | `loom ticket` | `.loom/ticket/` | Intent and execution state as Markdown + frontmatter, with deps/links/claims |
-| Workspace | `loom workspace` | `workspace.json`, `.loom/`, `.loom/workspace/` | Worktree lifecycle, snapshots, multi-repo coordination, service deps |
+| Workspace | `loom workspace` | `.loom/workspaces/workspace.json`, `.loom/workspace/` | Worktree lifecycle, snapshots, multi-repo coordination, component deps |
 | Team | `loom team` | `.loom/team/` | tmux-native orchestration: manager/workers/inbox/merge queue |
 | Memory | `loom memory` | `.loom/memory/` | Obsidian-like Markdown notes; derived SQLite cache for recall |
 | Compound | `loom compound` | `.opencode/` | Compounding: skills as procedural memory (SKILL.md), plus tooling scaffolding |
@@ -146,16 +146,16 @@ The point: memory captures context, skills capture procedure.
 ## Workspace modes
 
 - Repo mode: one repo, many worktrees.
-- Poly mode: multi-repo control plane (repo sets, tags, worktree groups, and service dependency metadata).
+- Harness mode: multi-repo control plane (repo sets, tags, worktree groups, and component dependency metadata).
 
-Example poly flow:
+Example harness flow:
 
 ```bash
-loom workspace poly init
+loom workspace harness init
 loom workspace add api git@github.com:org/api.git --clone
 loom workspace add web git@github.com:org/web.git --clone
 loom workspace worktree add sprint-42 --all
-loom workspace services refresh-index --print
+loom workspace harness components refresh-index --print
 loom workspace deps show api
 ```
 

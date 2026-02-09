@@ -472,7 +472,7 @@ components:
         dirty: { type: boolean }
       required:
         [mode, path, head, branch, ref, detached, locked, is_repo, dirty]
-    WorktreePolyEntry:
+    WorktreeHarnessEntry:
       type: object
       properties:
         mode: { type: string }
@@ -490,11 +490,11 @@ components:
           type: array
           items:
             anyOf:
-              - $ref: "#/components/schemas/WorktreeRepoEntry"
-              - $ref: "#/components/schemas/WorktreePolyEntry"
+               - $ref: "#/components/schemas/WorktreeRepoEntry"
+               - $ref: "#/components/schemas/WorktreeHarnessEntry"
         count: { type: integer }
       required: [worktrees, count]
-    ServicesIndexResult:
+    ComponentsIndexResult:
       type: object
       properties:
         index:
@@ -969,7 +969,7 @@ paths:
       parameters:
         - in: query
           name: mode
-          schema: { type: string, enum: [auto, repo, poly] }
+          schema: { type: string, enum: [auto, repo, harness] }
         - in: query
           name: root
           schema: { type: string }
@@ -992,7 +992,7 @@ paths:
       parameters:
         - in: query
           name: mode
-          schema: { type: string, enum: [auto, repo, poly] }
+          schema: { type: string, enum: [auto, repo, harness] }
         - in: query
           name: root
           schema: { type: string }
@@ -1023,16 +1023,18 @@ paths:
                     properties:
                       data: { $ref: "#/components/schemas/WorktreesResult" }
         "400": { description: WS_ERROR }
-  /api/v1/workspace/services/index:
+  /api/v1/workspace/components/index:
     get:
       tags: [workspace]
-      summary: Services index (poly only)
+      summary: Components index (harness only)
       parameters:
         - in: query
           name: mode
-          schema: { type: string, enum: [auto, repo, poly] }
+          required: false
+          schema: { type: string, enum: [auto, repo, harness] }
         - in: query
           name: root
+          required: false
           schema: { type: string }
       responses:
         "200":
@@ -1044,7 +1046,32 @@ paths:
                   - $ref: "#/components/schemas/EnvelopeBase"
                   - type: object
                     properties:
-                      data: { $ref: "#/components/schemas/ServicesIndexResult" }
+                      data: { $ref: "#/components/schemas/ComponentsIndexResult" }
+        "400": { description: WS_ERROR }
+  /api/v1/workspace/services/index:
+    get:
+      tags: [workspace]
+      summary: Alias for components index
+      parameters:
+        - in: query
+          name: mode
+          required: false
+          schema: { type: string, enum: [auto, repo, harness] }
+        - in: query
+          name: root
+          required: false
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/EnvelopeBase"
+                  - type: object
+                    properties:
+                      data: { $ref: "#/components/schemas/ComponentsIndexResult" }
         "400": { description: WS_ERROR }
   /api/v1/compound/skills:
     get:

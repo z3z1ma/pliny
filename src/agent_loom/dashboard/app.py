@@ -16,9 +16,9 @@ from agent_loom.dashboard.introspect import introspect_module
 from agent_loom.dashboard.workspace_read import (
     WorkspaceReadError,
     detect_workspace_mode,
-    poly_worktrees,
+    harness_worktrees,
     repo_worktrees,
-    services_index,
+    components_index,
     worktree_diff,
     workspace_meta,
 )
@@ -131,6 +131,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                         {"method": "GET", "path": "/api/v1/workspace/meta"},
                         {"method": "GET", "path": "/api/v1/workspace/worktrees"},
                         {"method": "GET", "path": "/api/v1/workspace/worktree/diff"},
+                        {"method": "GET", "path": "/api/v1/workspace/components/index"},
                         {"method": "GET", "path": "/api/v1/workspace/services/index"},
                         {"method": "GET", "path": "/api/v1/compound/skills"},
                         {"method": "GET", "path": "/api/v1/compound/skills/<name>"},
@@ -616,7 +617,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                     dirty_only=(str(q.get("dirty") or "0") == "1"),
                 )
             else:
-                payload = poly_worktrees(
+                payload = harness_worktrees(
                     root=root,
                     group=str(q.get("group") or ""),
                     repo=str(q.get("repo") or ""),
@@ -630,8 +631,8 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             return jsonify(err(code="WS_ERROR", message=str(e))), 400
         return jsonify(ok(data=payload))
 
-    @app.get("/api/v1/workspace/services/index")
-    def ws_services_index() -> Any:
+    @app.get("/api/v1/workspace/components/index")
+    def ws_components_index() -> Any:
         q = request.args
         try:
             mode, root = detect_workspace_mode(
@@ -642,12 +643,17 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                     or (str(cfg.workspace_root) if cfg.workspace_root else "")
                 ),
             )
-            if mode != "poly":
+            if mode != "harness":
                 return jsonify(ok(data={"index": None}))
-            idx = services_index(root=root)
+            idx = components_index(root=root)
             return jsonify(ok(data={"index": idx}))
         except Exception as e:
             return jsonify(err(code="WS_ERROR", message=str(e))), 400
+
+    @app.get("/api/v1/workspace/services/index")
+    def ws_services_index() -> Any:
+        # Alias for the components index.
+        return ws_components_index()
 
     @app.get("/api/v1/workspace/worktree/diff")
     def ws_worktree_diff() -> Any:

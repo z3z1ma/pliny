@@ -7,18 +7,25 @@ SUBSYSTEM_VERSION = "0.1.0"
 
 WORKSPACE_FILE = "workspace.json"
 INTERNAL_DIR = ".loom"
+# Workspace harness (multi-repo control plane) state is rooted under:
+#   <harness_root>/.loom/workspaces/
+HARNESS_DIR = "workspaces"
 REPO_INTERNAL_DIR = ".loom/workspace"
-REPOS_DIR = "repos"
-WORKTREES_DIR = "worktrees"
-STATES_DIR = "states"
-SERVICES_DIR = "services"
+# Harness defaults (relative to the harness root).
+REPOS_DIR = ".loom/workspaces/repos"
+WORKTREES_DIR = ".loom/workspaces/worktrees"
+STATES_DIR = ".loom/workspaces/states"
+COMPONENTS_DIR = ".loom/workspaces/components"
 
 DEFAULT_DEFAULT_BRANCH = "main"
 
-SERVICE_HEADER = """# Service: {name}
+COMPONENT_HEADER = """# Component: {name}
 
-This file is maintained by an AI agent. It is the workspace's cached understanding of this service.
+This file is maintained by an AI agent. It is the workspace's cached understanding of this component.
 It should be kept accurate and updated as changes are made.
+
+## Kind
+- service | library | cli | tool | infra | unknown
 
 ## Summary
 - Language:
@@ -29,10 +36,12 @@ It should be kept accurate and updated as changes are made.
 - HTTP:
 - Events:
 - gRPC:
+- CLI:
+- Library API:
 - Other:
 
-## Depends on (other services / repos)
-- (list other service repo names)
+## Depends on (other components / repos)
+- (list other component repo names)
 
 ## Used by (reverse dependencies)
 - (optional; can be computed via index)
@@ -54,14 +63,15 @@ __all__ = [
     "SUBSYSTEM_NAME",
     "SUBSYSTEM_VERSION",
     "BULLET_RE",
+    "COMPONENT_HEADER",
+    "COMPONENTS_DIR",
     "DEFAULT_DEFAULT_BRANCH",
     "DEP_SECTION_RE",
+    "HARNESS_DIR",
     "INTERNAL_DIR",
     "REPO_INTERNAL_DIR",
     "REPO_NAME_RE",
     "REPOS_DIR",
-    "SERVICE_HEADER",
-    "SERVICES_DIR",
     "SHA_RE",
     "STATES_DIR",
     "WORKSPACE_FILE",

@@ -71,14 +71,14 @@ class TestLoomInitCliUx(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
             rc, payload = _run_root_json(
-                ["init", "--yes", "--json", "--workspace-mode", "poly"],
+                ["init", "--yes", "--json", "--workspace-mode", "harness"],
                 cwd=root,
             )
             self.assertEqual(rc, 0)
             self.assertTrue(bool(payload.get("ok")))
             self.assertFalse(bool(payload.get("git", {}).get("ok")))
 
-            self.assertTrue((root / "workspace.json").exists())
+            self.assertTrue((root / ".loom" / "workspaces" / "workspace.json").exists())
             self.assertTrue((root / ".loom" / "ticket").exists())
             self.assertTrue((root / ".loom" / "ticket" / "closed").exists())
             self.assertTrue((root / ".loom" / "memory" / "meta.json").exists())

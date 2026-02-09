@@ -29,13 +29,13 @@ def build_parser() -> argparse.ArgumentParser:
     start.add_argument(
         "--workspace-mode",
         default="auto",
-        choices=["auto", "repo", "poly"],
+        choices=["auto", "repo", "harness"],
         help="Workspace mode for workspace endpoints (default: auto)",
     )
     start.add_argument(
         "--workspace-root",
         default="",
-        help="Workspace root for poly mode (optional; auto-detected when possible)",
+        help="Workspace root for harness mode (optional; auto-detected when possible)",
     )
     start.add_argument(
         "--enable-writes",

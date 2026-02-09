@@ -1,13 +1,14 @@
 """workspace — Git-adjacent workspace tool.
 
 Non-negotiable invariant
-  `workspace poly` and repo-local `workspace` are orthogonal operating models.
+  `workspace harness` (multi-repo control plane) and repo-local `workspace` (single repo)
+  are orthogonal operating models.
   They are mutually exclusive by design and never cooperate at runtime.
 
 Operating models
-  workspace poly  Workspace-level control plane (polyrepo): owns workspace layout, repo inventory,
-           cross-repo ops, services metadata, and derived indexes.
-  workspace       Repo-native local tooling (single repo): owns worktrees + branch/worktree
+  workspace harness  Workspace harness control plane: owns manifest, repo inventory,
+           cross-repo ops, component metadata, and derived indexes.
+  workspace          Repo-native local tooling (single repo): owns worktrees + branch/worktree
            mapping for one repository.
 
 Workspace library + CLI (loom).
@@ -15,7 +16,7 @@ Workspace library + CLI (loom).
 
 from __future__ import annotations
 
-from agent_loom.workspace.poly.core import (
+from agent_loom.workspace.harness.core import (
     add_repo,
     branch,
     context,
@@ -23,8 +24,9 @@ from agent_loom.workspace.poly.core import (
     deps_show,
     deps_who_uses,
     list_repos,
-    poly_init,
+    harness_init,
     remove_repo,
+    components_refresh_index,
     services_refresh_index,
     snapshot,
     snapshot_diff,
@@ -42,12 +44,18 @@ from agent_loom.workspace.poly.core import (
     worktree_rebase,
     worktree_rm,
 )
-from agent_loom.workspace.poly.exec import poly_exec
-from agent_loom.workspace.poly.cleanup import poly_cleanup_apply, poly_cleanup_suggest
-from agent_loom.workspace.poly.deps import deps_closure, deps_impacted
-from agent_loom.workspace.poly.impact import poly_impact_repos, poly_impact_snapshot
-from agent_loom.workspace.poly.gc import worktree_gc
-from agent_loom.workspace.poly.leases import (
+from agent_loom.workspace.harness.exec import harness_exec
+from agent_loom.workspace.harness.cleanup import (
+    harness_cleanup_apply,
+    harness_cleanup_suggest,
+)
+from agent_loom.workspace.harness.deps import deps_closure, deps_impacted
+from agent_loom.workspace.harness.impact import (
+    harness_impact_repos,
+    harness_impact_snapshot,
+)
+from agent_loom.workspace.harness.gc import worktree_gc
+from agent_loom.workspace.harness.leases import (
     lease_acquire,
     lease_is_active,
     lease_list,
@@ -56,12 +64,12 @@ from agent_loom.workspace.poly.leases import (
     lease_require_active,
     lease_show,
 )
-from agent_loom.workspace.poly.meta import (
-    poly_repo_edit,
-    poly_set_ls,
-    poly_set_rm,
-    poly_set_show,
-    poly_set_upsert,
+from agent_loom.workspace.harness.meta import (
+    harness_repo_edit,
+    harness_set_ls,
+    harness_set_rm,
+    harness_set_show,
+    harness_set_upsert,
 )
 from agent_loom.workspace.prime import prime
 from agent_loom.workspace.repo.core import (
@@ -105,10 +113,10 @@ __all__ = [
     "repo_worktree_ensure_detached",
     "repo_worktree_ls",
     "repo_merge_attempt",
-    "poly_init",
-    "poly_exec",
-    "poly_cleanup_suggest",
-    "poly_cleanup_apply",
+    "harness_init",
+    "harness_exec",
+    "harness_cleanup_suggest",
+    "harness_cleanup_apply",
     "add_repo",
     "remove_repo",
     "list_repos",
@@ -129,19 +137,20 @@ __all__ = [
     "snapshot",
     "snapshot_diff",
     "snapshot_restore",
+    "components_refresh_index",
     "services_refresh_index",
     "deps_show",
     "deps_who_uses",
     "deps_closure",
     "deps_impacted",
-    "poly_impact_repos",
-    "poly_impact_snapshot",
+    "harness_impact_repos",
+    "harness_impact_snapshot",
     "deepen",
-    "poly_repo_edit",
-    "poly_set_upsert",
-    "poly_set_rm",
-    "poly_set_show",
-    "poly_set_ls",
+    "harness_repo_edit",
+    "harness_set_upsert",
+    "harness_set_rm",
+    "harness_set_show",
+    "harness_set_ls",
     "lease_acquire",
     "lease_release",
     "lease_list",

@@ -7,7 +7,7 @@ from pathlib import Path
 @dataclass(frozen=True)
 class ServerConfig:
     repo_root: Path
-    workspace_mode: str  # auto|repo|poly
+    workspace_mode: str  # auto|repo|harness
     workspace_root: Path | None
     enable_writes: bool
     token: str

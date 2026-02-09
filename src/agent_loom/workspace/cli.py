@@ -26,17 +26,17 @@ from agent_loom.workspace.core import (
     lease_renew,
     lease_show,
     list_repos,
-    poly_exec,
-    poly_cleanup_apply,
-    poly_cleanup_suggest,
-    poly_impact_repos,
-    poly_impact_snapshot,
-    poly_init,
-    poly_repo_edit,
-    poly_set_ls,
-    poly_set_rm,
-    poly_set_show,
-    poly_set_upsert,
+    harness_exec,
+    harness_cleanup_apply,
+    harness_cleanup_suggest,
+    harness_impact_repos,
+    harness_impact_snapshot,
+    harness_init,
+    harness_repo_edit,
+    harness_set_ls,
+    harness_set_rm,
+    harness_set_show,
+    harness_set_upsert,
     prime,
     remove_repo,
     repo_init,
@@ -56,6 +56,7 @@ from agent_loom.workspace.core import (
     repo_worktree_rm,
     repo_worktree_rm_path,
     repo_worktree_status,
+    components_refresh_index,
     services_refresh_index,
     snapshot,
     snapshot_diff,
@@ -75,7 +76,7 @@ from agent_loom.workspace.core import (
     worktree_gc,
 )
 from agent_loom.workspace.errors import WorkspaceError
-from agent_loom.workspace.guards import workspace_root
+from agent_loom.workspace.guards import harness_root
 from agent_loom.workspace.repo.cleanup import (
     repo_worktree_cleanup_apply,
     repo_worktree_cleanup_suggest,
@@ -85,10 +86,10 @@ from agent_loom.workspace.repo.sandbox import (
     repo_sandbox_gc,
     repo_sandbox_promote,
 )
-from agent_loom.workspace.poly.sandbox import (
-    poly_sandbox_create,
-    poly_sandbox_gc,
-    poly_sandbox_promote,
+from agent_loom.workspace.harness.sandbox import (
+    harness_sandbox_create,
+    harness_sandbox_gc,
+    harness_sandbox_promote,
 )
 from agent_loom.workspace.models import (
     AddRepoResult,
@@ -105,8 +106,8 @@ from agent_loom.workspace.models import (
     LeaseShowResult,
     ListReposResult,
     MergeAttemptResult,
-    PolyInitResult,
-    PolyExecResult,
+    HarnessInitResult,
+    HarnessExecResult,
     PrimeResult,
     RemoveRepoResult,
     RepoInitResult,
@@ -116,7 +117,7 @@ from agent_loom.workspace.models import (
     RepoWorktreeListResult,
     RepoWorktreePruneResult,
     RepoWorktreeRemoveResult,
-    ServicesRefreshIndexResult,
+    ComponentsRefreshIndexResult,
     SnapshotResult,
     SnapshotDiffResult,
     SnapshotRestoreResult,
@@ -136,10 +137,13 @@ from agent_loom.workspace.repo.core import repo_root
 from agent_loom.core.time import now_iso
 
 
+workspace_root = harness_root
+
+
 def _cmd_name(args: argparse.Namespace) -> str:
     top = getattr(args, "cmd", "") or ""
-    if top in {"poly", "harness"}:
-        cmd = getattr(args, "poly_cmd", "") or ""
+    if top == "harness":
+        cmd = getattr(args, "harness_cmd", "") or ""
         if cmd == "worktree":
             cmd = f"worktree {getattr(args, 'worktree_cmd', '')}".strip()
         elif cmd == "snapshot":
@@ -150,8 +154,8 @@ def _cmd_name(args: argparse.Namespace) -> str:
             cmd = f"set {getattr(args, 'set_cmd', '')}".strip()
         elif cmd == "lease":
             cmd = f"lease {getattr(args, 'lease_cmd', '')}".strip()
-        elif cmd == "services":
-            cmd = f"services {getattr(args, 'services_cmd', '')}".strip()
+        elif cmd in {"components", "services"}:
+            cmd = f"{cmd} {getattr(args, 'components_cmd', '')}".strip()
         elif cmd == "deps":
             cmd = f"deps {getattr(args, 'deps_cmd', '')}".strip()
         elif cmd == "sandbox":
@@ -222,10 +226,12 @@ def _render_prime_text(payload: dict[str, Any]) -> str:
 
 
 def _render_services_index_text(index: dict[str, Any]) -> str:
-    services = index.get("services", {}) if isinstance(index, dict) else {}
-    lines = [f"Services ({len(services)})"]
-    for name in sorted(services.keys()):
-        entry = services.get(name) or {}
+    components = {}
+    if isinstance(index, dict):
+        components = index.get("components", {}) or index.get("services", {}) or {}
+    lines = [f"Components ({len(components)})"]
+    for name in sorted(components.keys()):
+        entry = components.get(name) or {}
         deps = ", ".join(entry.get("depends_on", []) or []) or "-"
         ext = ", ".join(entry.get("depends_on_external", []) or []) or "-"
         used_by = ", ".join(entry.get("used_by", []) or []) or "-"
@@ -370,7 +376,7 @@ def _render_text(result: Any) -> str:
             lines.append(f"stderr: {result.stderr}")
         return "\n".join(lines).rstrip() + "\n"
 
-    if isinstance(result, PolyInitResult):
+    if isinstance(result, HarnessInitResult):
         return (
             "\n".join(
                 [
@@ -378,7 +384,7 @@ def _render_text(result: Any) -> str:
                     f"repos_dir: {result.repos_dir}",
                     f"worktrees_dir: {result.worktrees_dir}",
                     f"states_dir: {result.states_dir}",
-                    f"services_dir: {result.services_dir}",
+                    f"components_dir: {result.components_dir}",
                     f"gitignore_path: {result.gitignore_path}",
                     f"updated_gitignore: {_bool(bool(result.updated_gitignore))}",
                 ]
@@ -399,7 +405,7 @@ def _render_text(result: Any) -> str:
             + "\n"
         )
 
-    if isinstance(result, PolyExecResult):
+    if isinstance(result, HarnessExecResult):
         s = result.summary or {}
         return (
             "\n".join(
@@ -515,7 +521,7 @@ def _render_text(result: Any) -> str:
                 [
                     f"repo: {result.repo}",
                     f"deleted_clone: {_bool(result.deleted_clone)}",
-                    f"deleted_service_md: {_bool(result.deleted_service_md)}",
+                    f"deleted_component_md: {_bool(result.deleted_component_md)}",
                 ]
             ).rstrip()
             + "\n"
@@ -549,8 +555,8 @@ def _render_text(result: Any) -> str:
             if row.get("error"):
                 parts.append(f"error:{row.get('error')}")
             lines.append(" ".join(parts))
-        if result.services_index is not None:
-            lines.append("services_index: refreshed")
+        if result.components_index is not None:
+            lines.append("components_index: refreshed")
         return "\n".join(lines).rstrip() + "\n"
 
     if isinstance(result, StatusResult):
@@ -565,8 +571,8 @@ def _render_text(result: Any) -> str:
         lines = [f"branch: {result.branch}"]
         for row in result.repos:
             lines.append(f"- {row.get('repo')} {row.get('branch')}")
-        if result.services_index is not None:
-            lines.append("services_index: refreshed")
+        if result.components_index is not None:
+            lines.append("components_index: refreshed")
         return "\n".join(lines).rstrip() + "\n"
 
     if isinstance(result, WorktreeAddResult):
@@ -655,15 +661,15 @@ def _render_text(result: Any) -> str:
             + "\n"
         )
 
-    if isinstance(result, ServicesRefreshIndexResult):
-        services = (
-            result.index.get("services", {}) if isinstance(result.index, dict) else {}
+    if isinstance(result, ComponentsRefreshIndexResult):
+        components = (
+            result.index.get("components", {}) if isinstance(result.index, dict) else {}
         )
         return (
             "\n".join(
                 [
-                    f"services_index_path: {result.services_index_path}",
-                    f"services: {len(services)}",
+                    f"components_index_path: {result.components_index_path}",
+                    f"components: {len(components)}",
                 ]
             ).rstrip()
             + "\n"
@@ -677,7 +683,7 @@ def _render_text(result: Any) -> str:
         return (
             "\n".join(
                 [
-                    f"service: {result.service}",
+                    f"component: {result.component}",
                     f"depends_on: {deps}",
                     f"depends_on_external: {ext}",
                     f"used_by: {used_by}",
@@ -691,7 +697,7 @@ def _render_text(result: Any) -> str:
         return (
             "\n".join(
                 [
-                    f"service: {result.service}",
+                    f"component: {result.component}",
                     f"used_by: {used_by}",
                 ]
             ).rstrip()
@@ -748,7 +754,7 @@ def emit_result(args: argparse.Namespace, root: Path, result: Any) -> None:
         emit_ok(args, root, result)
         return
 
-    if isinstance(result, ServicesRefreshIndexResult) and bool(
+    if isinstance(result, ComponentsRefreshIndexResult) and bool(
         getattr(args, "print", False)
     ):
         sys.stdout.write(_render_services_index_text(result.index))
@@ -966,10 +972,10 @@ def cmd_repo_merge_attempt(args: argparse.Namespace) -> None:
     emit_result(args, root, res)
 
 
-def cmd_poly_init(args: argparse.Namespace) -> None:
+def cmd_harness_init(args: argparse.Namespace) -> None:
     root_arg = str(getattr(args, "root", "") or "").strip()
     root = Path(root_arg).expanduser().resolve() if root_arg else Path.cwd().resolve()
-    res = poly_init(root=root)
+    res = harness_init(root=root, symlinks=bool(getattr(args, "symlinks", False)))
     emit_result(args, root, res)
 
 
@@ -980,7 +986,7 @@ def cmd_repo_init(args: argparse.Namespace) -> None:
 
 
 def cmd_add(args: argparse.Namespace) -> None:
-    root = workspace_root()
+    root = harness_root()
     res = add_repo(
         name=args.name,
         remote=args.remote,
@@ -995,11 +1001,11 @@ def cmd_add(args: argparse.Namespace) -> None:
 
 
 def cmd_remove(args: argparse.Namespace) -> None:
-    root = workspace_root()
+    root = harness_root()
     res = remove_repo(
         name=args.name,
         delete_clone=bool(args.delete_clone),
-        delete_service_md=bool(args.delete_service_md),
+        delete_component_md=bool(getattr(args, "delete_component_md", False)),
         confirm_delete=bool(args.yes_delete),
         root=root,
     )
@@ -1184,9 +1190,9 @@ def cmd_worktree_group_diff(args: argparse.Namespace) -> None:
 
 def cmd_worktree_group_annotate(args: argparse.Namespace) -> None:
     root = workspace_root()
-    from agent_loom.workspace.worktree_meta import poly_group_annotate
+    from agent_loom.workspace.worktree_meta import harness_group_annotate
 
-    res = poly_group_annotate(
+    res = harness_group_annotate(
         ws_root=root,
         group=str(args.group),
         purpose=str(args.purpose),
@@ -1198,9 +1204,9 @@ def cmd_worktree_group_annotate(args: argparse.Namespace) -> None:
     emit_result(args, root, res)
 
 
-def cmd_poly_sandbox_create(args: argparse.Namespace) -> None:
+def cmd_harness_sandbox_create(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = poly_sandbox_create(
+    res = harness_sandbox_create(
         group=str(args.group),
         base_ref=str(args.base_ref),
         ttl=str(getattr(args, "ttl", "2h") or "2h"),
@@ -1215,33 +1221,33 @@ def cmd_poly_sandbox_create(args: argparse.Namespace) -> None:
     emit_result(args, root, res)
 
 
-def cmd_poly_sandbox_promote(args: argparse.Namespace) -> None:
+def cmd_harness_sandbox_promote(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = poly_sandbox_promote(group=str(args.group), root=root)
+    res = harness_sandbox_promote(group=str(args.group), root=root)
     emit_result(args, root, res)
 
 
-def cmd_poly_sandbox_gc(args: argparse.Namespace) -> None:
+def cmd_harness_sandbox_gc(args: argparse.Namespace) -> None:
     root = workspace_root()
     req = str(getattr(args, "require_lease", "") or "").strip()
     if req:
         lease_require_active(key=req, root=root)
-    res = poly_sandbox_gc(confirm=bool(args.yes), force=bool(args.force), root=root)
+    res = harness_sandbox_gc(confirm=bool(args.yes), force=bool(args.force), root=root)
     emit_result(args, root, res)
 
 
-def cmd_poly_cleanup_suggest(args: argparse.Namespace) -> None:
+def cmd_harness_cleanup_suggest(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = poly_cleanup_suggest(root=root)
+    res = harness_cleanup_suggest(root=root)
     emit_result(args, root, res)
 
 
-def cmd_poly_cleanup_apply(args: argparse.Namespace) -> None:
+def cmd_harness_cleanup_apply(args: argparse.Namespace) -> None:
     root = workspace_root()
     req = str(getattr(args, "require_lease", "") or "").strip()
     if req:
         lease_require_active(key=req, root=root)
-    res = poly_cleanup_apply(
+    res = harness_cleanup_apply(
         ids=list(args.id or []),
         confirm=bool(args.yes),
         force=bool(args.force),
@@ -1318,6 +1324,12 @@ def cmd_snapshot_restore(args: argparse.Namespace) -> None:
     emit_result(args, root, res)
 
 
+def cmd_components_refresh_index(args: argparse.Namespace) -> None:
+    root = workspace_root()
+    res = components_refresh_index(root=root)
+    emit_result(args, root, res)
+
+
 def cmd_services_refresh_index(args: argparse.Namespace) -> None:
     root = workspace_root()
     res = services_refresh_index(root=root)
@@ -1326,37 +1338,37 @@ def cmd_services_refresh_index(args: argparse.Namespace) -> None:
 
 def cmd_deps_show(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = deps_show(service=args.service, root=root)
+    res = deps_show(component=args.component, root=root)
     emit_result(args, root, res)
 
 
 def cmd_deps_who_uses(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = deps_who_uses(service=args.service, root=root)
+    res = deps_who_uses(component=args.component, root=root)
     emit_result(args, root, res)
 
 
 def cmd_deps_closure(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = deps_closure(service=args.service, root=root)
+    res = deps_closure(component=args.component, root=root)
     emit_result(args, root, res)
 
 
 def cmd_deps_impacted(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = deps_impacted(service=args.service, root=root)
+    res = deps_impacted(component=args.component, root=root)
     emit_result(args, root, res)
 
 
-def cmd_poly_impact_repos(args: argparse.Namespace) -> None:
+def cmd_harness_impact_repos(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = poly_impact_repos(changed=list(args.changed or []), root=root)
+    res = harness_impact_repos(changed=list(args.changed or []), root=root)
     emit_result(args, root, res)
 
 
-def cmd_poly_impact_snapshot(args: argparse.Namespace) -> None:
+def cmd_harness_impact_snapshot(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = poly_impact_snapshot(
+    res = harness_impact_snapshot(
         name=str(args.name),
         include_missing=not bool(getattr(args, "no_missing", False)),
         root=root,
@@ -1364,12 +1376,12 @@ def cmd_poly_impact_snapshot(args: argparse.Namespace) -> None:
     emit_result(args, root, res)
 
 
-def cmd_poly_exec(args: argparse.Namespace) -> None:
+def cmd_harness_exec(args: argparse.Namespace) -> None:
     root = workspace_root()
     cmd = list(getattr(args, "cmd_argv", []) or [])
     if cmd and cmd[0] == "--":
         cmd = cmd[1:]
-    res = poly_exec(
+    res = harness_exec(
         cmd=cmd,
         group=args.group,
         repos=args.repos,
@@ -1383,7 +1395,7 @@ def cmd_poly_exec(args: argparse.Namespace) -> None:
     emit_result(args, root, res)
 
 
-def cmd_poly_repo_edit(args: argparse.Namespace) -> None:
+def cmd_harness_repo_edit(args: argparse.Namespace) -> None:
     root = workspace_root()
     shallow: Optional[bool]
     if bool(getattr(args, "shallow", False)):
@@ -1393,7 +1405,7 @@ def cmd_poly_repo_edit(args: argparse.Namespace) -> None:
     else:
         shallow = None
 
-    res = poly_repo_edit(
+    res = harness_repo_edit(
         name=args.name,
         remote=getattr(args, "remote", None),
         default_branch=getattr(args, "default_branch", None),
@@ -1407,27 +1419,27 @@ def cmd_poly_repo_edit(args: argparse.Namespace) -> None:
     emit_result(args, root, res)
 
 
-def cmd_poly_set_upsert(args: argparse.Namespace) -> None:
+def cmd_harness_set_upsert(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = poly_set_upsert(name=args.name, items=args.items, root=root)
+    res = harness_set_upsert(name=args.name, items=args.items, root=root)
     emit_result(args, root, res)
 
 
-def cmd_poly_set_rm(args: argparse.Namespace) -> None:
+def cmd_harness_set_rm(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = poly_set_rm(name=args.name, root=root)
+    res = harness_set_rm(name=args.name, root=root)
     emit_result(args, root, res)
 
 
-def cmd_poly_set_show(args: argparse.Namespace) -> None:
+def cmd_harness_set_show(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = poly_set_show(name=args.name, root=root)
+    res = harness_set_show(name=args.name, root=root)
     emit_result(args, root, res)
 
 
-def cmd_poly_set_ls(args: argparse.Namespace) -> None:
+def cmd_harness_set_ls(args: argparse.Namespace) -> None:
     root = workspace_root()
-    res = poly_set_ls(root=root)
+    res = harness_set_ls(root=root)
     emit_result(args, root, res)
 
 
@@ -1505,25 +1517,31 @@ def cmd_prime(args: argparse.Namespace) -> None:
     sys.stdout.write(_render_prime_text(payload))
 
 
-def _add_poly_parser(
+def _add_harness_parser(
     root_sub: Any,
     *,
-    name: str = "poly",
-    help_text: str = "Workspace harness control plane (polyrepo)",
-    description_text: str = "Workspace harness control plane (polyrepo)",
+    name: str = "harness",
+    help_text: str = "Workspace harness control plane",
+    description_text: str = "Workspace harness control plane",
 ) -> None:
     p = root_sub.add_parser(name, help=help_text, description=description_text)
-    sub = p.add_subparsers(dest="poly_cmd", required=True)
+    sub = p.add_subparsers(dest="harness_cmd", required=True)
 
     sp = sub.add_parser(
-        "init", help="Initialize workspace.json + dirs + baseline .gitignore"
+        "init",
+        help="Initialize harness manifest + dirs + baseline .gitignore",
     )
     sp.add_argument(
         "--root",
         default="",
         help="Initialize the harness at a specific root (default: current directory)",
     )
-    sp.set_defaults(func=cmd_poly_init)
+    sp.add_argument(
+        "--symlinks",
+        action="store_true",
+        help="Create root-level symlinks (repos/, worktrees/, states/, components/) into .loom/workspaces",
+    )
+    sp.set_defaults(func=cmd_harness_init)
 
     sp = sub.add_parser(
         "exec", help="Run a command across repos (optionally a worktree group)"
@@ -1557,7 +1575,7 @@ def _add_poly_parser(
         nargs=argparse.REMAINDER,
         help="Command to run (use: exec -- <cmd...>)",
     )
-    sp.set_defaults(func=cmd_poly_exec)
+    sp.set_defaults(func=cmd_harness_exec)
 
     sp = sub.add_parser("repo", help="Edit workspace repo metadata")
     sub_repo = sp.add_subparsers(dest="repo_cmd", required=True)
@@ -1573,7 +1591,7 @@ def _add_poly_parser(
     sh.add_argument("--shallow", action="store_true")
     sh.add_argument("--no-shallow", dest="no_shallow", action="store_true")
     spe.add_argument("--depth", type=int, default=None)
-    spe.set_defaults(func=cmd_poly_repo_edit)
+    spe.set_defaults(func=cmd_harness_repo_edit)
 
     sp = sub.add_parser("set", help="Manage repo sets (workspace.json repo_sets)")
     sub_set = sp.add_subparsers(dest="set_cmd", required=True)
@@ -1581,18 +1599,18 @@ def _add_poly_parser(
     sps = sub_set.add_parser("upsert", help="Create/update a repo set")
     sps.add_argument("name")
     sps.add_argument("items", nargs="*")
-    sps.set_defaults(func=cmd_poly_set_upsert)
+    sps.set_defaults(func=cmd_harness_set_upsert)
 
     sps = sub_set.add_parser("rm", help="Remove a repo set")
     sps.add_argument("name")
-    sps.set_defaults(func=cmd_poly_set_rm)
+    sps.set_defaults(func=cmd_harness_set_rm)
 
     sps = sub_set.add_parser("show", help="Show a repo set")
     sps.add_argument("name")
-    sps.set_defaults(func=cmd_poly_set_show)
+    sps.set_defaults(func=cmd_harness_set_show)
 
     sps = sub_set.add_parser("ls", help="List repo sets")
-    sps.set_defaults(func=cmd_poly_set_ls)
+    sps.set_defaults(func=cmd_harness_set_ls)
 
     sp = sub.add_parser(
         "lease",
@@ -1659,11 +1677,11 @@ def _add_poly_parser(
     spc.add_argument("--repos", nargs="*", help="Subset of repos (default all)")
     spc.add_argument("--set", dest="sets", action="append", help="Select repos by set")
     spc.add_argument("--tag", dest="tags", action="append", help="Select repos by tag")
-    spc.set_defaults(func=cmd_poly_sandbox_create)
+    spc.set_defaults(func=cmd_harness_sandbox_create)
 
     spp = subs.add_parser("promote", help="Promote a sandbox group (metadata only)")
     spp.add_argument("group")
-    spp.set_defaults(func=cmd_poly_sandbox_promote)
+    spp.set_defaults(func=cmd_harness_sandbox_promote)
 
     spg = subs.add_parser("gc", help="Remove expired sandbox groups (requires --yes)")
     spg.add_argument(
@@ -1673,13 +1691,13 @@ def _add_poly_parser(
     )
     spg.add_argument("--force", action="store_true")
     spg.add_argument("--yes", action="store_true")
-    spg.set_defaults(func=cmd_poly_sandbox_gc)
+    spg.set_defaults(func=cmd_harness_sandbox_gc)
 
     sp = sub.add_parser("cleanup", help="Suggest/apply TTL-based group cleanup")
     subc = sp.add_subparsers(dest="cleanup_cmd", required=True)
 
     spc = subc.add_parser("suggest", help="Suggest expired groups")
-    spc.set_defaults(func=cmd_poly_cleanup_suggest)
+    spc.set_defaults(func=cmd_harness_cleanup_suggest)
 
     spa = subc.add_parser("apply", help="Apply cleanup (requires --yes)")
     spa.add_argument(
@@ -1690,7 +1708,7 @@ def _add_poly_parser(
     spa.add_argument("--id", action="append", default=[])
     spa.add_argument("--force", action="store_true")
     spa.add_argument("--yes", action="store_true")
-    spa.set_defaults(func=cmd_poly_cleanup_apply)
+    spa.set_defaults(func=cmd_harness_cleanup_apply)
 
     sp = sub.add_parser(
         "add", help="Imperatively add a repo to workspace.json (optionally clone)"
@@ -1723,7 +1741,18 @@ def _add_poly_parser(
     )
     sp.add_argument("name")
     sp.add_argument("--delete-clone", action="store_true")
-    sp.add_argument("--delete-service-md", action="store_true")
+    sp.add_argument(
+        "--delete-component-md",
+        dest="delete_component_md",
+        action="store_true",
+        help="Delete the component metadata markdown (components/<repo>.md)",
+    )
+    sp.add_argument(
+        "--delete-service-md",
+        dest="delete_component_md",
+        action="store_true",
+        help="Alias for --delete-component-md",
+    )
     sp.add_argument(
         "--yes-delete",
         dest="yes_delete",
@@ -1737,7 +1766,7 @@ def _add_poly_parser(
 
     sp = sub.add_parser(
         "sync",
-        help="Fetch/prune repos; optionally clone missing; refresh services index",
+        help="Fetch/prune repos; optionally clone missing; refresh components index",
     )
     sp.add_argument(
         "--clone", action="store_true", help="Clone missing repos before fetching"
@@ -1821,7 +1850,7 @@ def _add_poly_parser(
     sp.add_argument(
         "--refresh-index",
         action="store_true",
-        help="Refresh services index after branching",
+        help="Refresh components index after branching",
     )
     sp.set_defaults(func=cmd_branch)
 
@@ -2153,52 +2182,60 @@ def _add_poly_parser(
     )
     spr.set_defaults(func=cmd_snapshot_restore)
 
-    sp = sub.add_parser("services", help="Service metadata cache operations")
-    sub3 = sp.add_subparsers(dest="services_cmd", required=True)
+    sp = sub.add_parser("components", help="Component metadata cache operations")
+    sub3 = sp.add_subparsers(dest="components_cmd", required=True)
 
     sp3 = sub3.add_parser(
-        "refresh-index", help="Rebuild services/index.json from services/*.md"
+        "refresh-index", help="Rebuild components/index.json from components/*.md"
     )
+    sp3.add_argument(
+        "--print", action="store_true", help="Print a concise view after refresh"
+    )
+    sp3.set_defaults(func=cmd_components_refresh_index)
+
+    sp = sub.add_parser("services", help="Alias for components (microservice naming)")
+    sub3 = sp.add_subparsers(dest="components_cmd", required=True)
+    sp3 = sub3.add_parser("refresh-index", help="Alias for components refresh-index")
     sp3.add_argument(
         "--print", action="store_true", help="Print a concise view after refresh"
     )
     sp3.set_defaults(func=cmd_services_refresh_index)
 
-    sp = sub.add_parser("deps", help="Dependency queries (from services/index.json)")
+    sp = sub.add_parser("deps", help="Dependency queries (from components/index.json)")
     sub4 = sp.add_subparsers(dest="deps_cmd", required=True)
 
-    sp4 = sub4.add_parser("show", help="Show deps + reverse deps for a service")
-    sp4.add_argument("service")
+    sp4 = sub4.add_parser("show", help="Show deps + reverse deps for a component")
+    sp4.add_argument("component")
     sp4.set_defaults(func=cmd_deps_show)
 
-    sp4 = sub4.add_parser("who-uses", help="List services that depend on a service")
-    sp4.add_argument("service")
+    sp4 = sub4.add_parser("who-uses", help="List components that depend on a component")
+    sp4.add_argument("component")
     sp4.set_defaults(func=cmd_deps_who_uses)
 
     sp4 = sub4.add_parser(
-        "closure", help="Transitive deps + reverse deps for a service"
+        "closure", help="Transitive deps + reverse deps for a component"
     )
-    sp4.add_argument("service")
+    sp4.add_argument("component")
     sp4.set_defaults(func=cmd_deps_closure)
 
     sp4 = sub4.add_parser(
         "impacted", help="Transitive reverse deps (who is impacted by changes)"
     )
-    sp4.add_argument("service")
+    sp4.add_argument("component")
     sp4.set_defaults(func=cmd_deps_impacted)
 
     sp = sub.add_parser(
         "impact",
-        help="Impact analysis: changed repos -> impacted services (from services/index.json)",
+        help="Impact analysis: changed repos -> impacted components (from components/index.json)",
     )
     subi = sp.add_subparsers(dest="impact_cmd", required=True)
 
-    spi = subi.add_parser("repos", help="Report impacted services from changed repos")
-    spi.add_argument("changed", nargs="+", help="Changed repo/service names")
-    spi.set_defaults(func=cmd_poly_impact_repos)
+    spi = subi.add_parser("repos", help="Report impacted components from changed repos")
+    spi.add_argument("changed", nargs="+", help="Changed repo/component names")
+    spi.set_defaults(func=cmd_harness_impact_repos)
 
     spi = subi.add_parser(
-        "snapshot", help="Report impacted services from snapshot diff"
+        "snapshot", help="Report impacted components from snapshot diff"
     )
     spi.add_argument("name", help="Snapshot name")
     spi.add_argument(
@@ -2206,7 +2243,7 @@ def _add_poly_parser(
         action="store_true",
         help="Do not treat missing repos/worktrees as changed",
     )
-    spi.set_defaults(func=cmd_poly_impact_snapshot)
+    spi.set_defaults(func=cmd_harness_impact_snapshot)
 
     sp = sub.add_parser("deepen", help="Deepen history of a shallow repo")
     sp.add_argument("repo", help="Repo name")
@@ -2440,18 +2477,7 @@ def build_parser() -> argparse.ArgumentParser:
     spr.add_argument("--force-clean", action="store_true")
     spr.set_defaults(func=cmd_repo_snapshot_restore)
 
-    _add_poly_parser(
-        sub,
-        name="harness",
-        help_text="Workspace harness control plane (preferred)",
-        description_text="Workspace harness control plane (preferred; alias: poly)",
-    )
-    _add_poly_parser(
-        sub,
-        name="poly",
-        help_text="Alias for harness (workspace control plane)",
-        description_text="Alias for harness (workspace control plane)",
-    )
+    _add_harness_parser(sub)
 
     return p
 
@@ -2478,8 +2504,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     except WorkspaceError as e:
         if getattr(args, "json", False):
             try:
-                if getattr(args, "cmd", "") in {"poly", "harness"}:
-                    if getattr(args, "poly_cmd", "") == "init":
+                if getattr(args, "cmd", "") == "harness":
+                    if getattr(args, "harness_cmd", "") == "init":
                         root_arg = str(getattr(args, "root", "") or "").strip()
                         root = (
                             Path(root_arg).expanduser().resolve()
@@ -2506,6 +2532,3 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-    (poly_impact_repos,)
-    (poly_impact_snapshot,)
-    (ImpactResult,)

@@ -63,8 +63,8 @@ class TestWorkspaceSnapshots(unittest.TestCase):
             ws_root = Path(td) / "ws"
             ws_root.mkdir(parents=True, exist_ok=True)
 
-            # Init poly workspace
-            rc0, out0 = _run_json(["poly", "init"], ws_root)
+            # Init harness workspace
+            rc0, out0 = _run_json(["harness", "init"], ws_root)
             self.assertEqual(rc0, 0)
             self.assertTrue(out0.get("ok"))
 
@@ -76,17 +76,21 @@ class TestWorkspaceSnapshots(unittest.TestCase):
             _git_init_repo(r2)
 
             # Add and clone into workspace
-            rc1, out1 = _run_json(["poly", "add", "one", str(r1), "--clone"], ws_root)
+            rc1, out1 = _run_json(
+                ["harness", "add", "one", str(r1), "--clone"], ws_root
+            )
             self.assertEqual(rc1, 0)
             self.assertTrue(out1.get("ok"))
 
-            rc2, out2 = _run_json(["poly", "add", "two", str(r2), "--clone"], ws_root)
+            rc2, out2 = _run_json(
+                ["harness", "add", "two", str(r2), "--clone"], ws_root
+            )
             self.assertEqual(rc2, 0)
             self.assertTrue(out2.get("ok"))
 
             # Snapshot capture
             rc3, out3 = _run_json(
-                ["poly", "snapshot", "capture", "s1", "--all"], ws_root
+                ["harness", "snapshot", "capture", "s1", "--all"], ws_root
             )
             self.assertEqual(rc3, 0)
             self.assertTrue(out3.get("ok"))
@@ -94,11 +98,11 @@ class TestWorkspaceSnapshots(unittest.TestCase):
             self.assertTrue(snap_path.exists())
 
             # Mutate one repo clone
-            clone_one = ws_root / "repos" / "one"
+            clone_one = ws_root / ".loom" / "workspaces" / "repos" / "one"
             _ = _git_commit(clone_one, "change")
 
             # Diff should show changed=1
-            rc4, out4 = _run_json(["poly", "snapshot", "diff", "s1"], ws_root)
+            rc4, out4 = _run_json(["harness", "snapshot", "diff", "s1"], ws_root)
             self.assertEqual(rc4, 0)
             self.assertTrue(out4.get("ok"))
             summary = (out4.get("data") or {}).get("summary") or {}
@@ -106,13 +110,20 @@ class TestWorkspaceSnapshots(unittest.TestCase):
 
             # Restore should reset to snapshot
             rc5, out5 = _run_json(
-                ["poly", "snapshot", "restore", "s1", "--yes", "--force-clean"],
+                [
+                    "harness",
+                    "snapshot",
+                    "restore",
+                    "s1",
+                    "--yes",
+                    "--force-clean",
+                ],
                 ws_root,
             )
             self.assertEqual(rc5, 0)
             self.assertTrue(out5.get("ok"))
 
-            rc6, out6 = _run_json(["poly", "snapshot", "diff", "s1"], ws_root)
+            rc6, out6 = _run_json(["harness", "snapshot", "diff", "s1"], ws_root)
             self.assertEqual(rc6, 0)
             summary2 = (out6.get("data") or {}).get("summary") or {}
             self.assertEqual(int(summary2.get("changed") or 0), 0)

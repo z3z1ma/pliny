@@ -55,7 +55,7 @@ class TestWorkspaceCliUx(unittest.TestCase):
             content = str(data.get("markdown") or "")
             self.assertIn("Workspace Cookbook", content)
 
-    def test_harness_is_poly_alias(self) -> None:
+    def test_harness_init_prints_paths(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             rc, text = _run_text(["harness", "init"], Path(td))
             self.assertEqual(rc, 0)

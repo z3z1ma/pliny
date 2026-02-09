@@ -7,13 +7,13 @@ from agent_loom.core.concurrent import parallel_map
 from agent_loom.core.fs import fs_unescape
 from agent_loom.core.git import is_git_repo
 from agent_loom.core.io import read_json
-from agent_loom.workspace.guards import poly_context
+from agent_loom.workspace.guards import harness_context
 from agent_loom.workspace.repo.core import repo_root as repo_root_fn
 from agent_loom.workspace.state import (
     iter_repos,
     load_workspace,
     worktrees_base,
-    ws_services_dir,
+    ws_components_dir,
     ws_worktrees_dir,
 )
 from agent_loom.workspace.git.core import git_is_dirty, git_worktree_list_porcelain
@@ -25,8 +25,8 @@ class WorkspaceReadError(RuntimeError):
     pass
 
 
-def _find_poly_root(start: Path) -> Optional[Path]:
-    ctx = poly_context(start)
+def _find_harness_root(start: Path) -> Optional[Path]:
+    ctx = harness_context(start)
     if ctx.root and ctx.ws:
         return ctx.root
     return None
@@ -35,17 +35,19 @@ def _find_poly_root(start: Path) -> Optional[Path]:
 def detect_workspace_mode(*, cwd: Path, mode: str, root_arg: str) -> tuple[str, Path]:
     m = (mode or "auto").strip().lower()
     root_s = (root_arg or "").strip()
-    if m not in {"auto", "poly", "repo"}:
-        raise WorkspaceReadError("Invalid mode (expected auto|poly|repo)")
+    if m not in {"auto", "harness", "repo"}:
+        raise WorkspaceReadError("Invalid mode (expected auto|harness|repo)")
 
-    if m == "poly":
-        root = Path(root_s).expanduser().resolve() if root_s else _find_poly_root(cwd)
+    if m == "harness":
+        root = (
+            Path(root_s).expanduser().resolve() if root_s else _find_harness_root(cwd)
+        )
         if not root:
             raise WorkspaceReadError(
-                "Unable to find workspace root (expected workspace.json + .loom/). Use --workspace-root."
+                "Unable to find harness root (expected .loom/workspaces/workspace.json). Use --workspace-root."
             )
         _ = load_workspace(root)
-        return "poly", root
+        return "harness", root
 
     if m == "repo":
         if root_s:
@@ -59,9 +61,9 @@ def detect_workspace_mode(*, cwd: Path, mode: str, root_arg: str) -> tuple[str, 
         return "repo", repo_root_fn()
 
     # auto
-    poly_root = _find_poly_root(cwd)
-    if poly_root is not None:
-        return "poly", poly_root
+    harness_root = _find_harness_root(cwd)
+    if harness_root is not None:
+        return "harness", harness_root
     if is_git_repo(cwd):
         return "repo", cwd.resolve()
     return "repo", repo_root_fn()
@@ -81,13 +83,13 @@ def workspace_meta(*, mode: str, root: Path) -> dict[str, Any]:
             groups.append(fs_unescape(p.name))
     repos = sorted(iter_repos(ws).keys())
     return {
-        "mode": "poly",
+        "mode": "harness",
         "root": str(root.resolve()),
         "groups": groups,
         "repos": repos,
         "paths": {
             "worktrees_dir": str((root / ws_worktrees_dir(ws)).resolve()),
-            "services_dir": str((root / ws_services_dir(ws)).resolve()),
+            "components_dir": str((root / ws_components_dir(ws)).resolve()),
         },
     }
 
@@ -152,7 +154,7 @@ def repo_worktrees(
     return {"worktrees": items2, "count": len(items2)}
 
 
-def poly_worktrees(
+def harness_worktrees(
     *,
     root: Path,
     group: str = "",
@@ -181,7 +183,7 @@ def poly_worktrees(
                 if repo and rname != repo:
                     continue
                 entry: dict[str, Any] = {
-                    "mode": "poly",
+                    "mode": "harness",
                     "group": g,
                     "repo": rname,
                     "path": str(repo_dir.resolve()),
@@ -213,7 +215,7 @@ def poly_worktrees(
             expected = base / rname
             items.append(
                 {
-                    "mode": "poly",
+                    "mode": "harness",
                     "group": group,
                     "repo": rname,
                     "path": str(expected.resolve()),
@@ -253,9 +255,9 @@ def poly_worktrees(
     return {"worktrees": items, "count": len(items)}
 
 
-def services_index(*, root: Path) -> dict[str, Any] | None:
+def components_index(*, root: Path) -> dict[str, Any] | None:
     ws = load_workspace(root)
-    idx = root / ws_services_dir(ws) / "index.json"
+    idx = root / ws_components_dir(ws) / "index.json"
     if not idx.exists():
         return None
     try:
@@ -277,7 +279,7 @@ def worktree_diff(
     """Return a worktree diff (split by file) for a known worktree.
 
     Security posture: `path` must match a worktree returned by the corresponding
-    `repo_worktrees` / `poly_worktrees` listing for the same mode/root.
+    `repo_worktrees` / `harness_worktrees` listing for the same mode/root.
     """
 
     requested = Path(str(path or "").strip()).expanduser().resolve()
@@ -287,8 +289,8 @@ def worktree_diff(
     if mode == "repo":
         listing = repo_worktrees(root=root, q="", dirty_only=False)
     else:
-        # In poly mode, allow diffing any present worktree under the root.
-        listing = poly_worktrees(
+        # In harness mode, allow diffing any present worktree under the root.
+        listing = harness_worktrees(
             root=root,
             group="",
             repo="",
@@ -318,7 +320,7 @@ def worktree_diff(
 
     # Determine default branch for cumulative resolution.
     default_branch = "main"
-    if mode == "poly":
+    if mode == "harness":
         try:
             ws = load_workspace(root)
             repo_name = str(meta.get("repo") or "").strip()

@@ -113,12 +113,12 @@ class RepoWorktreeRemoveResult:
 
 
 @dataclass(frozen=True)
-class PolyInitResult:
+class HarnessInitResult:
     workspace_file: str
     repos_dir: str
     worktrees_dir: str
     states_dir: str
-    services_dir: str
+    components_dir: str
     gitignore_path: str
     created: List[str]
     updated_gitignore: bool
@@ -152,7 +152,7 @@ class SnapshotRestoreResult:
 
 
 @dataclass(frozen=True)
-class PolyExecResult:
+class HarnessExecResult:
     cmd: List[str]
     target: Dict[str, Any]
     results: List[Dict[str, Any]]
@@ -216,7 +216,7 @@ class AddRepoResult:
 class RemoveRepoResult:
     repo: str
     deleted_clone: bool
-    deleted_service_md: bool
+    deleted_component_md: bool
 
 
 @dataclass(frozen=True)
@@ -230,13 +230,13 @@ class ContextResult:
     workspace: Dict[str, Any]
     repos: List[Dict[str, Any]]
     worktrees: List[Dict[str, Any]]
-    services_index: Optional[Dict[str, Any]]
+    components_index: Optional[Dict[str, Any]]
 
 
 @dataclass(frozen=True)
 class SyncResult:
     results: List[Dict[str, Any]]
-    services_index: Optional[Dict[str, Any]]
+    components_index: Optional[Dict[str, Any]]
 
 
 @dataclass(frozen=True)
@@ -248,7 +248,7 @@ class StatusResult:
 class BranchResult:
     branch: str
     repos: List[Dict[str, Any]]
-    services_index: Optional[Dict[str, Any]]
+    components_index: Optional[Dict[str, Any]]
 
 
 @dataclass(frozen=True)
@@ -287,20 +287,20 @@ class SnapshotResult:
 
 
 @dataclass(frozen=True)
-class ServicesRefreshIndexResult:
-    services_index_path: str
+class ComponentsRefreshIndexResult:
+    components_index_path: str
     index: Dict[str, Any]
 
 
 @dataclass(frozen=True)
 class DepsShowResult:
-    service: str
+    component: str
     data: Dict[str, Any]
 
 
 @dataclass(frozen=True)
 class DepsWhoUsesResult:
-    service: str
+    component: str
     used_by: List[str]
 
 
@@ -336,8 +336,8 @@ __all__ = [
     "LeaseRenewResult",
     "LeaseShowResult",
     "MergeAttemptResult",
-    "PolyInitResult",
-    "PolyExecResult",
+    "HarnessInitResult",
+    "HarnessExecResult",
     "RepoStatusResult",
     "RepoInitResult",
     "RepoWorktreeAddResult",
@@ -346,7 +346,7 @@ __all__ = [
     "RepoWorktreePruneResult",
     "RepoWorktreeRemoveResult",
     "RemoveRepoResult",
-    "ServicesRefreshIndexResult",
+    "ComponentsRefreshIndexResult",
     "SnapshotResult",
     "SnapshotDiffResult",
     "SnapshotRestoreResult",

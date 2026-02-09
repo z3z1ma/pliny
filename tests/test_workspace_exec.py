@@ -40,12 +40,12 @@ def _git_init_repo(path: Path) -> None:
 
 
 class TestWorkspaceExec(unittest.TestCase):
-    def test_poly_exec_runs_command_in_each_repo(self) -> None:
+    def test_harness_exec_runs_command_in_each_repo(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             ws_root = Path(td) / "ws"
             ws_root.mkdir(parents=True, exist_ok=True)
 
-            rc0, out0 = _run_json(["poly", "init"], ws_root)
+            rc0, out0 = _run_json(["harness", "init"], ws_root)
             self.assertEqual(rc0, 0)
             self.assertTrue(out0.get("ok"))
 
@@ -55,13 +55,13 @@ class TestWorkspaceExec(unittest.TestCase):
             _git_init_repo(r1)
             _git_init_repo(r2)
 
-            _run_json(["poly", "add", "one", str(r1), "--clone"], ws_root)
-            _run_json(["poly", "add", "two", str(r2), "--clone"], ws_root)
+            _run_json(["harness", "add", "one", str(r1), "--clone"], ws_root)
+            _run_json(["harness", "add", "two", str(r2), "--clone"], ws_root)
 
             # Use a stable git command
             rc, out = _run_json(
                 [
-                    "poly",
+                    "harness",
                     "exec",
                     "--all",
                     "--",
