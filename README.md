@@ -37,6 +37,165 @@ Each subsystem has a CLI surface and an on-disk footprint.
 | Compound | `loom compound` | `.opencode/` | Compounding: skills as procedural memory (SKILL.md), plus tooling scaffolding |
 | Dashboard | `loom dashboard` | - | HTTP API for dashboards (see `docs/openapi.yaml`) |
 
+## Starter snippets (agent copy/paste)
+
+These are intentionally directive. They explain what each subsystem is for, why it matters, and when to reach for it; the mechanics are progressive disclosure via `-h` and `prime`.
+
+Canonical loop (what Loom is optimizing for):
+
+- Ticket: externalize intent + state (the work ledger)
+- Workspace: isolate execution (safe, parallel worktrees)
+- Memory: persist what you learned and general domain knowledge (scoped, recallable context)
+- Compound: persist how to do it next time (procedures as Skills)
+
+Treat the CLI as the source of truth. Prefer `loom ...` commands over hand-editing `.loom/**` files so locks/audits/indexes stay consistent.
+
+### Ticket
+
+We use Loom Ticket for Git-backed issue tracking and as the durable work ledger for agents.
+
+A ticket is a single Markdown document with YAML frontmatter (status/priority/type/tags) plus a readable body (description/design/notes). Tickets also have first-class relationships: deps (blocking), links (related), and parent/children (hierarchy), so "ready vs blocked" is computable rather than debatable. Writes are guarded (locks), auditable (jsonl audit log), and automatable (`--json` outputs), which is what makes it safe for humans and agents to collaborate. References are flexible: ids, `#id`, filenames, and paths normalize to a ticket id; partial ids resolve unless ambiguous.
+
+This matters because agents lose state without file-backed intent: tickets act as the write-ahead log that prevents rework and makes progress reviewable. The deps/ready/blocked surfaces turn planning into a graph problem instead of a vibe check. Claims (leases) provide an explicit concurrency primitive: multiple agents can look, but only one should mutate at a time.
+
+Operationally, any non-trivial work starts with a ticket; treat it as the source of truth for scope, current status, and next actions. Use Ticket for tasks/bugs/features and coordination; put reusable lessons into Memory and durable procedure into Compound. Use deps when something is truly blocked, use notes for short timestamped progress, and use `--json` when driving from scripts. If you are about to hand-edit a ticket file, stop: prefer `loom ticket update` so locks/audit/normalization rules are respected.
+
+On disk: `.loom/ticket/`
+
+Start here:
+
+```bash
+loom ticket -h
+loom ticket prime
+
+loom ticket create "<title>" --type task --priority 2 --tags docs
+loom ticket ready
+loom ticket show <ticket-id>
+loom ticket add-note <ticket-id> "<progress update>"
+```
+
+If you're coordinating multiple agents:
+
+```bash
+loom ticket claim <ticket-id> --ttl 45m
+loom ticket dep-add <ticket-id> <blocking-ticket-id>
+loom ticket view <ticket-id>
+```
+
+Use these when you need planning leverage (not more prose):
+
+```bash
+loom ticket ready
+loom ticket blocked
+loom ticket dep <ticket-id>
+loom ticket query --format json
+```
+
+Common failure mode this prevents: "we kept working, but nobody can explain the current state." Tickets make state a file.
+
+### Memory
+
+We use Loom Memory for durable knowledge and context packs: Obsidian-like Markdown notes with scopes + links, indexed for fast recall.
+
+The files are the source of truth (Markdown + YAML frontmatter); the sqlite index is derived and rebuildable. Notes can be scoped to the real world: `file:...`, `folder:...`, `glob:...`, `command:...`, `filetype:...`, `tag:...`. Memory is also a link graph: wikilinks like `[[concept]]` turn isolated notes into navigable context. Visibilities exist for a reason: shared (committed), personal (gitignored), ephemeral (scratch). Use the right bucket.
+
+This matters because agents need small, relevant context: scoped recall produces a tight context pack instead of dumping the vault into the prompt. Memory captures the "why" behind decisions and the "gotchas" behind fixes, which tickets should not carry forever. Because the index is derived, you can trust the on-disk notes and rebuild safely (`reindex`) when needed.
+
+Write Memory after you discover a sharp edge, a convention, a design rationale, a flaky test root cause, or a debugging playbook. Before starting similar work, recall memory scoped to the code or command you are about to touch. When files move, run janitor to keep file scopes honest; when a note is obsolete, deprecate it (soft forget) instead of deleting history. Capture command output into Memory when it is evidence (test failures, logs, repro steps) and scope it with `command:`.
+
+On disk: `.loom/memory/`
+
+Start here:
+
+```bash
+loom memory -h
+loom memory prime
+
+loom memory recall "<query>" --context --format prompt
+loom memory add --title "<title>" --body "<what you learned>" --command "<the command you ran>"
+```
+
+Rules of thumb:
+
+- Prefer Memory for durable notes; prefer Tickets for work items.
+- Scope notes to the thing that triggered them (`--command` or `--scope file:...`) so recall stays relevant.
+- Add wikilinks like `[[concept-id]]` in note bodies when you reference concepts.
+
+High leverage commands (context hygiene):
+
+```bash
+loom memory recall "<query>" --scope file:<path> --context --format prompt
+loom memory grep "<regex>"
+loom memory link validate
+loom memory janitor report
+```
+
+Common failure mode this prevents: "we fixed it once, then forgot the real reason." Memory makes the why retrievable.
+
+### Workspace
+
+We use Loom Workspace for safe, repeatable execution: isolate changes in worktrees, snapshot before risk, and coordinate across repos explicitly when needed.
+
+This is a single-repo worktree manager; the harness subcommand space is a multi-repo control plane, and they do not auto-dispatch into each other. Workspace provides guardrails: deterministic selection (`--repos`/`--set`/`--tag`/`--all`), safe cleanup (TTL + suggest/apply), and recovery tools (snapshots/diffs). It is the "where" of work: every agent or ticket should have a dedicated worktree; risky operations should be preceded by a snapshot. Sandbox worktrees exist for spikes with expiry; annotate/TTL features exist so cleanup can be safe and unsurprising.
+
+This matters because git worktrees are cheap isolation and Loom makes them systematic (naming, metadata, cleanup) so parallel agent work stays sane. Snapshots and diffs are the difference between a controlled experiment and a mystery; they make failures reproducible and reversible. Harness mode prevents accidental cross-repo blast radius by forcing explicit intent when touching many repos.
+
+Before you change code, ensure a worktree for the branch/ticket. If you are about to rebase/merge/force-clean, snapshot first. Use sandbox worktrees for spikes with TTL and cleanup suggest/apply to remove expired work safely. Use harness mode when you need to run commands, create branches, or manage worktrees across many repos; if you are about to run a command across many repos, use harness selection flags explicitly so the blast radius is intentional.
+
+On disk: repo mode `.loom/workspace/`; harness mode `.loom/workspaces/workspace.json`
+
+Start here:
+
+```bash
+loom workspace -h
+loom workspace prime
+
+loom workspace worktree ensure <branch> --base-ref main
+loom workspace snapshot capture pre-change
+loom workspace worktree diff --mode dirty
+```
+
+If you're about to do something risky:
+
+```bash
+loom workspace snapshot capture pre-rebase
+loom workspace merge attempt --worktree <path> --base main --topic <branch>
+```
+
+If you're operating across many repos (harness mode):
+
+```bash
+loom workspace harness -h
+loom workspace harness init
+loom workspace harness status --all
+loom workspace harness exec --tag <tag> --jobs 4 -- uv run pytest -q
+```
+
+Common failure mode this prevents: "the repo is dirty and I don't know where the change came from." Worktrees + snapshots isolate causality.
+
+### Compound
+
+We use Loom Compound for deterministic learning: convert repeated wins (and failures) into Skills so future agents follow procedure, not vibes.
+
+Skills are procedural memory stored as Markdown (`.opencode/skills/<name>/SKILL.md`) with crisp, repeatable steps. Compound records evidence (Episodes) and governance (Decisions) so "this is how we do it" is traceable and reviewable. It can regenerate derived artifacts (`refresh`) and stage/commit learning outputs (`sync`) so the repo stays coherent. Compound is how you turn a good run into institutional memory that survives model swaps, new teammates, and time.
+
+This matters because the highest leverage output of agent work is durable procedure: skills prevent rediscovering workflows every week. Determinism + evidence reduce prompt drift; skills become a stable contract that agents can follow and reviewers can trust. Compounding turns "tribal knowledge" into files you can diff, enforce, and ship.
+
+Use Compound after review/ship, after incidents, or whenever you notice a repeated pattern that should become a procedure. Use it when you want consistent tool usage across agents/repos (preferred commands, safety steps, regression test patterns). If you hear yourself say "next time, remember to...", that is a Skill candidate.
+
+On disk: `.opencode/skills/`, `.loom/compound/`
+
+Start here:
+
+```bash
+loom compound -h
+loom compound prime
+
+loom compound init
+loom compound refresh
+loom compound sync
+```
+
 ## Install
 
 Requirements:
@@ -57,7 +216,7 @@ Confirm the CLI:
 loom --help
 ```
 
-## Quickstart (repo mode)
+## Quickstart (single repo)
 
 Initialize everything:
 
@@ -81,7 +240,7 @@ Start a team run and spawn a worker on the ticket:
 
 ```bash
 loom team start core --objective "Build the Loom dashboard"
-loom team spawn core <ticket-id>
+loom team spawn core <ticket-id> # the manager handles this for you, but this is how you would do it manually if you wanted to script it or drive it from an agent
 ```
 
 Pause/resume a run (clock out/in):
