@@ -15,12 +15,20 @@
           "sha256": "4fe4e1e8398a2babfe10a7dff59e901baa4ec47894b47756dcb31e9efd74b630"
         },
         {
+          "path": ".opencode/commands/loom-compound.md",
+          "sha256": "1c9a0b17ab56b4bdd2768e22a34591647ddb0794fd59b53794e4f44cfd96bf2d"
+        },
+        {
           "path": ".opencode/commands/loom-plan.md",
           "sha256": "21c0a00f6f39b451c1e78e43bc5bfe61ddb08b116b3e065f05da6c8fdf94cbd4"
         },
         {
           "path": ".opencode/commands/loom-review.md",
           "sha256": "2922346ead20f5e34dbd01160e36b23fdd3418b14362d2c2f4cebc5d5d86dc8b"
+        },
+        {
+          "path": ".opencode/commands/loom-work.md",
+          "sha256": "606fb72462a24167fc87e867da0c16ceeedb864aa5a5d5bdce3ba4392fd9fb79"
         },
         {
           "path": ".opencode/compound/.gitignore",
@@ -36,7 +44,7 @@
         }
       ],
       "id": "loom-compound-core",
-      "installed_at": "2026-02-09T19:37:20.780544Z",
+      "installed_at": "2026-02-09T20:01:11.896312Z",
       "version": "0.1.0"
     }
   ],
