@@ -1,0 +1,5670 @@
+{
+  "created_at": "2026-02-09T20:53:24.282450Z",
+  "episode_id": "883055ed0f173f797d74a5673db40cf642b8191663f6ef312188b017e1d17914",
+  "git": {
+    "base_ref": "origin/main",
+    "base_sha": "a4b960a2ccee937026cb931e55b500fd4b7de827",
+    "changed_files": [],
+    "diffstat": "",
+    "diffstat_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dirty": true,
+    "head_sha": "a4b960a2ccee937026cb931e55b500fd4b7de827",
+    "patch": "\n",
+    "patch_omitted": false,
+    "patch_sha256": ""
+  },
+  "observations": {
+    "cursor": {
+      "end_count": 98328,
+      "end_offset_bytes": 17376580,
+      "file_prefix_sha256": "ea08844a853b43d8b06f8d9d28a0a9f67156d83075061a491564d6b3cbe1350f",
+      "reset_detected": false,
+      "start_count": 97839,
+      "start_offset_bytes": 17280591,
+      "tail_sha256": "a305cd8839ea47de8ae82760ddb1b85c9dcd84adeb99575c77783f6859e0321d"
+    },
+    "included": [
+      {
+        "id": "1e501a03-6971-4092-92c1-e27be7af1f4e",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:36:30.176Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "882767d5-b3e6-4307-99c5-d8f92e8f7a33",
+        "properties": {
+          "keys": [
+            "message",
+            "variant",
+            "duration"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:36:30.459Z",
+        "type": "tui.toast.show"
+      },
+      {
+        "id": "0c663bca-a450-40a3-afc9-bdbd6eaa8f48",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:39:00.481Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "ca8c2ee2-acf5-4e35-8ce7-1b26aa167bde",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:39:00.556Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "bb16b7f3-9ca5-4d79-80fb-fd9ac740eb9f",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:39:50.120Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "dd2e90a1-f571-4df7-b374-3e3749c87fbc",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:39:50.283Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "41064464-fd30-4c95-a10d-c34d4b9fe80e",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:39:50.283Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "3aa4300e-7149-46e7-a947-a5b77570bafd",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:41:42.992Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "8eb7630a-bfb1-441c-bc6c-842dd729ea94",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:41:45.681Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "5b1a10c8-5fd3-44a7-b007-656538a6ab1a",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:41:45.829Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "342830e3-e0df-446a-8b4a-f0d446c7ba44",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:41:45.829Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "c49b8c97-49d7-4a51-bbd4-0ed872546c17",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:41:45.829Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "0e53b3ac-6c37-4c69-9c8c-c2c65567de52",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:41.203Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "c5626cc7-4efe-4a48-8c51-01ac3e11ab27",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:45:41.210Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "7ed51047-d90d-4c17-af10-16bae14b4791",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:45:41.211Z",
+        "type": "session.status"
+      },
+      {
+        "id": "4e58f305-65d3-480c-a4de-8a33527398e5",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:41.426Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "3d37e3d0-7fb1-44ad-83a8-87062ec63a63",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:45:42.241Z",
+        "type": "session.status"
+      },
+      {
+        "id": "003a86a5-01d0-481d-955d-26571eda2c84",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:42.246Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "28fb1bc7-9be8-47b4-a438-dc6e34fd488e",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:45:42.247Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "a063663b-4f12-4e88-b9d7-c2f273dbae77",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:45:42.248Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "c4573211-98ec-43ba-a1df-6e9ab5d3902f",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:45.440Z",
+        "type": "message.updated"
+      },
+      {
+        "args": {
+          "include": "*.py",
+          "path": "src/agent_loom/memory",
+          "pattern": "def recall_impl|def recall\\(|scope\\b.*match|SCOPE_KINDS|match_scopes|excluded_scopes|scopes_json"
+        },
+        "id": "cbb06c8d-5dae-4f29-b1f1-be8e5bfbec53",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "pattern=def recall_impl|def recall\\(|scope\\b.*match|SCOPE_KINDS|match_scopes|excluded_scopes|scopes_json include=*.py",
+        "tool": "grep",
+        "ts": "2026-02-09T20:45:54.952Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "filePath": "/Users/alexanderbutler/code_projects/personal/agent-loom/src/agent_loom/memory/scopes.py"
+        },
+        "id": "d354ffba-8bfa-438f-b981-ad672c1becdc",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "filePath=/Users/alexanderbutler/code_projects/personal/agent-loom/src/agent_loom/memory/scopes.py",
+        "tool": "read",
+        "ts": "2026-02-09T20:45:54.966Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "command_len": 70,
+          "command_sha256": "7ec3dfc2f11278639c0a7ab2c597dbb88d3c0b95e18ae02558979757be776640",
+          "redacted": true
+        },
+        "id": "4935c30a-4c2b-4137-9040-89bfa42e3b22",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=7ec3dfc2f11278639c0a7ab2c597dbb88d3c0b95e18ae02558979757be776640 command_len=70",
+        "tool": "bash",
+        "ts": "2026-02-09T20:45:54.969Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "4446068b-c9b9-4593-8e19-ad6b3e59b5a7",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "read",
+        "ts": "2026-02-09T20:45:54.978Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "44a4ddd0-885c-43d2-b91e-7641934db5a4",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "grep",
+        "ts": "2026-02-09T20:45:55.004Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "9e78ffa5-f1d3-4f13-9814-150a26dbd2fe",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.294Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "446bbacc-3eeb-476c-b844-e44e3125b2bb",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.295Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "d4acce6b-213d-4417-84ad-97c3f5825793",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.295Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "d474d3f3-c855-455d-ab24-a9190966a6b4",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.295Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "5ddc760d-6730-4f87-831c-6e646512ea39",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.295Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "32b41d93-12b2-4983-94eb-6f4fce63256a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.389Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "d5dbe07d-6bd2-47e6-b0f2-dbd19bbe98ae",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.389Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "8c6bf7f9-dc96-4064-aa5b-68742a453cf7",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.389Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "28adf9cf-93ee-400d-8522-f3612dc058c4",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.458Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "da5d78eb-56d5-43bb-858e-a1d4ce26bdf0",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.458Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2ad6ef40-afac-4364-8e58-852b7cd3a9fa",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.736Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "b9848ad0-7396-4d76-bf35-c9219e2eca33",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.737Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "425294ed-25d4-4854-a0d4-b43b742fe77d",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.736Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "cfd57f15-2ba3-4915-bddf-f2b5cca0c482",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.737Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "4b313c74-b44a-49d1-a920-019986a01321",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.737Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "fa1c7840-f15a-4686-b2c7-055363ff1fe2",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.737Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "a04830f2-ebc8-44e9-976c-5e8002b21948",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.968Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "040d3ec1-ec6a-40a2-8a58-32ba017e197f",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.969Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "8e25e33a-7be5-4392-a529-08c005c79449",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.969Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2f205dc2-08d5-4f64-9c9b-988a16d3a0e1",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.969Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "0fbb188d-fe5d-45a0-9ed6-3af9b70d1d1a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:55.969Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "d73f6c7f-cad0-47b7-8024-409b42fa770f",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.029Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": null,
+        "id": "64e3f6c5-6b1f-4d04-9d05-84c0fdd465ef",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:45:56.084Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "9ee6a906-adfa-4ae4-9a9f-0c1c2774d1fc",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.087Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d6a9c621-bd73-4fd0-b225-6164c4c8e52e",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.089Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "f465b671-6ce1-40c3-a09e-3aca8152cfc1",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:45:56.089Z",
+        "type": "session.status"
+      },
+      {
+        "id": "6b0ff29c-8f6c-4a3c-b1e0-31418b147f5e",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.245Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "da3fae6e-3e5b-429b-a2f6-855beafd07c8",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.246Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "5548bce2-6cee-4fa2-87ab-17687e2e4d53",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:45:56.248Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "1a8fc438-6964-4a1c-b10a-fe44c600dcea",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:45:56.248Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "04e9115f-4605-44a6-ac00-1e06a75b8009",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.294Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "fcb9ed8e-b4f1-4671-b699-47eb02c3bc3f",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.294Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "834a1069-54d3-4a76-9564-a7b60742266a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.377Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "5cba3b48-8011-4be9-aeb0-c5f695d9330c",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.377Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "112e0923-1776-423c-9a40-f62f9f05280c",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:45:56.704Z",
+        "type": "session.status"
+      },
+      {
+        "id": "f21fb72e-62f2-4e29-900b-e1cd5628fe82",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.724Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "ab23ff89-a313-411a-92d0-775c013a9b5a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.725Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "d6dd9842-2388-47da-aa7d-249b0442b9b6",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.725Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "b26d44ab-ff73-4673-8347-acb06b2012f8",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.725Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2b544e66-3fda-4054-b848-00cf97eaf5ef",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.785Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "502cd47a-12ff-4b66-961a-d6d2856d16e9",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.843Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "bc6f7cfe-0c2c-4e3e-82b0-4f0f5dcca78e",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.844Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "0901c2af-b161-411d-9a6f-11ac7de08d01",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.844Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "523f19fd-e4f6-4b34-8a42-ec8808a644cf",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.844Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2976af60-7ed8-4d22-9293-cfada8e942c2",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.844Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "b496da6a-20b5-471e-941a-ca8097ba745d",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.844Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "70b91411-d13e-4de9-8566-2aab14d5ab20",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.913Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "434e6334-e16b-457c-99d5-1c04653b7f58",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.964Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "d806c2a8-308f-4b34-afc0-b06cdfbb349a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.964Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "ce690e60-f98e-43c4-8336-5e03e0e50a43",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:45:56.964Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": {
+          "filePath": "/Users/alexanderbutler/code_projects/personal/agent-loom/src/agent_loom/memory/recall.py",
+          "limit": 420,
+          "offset": 200
+        },
+        "id": "b3e88a57-fde1-454d-a419-fbeddb70c069",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "filePath=/Users/alexanderbutler/code_projects/personal/agent-loom/src/agent_loom/memory/recall.py",
+        "tool": "read",
+        "ts": "2026-02-09T20:46:43.652Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "include": "*.py",
+          "path": "src/agent_loom/memory/recall.py",
+          "pattern": "parse_scope_string\\(|validate_file_scopes_exist\\(|scope_matches_context\\("
+        },
+        "id": "600d9c77-cf47-4835-96f3-0afd1a98af5b",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "pattern=parse_scope_string\\(|validate_file_scopes_exist\\(|scope_matches_context\\( include=*.py",
+        "tool": "grep",
+        "ts": "2026-02-09T20:46:43.656Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "f6d85b6f-fdd9-4225-a61f-7140a7b9b648",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "read",
+        "ts": "2026-02-09T20:46:43.660Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "5ace9e64-a025-458b-909c-22fb9ec569ba",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "grep",
+        "ts": "2026-02-09T20:46:43.683Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "c308722a-09ed-4db0-8890-9fd7fbae834b",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:43.907Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "17ee026c-fa4b-4d07-bac2-acfe345e93f0",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:46:43.909Z",
+        "type": "session.status"
+      },
+      {
+        "id": "cc351536-5bd2-4b84-9cd7-70f37417b1b2",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:43.909Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "8ee0d558-c63c-4752-a1ea-279bfd1bd892",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:43.917Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "fea666cd-6fa7-48e8-a397-5d03db1ac0dd",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:43.917Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2b9cc018-21db-42d4-94d9-bc011a98e623",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:43.917Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "60b99027-d31a-4b96-9828-11dd82623811",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:43.917Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "020d994a-86b2-4060-b2bc-50704ece2d78",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:43.917Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "85ed69d3-17b6-4e2b-b9aa-e64b502703f7",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.016Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "e139f9f0-105b-4a0a-aa71-615094d49866",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.016Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "f69e2390-9e9d-48f4-aa59-051d202b939c",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.017Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "10f6938a-9c0d-48d4-b660-95727735e1f7",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.052Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a393a215-8304-487c-85f7-af617673f10b",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.053Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "92443c08-8391-46e4-88b5-e651174959b0",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:46:44.055Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "d20a2599-a5a0-40f3-9f14-2a30d8f942dd",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:46:44.056Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "9d40a807-2b08-464b-9141-01da84e5f0aa",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.087Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "273b1c0b-db1e-4547-8679-509b6725426c",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.088Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "ddff4ce0-a2ac-4ea8-b22c-00ade72dfa58",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.260Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "3284a1a4-0c39-4872-85a5-2221280bcdad",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.260Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "187c269b-f7ad-4bf8-ad62-c245b8ffa008",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.260Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2bd54278-34e6-403d-aa42-db2cce29a3c3",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.260Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "0bfb08aa-bce6-41d7-89f1-90caa5e29284",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.261Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "c51bea1f-6705-4a7b-8ea2-82588f39fa26",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.261Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "f386d5ba-bad3-44ef-8202-8ac380ed7908",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.260Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "a07b4b30-96e7-4dab-86fa-8b5c6e9413ea",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:46:44.492Z",
+        "type": "session.status"
+      },
+      {
+        "id": "c7b04977-34c0-47fa-900f-7c22b44120db",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.507Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "c4483cb9-3aa9-47af-bbab-dd5c6d0eb85b",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.507Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "ee9f1ee5-c080-4828-bdbc-5b58a6fafb40",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.507Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "c7db578f-7b0d-49ac-888b-2bc9b2d3d73d",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.508Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "724a2a9e-9901-4c32-9a16-b09cb32d107d",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.508Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "57ffb686-3ad2-42cb-a1a5-3ff2e3a732ac",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.570Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "68baa196-ab79-48c7-badf-d141a4901380",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.729Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2e63dd76-757d-4630-88e8-04d876231efd",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.729Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "627fc117-c1ea-484c-a739-429b4eae1e32",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:44.957Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "d27bcb6e-f2ab-4208-99fb-0e196d7fca12",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.046Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "bdf60d0c-0223-421b-8512-7e1a95cde841",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.046Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "a4bdb079-f4e9-4166-a2ce-5c6395df54ae",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.382Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "0c44fa66-9608-4768-b1bc-1ccd7ec8f0dc",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.382Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "7d4d8822-15e0-47ee-95b9-d4ba2b051834",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.382Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "86993ab2-bbc0-4227-9843-83bd4710699e",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.382Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "6709ff3a-d003-45b6-980a-a5815857d407",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.448Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "51c25ee4-484f-4589-a666-448092cc0198",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.449Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "a47f0353-2904-40bf-955e-e3e8b9875cf6",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.555Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "ef4a7416-1b8c-401c-8284-57d4a3e09071",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.555Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "64cc2a8f-d0a6-45ec-b05a-f15972eab1f5",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.555Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "db57c8c3-ba72-41ec-affa-7dfb8c8023eb",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.555Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "83d95fed-59a8-40f6-91dd-61ba21f9d17a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.555Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "6ddc05e5-f847-4010-87ec-8a269a6637c7",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.555Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "00ebcd0c-e615-4cf4-9736-b97b3a367845",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.604Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "b8ae16e4-8411-4990-8530-3f9c06c38d7d",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.605Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "32628dc6-987c-48f0-9a4b-8d7d735dabd8",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:45.605Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": {
+          "filePath": "/Users/alexanderbutler/code_projects/personal/agent-loom/src/agent_loom/memory/recall.py",
+          "limit": 140,
+          "offset": 60
+        },
+        "id": "faeb1e6a-9888-4168-a324-992ec5070dca",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "filePath=/Users/alexanderbutler/code_projects/personal/agent-loom/src/agent_loom/memory/recall.py",
+        "tool": "read",
+        "ts": "2026-02-09T20:46:48.793Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "13f4ddba-0fb8-4bf9-aa18-7d09bf85ed4d",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "read",
+        "ts": "2026-02-09T20:46:48.797Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "e54259fb-877b-4992-9876-69977b6b7dd8",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:48.918Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "babb8f2a-ad67-4ccb-b47b-498351b22b68",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:48.920Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2d25dc4a-553e-4668-b7af-36dde9537a84",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:46:48.920Z",
+        "type": "session.status"
+      },
+      {
+        "id": "151f541a-7d3f-4134-81a6-a9695c545918",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.003Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "f918c0a3-5e65-4e0f-a102-80290e5b22eb",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.004Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "9d3a76ae-bcd3-4dfd-b30b-948758f83205",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:46:49.006Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "6284dea2-afe9-44ed-a374-2379341bc749",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:46:49.006Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "f2a578f7-27c8-4a80-b2a0-3c585795b160",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.178Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "80961d37-0ac3-4783-8287-fec3ec72994d",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.178Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "573ddef4-9526-4c1d-87f4-feec3f2ac8da",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.178Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "634e58bd-2db9-428c-a193-78f48477d93b",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.352Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "53123a37-570f-4f41-866b-f7d678647137",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:46:49.461Z",
+        "type": "session.status"
+      },
+      {
+        "id": "9318e35b-7eaa-4b1c-9b6b-c8f4e792559f",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.484Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "de1e09ed-2d62-466f-9712-faa1121eea3a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.521Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "5e11f690-3d39-477e-a37e-c5e5d69f0bf7",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.521Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "8b32bcc7-34f0-4657-a970-1eac0a6b2dff",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.521Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "b4bb0604-d9b5-423e-9514-47275a142fff",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.521Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "6ae17ba6-3144-41f7-aa26-9651a731c69e",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:46:49.521Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": {
+          "filePath": "/Users/alexanderbutler/code_projects/personal/agent-loom/src/agent_loom/memory/recall.py",
+          "limit": 70,
+          "offset": 1240
+        },
+        "id": "b7388bfa-5c0a-4a65-87c3-c518415eb8c5",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "filePath=/Users/alexanderbutler/code_projects/personal/agent-loom/src/agent_loom/memory/recall.py",
+        "tool": "read",
+        "ts": "2026-02-09T20:47:02.445Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "3db1e176-7d94-4ef2-a6e0-0fc126c4a43a",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "read",
+        "ts": "2026-02-09T20:47:02.451Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "da83e101-a67e-401e-9b99-66ebcb4fa116",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:02.455Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a73a2f4c-2a62-4165-9993-8f3860643d02",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:02.459Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "932ad937-e4aa-44f8-ad04-b67f98764fd0",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:47:02.459Z",
+        "type": "session.status"
+      },
+      {
+        "id": "ebd979fb-dbc0-4c89-a81e-51212938505d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:02.622Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "1d725c06-dd61-4e31-b46f-2e9ca9fc6f4c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:02.623Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2479f4c1-747f-4075-8a13-a52f74e27593",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:47:02.625Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "fca6b673-75a9-49b4-add0-b6ee16534d53",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:47:02.626Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "76e0c6d7-25bc-4197-9d45-798297367330",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:02.838Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "eb6171ae-0bd8-4417-8867-cc5d49b231ba",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:02.838Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "727a63c9-a1a2-4b2d-be11-a0c3541181f6",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:02.837Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "8d3739d3-a265-485e-82e2-31aceadf0360",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:03.026Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "68395b15-29e1-446c-83c3-3a004d2544cb",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:47:03.120Z",
+        "type": "session.status"
+      },
+      {
+        "id": "34d6b79d-278f-437b-a7e6-29b2d67e3425",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:03.181Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "c4d553fa-4a47-49a7-afc6-74f4f7a38c29",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:03.219Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "411600ff-1801-4a27-a96d-2f837a91f7ac",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:03.219Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "669fdc24-7122-41c3-8767-e3ff9f084dcf",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:03.219Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "e116d665-168f-40ca-b87b-3d7ece937a97",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:03.219Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "4e2463c4-48ff-401a-b044-5b24d9798113",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:03.219Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": {
+          "command_len": 76,
+          "command_sha256": "b28e20b9ef62fb699b04123601c64d144485c78df8ae8d39ca8f8ada6d7989aa",
+          "redacted": true
+        },
+        "id": "3e6e987b-33e7-4d74-9988-54d29516de58",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=b28e20b9ef62fb699b04123601c64d144485c78df8ae8d39ca8f8ada6d7989aa command_len=76",
+        "tool": "bash",
+        "ts": "2026-02-09T20:47:39.173Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "command_len": 72,
+          "command_sha256": "2546766c10d44bc45db6e082ffda8969a86a0bd19b3a732509b481e737916a70",
+          "redacted": true
+        },
+        "id": "1fda6f07-96ab-4911-a4c5-7aa98f89b6aa",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=2546766c10d44bc45db6e082ffda8969a86a0bd19b3a732509b481e737916a70 command_len=72",
+        "tool": "bash",
+        "ts": "2026-02-09T20:47:39.175Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "command_len": 743,
+          "command_sha256": "45b143c0769bc7097c26023e96305f6549266e027f5b9ff6c768a1fd2d2d01be",
+          "redacted": true
+        },
+        "id": "2ff14904-224a-4402-9a78-7b885a83082e",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=45b143c0769bc7097c26023e96305f6549266e027f5b9ff6c768a1fd2d2d01be command_len=743",
+        "tool": "bash",
+        "ts": "2026-02-09T20:47:39.174Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "ab8d6883-5eb2-4038-b661-d09f4353aef7",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:47:39.286Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "b4daafe9-6252-4642-9ebd-e25fb45c4b43",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:47:40.148Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "caaf1850-8792-428d-9949-42696d2c9c87",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:47:42.106Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "ac14e938-7572-4a65-a4ec-36e69ac5e9c7",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:42.109Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a72e2091-5f09-4ee1-bbdf-aaf7153073a9",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:42.111Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a1581c4d-7c1a-4ee9-8414-bdcacef2a421",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:47:42.112Z",
+        "type": "session.status"
+      },
+      {
+        "id": "bc736db8-3510-4c3a-b820-00468732810d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:42.255Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "0b1fde26-2b02-42bd-8e2c-d6beba5ddfc2",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:47:42.258Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "003dfb61-74b4-4060-9ae6-26884ab06c1d",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:47:42.258Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "77ef0991-5c0c-442e-b009-e0f3c806fbc6",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:42.256Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "7978d7ed-b622-47b3-b9cc-a2b661c1ec20",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:47:42.707Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 32,
+          "command_sha256": "2ce27616da9ccea2b8ed5c001239324a95b2f5b7b8ee8d63e5111ca5f858f8f1",
+          "redacted": true
+        },
+        "id": "d6e7e007-1b3e-4cfb-bef9-b6bbc8403d9c",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=2ce27616da9ccea2b8ed5c001239324a95b2f5b7b8ee8d63e5111ca5f858f8f1 command_len=32",
+        "tool": "bash",
+        "ts": "2026-02-09T20:47:57.130Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "command_len": 846,
+          "command_sha256": "565cc3980b730abd4de388aa7490d08d728d32bb13bd43bcffe2642da92d7fc3",
+          "redacted": true
+        },
+        "id": "0185a9ce-df8a-4fd0-a149-098413450dd8",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=565cc3980b730abd4de388aa7490d08d728d32bb13bd43bcffe2642da92d7fc3 command_len=846",
+        "tool": "bash",
+        "ts": "2026-02-09T20:47:57.137Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "feec830e-8e3e-41bd-bd03-5c8f32cbb8b0",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:47:58.104Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "fe23c24e-5a64-45a4-a396-a9a741535df6",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:47:58.108Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "39904222-dd75-4b6d-b76f-01e7d867badb",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:58.110Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "695d5c6f-127a-497e-b516-ee8b65e89e59",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:47:58.112Z",
+        "type": "session.status"
+      },
+      {
+        "id": "c653f246-b1d8-4653-8cfc-62f776362610",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:58.112Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "7fbf395d-090d-443b-a448-265bb27afb4f",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:47:58.308Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "6c6472f3-8613-4d12-99db-0ea4f948f60f",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:47:58.308Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "be2e294e-4de5-48e8-afd6-348a34d4bc36",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:58.305Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "70271e71-9a6d-4420-86e9-6e61836cfa3b",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:47:58.306Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "1884b426-0888-42cb-8e6c-a8dd1f785395",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:47:58.770Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 31,
+          "command_sha256": "325c021d9fedf446d8b24e91d62086425f93fe914f0d414456ec20ec2a7095b2",
+          "redacted": true
+        },
+        "id": "2ac273f9-d519-4f06-9392-c24ddede54d4",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=325c021d9fedf446d8b24e91d62086425f93fe914f0d414456ec20ec2a7095b2 command_len=31",
+        "tool": "bash",
+        "ts": "2026-02-09T20:48:03.372Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "16c4c077-fa43-4048-a96e-5f49254be772",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:48:03.994Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "ce634c3a-b3a5-4698-9d1e-91c566be7181",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:03.998Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "6d4d4fdc-d939-408e-bb61-749627b4f80c",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:04.000Z",
+        "type": "session.status"
+      },
+      {
+        "id": "67f073c4-a306-40ba-9675-a696dd6d1dbe",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:04.000Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "e01ae4c1-80e1-4b8f-bd89-e3811e823984",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:04.078Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "723224a1-3e47-4f1a-aee2-4644ba758992",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:48:04.081Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "dbd2d420-80a3-454c-abf1-de7d5d31c317",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:04.081Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "f13e284c-ad4c-4fbb-b182-546b9e57b696",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:04.079Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "e98b9064-b258-4375-a48e-ff53c31e91f3",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:04.564Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 84,
+          "command_sha256": "7a63e8a77218866edb2ec0d4aaeb022b597d210b2e1f2a4a31bd6f66b1d5822f",
+          "redacted": true
+        },
+        "id": "a6755a7e-f259-47f2-8d1a-26081417994d",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=7a63e8a77218866edb2ec0d4aaeb022b597d210b2e1f2a4a31bd6f66b1d5822f command_len=84",
+        "tool": "bash",
+        "ts": "2026-02-09T20:48:09.076Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "command_len": 32,
+          "command_sha256": "2ce27616da9ccea2b8ed5c001239324a95b2f5b7b8ee8d63e5111ca5f858f8f1",
+          "redacted": true
+        },
+        "id": "d00d1f39-4c23-4cf9-80c8-c845c48b57d2",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=2ce27616da9ccea2b8ed5c001239324a95b2f5b7b8ee8d63e5111ca5f858f8f1 command_len=32",
+        "tool": "bash",
+        "ts": "2026-02-09T20:48:09.096Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "d271dd72-96ab-40fc-8e36-3a7de3c41d4e",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:48:09.716Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "22bea7bb-d054-4425-b44d-7274f5ddcd02",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:48:09.719Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "90b23037-41c4-4d12-af51-0533bc0cd8de",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:09.723Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "88bf0153-8b78-481c-8963-198430c9c7cd",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:09.726Z",
+        "type": "session.status"
+      },
+      {
+        "id": "b1f5fe22-00ec-4012-9709-3674c5c6d98c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:09.726Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "9b02fc23-64b1-408e-a6aa-2d2dc2ad81ed",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:09.795Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "0d27a417-e3eb-4f75-9251-d64c0e6402a2",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:09.796Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a8b8dd57-90bc-4ec0-b414-60cc439a12d2",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:48:09.798Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "1ea9924e-f101-4e55-b162-e13c7edc08aa",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:09.798Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "01db2ccc-e9a5-442a-b960-1711644cd004",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:10.316Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 26,
+          "command_sha256": "0fd452344cbce5f103a084593525fb64217ba7bcaac50e88329e92e01d64f2e6",
+          "redacted": true
+        },
+        "id": "47066da2-f0dd-4b4c-a776-d85dddca379e",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=0fd452344cbce5f103a084593525fb64217ba7bcaac50e88329e92e01d64f2e6 command_len=26",
+        "tool": "bash",
+        "ts": "2026-02-09T20:48:14.782Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "1ef8b95b-5f15-4955-91bc-d52a8d094297",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:48:14.809Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "bfa93d3a-62fb-408a-a347-d557dd564ef7",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:14.812Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "ab869a34-2eb0-4e5a-8182-1c629fd19a16",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:14.813Z",
+        "type": "session.status"
+      },
+      {
+        "id": "bc9b4287-7ab9-472c-81c7-132a35415a70",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:14.813Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "b5559653-42e7-438b-8b3f-223eb0f0ad52",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:14.901Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "55d79408-4761-4ff8-b937-37c22b8c29d8",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:14.904Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2bd0faf3-8d17-4262-9eea-62ac02312d35",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:48:14.904Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "4e4c6cd8-00aa-4f35-a150-f3caf8889fd4",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:14.904Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "5dc0cfdc-1e66-4610-8c2b-3de9e19be532",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:15.504Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 89,
+          "command_sha256": "0b08a55dc0376ab77f9e007e94e7688d486247a699edf0687c19052dcd0bf2e6",
+          "redacted": true
+        },
+        "id": "4ca98edb-96f5-416a-aad9-8e14d506143e",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=0b08a55dc0376ab77f9e007e94e7688d486247a699edf0687c19052dcd0bf2e6 command_len=89",
+        "tool": "bash",
+        "ts": "2026-02-09T20:48:18.382Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "befe6a16-8c4e-4126-9dcd-089bdee4d84c",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:48:19.014Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "c81773d1-5b90-4ee9-9dd9-03df65021134",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:19.017Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "9551c2fb-9d55-4673-a6e3-a210beadc03b",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:19.019Z",
+        "type": "session.status"
+      },
+      {
+        "id": "5d2a3812-0589-4675-a113-11ccadb14fbe",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:19.018Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "79810920-840a-4cb8-8796-bcce2e5b36ad",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:19.094Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "73c3265b-2817-4fcb-92e1-fe0d4c4817bc",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:19.096Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "196a00ed-43f2-4428-9b74-c915991b2ee6",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:48:19.097Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "faa1d00b-e066-4299-9b26-2f67f4e2e466",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:19.097Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "3be218e6-8707-47c7-901d-f9a512fbaab6",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:19.571Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Update File: src/agent_loom/memory/scopes.py\n@@\n def _normalize_command(raw: str) -> str:\n     return (raw or \"\").strip()\n+\n+\n+def _looks_like_glob(raw: str) -> bool:\n+    s = raw or \"\"\n+    return any(ch in s for ch in (\"*\", \"?\", \"[\"))\n@@\n def parse_scope_string(item: str, *, repo_root: Optional[Path]) -> Dict[str, Any]:\n@@\n     key = SCOPE_KIND_KEY[kind]\n     out: Dict[str, Any] = {\"kind\": kind, \"raw\": raw_val}\n \n     if kind in (\"file\", \"folder\"):\n+        # UX: allow globbing via file:/folder: for recall filters.\n+        # Example: --scope file:src/**/*.py\n+        if _looks_like_glob(raw_val):\n+            if repo_root is not None:\n+                try:\n+                    rv = raw_val.replace(\"\\\\\", \"/\").strip()\n+                    if rv.startswith(\"/\"):\n+                        ap = Path(rv).expanduser().resolve()\n+                        if repo_root not in ap.parents and ap != repo_root:\n+                            raise ValueError(\n+                                \"scope glob: pattern must be repo-relative (got absolute path outside repo root)\"\n+                            )\n+                except ValueError:\n+                    raise\n+                except Exception:\n+                    pass\n+\n+            pat = _normalize_glob(raw_val, repo_root=repo_root)\n+            if not pat:\n+                raise ValueError(\"scope glob: pattern is empty\")\n+            return {\"kind\": \"glob\", \"raw\": raw_val, \"pattern\": pat}\n+\n         if repo_root is not None:\n             try:\n                 rv = raw_val.replace(\"\\\\\", \"/\").strip()\n                 if rv.startswith(\"/\"):\n                     ap = Path(rv).expanduser().resolve()\n                     if repo_root not in ap.parents and ap != repo_root:\n                         raise ValueError(\n                             f\"scope {kind}: path must be repo-relative (got absolute path outside repo root: {raw_val... (truncated, len=2074)"
+        },
+        "id": "6d93496c-fcb7-42c6-b1a7-54e0c74cf7c7",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:48:48.983Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "29745413-2b02-40ee-a9b2-2971f8679b7c",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:48.990Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "660ffdb2-0151-46e7-bcba-9b05cc2e0825",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.065Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "3984ff78-cc23-42a7-a85f-5b7fabc33a10",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.599Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "17bae48f-6f9a-455f-970f-53e4fd015ae9",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.599Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "f0e90966-0b55-4729-a8fc-7373d285d936",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.599Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "f6b02ab0-9232-48f0-b106-240e99ee5d5d",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.599Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2ca404f9-d808-4cab-8492-d2a4cc4dd3db",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.599Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": null,
+        "id": "852c009e-34b6-4b93-b0eb-2ae7354a5435",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:48:49.751Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "f2c7b838-d65e-4798-a8c0-d9c5c21d40b5",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.755Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "451bbb4d-8d8b-42f5-8e9d-f07318668ef5",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.758Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "8badc810-58dc-44c3-84ad-b1768736827f",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:49.759Z",
+        "type": "session.status"
+      },
+      {
+        "id": "6d4a8a16-c831-448c-97d5-e002a3ed4648",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.858Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "32310851-731e-4069-a83d-93dc14e0c3bf",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.858Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "60fb50b7-2cf5-4e1a-b4b3-8cbab089944d",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.858Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "1e10cfda-9d78-4628-b460-1e20d5251bda",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.858Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "d9585b7d-dae6-486a-80c5-39457484ec94",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.861Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "eb90a75b-4dec-446e-a828-bfd36bc2ae47",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:49.865Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "0394c5f8-d190-4aef-a7e7-ee69c7f6fd6a",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:48:49.865Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "6740ecd6-97b6-439c-9f70-b5412466b176",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:49.865Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "8e71d673-ccb4-48d6-9276-6314ca7815d5",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:50.041Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "d51400f6-6baf-47cc-bc2e-b00798ef780a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:50.041Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "3d0f19c4-bc26-4476-8b31-d6e53428f4f5",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:50.281Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "897ca0d0-9853-4045-854d-fbf62c9ec765",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:50.353Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "9f6112eb-2d81-4c98-b788-9c50388882a3",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:48:50.377Z",
+        "type": "session.status"
+      },
+      {
+        "id": "476f46d4-dc8d-46e7-8067-0fb990bc984c",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:50.416Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2ca8c1c0-ba02-40d7-84bb-d7dede5c1a6b",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:50.416Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "44c417b7-8f7f-494d-bd1c-851ab7aa0872",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:50.416Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "16746c10-f5d8-4a7c-bc50-58db87245560",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:50.416Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "44b8ea8a-e130-4948-9bad-aa3d0b2f4ed8",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:50.416Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "f13b0c22-bba6-4a81-8756-c7d6b6e85954",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:48:50.436Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Update File: src/agent_loom/memory/scopes.py\n@@\n         if kind == \"file\":\n             sp = s.get(\"path\")\n             if isinstance(sp, str) and sp:\n                 for idx, c in enumerate(ctx_scopes):\n                     if (c.get(\"kind\") in (\"file\", \"folder\")) and normcase(\n                         sp\n                     ) == normcase(str(c.get(\"path\") or \"\")):\n                         matched.append(\n                             {\"note_scope\": s, \"context\": c, \"reason\": \"file exact\"}\n                         )\n                         best = max(best, SCOPE_MATCH_SCORE[\"file\"])\n                         _mark_ctx_satisfied(idx)\n+                    elif c.get(\"kind\") == \"glob\":\n+                        pat = str(c.get(\"pattern\") or \"\")\n+                        if pat and _glob_match(sp, pat):\n+                            matched.append(\n+                                {\n+                                    \"note_scope\": s,\n+                                    \"context\": c,\n+                                    \"reason\": \"file matches ctx glob\",\n+                                }\n+                            )\n+                            best = max(best, SCOPE_MATCH_SCORE[\"file\"])\n+                            _mark_ctx_satisfied(idx)\n             continue\n@@\n         if kind == \"folder\":\n             folder = s.get(\"path\")\n             if isinstance(folder, str) and folder:\n                 for idx, c in enumerate(ctx_scopes):\n                     if c.get(\"kind\") in (\"file\", \"folder\"):\n                         cp = str(c.get(\"path\") or \"\")\n                         if normcase(cp) == normcase(folder) or normcase(cp).startswith(\n                             normcase(folder)\n                         ):\n                             matched.append(\n                                 {\n                                     \"note_scope\": s,\n                            ... (truncated, len=3194)"
+        },
+        "id": "b8f6e6de-f4c4-4906-97aa-82f87ba647fa",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:49:10.393Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "5e8f84a5-f310-4633-a40a-7d25691281a3",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:10.399Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "18d27fc4-cf63-4a92-8eac-58f609320653",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:10.431Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "45cee4c1-092a-4aea-9d4e-b6a861700502",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:10.867Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "a12d408b-97d6-4f53-a3ef-38695489cba2",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:10.868Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "744d813b-fda4-48d1-b82c-f4914013ebcc",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:10.868Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "a5a12fa4-353f-45ca-a3c1-149aed1cee36",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:10.868Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "7baa7cca-8436-4686-86a8-c7a982f465af",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:10.868Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": null,
+        "id": "fcb3b178-35fc-4ac1-b2b1-1b5bf2e7d9d0",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:49:11.019Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "e92f7a64-8031-4a26-a4a3-b959937c4f02",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.023Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d6f8d7e3-8f5c-41f5-8e81-1617e1b85114",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.026Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "5a292104-29a8-43ad-89c6-927b12e9101e",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:11.026Z",
+        "type": "session.status"
+      },
+      {
+        "id": "e30e18b5-f9bb-44b3-84fe-4be102d3f3a4",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.077Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "3af0d49c-4e2c-47da-8374-d0ad024940fe",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.078Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "ea1ffedb-1ffa-43d3-9c2e-115ce23f10ec",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.078Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "df335d15-b92a-43e0-92bd-f6fd298f2ff1",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.078Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "b90017ee-c917-4de1-8551-03b3e56181f3",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.118Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "80c96ebb-01b3-4256-b1e1-0cf7dc744252",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.121Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "f0ca8d1a-b0b6-49d9-878c-edd5336a7b6a",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:49:11.122Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "6b7c1c02-6e76-477b-91ea-cb65244eacba",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:11.122Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "89be51ec-df75-4dfe-ae22-a7a23aa7cbb4",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.245Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "4b4c0640-41a2-459b-a30a-8ab8218765dc",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.245Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "8e5221b9-5a52-4ad8-915b-dab8426874ea",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.541Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "7eac9596-5c8f-4266-aac2-ab9f9faf9c73",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:11.569Z",
+        "type": "session.status"
+      },
+      {
+        "id": "66aa50a7-9642-43eb-aa1d-e094524108ad",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.598Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "06e1a08d-501f-4eb2-a551-45e0b5973865",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.598Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "0874d82e-8a57-404d-8786-4e683816bd71",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.598Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "43e12580-326f-4755-82e2-582bbb8d02d2",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.648Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "010c0450-c4c8-432b-8628-7353236e6898",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.648Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "16b2ac1f-91be-4589-924b-2cb0a031eb24",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.648Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "0fc10978-d60d-4e9c-949d-28dfde208b00",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:11.648Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Add File: tests/test_memory_scope_glob.py\n+import contextlib\n+import io\n+import json\n+import os\n+import sys\n+import tempfile\n+import unittest\n+from pathlib import Path\n+\n+from agent_loom.memory import cli as memory_cli\n+\n+\n+def _run_json(argv: list[str]) -> object:\n+    buf = io.StringIO()\n+    with contextlib.redirect_stdout(buf):\n+        rc = memory_cli(argv)\n+    if rc != 0:\n+        raise AssertionError(f\"memory exited non-zero: {rc}\")\n+    payload = buf.getvalue().strip()\n+    return json.loads(payload) if payload else {}\n+\n+\n+class _Chdir:\n+    def __init__(self, p: Path):\n+        self.p = p\n+        self._old: str | None = None\n+\n+    def __enter__(self) -> None:\n+        self._old = os.getcwd()\n+        os.chdir(str(self.p))\n+\n+    def __exit__(self, exc_type, exc, tb) -> None:\n+        if self._old is not None:\n+            os.chdir(self._old)\n+\n+\n+class TestMemoryScopeGlob(unittest.TestCase):\n+    def test_recall_scope_file_allows_glob_patterns(self) -> None:\n+        with tempfile.TemporaryDirectory() as td:\n+            root = Path(td)\n+            with _Chdir(root):\n+                # Create a small fake repo tree for file scopes.\n+                (root / \"src\" / \"agent_loom\" / \"memory\").mkdir(parents=True)\n+                (root / \"src\" / \"agent_loom\" / \"pack\").mkdir(parents=True)\n+                (root / \"src\" / \"agent_loom\" / \"memory\" / \"a.py\").write_text(\n+                    \"a\\n\", encoding=\"utf-8\"\n+                )\n+                (root / \"src\" / \"agent_loom\" / \"pack\" / \"b.py\").write_text(\n+                    \"b\\n\", encoding=\"utf-8\"\n+                )\n+\n+                vault = root / \".loom\" / \"memory\"\n+                _run_json([\"--vault\", str(vault), \"--format\", \"json\", \"init\"])\n+\n+                _run_json(\n+                    [\n+                        \"--vault\",\n+                        str(vault),\n+                        \"--format\",\n+ ... (truncated, len=3708)"
+        },
+        "id": "724a61b1-c496-4f5c-8245-cf53891ba0aa",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:49:40.084Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "8c4a0899-551d-4d42-ace3-c1bcd3812465",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.089Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "a3015233-a75d-400c-8f78-03b0584a0994",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.118Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "7fefd204-7747-4427-b1b0-1b8d066b6ccc",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.403Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2142813d-a992-4fcb-ab61-5738654222a0",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.403Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "af449bff-adca-4df6-8791-2eb8b31667c4",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.403Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "a7aa5671-d6b2-47ac-a46e-e8efe332c9b0",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.403Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "a2397a75-0de3-4104-bccc-787315a5db08",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.403Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "adc8eb23-9786-440b-9b67-0951e21ed29a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.493Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "74aacd1f-bd91-4abb-b846-524feb1d8105",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.493Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "356e995f-b75c-4827-9997-98488511ea1b",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.493Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": null,
+        "id": "cb5ebccd-e034-4090-9bdd-f3dcdc257f42",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:49:40.555Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "398d1b7c-764b-4da0-b2a0-4dd7a45c9b8a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.560Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "9423796b-bcda-4bc0-9d1e-ab94db682d06",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.560Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "967affbd-8290-4df4-8cdb-f391a9ebd89e",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.632Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "9a03f63c-a100-4bc6-aa47-40a00dd7daa2",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:40.634Z",
+        "type": "session.status"
+      },
+      {
+        "id": "61bab289-250c-452c-858d-5f4bb51dd55e",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.634Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "0e16d838-6c2a-44e9-8a7b-e2fda511a23f",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.733Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "b007ec1f-236d-475f-a3ba-e2694800784f",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.733Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "c9a4645e-55ad-41af-bc02-e42480d00f1c",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:40.736Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "3a14447f-0875-40c8-85e3-cb4a4c5b8641",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:49:40.736Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "6398d5dd-c816-44f2-932b-6be7fbd14395",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.749Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "5fb1c0f5-8c76-4fb2-8811-442f6fda6820",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.749Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "de8b9baa-54e1-4640-a4ff-d5190f5ef274",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.749Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "39701540-b240-4e73-bc9e-ca602fc1ff13",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.749Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "762b6920-382d-473c-90c5-739fbc26f41b",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.749Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2c0d7ffa-4fa9-4218-ad00-90308a89e829",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.749Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "a8c1ae20-5cb5-4746-80c2-d4226657115a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.749Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2040257f-187d-49e0-82ec-12eef7ac4e5b",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.977Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "488f6795-b57d-4430-90a4-16b4f939f298",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.977Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "43b913f8-7cf6-4436-9063-56705973b983",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.977Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "38ca5d48-48c1-453d-985d-58c09ddb194f",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.977Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "cb81f11d-740c-4f0d-8b82-462ed246db2b",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:40.977Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "1276bce3-08a1-428a-824d-276594324a99",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.051Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "8433ea8c-c486-43e4-be32-26eda0ba331c",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.051Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "703f1d82-fc26-4dc4-9a11-4ba3cdffbeff",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.186Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "690c1785-3f2d-4376-b7fe-ed53386bda0d",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:41.225Z",
+        "type": "session.status"
+      },
+      {
+        "id": "4ce349f3-13e0-4229-96b5-0d35857e4afb",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.490Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "3b4b7ee8-0f62-44b6-b8b7-3a8b893a5724",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.559Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "21b1a62b-c580-46d2-a620-f0334da65b4c",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.559Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "7dfb16e4-d265-4921-bd7b-b3fe4c1ccbfe",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.898Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "a573f338-67aa-4449-afec-7b3ea6bc0bdf",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.898Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "f84258bf-73b4-439b-8fb4-0fd814c1f23e",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.898Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "f3543784-56ac-4854-a1df-1a98d601f406",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.898Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "6c1c0930-3d4f-4179-9e7a-9563132b9227",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.963Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "ed795ce6-4420-45ff-9b97-24e59e9f3f45",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.963Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "9134051c-0a93-4bcd-beba-873d5a73d0ee",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:41.963Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "6b3f6a42-6b10-435d-b7a0-d8f542c78bfb",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:42.052Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "8cdc693e-1730-4c09-ac28-75b08b50f45a",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:42.052Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "ecaad314-a57c-4275-ac8d-4da482d0c013",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:42.052Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "3aeb1231-2d0a-43a1-951c-7e7cf5b35e30",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:42.052Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "fe1bc73f-5115-4243-9f24-72fb1e695ff8",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:42.052Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "60e9cfcb-ccf6-4a42-9a6d-cb51c1a0efd0",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:42.106Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "254da565-b211-44cc-b46e-c2f5da01ed1c",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:42.106Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "2a1c57d8-17b2-49d9-8986-7c94c83d49ed",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:42.106Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "id": "0e400243-43a4-4bbf-b1d0-f79885c5b4a3",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:42.106Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": {
+          "command_len": 59,
+          "command_sha256": "3c249488a2cfbbcc3e2049edf931f36d3cd850881db6ddb4dcfe78a4d2e018b6",
+          "redacted": true
+        },
+        "id": "15334a4e-5920-4fc4-9d3d-e199574b1b55",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=3c249488a2cfbbcc3e2049edf931f36d3cd850881db6ddb4dcfe78a4d2e018b6 command_len=59",
+        "tool": "bash",
+        "ts": "2026-02-09T20:49:48.736Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "9155d0ff-ffb0-4553-95f5-b21097c4d9b6",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:49:48.862Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "648be70c-fab9-42df-8bd5-81d90d055030",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:48.864Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "37e4c185-d94a-473c-a30a-4c1675b2f406",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:48.866Z",
+        "type": "session.status"
+      },
+      {
+        "id": "e473d911-7149-4066-87de-a9825bbf7e8c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:48.866Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "6a3fe2fa-2e76-4558-bc17-6e22f0932c9a",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:48.963Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "0d06b3e5-d6e4-4745-ab0d-51720536e9ba",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:48.965Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "ff03da41-b5dc-4a3b-b903-ad5e47455741",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:49:48.965Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "81bb08ab-862d-4fe7-8797-f0068ab84d99",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:48.966Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "113d56a5-d81c-40bc-bc69-b8bab643e64f",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:49.445Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Update File: tests/test_memory_scope_glob.py\n@@\n import json\n import os\n-import sys\n import tempfile\n import unittest\n*** End Patch"
+        },
+        "id": "03b9d0a9-8aeb-4900-81cb-c6c555a27ef1",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:49:53.953Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "a7d7526e-b5f7-4ed3-8ab4-524bb60a6a8e",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:53.956Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "1a2b5106-885e-468e-9bd8-71f6ad5405ad",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:53.983Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "54ef1df7-a6fc-43f3-9916-2c2a65e19f34",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:54.279Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": null,
+        "id": "f5ec7168-b287-44c7-8fa2-c7414d12980d",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:49:54.431Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "3eae5a9c-af80-436d-80e5-61b5f837439b",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:54.435Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "5182eef3-a243-4f37-a1ac-7c7dd0152bf3",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:54.437Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d7437031-811c-457e-86c3-6a0c9ed2f41e",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:54.437Z",
+        "type": "session.status"
+      },
+      {
+        "id": "7d47a750-f89a-4b18-b5b8-fce71ee5690c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:54.522Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "0b999783-74a4-4517-ace0-ce48db29e69f",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:49:54.525Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "e2402fe7-dd26-4889-93eb-edcb569d7ab2",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:49:54.524Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a1e06c2f-205d-40bb-ae39-1792ea664794",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:54.525Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "7b8adfe9-d51d-4520-84a1-bff0a7349c89",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:49:54.948Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Update File: tests/test_memory_scope_glob.py\n@@\n                 out = _run_json(\n@@\n                     ]\n                 )\n-                self.assertIsInstance(out, list)\n-                ids = [str(it.get(\"id\") or \"\") for it in out if isinstance(it, dict)]\n+                assert isinstance(out, list)\n+                ids = [str(it.get(\"id\") or \"\") for it in out if isinstance(it, dict)]\n                 self.assertIn(\"note-a\", ids)\n                 self.assertNotIn(\"note-b\", ids)\n*** End Patch"
+        },
+        "id": "3589e663-44c7-42f2-b2e8-2cf8706e5b5f",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:50:04.504Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "525ec298-1b5d-41ef-bb9a-f25331383e27",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:04.524Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "6588b620-0af1-4ba8-ab77-70a6b5d1b29a",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:04.551Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "5789c1e2-b124-4c4c-a728-1f828cf0d2f2",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:04.878Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": null,
+        "id": "4d503a8f-fef6-420b-9967-a5149a4e6e6f",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:50:05.028Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "266d86bd-f821-459a-9f0e-eeab5e6b821b",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:05.032Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "f9295fe8-7177-47c8-b6c2-e22bad7e69fb",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:05.034Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "9a872d0b-5838-49a7-96dd-0d9aa9517806",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:50:05.035Z",
+        "type": "session.status"
+      },
+      {
+        "id": "30f5adbf-9c43-4f6f-b67d-4159ff293d5f",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:05.123Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "32493628-0aae-439d-8ea4-0b79f28d20d2",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:05.124Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d6bcbdc2-5ddb-44c8-8bc5-7364a00fdecf",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:50:05.126Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "87eea534-a475-4e89-b90e-a41f96f55537",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:50:05.126Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "7455ebd1-59f2-4756-a248-a47a91ae18e8",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:50:05.608Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 59,
+          "command_sha256": "3c249488a2cfbbcc3e2049edf931f36d3cd850881db6ddb4dcfe78a4d2e018b6",
+          "redacted": true
+        },
+        "id": "83f683c3-cc3e-42a3-82f1-7d63dfc83991",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=3c249488a2cfbbcc3e2049edf931f36d3cd850881db6ddb4dcfe78a4d2e018b6 command_len=59",
+        "tool": "bash",
+        "ts": "2026-02-09T20:50:09.933Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "f8564705-2816-4629-ae3b-1bdaff9ae1ae",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:50:50.334Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "c8ac6075-15f5-406f-b714-35d221e82737",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:50.338Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "af6ddc93-3dba-46c3-9c40-5908a7ae9d85",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:50:50.344Z",
+        "type": "session.status"
+      },
+      {
+        "id": "b69d2669-415e-4a8e-bbca-f16c3c9ae388",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:50.344Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "7369785b-87bd-4e14-97ef-6e110cd3e5dd",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:50.490Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "cd28b4ce-d204-41a2-8ee7-d7040a1a85fc",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:50:50.491Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "302abf49-dbc9-4a25-9b3f-31a615606fc3",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:50:50.494Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "aa142f88-2f6f-4522-8547-0edb88afa896",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:50:50.494Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "ae690e88-5010-4b5d-b0ae-cc4db056fc71",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:50:51.014Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "patchText": "*** Begin Patch\n*** Update File: tests/test_memory_scope_glob.py\n@@\n                 out = _run_json(\n                     [\n@@\n                         \"--scope\",\n                         \"file:src/agent_loom/memory/*.py\",\n                         \"--limit\",\n-                        \"10\",\n+                        \"1\",\n                         \"--deterministic\",\n                     ]\n                 )\n                 assert isinstance(out, list)\n-                ids = [str(it.get(\"id\") or \"\") for it in out if isinstance(it, dict)]\n-                self.assertIn(\"note-a\", ids)\n-                self.assertNotIn(\"note-b\", ids)\n+                ids = [str(it.get(\"id\") or \"\") for it in out if isinstance(it, dict)]\n+                self.assertEqual(ids, [\"note-a\"])\n*** End Patch"
+        },
+        "id": "7e440470-6053-4a8f-975d-fb90e04a89eb",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:51:21.328Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "id": "9f414617-2884-42bf-867c-08caccb08d9d",
+        "properties": {
+          "keys": [
+            "file"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:51:21.334Z",
+        "type": "file.edited"
+      },
+      {
+        "id": "9cd70d32-9e6b-417d-b711-8c7482269bb2",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:51:21.398Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "fb5ad73b-c021-426c-ac08-b1a9b7be462f",
+        "properties": {
+          "keys": [
+            "path",
+            "serverID"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:51:21.725Z",
+        "type": "lsp.client.diagnostics"
+      },
+      {
+        "args": null,
+        "id": "fcad42c0-4725-4afb-affa-2f4f01f42abd",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "apply_patch",
+        "ts": "2026-02-09T20:51:21.877Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "50821708-521d-45e0-a9cb-4dec2447990d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:51:21.885Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d3c6822a-96b5-4db5-ada5-9897047affaf",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:51:21.891Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a3b28450-4b85-4408-9682-0b9bde9bbf09",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:51:21.891Z",
+        "type": "session.status"
+      },
+      {
+        "id": "0a79c308-2689-46f8-959a-dbe7986d2824",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:51:21.979Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "8795e49c-0d41-497f-9d8e-b8ee691dc187",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:51:21.982Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "4fec07be-cd3f-4396-bad9-7c8b9f61d310",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:51:21.982Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "f1eb2f01-38ae-43ab-b12e-33ca76a7022c",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:51:21.983Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "ea33ebf9-0431-4d73-a989-f63268639233",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:51:22.476Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 59,
+          "command_sha256": "3c249488a2cfbbcc3e2049edf931f36d3cd850881db6ddb4dcfe78a4d2e018b6",
+          "redacted": true
+        },
+        "id": "a69d508b-4159-49c5-ba34-adc996ef047a",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=3c249488a2cfbbcc3e2049edf931f36d3cd850881db6ddb4dcfe78a4d2e018b6 command_len=59",
+        "tool": "bash",
+        "ts": "2026-02-09T20:51:26.934Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "ed140575-c707-4329-8e23-459da720deb6",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:52:03.860Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "a24dc127-b601-453a-b18f-27476abe6548",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:03.864Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "cb40fb33-2427-4913-8c4f-19788536bec4",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:03.869Z",
+        "type": "session.status"
+      },
+      {
+        "id": "90a39d0d-9876-49d6-810d-f7b7ff5e4093",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:03.869Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "30446e5c-bce0-4379-a2fd-36e2afce7cb0",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:04.016Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "dcf01ac6-705c-492a-9a9c-7a2228ca7e1a",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:52:04.019Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "9a400163-4f13-4df6-8600-85f268c72c38",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:04.016Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "12dc5e46-7d12-4c42-893c-f1bbdf6084bc",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:04.019Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "9e202023-b8cb-4fc5-9e9e-c4ccb724f7cf",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:04.462Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 512,
+          "command_sha256": "ae7b69ff7168e3b630c0ebe242104196853c5ff3867bb96b23c4096bbda682f8",
+          "redacted": true
+        },
+        "id": "2f096312-a6f4-4d7c-977f-4e8decacddaf",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=ae7b69ff7168e3b630c0ebe242104196853c5ff3867bb96b23c4096bbda682f8 command_len=512",
+        "tool": "bash",
+        "ts": "2026-02-09T20:52:09.889Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": {
+          "command_len": 32,
+          "command_sha256": "f9fd0097f587092fda6d00f87fcf17344bf64c39c1a02681d93eaa24a9b84766",
+          "redacted": true
+        },
+        "id": "e4e2e26f-9a56-4e33-a9c5-c9e14c2766c0",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=f9fd0097f587092fda6d00f87fcf17344bf64c39c1a02681d93eaa24a9b84766 command_len=32",
+        "tool": "bash",
+        "ts": "2026-02-09T20:52:10.058Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "a28b0899-75b5-475f-89ed-7fd6f8b5f70f",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:52:10.406Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "args": null,
+        "id": "35bcf8a2-600f-4346-95b4-2470fd84f316",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:52:10.524Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "1ca58fcf-b7b0-4c61-a219-b10133bf43bd",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:10.526Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2f13cc12-66e6-4b12-9576-ec8702c1e560",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:10.529Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "c28bf329-391b-4085-be57-ae501840e9a9",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:10.529Z",
+        "type": "session.status"
+      },
+      {
+        "id": "5b7c79e3-b71b-4ed7-8bcc-28073d001e35",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:10.599Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "cab0d375-45b1-4bd7-82ea-32fd93b490aa",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:52:10.601Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "621221db-df34-49ba-8005-ca5f4b3cd8fa",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:10.599Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "5109269b-3404-46a4-a636-bd277ba506c2",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:10.601Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "879cd32d-fab7-4f0a-bc70-e9a8e6ed20cf",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:11.024Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 688,
+          "command_sha256": "9dc28d020f8665a231d7401f49795c65f74f96d77bdfaa7db6b2f21763aeb3b0",
+          "redacted": true
+        },
+        "id": "9af4b3c7-a584-49e7-9cc2-bb04f4118403",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=9dc28d020f8665a231d7401f49795c65f74f96d77bdfaa7db6b2f21763aeb3b0 command_len=688",
+        "tool": "bash",
+        "ts": "2026-02-09T20:52:19.100Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "5daac32a-272e-4348-90bc-5816ec80762e",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:52:19.119Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "2f7a3c3b-04ff-4735-81de-82156fc2538b",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:19.126Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "e8817ea2-10bd-46b7-9261-f7639f516af4",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:19.128Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "d2565596-1386-4e5d-a058-191c9fcebe6c",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:19.128Z",
+        "type": "session.status"
+      },
+      {
+        "id": "39a3b28d-a947-408e-a116-40f7de856126",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:19.213Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "37ab87a9-075c-4566-86fc-3a313bd5f376",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:19.215Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "976aa036-33ea-428c-8094-302bdb67c1ae",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:52:19.215Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "b9f26224-b046-4157-8523-ee6a314a888d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:19.213Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "8afb2152-35f7-4c62-8729-5df331f4819b",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:19.660Z",
+        "type": "session.status"
+      },
+      {
+        "args": {
+          "command_len": 701,
+          "command_sha256": "2819f510908b1092e5d4fbea22e20f27aa0d98395f222fc965f7de54b515712d",
+          "redacted": true
+        },
+        "id": "66b3ad18-ea2c-4a93-b3db-6234e2479b58",
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "summary": "command_sha256=2819f510908b1092e5d4fbea22e20f27aa0d98395f222fc965f7de54b515712d command_len=701",
+        "tool": "bash",
+        "ts": "2026-02-09T20:52:28.884Z",
+        "type": "tool.execute.before"
+      },
+      {
+        "args": null,
+        "id": "ec8cb8da-cc34-42c8-bf8f-4f266a1f1271",
+        "ok": null,
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "tool": "bash",
+        "ts": "2026-02-09T20:52:29.442Z",
+        "type": "tool.execute.after"
+      },
+      {
+        "id": "c2f8a9d1-0b78-4488-85fb-7dde808c8ab0",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:29.445Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a48f9806-bdb6-4111-a017-7c8a131c0296",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:29.447Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "92fc76b6-d5e4-4c27-bc87-8b8d5cd4fc5c",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:29.447Z",
+        "type": "session.status"
+      },
+      {
+        "id": "e9030e2e-c653-4eff-8f40-8def3911e667",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:29.531Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "52d886e9-9db7-4005-a513-c334165f0188",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:29.532Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "63026461-ce5d-4278-a72f-01441ee3a96e",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:52:29.535Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "b12c2da2-4aa1-4d2a-9684-0539843136cd",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:29.535Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "792dbbe1-87a9-4da2-b4d3-c4b33f0e38c9",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:29.960Z",
+        "type": "session.status"
+      },
+      {
+        "id": "6c2556de-6a67-484b-9146-ec4d0cc2851c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:39.097Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "c1ea032c-eb5c-4c7f-a85a-997c2c192ea3",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:39.099Z",
+        "type": "session.status"
+      },
+      {
+        "id": "f7d835cb-7a13-4caa-83f0-7f678923429a",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:39.099Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "c14a2da9-6d9b-4717-be09-fe810a1216ba",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:39.190Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "b6507acb-c404-4edd-9d0f-3baa215f8a35",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:39.191Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "53c5fa7c-d840-4d2f-af81-d174f7aa60f6",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:52:39.191Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "34b0d5ed-afbe-4bec-a145-979fabac39d9",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:39.192Z",
+        "type": "session.status"
+      },
+      {
+        "id": "6775bdc9-6f7f-46bf-8aea-303537b408b0",
+        "properties": {
+          "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U"
+        },
+        "sessionID": "ses_3bc1f5b24ffeukhxelvD6uJj0U",
+        "ts": "2026-02-09T20:52:39.192Z",
+        "type": "session.idle"
+      },
+      {
+        "id": "6e2a9a3b-558f-41c9-9fc2-45b3ebe81476",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:39.241Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "6220db9a-d93b-4646-820f-fbdcf49e4fa2",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:39.254Z",
+        "type": "session.created"
+      },
+      {
+        "id": "590929b3-daac-458d-98e1-b48acd9c8abb",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:52:39.254Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "ccd22118-8df3-43df-9466-15dc80a09305",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:39.257Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "9fcbb3b2-bcd1-4cd8-a8f3-8f125f703640",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:52:39.258Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "4123a150-9a69-42c9-8169-4074818cdced",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bbd27d29ffeNyvnjMvUnNQ6a1",
+        "ts": "2026-02-09T20:52:39.258Z",
+        "type": "session.status"
+      },
+      {
+        "id": "6444a6cf-f5a8-4f7e-8da1-bd9dee5662ea",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:39.259Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "9af2905f-fb4d-415c-8884-c180dd608c8b",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bbd27d29ffeNyvnjMvUnNQ6a1",
+        "ts": "2026-02-09T20:52:39.651Z",
+        "type": "session.status"
+      },
+      {
+        "id": "b2cfaafe-e56c-4540-a7a0-08ca4aa80c3e",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:39.654Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "2db7cb0c-adc3-43e8-8c17-99e21b8f46ce",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:52:39.655Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "dbf158dd-0721-450d-8054-13ceaaf43a0e",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bbd27d29ffeNyvnjMvUnNQ6a1",
+        "ts": "2026-02-09T20:52:39.657Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "b5ce759c-0f2d-4304-abc2-461abaa3604d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:52:41.178Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "637b914f-b8ae-4a95-82e0-46922239d0bc",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:53:14.121Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "82e86c07-074d-46a9-b9aa-990fa1b4301b",
+        "properties": {
+          "keys": [
+            "file",
+            "event"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:53:14.184Z",
+        "type": "file.watcher.updated"
+      },
+      {
+        "id": "79fd699b-498e-497a-976a-69b4d2e4183d",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:53:21.833Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a1376acb-6eb1-465a-9c23-ac74d782a565",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:53:21.835Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "a00c9c68-cdfc-4a02-b513-5f1c4b2a8e64",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bbd27d29ffeNyvnjMvUnNQ6a1",
+        "ts": "2026-02-09T20:53:21.836Z",
+        "type": "session.status"
+      },
+      {
+        "id": "60dfdd9a-09f8-42d5-8ec0-fb4543f8c72c",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:53:21.840Z",
+        "type": "message.updated"
+      },
+      {
+        "id": "053bd814-d884-4615-9df7-c878b053081b",
+        "properties": {},
+        "sessionID": null,
+        "summary": "title=",
+        "ts": "2026-02-09T20:53:21.840Z",
+        "type": "session.updated"
+      },
+      {
+        "id": "f2f75bd8-88f7-4960-8cf2-737f52d2d845",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "diff"
+          ]
+        },
+        "sessionID": "ses_3bbd27d29ffeNyvnjMvUnNQ6a1",
+        "ts": "2026-02-09T20:53:21.841Z",
+        "type": "session.diff"
+      },
+      {
+        "id": "d9f87ed4-b75a-4617-b16a-4bfe2377f6ae",
+        "properties": {
+          "keys": [
+            "sessionID",
+            "status"
+          ]
+        },
+        "sessionID": "ses_3bbd27d29ffeNyvnjMvUnNQ6a1",
+        "ts": "2026-02-09T20:53:21.844Z",
+        "type": "session.status"
+      },
+      {
+        "id": "b8a1dce4-c4b1-4c4c-9156-7a2f28de3ecf",
+        "properties": {
+          "sessionID": "ses_3bbd27d29ffeNyvnjMvUnNQ6a1"
+        },
+        "sessionID": "ses_3bbd27d29ffeNyvnjMvUnNQ6a1",
+        "ts": "2026-02-09T20:53:21.844Z",
+        "type": "session.idle"
+      },
+      {
+        "id": "af0e257a-12b6-482c-b709-50d8a2875a7b",
+        "properties": {
+          "keys": [
+            "info"
+          ]
+        },
+        "sessionID": null,
+        "ts": "2026-02-09T20:53:21.898Z",
+        "type": "session.deleted"
+      }
+    ],
+    "omitted": false
+  },
+  "proposals": {
+    "instinct_candidates": [
+      {
+        "action": "Define an explicit internal representation for scopes and require `parse -> format -> parse` roundtrips to be stable; reject/raise on invalid inputs rather than guessing; keep one canonical string form for each scope to avoid drift in stored memory metadata.",
+        "confidence": 0.62,
+        "id": "scope-roundtrip-contract",
+        "tags": [
+          "memory",
+          "scopes",
+          "parsing",
+          "ux",
+          "correctness"
+        ],
+        "title": "Treat scope parse/format as a strict roundtrip contract",
+        "trigger": "When adding or modifying Loom memory scope parsing/formatting (especially new scope kinds or new accepted spellings)"
+      },
+      {
+        "action": "Require explicit prefixes like `file:...` / `command:...` / `dir:...` (or whatever set Loom supports) instead of trying to infer intent from the value; document the accepted prefixes and keep them minimal to reduce ambiguity and surprise.",
+        "confidence": 0.58,
+        "id": "scope-kind-explicit-prefixes",
+        "tags": [
+          "memory",
+          "cli",
+          "ux",
+          "parsing"
+        ],
+        "title": "Prefer explicit scope kind prefixes over heuristics",
+        "trigger": "When accepting user-provided scope strings (CLI flags, config, or interactive prompts)"
+      },
+      {
+        "action": "Normalize only what is safe and deterministic (e.g., strip whitespace, unify separators if needed, avoid environment-dependent resolution); avoid implicit `resolve()` / cwd-dependent behavior unless the scope kind explicitly means 'relative to cwd'.",
+        "confidence": 0.5,
+        "id": "scope-normalize-paths-cautiously",
+        "tags": [
+          "memory",
+          "scopes",
+          "determinism",
+          "portability"
+        ],
+        "title": "Normalize path scopes cautiously and deterministically",
+        "trigger": "When implementing path-like scopes (file/dir/repo-ish) or changing how they are serialized"
+      },
+      {
+        "action": "Raise errors that include: the original scope string, the expected grammar/prefix, and 1-2 example valid forms; ensure error text is stable enough for CLI UX tests.",
+        "confidence": 0.55,
+        "id": "scope-validation-errors-high-signal",
+        "tags": [
+          "memory",
+          "cli",
+          "errors",
+          "testing"
+        ],
+        "title": "Make scope validation errors actionable",
+        "trigger": "When adding new validation rules to scopes"
+      }
+    ],
+    "skill_candidates": [
+      {
+        "body": "# Loom Memory Scope Extension\n\nGoal: add/adjust a memory scope kind with stable parsing, canonical formatting, and low-noise errors.\n\n## Steps\n\n1. Inspect the scope model and parser\n- Read `src/agent_loom/memory/scopes.py`.\n- Identify: (a) the canonical set of scope kinds, (b) parsing entrypoint(s), (c) formatting/serialization function(s).\n\n2. Add/modify a scope kind\n- Implement one canonical string form (what gets stored and displayed).\n- Avoid heuristics: require an explicit prefix for the scope kind.\n- Keep behavior deterministic (no implicit cwd/FS resolution unless the kind semantics demand it).\n\n3. Enforce strict validation\n- On invalid scope strings: raise/return an error that includes the input, the expected prefix/grammar, and at least one valid example.\n- Do not silently coerce ambiguous inputs.\n\n4. Roundtrip invariants\n- Ensure `parse(scope_str)` + `format(scope_obj)` is stable.\n- Ensure `parse(format(scope_obj))` yields an equivalent object.\n\n5. Update call sites\n- If CLI accepts scopes, ensure help text and examples match the canonical string form.\n- If scopes are persisted, ensure existing persisted values still parse (or provide an explicit migration path).\n\n6. Gates\n- Run: `uv run ruff check .`\n- Run: `uv run basedpyright`\n- Run: `uv run pytest`\n\n## Done when\n- One canonical string form exists per scope kind.\n- Invalid inputs produce high-signal, testable errors.\n- Roundtrip invariants hold and are covered by tests.\n",
+        "description": "Procedure for adding or changing Loom memory scope kinds without breaking stored data or CLI UX.",
+        "name": "loom-memory-scope-extension",
+        "source_instinct_ids": [
+          "scope-roundtrip-contract",
+          "scope-kind-explicit-prefixes",
+          "scope-validation-errors-high-signal",
+          "scope-normalize-paths-cautiously"
+        ],
+        "tags": [
+          "loom",
+          "memory",
+          "scopes",
+          "parsing",
+          "testing"
+        ]
+      }
+    ]
+  },
+  "triage": {
+    "notes": "",
+    "status": "accepted",
+    "tags": []
+  },
+  "version": 1
+}

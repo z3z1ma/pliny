@@ -1278,6 +1278,103 @@
       ]
     },
     {
+      "id": "scope-kind-explicit-prefixes",
+      "title": "Prefer explicit scope kind prefixes over heuristics",
+      "trigger": "When accepting user-provided scope strings (CLI flags, config, or interactive prompts)",
+      "action": "Require explicit prefixes like `file:...` / `command:...` / `dir:...` (or whatever set Loom supports) instead of trying to infer intent from the value; document the accepted prefixes and keep them minimal to reduce ambiguity and surprise.",
+      "tags": [
+        "cli",
+        "memory",
+        "parsing",
+        "ux"
+      ],
+      "confidence": 0.58,
+      "status": "active",
+      "created_at": "2026-02-09T20:53:24.282450Z",
+      "updated_at": "2026-02-09T20:53:24.282450Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T20:53:24.282450Z",
+          "episode_id": "883055ed0f173f797d74a5673db40cf642b8191663f6ef312188b017e1d17914",
+          "head_sha": "a4b960a2ccee937026cb931e55b500fd4b7de827",
+          "patch_sha256": ""
+        }
+      ]
+    },
+    {
+      "id": "scope-normalize-paths-cautiously",
+      "title": "Normalize path scopes cautiously and deterministically",
+      "trigger": "When implementing path-like scopes (file/dir/repo-ish) or changing how they are serialized",
+      "action": "Normalize only what is safe and deterministic (e.g., strip whitespace, unify separators if needed, avoid environment-dependent resolution); avoid implicit `resolve()` / cwd-dependent behavior unless the scope kind explicitly means 'relative to cwd'.",
+      "tags": [
+        "determinism",
+        "memory",
+        "portability",
+        "scopes"
+      ],
+      "confidence": 0.5,
+      "status": "active",
+      "created_at": "2026-02-09T20:53:24.282450Z",
+      "updated_at": "2026-02-09T20:53:24.282450Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T20:53:24.282450Z",
+          "episode_id": "883055ed0f173f797d74a5673db40cf642b8191663f6ef312188b017e1d17914",
+          "head_sha": "a4b960a2ccee937026cb931e55b500fd4b7de827",
+          "patch_sha256": ""
+        }
+      ]
+    },
+    {
+      "id": "scope-roundtrip-contract",
+      "title": "Treat scope parse/format as a strict roundtrip contract",
+      "trigger": "When adding or modifying Loom memory scope parsing/formatting (especially new scope kinds or new accepted spellings)",
+      "action": "Define an explicit internal representation for scopes and require `parse -> format -> parse` roundtrips to be stable; reject/raise on invalid inputs rather than guessing; keep one canonical string form for each scope to avoid drift in stored memory metadata.",
+      "tags": [
+        "correctness",
+        "memory",
+        "parsing",
+        "scopes",
+        "ux"
+      ],
+      "confidence": 0.62,
+      "status": "active",
+      "created_at": "2026-02-09T20:53:24.282450Z",
+      "updated_at": "2026-02-09T20:53:24.282450Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T20:53:24.282450Z",
+          "episode_id": "883055ed0f173f797d74a5673db40cf642b8191663f6ef312188b017e1d17914",
+          "head_sha": "a4b960a2ccee937026cb931e55b500fd4b7de827",
+          "patch_sha256": ""
+        }
+      ]
+    },
+    {
+      "id": "scope-validation-errors-high-signal",
+      "title": "Make scope validation errors actionable",
+      "trigger": "When adding new validation rules to scopes",
+      "action": "Raise errors that include: the original scope string, the expected grammar/prefix, and 1-2 example valid forms; ensure error text is stable enough for CLI UX tests.",
+      "tags": [
+        "cli",
+        "errors",
+        "memory",
+        "testing"
+      ],
+      "confidence": 0.55,
+      "status": "active",
+      "created_at": "2026-02-09T20:53:24.282450Z",
+      "updated_at": "2026-02-09T20:53:24.282450Z",
+      "evidence": [
+        {
+          "ts": "2026-02-09T20:53:24.282450Z",
+          "episode_id": "883055ed0f173f797d74a5673db40cf642b8191663f6ef312188b017e1d17914",
+          "head_sha": "a4b960a2ccee937026cb931e55b500fd4b7de827",
+          "patch_sha256": ""
+        }
+      ]
+    },
+    {
       "id": "stabilize-cli-output-contract",
       "title": "Stabilize CLI Output Contracts",
       "trigger": "When printing structured lists/summaries in CLI",
