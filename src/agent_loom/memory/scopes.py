@@ -95,7 +95,29 @@ def _normalize_tag_scope(raw: str) -> str:
     return s.lower()
 
 
-def parse_scope_string(item: str, *, repo_root: Optional[Path]) -> Dict[str, Any]:
+def _validate_repo_relative_scope_path(
+    *, kind: str, raw_val: str, repo_root: Optional[Path]
+) -> None:
+    if repo_root is None:
+        return
+    rv = raw_val.replace("\\", "/").strip()
+    if not rv.startswith("/"):
+        return
+    try:
+        ap = Path(rv).expanduser().resolve()
+    except Exception:
+        return
+    if repo_root not in ap.parents and ap != repo_root:
+        raise ValueError(
+            f"scope {kind}: path must be repo-relative (got absolute path outside repo root: {raw_val!r})"
+        )
+
+
+def parse_scope_string(
+    item: str,
+    *,
+    repo_root: Optional[Path],
+) -> Optional[Dict[str, Any]]:
     if ":" not in item:
         raise ValueError(
             f"Invalid scope {item!r}. Expected kind:value; valid kinds: {', '.join(SCOPE_KINDS)}"
@@ -104,63 +126,28 @@ def parse_scope_string(item: str, *, repo_root: Optional[Path]) -> Dict[str, Any
     kind = kind.strip()
     raw_val = value.strip()
     if kind not in SCOPE_KINDS:
-        raise ValueError(
-            f"Invalid scope kind {kind!r}. Valid kinds: {', '.join(SCOPE_KINDS)}"
-        )
+        return None
 
     key = SCOPE_KIND_KEY[kind]
     out: Dict[str, Any] = {"kind": kind, "raw": raw_val}
 
     if kind in ("file", "folder"):
-        # UX: allow globbing via file:/folder: for recall filters.
-        # Example: --scope file:src/**/*.py
-        if _looks_like_glob(raw_val):
-            if repo_root is not None:
-                try:
-                    rv = raw_val.replace("\\", "/").strip()
-                    if rv.startswith("/"):
-                        ap = Path(rv).expanduser().resolve()
-                        if repo_root not in ap.parents and ap != repo_root:
-                            raise ValueError(
-                                "scope glob: pattern must be repo-relative (got absolute path outside repo root)"
-                            )
-                except ValueError:
-                    raise
-                except Exception:
-                    pass
-
-            pat = _normalize_glob(raw_val, repo_root=repo_root)
-            if not pat:
-                raise ValueError("scope glob: pattern is empty")
-            return {"kind": "glob", "raw": raw_val, "pattern": pat}
-
-        if repo_root is not None:
-            try:
-                rv = raw_val.replace("\\", "/").strip()
-                if rv.startswith("/"):
-                    ap = Path(rv).expanduser().resolve()
-                    if repo_root not in ap.parents and ap != repo_root:
-                        raise ValueError(
-                            f"scope {kind}: path must be repo-relative (got absolute path outside repo root: {raw_val!r})"
-                        )
-            except ValueError:
-                raise
-            except Exception:
-                pass
-
-        p = _normalize_posix_path(raw_val, repo_root=repo_root)
+        is_glob_path = _looks_like_glob(raw_val)
+        _validate_repo_relative_scope_path(
+            kind=kind,
+            raw_val=raw_val,
+            repo_root=repo_root,
+        )
+        p = (
+            _normalize_glob(raw_val, repo_root=repo_root)
+            if is_glob_path
+            else _normalize_posix_path(raw_val, repo_root=repo_root)
+        )
         if not p:
             raise ValueError(f"scope {kind}: path is empty")
-        if kind == "folder" and not p.endswith("/"):
+        if kind == "folder" and not is_glob_path and not p.endswith("/"):
             p = p.rstrip("/") + "/"
         out[key] = p
-        return out
-
-    if kind == "glob":
-        pat = _normalize_glob(raw_val, repo_root=repo_root)
-        if not pat:
-            raise ValueError("scope glob: pattern is empty")
-        out[key] = pat
         return out
 
     if kind == "filetype":
@@ -212,6 +199,8 @@ def validate_file_scopes_exist(
         p = s.get("path")
         if not isinstance(p, str) or not p.strip():
             continue
+        if _looks_like_glob(p):
+            continue
         resolved = resolve_scope_path(scope_path=p, repo_root=repo_root, cwd=cwd)
         if not resolved.exists():
             raise MemoryError(
@@ -221,7 +210,7 @@ def validate_file_scopes_exist(
                 hint=f"Resolved to {str(resolved)}.",
                 suggestions=[
                     "Use folder:<dir>/ if the file is generated or not checked out",
-                    "Use glob:<pattern> for multiple possible paths",
+                    "Use file:<pattern> for multiple possible paths",
                     "Or pass --allow-missing-scopes",
                 ],
                 details={"scope": f"file:{p}", "resolved": str(resolved)},
@@ -251,20 +240,25 @@ def normalize_scopes(scopes: Any, *, repo_root: Optional[Path]) -> List[Dict[str
     out: List[Dict[str, Any]] = []
     for s in scopes:
         if isinstance(s, str):
-            out.append(parse_scope_string(s, repo_root=repo_root))
+            parsed = parse_scope_string(s, repo_root=repo_root)
+            if parsed is None:
+                continue
+            out.append(parsed)
             continue
         if not isinstance(s, dict):
             raise ValueError("scopes must contain objects or kind:value strings")
 
         kind = s.get("kind")
         if kind not in SCOPE_KINDS:
-            raise ValueError(f"Invalid scope kind in note: {kind!r}")
+            continue
 
         raw_val = s.get("raw")
         if not isinstance(raw_val, str) or not raw_val.strip():
             raise ValueError("scope objects must include raw")
 
         normalized = parse_scope_string(f"{kind}:{raw_val}", repo_root=repo_root)
+        if normalized is None:
+            continue
         out.append(normalized)
 
     seen = set()
@@ -291,18 +285,13 @@ def scope_matches_context(
     ctx_cmds: List[str] = []
     ctx_tags: List[str] = []
     ctx_filetypes: List[str] = []
-    ctx_globs: List[str] = []
 
     for c in ctx_scopes:
         if not isinstance(c, dict):
             continue
         k = c.get("kind")
-        if k == "file":
+        if k in ("file", "folder"):
             ctx_paths.append(str(c.get("path") or ""))
-        elif k == "folder":
-            ctx_paths.append(str(c.get("path") or ""))
-        elif k == "glob":
-            ctx_globs.append(str(c.get("pattern") or ""))
         elif k == "command":
             ctx_cmds.append(str(c.get("pattern") or ""))
         elif k == "tag":
@@ -319,7 +308,6 @@ def scope_matches_context(
     ctx_cmds = [c for c in ctx_cmds if c]
     ctx_tags = [t.lower() for t in ctx_tags if t]
     ctx_filetypes = [e.lower().lstrip(".") for e in ctx_filetypes if e]
-    ctx_globs = [g for g in ctx_globs if g]
 
     matched: List[Dict[str, Any]] = []
     best = 0
@@ -335,6 +323,17 @@ def scope_matches_context(
         pat = normcase(pattern)
         return fnmatch.fnmatchcase(p, pat)
 
+    def _glob_root(pattern: str) -> str:
+        p = (pattern or "").replace("\\", "/")
+        wildcards = [i for i, ch in enumerate(p) if ch in ("*", "?", "[")]
+        if not wildcards:
+            return p
+        prefix = p[: min(wildcards)]
+        slash = prefix.rfind("/")
+        if slash < 0:
+            return ""
+        return prefix[: slash + 1]
+
     for s in note_scopes:
         kind = s.get("kind")
         if kind not in SCOPE_KINDS:
@@ -343,23 +342,35 @@ def scope_matches_context(
         if kind == "file":
             sp = s.get("path")
             if isinstance(sp, str) and sp:
+                sp_is_glob = _looks_like_glob(sp)
                 for idx, c in enumerate(ctx_scopes):
-                    if (c.get("kind") in ("file", "folder")) and normcase(
-                        sp
-                    ) == normcase(str(c.get("path") or "")):
-                        matched.append(
-                            {"note_scope": s, "context": c, "reason": "file exact"}
-                        )
-                        best = max(best, SCOPE_MATCH_SCORE["file"])
-                        _mark_ctx_satisfied(idx)
-                    elif c.get("kind") == "glob":
-                        pat = str(c.get("pattern") or "")
-                        if pat and _glob_match(sp, pat):
+                    if c.get("kind") in ("file", "folder"):
+                        cp = str(c.get("path") or "")
+                        if not cp:
+                            continue
+                        cp_is_glob = _looks_like_glob(cp)
+                        if normcase(sp) == normcase(cp):
+                            matched.append(
+                                {"note_scope": s, "context": c, "reason": "file exact"}
+                            )
+                            best = max(best, SCOPE_MATCH_SCORE["file"])
+                            _mark_ctx_satisfied(idx)
+                        elif cp_is_glob and _glob_match(sp, cp):
                             matched.append(
                                 {
                                     "note_scope": s,
                                     "context": c,
-                                    "reason": "file matches ctx glob",
+                                    "reason": "file matches ctx pattern",
+                                }
+                            )
+                            best = max(best, SCOPE_MATCH_SCORE["file"])
+                            _mark_ctx_satisfied(idx)
+                        elif sp_is_glob and _glob_match(cp, sp):
+                            matched.append(
+                                {
+                                    "note_scope": s,
+                                    "context": c,
+                                    "reason": "ctx path matches note file pattern",
                                 }
                             )
                             best = max(best, SCOPE_MATCH_SCORE["file"])
@@ -369,59 +380,63 @@ def scope_matches_context(
         if kind == "folder":
             folder = s.get("path")
             if isinstance(folder, str) and folder:
+                folder_is_glob = _looks_like_glob(folder)
+                folder_norm = folder.rstrip("/") + "/"
                 for idx, c in enumerate(ctx_scopes):
                     if c.get("kind") in ("file", "folder"):
                         cp = str(c.get("path") or "")
-                        if normcase(cp) == normcase(folder) or normcase(cp).startswith(
-                            normcase(folder)
-                        ):
-                            matched.append(
-                                {
-                                    "note_scope": s,
-                                    "context": c,
-                                    "reason": "folder prefix",
-                                }
-                            )
-                            best = max(best, SCOPE_MATCH_SCORE["folder"])
-                            _mark_ctx_satisfied(idx)
-                    elif c.get("kind") == "glob":
-                        pat = str(c.get("pattern") or "")
-                        if not pat:
+                        if not cp:
                             continue
-                        folder_norm = folder.rstrip("/") + "/"
-                        # Conservative: treat it as a match when the context glob is
-                        # clearly rooted under this folder (prefix before any wildcard).
-                        if normcase(pat).startswith(normcase(folder_norm)):
-                            matched.append(
-                                {
-                                    "note_scope": s,
-                                    "context": c,
-                                    "reason": "folder contains ctx glob",
-                                }
-                            )
-                            best = max(best, SCOPE_MATCH_SCORE["folder"])
-                            _mark_ctx_satisfied(idx)
-            continue
-
-        if kind == "glob":
-            pat = s.get("pattern")
-            if isinstance(pat, str) and pat:
-                for idx, c in enumerate(ctx_scopes):
-                    if c.get("kind") in ("file", "folder"):
-                        cp = str(c.get("path") or "")
-                        if cp and _glob_match(cp, pat):
-                            matched.append(
-                                {"note_scope": s, "context": c, "reason": "glob match"}
-                            )
-                            best = max(best, SCOPE_MATCH_SCORE["glob"])
-                            _mark_ctx_satisfied(idx)
-                    elif c.get("kind") == "glob":
-                        if str(c.get("pattern") or "") == pat:
-                            matched.append(
-                                {"note_scope": s, "context": c, "reason": "glob eq"}
-                            )
-                            best = max(best, SCOPE_MATCH_SCORE["glob"])
-                            _mark_ctx_satisfied(idx)
+                        cp_is_glob = _looks_like_glob(cp)
+                        if not folder_is_glob and not cp_is_glob:
+                            if normcase(cp) == normcase(folder) or normcase(
+                                cp
+                            ).startswith(normcase(folder_norm)):
+                                matched.append(
+                                    {
+                                        "note_scope": s,
+                                        "context": c,
+                                        "reason": "folder prefix",
+                                    }
+                                )
+                                best = max(best, SCOPE_MATCH_SCORE["folder"])
+                                _mark_ctx_satisfied(idx)
+                        elif folder_is_glob and not cp_is_glob:
+                            if _glob_match(cp, folder):
+                                matched.append(
+                                    {
+                                        "note_scope": s,
+                                        "context": c,
+                                        "reason": "ctx path matches note folder pattern",
+                                    }
+                                )
+                                best = max(best, SCOPE_MATCH_SCORE["folder"])
+                                _mark_ctx_satisfied(idx)
+                        elif (not folder_is_glob) and cp_is_glob:
+                            cp_root = _glob_root(cp)
+                            if cp_root and normcase(cp_root).startswith(
+                                normcase(folder_norm)
+                            ):
+                                matched.append(
+                                    {
+                                        "note_scope": s,
+                                        "context": c,
+                                        "reason": "folder contains ctx pattern",
+                                    }
+                                )
+                                best = max(best, SCOPE_MATCH_SCORE["folder"])
+                                _mark_ctx_satisfied(idx)
+                        elif folder_is_glob and cp_is_glob:
+                            if normcase(folder) == normcase(cp):
+                                matched.append(
+                                    {
+                                        "note_scope": s,
+                                        "context": c,
+                                        "reason": "folder pattern eq",
+                                    }
+                                )
+                                best = max(best, SCOPE_MATCH_SCORE["folder"])
+                                _mark_ctx_satisfied(idx)
             continue
 
         if kind == "filetype":

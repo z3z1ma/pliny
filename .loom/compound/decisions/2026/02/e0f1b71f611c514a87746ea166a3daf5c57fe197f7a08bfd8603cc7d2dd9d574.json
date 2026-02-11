@@ -1,0 +1,81 @@
+{
+  "created_at": "2026-02-11T21:04:59.419091Z",
+  "decision_id": "e0f1b71f611c514a87746ea166a3daf5c57fe197f7a08bfd8603cc7d2dd9d574",
+  "episode_id": "517a7d951e2d4ae1ee98b051a0d26883aa07cc0ac86eccf1300d39920d222962",
+  "ops": [
+    {
+      "action": "Converge validation/normalization into shared scope helpers and keep one canonical representation of scope strings to reduce branching bugs and doc drift.",
+      "confidence": 0.83,
+      "episode_id": "517a7d951e2d4ae1ee98b051a0d26883aa07cc0ac86eccf1300d39920d222962",
+      "id": "centralize-scope-validation-and-normalization",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "loom-memory",
+        "maintainability",
+        "refactor",
+        "scopes"
+      ],
+      "title": "Centralize scope validation and normalization",
+      "trigger": "Scope logic starts spreading across multiple branches or call sites",
+      "ts": "2026-02-11T21:04:59.419091Z"
+    },
+    {
+      "action": "Update scope constants, parser/normalizer, and docs in the same change; add or adjust focused tests that cover accepted and rejected inputs so behavior cannot drift.",
+      "confidence": 0.94,
+      "episode_id": "517a7d951e2d4ae1ee98b051a0d26883aa07cc0ac86eccf1300d39920d222962",
+      "id": "memory-scope-contract-sync",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "contract-sync",
+        "docs",
+        "loom-memory",
+        "scopes",
+        "tests"
+      ],
+      "title": "Keep memory scope contracts synchronized",
+      "trigger": "Any change to memory scope kinds, parsing rules, or matching behavior",
+      "ts": "2026-02-11T21:04:59.419091Z"
+    },
+    {
+      "action": "Add explicit tests for positive matches, non-matches, malformed patterns, and normalization edge cases; keep failures user-facing and deterministic.",
+      "confidence": 0.9,
+      "episode_id": "517a7d951e2d4ae1ee98b051a0d26883aa07cc0ac86eccf1300d39920d222962",
+      "id": "scope-glob-requires-edge-coverage",
+      "notes": "",
+      "op": "instinct.upsert",
+      "tags": [
+        "determinism",
+        "glob",
+        "loom-memory",
+        "testing"
+      ],
+      "title": "Treat glob scope behavior as edge-case heavy",
+      "trigger": "Introducing or modifying glob-based memory scopes",
+      "ts": "2026-02-11T21:04:59.419091Z"
+    },
+    {
+      "body": "# Loom Memory Scope Extension\n\nUse this when adding or changing memory scope kinds in Loom.\n\n## Procedure\n1. Update the scope contract in `src/agent_loom/memory/constants.py` first (allowed kinds, exported sets, and any shared literals).\n2. Implement parsing, validation, and canonicalization in `src/agent_loom/memory/scopes.py` with one canonical internal form for each scope.\n3. Keep matching behavior deterministic and centralized; avoid duplicating scope interpretation logic in multiple call sites.\n4. If glob behavior is involved, define clear handling for valid patterns, invalid patterns, and no-match cases with stable user-facing outcomes.\n5. Update user-facing scope docs and examples in `src/agent_loom/memory/README.md` in the same change.\n6. Add or update targeted tests (for example `tests/test_memory_scope_glob.py`) that cover:\n   - successful parses and matches\n   - explicit non-matches\n   - malformed/invalid scope inputs\n   - normalization/canonicalization behavior\n7. Run quality gates before finalizing:\n   - `uv run ruff check .`\n   - `uv run basedpyright`\n   - `uv run pytest` (or at minimum the relevant focused memory scope tests first, then full suite)\n\n## Done Criteria\n- Scope rules are defined in one contract source and consumed consistently.\n- Parser/matcher behavior is deterministic and covered by focused tests.\n- README scope docs match runtime behavior.\n- No dead scope code paths remain.",
+      "description": "Procedure for adding or changing Loom memory scope kinds (including glob semantics) without introducing parser, matcher, or docs drift.",
+      "episode_id": "517a7d951e2d4ae1ee98b051a0d26883aa07cc0ac86eccf1300d39920d222962",
+      "name": "loom-memory-scope-extension",
+      "op": "skill.upsert",
+      "source_instinct_ids": [
+        "centralize-scope-validation-and-normalization",
+        "memory-scope-contract-sync",
+        "scope-glob-requires-edge-coverage"
+      ],
+      "tags": [
+        "documentation",
+        "glob",
+        "loom-memory",
+        "scopes",
+        "testing"
+      ],
+      "ts": "2026-02-11T21:04:59.419091Z"
+    }
+  ],
+  "proposal_blob_sha256": "a5a0cba2058b3b17f6e882c96ec05e29d045cac4744dc0846cd0e227e8a18abc",
+  "version": 1
+}

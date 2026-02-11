@@ -128,6 +128,30 @@
       ]
     },
     {
+      "id": "centralize-scope-validation-and-normalization",
+      "title": "Centralize scope validation and normalization",
+      "trigger": "Scope logic starts spreading across multiple branches or call sites",
+      "action": "Converge validation/normalization into shared scope helpers and keep one canonical representation of scope strings to reduce branching bugs and doc drift.",
+      "tags": [
+        "loom-memory",
+        "maintainability",
+        "refactor",
+        "scopes"
+      ],
+      "confidence": 0.83,
+      "status": "active",
+      "created_at": "2026-02-11T21:04:59.419091Z",
+      "updated_at": "2026-02-11T21:04:59.419091Z",
+      "evidence": [
+        {
+          "ts": "2026-02-11T21:04:59.419091Z",
+          "episode_id": "517a7d951e2d4ae1ee98b051a0d26883aa07cc0ac86eccf1300d39920d222962",
+          "head_sha": "2d25cfd646eaed71d4409cc7ef21fc0e697f541e",
+          "patch_sha256": "a3d9c9bdfb9e212183086aaab4bf16d28f93f3b30830e3c968fc8f87fac7e109"
+        }
+      ]
+    },
+    {
       "id": "cli-changes-require-ux-regression-tests",
       "title": "Add CLI UX tests alongside CLI behavior changes",
       "trigger": "When changing CLI output, exit codes, error handling, or flags for any loom subcommand (especially user-facing UX paths).",
@@ -845,6 +869,55 @@
       ]
     },
     {
+      "id": "memory-scope-change-is-cross-layer",
+      "title": "Treat memory scope changes as cross-layer contract work",
+      "trigger": "When adding, removing, or changing Loom memory scope syntax or scope kinds",
+      "action": "Update all scope touchpoints together: `src/agent_loom/memory/scopes.py` parsing/normalization, `src/agent_loom/memory/constants.py` identifiers, `src/agent_loom/memory/core.py` write paths, `src/agent_loom/memory/recall.py` read/filter paths, and `src/agent_loom/memory/README.md` docs in the same change.",
+      "tags": [
+        "contract-sync",
+        "cross-layer",
+        "memory",
+        "scope"
+      ],
+      "confidence": 0.96,
+      "status": "active",
+      "created_at": "2026-02-11T21:21:38.402529Z",
+      "updated_at": "2026-02-11T21:21:38.402529Z",
+      "evidence": [
+        {
+          "ts": "2026-02-11T21:21:38.402529Z",
+          "episode_id": "de39f751f660e27dd86ac6a3f4e9fd7bf4cbc258fdb56bb916aded03026b05fb",
+          "head_sha": "2d25cfd646eaed71d4409cc7ef21fc0e697f541e",
+          "patch_sha256": "624aa3d0af247cd829f7a90c3c7f0d8d182112cdec80d4374cf5ee038032fbe8"
+        }
+      ]
+    },
+    {
+      "id": "memory-scope-contract-sync",
+      "title": "Keep memory scope contracts synchronized",
+      "trigger": "Any change to memory scope kinds, parsing rules, or matching behavior",
+      "action": "Update scope constants, parser/normalizer, and docs in the same change; add or adjust focused tests that cover accepted and rejected inputs so behavior cannot drift.",
+      "tags": [
+        "contract-sync",
+        "docs",
+        "loom-memory",
+        "scopes",
+        "tests"
+      ],
+      "confidence": 0.94,
+      "status": "active",
+      "created_at": "2026-02-11T21:04:59.419091Z",
+      "updated_at": "2026-02-11T21:04:59.419091Z",
+      "evidence": [
+        {
+          "ts": "2026-02-11T21:04:59.419091Z",
+          "episode_id": "517a7d951e2d4ae1ee98b051a0d26883aa07cc0ac86eccf1300d39920d222962",
+          "head_sha": "2d25cfd646eaed71d4409cc7ef21fc0e697f541e",
+          "patch_sha256": "a3d9c9bdfb9e212183086aaab4bf16d28f93f3b30830e3c968fc8f87fac7e109"
+        }
+      ]
+    },
+    {
       "id": "openapi-keep-spec-deterministic",
       "title": "Keep OpenAPI spec deterministic and non-generated where possible",
       "trigger": "Editing `docs/openapi.yaml` during endpoint/schema updates",
@@ -1255,6 +1328,30 @@
       ]
     },
     {
+      "id": "remove-stale-scope-paths-immediately",
+      "title": "Delete stale scope branches once replacement lands",
+      "trigger": "After replacing legacy scope parsing or dispatch logic",
+      "action": "Search for legacy markers (for example `legacy` or old scope prefixes) and remove dead branches immediately so parser behavior has a single source of truth.",
+      "tags": [
+        "cleanup",
+        "dead-code",
+        "maintainability",
+        "scope"
+      ],
+      "confidence": 0.89,
+      "status": "active",
+      "created_at": "2026-02-11T21:21:38.402529Z",
+      "updated_at": "2026-02-11T21:21:38.402529Z",
+      "evidence": [
+        {
+          "ts": "2026-02-11T21:21:38.402529Z",
+          "episode_id": "de39f751f660e27dd86ac6a3f4e9fd7bf4cbc258fdb56bb916aded03026b05fb",
+          "head_sha": "2d25cfd646eaed71d4409cc7ef21fc0e697f541e",
+          "patch_sha256": "624aa3d0af247cd829f7a90c3c7f0d8d182112cdec80d4374cf5ee038032fbe8"
+        }
+      ]
+    },
+    {
       "id": "reproducible-pack-outputs",
       "title": "Prefer reproducible packaging outputs",
       "trigger": "When implementing or extending `pack`-like functionality that builds archives/bundles/manifests",
@@ -1274,6 +1371,30 @@
           "episode_id": "6b4f92dcfe0b292c1545e85c5c8d5eb0751c41108b80b557a74a4c6539245fd9",
           "head_sha": "b6ff7f76d8fd836ce1b5c94002b0a1d4e46d2003",
           "patch_sha256": ""
+        }
+      ]
+    },
+    {
+      "id": "scope-glob-requires-edge-coverage",
+      "title": "Treat glob scope behavior as edge-case heavy",
+      "trigger": "Introducing or modifying glob-based memory scopes",
+      "action": "Add explicit tests for positive matches, non-matches, malformed patterns, and normalization edge cases; keep failures user-facing and deterministic.",
+      "tags": [
+        "determinism",
+        "glob",
+        "loom-memory",
+        "testing"
+      ],
+      "confidence": 0.9,
+      "status": "active",
+      "created_at": "2026-02-11T21:04:59.419091Z",
+      "updated_at": "2026-02-11T21:04:59.419091Z",
+      "evidence": [
+        {
+          "ts": "2026-02-11T21:04:59.419091Z",
+          "episode_id": "517a7d951e2d4ae1ee98b051a0d26883aa07cc0ac86eccf1300d39920d222962",
+          "head_sha": "2d25cfd646eaed71d4409cc7ef21fc0e697f541e",
+          "patch_sha256": "a3d9c9bdfb9e212183086aaab4bf16d28f93f3b30830e3c968fc8f87fac7e109"
         }
       ]
     },
@@ -1351,6 +1472,30 @@
       ]
     },
     {
+      "id": "scope-syntax-migration-needs-compat-tests",
+      "title": "Backwards syntax handling requires explicit migration tests",
+      "trigger": "When introducing a new scope syntax form (for example prefixed forms like `glob:`) or deprecating legacy forms",
+      "action": "Add/expand targeted tests in `tests/test_memory_scope_glob.py` to cover accepted inputs, normalization behavior, and rejection of ambiguous forms. Include both legacy and new syntax cases until legacy behavior is fully removed.",
+      "tags": [
+        "memory",
+        "migration",
+        "scope-glob",
+        "tests"
+      ],
+      "confidence": 0.93,
+      "status": "active",
+      "created_at": "2026-02-11T21:21:38.402529Z",
+      "updated_at": "2026-02-11T21:21:38.402529Z",
+      "evidence": [
+        {
+          "ts": "2026-02-11T21:21:38.402529Z",
+          "episode_id": "de39f751f660e27dd86ac6a3f4e9fd7bf4cbc258fdb56bb916aded03026b05fb",
+          "head_sha": "2d25cfd646eaed71d4409cc7ef21fc0e697f541e",
+          "patch_sha256": "624aa3d0af247cd829f7a90c3c7f0d8d182112cdec80d4374cf5ee038032fbe8"
+        }
+      ]
+    },
+    {
       "id": "scope-validation-errors-high-signal",
       "title": "Make scope validation errors actionable",
       "trigger": "When adding new validation rules to scopes",
@@ -1371,6 +1516,30 @@
           "episode_id": "883055ed0f173f797d74a5673db40cf642b8191663f6ef312188b017e1d17914",
           "head_sha": "a4b960a2ccee937026cb931e55b500fd4b7de827",
           "patch_sha256": ""
+        }
+      ]
+    },
+    {
+      "id": "ship-scope-ux-with-doc-and-skill-sync",
+      "title": "Scope UX changes must ship with docs and skill updates",
+      "trigger": "When memory scope behavior changes in user-facing CLI flows",
+      "action": "Update `src/agent_loom/memory/README.md` and the procedural skill `.opencode/skills/loom-memory-scope-extension/SKILL.md` (and distributed copy under `src/agent_loom/compound/opencode/skills/loom-memory-scope-extension/SKILL.md`) in the same PR.",
+      "tags": [
+        "compound",
+        "docs",
+        "memory",
+        "skills"
+      ],
+      "confidence": 0.94,
+      "status": "active",
+      "created_at": "2026-02-11T21:21:38.402529Z",
+      "updated_at": "2026-02-11T21:21:38.402529Z",
+      "evidence": [
+        {
+          "ts": "2026-02-11T21:21:38.402529Z",
+          "episode_id": "de39f751f660e27dd86ac6a3f4e9fd7bf4cbc258fdb56bb916aded03026b05fb",
+          "head_sha": "2d25cfd646eaed71d4409cc7ef21fc0e697f541e",
+          "patch_sha256": "624aa3d0af247cd829f7a90c3c7f0d8d182112cdec80d4374cf5ee038032fbe8"
         }
       ]
     },

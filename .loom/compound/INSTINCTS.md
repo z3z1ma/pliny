@@ -3,12 +3,30 @@
 <!-- BEGIN:compound:instincts-md -->
 ## Active instincts (top confidence)
 
+- **memory-scope-change-is-cross-layer** (96%) [contract-sync, cross-layer, memory, scope]
+  - Trigger: When adding, removing, or changing Loom memory scope syntax or scope kinds
+  - Action: Update all scope touchpoints together: `src/agent_loom/memory/scopes.py` parsing/normalization, `src/agent_loom/memory/constants.py` identifiers, `src/agent_loom/memory/core.py` write paths, `src/agen...
+- **memory-scope-contract-sync** (94%) [contract-sync, docs, loom-memory, scopes, tests]
+  - Trigger: Any change to memory scope kinds, parsing rules, or matching behavior
+  - Action: Update scope constants, parser/normalizer, and docs in the same change; add or adjust focused tests that cover accepted and rejected inputs so behavior cannot drift.
+- **ship-scope-ux-with-doc-and-skill-sync** (94%) [compound, docs, memory, skills]
+  - Trigger: When memory scope behavior changes in user-facing CLI flows
+  - Action: Update `src/agent_loom/memory/README.md` and the procedural skill `.opencode/skills/loom-memory-scope-extension/SKILL.md` (and distributed copy under `src/agent_loom/compound/opencode/skills/loom-memo...
+- **scope-syntax-migration-needs-compat-tests** (93%) [memory, migration, scope-glob, tests]
+  - Trigger: When introducing a new scope syntax form (for example prefixed forms like `glob:`) or deprecating legacy forms
+  - Action: Add/expand targeted tests in `tests/test_memory_scope_glob.py` to cover accepted inputs, normalization behavior, and rejection of ambiguous forms. Include both legacy and new syntax cases until legacy...
 - **compound-autolearn-json-only** (92%) [autolearn, compound, io-contract, memory, process]
   - Trigger: When acting as the background autolearn/compound learning agent producing memory-only updates.
   - Action: Do not run any tools; output exactly one valid JSON object (no markdown). If there is no durable learning worth persisting, output `{}`. Keep within budgets and avoid proposing product code changes.
 - **avoid-tooling-artifacts-in-templates** (90%) [compound, hygiene, templates]
   - Trigger: When adding or reviewing files under template trees like src/agent_loom/compound/opencode/ (or other scaffolded outputs).
   - Action: Exclude tool-specific project files (e.g., `.serena/*`, local IDE metadata, assistant-runner configs) from templates and committed scaffolds unless they are a deliberate product feature; prefer removi...
+- **scope-glob-requires-edge-coverage** (90%) [determinism, glob, loom-memory, testing]
+  - Trigger: Introducing or modifying glob-based memory scopes
+  - Action: Add explicit tests for positive matches, non-matches, malformed patterns, and normalization edge cases; keep failures user-facing and deterministic.
+- **remove-stale-scope-paths-immediately** (89%) [cleanup, dead-code, maintainability, scope]
+  - Trigger: After replacing legacy scope parsing or dispatch logic
+  - Action: Search for legacy markers (for example `legacy` or old scope prefixes) and remove dead branches immediately so parser behavior has a single source of truth.
 - **plan-mode-submit-plan-before-implementation** (86%) [planning, process, safety, workflow]
   - Trigger: When operating under Plan Mode / read-only constraints or when a plan is explicitly requested as a gate before coding
   - Action: Do only inspection/analysis; produce a concrete, executable plan; call `submit_plan` with plan+summary; do not edit files or run write-capable tools until the plan is approved
@@ -18,6 +36,9 @@
 - **avoid-lsp-diagnostics-use-basedpyright** (85%) [python, quality-gates, type-checking, uv, workflow]
   - Trigger: When you need to assess/resolve Python type issues in a repo that treats basedpyright as a required gate (or explicitly instructs to use it).
   - Action: Run `uv run basedpyright` and fix reported issues; do not rely on editor/LSP diagnostics or the `lsp_diagnostics` tool as a substitute for the gate.
+- **centralize-scope-validation-and-normalization** (83%) [loom-memory, maintainability, refactor, scopes]
+  - Trigger: Scope logic starts spreading across multiple branches or call sites
+  - Action: Converge validation/normalization into shared scope helpers and keep one canonical representation of scope strings to reduce branching bugs and doc drift.
 - **add-cli-ux-tests-when-output-changes** (82%) [cli, stability, tests, ux]
   - Trigger: When changing any CLI command behavior (stdout/stderr text, exit codes, help output, error messages)
   - Action: Add or update a focused CLI UX test that asserts exit code and a small set of stable substrings/lines (not full output), covering both success and failure cases; avoid brittle assertions on whitespace...
@@ -102,27 +123,6 @@
 - **python-change-run-gates-even-for-doc-heavy-prs** (74%) [basedpyright, python, quality, ruff, tests]
   - Trigger: When a change set includes any Python edits (even small ones) alongside lots of markdown/skill edits
   - Action: Run uv-based gates in order: `uv run ruff check .` then `uv run basedpyright` then relevant `uv run pytest` subset (at least pack tests if pack touched). Fix warnings/errors instead of deferring.
-- **sync-distributed-opencode-plugin** (74%) [compound, distribution, drift-prevention, opencode]
-  - Trigger: When editing `.opencode/plugins/compound_engineering.ts` or any opencode plugin that is also shipped under `src/agent_loom/**/opencode/plugins/`
-  - Action: Treat the plugin as having a source-of-truth and a distributed copy: update both copies in the same change, or consolidate to a single source and add a deterministic sync step + a check (e.g., CI/test...
-- **keep-core-and-cli-error-contract-aligned** (73%) [cli, error-handling, loom-ticket, ux-contract]
-  - Trigger: When updating core behavior that the CLI surfaces (validation, missing resources, ambiguous inputs)
-  - Action: Make core raise/return a single, well-typed/consistent error shape that CLI maps to stable user-facing messages + non-zero exit codes; add a UX test covering the error path.
-- **document-new-subsystem-entrypoints** (72%) [architecture, docs, onboarding]
-  - Trigger: When adding a new subsystem or expanding an existing one with multiple new modules (e.g., `core.py`, `models.py`, `cli.py`, `recall.py`)
-  - Action: Add/update a subsystem README that explains: the user-facing commands, where data is stored, primary module responsibilities, and the quickest 'smoke path' to validate behavior.
-- **extract-new-package-from-monolith** (72%) [architecture, maintainability, packaging, python, refactor]
-  - Trigger: A refactor produces a diffstat dominated by large deletions in a single file/module (hundreds of lines removed) and the remaining code is conceptually multiple responsibilities.
-  - Action: Extract a focused package with a small public surface (exports in __init__.py), split by role (models/types vs core logic vs registries), add a package-level README that states scope + non-goals, then...
-- **loom-ticket-never-delete** (72%) [hygiene, loom, tickets, workflow]
-  - Trigger: When cleaning up or finishing work tracked under `.loom/ticket/`
-  - Action: Preserve history by closing the ticket (or moving it into `.loom/ticket/closed/`) instead of deleting the markdown file directly; only remove a ticket file if it was created by mistake and contains no...
-- **pack-change-sync-sample-and-tests** (72%) [consistency, packs, regression, sample-data, tests]
-  - Trigger: When editing any pack implementation under src/agent_loom/pack/ (core/lock/packs/cli) or changing pack behaviors/validation
-  - Action: Update the reference pack at src/agent_loom/pack/packs/sample/pack.yaml and any sample command/docs under src/agent_loom/pack/packs/sample/files/ to match the new behavior, then adjust tests in tests/...
-- **compound-skill-path-source-of-truth** (71%) [compound, repo-hygiene, skills]
-  - Trigger: When reading, updating, or proposing skills for Loom / OpenCode
-  - Action: Prefer `.opencode/skills/<name>/SKILL.md` as the source-of-truth; if a parallel legacy path exists (e.g. `.claude/skills/...`), do not create/maintain duplicates—converge on the `.opencode/skills` cop...
 
 ## Notes
 

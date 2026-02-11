@@ -86,7 +86,6 @@ Kinds:
 
 - `file:src/app.py`
 - `folder:src/`
-- `glob:src/**/*.py`
 - `filetype:py`
 - `command:pytest -q`
 - `tag:infra`
@@ -94,6 +93,8 @@ Kinds:
 Notes:
 
 - `file` and `folder` are repo-relative when in a git repo.
+- `file` and `folder` support glob wildcards (`*`, `?`, `[]`) in the path value.
+- Unknown scope kinds are ignored during parsing and matching.
 - `--allow-missing-scopes` bypasses file existence checks.
 - `--command` is shorthand for `--scope command:...` (supported by `add`, `edit`, and `recall`).
 

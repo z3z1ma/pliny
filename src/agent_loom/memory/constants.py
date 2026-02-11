@@ -25,11 +25,10 @@ MDLINK_RE = re.compile(r"(?<!\!)\[[^\]]*?\]\(([^)]+?)\)")
 FENCED_CODE_RE = re.compile(r"(?ms)^```.*?^```\s*$")
 FENCED_TILDE_RE = re.compile(r"(?ms)^~~~.*?^~~~\s*$")
 
-SCOPE_KINDS = ("file", "folder", "glob", "filetype", "command", "tag")
+SCOPE_KINDS = ("file", "folder", "filetype", "command", "tag")
 SCOPE_KIND_KEY = {
     "file": "path",
     "folder": "path",
-    "glob": "pattern",
     "filetype": "ext",
     "command": "pattern",
     "tag": "tag",
@@ -38,7 +37,6 @@ SCOPE_KIND_KEY = {
 SCOPE_MATCH_SCORE = {
     "file": 50,
     "folder": 40,
-    "glob": 30,
     "command": 20,
     "filetype": 10,
     "tag": 5,

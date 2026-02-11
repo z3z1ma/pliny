@@ -106,7 +106,9 @@ def parse_context_scopes(
         it = it.strip()
         if not it:
             continue
-        out.append(parse_scope_string(it, repo_root=repo_root))
+        parsed = parse_scope_string(it, repo_root=repo_root)
+        if parsed is not None:
+            out.append(parsed)
     return out
 
 

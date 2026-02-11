@@ -302,7 +302,11 @@ def add(
                 ],
             )
         scope_items.append(f"command:{cmd}")
-    scopes = [parse_scope_string(s, repo_root=repo_root) for s in scope_items]
+    scopes: List[Dict[str, Any]] = []
+    for s in scope_items:
+        parsed = parse_scope_string(s, repo_root=repo_root)
+        if parsed is not None:
+            scopes.append(parsed)
     if scopes:
         # Dedup by JSON signature for stable frontmatter.
         sigs = {json.dumps(s, sort_keys=True, ensure_ascii=False): s for s in scopes}
@@ -637,18 +641,22 @@ def edit(
         changed = True
     if add_scopes_raw or remove_scopes_raw:
         cur = normalize_scopes(fm.get("scopes"), repo_root=repo_root)
-        add_scopes = [
-            parse_scope_string(s, repo_root=repo_root) for s in add_scopes_raw
-        ]
+        add_scopes: List[Dict[str, Any]] = []
+        for s in add_scopes_raw:
+            parsed = parse_scope_string(s, repo_root=repo_root)
+            if parsed is not None:
+                add_scopes.append(parsed)
         validate_file_scopes_exist(
             add_scopes,
             repo_root=repo_root,
             cwd=cwd,
             allow_missing=bool(allow_missing_scopes),
         )
-        rem_scopes = [
-            parse_scope_string(s, repo_root=repo_root) for s in remove_scopes_raw
-        ]
+        rem_scopes: List[Dict[str, Any]] = []
+        for s in remove_scopes_raw:
+            parsed = parse_scope_string(s, repo_root=repo_root)
+            if parsed is not None:
+                rem_scopes.append(parsed)
         # Dedup/remove by JSON signature
         cur_sigs = {json.dumps(s, sort_keys=True, ensure_ascii=False): s for s in cur}
         for s in add_scopes:
@@ -893,7 +901,11 @@ def list_recent(
     scope_args = parse_multi_csvish(list(scope) if scope else None)
     if command:
         scope_args.append(f"command:{command}")
-    ctx_scopes = [parse_scope_string(s, repo_root=repo_root) for s in scope_args]
+    ctx_scopes: List[Dict[str, Any]] = []
+    for s in scope_args:
+        parsed = parse_scope_string(s, repo_root=repo_root)
+        if parsed is not None:
+            ctx_scopes.append(parsed)
     validate_file_scopes_exist(
         ctx_scopes,
         repo_root=repo_root,
@@ -902,11 +914,12 @@ def list_recent(
     )
 
     not_scope_args = parse_multi_csvish(list(not_scope) if not_scope else None)
-    not_ctx_scopes = (
-        [parse_scope_string(s, repo_root=repo_root) for s in not_scope_args]
-        if not_scope_args
-        else []
-    )
+    not_ctx_scopes: List[Dict[str, Any]] = []
+    if not_scope_args:
+        for s in not_scope_args:
+            parsed = parse_scope_string(s, repo_root=repo_root)
+            if parsed is not None:
+                not_ctx_scopes.append(parsed)
 
     vis = list(visibility) if visibility else default_visibility_from_env()
 
@@ -962,7 +975,11 @@ def grep(
     scope_args = parse_multi_csvish(list(scope) if scope else None)
     if command:
         scope_args.append(f"command:{command}")
-    ctx_scopes = [parse_scope_string(s, repo_root=repo_root) for s in scope_args]
+    ctx_scopes: List[Dict[str, Any]] = []
+    for s in scope_args:
+        parsed = parse_scope_string(s, repo_root=repo_root)
+        if parsed is not None:
+            ctx_scopes.append(parsed)
     validate_file_scopes_exist(
         ctx_scopes,
         repo_root=repo_root,
@@ -971,11 +988,12 @@ def grep(
     )
 
     not_scope_args = parse_multi_csvish(list(not_scope) if not_scope else None)
-    not_ctx_scopes = (
-        [parse_scope_string(s, repo_root=repo_root) for s in not_scope_args]
-        if not_scope_args
-        else []
-    )
+    not_ctx_scopes: List[Dict[str, Any]] = []
+    if not_scope_args:
+        for s in not_scope_args:
+            parsed = parse_scope_string(s, repo_root=repo_root)
+            if parsed is not None:
+                not_ctx_scopes.append(parsed)
 
     vis = list(visibility) if visibility else default_visibility_from_env()
 
