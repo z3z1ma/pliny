@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import dataclasses
 import difflib
 import json
 import os
@@ -9,6 +8,7 @@ import sys
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
+from agent_loom.core.cli_output import emit_json, make_ok_envelope, normalize_payload
 from agent_loom.core.time import parse_duration_seconds
 from agent_loom.team.constants import (
     DEFAULT_AUTOCAPTURE_LINES,
@@ -70,7 +70,7 @@ from agent_loom.team.core import (
 )
 from agent_loom.team.errors import TeamError
 from agent_loom.team.exec import _require_bin, _run
-from agent_loom.team.output import _emit_error, _emit_json
+from agent_loom.team.output import _emit_error
 from agent_loom.team.prime import prime
 from agent_loom.team.strings import message_preview, sanitize
 
@@ -395,21 +395,8 @@ def _did_you_mean(value: str, choices: Sequence[str]) -> list[str]:
     return difflib.get_close_matches(v, list(choices), n=3, cutoff=0.6)
 
 
-def _payload(obj: Any) -> Any:
-    if hasattr(obj, "to_dict"):
-        return obj.to_dict()
-    if dataclasses.is_dataclass(obj) and not isinstance(obj, type):
-        return dataclasses.asdict(obj)
-    return obj
-
-
 def emit_json_result(result: Any) -> None:
-    payload = _payload(result)
-    if isinstance(payload, dict):
-        data = {"ok": True, **payload}
-    else:
-        data = {"ok": True, "data": payload}
-    _emit_json(data)
+    emit_json(make_ok_envelope(normalize_payload(result)), indent=2)
 
 
 def _maybe_worktree_root(invoked_from: Path) -> Optional[Path]:

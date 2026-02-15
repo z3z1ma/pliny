@@ -9,6 +9,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional, Sequence
 
+from agent_loom.core.cli_output import emit_json
+
 from agent_loom.compound.install import install_opencode
 from agent_loom.core.git import git_repo_root
 from agent_loom.memory.core import init as memory_init
@@ -365,14 +367,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if not interactive and do_workspace and workspace_mode not in {"repo", "harness"}:
         hint = "Pass --workspace-mode repo or --workspace-mode harness (required for non-interactive loom init)."
         if bool(args.json):
-            _emit_json(
-                {
-                    "ok": False,
-                    "cmd": "init",
-                    "error": "workspace_mode is required",
-                    "hint": hint,
-                }
-            )
+            emit_json(
+            {
+                "ok": False,
+                "cmd": "init",
+                "error": "workspace_mode is required",
+                "hint": hint,
+            }
+        )
         else:
             sys.stderr.write(f"Error: workspace_mode is required. {hint}\n")
         return 2
@@ -407,7 +409,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     }
 
     if bool(args.json):
-        _emit_json(payload)
+        emit_json(payload)
         return 0 if res.ok else 2
 
     if not res.ok:

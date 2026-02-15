@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 from typing import Optional, Sequence
 
+from agent_loom.core.cli_output import emit_json
+
 from agent_loom.core.git import git_repo_root
 from agent_loom.pack.core import (
     doctor,
@@ -27,8 +29,6 @@ class PackArgumentParser(argparse.ArgumentParser):
         raise ArgParseError(message)
 
 
-def _emit_json(obj: object) -> None:
-    sys.stdout.write(json.dumps(obj, sort_keys=True) + "\n")
 
 
 def _infer_json(argv: Sequence[str]) -> bool:
@@ -204,7 +204,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             "hint": "Run: loom pack -h",
         }
         if _infer_json(raw_argv):
-            _emit_json(payload)
+            emit_json(payload)
         else:
             sys.stderr.write(f"Error: {e}\n")
             sys.stderr.write("Run: loom pack -h\n")
@@ -214,7 +214,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         packs = list_packs()
         payload = {"ok": True, "packs": [p.__dict__ for p in packs]}
         if bool(getattr(args, "json", False)):
-            _emit_json(payload)
+            emit_json(payload)
         else:
             if not packs:
                 sys.stdout.write("(no packs)\n")
@@ -229,7 +229,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if bool(getattr(args, "json", False)):
             if want_diff:
                 payload = {**payload, "diffs": _status_diff_items(repo_root=repo)}
-            _emit_json(payload)
+            emit_json(payload)
         else:
             sys.stdout.write(json.dumps(payload, indent=2) + "\n")
             drifted_val = payload.get("drifted")
@@ -254,7 +254,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         repo = _resolve_repo_root(getattr(args, "repo", None))
         payload = doctor(repo, pack_id=getattr(args, "pack", None))
         if bool(getattr(args, "json", False)):
-            _emit_json(payload)
+            emit_json(payload)
         else:
             sys.stdout.write(json.dumps(payload, indent=2) + "\n")
         return 0
@@ -279,7 +279,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         )
         payload = {**res.__dict__, **({"diffs": diffs} if want_diff else {})}
         if bool(getattr(args, "json", False)):
-            _emit_json(payload)
+            emit_json(payload)
         else:
             sys.stdout.write(json.dumps(payload, indent=2) + "\n")
             sys.stdout.write("note: commit .loom/pack/lock.json\n")
@@ -318,7 +318,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         )
         payload = {**res.__dict__, **({"diffs": diffs} if want_diff else {})}
         if bool(getattr(args, "json", False)):
-            _emit_json(payload)
+            emit_json(payload)
         else:
             sys.stdout.write(json.dumps(payload, indent=2) + "\n")
             sys.stdout.write("note: commit .loom/pack/lock.json\n")
@@ -357,7 +357,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         )
         payload = {**res.__dict__, **({"diffs": diffs} if want_diff else {})}
         if bool(getattr(args, "json", False)):
-            _emit_json(payload)
+            emit_json(payload)
         else:
             sys.stdout.write(json.dumps(payload, indent=2) + "\n")
             sys.stdout.write("note: commit .loom/pack/lock.json\n")
