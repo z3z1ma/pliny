@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import dataclasses
 import datetime as dt
-import json
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -168,10 +167,6 @@ def run_init(opts: LoomInitOptions) -> LoomInitResult:
         error=err,
         meta={"generated_at": now_iso(), "workspace_mode": ws_mode},
     )
-
-
-def _emit_json(obj: object) -> None:
-    sys.stdout.write(json.dumps(obj, sort_keys=True) + "\n")
 
 
 def _isatty() -> bool:
