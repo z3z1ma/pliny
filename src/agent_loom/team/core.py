@@ -1143,6 +1143,55 @@ def _omp_model_available(bin: str, model: str) -> tuple[bool, str]:
         # Return True with a warning - the spawn will fail naturally if the model is actually bad.
         return (True, f"Model preflight check failed: {e!r}")
 
+def _validate_omp_models(
+    *,
+    bin: str,
+    harness: str,
+    model: str,
+    manager_model: str,
+    worker_model: str,
+    investigator_model: str,
+    integrator_model: str,
+) -> None:
+    """Validate OMP model overrides before persisting to run.json.
+
+    Raises TeamError if a model is known-invalid.
+    Warns but continues if model check cannot be performed.
+    """
+    if harness != "omp":
+        return
+
+    # Collect all explicit model overrides.
+    models_to_check: list[tuple[str, str]] = []
+    if str(model or "").strip():
+        models_to_check.append(("global", str(model).strip()))
+    if str(manager_model or "").strip():
+        models_to_check.append(("manager", str(manager_model).strip()))
+    if str(worker_model or "").strip():
+        models_to_check.append(("worker", str(worker_model).strip()))
+    if str(investigator_model or "").strip():
+        models_to_check.append(("investigator", str(investigator_model).strip()))
+    if str(integrator_model or "").strip():
+        models_to_check.append(("integrator", str(integrator_model).strip()))
+
+    if not models_to_check:
+        return
+
+    for role, model_name in models_to_check:
+        available, error_msg = _omp_model_available(bin, model_name)
+        if not available:
+            # Definite failure: model is known-invalid.
+            raise TeamError(
+                f"OMP model invalid for {role}: {error_msg}",
+                code="OMP_MODEL",
+                exit_code=2,
+                hint=(
+                    f"List available models: omp --list-models <pattern>\n"
+                    f"Valid example: loom team start <team> --harness omp --{role if role != 'global' else ''}model openai/gpt-4o"
+                ),
+            )
+
+
 
 def _omp_tui_argv(
     *,
@@ -2405,6 +2454,17 @@ def start(
             update_cfg["models"] = models_map
 
             run[update_harness] = update_cfg
+            # Validate OMP models before persisting (existing run path).
+            _validate_omp_models(
+                bin=str(update_cfg.get("bin") or "").strip() or update_harness,
+                harness=update_harness,
+                model=model,
+                manager_model=manager_model,
+                worker_model=worker_model,
+                investigator_model=investigator_model,
+                integrator_model=integrator_model,
+            )
+
             save_run(paths, run)
 
             # Adopt persisted session unless the caller explicitly overrides.
@@ -2548,6 +2608,18 @@ def start(
             ms = _merge_state(run)
             ms["branch"] = merge_branch_for_run(run)
             run["merge"] = ms
+            # Validate OMP models before persisting (new run path).
+            final_cfg = dict(run.get(requested_harness) or {})
+            _validate_omp_models(
+                bin=str(final_cfg.get("bin") or "").strip() or requested_harness,
+                harness=requested_harness,
+                model=model,
+                manager_model=manager_model,
+                worker_model=worker_model,
+                investigator_model=investigator_model,
+                integrator_model=integrator_model,
+            )
+
             save_run(paths, run)
 
         # If session was updated via adoption, persist it back.

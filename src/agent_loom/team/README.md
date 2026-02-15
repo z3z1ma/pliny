@@ -475,3 +475,31 @@ Ship push failed
 git push origin main
 loom team ship my-team --no-push
 ```
+
+OMP model invalid or unavailable
+
+List available models to find a valid one:
+
+```
+omp --list-models <pattern>
+omp --list-models openai
+omp --list-models github-copilot
+```
+
+Fix existing run with invalid model in run.json:
+
+```
+# Option 1: Update via loom team config
+loom team config my-team --omp-model openai/gpt-4o
+
+# Option 2: Edit run.json directly (if team not running)
+vim .loom/team/runs/my-team/run.json
+# Find "omp": {"model": "...", "models": {...}} and update to valid models
+
+# Option 3: Start with valid model override
+loom team start my-team --harness omp --worker-model openai/gpt-4o
+```
+
+Note: `loom team start` validates OMP models before persisting to run.json and
+will fail fast with an actionable error if a model is known-invalid.
+
