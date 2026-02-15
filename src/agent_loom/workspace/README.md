@@ -12,6 +12,48 @@ the workspace module.
 - The modes never dispatch into each other automatically.
 - JSON is always available via `--json` (anywhere on the command line).
 
+## Module architecture
+
+### Responsibility boundaries
+
+**CLI layer** (`workspace/cli.py`):
+- Parser construction and argument validation
+- Dispatches to command handler modules
+- Contains rendering/output logic specific to workspace (text tables, diff formatting)
+- Uses shared output primitives from `core/cli_output.py` for JSON serialization
+
+**Command handlers** (`workspace/commands/*.py`):
+- Grouped by domain: core, repo, harness, worktree, deps, lease
+- Each module owns command implementation for its domain
+- Delegates to `workspace/core.py` and domain-specific modules for business logic
+- Returns structured data; rendering delegated to CLI layer
+
+**Core business logic**:
+- `workspace/core.py`: repo/worktree lifecycle, state management, git operations
+- `workspace/harness/core.py`: harness initialization, multi-repo coordination
+- `workspace/repo/*.py`: repo discovery, sandbox, cleanup
+- `workspace/harness/*.py`: components, deps, impact, leases, exec, gc
+- `workspace/git/*.py`: git subprocess wrappers and diff utilities
+
+**Models and utilities**:
+- `workspace/models.py`: dataclasses for workspace/harness state
+- `workspace/worktree_meta.py`: worktree metadata schema
+- `workspace/state.py`: state persistence helpers
+- `workspace/guards.py`: mode detection and validation
+- `workspace/utils.py`: shared helpers
+
+**Output contract**:
+- Uses `core/cli_output.py` shared primitives for JSON serialization
+- Workspace-specific envelope metadata (cmd, root, meta.generated_at) added via local wrappers in `workspace/cli.py`
+- All commands MUST use these helpers, not local duplicates
+
+### Guardrails
+
+1. **No duplicate output helpers**: All JSON serialization uses `core/cli_output.py` primitives. Local helper duplication is a regression.
+2. **Command handlers delegate rendering**: Command handler modules return structured data; `workspace/cli.py` handles presentation.
+3. **Mode separation enforced**: Harness commands error if run inside managed repos. Repo commands error if workspace not initialized. Guards in `workspace/guards.py` enforce this.
+4. **Import direction**: Command modules import from business logic modules and core, never vice versa.
+
 ## Why use workspace harness (beyond git)
 
 - Annotations + TTL: purpose/ticket/owner/ttl on worktrees and groups.
