@@ -7,9 +7,11 @@ import select
 import stat
 import sys
 import uuid
-from dataclasses import asdict, is_dataclass
+from dataclasses import asdict
 from pathlib import Path
 from typing import Any, NoReturn, Optional, Sequence
+
+from agent_loom.core.cli_output import emit_json, make_error_envelope, make_ok_envelope
 
 import yaml
 
@@ -127,11 +129,12 @@ def _should_audit_cmd(cmd: str) -> bool:
 
 def _emit_json(obj: Any) -> None:
     if not isinstance(obj, dict):
-        obj = {"ok": True, "result": obj}
+        envelope = make_ok_envelope(obj)
     elif "ok" not in obj:
-        obj = {"ok": True, **obj}
-    sys.stdout.write(json.dumps(obj, sort_keys=True, separators=(",", ":")))
-    sys.stdout.write("\n")
+        envelope = {"ok": True, **obj}
+    else:
+        envelope = obj
+    emit_json(envelope, minified=True)
 
 
 def _emit_error(
@@ -144,25 +147,15 @@ def _emit_error(
     details: Optional[dict[str, Any]] = None,
 ) -> None:
     if json_mode:
-        payload: dict[str, Any] = {"ok": False, "error": error, "code": code}
-        if hint:
-            payload["hint"] = hint
-        if suggestions:
-            payload["suggestions"] = list(suggestions)
-        if details:
-            payload["details"] = dict(details)
-        sys.stdout.write(json.dumps(payload, sort_keys=True))
-        sys.stdout.write("\n")
-    else:
-        sys.stderr.write(f"Error: {error}\n")
-        if hint:
-            sys.stderr.write(f"Hint: {hint}\n")
-        if suggestions:
-            for s in suggestions:
-                if str(s).strip():
-                    sys.stderr.write(f"Try: {s}\n")
-
-
+        envelope = make_error_envelope(
+            error=error,
+            code=code,
+            hint=hint,
+            suggestions=list(suggestions) if suggestions else None,
+            details=dict(details) if details else None,
+        )
+        emit_json(envelope, minified=True)
+        return
 _VALUE_FLAGS = {"-p", "-m", "-a", "-T", "-N"}
 _FLAG_ALIASES = {
     "--ticket-dir": "--tickets-dir",
@@ -214,10 +207,6 @@ def _did_you_mean(value: str, choices: Sequence[str]) -> list[str]:
     return difflib.get_close_matches(v, list(choices), n=3, cutoff=0.6)
 
 
-def _payload(obj: Any) -> Any:
-    if is_dataclass(obj) and not isinstance(obj, type):
-        return asdict(obj)
-    return obj
 
 
 def _render_ticket_line(row: dict[str, Any]) -> str:
@@ -770,7 +759,7 @@ def _handle_query_output(obj: Any, *, fmt: str, json_mode: bool) -> int:
 
 def _emit_list_result(title: str, result: TicketListResult, *, json_mode: bool) -> None:
     if json_mode:
-        _emit_json(_payload(result))
+        _emit_json(asdict(result))
     else:
         sys.stdout.write(_render_list(title, result))
 
@@ -788,7 +777,7 @@ def _handle_version(_args: argparse.Namespace, json_mode: bool, _cwd: Path) -> i
 def _handle_init(_args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = init()
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"Initialized {response.initialized}\n")
     return 0
@@ -821,7 +810,7 @@ def _handle_create(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
         acceptance=args.acceptance or "",
     )
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"{response.id}\n")
     return 0
@@ -832,7 +821,7 @@ def _handle_status(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
         ticket=args.ticket, new_status=args.new_status, force=bool(args.force)
     )
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"Updated {response.id} -> {response.status}\n")
     return 0
@@ -841,7 +830,7 @@ def _handle_status(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
 def _handle_start(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = start(ticket=args.ticket, force=bool(args.force))
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"Updated {response.id} -> {response.status}\n")
     return 0
@@ -850,7 +839,7 @@ def _handle_start(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
 def _handle_close(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = close(ticket=args.ticket, force=bool(args.force))
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"Updated {response.id} -> {response.status}\n")
     return 0
@@ -859,7 +848,7 @@ def _handle_close(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
 def _handle_reopen(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = reopen(ticket=args.ticket, force=bool(args.force))
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"Updated {response.id} -> {response.status}\n")
     return 0
@@ -916,8 +905,8 @@ def _handle_show(args: argparse.Namespace, json_mode: bool, cwd: Path) -> int:
     response = show(ticket=args.ticket)
     if json_mode:
         payload = {
-            "ticket": _payload(response.ticket),
-            "relationships": _payload(response.relationships),
+            "ticket": asdict(response.ticket),
+            "relationships": asdict(response.relationships),
             "body": response.body,
             "frontmatter": response.frontmatter,
             "lease": response.lease,
@@ -968,7 +957,7 @@ def _handle_update(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
             note = _maybe_read_stdin() or ""
         response = add_note(ticket=args.ticket, note=note, force=bool(args.force))
         if json_mode:
-            _emit_json(_payload(response))
+            _emit_json(asdict(response))
         else:
             sys.stdout.write(f"Note added to {response.id}\n")
         return 0
@@ -997,7 +986,7 @@ def _handle_update(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
         force=bool(args.force),
     )
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"Updated {response.id}\n")
     return 0
@@ -1026,7 +1015,7 @@ def _handle_add_note(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> i
         note = _maybe_read_stdin() or ""
     response = add_note(ticket=args.ticket, note=note, force=bool(args.force))
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"Note added to {response.id}\n")
     return 0
@@ -1038,8 +1027,8 @@ def _handle_dep(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
         payload = {
             "root": response.root,
             "nodes": response.nodes,
-            "edges": [_payload(e) for e in response.edges],
-            "health": _payload(response.health),
+            "edges": [asdict(e) for e in response.edges],
+            "health": asdict(response.health),
         }
         _emit_json(payload)
     else:
@@ -1055,7 +1044,7 @@ def _handle_dep_add(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> in
         ticket=args.ticket, dependency=args.dependency, force=bool(args.force)
     )
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         if response.changed:
             sys.stdout.write(
@@ -1071,7 +1060,7 @@ def _handle_dep_rm(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
         ticket=args.ticket, dependency=args.dependency, force=bool(args.force)
     )
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(
             f"Removed dependency: {response.id} -/-> {response.dependency}\n"
@@ -1082,7 +1071,7 @@ def _handle_dep_rm(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
 def _handle_dep_cycle(_args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = dep_cycle()
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         if not response.cycles:
             sys.stdout.write("No dependency cycles found\n")
@@ -1099,7 +1088,7 @@ def _handle_dep_cycle(_args: argparse.Namespace, json_mode: bool, _cwd: Path) ->
 def _handle_link(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = link(tickets=list(args.tickets), force=bool(args.force))
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         if response.changed == 0:
             sys.stdout.write("All links already exist\n")
@@ -1113,7 +1102,7 @@ def _handle_link(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
 def _handle_unlink(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = unlink(ticket=args.ticket, target=args.target, force=bool(args.force))
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"Removed link: {response.id} <-> {response.target}\n")
     return 0
@@ -1123,12 +1112,12 @@ def _handle_view(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = view(ticket=args.ticket)
     if json_mode:
         payload = {
-            "ticket": _payload(response.ticket),
+            "ticket": asdict(response.ticket),
             "graph": {
                 "nodes": response.graph.nodes,
-                "edges": [_payload(e) for e in response.graph.edges],
+                "edges": [asdict(e) for e in response.graph.edges],
             },
-            "health": _payload(response.health),
+            "health": asdict(response.health),
         }
         _emit_json(payload)
     else:
@@ -1147,7 +1136,7 @@ def _handle_view(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
 def _handle_claim(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = claim(ticket=args.ticket, ttl=args.ttl, force=bool(args.force))
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(
             f"Claimed {response.id} as {response.claimed_by} (ttl {args.ttl})\n"
@@ -1158,7 +1147,7 @@ def _handle_claim(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
 def _handle_heartbeat(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = heartbeat(ticket=args.ticket, extend=bool(args.extend))
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"Heartbeat updated for {response.id}\n")
     return 0
@@ -1167,7 +1156,7 @@ def _handle_heartbeat(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> 
 def _handle_release(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = release(ticket=args.ticket, force=bool(args.force))
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         sys.stdout.write(f"Released {response.id}\n")
     return 0
@@ -1176,7 +1165,7 @@ def _handle_release(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> in
 def _handle_swarm(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = swarm(active_within=args.active_within)
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         if not response.agents:
             sys.stdout.write("No active claims\n")
@@ -1195,7 +1184,7 @@ def _handle_swarm(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
 def _handle_sync(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = sync(message=args.message)
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         if not response.committed:
             sys.stdout.write("No ticket changes\n")
@@ -1213,7 +1202,7 @@ def _handle_sync_external(args: argparse.Namespace, json_mode: bool, _cwd: Path)
         force=bool(args.force),
     )
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         lines = [f"# Sync External ({len(response.results)})"]
         for r in response.results:
@@ -1232,7 +1221,7 @@ def _handle_query(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
 def _handle_prime(_args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = prime()
     if json_mode:
-        _emit_json(_payload(response))
+        _emit_json(asdict(response))
     else:
         text = str(response.payload.get("markdown") or "")
         if text:

@@ -9,6 +9,8 @@ from importlib import resources
 from pathlib import Path
 from typing import Optional, Sequence
 
+from agent_loom.core.cli_output import emit_json
+
 from agent_loom.compound.evolve import evolve_instincts
 from agent_loom.compound.hooks import run_claude_hook, run_omp_hook, run_opencode_hook
 from agent_loom.compound.import_export import export_instincts, instinct_import
@@ -33,8 +35,6 @@ class CompoundArgumentParser(argparse.ArgumentParser):
         raise ArgParseError(message)
 
 
-def _emit_json(obj: object) -> None:
-    sys.stdout.write(json.dumps(obj, sort_keys=True) + "\n")
 
 
 def _resolve_repo_root(repo: Optional[str]) -> Path:
@@ -319,7 +319,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             "hint": "Run: loom compound -h",
         }
         if _infer_json(raw_argv):
-            _emit_json(payload)
+            emit_json(payload)
         else:
             sys.stderr.write(f"Error: {e}\n")
             sys.stderr.write("Run: loom compound -h\n")
@@ -341,7 +341,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 "warnings": res.warnings,
             }
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stdout.write(f"installed into: {res.dest}\n")
                 sys.stdout.write(f"pack: {COMPOUND_PACK_ID}\n")
@@ -383,7 +383,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         except Exception as e:
             payload = {"ok": False, "error": str(e)}
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stderr.write(f"Error: {e}\n")
             return 1
@@ -396,7 +396,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             )
             payload = {"ok": True, **dataclasses.asdict(res)}
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 if not res.committed:
                     sys.stdout.write("compound sync: noop\n")
@@ -408,7 +408,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         except Exception as e:
             payload = {"ok": False, "error": str(e)}
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stderr.write(f"Error: {e}\n")
             return 1
@@ -434,14 +434,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             )
             payload = dataclasses.asdict(res)
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stdout.write(json.dumps(payload, indent=2) + "\n")
             return 0
         except Exception as e:
             payload = {"ok": False, "error": str(e)}
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stderr.write(f"Error: {e}\n")
             return 1
@@ -464,14 +464,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 "observer": dataclasses.asdict(status),
             }
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stdout.write(json.dumps(payload, indent=2) + "\n")
             return 0
         except Exception as e:
             payload = {"ok": False, "error": str(e)}
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stderr.write(f"Error: {e}\n")
             return 1
@@ -490,14 +490,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             )
             payload = dataclasses.asdict(res)
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stdout.write(json.dumps(payload, indent=2) + "\n")
             return 0
         except Exception as e:
             payload = {"ok": False, "error": str(e)}
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stderr.write(f"Error: {e}\n")
             return 1
@@ -517,14 +517,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             )
             payload = dataclasses.asdict(res)
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stdout.write(json.dumps(payload, indent=2) + "\n")
             return 0
         except Exception as e:
             payload = {"ok": False, "error": str(e)}
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stderr.write(f"Error: {e}\n")
             return 1
@@ -539,14 +539,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             )
             payload = dataclasses.asdict(res)
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stdout.write(json.dumps(payload, indent=2) + "\n")
             return 0
         except Exception as e:
             payload = {"ok": False, "error": str(e)}
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stderr.write(f"Error: {e}\n")
             return 1
@@ -564,14 +564,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 res = run_observer_once(repo=repo)
             payload = dataclasses.asdict(res)
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stdout.write(json.dumps(payload, indent=2) + "\n")
             return 0
         except Exception as e:
             payload = {"ok": False, "error": str(e)}
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stderr.write(f"Error: {e}\n")
             return 1
@@ -582,7 +582,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             md = p.read_text(encoding="utf-8", errors="replace")
         payload = {"ok": True, "markdown": md}
         if bool(getattr(args, "json", False)):
-            _emit_json(payload)
+            emit_json(payload)
         else:
             sys.stdout.write(str(md).rstrip() + "\n")
         return 0
@@ -617,7 +617,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     event=event_raw,
                 )
                 if bool(getattr(args, "json", False)):
-                    _emit_json(dataclasses.asdict(res))
+                    emit_json(dataclasses.asdict(res))
             else:
                 res = run_omp_hook(
                     repo=repo,
@@ -626,12 +626,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     event=event_raw,
                 )
                 if bool(getattr(args, "json", False)):
-                    _emit_json(dataclasses.asdict(res))
+                    emit_json(dataclasses.asdict(res))
             return 0 if bool(res.ok) else 1
         except Exception as e:
             payload = {"ok": False, "error": str(e)}
             if bool(getattr(args, "json", False)):
-                _emit_json(payload)
+                emit_json(payload)
             else:
                 sys.stderr.write(f"Error: {e}\n")
             return 1

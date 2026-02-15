@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-import json
 import sys
 from typing import Any, Mapping, Sequence
+
+from agent_loom.core.cli_output import emit_json as _core_emit_json, make_error_envelope
 
 
 def _eprint(*a: object) -> None:
@@ -10,8 +11,7 @@ def _eprint(*a: object) -> None:
 
 
 def _emit_json(payload: Any) -> None:
-    json.dump(payload, sys.stdout, indent=2, sort_keys=True)
-    sys.stdout.write("\n")
+    _core_emit_json(payload, indent=2)
 
 
 def _emit_error(
@@ -24,17 +24,15 @@ def _emit_error(
     details: Mapping[str, Any] | None = None,
 ) -> None:
     if json_mode:
-        payload: dict[str, Any] = {"ok": False, "code": str(code), "error": str(error)}
-        if hint:
-            payload["hint"] = str(hint)
-        if suggestions:
-            payload["suggestions"] = [str(s) for s in suggestions if str(s).strip()]
-        if details:
-            payload["details"] = dict(details)
-        _emit_json(payload)
+        envelope = make_error_envelope(
+            error=error,
+            code=code,
+            hint=hint,
+            suggestions=[str(s) for s in suggestions if str(s).strip()] if suggestions else None,
+            details=dict(details) if details else None,
+        )
+        _emit_json(envelope)
         return
-
-    _eprint(f"Error: {error}")
     if hint:
         _eprint(f"Hint: {hint}")
     if suggestions:

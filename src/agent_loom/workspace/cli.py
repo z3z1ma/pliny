@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import argparse
-import dataclasses
 import json
 import sys
 from pathlib import Path
 from typing import Any, Optional, Sequence
+
+from agent_loom.core.cli_output import emit_json, normalize_payload
 
 from agent_loom.workspace.constants import (
     REPO_INTERNAL_DIR,
@@ -180,41 +181,33 @@ def _cmd_name(args: argparse.Namespace) -> str:
     return cmd
 
 
-def _emit_json(obj: dict) -> None:
-    sys.stdout.write(json.dumps(obj, indent=2, sort_keys=True) + "\n")
-
-
-def _payload(obj: Any) -> Any:
-    if hasattr(obj, "to_dict"):
-        return obj.to_dict()
-    if dataclasses.is_dataclass(obj) and not isinstance(obj, type):
-        return dataclasses.asdict(obj)
-    return obj
 
 
 def emit_ok(args: argparse.Namespace, root: Path, data: Any = None) -> None:
-    _emit_json(
+    emit_json(
         {
             "ok": True,
             "cmd": _cmd_name(args),
             "root": str(root.resolve()),
-            "data": _payload(data),
+            "data": normalize_payload(data),
             "meta": {"generated_at": now_iso()},
-        }
+        },
+        indent=2,
     )
 
 
 def emit_error(
     args: argparse.Namespace, root: Optional[Path], err: BaseException
 ) -> None:
-    _emit_json(
+    emit_json(
         {
             "ok": False,
             "cmd": _cmd_name(args),
             "root": str(root.resolve()) if root else None,
             "error": {"type": type(err).__name__, "message": str(err)},
             "meta": {"generated_at": now_iso()},
-        }
+        },
+        indent=2,
     )
 
 
@@ -742,10 +735,10 @@ def _render_text(result: Any) -> str:
         return _render_prime_text(result.payload)
 
     if isinstance(result, ContextResult):
-        payload = _payload(result)
+        payload = normalize_payload(result)
         return json.dumps(payload, indent=2, sort_keys=True) + "\n"
 
-    payload = _payload(result)
+    payload = normalize_payload(result)
     return json.dumps(payload, indent=2, sort_keys=True) + "\n"
 
 
@@ -1504,14 +1497,15 @@ def cmd_prime(args: argparse.Namespace) -> None:
     payload = res.payload
     root = Path.cwd().resolve()
     if getattr(args, "json", False):
-        _emit_json(
+        emit_json(
             {
                 "ok": True,
                 "cmd": "prime",
                 "root": str(root),
                 "data": payload,
                 "meta": {"generated_at": now_iso()},
-            }
+            },
+            indent=2,
         )
         return
     sys.stdout.write(_render_prime_text(payload))
