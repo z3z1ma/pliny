@@ -38,6 +38,8 @@ def _temp_git_repo():
                 "GIT_AUTHOR_EMAIL": "test@example.com",
                 "GIT_COMMITTER_NAME": "Test",
                 "GIT_COMMITTER_EMAIL": "test@example.com",
+                "TEAM_SPRINT_NAME": "",
+                "TEAM_SPRINT_TAG": "",
             }
         )
         _git(["init"], cwd=root, env=env)
@@ -313,6 +315,68 @@ class TestTicketUx(unittest.TestCase):
             self.assertEqual(code, 0)
             self.assertEqual(int(list_limited_short.get("count") or 0), 1)
             self.assertEqual(len(list_limited_short.get("tickets") or []), 1)
+
+    def test_sprint_context_show_set_clear(self) -> None:
+        with _temp_git_repo() as (root, env):
+            tickets_dir = root / ".loom" / "ticket"
+            env = {**env, "TICKET_DIR": str(tickets_dir)}
+
+            code, shown_empty = _ticket_json(
+                ["--json", "--no-audit", "sprint", "show"],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(str(shown_empty.get("name") or ""), "")
+            self.assertEqual(str(shown_empty.get("tag") or ""), "")
+
+            code, set_payload = _ticket_json(
+                [
+                    "--json",
+                    "--no-audit",
+                    "sprint",
+                    "set",
+                    "--name",
+                    "YAML Sprint Foundations",
+                    "--tag",
+                    "sprint:YAML-Sprint-Foundations",
+                ],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(
+                str(set_payload.get("name") or ""),
+                "YAML Sprint Foundations",
+            )
+            self.assertEqual(
+                str(set_payload.get("tag") or ""),
+                "sprint:YAML-Sprint-Foundations",
+            )
+
+            code, shown_set = _ticket_json(
+                ["--json", "--no-audit", "sprint", "show"],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(
+                str(shown_set.get("name") or ""),
+                "YAML Sprint Foundations",
+            )
+            self.assertEqual(
+                str(shown_set.get("tag") or ""),
+                "sprint:YAML-Sprint-Foundations",
+            )
+
+            code, cleared = _ticket_json(
+                ["--json", "--no-audit", "sprint", "clear"],
+                cwd=root,
+                env=env,
+            )
+            self.assertEqual(code, 0)
+            self.assertEqual(str(cleared.get("name") or ""), "")
+            self.assertEqual(str(cleared.get("tag") or ""), "")
 
 
 if __name__ == "__main__":

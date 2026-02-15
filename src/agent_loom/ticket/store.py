@@ -324,13 +324,17 @@ class TicketStore:
             raw.get("github", {}) if isinstance(raw.get("github", {}), dict) else {}
         )
         jira = raw.get("jira", {}) if isinstance(raw.get("jira", {}), dict) else {}
-
+        sprint = (
+            raw.get("sprint", {}) if isinstance(raw.get("sprint", {}), dict) else {}
+        )
         return TicketConfig(
             prefix=str(raw.get("prefix") or ""),
             github_default_repo=str(
                 raw.get("github_default_repo") or github.get("default_repo") or ""
             ),
             jira_base_url=str(raw.get("jira_base_url") or jira.get("base_url") or ""),
+            sprint_name=str(raw.get("sprint_name") or sprint.get("name") or ""),
+            sprint_tag=str(raw.get("sprint_tag") or sprint.get("tag") or ""),
             extra={
                 k: v
                 for k, v in (raw or {}).items()
@@ -339,8 +343,11 @@ class TicketStore:
                     "prefix",
                     "github",
                     "jira",
+                    "sprint",
                     "github_default_repo",
                     "jira_base_url",
+                    "sprint_name",
+                    "sprint_tag",
                 }
             },
         )

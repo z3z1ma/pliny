@@ -46,6 +46,9 @@ from agent_loom.ticket.core import (
     release,
     reopen,
     show,
+    sprint_clear,
+    sprint_set,
+    sprint_show,
     start,
     status,
     swarm,
@@ -392,8 +395,19 @@ def build_parser() -> argparse.ArgumentParser:
         "--no-sprint-tag",
         dest="no_sprint_tag",
         action="store_true",
-        help="Do not auto-add TEAM_SPRINT_TAG (if set)",
+        help="Do not auto-add sprint tag from ticket sprint context or TEAM_SPRINT_TAG",
     )
+
+    sp = sub.add_parser("sprint", parents=[common], help="Manage sprint context")
+    spr_sub = sp.add_subparsers(dest="sprint_cmd", required=True)
+
+    spr_sub.add_parser("show", help="Show configured sprint context")
+
+    spr_set = spr_sub.add_parser("set", help="Set sprint context")
+    spr_set.add_argument("--name", required=True, help="Sprint name")
+    spr_set.add_argument("--tag", required=True, help="Sprint tag")
+
+    spr_sub.add_parser("clear", help="Clear sprint context")
 
     sp = sub.add_parser("status", parents=[common], help="Set ticket status")
     sp.add_argument("ticket", type=_arg_ticket_ref)
@@ -854,6 +868,34 @@ def _handle_reopen(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int
     return 0
 
 
+def _handle_sprint(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
+    sprint_cmd = str(getattr(args, "sprint_cmd", "") or "")
+    if sprint_cmd == "show":
+        response = sprint_show()
+    elif sprint_cmd == "set":
+        response = sprint_set(name=args.name, tag=args.tag)
+    elif sprint_cmd == "clear":
+        response = sprint_clear()
+    else:
+        raise TicketArgError(
+            code="ARG",
+            error=f"Unknown sprint command: {sprint_cmd}",
+            hint="Run `loom ticket sprint -h`.",
+            suggestions=["loom ticket sprint -h"],
+            details={"sprint_cmd": sprint_cmd},
+        )
+
+    if json_mode:
+        _emit_json(asdict(response))
+    else:
+        if sprint_cmd == "clear":
+            sys.stdout.write("Sprint context cleared\n")
+        elif response.name or response.tag:
+            sys.stdout.write(f"name: {response.name}\ntag: {response.tag}\n")
+        else:
+            sys.stdout.write("No sprint context set\n")
+    return 0
+
 def _handle_list(args: argparse.Namespace, json_mode: bool, _cwd: Path) -> int:
     response = list_tickets(
         status=args.status,
@@ -1238,6 +1280,7 @@ def _dispatch(cmd: str, args: argparse.Namespace, *, json_mode: bool, cwd: Path)
         "start": _handle_start,
         "close": _handle_close,
         "reopen": _handle_reopen,
+        "sprint": _handle_sprint,
         "list": _handle_list,
         "ls": _handle_list,
         "ready": _handle_ready,

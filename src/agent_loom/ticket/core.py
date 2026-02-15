@@ -102,6 +102,7 @@ from agent_loom.ticket.models import (
     TicketLinkResult,
     TicketListResult,
     TicketPrimeResult,
+    TicketSprintContextResult,
     TicketQueryResult,
     TicketRelationships,
     TicketReleaseResult,
@@ -154,6 +155,9 @@ __all__ = [
     "release",
     "reopen",
     "show",
+    "sprint_clear",
+    "sprint_set",
+    "sprint_show",
     "start",
     "status",
     "swarm",
@@ -403,27 +407,97 @@ def init() -> TicketInitResult:
     return TicketInitResult(initialized=str(store.tickets_dir))
 
 
+def _load_config_raw(store: TicketStore) -> Dict[str, Any]:
+    raw: Dict[str, Any] = {}
+    if store.config_path.exists():
+        try:
+            parsed = yaml.safe_load(store.config_path.read_text(encoding="utf-8")) or {}
+            if isinstance(parsed, dict):
+                raw = dict(parsed)
+        except Exception:
+            raw = {}
+    return raw
+
+
+def _write_config_raw(store: TicketStore, raw: Mapping[str, Any]) -> None:
+    store.ensure()
+    data = dict(raw) if isinstance(raw, dict) else {}
+    store.config_path.write_text(yaml.safe_dump(data, sort_keys=False), encoding="utf-8")
+
+
+def _stored_sprint_context(store: TicketStore) -> TicketSprintContextResult:
+    cfg = store.load_config()
+    return TicketSprintContextResult(
+        name=str(cfg.sprint_name or "").strip(),
+        tag=str(cfg.sprint_tag or "").strip(),
+    )
+
+
+def _effective_sprint_tag(store: TicketStore) -> str:
+    context = _stored_sprint_context(store)
+    if context.tag:
+        return context.tag
+    return str(os.getenv("TEAM_SPRINT_TAG") or "").strip()
+
+
 def _ensure_prefix(store: TicketStore, *, cwd: Path) -> str:
     store.ensure()
     cfg = store.load_config()
     if cfg.prefix:
         return cfg.prefix
-
     prefix = dirname_prefix(cwd)
-
-    raw: Dict[str, Any] = {}
-    if store.config_path.exists():
-        try:
-            raw = yaml.safe_load(store.config_path.read_text(encoding="utf-8")) or {}
-        except Exception:
-            raw = {}
-
-    raw = dict(raw) if isinstance(raw, dict) else {}
+    raw = _load_config_raw(store)
     raw["prefix"] = prefix
-    store.config_path.write_text(yaml.safe_dump(raw, sort_keys=False), encoding="utf-8")
-
+    _write_config_raw(store, raw)
     return prefix
 
+
+def sprint_show() -> TicketSprintContextResult:
+    store = store_for_cmd("create")
+    return _stored_sprint_context(store)
+
+
+def sprint_set(*, name: str, tag: str) -> TicketSprintContextResult:
+    sprint_name = str(name or "").strip()
+    if not sprint_name:
+        raise TicketArgError(
+            code="ARG",
+            error="Sprint name is required",
+            hint="Provide a non-empty sprint name.",
+            suggestions=["loom ticket sprint set --name 'Sprint Name' --tag sprint:sprint-name"],
+        )
+
+    sprint_tag = str(tag or "").strip()
+    if not sprint_tag:
+        raise TicketArgError(
+            code="ARG",
+            error="Sprint tag is required",
+            hint="Provide a non-empty sprint tag.",
+            suggestions=["loom ticket sprint set --name 'Sprint Name' --tag sprint:sprint-name"],
+        )
+
+    store = store_for_cmd("create")
+    raw = _load_config_raw(store)
+    sprint_raw = raw.get("sprint", {})
+    sprint_data = dict(sprint_raw) if isinstance(sprint_raw, dict) else {}
+    sprint_data["name"] = sprint_name
+    sprint_data["tag"] = sprint_tag
+    raw["sprint"] = sprint_data
+    raw.pop("sprint_name", None)
+    raw.pop("sprint_tag", None)
+    _write_config_raw(store, raw)
+    return TicketSprintContextResult(name=sprint_name, tag=sprint_tag)
+
+
+def sprint_clear() -> TicketSprintContextResult:
+    store = store_for_cmd("create")
+    raw = _load_config_raw(store)
+    raw.pop("sprint", None)
+    raw.pop("sprint_name", None)
+    raw.pop("sprint_tag", None)
+    if raw or store.config_path.exists():
+        _write_config_raw(store, raw)
+    return TicketSprintContextResult(name="", tag="")
 
 def create(
     *,
@@ -499,7 +573,7 @@ def create_in_dir(
     if parent_id:
         fm["parent"] = parent_id
 
-    sprint_tag = str(os.getenv("TEAM_SPRINT_TAG") or "").strip()
+    sprint_tag = _effective_sprint_tag(store) if include_sprint_tag else ""
     tags_list = [t.strip() for t in (tags or "").split(",") if t.strip()]
     if include_sprint_tag and sprint_tag and sprint_tag not in tags_list:
         tags_list = [sprint_tag, *tags_list]
@@ -564,6 +638,7 @@ def list_tickets(
     prio_max: Optional[int] = None,
     assignee: str = "",
     tag: str = "",
+    include_sprint_tag: bool = True,
     include_closed: bool = False,
     limit: int = 0,
 ) -> TicketListResult:
@@ -587,6 +662,10 @@ def list_tickets(
         prio_max = priority
 
     type_filter = (type or "").strip()
+    assignee_filter = (assignee or "").strip()
+    tag_filter = (tag or "").strip()
+    if not tag_filter and include_sprint_tag:
+        tag_filter = _effective_sprint_tag(store)
 
     def match(t: Ticket) -> bool:
         if not include_closed and t.status == "closed":
@@ -607,11 +686,11 @@ def list_tickets(
         if type_filter and str(t.fm.get("type") or "") != type_filter:
             return False
 
-        if assignee and str(t.fm.get("assignee") or "") != assignee:
+        if assignee_filter and str(t.fm.get("assignee") or "") != assignee_filter:
             return False
-        if tag:
+        if tag_filter:
             tags = [str(x) for x in (t.fm.get("tags") or [])]
-            if tag not in tags:
+            if tag_filter not in tags:
                 return False
         return True
 
