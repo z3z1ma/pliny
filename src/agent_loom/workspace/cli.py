@@ -8,90 +8,93 @@ from typing import Any, Optional, Sequence
 
 from agent_loom.core.cli_output import emit_json, normalize_payload
 
-from agent_loom.workspace.constants import (
-    REPO_INTERNAL_DIR,
+from agent_loom.core.time import now_iso
+from agent_loom.workspace.commands.core import (
+    cmd_add,
+    cmd_branch,
+    cmd_context,
+    cmd_deepen,
+    cmd_list,
+    cmd_prime,
+    cmd_remove,
+    cmd_snapshot_capture,
+    cmd_snapshot_diff,
+    cmd_snapshot_restore,
+    cmd_status,
+    cmd_sync,
 )
-from agent_loom.workspace.core import (
-    add_repo,
-    branch,
-    context,
-    deepen,
-    deps_closure,
-    deps_impacted,
-    deps_show,
-    deps_who_uses,
-    lease_acquire,
-    lease_require_active,
-    lease_list,
-    lease_release,
-    lease_renew,
-    lease_show,
-    list_repos,
-    harness_exec,
-    harness_cleanup_apply,
-    harness_cleanup_suggest,
-    harness_impact_repos,
-    harness_impact_snapshot,
-    harness_init,
-    harness_repo_edit,
-    harness_set_ls,
-    harness_set_rm,
-    harness_set_show,
-    harness_set_upsert,
-    prime,
-    remove_repo,
-    repo_init,
-    repo_merge_attempt,
-    repo_snapshot_capture,
-    repo_snapshot_diff,
-    repo_snapshot_restore,
-    repo_status,
-    repo_worktree_add,
-    repo_worktree_check_clean,
-    repo_worktree_check_divergence,
-    repo_worktree_diff,
-    repo_worktree_ensure,
-    repo_worktree_ensure_detached,
-    repo_worktree_ls,
-    repo_worktree_prune,
-    repo_worktree_rm,
-    repo_worktree_rm_path,
-    repo_worktree_status,
-    components_refresh_index,
-    services_refresh_index,
-    snapshot,
-    snapshot_diff,
-    snapshot_restore,
-    status,
-    sync,
-    worktree_add,
-    worktree_group_check_clean,
-    worktree_group_check_divergence,
-    worktree_group_diff,
-    worktree_group_status,
-    worktree_prune,
-    worktree_ls,
-    worktree_push,
-    worktree_rebase,
-    worktree_rm,
-    worktree_gc,
+from agent_loom.workspace.commands.deps import (
+    cmd_components_refresh_index,
+    cmd_deps_closure,
+    cmd_deps_impacted,
+    cmd_deps_show,
+    cmd_deps_who_uses,
+    cmd_services_refresh_index,
 )
+from agent_loom.workspace.commands.harness import (
+    cmd_harness_cleanup_apply,
+    cmd_harness_cleanup_suggest,
+    cmd_harness_exec,
+    cmd_harness_impact_repos,
+    cmd_harness_impact_snapshot,
+    cmd_harness_init,
+    cmd_harness_repo_edit,
+    cmd_harness_sandbox_create,
+    cmd_harness_sandbox_gc,
+    cmd_harness_sandbox_promote,
+    cmd_harness_set_ls,
+    cmd_harness_set_rm,
+    cmd_harness_set_show,
+    cmd_harness_set_upsert,
+)
+from agent_loom.workspace.commands.lease import (
+    cmd_lease_acquire,
+    cmd_lease_ls,
+    cmd_lease_release,
+    cmd_lease_renew,
+    cmd_lease_show,
+)
+from agent_loom.workspace.commands.repo import (
+    cmd_repo_cleanup_apply,
+    cmd_repo_cleanup_suggest,
+    cmd_repo_init,
+    cmd_repo_merge_attempt,
+    cmd_repo_sandbox_create,
+    cmd_repo_sandbox_gc,
+    cmd_repo_sandbox_promote,
+    cmd_repo_snapshot_capture,
+    cmd_repo_snapshot_diff,
+    cmd_repo_snapshot_restore,
+    cmd_repo_status,
+    cmd_repo_worktree_add,
+    cmd_repo_worktree_annotate,
+    cmd_repo_worktree_check_clean,
+    cmd_repo_worktree_check_divergence,
+    cmd_repo_worktree_diff,
+    cmd_repo_worktree_ensure,
+    cmd_repo_worktree_ensure_detached,
+    cmd_repo_worktree_ls,
+    cmd_repo_worktree_prune,
+    cmd_repo_worktree_rm,
+    cmd_repo_worktree_rm_path,
+    cmd_repo_worktree_status,
+)
+from agent_loom.workspace.commands.worktree import (
+    cmd_worktree_add,
+    cmd_worktree_gc,
+    cmd_worktree_group_annotate,
+    cmd_worktree_group_check_clean,
+    cmd_worktree_group_check_divergence,
+    cmd_worktree_group_diff,
+    cmd_worktree_group_status,
+    cmd_worktree_ls,
+    cmd_worktree_prune,
+    cmd_worktree_push,
+    cmd_worktree_rebase,
+    cmd_worktree_rm,
+)
+from agent_loom.workspace.constants import REPO_INTERNAL_DIR
 from agent_loom.workspace.errors import WorkspaceError
-from agent_loom.workspace.guards import harness_root
-from agent_loom.workspace.repo.cleanup import (
-    repo_worktree_cleanup_apply,
-    repo_worktree_cleanup_suggest,
-)
-from agent_loom.workspace.repo.sandbox import (
-    repo_sandbox_create,
-    repo_sandbox_gc,
-    repo_sandbox_promote,
-)
-from agent_loom.workspace.harness.sandbox import (
-    harness_sandbox_create,
-    harness_sandbox_gc,
-    harness_sandbox_promote,
-)
 from agent_loom.workspace.models import (
     AddRepoResult,
     BranchResult,
@@ -134,12 +137,11 @@ from agent_loom.workspace.models import (
     WorktreePushResult,
     WorktreeRebaseResult,
 )
+from agent_loom.workspace.guards import harness_root
 from agent_loom.workspace.repo.core import repo_root
-from agent_loom.core.time import now_iso
 
 
 workspace_root = harness_root
-
 
 def _cmd_name(args: argparse.Namespace) -> str:
     top = getattr(args, "cmd", "") or ""
@@ -755,760 +757,6 @@ def emit_result(args: argparse.Namespace, root: Path, result: Any) -> None:
 
     sys.stdout.write(_render_text(result))
 
-
-def cmd_repo_status(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_status(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_add(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_add(
-        branch=args.branch,
-        base_ref=args.base_ref,
-        path=args.path,
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_ensure(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_ensure(
-        branch=args.branch,
-        path=getattr(args, "path", None),
-        base_ref=args.base_ref,
-        allow_dirty=bool(args.allow_dirty),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_rm(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_rm(
-        branch=args.branch,
-        force=bool(args.force),
-        confirm=bool(args.yes),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_rm_path(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_rm_path(
-        path=args.path,
-        force=bool(args.force),
-        confirm=bool(args.yes),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_prune(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_prune(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_ensure_detached(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_ensure_detached(path=args.path, ref=args.ref, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_ls(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_ls(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_status(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_status(
-        worktree=str(getattr(args, "worktree", "") or ""), root=root
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_check_clean(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_check_clean(
-        worktree=str(getattr(args, "worktree", "") or ""),
-        allow_untracked=bool(getattr(args, "allow_untracked", False)),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_check_divergence(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_check_divergence(
-        base=str(getattr(args, "base", "") or ""),
-        worktree=str(getattr(args, "worktree", "") or ""),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_diff(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_diff(
-        worktree=str(getattr(args, "worktree", "") or ""),
-        diff_mode=str(getattr(args, "mode", "dirty") or "dirty"),
-        base=str(getattr(args, "base", "") or ""),
-        max_patch_bytes=int(getattr(args, "max_bytes", 2_000_000) or 2_000_000),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_worktree_annotate(args: argparse.Namespace) -> None:
-    root = repo_root()
-    from agent_loom.workspace.worktree_meta import repo_worktree_annotate
-
-    res = repo_worktree_annotate(
-        repo_root=root,
-        branch=str(args.branch),
-        purpose=str(args.purpose),
-        ticket_id=str(getattr(args, "ticket", "") or ""),
-        owner=str(getattr(args, "owner", "") or ""),
-        ttl=str(getattr(args, "ttl", "") or ""),
-        kind=str(getattr(args, "kind", "normal") or "normal"),
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_snapshot_capture(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_snapshot_capture(
-        name=str(args.name),
-        worktree=str(getattr(args, "worktree", "") or ""),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_snapshot_diff(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_snapshot_diff(name=str(args.name), root=root)
-    emit_result(args, root, res)
-
-
-def cmd_repo_snapshot_restore(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_snapshot_restore(
-        name=str(args.name),
-        confirm=bool(getattr(args, "yes", False)),
-        force_clean=bool(getattr(args, "force_clean", False)),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_cleanup_suggest(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_cleanup_suggest(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_repo_cleanup_apply(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_worktree_cleanup_apply(
-        ids=list(args.id or []),
-        confirm=bool(args.yes),
-        force=bool(args.force),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_sandbox_create(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_sandbox_create(
-        base_ref=str(args.base),
-        name=str(getattr(args, "name", "") or ""),
-        ttl=str(getattr(args, "ttl", "") or "2h"),
-        purpose=str(getattr(args, "purpose", "sandbox") or "sandbox"),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_sandbox_promote(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_sandbox_promote(
-        from_branch=str(args.from_branch),
-        to_branch=str(args.to_branch),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_repo_sandbox_gc(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_sandbox_gc(confirm=bool(args.yes), force=bool(args.force), root=root)
-    emit_result(args, root, res)
-
-
-def cmd_repo_merge_attempt(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_merge_attempt(
-        worktree=args.worktree,
-        base=args.base,
-        topic=args.topic,
-        force_clean=bool(args.force_clean),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_harness_init(args: argparse.Namespace) -> None:
-    root_arg = str(getattr(args, "root", "") or "").strip()
-    root = Path(root_arg).expanduser().resolve() if root_arg else Path.cwd().resolve()
-    res = harness_init(root=root, symlinks=bool(getattr(args, "symlinks", False)))
-    emit_result(args, root, res)
-
-
-def cmd_repo_init(args: argparse.Namespace) -> None:
-    root = repo_root()
-    res = repo_init(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_add(args: argparse.Namespace) -> None:
-    root = harness_root()
-    res = add_repo(
-        name=args.name,
-        remote=args.remote,
-        default_branch=args.default_branch,
-        shallow=bool(args.shallow),
-        depth=int(args.depth),
-        clone=bool(args.clone),
-        force=bool(args.force),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_remove(args: argparse.Namespace) -> None:
-    root = harness_root()
-    res = remove_repo(
-        name=args.name,
-        delete_clone=bool(args.delete_clone),
-        delete_component_md=bool(getattr(args, "delete_component_md", False)),
-        confirm_delete=bool(args.yes_delete),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_list(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = list_repos(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_sync(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = sync(
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        clone=bool(args.clone),
-        jobs=int(args.jobs),
-        allow_all=bool(args.all),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_status(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = status(
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        jobs=int(args.jobs),
-        allow_all=bool(args.all),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_context(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = context(
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        jobs=int(args.jobs),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_branch(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = branch(
-        branch=args.branch,
-        reset=bool(args.reset),
-        allow_dirty=bool(args.allow_dirty),
-        clone=bool(args.clone),
-        base_ref=args.base_ref,
-        refresh_index=bool(args.refresh_index),
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        confirm_reset=bool(args.yes),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_worktree_add(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = worktree_add(
-        group=args.group,
-        base_ref=args.base_ref,
-        path=str(getattr(args, "path", "") or "").strip() or None,
-        clone=bool(args.clone),
-        allow_dirty=bool(args.allow_dirty),
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_worktree_rm(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    req = str(getattr(args, "require_lease", "") or "").strip()
-    if req:
-        lease_require_active(key=req, root=root)
-    res = worktree_rm(
-        group=args.group,
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        force=bool(args.force),
-        confirm=bool(args.yes),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_worktree_ls(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = worktree_ls(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_worktree_prune(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = worktree_prune(
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_worktree_group_status(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = worktree_group_status(
-        group=args.group,
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_worktree_group_check_clean(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = worktree_group_check_clean(
-        group=args.group,
-        allow_untracked=bool(args.allow_untracked),
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_worktree_group_check_divergence(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = worktree_group_check_divergence(
-        group=args.group,
-        base=str(args.base),
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_worktree_group_diff(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = worktree_group_diff(
-        group=str(args.group),
-        diff_mode=str(getattr(args, "mode", "dirty") or "dirty"),
-        base=str(getattr(args, "base", "") or ""),
-        repos=list(getattr(args, "repos", []) or []) or None,
-        sets=list(getattr(args, "sets", []) or []) or None,
-        tags=list(getattr(args, "tags", []) or []) or None,
-        allow_all=bool(getattr(args, "all", False)),
-        max_patch_bytes_per_repo=int(
-            getattr(args, "max_bytes", 2_000_000) or 2_000_000
-        ),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_worktree_group_annotate(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    from agent_loom.workspace.worktree_meta import harness_group_annotate
-
-    res = harness_group_annotate(
-        ws_root=root,
-        group=str(args.group),
-        purpose=str(args.purpose),
-        ticket_id=str(getattr(args, "ticket", "") or ""),
-        owner=str(getattr(args, "owner", "") or ""),
-        ttl=str(getattr(args, "ttl", "") or ""),
-        kind=str(getattr(args, "kind", "normal") or "normal"),
-    )
-    emit_result(args, root, res)
-
-
-def cmd_harness_sandbox_create(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = harness_sandbox_create(
-        group=str(args.group),
-        base_ref=str(args.base_ref),
-        ttl=str(getattr(args, "ttl", "2h") or "2h"),
-        purpose=str(getattr(args, "purpose", "sandbox") or "sandbox"),
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        clone=bool(getattr(args, "clone", False)),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_harness_sandbox_promote(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = harness_sandbox_promote(group=str(args.group), root=root)
-    emit_result(args, root, res)
-
-
-def cmd_harness_sandbox_gc(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    req = str(getattr(args, "require_lease", "") or "").strip()
-    if req:
-        lease_require_active(key=req, root=root)
-    res = harness_sandbox_gc(confirm=bool(args.yes), force=bool(args.force), root=root)
-    emit_result(args, root, res)
-
-
-def cmd_harness_cleanup_suggest(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = harness_cleanup_suggest(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_harness_cleanup_apply(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    req = str(getattr(args, "require_lease", "") or "").strip()
-    if req:
-        lease_require_active(key=req, root=root)
-    res = harness_cleanup_apply(
-        ids=list(args.id or []),
-        confirm=bool(args.yes),
-        force=bool(args.force),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_worktree_rebase(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    req = str(getattr(args, "require_lease", "") or "").strip()
-    if req:
-        lease_require_active(key=req, root=root)
-    res = worktree_rebase(
-        group=args.group,
-        base_ref=args.base_ref,
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_worktree_push(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    req = str(getattr(args, "require_lease", "") or "").strip()
-    if req:
-        lease_require_active(key=req, root=root)
-    res = worktree_push(
-        group=args.group,
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        force=bool(args.force),
-        force_with_lease=bool(args.force_with_lease),
-        set_upstream=bool(args.set_upstream),
-        confirm_force=bool(args.yes),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_snapshot_capture(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = snapshot(
-        name=args.name,
-        group=args.group,
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_snapshot_diff(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = snapshot_diff(name=args.name, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_snapshot_restore(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = snapshot_restore(
-        name=args.name,
-        confirm=bool(args.yes),
-        force_clean=bool(args.force_clean),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_components_refresh_index(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = components_refresh_index(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_services_refresh_index(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = services_refresh_index(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_deps_show(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = deps_show(component=args.component, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_deps_who_uses(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = deps_who_uses(component=args.component, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_deps_closure(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = deps_closure(component=args.component, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_deps_impacted(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = deps_impacted(component=args.component, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_harness_impact_repos(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = harness_impact_repos(changed=list(args.changed or []), root=root)
-    emit_result(args, root, res)
-
-
-def cmd_harness_impact_snapshot(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = harness_impact_snapshot(
-        name=str(args.name),
-        include_missing=not bool(getattr(args, "no_missing", False)),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_harness_exec(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    cmd = list(getattr(args, "cmd_argv", []) or [])
-    if cmd and cmd[0] == "--":
-        cmd = cmd[1:]
-    res = harness_exec(
-        cmd=cmd,
-        group=args.group,
-        repos=args.repos,
-        sets=args.sets,
-        tags=args.tags,
-        allow_all=bool(args.all),
-        jobs=int(args.jobs),
-        require_clean=bool(args.require_clean),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_harness_repo_edit(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    shallow: Optional[bool]
-    if bool(getattr(args, "shallow", False)):
-        shallow = True
-    elif bool(getattr(args, "no_shallow", False)):
-        shallow = False
-    else:
-        shallow = None
-
-    res = harness_repo_edit(
-        name=args.name,
-        remote=getattr(args, "remote", None),
-        default_branch=getattr(args, "default_branch", None),
-        add_tags=getattr(args, "add_tag", None),
-        rm_tags=getattr(args, "rm_tag", None),
-        description=getattr(args, "description", None),
-        shallow=shallow,
-        depth=getattr(args, "depth", None),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_harness_set_upsert(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = harness_set_upsert(name=args.name, items=args.items, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_harness_set_rm(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = harness_set_rm(name=args.name, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_harness_set_show(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = harness_set_show(name=args.name, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_harness_set_ls(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = harness_set_ls(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_lease_acquire(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = lease_acquire(
-        key=args.key,
-        ttl=str(getattr(args, "ttl", "") or ""),
-        force=bool(args.force),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_lease_release(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = lease_release(key=args.key, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_lease_ls(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = lease_list(root=root)
-    emit_result(args, root, res)
-
-
-def cmd_lease_show(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = lease_show(key=args.key, root=root)
-    emit_result(args, root, res)
-
-
-def cmd_lease_renew(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = lease_renew(key=args.key, ttl=str(getattr(args, "ttl", "") or ""), root=root)
-    emit_result(args, root, res)
-
-
-def cmd_worktree_gc(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    req = str(getattr(args, "require_lease", "") or "").strip()
-    if req:
-        lease_require_active(key=req, root=root)
-    res = worktree_gc(
-        older_than_days=int(args.older_than),
-        skip_leased=bool(getattr(args, "skip_leased", False)),
-        force=bool(args.force),
-        confirm=bool(args.yes),
-        root=root,
-    )
-    emit_result(args, root, res)
-
-
-def cmd_deepen(args: argparse.Namespace) -> None:
-    root = workspace_root()
-    res = deepen(repo=args.repo, depth=int(args.depth), root=root)
-    emit_result(args, root, res)
-
-
-def cmd_prime(args: argparse.Namespace) -> None:
-    res = prime()
-    payload = res.payload
-    root = Path.cwd().resolve()
-    if getattr(args, "json", False):
-        emit_json(
-            {
-                "ok": True,
-                "cmd": "prime",
-                "root": str(root),
-                "data": payload,
-                "meta": {"generated_at": now_iso()},
-            },
-            indent=2,
-        )
-        return
-    sys.stdout.write(_render_prime_text(payload))
 
 
 def _add_harness_parser(
