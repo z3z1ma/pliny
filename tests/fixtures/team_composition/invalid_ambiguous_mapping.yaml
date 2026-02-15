@@ -1,0 +1,25 @@
+version: 1
+metadata:
+  name: YAML Sprint Foundations
+members:
+  - id: worker-a
+    role: worker
+    lifecycle: ephemeral
+    source: loom
+    agent: loom-team-worker
+  - id: worker-b
+    role: worker
+    lifecycle: ephemeral
+    source: loom
+    agent: loom-team-worker
+worktree_mappings:
+  - pattern: al-*
+    member: worker-a
+  - pattern: al-aec3
+    member: worker-b
+communication:
+  channel: inbox_only
+  require_ack: true
+  escalation:
+    target_role: manager
+    timeout_seconds: 900

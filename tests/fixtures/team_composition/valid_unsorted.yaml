@@ -1,0 +1,38 @@
+version: 1
+metadata:
+  labels:
+    - b
+    - a
+  purpose: team composition schema test
+  name: YAML Sprint Foundations
+worktree_mappings:
+  - member: worker-template
+    pattern: al-z*
+  - member: manager
+    pattern: mgr/main
+communication:
+  require_ack: true
+  escalation:
+    timeout_seconds: 1200
+    target_role: integrator
+    max_retries: 2
+  channel: inbox_and_tmux
+members:
+  - role: worker
+    id: worker-template
+    source: byo
+    lifecycle: ephemeral
+    agent: codex-worker
+  - source: loom
+    lifecycle: always_on
+    id: manager
+    role: manager
+    agent: loom-team-manager
+    harness: opencode
+byo_agents:
+  codex-worker:
+    env:
+      B: "2"
+      A: "1"
+    command: codex --mode worker
+    cwd: /tmp

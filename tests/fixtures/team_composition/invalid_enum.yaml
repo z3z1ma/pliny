@@ -1,0 +1,18 @@
+version: 1
+metadata:
+  name: YAML Sprint Foundations
+members:
+  - id: manager
+    role: manager
+    lifecycle: persistent
+    source: loom
+    agent: loom-team-manager
+worktree_mappings:
+  - pattern: "*"
+    member: manager
+communication:
+  channel: inbox_only
+  require_ack: true
+  escalation:
+    target_role: manager
+    timeout_seconds: 900
