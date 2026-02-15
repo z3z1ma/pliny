@@ -9,6 +9,7 @@
 .loom/workspace/
 
 # Local virtualenvs (repo-root mounted into worktrees)
+.venv
 .venv/
 .loom/workspaces/repos/
 .loom/workspaces/worktrees/
