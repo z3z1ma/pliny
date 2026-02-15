@@ -68,6 +68,7 @@ class TestTeamCliUx(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             repo_root = Path(td)
             with (
+                _patched_env({"TEAM_ROLE": ""}),
                 mock.patch(
                     "agent_loom.team.core.canonical_repo_root", return_value=repo_root
                 ),

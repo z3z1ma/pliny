@@ -1107,6 +1107,43 @@ def _agent_prompt_text(*, workdir: Path, agent: str) -> str:
     )
 
 
+def _omp_model_available(bin: str, model: str) -> tuple[bool, str]:
+    """Check if an OMP model is available via --list-models.
+
+    Returns:
+        (available, error_msg)
+        - (True, "") if model is available or check cannot be performed
+        - (False, error_msg) if model is definitely unavailable
+    """
+    if not model.strip():
+        return (False, "OMP model is empty")
+
+    try:
+        p = _run(
+            [bin, "--list-models", model],
+            check=False,
+            timeout=10.0,
+        )
+        # OMP returns exit code 0 and prints model info if available.
+        # If model not found, it prints "No models matching" to stdout.
+        if p.returncode == 0:
+            stdout = str(p.stdout or "").strip()
+            stderr = str(p.stderr or "").strip()
+            combined = f"{stdout}\n{stderr}"
+            if "No models matching" in combined or "no models" in combined.lower():
+                return (False, f"Model '{model}' not found by provider")
+            return (True, "")
+        # Non-zero exit could mean provider issue or model missing.
+        # Treat as "not available" to be safe.
+        stderr = str(p.stderr or "").strip()
+        return (False, f"Model check failed (rc={p.returncode}): {stderr}")
+    except Exception as e:
+        # If the preflight command itself fails due to provider/environment issues,
+        # we don't want to block a potentially valid setup.
+        # Return True with a warning - the spawn will fail naturally if the model is actually bad.
+        return (True, f"Model preflight check failed: {e!r}")
+
+
 def _omp_tui_argv(
     *,
     prompt: str,
@@ -1955,6 +1992,57 @@ def tui(
             session_dir = paths.run_dir / "sessions" / "omp"
             session_dir.mkdir(parents=True, exist_ok=True)
             session_path = session_dir / f"{recipient}.jsonl"
+
+            # OMP model preflight: fail fast with actionable error if model unavailable.
+            available, error_msg = _omp_model_available(agent_bin, model)
+            if not available:
+                _append_log_line(
+                    log_path,
+                    f"{_iso_z()} OMP model invalid: {error_msg} model={model}",
+                )
+                safe_write_event(
+                    paths,
+                    event_type="sidecar.omp_model_invalid",
+                    run=run,
+                    ok=False,
+                    summary=f"OMP model invalid recipient={recipient} model={model}",
+                    refs={"recipient": recipient, "pane_id": pane_id},
+                    data={"model": model, "error": error_msg, "bin": agent_bin},
+                )
+                if recipient != "manager":
+                    _inbox_write_and_maybe_nudge(
+                        paths=paths,
+                        run=run,
+                        target="manager",
+                        message=(
+                            f"OMP model invalid for {recipient}: {error_msg}. "
+                            f"Model: {model}. Bin: {agent_bin}. Pane: {pane_id}. "
+                            f"Fix: update model in run.json or via `loom team config {paths.team} --omp-model <valid-model>`."
+                        ),
+                        sender="team",
+                        kind="model_invalid",
+                        meta_extra={
+                            "recipient": recipient,
+                            "pane_id": pane_id,
+                            "model": model,
+                            "bin": agent_bin,
+                            "error": error_msg,
+                        },
+                        nudge=True,
+                        force=True,  # Always send, even if duplicate
+                        line_info="omp_model_invalid",
+                    )
+                return TuiResult(
+                    recipient=recipient,
+                    run_id=run_id,
+                    exit_reason="model_invalid",
+                )
+            # If warning was emitted but we're continuing, log it.
+            if error_msg:
+                _append_log_line(
+                    log_path,
+                    f"{_iso_z()} OMP model preflight warning (continuing): {error_msg}",
+                )
             child_argv = _omp_tui_argv(
                 prompt=prompt,
                 model=model,

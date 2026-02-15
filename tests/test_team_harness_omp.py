@@ -110,14 +110,22 @@ class TestTeamHarnessOmp(unittest.TestCase):
                 team.ENV_TEAM_ROLE: team.ROLE_MANAGER,
                 team.ENV_TEAM_WORKER_ID: "",
             }
+            fake_model_check = subprocess.CompletedProcess(
+                args=["omp", "--list-models", "opus"],
+                returncode=0,
+                stdout="opus (provider)\n",
+                stderr="",
+            )
             old_env = os.environ.copy()
             os.environ.update(env)
             try:
+
                 with (
                     mock.patch.object(team, "load_run", return_value=run),
                     mock.patch.object(team, "_require_bin"),
                     mock.patch.object(team, "safe_write_event"),
                     mock.patch.object(team, "tmux_signal"),
+                    mock.patch.object(team, "_run", return_value=fake_model_check),
                     mock.patch("agent_loom.team.core.threading.Thread", _NoopThread),
                     mock.patch("agent_loom.team.core.subprocess.Popen", side_effect=fake_popen),
                 ):
@@ -159,19 +167,26 @@ class TestTeamHarnessOmp(unittest.TestCase):
                 _ = kwargs
                 return subprocess.CompletedProcess(list(argv), 0, stdout="", stderr="")
 
-            with (
-                mock.patch.object(team, "canonical_repo_root", return_value=repo_root),
-                mock.patch.object(team, "_require_bin"),
-                mock.patch.object(team, "tmux_has_session", return_value=False),
-                mock.patch.object(team, "tmux_cmd", side_effect=fake_tmux_cmd),
-                mock.patch.object(team, "tmux_set_option"),
-                mock.patch.object(team, "tmux_window_exists", return_value=False),
-                mock.patch.object(team, "tmux_mark_pane"),
-                mock.patch.object(team, "tmux_format", return_value="%1"),
-            ):
-                team.init_agents(repo=repo_root, create_missing=True)
-                res = team.start(team="Cobra", repo=repo_root, harness="omp")
+            env_backup = os.environ.copy()
+            # Clear team role to simulate running from outside team pane
+            os.environ.pop(team.ENV_TEAM_ROLE, None)
+            try:
+                with (
+                    mock.patch.object(team, "canonical_repo_root", return_value=repo_root),
+                    mock.patch.object(team, "_require_bin"),
+                    mock.patch.object(team, "tmux_has_session", return_value=False),
+                    mock.patch.object(team, "tmux_cmd", side_effect=fake_tmux_cmd),
+                    mock.patch.object(team, "tmux_set_option"),
+                    mock.patch.object(team, "tmux_window_exists", return_value=False),
+                    mock.patch.object(team, "tmux_mark_pane"),
+                    mock.patch.object(team, "tmux_format", return_value="%1"),
+                ):
+                    team.init_agents(repo=repo_root, create_missing=True)
+                    res = team.start(team="Cobra", repo=repo_root, harness="omp")
 
+            finally:
+                os.environ.clear()
+                os.environ.update(env_backup)
             run_path = Path(res.run_dir) / "run.json"
             run = json.loads(run_path.read_text(encoding="utf-8"))
             self.assertEqual(str(run.get("harness") or ""), "omp")
@@ -234,6 +249,201 @@ class TestTeamHarnessOmp(unittest.TestCase):
         model = team._model_for_role(run, "worker", harness="omp")
         # Should use role-specific model, not harness-level
         self.assertEqual(model, "openai-codex/gpt-5.3-codex")
+
+    def test_omp_model_available_success(self) -> None:
+        """Test that _omp_model_available returns True for available models."""
+        fake_proc = subprocess.CompletedProcess(
+            args=["omp", "--list-models", "valid-model"],
+            returncode=0,
+            stdout="valid-model (provider)\n",
+            stderr="",
+        )
+        with mock.patch.object(team, "_run", return_value=fake_proc):
+            available, error_msg = team._omp_model_available("omp", "valid-model")
+            self.assertTrue(available)
+            self.assertEqual(error_msg, "")
+
+    def test_omp_model_available_not_found(self) -> None:
+        """Test that _omp_model_available returns False for unavailable models."""
+        fake_proc = subprocess.CompletedProcess(
+            args=["omp", "--list-models", "invalid-model"],
+            returncode=0,
+            stdout="No models matching 'invalid-model'\n",
+            stderr="",
+        )
+        with mock.patch.object(team, "_run", return_value=fake_proc):
+            available, error_msg = team._omp_model_available("omp", "invalid-model")
+            self.assertFalse(available)
+            self.assertIn("not found", error_msg)
+
+    def test_omp_model_available_empty_model(self) -> None:
+        """Test that _omp_model_available returns False for empty model string."""
+        available, error_msg = team._omp_model_available("omp", "")
+        self.assertFalse(available)
+        self.assertIn("empty", error_msg)
+
+    def test_omp_model_available_command_failure(self) -> None:
+        """Test that _omp_model_available handles provider failures gracefully."""
+        fake_proc = subprocess.CompletedProcess(
+            args=["omp", "--list-models", "some-model"],
+            returncode=1,
+            stdout="",
+            stderr="Provider authentication failed\n",
+        )
+        with mock.patch.object(team, "_run", return_value=fake_proc):
+            available, error_msg = team._omp_model_available("omp", "some-model")
+            self.assertFalse(available)
+            self.assertIn("failed", error_msg)
+
+    def test_omp_model_available_exception_handling(self) -> None:
+        """Test that _omp_model_available returns True on exception to avoid blocking valid setups."""
+        def raise_exception(*_args: object, **_kwargs: object) -> None:
+            raise RuntimeError("Network timeout")
+
+        with mock.patch.object(team, "_run", side_effect=raise_exception):
+            available, error_msg = team._omp_model_available("omp", "test-model")
+            self.assertTrue(available)  # Should not block on exception
+            self.assertIn("preflight check failed", error_msg)
+
+    def test_tui_omp_invalid_model_fails_fast(self) -> None:
+        """Test that tui() exits with model_invalid when OMP model is unavailable."""
+        with tempfile.TemporaryDirectory() as td:
+            repo_root = Path(td)
+            run_dir = repo_root / ".loom" / "team" / "runs" / "test"
+            run_dir.mkdir(parents=True, exist_ok=True)
+            (run_dir / "run.json").write_text('{"run_id": "test-123"}', encoding="utf-8")
+
+            agent_dir = repo_root / ".opencode" / "agents"
+            agent_dir.mkdir(parents=True, exist_ok=True)
+            (agent_dir / f"{team.DEFAULT_WORKER_AGENT}.md").write_text(
+                "\n".join(
+                    [
+                        "---",
+                        "name: loom-team-worker",
+                        "description: worker",
+                        "---",
+                        team.TEAM_AGENT_PROMPT_BEGIN,
+                        "SYSTEM PROMPT",
+                        team.TEAM_AGENT_PROMPT_END,
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            run = {"run_id": "test-123", "team": "test"}
+            fake_model_check = subprocess.CompletedProcess(
+                args=["omp", "--list-models", "invalid-model"],
+                returncode=0,
+                stdout="No models matching 'invalid-model'\n",
+                stderr="",
+            )
+
+            env = {
+                "TMUX_PANE": "%1",
+                team.ENV_TEAM_NAME: "test",
+                team.ENV_TEAM_RUN_DIR: str(run_dir),
+                team.ENV_TEAM_ROLE: team.ROLE_WORKER,
+                team.ENV_TEAM_WORKER_ID: "w1",
+            }
+            old_env = os.environ.copy()
+            os.environ.update(env)
+            try:
+                with (
+                    mock.patch.object(team, "load_run", return_value=run),
+                    mock.patch.object(team, "_require_bin"),
+                    mock.patch.object(team, "safe_write_event"),
+                    mock.patch.object(team, "_run", return_value=fake_model_check),
+                    mock.patch.object(team, "_inbox_write_and_maybe_nudge"),
+                    mock.patch("agent_loom.team.core.threading.Thread", _NoopThread),
+                ):
+                    result = team.tui(
+                        project_dir=repo_root,
+                        harness="omp",
+                        agent=team.DEFAULT_WORKER_AGENT,
+                        model="invalid-model",
+                        prompt="test",
+                        respawn_cap=1,
+                    )
+            finally:
+                os.environ.clear()
+                os.environ.update(old_env)
+
+            self.assertEqual(result.exit_reason, "model_invalid")
+
+    def test_tui_omp_valid_model_spawns(self) -> None:
+        """Test that tui() spawns normally when OMP model is valid."""
+        with tempfile.TemporaryDirectory() as td:
+            repo_root = Path(td)
+            run_dir = repo_root / ".loom" / "team" / "runs" / "test"
+            run_dir.mkdir(parents=True, exist_ok=True)
+            (run_dir / "run.json").write_text('{"run_id": "test-123"}', encoding="utf-8")
+
+            agent_dir = repo_root / ".opencode" / "agents"
+            agent_dir.mkdir(parents=True, exist_ok=True)
+            (agent_dir / f"{team.DEFAULT_WORKER_AGENT}.md").write_text(
+                "\n".join(
+                    [
+                        "---",
+                        "name: loom-team-worker",
+                        "description: worker",
+                        "---",
+                        team.TEAM_AGENT_PROMPT_BEGIN,
+                        "SYSTEM PROMPT",
+                        team.TEAM_AGENT_PROMPT_END,
+                    ]
+                ),
+                encoding="utf-8",
+            )
+
+            run = {"run_id": "test-123", "team": "test"}
+            fake_model_check = subprocess.CompletedProcess(
+                args=["omp", "--list-models", "valid-model"],
+                returncode=0,
+                stdout="valid-model (provider)\n",
+                stderr="",
+            )
+            popen_called = []
+
+            def fake_popen(argv, **kwargs):
+                _ = kwargs
+                popen_called.append(list(argv))
+                return _FakeProc(pid=1234)
+
+            env = {
+                "TMUX_PANE": "%1",
+                team.ENV_TEAM_NAME: "test",
+                team.ENV_TEAM_RUN_DIR: str(run_dir),
+                team.ENV_TEAM_ROLE: team.ROLE_WORKER,
+                team.ENV_TEAM_WORKER_ID: "w1",
+            }
+            old_env = os.environ.copy()
+            os.environ.update(env)
+            try:
+                with (
+                    mock.patch.object(team, "load_run", return_value=run),
+                    mock.patch.object(team, "_require_bin"),
+                    mock.patch.object(team, "safe_write_event"),
+                    mock.patch.object(team, "tmux_signal"),
+                    mock.patch.object(team, "_run", return_value=fake_model_check),
+                    mock.patch("agent_loom.team.core.threading.Thread", _NoopThread),
+                    mock.patch("agent_loom.team.core.subprocess.Popen", side_effect=fake_popen),
+                ):
+                    result = team.tui(
+                        project_dir=repo_root,
+                        harness="omp",
+                        agent=team.DEFAULT_WORKER_AGENT,
+                        model="valid-model",
+                        prompt="test",
+                        respawn_cap=1,
+                    )
+            finally:
+                os.environ.clear()
+                os.environ.update(old_env)
+
+            # Should hit respawn cap (normal flow), not model_invalid
+            self.assertEqual(result.exit_reason, "respawn_cap")
+            # Popen should have been called
+            self.assertTrue(popen_called)
 
 
 if __name__ == "__main__":
