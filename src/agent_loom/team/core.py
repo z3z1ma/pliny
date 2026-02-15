@@ -128,11 +128,6 @@ from agent_loom.team.merge_queue import (
     merge_list_items,
     merge_mark_done,
 )
-from agent_loom.team.permissions import (
-    _deny_if_role_set,
-    _require_role,
-    _require_self_worker_id,
-)
 from agent_loom.team.models import (
     AttachResult,
     BounceResult,
@@ -168,6 +163,11 @@ from agent_loom.team.models import (
     StatusResult,
     TuiResult,
     WaitResult,
+)
+from agent_loom.team.permissions import (
+    _deny_if_role_set,
+    _require_role,
+    _require_self_worker_id,
 )
 from agent_loom.team.prompts import (
     render_integrator_prompt,
@@ -1057,7 +1057,6 @@ def _agent_prompt_text(*, workdir: Path, agent: str) -> str:
     )
 
 
-
 def _omp_tui_argv(
     *,
     prompt: str,
@@ -1075,7 +1074,6 @@ def _omp_tui_argv(
         argv += ["--append-system-prompt", system_prompt_append]
     if tools:
         argv += ["--tools", ",".join(tools)]
-    argv += ["--resume", str(session_path)]
     if prompt:
         argv.append(prompt)
     return argv
@@ -1099,7 +1097,9 @@ def _codex_tui_argv(
         argv += ["--sandbox", sandbox]
     if approval:
         argv += ["--ask-for-approval", approval]
-    instructions_value = str(instructions_file).replace("\\", "\\\\").replace('"', '\\"')
+    instructions_value = (
+        str(instructions_file).replace("\\", "\\\\").replace('"', '\\"')
+    )
     argv += ["--config", f'model_instructions_file="{instructions_value}"']
     if resume_last:
         argv += ["resume", "--last"]
@@ -1873,7 +1873,9 @@ def tui(
             instructions_dir = paths.run_dir / "agents" / "codex"
             instructions_dir.mkdir(parents=True, exist_ok=True)
             instructions_file = instructions_dir / f"{recipient}.md"
-            instructions_file.write_text(instructions_text.rstrip() + "\n", encoding="utf-8")
+            instructions_file.write_text(
+                instructions_text.rstrip() + "\n", encoding="utf-8"
+            )
             codex_home = paths.run_dir / "sessions" / "codex" / recipient
             codex_home.mkdir(parents=True, exist_ok=True)
             child_env["CODEX_HOME"] = str(codex_home)
@@ -5819,7 +5821,14 @@ def merge_enqueue(
                     pane = panes.get(pane_id)
                     if pane and _pane_can_receive_chat(pane):
                         line = f"TEAM merge_queue enqueued id={item['id']} ticket={ticket_id or '-'} branch={branch}"
-                        tmux_send_text(pane_id, line, enter=True, ctrl_enter=(str(run.get("harness") or "").strip().lower() == "omp"))
+                        tmux_send_text(
+                            pane_id,
+                            line,
+                            enter=True,
+                            ctrl_enter=(
+                                str(run.get("harness") or "").strip().lower() == "omp"
+                            ),
+                        )
                         nudged = True
                 except Exception:
                     nudged = False

@@ -141,14 +141,8 @@ class TestTeamHarnessOmp(unittest.TestCase):
             argv = popen_argv[0]
             self.assertEqual(argv[0], "omp")
             self.assertIn("--append-system-prompt", argv)
-            self.assertIn("--resume", argv)
             self.assertIn("--tools", argv)
             self.assertIn("initial prompt", argv)
-            resume_arg = argv[argv.index("--resume") + 1]
-            self.assertEqual(
-                str(Path(resume_arg).resolve()),
-                str((run_dir / "sessions" / "omp" / "manager.jsonl").resolve()),
-            )
             tools_arg = argv[argv.index("--tools") + 1]
             tools = tools_arg.split(",")
             self.assertIn("read", tools)
@@ -166,7 +160,9 @@ class TestTeamHarnessOmp(unittest.TestCase):
             os.environ.pop(team.ENV_TEAM_ROLE, None)
             try:
                 with (
-                    mock.patch.object(team, "canonical_repo_root", return_value=repo_root),
+                    mock.patch.object(
+                        team, "canonical_repo_root", return_value=repo_root
+                    ),
                     mock.patch.object(team, "_require_bin"),
                     mock.patch.object(team, "tmux_has_session", return_value=False),
                     mock.patch.object(team, "tmux_cmd", side_effect=fake_tmux_cmd),
@@ -240,7 +236,9 @@ class TestTeamHarnessOmp(unittest.TestCase):
             repo_root = Path(td)
             run_dir = repo_root / ".loom" / "team" / "runs" / "test"
             run_dir.mkdir(parents=True, exist_ok=True)
-            (run_dir / "run.json").write_text('{"run_id": "test-123"}', encoding="utf-8")
+            (run_dir / "run.json").write_text(
+                '{"run_id": "test-123"}', encoding="utf-8"
+            )
 
             agent_dir = repo_root / ".opencode" / "agents"
             agent_dir.mkdir(parents=True, exist_ok=True)
@@ -315,7 +313,9 @@ class TestTeamHarnessOmp(unittest.TestCase):
             os.environ.pop(team.ENV_TEAM_ROLE, None)
             try:
                 with (
-                    mock.patch.object(team, "canonical_repo_root", return_value=repo_root),
+                    mock.patch.object(
+                        team, "canonical_repo_root", return_value=repo_root
+                    ),
                     mock.patch.object(team, "_require_bin"),
                     mock.patch.object(team, "tmux_has_session", return_value=False),
                     mock.patch.object(team, "tmux_cmd", side_effect=fake_tmux_cmd),
@@ -336,7 +336,9 @@ class TestTeamHarnessOmp(unittest.TestCase):
                 run = json.loads(run_path.read_text(encoding="utf-8"))
                 omp_cfg = dict(run.get("omp") or {})
                 models = dict(omp_cfg.get("models") or {})
-                self.assertEqual(models.get("worker"), "invalid-worker-model-but-allowed")
+                self.assertEqual(
+                    models.get("worker"), "invalid-worker-model-but-allowed"
+                )
             finally:
                 os.environ.clear()
                 os.environ.update(env_backup)
@@ -353,7 +355,9 @@ class TestTeamHarnessOmp(unittest.TestCase):
             os.environ.pop(team.ENV_TEAM_ROLE, None)
             try:
                 with (
-                    mock.patch.object(team, "canonical_repo_root", return_value=repo_root),
+                    mock.patch.object(
+                        team, "canonical_repo_root", return_value=repo_root
+                    ),
                     mock.patch.object(team, "_require_bin"),
                     mock.patch.object(team, "tmux_has_session", return_value=False),
                     mock.patch.object(team, "tmux_cmd", side_effect=fake_tmux_cmd),
