@@ -1,10 +1,10 @@
 {
-  "last_auto_apply_at": "2026-02-13T19:11:02.218252Z",
-  "last_auto_run_at": "2026-02-13T19:11:02.218252Z",
-  "observations_count": 3000,
-  "observations_offset_bytes": 1992733,
+  "last_auto_apply_at": "2026-02-15T18:43:41.419261Z",
+  "last_auto_run_at": "2026-02-15T18:43:41.419261Z",
+  "observations_count": 3854,
+  "observations_offset_bytes": 2799716,
   "observations_prefix_sha256": "1b9799d1f16151acb585382cd139c4d2b0b8b8a215a504cec066795ea8b09d3a",
-  "observations_tail_sha256": "fd7855c2fc415aa19e66c4e1c303ce0254541771d27757676cb4230eb902516c",
-  "updated_at": "2026-02-13T19:11:02.218252Z",
+  "observations_tail_sha256": "9a1c7cb8fa160ed78279c4c1ed0e1ce19232cd81ee2ac737d52d5bd8f7b985dc",
+  "updated_at": "2026-02-15T18:43:41.419261Z",
   "version": 3
 }
