@@ -74,6 +74,41 @@ class TestTeamCompositionSchema(unittest.TestCase):
         self.assertIn("ambiguous pattern overlap", str(ctx.exception))
         self.assertIn("Patterns must be disjoint", ctx.exception.hint)
 
+    def test_malformed_yaml_reports_source_context(self) -> None:
+        payload = "version: [1"
+        with self.assertRaises(TeamCompositionError) as ctx:
+            parse_team_composition_yaml(payload, source="fixture")
+
+        self.assertIn("fixture: invalid YAML", str(ctx.exception))
+
+    def test_invalid_pattern_is_rejected_with_hint(self) -> None:
+        payload = """
+version: 1
+metadata:
+  name: x
+members:
+  - id: worker-1
+    role: worker
+    lifecycle: ephemeral
+    source: loom
+    agent: loom-team-worker
+worktree_mappings:
+  - pattern: a*b
+    member: worker-1
+communication:
+  channel: inbox_only
+  require_ack: true
+  escalation:
+    target_role: manager
+    timeout_seconds: 60
+"""
+        with self.assertRaises(TeamCompositionError) as ctx:
+            parse_team_composition_yaml(payload, source="inline")
+
+        self.assertIn("worktree_mappings[0].pattern", str(ctx.exception))
+        self.assertIn("invalid pattern", str(ctx.exception))
+        self.assertIn("trailing '*'", ctx.exception.hint)
+
     def test_unknown_byo_agent_reference_is_rejected(self) -> None:
         payload = """
 version: 1
