@@ -181,6 +181,60 @@ class TestTeamHarnessOmp(unittest.TestCase):
             self.assertIn("models", omp_cfg)
             self.assertEqual(str(omp_cfg.get("manager_agent") or ""), team.DEFAULT_MANAGER_AGENT)
 
+    def test_model_for_role_worker_with_omp_harness(self) -> None:
+        """Test that _model_for_role correctly resolves worker model for OMP harness.
+
+        This regression test captures the expected behavior:
+        - When harness="omp" and role="worker"
+        - With run.omp.models.worker set to a specific model
+        - _model_for_role should return run.omp.models.worker (not run.omp.model)
+        """
+        run = {
+            "harness": "omp",
+            "omp": {
+                "model": "github-copilot/claude-sonnet-4.5",
+                "models": {
+                    "worker": "github-copilot/claude-sonnet-4.5",
+                    "investigator": "openai-codex/gpt-5.3-codex",
+                    "manager": "github-copilot/gemini-3-flash-preview",
+                    "integrator": "github-copilot/claude-sonnet-4.5",
+                },
+            },
+        }
+        model = team._model_for_role(run, "worker", harness="omp")
+        self.assertEqual(model, "github-copilot/claude-sonnet-4.5")
+
+    def test_model_for_role_fallback_to_harness_model(self) -> None:
+        """Test that _model_for_role falls back to harness.model when role model is empty."""
+        run = {
+            "harness": "omp",
+            "omp": {
+                "model": "github-copilot/claude-sonnet-4.5",
+                "models": {
+                    "worker": "",  # Empty worker model
+                    "manager": "github-copilot/gemini-3-flash-preview",
+                },
+            },
+        }
+        model = team._model_for_role(run, "worker", harness="omp")
+        # Should fall back to run.omp.model
+        self.assertEqual(model, "github-copilot/claude-sonnet-4.5")
+
+    def test_model_for_role_precedence_role_over_harness(self) -> None:
+        """Test that role-specific model takes precedence over harness-level model."""
+        run = {
+            "harness": "omp",
+            "omp": {
+                "model": "github-copilot/claude-sonnet-4.5",
+                "models": {
+                    "worker": "openai-codex/gpt-5.3-codex",  # Different from harness model
+                },
+            },
+        }
+        model = team._model_for_role(run, "worker", harness="omp")
+        # Should use role-specific model, not harness-level
+        self.assertEqual(model, "openai-codex/gpt-5.3-codex")
+
 
 if __name__ == "__main__":
     unittest.main()
