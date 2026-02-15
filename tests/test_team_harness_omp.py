@@ -572,6 +572,174 @@ class TestTeamHarnessOmp(unittest.TestCase):
             finally:
                 os.environ.clear()
                 os.environ.update(env_backup)
+            repo_root = Path(td)
+
+            def fake_tmux_cmd(argv, **kwargs):
+                _ = kwargs
+                return subprocess.CompletedProcess(list(argv), 0, stdout="", stderr="")
+
+            fake_model_check = subprocess.CompletedProcess(
+                args=["omp", "--list-models", "invalid-worker-model"],
+                returncode=0,
+                stdout="No models matching 'invalid-worker-model'\n",
+                stderr="",
+            )
+
+            env_backup = os.environ.copy()
+            os.environ.pop(team.ENV_TEAM_ROLE, None)
+            try:
+                with (
+                    mock.patch.object(team, "canonical_repo_root", return_value=repo_root),
+                    mock.patch.object(team, "_require_bin"),
+                    mock.patch.object(team, "tmux_has_session", return_value=False),
+                    mock.patch.object(team, "tmux_cmd", side_effect=fake_tmux_cmd),
+                    mock.patch.object(team, "tmux_set_option"),
+                    mock.patch.object(team, "tmux_window_exists", return_value=False),
+                    mock.patch.object(team, "tmux_mark_pane"),
+                    mock.patch.object(team, "tmux_format", return_value="%1"),
+                    mock.patch.object(team, "_run", return_value=fake_model_check),
+                ):
+                    team.init_agents(repo=repo_root, create_missing=True)
+                    with self.assertRaises(team.TeamError) as ctx:
+                        team.start(
+                            team="Cobra",
+                            repo=repo_root,
+                            harness="omp",
+                            worker_model="invalid-worker-model",
+                        )
+                    self.assertIn("OMP model invalid", str(ctx.exception))
+                    self.assertIn("worker", str(ctx.exception))
+            finally:
+                os.environ.clear()
+                os.environ.update(env_backup)
+
+    def test_start_rejects_invalid_omp_global_model(self) -> None:
+        """Test that start() fails fast when OMP global model is invalid."""
+        with tempfile.TemporaryDirectory() as td:
+            repo_root = Path(td)
+
+            def fake_tmux_cmd(argv, **kwargs):
+                _ = kwargs
+                return subprocess.CompletedProcess(list(argv), 0, stdout="", stderr="")
+
+            fake_model_check = subprocess.CompletedProcess(
+                args=["omp", "--list-models", "invalid-global-model"],
+                returncode=0,
+                stdout="No models matching 'invalid-global-model'\n",
+                stderr="",
+            )
+
+            env_backup = os.environ.copy()
+            os.environ.pop(team.ENV_TEAM_ROLE, None)
+            try:
+                with (
+                    mock.patch.object(team, "canonical_repo_root", return_value=repo_root),
+                    mock.patch.object(team, "_require_bin"),
+                    mock.patch.object(team, "tmux_has_session", return_value=False),
+                    mock.patch.object(team, "tmux_cmd", side_effect=fake_tmux_cmd),
+                    mock.patch.object(team, "tmux_set_option"),
+                    mock.patch.object(team, "tmux_window_exists", return_value=False),
+                    mock.patch.object(team, "tmux_mark_pane"),
+                    mock.patch.object(team, "tmux_format", return_value="%1"),
+                    mock.patch.object(team, "_run", return_value=fake_model_check),
+                ):
+                    team.init_agents(repo=repo_root, create_missing=True)
+                    with self.assertRaises(team.TeamError) as ctx:
+                        team.start(
+                            team="Cobra",
+                            repo=repo_root,
+                            harness="omp",
+                            model="invalid-global-model",
+                        )
+                    self.assertIn("OMP model invalid", str(ctx.exception))
+                    self.assertIn("global", str(ctx.exception))
+            finally:
+                os.environ.clear()
+                os.environ.update(env_backup)
+
+    def test_start_accepts_valid_omp_model(self) -> None:
+        """Test that start() succeeds when OMP model is valid."""
+        with tempfile.TemporaryDirectory() as td:
+            repo_root = Path(td)
+
+            def fake_tmux_cmd(argv, **kwargs):
+                _ = kwargs
+                return subprocess.CompletedProcess(list(argv), 0, stdout="", stderr="")
+
+            fake_model_check = subprocess.CompletedProcess(
+                args=["omp", "--list-models", "valid-model"],
+                returncode=0,
+                stdout="valid-model (provider)\n",
+                stderr="",
+            )
+
+            env_backup = os.environ.copy()
+            os.environ.pop(team.ENV_TEAM_ROLE, None)
+            try:
+                with (
+                    mock.patch.object(team, "canonical_repo_root", return_value=repo_root),
+                    mock.patch.object(team, "_require_bin"),
+                    mock.patch.object(team, "tmux_has_session", return_value=False),
+                    mock.patch.object(team, "tmux_cmd", side_effect=fake_tmux_cmd),
+                    mock.patch.object(team, "tmux_set_option"),
+                    mock.patch.object(team, "tmux_window_exists", return_value=False),
+                    mock.patch.object(team, "tmux_mark_pane"),
+                    mock.patch.object(team, "tmux_format", return_value="%1"),
+                    mock.patch.object(team, "_run", return_value=fake_model_check),
+                ):
+                    team.init_agents(repo=repo_root, create_missing=True)
+                    res = team.start(
+                        team="Cobra",
+                        repo=repo_root,
+                        harness="omp",
+                        worker_model="valid-model",
+                    )
+                    # Should succeed without raising
+                    run_path = Path(res.run_dir) / "run.json"
+                    run = json.loads(run_path.read_text(encoding="utf-8"))
+                    self.assertEqual(str(run.get("harness") or ""), "omp")
+                    omp_cfg = dict(run.get("omp") or {})
+                    models = dict(omp_cfg.get("models") or {})
+                    self.assertEqual(models.get("worker"), "valid-model")
+            finally:
+                os.environ.clear()
+                os.environ.update(env_backup)
+
+    def test_start_ignores_invalid_model_for_non_omp_harness(self) -> None:
+        """Test that start() does not validate models for non-OMP harnesses."""
+        with tempfile.TemporaryDirectory() as td:
+            repo_root = Path(td)
+
+            def fake_tmux_cmd(argv, **kwargs):
+                _ = kwargs
+                return subprocess.CompletedProcess(list(argv), 0, stdout="", stderr="")
+
+            env_backup = os.environ.copy()
+            os.environ.pop(team.ENV_TEAM_ROLE, None)
+            try:
+                with (
+                    mock.patch.object(team, "canonical_repo_root", return_value=repo_root),
+                    mock.patch.object(team, "_require_bin"),
+                    mock.patch.object(team, "tmux_has_session", return_value=False),
+                    mock.patch.object(team, "tmux_cmd", side_effect=fake_tmux_cmd),
+                    mock.patch.object(team, "tmux_set_option"),
+                    mock.patch.object(team, "tmux_window_exists", return_value=False),
+                    mock.patch.object(team, "tmux_mark_pane"),
+                    mock.patch.object(team, "tmux_format", return_value="%1"),
+                ):
+                    team.init_agents(repo=repo_root, create_missing=True)
+                    # Should not attempt validation for opencode harness
+                    res = team.start(
+                        team="Cobra",
+                        repo=repo_root,
+                        harness="opencode",
+                        worker_model="any-model-string",
+                    )
+                    # Should succeed without raising
+                    self.assertTrue(res.run_dir)
+            finally:
+                os.environ.clear()
+                os.environ.update(env_backup)
 
 
 
