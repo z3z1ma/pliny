@@ -180,6 +180,16 @@ from agent_loom.team.models import (
     TuiResult,
     WaitResult,
 )
+from agent_loom.team.objective_state import (
+    apply_objective_mutation as _objective_state_apply_objective_mutation,
+    build_prep_sprint_ticket_description as _build_prep_sprint_ticket_description,
+    clear_sprint_state as _objective_state_clear_sprint_state,
+    objective_show as _objective_state_objective_show,
+    read_text_input as _objective_state_read_text_input,
+    set_sprint_state as _objective_state_set_sprint_state,
+    sprint_state as _objective_state_sprint_state,
+    start_sprint_state as _objective_state_start_sprint_state,
+)
 from agent_loom.team.permissions import (
     _deny_if_role_set,
     _require_role,
@@ -2268,7 +2278,7 @@ def _ensure_always_on_personas(*, team: str, repo: Optional[Path] = None) -> Non
 
         root = run_root(paths, run)
         tickets_dir = ensure_run_tickets_dir(run, repo_root=root)
-        sprint = _sprint_state(run)
+        sprint = _objective_state_sprint_state(run)
         defaults = run.get("defaults") if isinstance(run.get("defaults"), dict) else {}
         base_ref_default = str((defaults or {}).get("base_ref") or "").strip() or None
 
@@ -2977,7 +2987,7 @@ def start(
             bin=str(cfg.get("bin") or "").strip(),
         )
 
-        sprint = _sprint_state(run)
+        sprint = _objective_state_sprint_state(run)
         pane_env = {
             ENV_TICKET_DIR: str(tickets_dir),
             ENV_TEAM_NAME: team,
@@ -3174,123 +3184,10 @@ def _epoch(ts: Optional[dt.datetime]) -> float:
         return 0.0
 
 
-def _read_text_input(
-    *,
-    message: str,
-    file_path: str,
-    stdin_ok: bool,
-) -> str:
-    msg = str(message or "")
-    fp = str(file_path or "").strip()
-    if msg.strip():
-        return msg
-    if fp:
-        p = Path(fp).expanduser().resolve()
-        return p.read_text(encoding="utf-8")
-    if stdin_ok and not sys.stdin.isatty():
-        return sys.stdin.read()
-    raise TeamError(
-        "Missing objective text. Use --message, --file, or pipe via stdin.",
-        code="ARG",
-        exit_code=2,
-    )
-
-
-def _objective_append_block(text: str, *, stamp: str) -> str:
-    t = str(text or "").strip("\n")
-    if not t:
-        return ""
-    return f"\n\n---\n\n## Update {stamp}\n\n{t}\n"
-
-
 def objective_show(*, team: str, repo: Optional[Path] = None) -> ObjectiveShowResult:
     paths = _paths_for(team=team, repo=repo)
     run = load_run(paths)
-    return ObjectiveShowResult(
-        team=str(run.get("team") or paths.team),
-        objective=str(run.get("objective") or ""),
-        objective_rev=int(run.get("objective_rev") or 0),
-        objective_updated_at=str(run.get("objective_updated_at") or ""),
-        charter=str(paths.charter_file.resolve()),
-    )
-
-
-def _objective_mutate(
-    *,
-    paths: RunPaths,
-    run: Dict[str, Any],
-    mode: str,
-    text: str,
-    nudge: bool,
-    force: bool,
-) -> Dict[str, Any]:
-    now = _iso_z()
-    cur = str(run.get("objective") or "")
-    if mode == "set":
-        new_obj = str(text or "").strip("\n") + "\n"
-    elif mode == "append":
-        new_obj = (cur or "").rstrip("\n") + _objective_append_block(text, stamp=now)
-    else:
-        raise TeamError(f"Invalid objective mode: {mode}", code="BUG", exit_code=2)
-
-    prev_rev = int(run.get("objective_rev") or 0)
-    run["objective"] = new_obj
-    run["objective_rev"] = prev_rev + 1
-    run["objective_updated_at"] = now
-
-    # New work implies we are no longer "done".
-    run["done_reminder"] = {}
-
-    charter_path = _write_charter(paths=paths, run=run)
-
-    # Notify manager so they pivot; the inbox sidecar will nudge until ack/disband.
-    msg = (
-        f"Objective {('replaced' if mode == 'set' else 'appended')} (rev={run['objective_rev']}) at {now}.\n\n"
-        f"Team: {paths.team}\n"
-        f"Charter: {charter_path}\n\n"
-        "Next actions (manager):\n"
-        "- Re-read CHARTER and pivot immediately.\n"
-        "- Map objective -> tickets (loom ticket).\n"
-        "- If no crisp tickets exist: spawn an Architect to produce a ticket set.\n"
-        "- When 100% done (tickets closed + merges shipped): disband the team.\n\n"
-        "Current objective:\n"
-        f"{str(run.get('objective') or '').strip()}\n"
-    )
-
-    inbox_msg, _recipient, nudged, reason, _meta = _inbox_write_and_maybe_nudge(
-        paths=paths,
-        run=run,
-        target="manager",
-        message=msg,
-        sender="team",
-        kind="objective",
-        meta_extra={"objective_rev": int(run.get("objective_rev") or 0), "mode": mode},
-        nudge=bool(nudge),
-        force=bool(force),
-        line_info=f"objective_{mode} rev={run['objective_rev']}",
-    )
-
-    write_event(
-        paths,
-        event_type="objective.updated",
-        run=run,
-        summary=f"Objective {mode} rev={run['objective_rev']} nudged={nudged}",
-        refs={
-            "objective_rev": int(run.get("objective_rev") or 0),
-            "inbox_id": str(inbox_msg.get("id") or ""),
-        },
-        data={"mode": mode, "nudged": bool(nudged), "nudge_reason": reason},
-    )
-
-    return {
-        "ok": True,
-        "team": paths.team,
-        "objective_rev": int(run.get("objective_rev") or 0),
-        "objective_updated_at": str(run.get("objective_updated_at") or ""),
-        "charter": str(charter_path.resolve()),
-        "inbox_id": str(inbox_msg.get("id") or ""),
-        "nudged": bool(nudged),
-    }
+    return _objective_state_objective_show(paths=paths, run=run)
 
 
 def objective_set(
@@ -3305,19 +3202,63 @@ def objective_set(
 ) -> ObjectiveUpdateResult:
     _require_role(action="loom team objective set", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
-    text = _read_text_input(
+    text = _objective_state_read_text_input(
         message=str(message or ""),
         file_path=str(file_path or ""),
         stdin_ok=bool(stdin_ok),
     )
     with locked_run(paths) as run:
-        payload = _objective_mutate(
-            paths=paths,
+        now = _iso_z()
+        payload = _objective_state_apply_objective_mutation(
             run=run,
             mode="set",
             text=text,
+            now=now,
+        )
+        charter_path = _write_charter(paths=paths, run=run)
+
+        msg = (
+            f"Objective replaced (rev={run['objective_rev']}) at {now}.\n\n"
+            f"Team: {paths.team}\n"
+            f"Charter: {charter_path}\n\n"
+            "Next actions (manager):\n"
+            "- Re-read CHARTER and pivot immediately.\n"
+            "- Map objective -> tickets (loom ticket).\n"
+            "- If no crisp tickets exist: spawn an Architect to produce a ticket set.\n"
+            "- When 100% done (tickets closed + merges shipped): disband the team.\n\n"
+            "Current objective:\n"
+            f"{str(run.get('objective') or '').strip()}\n"
+        )
+        inbox_msg, _recipient, nudged, reason, _meta = _inbox_write_and_maybe_nudge(
+            paths=paths,
+            run=run,
+            target="manager",
+            message=msg,
+            sender="team",
+            kind="objective",
+            meta_extra={"objective_rev": int(run.get("objective_rev") or 0), "mode": "set"},
             nudge=bool(nudge),
             force=bool(force),
+            line_info=f"objective_set rev={run['objective_rev']}",
+        )
+        write_event(
+            paths,
+            event_type="objective.updated",
+            run=run,
+            summary=f"Objective set rev={run['objective_rev']} nudged={nudged}",
+            refs={
+                "objective_rev": int(run.get("objective_rev") or 0),
+                "inbox_id": str(inbox_msg.get("id") or ""),
+            },
+            data={"mode": "set", "nudged": bool(nudged), "nudge_reason": reason},
+        )
+        payload.update(
+            {
+                "team": paths.team,
+                "charter": str(charter_path.resolve()),
+                "inbox_id": str(inbox_msg.get("id") or ""),
+                "nudged": bool(nudged),
+            }
         )
     return ObjectiveUpdateResult(
         team=str(payload.get("team") or paths.team),
@@ -3342,19 +3283,66 @@ def objective_append(
 ) -> ObjectiveUpdateResult:
     _require_role(action="loom team objective append", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
-    text = _read_text_input(
+    text = _objective_state_read_text_input(
         message=str(message or ""),
         file_path=str(file_path or ""),
         stdin_ok=bool(stdin_ok),
     )
     with locked_run(paths) as run:
-        payload = _objective_mutate(
-            paths=paths,
+        now = _iso_z()
+        payload = _objective_state_apply_objective_mutation(
             run=run,
             mode="append",
             text=text,
+            now=now,
+        )
+        charter_path = _write_charter(paths=paths, run=run)
+
+        msg = (
+            f"Objective appended (rev={run['objective_rev']}) at {now}.\n\n"
+            f"Team: {paths.team}\n"
+            f"Charter: {charter_path}\n\n"
+            "Next actions (manager):\n"
+            "- Re-read CHARTER and pivot immediately.\n"
+            "- Map objective -> tickets (loom ticket).\n"
+            "- If no crisp tickets exist: spawn an Architect to produce a ticket set.\n"
+            "- When 100% done (tickets closed + merges shipped): disband the team.\n\n"
+            "Current objective:\n"
+            f"{str(run.get('objective') or '').strip()}\n"
+        )
+        inbox_msg, _recipient, nudged, reason, _meta = _inbox_write_and_maybe_nudge(
+            paths=paths,
+            run=run,
+            target="manager",
+            message=msg,
+            sender="team",
+            kind="objective",
+            meta_extra={
+                "objective_rev": int(run.get("objective_rev") or 0),
+                "mode": "append",
+            },
             nudge=bool(nudge),
             force=bool(force),
+            line_info=f"objective_append rev={run['objective_rev']}",
+        )
+        write_event(
+            paths,
+            event_type="objective.updated",
+            run=run,
+            summary=f"Objective append rev={run['objective_rev']} nudged={nudged}",
+            refs={
+                "objective_rev": int(run.get("objective_rev") or 0),
+                "inbox_id": str(inbox_msg.get("id") or ""),
+            },
+            data={"mode": "append", "nudged": bool(nudged), "nudge_reason": reason},
+        )
+        payload.update(
+            {
+                "team": paths.team,
+                "charter": str(charter_path.resolve()),
+                "inbox_id": str(inbox_msg.get("id") or ""),
+                "nudged": bool(nudged),
+            }
         )
     return ObjectiveUpdateResult(
         team=str(payload.get("team") or paths.team),
@@ -4067,7 +4055,7 @@ def _respawn_active_worker_if_missing(
         bin=str(cfg.get("bin") or "").strip(),
     )
 
-    sprint = _sprint_state(run)
+    sprint = _objective_state_sprint_state(run)
     pane_env = {
         ENV_TICKET_DIR: str(tickets_dir),
         ENV_TEAM_NAME: str(run.get("team") or paths.team),
@@ -4302,19 +4290,6 @@ def _model_for_role(run: Mapping[str, Any], role: str, *, harness: str) -> str:
     if m:
         return m
     return str(cfg.get("model") or "").strip()
-
-
-def _sprint_state(run: Mapping[str, Any]) -> Dict[str, str]:
-    s = run.get("sprint")
-    if not isinstance(s, dict):
-        return {"name": "", "tag": ""}
-    name = str(s.get("name") or "").strip()
-    tag = str(s.get("tag") or "").strip()
-    return {"name": name, "tag": tag}
-
-
-def _sprint_slug(name: str) -> str:
-    return sanitize(str(name or ""), max_len=40)
 
 
 def _max_headcount(run: Mapping[str, Any]) -> int:
@@ -4619,7 +4594,7 @@ def spawn(
             bin=str(cfg.get("bin") or "").strip(),
         )
 
-        sprint = _sprint_state(run)
+        sprint = _objective_state_sprint_state(run)
         pane_env = {
             ENV_TICKET_DIR: str(tickets_dir),
             ENV_TEAM_NAME: str(run.get("team") or paths.team),
@@ -4793,34 +4768,17 @@ def prep_sprint(
     _require_role(action="loom team prep-sprint", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     sprint_name = str(name or "").strip()
-    if not sprint_name:
-        raise TeamError("Sprint name is required", code="ARG", exit_code=2)
-
-    slug = _sprint_slug(sprint_name)
-    if not slug:
-        raise TeamError("Invalid sprint name", code="ARG", exit_code=2)
-    tag = f"sprint:{slug}"
+    now = _iso_z()
 
     with locked_run(paths) as run:
-        existing = run.get("sprint") if isinstance(run.get("sprint"), dict) else {}
-        existing_name = str((existing or {}).get("name") or "").strip()
-        if existing_name and not bool(force):
-            raise TeamError(
-                f"Sprint already set: {existing_name} (use --force to overwrite)",
-                code="ARG",
-                exit_code=2,
-            )
-
-        rev = int((existing or {}).get("rev") or 0) + 1
-        sprint = {
-            "name": sprint_name,
-            "slug": slug,
-            "tag": tag,
-            "rev": rev,
-            "started_at": _iso_z(),
-            "updated_at": _iso_z(),
-        }
-        run["sprint"] = sprint
+        sprint = _objective_state_start_sprint_state(
+            run=run,
+            name=sprint_name,
+            force=bool(force),
+            now=now,
+        )
+        tag = str(sprint.get("tag") or "")
+        rev = int(sprint.get("rev") or 0)
 
         # Update charter with sprint metadata.
         _write_charter(paths=paths, run=run)
@@ -4836,63 +4794,11 @@ def prep_sprint(
         root = run_root(paths, run)
         tickets_dir = ensure_run_tickets_dir(run, repo_root=root)
         objective = str(run.get("objective") or "").strip()
-
-        desc_lines = []
-        if objective:
-            desc_lines.append("Objective:")
-            desc_lines.append(objective)
-            desc_lines.append("")
-        desc_lines.append(
-            "Sprint prep deliverable (fill this ticket in, then create tickets):"
+        desc = _build_prep_sprint_ticket_description(
+            objective=objective,
+            sprint_name=sprint_name,
+            tag=tag,
         )
-        desc_lines.append("")
-        desc_lines.append("## Sprint Brief")
-        desc_lines.append("")
-        desc_lines.append(
-            "Write a short sprint brief that a cheaper worker model can follow."
-        )
-        desc_lines.append("")
-        desc_lines.append("Required sections:")
-        desc_lines.append("- Objective restatement: ...")
-        desc_lines.append("- Sprint focus (2-5 words): ...")
-        desc_lines.append("- Why this sprint focus is the best next step: ...")
-        desc_lines.append("- Current state:")
-        desc_lines.append("  - Existing tickets that matter: ...")
-        desc_lines.append(
-            "  - Codebase state that matters (git status/log, key modules): ..."
-        )
-        desc_lines.append("- Risks + unknowns (and how we'll resolve them): ...")
-        desc_lines.append("")
-        desc_lines.append("## Ticket Set")
-        desc_lines.append("")
-        desc_lines.append(
-            "Create the sprint tickets directly. This sprint prep ticket should be the parent."
-        )
-        desc_lines.append(f"- Tag rule: include `{tag}` on sprint tickets.")
-        desc_lines.append(
-            '- Prefer: `loom ticket create ... --parent <THIS_TICKET_ID> --acceptance "..."`'
-        )
-        desc_lines.append("")
-        desc_lines.append("Ticket quality rubric (non-negotiable):")
-        desc_lines.append("- Scope + explicit non-goals")
-        desc_lines.append(
-            "- Step-by-step implementation plan (include file paths when possible)"
-        )
-        desc_lines.append("- Acceptance criteria (observable outcomes)")
-        desc_lines.append("- Verification commands (use `uv run ...` for Python)")
-        desc_lines.append("- Risks/edge cases")
-        desc_lines.append(
-            "- Dependencies + suggested ordering (use `loom ticket dep-add`)\n"
-        )
-        desc_lines.append("## Output")
-        desc_lines.append("")
-        desc_lines.append("When done, update THIS ticket with:")
-        desc_lines.append("- Created/updated ticket IDs: [ ... ]")
-        desc_lines.append("- Suggested ordering + what can run in parallel")
-        desc_lines.append("")
-        desc_lines.append(f"Sprint name: {sprint_name}")
-        desc_lines.append(f"Sprint tag: {tag}")
-        desc = "\n".join(desc_lines).strip()
 
         created = ticket_create(
             tickets_dir=tickets_dir,
@@ -4977,10 +4883,11 @@ def sprint_show(
     """Show current sprint metadata."""
     paths = _paths_for(team=team, repo=repo)
     with locked_run(paths) as run:
-        sprint = run.get("sprint") if isinstance(run.get("sprint"), dict) else {}
+        sprint_raw = run.get("sprint") if isinstance(run.get("sprint"), dict) else {}
+        sprint = dict(sprint_raw or {})
         return SprintShowResult(
             team=paths.team,
-            sprint=dict(sprint or {}),
+            sprint=sprint,
             rev=int((sprint or {}).get("rev") or 0),
         )
 
@@ -4995,30 +4902,17 @@ def sprint_set(
     """Update sprint metadata (name and/or tag) without spawning tickets."""
     _require_role(action="loom team sprint set", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
-    sprint_name = str(name or "").strip()
-    if not sprint_name:
-        raise TeamError("Sprint name is required", code="ARG", exit_code=2)
-
-    slug = _sprint_slug(sprint_name)
-    if not slug:
-        raise TeamError("Invalid sprint name", code="ARG", exit_code=2)
-
-    sprint_tag = str(tag or "").strip()
-    if not sprint_tag:
-        sprint_tag = f"sprint:{slug}"
-
+    now = _iso_z()
     with locked_run(paths) as run:
-        existing = run.get("sprint") if isinstance(run.get("sprint"), dict) else {}
-        rev = int((existing or {}).get("rev") or 0) + 1
-        sprint = {
-            "name": sprint_name,
-            "slug": slug,
-            "tag": sprint_tag,
-            "rev": rev,
-            "started_at": (existing or {}).get("started_at") or _iso_z(),
-            "updated_at": _iso_z(),
-        }
-        run["sprint"] = sprint
+        sprint = _objective_state_set_sprint_state(
+            run=run,
+            name=str(name or ""),
+            tag=str(tag or ""),
+            now=now,
+        )
+        sprint_name = str(sprint.get("name") or "")
+        sprint_tag = str(sprint.get("tag") or "")
+        rev = int(sprint.get("rev") or 0)
         charter_path = _write_charter(paths=paths, run=run)
 
         write_event(
@@ -5046,9 +4940,7 @@ def sprint_clear(
     _require_role(action="loom team sprint clear", allowed_roles={ROLE_MANAGER})
     paths = _paths_for(team=team, repo=repo)
     with locked_run(paths) as run:
-        existing = run.get("sprint") if isinstance(run.get("sprint"), dict) else {}
-        rev = int((existing or {}).get("rev") or 0) + 1
-        run["sprint"] = {}
+        rev = _objective_state_clear_sprint_state(run=run)
         charter_path = _write_charter(paths=paths, run=run)
 
         write_event(
@@ -5254,7 +5146,7 @@ def spawn_integrator(
             bin=str(cfg.get("bin") or "").strip(),
         )
 
-        sprint = _sprint_state(run)
+        sprint = _objective_state_sprint_state(run)
         pane_env = {
             ENV_TICKET_DIR: str(tickets_dir),
             ENV_TEAM_NAME: str(run.get("team") or paths.team),

@@ -22,6 +22,7 @@ from agent_loom.team.constants import (
 from agent_loom.team.errors import TeamError
 from agent_loom.team.exec import _require_bin
 from agent_loom.team.models import SpawnPersonaResult
+from agent_loom.team.objective_state import sprint_state
 from agent_loom.team.permissions import _require_role
 from agent_loom.team.prompts import render_persona_prompt
 from agent_loom.team.run_state import locked_run, run_root, run_session
@@ -56,7 +57,6 @@ def spawn_persona(
         _paths_for,
         _persona_worktree_branch,
         _require_agent_file_present,
-        _sprint_state,
         _team_tui_argv,
         _workspace_for_always_on_profile,
         ensure_run_tickets_dir,
@@ -93,7 +93,7 @@ def spawn_persona(
 
         root = run_root(paths, run)
         tickets_dir = ensure_run_tickets_dir(run, repo_root=root)
-        sprint = _sprint_state(run)
+        sprint = sprint_state(run)
         defaults = run.get("defaults") if isinstance(run.get("defaults"), dict) else {}
         base_ref_default = str((defaults or {}).get("base_ref") or "").strip() or None
 

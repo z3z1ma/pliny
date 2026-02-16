@@ -91,6 +91,7 @@ class TestPrepSprint(unittest.TestCase):
                 yield run
 
             with (
+                mock.patch.object(team, "_require_role"),
                 mock.patch.object(team, "_paths_for", return_value=paths),
                 mock.patch.object(team, "locked_run", fake_locked_run),
                 mock.patch.object(team, "run_root", return_value=repo_root),
@@ -135,11 +136,66 @@ class TestPrepSprint(unittest.TestCase):
             yield run
 
         with (
+            mock.patch.object(team, "_require_role"),
             mock.patch.object(team, "_paths_for", return_value=paths),
             mock.patch.object(team, "locked_run", fake_locked_run),
         ):
             with self.assertRaises(team.TeamError):
                 team.prep_sprint(team="CobraKai", name="New")
+
+
+class TestSprintStateCommands(unittest.TestCase):
+    def test_sprint_set_defaults_tag_from_slug(self) -> None:
+        paths = RunPaths(repo_root=Path("/repo"), team="CobraKai")
+        run = {
+            "team": "CobraKai",
+            "run_id": "1234567890abcdef",
+            "session": "team-cobrakai",
+            "sprint": {},
+        }
+
+        @contextlib.contextmanager
+        def fake_locked_run(_paths: RunPaths, *, _save: bool = True):
+            yield run
+
+        with (
+            mock.patch.object(team, "_require_role"),
+            mock.patch.object(team, "_paths_for", return_value=paths),
+            mock.patch.object(team, "locked_run", fake_locked_run),
+            mock.patch.object(team, "_write_charter", return_value=Path("/repo/CHARTER.md")),
+            mock.patch.object(team, "write_event"),
+        ):
+            result = team.sprint_set(team="CobraKai", name="Alpha Sprint")
+
+        self.assertEqual(result.rev, 1)
+        self.assertEqual(result.sprint["name"], "Alpha Sprint")
+        self.assertEqual(result.sprint["slug"], "Alpha-Sprint")
+        self.assertEqual(result.sprint["tag"], "sprint:Alpha-Sprint")
+
+    def test_sprint_clear_increments_rev(self) -> None:
+        paths = RunPaths(repo_root=Path("/repo"), team="CobraKai")
+        run = {
+            "team": "CobraKai",
+            "run_id": "1234567890abcdef",
+            "session": "team-cobrakai",
+            "sprint": {"name": "Alpha", "tag": "sprint:alpha", "rev": 2},
+        }
+
+        @contextlib.contextmanager
+        def fake_locked_run(_paths: RunPaths, *, _save: bool = True):
+            yield run
+
+        with (
+            mock.patch.object(team, "_require_role"),
+            mock.patch.object(team, "_paths_for", return_value=paths),
+            mock.patch.object(team, "locked_run", fake_locked_run),
+            mock.patch.object(team, "_write_charter", return_value=Path("/repo/CHARTER.md")),
+            mock.patch.object(team, "write_event"),
+        ):
+            result = team.sprint_clear(team="CobraKai")
+
+        self.assertEqual(result.rev, 3)
+        self.assertEqual(run["sprint"], {})
 
 
 if __name__ == "__main__":
