@@ -7,7 +7,7 @@ status: active
 domain: workflow
 source: local
 created_at: 2026-02-15T23:40:44.698691Z
-updated_at: 2026-02-16T00:41:48.063183Z
+updated_at: 2026-02-16T00:46:30.022893Z
 tags: workflow, team, inbox, orchestration, acknowledgements
 notes: Observed across multiple ack cycles for different recipients, confirming this is durable orchestration behavior.
 ---
@@ -31,6 +31,13 @@ Use `loom team inbox <team>` repeatedly during active coordination loops to coll
 - ts=2026-02-16T00:40:56.134261Z source_id=obs-inbox-004056 source_hash=loom-team-inbox-unack-manager-followup
 - ts=2026-02-16T00:41:00.134342Z source_id=obs-inbox-004100 source_hash=loom-team-inbox-ack-worker-followup
 - ts=2026-02-16T00:41:10.853288Z source_id=obs-inbox-004110 source_hash=loom-team-inbox-ack-manager-status
+- ts=2026-02-16T00:43:27.378769Z source_id=obs-inbox-004327 source_hash=loom-team-inbox-unack-merge-manager
+- ts=2026-02-16T00:43:31.765702Z source_id=obs-inbox-004331 source_hash=loom-team-inbox-merge-acked-detail
+- ts=2026-02-16T00:43:32.140397Z source_id=obs-inbox-004332 source_hash=loom-team-inbox-sidecar-acked-detail
+- ts=2026-02-16T00:45:23.062375Z source_id=obs-inbox-004523 source_hash=loom-team-inbox-unack-send-to-w6
+- ts=2026-02-16T00:45:25.790308Z source_id=obs-inbox-004525 source_hash=loom-team-inbox-ack-send-to-w6
+- ts=2026-02-16T00:45:53.359239Z source_id=obs-inbox-004553 source_hash=loom-team-inbox-unack-ready-for-review
+- ts=2026-02-16T00:45:56.266812Z source_id=obs-inbox-004556 source_hash=loom-team-inbox-ack-ready-for-review
 
 ## Notes
 Observed across multiple ack cycles for different recipients, confirming this is durable orchestration behavior.
