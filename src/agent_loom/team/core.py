@@ -99,6 +99,10 @@ from agent_loom.team.constants import (
     TMUX_OPT_TEAM,
 )
 from agent_loom.team.composition import load_team_composition_yaml
+from agent_loom.team.composition_runtime import (
+    enforce_member_lifecycle,
+    resolve_member_profile,
+)
 from agent_loom.team.errors import TeamError
 from agent_loom.team.events import (
     _event_stamp,
@@ -1126,6 +1130,16 @@ def _agent_prompt_text(*, workdir: Path, agent: str) -> str:
     )
 
 
+def _compose_wrapped_agent_prompt(*, protocol_preamble: str, user_agent_prompt: str) -> str:
+    protocol = str(protocol_preamble or "").strip()
+    user = str(user_agent_prompt or "").strip()
+    if protocol and user:
+        return f"{protocol}\n\n---\n\n{user}".strip()
+    if protocol:
+        return protocol
+    return user
+
+
 def _omp_tui_argv(
     *,
     prompt: str,
@@ -1923,28 +1937,32 @@ def tui(
                 pass
 
         child_env = os.environ.copy()
+        user_agent_prompt = _agent_prompt_text(workdir=project_dir, agent=agent)
+        wrapped_prompt = _compose_wrapped_agent_prompt(
+            protocol_preamble=prompt,
+            user_agent_prompt=user_agent_prompt,
+        )
         if harness == "opencode":
             child_argv = _opencode_tui_argv(
                 project_dir=project_dir,
                 agent=agent,
-                prompt=prompt,
+                prompt=wrapped_prompt,
                 model=model,
                 bin=agent_bin,
             )
         elif harness == "claude":
             child_argv = _claude_tui_argv(
                 agent=agent,
-                prompt=prompt,
+                prompt=wrapped_prompt,
                 model=model,
                 bin=agent_bin,
             )
         elif harness == "codex":
-            instructions_text = _agent_prompt_text(workdir=project_dir, agent=agent)
             instructions_dir = paths.run_dir / "agents" / "codex"
             instructions_dir.mkdir(parents=True, exist_ok=True)
             instructions_file = instructions_dir / f"{recipient}.md"
             instructions_file.write_text(
-                instructions_text.rstrip() + "\n", encoding="utf-8"
+                wrapped_prompt.rstrip() + "\n", encoding="utf-8"
             )
             codex_home = paths.run_dir / "sessions" / "codex" / recipient
             codex_home.mkdir(parents=True, exist_ok=True)
@@ -1963,7 +1981,6 @@ def tui(
                 bin=agent_bin,
             )
         else:
-            system_prompt_append = _agent_prompt_text(workdir=project_dir, agent=agent)
             restricted_tools: list[str] | None = None
             if role in (ROLE_MANAGER, ROLE_INVESTIGATOR, ROLE_INTEGRATOR):
                 restricted_tools = [
@@ -1982,7 +1999,7 @@ def tui(
             child_argv = _omp_tui_argv(
                 prompt=prompt,
                 model=model,
-                system_prompt_append=system_prompt_append,
+                system_prompt_append=wrapped_prompt,
                 session_path=session_path,
                 tools=restricted_tools,
                 bin=agent_bin,
@@ -2156,13 +2173,13 @@ def start(
             "loaded_at": _iso_z(),
             "spec": parsed.as_dict(),
         }
-        for member in composition_state["spec"].get("members") or []:
-            if not isinstance(member, dict):
-                continue
-            if str(member.get("role") or "").strip() != ROLE_MANAGER:
-                continue
-            composition_harness = _normalize_harness(str(member.get("harness") or ""))
-            break
+        manager_profile = resolve_member_profile(
+            {"composition": composition_state},
+            role=ROLE_MANAGER,
+        )
+        enforce_member_lifecycle(profile=manager_profile, role=ROLE_MANAGER)
+        if manager_profile is not None and manager_profile.harness:
+            composition_harness = _normalize_harness(manager_profile.harness)
 
     # Precedence: explicit CLI override > composition > defaults.
     if not harness_provided and composition_harness:
@@ -2562,6 +2579,14 @@ def start(
             or DEFAULT_MANAGER_WINDOW
         )
         harness = _normalize_harness(str(run.get("harness") or requested_harness))
+        manager_profile = resolve_member_profile(
+            run,
+            role=ROLE_MANAGER,
+            worktree_key=manager_window,
+        )
+        enforce_member_lifecycle(profile=manager_profile, role=ROLE_MANAGER)
+        if manager_profile is not None and manager_profile.harness:
+            harness = _normalize_harness(manager_profile.harness)
         cfg = (
             (run.get(harness) or {})
             if isinstance(run.get(harness), dict)
@@ -2570,7 +2595,11 @@ def start(
         agent_bin = str(cfg.get("bin") or "").strip() or harness
         _require_bin(agent_bin)
         model = _model_for_role(run, ROLE_MANAGER, harness=harness)
-        manager_agent = str(cfg.get("manager_agent") or DEFAULT_MANAGER_AGENT)
+        manager_agent = (
+            str(manager_profile.agent)
+            if manager_profile is not None
+            else str(cfg.get("manager_agent") or DEFAULT_MANAGER_AGENT)
+        )
         manager_prompt = render_manager_prompt(run=run, charter_path=charter_path)
         oc_argv = _team_tui_argv(
             project_dir=root,
@@ -3951,13 +3980,6 @@ def spawn(
 
     with locked_run(paths) as run:
         harness = _normalize_harness(str(run.get("harness") or ""))
-        cfg = (
-            (run.get(harness) or {})
-            if isinstance(run.get(harness), dict)
-            else (run.get("opencode") or {})
-        )
-        agent_bin = str(cfg.get("bin") or "").strip() or harness
-        _require_bin(agent_bin)
         session = run_session(run)
         if not tmux_has_session(session):
             raise TeamError(
@@ -4149,6 +4171,24 @@ def spawn(
                 "worker_id resolution failed", code="BAD_STATE", exit_code=2
             )
 
+        profile = resolve_member_profile(
+            run,
+            role=role,
+            ticket_id=ticket_id,
+            worktree_key=worktree_key,
+        )
+        enforce_member_lifecycle(profile=profile, role=role)
+        if profile is not None and profile.harness:
+            harness = _normalize_harness(profile.harness)
+
+        cfg = (
+            (run.get(harness) or {})
+            if isinstance(run.get(harness), dict)
+            else (run.get("opencode") or {})
+        )
+        agent_bin = str(cfg.get("bin") or "").strip() or harness
+        _require_bin(agent_bin)
+
         raw_mounts = run.get("mounts")
         mounts: list[dict] = []
         if isinstance(raw_mounts, list):
@@ -4172,13 +4212,12 @@ def spawn(
             charter_path=charter_path,
         )
 
-        agent = _agent_for_role(run, role, harness=harness)
-        _require_agent_file_present(workdir=worktree_path, harness=harness, agent=agent)
-        cfg = (
-            (run.get(harness) or {})
-            if isinstance(run.get(harness), dict)
-            else (run.get("opencode") or {})
+        agent = (
+            str(profile.agent)
+            if profile is not None
+            else _agent_for_role(run, role, harness=harness)
         )
+        _require_agent_file_present(workdir=worktree_path, harness=harness, agent=agent)
         model = _model_for_role(run, role, harness=harness)
         oc_argv = _team_tui_argv(
             project_dir=worktree_path,
@@ -4236,6 +4275,9 @@ def spawn(
             "worker_id": worker_id,
             "role": role,
             "ticket_id": ticket_id,
+            "composition_member_id": str(profile.member_id) if profile is not None else "",
+            "composition_source": str(profile.source) if profile is not None else "",
+            "composition_lifecycle": str(profile.lifecycle) if profile is not None else "",
             "window": window,
             "pane_id": pane_id,
             "worktree": str(worktree_path),
@@ -4282,6 +4324,8 @@ def spawn(
                 "base_ref": str(base_ref_effective or ""),
                 "branch_override": branch_override or "",
                 "resumed": bool(resume) and bool(prev),
+                "composition_member_id": str(profile.member_id) if profile is not None else "",
+                "composition_source": str(profile.source) if profile is not None else "",
             },
         )
     return SpawnResult(
@@ -4630,6 +4674,14 @@ def spawn_integrator(
 
     with locked_run(paths) as run:
         harness = _normalize_harness(str(run.get("harness") or ""))
+        profile = resolve_member_profile(
+            run,
+            role=ROLE_INTEGRATOR,
+            worktree_key=str(worktree or ""),
+        )
+        enforce_member_lifecycle(profile=profile, role=ROLE_INTEGRATOR)
+        if profile is not None and profile.harness:
+            harness = _normalize_harness(profile.harness)
         cfg = (
             (run.get(harness) or {})
             if isinstance(run.get(harness), dict)
@@ -4753,7 +4805,11 @@ def spawn_integrator(
         if harness == "opencode":
             _ensure_opencode_worktree_runtime(workdir=wt_path, repo_root=root)
 
-        agent = _agent_for_role(run, ROLE_INTEGRATOR, harness=harness)
+        agent = (
+            str(profile.agent)
+            if profile is not None
+            else _agent_for_role(run, ROLE_INTEGRATOR, harness=harness)
+        )
         _require_agent_file_present(workdir=wt_path, harness=harness, agent=agent)
         cfg = (
             (run.get(harness) or {})
@@ -4871,6 +4927,9 @@ def spawn_integrator(
             "worker_id": worker_id,
             "role": ROLE_INTEGRATOR,
             "ticket_id": "",
+            "composition_member_id": str(profile.member_id) if profile is not None else "",
+            "composition_source": str(profile.source) if profile is not None else "",
+            "composition_lifecycle": str(profile.lifecycle) if profile is not None else "",
             "worktree": str(wt_path),
             "worktree_key": worktree_key,
             "branch": str(wt.get("branch") or merge_branch),
@@ -4920,6 +4979,8 @@ def spawn_integrator(
                 "base_ref": base_ref,
                 "forced": bool(force),
                 "config": dict(cfg),
+                "composition_member_id": str(profile.member_id) if profile is not None else "",
+                "composition_source": str(profile.source) if profile is not None else "",
             },
         )
     return SpawnIntegratorResult(
