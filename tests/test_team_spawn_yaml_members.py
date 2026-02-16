@@ -8,6 +8,7 @@ from pathlib import Path
 from unittest import mock
 
 from agent_loom.team import core as team
+from agent_loom.team import worker_planning
 from agent_loom.team.composition_runtime import list_always_on_member_profiles
 
 
@@ -24,6 +25,81 @@ class _TicketPayload:
 
 
 class TestTeamSpawnYamlMembers(unittest.TestCase):
+    def test_worker_planning_always_on_profiles_dedup_by_member_id(self) -> None:
+        run = {
+            "harness": "opencode",
+            "roster": {
+                "spec": {
+                    "version": 3,
+                    "builtins": {
+                        "manager": {"harness": "opencode", "agent": "loom-team-manager"},
+                        "worker": {"harness": "opencode", "agent": "loom-team-worker"},
+                        "integrator": {"harness": "opencode", "agent": "loom-team-integrator"},
+                    },
+                    "members": [
+                        {
+                            "id": "designer",
+                            "role": "designer",
+                            "always_on": True,
+                            "workspace": "repo_root",
+                        },
+                        {
+                            "id": "designer",
+                            "role": "reviewer",
+                            "always_on": True,
+                            "workspace": "worktree",
+                            "worktree_key": "review-lane",
+                        },
+                    ],
+                }
+            },
+            "opencode": {
+                "architect_agent": team.DEFAULT_ARCHITECT_AGENT,
+            },
+        }
+
+        profiles = worker_planning.always_on_profiles_for_run(run)
+        by_member = {str(profile.member_id): profile for profile in profiles}
+        self.assertIn("architect", by_member)
+        self.assertIn("designer", by_member)
+        self.assertEqual(str(by_member["designer"].role), "reviewer")
+
+    def test_worker_planning_workspace_mapping_defaults(self) -> None:
+        profile = list(
+            list_always_on_member_profiles(
+                {
+                    "roster": {
+                        "spec": {
+                            "version": 3,
+                            "builtins": {
+                                "manager": {"harness": "opencode", "agent": "loom-team-manager"},
+                                "worker": {"harness": "opencode", "agent": "loom-team-worker"},
+                                "architect": {
+                                    "harness": "opencode",
+                                    "agent": "loom-team-architect",
+                                },
+                                "integrator": {
+                                    "harness": "opencode",
+                                    "agent": "loom-team-integrator",
+                                },
+                            },
+                            "members": [
+                                {
+                                    "id": "ux",
+                                    "role": "reviewer",
+                                    "always_on": True,
+                                    "workspace": "unknown",
+                                }
+                            ],
+                        }
+                    }
+                }
+            )
+        )[0]
+        workspace, key = worker_planning.workspace_for_always_on_profile(profile)
+        self.assertEqual(workspace, "repo_root")
+        self.assertEqual(key, "")
+
     def _write_run(
         self,
         repo_root: Path,

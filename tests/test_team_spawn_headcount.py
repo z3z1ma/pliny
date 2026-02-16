@@ -5,9 +5,32 @@ from pathlib import Path
 from unittest import mock
 
 from agent_loom.team import core as team
+from agent_loom.team import worker_planning
 
 
 class TestTeamSpawnHeadcount(unittest.TestCase):
+    def test_worker_planning_headcount_helpers(self) -> None:
+        run = {
+            "limits": {"max_headcount": "2"},
+            "workers": {
+                "w2": {"role": team.ROLE_WORKER, "retired": False},
+                "w1": {"role": team.ROLE_WORKER, "retired": False},
+                "w3": {"role": team.ROLE_WORKER, "retired": True},
+                "integrator": {"role": team.ROLE_INTEGRATOR, "retired": False},
+            },
+        }
+
+        self.assertEqual(worker_planning.max_headcount(run), 2)
+        active_count, active_ids, active_roles = worker_planning.active_spawn_headcount(
+            run
+        )
+        self.assertEqual(active_count, 2)
+        self.assertEqual(active_ids, ["w1", "w2"])
+        self.assertEqual(
+            active_roles,
+            {"w1": team.ROLE_WORKER, "w2": team.ROLE_WORKER},
+        )
+
     def test_spawn_fails_forward_when_at_max_headcount(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             repo_root = Path(td)

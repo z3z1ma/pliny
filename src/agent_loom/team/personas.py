@@ -37,6 +37,13 @@ from agent_loom.team.tmux import (
     tmux_unique_window_name,
     tmux_window_exists,
 )
+from agent_loom.team.worker_planning import (
+    agent_for_role,
+    model_for_role,
+    normalize_harness,
+    persona_worktree_branch,
+    workspace_for_always_on_profile,
+)
 
 
 def spawn_persona(
@@ -47,18 +54,13 @@ def spawn_persona(
     force: bool = False,
 ) -> SpawnPersonaResult:
     from agent_loom.team.core import (
-        _agent_for_role,
         _apply_mounts,
         _ensure_opencode_worktree_runtime,
         _ensure_worktree,
         _is_path_within,
-        _model_for_role,
-        _normalize_harness,
         _paths_for,
-        _persona_worktree_branch,
         _require_agent_file_present,
         _team_tui_argv,
-        _workspace_for_always_on_profile,
         ensure_run_tickets_dir,
     )
 
@@ -97,7 +99,7 @@ def spawn_persona(
         defaults = run.get("defaults") if isinstance(run.get("defaults"), dict) else {}
         base_ref_default = str((defaults or {}).get("base_ref") or "").strip() or None
 
-        harness_default = _normalize_harness(str(run.get("harness") or ""))
+        harness_default = normalize_harness(str(run.get("harness") or ""))
         raw_mounts = run.get("mounts")
         mounts: list[dict] = []
         if isinstance(raw_mounts, list):
@@ -123,8 +125,8 @@ def spawn_persona(
                 exit_code=2,
             )
 
-        workspace, workspace_key = _workspace_for_always_on_profile(profile)
-        persona_harness = _normalize_harness(
+        workspace, workspace_key = workspace_for_always_on_profile(profile)
+        persona_harness = normalize_harness(
             str(profile.harness or "") or harness_default
         )
         cfg = (
@@ -135,7 +137,7 @@ def spawn_persona(
         agent_bin = str(cfg.get("bin") or "").strip() or persona_harness
         _require_bin(agent_bin)
 
-        agent = str(profile.agent or "").strip() or _agent_for_role(
+        agent = str(profile.agent or "").strip() or agent_for_role(
             run,
             role,
             harness=persona_harness,
@@ -159,7 +161,7 @@ def spawn_persona(
             wt = _ensure_worktree(
                 cwd=root,
                 path=desired_wt_path,
-                branch=_persona_worktree_branch(
+                branch=persona_worktree_branch(
                     run_id=str(run.get("run_id") or ""),
                     member_id=requested_member_id,
                 ),
@@ -179,7 +181,7 @@ def spawn_persona(
             agent=agent,
         )
 
-        model = _model_for_role(run, role, harness=persona_harness)
+        model = model_for_role(run, role, harness=persona_harness)
         if not model and profile.model:
             model = str(profile.model)
 
