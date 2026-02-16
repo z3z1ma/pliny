@@ -6,7 +6,12 @@ from typing import Any, List, Optional, Sequence
 
 from agent_loom.core.git import git_checked, git_repo_root, git_scoped_commit
 from agent_loom.ticket.constants import STATUS_ORDER, TICKET_DIRNAME, VALID_STATUSES
-from agent_loom.ticket.core import create_in_dir, default_agent_id
+from agent_loom.ticket.core import (
+    create_in_dir,
+    default_agent_id,
+    sprint_clear_in_dir,
+    sprint_set_in_dir,
+)
 from agent_loom.ticket.errors import TicketArgError
 from agent_loom.ticket.frontmatter import decanonicalize_frontmatter
 from agent_loom.ticket.graph import (
@@ -28,6 +33,7 @@ from agent_loom.ticket.models import (
     TicketListResult,
     TicketRelationships,
     TicketShowResult,
+    TicketSprintContextResult,
     TicketSummary,
     TicketSwarmAgent,
     TicketSwarmResult,
@@ -202,6 +208,14 @@ def create(
         design=str(design or "").strip() or None,
         acceptance=str(acceptance or "").strip() or None,
     )
+
+
+def sprint_set(*, tickets_dir: Path, name: str, tag: str) -> TicketSprintContextResult:
+    return sprint_set_in_dir(tickets_dir=tickets_dir, name=name, tag=tag)
+
+
+def sprint_clear(*, tickets_dir: Path) -> TicketSprintContextResult:
+    return sprint_clear_in_dir(tickets_dir=tickets_dir)
 
 
 def _require_status(s: str) -> str:

@@ -243,6 +243,8 @@ from agent_loom.team.tmux import (
     tmux_window_exists,
 )
 from agent_loom.ticket.api import create as ticket_create
+from agent_loom.ticket.api import sprint_clear as ticket_sprint_clear
+from agent_loom.ticket.api import sprint_set as ticket_sprint_set
 from agent_loom.ticket.api import show as ticket_show
 from agent_loom.ticket.api import sync as ticket_sync
 from agent_loom.workspace.core import (
@@ -4753,6 +4755,16 @@ def resume_worker(
     )
 
 
+def _sync_ticket_sprint_context(
+    *, tickets_dir: Path, sprint_name: str, sprint_tag: str
+) -> None:
+    ticket_sprint_set(tickets_dir=tickets_dir, name=sprint_name, tag=sprint_tag)
+
+
+def _clear_ticket_sprint_context(*, tickets_dir: Path) -> None:
+    ticket_sprint_clear(tickets_dir=tickets_dir)
+
+
 def prep_sprint(
     *,
     team: str,
@@ -4779,6 +4791,13 @@ def prep_sprint(
         )
         tag = str(sprint.get("tag") or "")
         rev = int(sprint.get("rev") or 0)
+        root = run_root(paths, run)
+        tickets_dir = ensure_run_tickets_dir(run, repo_root=root)
+        _sync_ticket_sprint_context(
+            tickets_dir=tickets_dir,
+            sprint_name=sprint_name,
+            sprint_tag=tag,
+        )
 
         # Update charter with sprint metadata.
         _write_charter(paths=paths, run=run)
@@ -4791,8 +4810,6 @@ def prep_sprint(
             refs={"sprint": sprint_name, "tag": tag, "rev": rev},
         )
 
-        root = run_root(paths, run)
-        tickets_dir = ensure_run_tickets_dir(run, repo_root=root)
         objective = str(run.get("objective") or "").strip()
         desc = _build_prep_sprint_ticket_description(
             objective=objective,
@@ -4913,6 +4930,13 @@ def sprint_set(
         sprint_name = str(sprint.get("name") or "")
         sprint_tag = str(sprint.get("tag") or "")
         rev = int(sprint.get("rev") or 0)
+        root = run_root(paths, run)
+        tickets_dir = ensure_run_tickets_dir(run, repo_root=root)
+        _sync_ticket_sprint_context(
+            tickets_dir=tickets_dir,
+            sprint_name=sprint_name,
+            sprint_tag=sprint_tag,
+        )
         charter_path = _write_charter(paths=paths, run=run)
 
         write_event(
@@ -4941,6 +4965,9 @@ def sprint_clear(
     paths = _paths_for(team=team, repo=repo)
     with locked_run(paths) as run:
         rev = _objective_state_clear_sprint_state(run=run)
+        root = run_root(paths, run)
+        tickets_dir = ensure_run_tickets_dir(run, repo_root=root)
+        _clear_ticket_sprint_context(tickets_dir=tickets_dir)
         charter_path = _write_charter(paths=paths, run=run)
 
         write_event(

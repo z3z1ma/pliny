@@ -7,7 +7,10 @@ import tempfile
 import unittest
 from pathlib import Path
 from typing import Callable, cast
+from unittest import mock
 
+from agent_loom.team import core as team
+from agent_loom.team.run_state import RunPaths
 from agent_loom.ticket import cli as ticket
 
 _ticket_cli = cast(Callable[[list[str]], int], ticket)
@@ -77,6 +80,28 @@ def _ticket_json(argv: list[str], *, cwd: Path, env: dict[str, str]) -> tuple[in
 
 
 class TestTicketSprintContext(unittest.TestCase):
+    @staticmethod
+    def _seed_team_run(root: Path, *, team_name: str = "CobraKai") -> RunPaths:
+        paths = RunPaths(repo_root=root, team=team_name)
+        paths.run_dir.mkdir(parents=True, exist_ok=True)
+        paths.events_dir.mkdir(parents=True, exist_ok=True)
+        run_payload = {
+            "team": team_name,
+            "run_id": "1234567890abcdef",
+            "session": f"team-{team_name.lower()}",
+            "repo_root": str(root),
+            "objective": "Ship sprint context sync.",
+            "objective_rev": 1,
+            "objective_updated_at": "",
+            "harness": "opencode",
+            "opencode": {"model": "", "models": {}},
+            "workers": {},
+            "merge": {"items": [], "config": {}},
+            "sprint": {},
+        }
+        paths.run_file.write_text(json.dumps(run_payload, indent=2), encoding="utf-8")
+        return paths
+
     def test_create_precedence_context_over_env_then_none(self) -> None:
         with _temp_git_repo() as (root, env):
             tickets_dir = root / ".loom" / "ticket"
@@ -323,6 +348,75 @@ class TestTicketSprintContext(unittest.TestCase):
             ]
             self.assertIn(tid_env_manual, ids_explicit)
             self.assertNotIn(tid_ctx, ids_explicit)
+
+    def test_team_sprint_set_syncs_context_for_stale_env_ticket_create(self) -> None:
+        with _temp_git_repo() as (root, env):
+            paths = self._seed_team_run(root)
+            with (
+                mock.patch.object(team, "_require_role"),
+                mock.patch.object(team, "_paths_for", return_value=paths),
+            ):
+                result = team.sprint_set(team=paths.team, name="Refinement Sprint")
+
+            stale_env = {
+                **env,
+                "TICKET_DIR": str(root / ".loom" / "ticket"),
+                "TEAM_SPRINT_TAG": "sprint:stale-pane",
+            }
+            code, created = _ticket_json(
+                ["--json", "--no-audit", "create", "Ticket after team sprint set"],
+                cwd=root,
+                env=stale_env,
+            )
+            self.assertEqual(code, 0)
+            ticket_id = str(created.get("id") or "")
+            self.assertTrue(ticket_id)
+
+            code, shown = _ticket_json(
+                ["--json", "--no-audit", "show", ticket_id],
+                cwd=root,
+                env=stale_env,
+            )
+            self.assertEqual(code, 0)
+            self.assertIn(str(result.sprint["tag"]), shown["ticket"]["tags"])
+            self.assertNotIn("sprint:stale-pane", shown["ticket"]["tags"])
+
+    def test_team_prep_sprint_syncs_context_for_stale_env_ticket_create(self) -> None:
+        with _temp_git_repo() as (root, env):
+            paths = self._seed_team_run(root)
+            with (
+                mock.patch.object(team, "_require_role"),
+                mock.patch.object(team, "_paths_for", return_value=paths),
+                mock.patch.object(team, "_inbox_write_and_maybe_nudge"),
+            ):
+                result = team.prep_sprint(
+                    team=paths.team,
+                    name="Prep Sprint",
+                    notify_architect=False,
+                )
+
+            stale_env = {
+                **env,
+                "TICKET_DIR": str(root / ".loom" / "ticket"),
+                "TEAM_SPRINT_TAG": "sprint:stale-pane",
+            }
+            code, created = _ticket_json(
+                ["--json", "--no-audit", "create", "Ticket after team prep sprint"],
+                cwd=root,
+                env=stale_env,
+            )
+            self.assertEqual(code, 0)
+            ticket_id = str(created.get("id") or "")
+            self.assertTrue(ticket_id)
+
+            code, shown = _ticket_json(
+                ["--json", "--no-audit", "show", ticket_id],
+                cwd=root,
+                env=stale_env,
+            )
+            self.assertEqual(code, 0)
+            self.assertIn(str(result.sprint["tag"]), shown["ticket"]["tags"])
+            self.assertNotIn("sprint:stale-pane", shown["ticket"]["tags"])
 
 
 if __name__ == "__main__":
