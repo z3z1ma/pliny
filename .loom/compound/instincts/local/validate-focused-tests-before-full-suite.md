@@ -2,12 +2,12 @@
 id: validate-focused-tests-before-full-suite
 title: Validate focused tests before full-suite gates
 trigger: When implementing or debugging changes scoped to a specific module or harness
-confidence: 0.7900
+confidence: 0.8200
 status: active
 domain: workflow
 source: local
 created_at: 2026-02-15T18:42:48.199834Z
-updated_at: 2026-02-16T00:41:48.063183Z
+updated_at: 2026-02-16T06:22:48.260602Z
 tags: workflow, testing, iteration, validation
 notes: The run did not proceed to full-suite until the scoped test was made green, then gates followed in order.
 ---
@@ -26,6 +26,10 @@ Run targeted pytest files for the area being changed until green, then run repos
 - ts=2026-02-16T00:41:14.658737Z source_id=obs-pytest-focused-pass-004114 source_hash=uv-run-pytest-tests-test-team-spawn-yaml-members-pass
 - ts=2026-02-16T00:41:17.513137Z source_id=obs-gate-ruff-004117 source_hash=uv-run-ruff-check-pass
 - ts=2026-02-16T00:41:29.097667Z source_id=obs-gate-pyright-004129 source_hash=uv-run-basedpyright-pass
+- ts=2026-02-16T06:10:48.700626Z source_id=obs-pytest-focused-pass-061048 source_hash=uv-run-pytest-tests-test-team-harness-codex-pass
+- ts=2026-02-16T06:10:50.940139Z source_id=obs-gate-pytest-full-061050 source_hash=uv-run-pytest-full-after-focused
+- ts=2026-02-16T06:10:38.322935Z source_id=obs-gate-ruff-061038 source_hash=uv-run-ruff-check-pass
+- ts=2026-02-16T06:10:45.054383Z source_id=obs-gate-pyright-061045 source_hash=uv-run-basedpyright-pass
 
 ## Notes
 The run did not proceed to full-suite until the scoped test was made green, then gates followed in order.

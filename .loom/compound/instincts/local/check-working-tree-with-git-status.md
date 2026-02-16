@@ -2,12 +2,12 @@
 id: check-working-tree-with-git-status
 title: Check working tree state with git status
 trigger: Before resuming edits or after tool activity that may change repository state
-confidence: 0.8300
+confidence: 0.8500
 status: active
 domain: workflow
 source: local
 created_at: 2026-02-15T21:06:52.548579Z
-updated_at: 2026-02-16T00:46:30.022893Z
+updated_at: 2026-02-16T06:24:33.846388Z
 tags: workflow, git, state-awareness, safety
 notes: This pattern appears around coordination and validation transitions, reducing state drift risk before next actions.
 ---
@@ -44,6 +44,10 @@ Run `git status --porcelain` (or `git status --short`) at key checkpoints to con
 - ts=2026-02-16T00:45:30.426908Z source_id=obs-git-status-004530 source_hash=git-status-short-clean-checkpoint
 - ts=2026-02-16T00:46:06.749373Z source_id=obs-git-status-004606 source_hash=git-status-short-branch-post-merge-queue
 - ts=2026-02-16T00:46:30.832828Z source_id=obs-git-status-004630 source_hash=git-status-porcelain-post-validation
+- ts=2026-02-16T05:30:45.516621Z source_id=obs-git-status-053045 source_hash=git-status-short-branch-sprint-prep
+- ts=2026-02-16T06:22:48.029620Z source_id=obs-git-status-062248 source_hash=git-status-porcelain-checkpoint
+- ts=2026-02-16T06:23:23.644571Z source_id=obs-git-status-062323 source_hash=git-status-porcelain
+- ts=2026-02-16T06:24:33.632915Z source_id=obs-git-status-062433 source_hash=git-status-porcelain
 
 ## Notes
 This pattern appears around coordination and validation transitions, reducing state drift risk before next actions.

@@ -23,7 +23,7 @@
   - Trigger: While managing an active team run with asynchronous worker updates
   - Action: Use `loom team inbox <team>` repeatedly during active coordination loops to collect worker updates, verify ack transitions, and drive follow-up actions from observed status rather than assumptions.
   - Source: local
-- **check-working-tree-with-git-status** (83%) [workflow, git, state-awareness, safety]
+- **check-working-tree-with-git-status** (85%) [workflow, git, state-awareness, safety]
   - Trigger: Before resuming edits or after tool activity that may change repository state
   - Action: Run `git status --porcelain` (or `git status --short`) at key checkpoints to confirm current working tree state before proceeding with additional edits or coordination commands.
   - Source: local
@@ -35,11 +35,11 @@
   - Trigger: When Edit reports lines changed since last read or asks for updated LINE:HASH anchors
   - Action: On Edit hash-mismatch failure, stop mutation flow, re-read the affected region to obtain fresh LINE:HASH anchors, then retry a minimal targeted edit with updated anchors.
   - Source: local
-- **validate-focused-tests-before-full-suite** (79%) [workflow, testing, iteration, validation]
+- **validate-focused-tests-before-full-suite** (82%) [workflow, testing, iteration, validation]
   - Trigger: When implementing or debugging changes scoped to a specific module or harness
   - Action: Run targeted pytest files for the area being changed until green, then run repository-wide lint/type/test gates.
   - Source: local
-- **wait-on-team-inbox-events-during-manager-loops** (79%) [workflow, team, wait, orchestration, efficiency]
+- **wait-on-team-inbox-events-during-manager-loops** (82%) [workflow, team, wait, orchestration, efficiency]
   - Trigger: When managing active team runs and expecting asynchronous worker responses
   - Action: Use `loom team wait <team>` to block for inbox activity, then immediately inspect `loom team inbox <team>` to process and acknowledge resulting messages.
   - Source: local
@@ -47,7 +47,7 @@
   - Trigger: When integrating worker-delivered branches from a Loom team merge queue
   - Action: Run `loom team merge <team>` in a short loop during integration handoff and use each response state (`sha`, `[queued]`, claimed record) to confirm queue advancement before taking branch-level merge actions.
   - Source: local
-- **consult-ticket-cli-help-before-subcommand-use** (72%) [workflow, ticket, cli, discovery, safety]
+- **consult-ticket-cli-help-before-subcommand-use** (76%) [workflow, ticket, cli, discovery, safety]
   - Trigger: When operating ticket commands with uncertain flags, aliases, or argument forms
   - Action: Before mutating ticket state with unfamiliar ticket subcommands, query `loom ticket --help` and relevant subcommand help (`-h`/`--help`) to verify exact syntax and flags, then execute.
   - Source: local
