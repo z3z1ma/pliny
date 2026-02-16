@@ -24,12 +24,9 @@ from agent_loom.compound.observations import (
 from agent_loom.compound.paths import CompoundPaths, compound_paths
 from agent_loom.compound.state import CompoundState, load_state, save_state
 from agent_loom.core.exec import run
+from agent_loom.core.time import now_iso_precise
 
 _PLACEHOLDER_RE = re.compile(r"\{([a-z0-9_]+)\}")
-
-
-def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def _parse_iso(text: str) -> datetime | None:
@@ -109,7 +106,7 @@ def _build_freeform_prompt(
     min_occurrences: int,
     max_candidates: int,
 ) -> str:
-    now_iso = _now_iso()
+    now_iso = now_iso_precise()
     observations_json = json.dumps(
         _observations_compact(observations, max_rows=260),
         indent=2,
@@ -449,7 +446,7 @@ def run_instincts_update(
     start_count = 0 if reset_detected else int(state.observations_count or 0)
     end_count = int(start_count + new_obs)
 
-    now_iso = _now_iso()
+    now_iso = now_iso_precise()
     next_state = CompoundState(
         version=3,
         observations_offset_bytes=int(end_offset),

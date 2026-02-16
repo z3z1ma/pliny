@@ -2,12 +2,9 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 
-
-def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+from agent_loom.core.time import now_iso_precise
 
 
 @dataclass
@@ -96,7 +93,7 @@ def save_state(path: Path, state: CompoundState) -> None:
         "observations_tail_sha256": str(state.observations_tail_sha256 or ""),
         "last_auto_run_at": str(state.last_auto_run_at or ""),
         "last_auto_apply_at": str(state.last_auto_apply_at or ""),
-        "updated_at": str(state.updated_at or _now_iso()),
+        "updated_at": str(state.updated_at or now_iso_precise()),
     }
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import argparse
 import dataclasses
-import datetime as dt
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -11,6 +10,7 @@ from typing import Any, Dict, Optional, Sequence
 from agent_loom.compound.install import install_opencode
 from agent_loom.core.cli_output import emit_json
 from agent_loom.core.git import git_repo_root
+from agent_loom.core.time import now_iso_precise
 from agent_loom.memory.core import init as memory_init
 from agent_loom.team.core import init_agents
 from agent_loom.ticket.core import init as ticket_init
@@ -19,7 +19,7 @@ from agent_loom.workspace.repo.core import repo_init
 
 
 def now_iso() -> str:
-    return dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z")
+    return now_iso_precise()
 
 
 def as_dict(obj: object) -> object:

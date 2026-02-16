@@ -1,12 +1,15 @@
 import sys
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 
 
+from agent_loom.core import cli_args as core_cli_args
 from agent_loom.core import concurrent as core_concurrent
 from agent_loom.core import exec as core_exec
 from agent_loom.core import fs as core_fs
+from agent_loom.core import git as core_git
 from agent_loom.core import time as core_time
 
 
@@ -80,6 +83,40 @@ class TestCoreExec(unittest.TestCase):
         self.assertIn("bad", e.stderr)
         # __str__ should be human-friendly and include cwd.
         self.assertIn(str(Path.cwd()), str(e))
+
+
+class TestCoreCliArgs(unittest.TestCase):
+    def test_strict_parser_raises_arg_parse_error(self) -> None:
+        parser = core_cli_args.StrictArgumentParser(prog="x")
+        parser.add_argument("--ok", action="store_true")
+        with self.assertRaises(core_cli_args.ArgParseError):
+            parser.parse_args(["--nope"])
+
+    def test_did_you_mean_suggests_close_values(self) -> None:
+        got = core_cli_args.did_you_mean("strat", ["start", "status", "stop"])
+        self.assertIn("start", got)
+
+
+class TestCoreGit(unittest.TestCase):
+    def test_resolve_repo_root_returns_path_when_not_git(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = core_git.resolve_repo_root(Path(td))
+            self.assertEqual(root, Path(td).resolve())
+
+    def test_resolve_repo_root_returns_git_toplevel(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td).resolve()
+            subprocess.run(
+                ["git", "init", str(root)],
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                text=True,
+            )
+            nested = root / "a" / "b"
+            nested.mkdir(parents=True, exist_ok=True)
+            resolved = core_git.resolve_repo_root(nested)
+            self.assertEqual(resolved, root)
 
 
 if __name__ == "__main__":

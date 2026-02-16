@@ -1,6 +1,5 @@
 import argparse
 import contextlib
-import difflib
 import json
 import os
 import select
@@ -9,11 +8,17 @@ import sys
 import uuid
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any, NoReturn, Optional, Sequence
+from typing import Any, Optional, Sequence
 
 import yaml
 
-from agent_loom.core.cli_args import rewrite_flag_aliases, split_short_value_flags
+from agent_loom.core.cli_args import (
+    ArgParseError,
+    StrictArgumentParser,
+    did_you_mean,
+    rewrite_flag_aliases,
+    split_short_value_flags,
+)
 from agent_loom.core.cli_output import emit_json, make_error_envelope, make_ok_envelope
 from agent_loom.core.git import git_repo_root
 from agent_loom.core.time import utcnow
@@ -69,13 +74,8 @@ from agent_loom.ticket.normalize import (
 from agent_loom.ticket.store import AuditLogger, LockError, TicketStore
 
 
-class ArgParseError(RuntimeError):
+class TicketArgumentParser(StrictArgumentParser):
     pass
-
-
-class TicketArgumentParser(argparse.ArgumentParser):
-    def error(self, message: str) -> NoReturn:
-        raise ArgParseError(message)
 
 
 def _arg_status(v: str) -> str:
@@ -201,13 +201,6 @@ def _normalize_argv(argv: list[str]) -> list[str]:
         rewrite_flag_aliases(argv, _FLAG_ALIASES),
         _VALUE_FLAGS,
     )
-
-
-def _did_you_mean(value: str, choices: Sequence[str]) -> list[str]:
-    v = str(value or "").strip()
-    if not v:
-        return []
-    return difflib.get_close_matches(v, list(choices), n=3, cutoff=0.6)
 
 
 def _render_ticket_line(row: dict[str, Any]) -> str:
@@ -1267,7 +1260,7 @@ def _dispatch(cmd: str, args: argparse.Namespace, *, json_mode: bool, cwd: Path)
     }
     handler = handlers.get(cmd)
     if not handler:
-        hints = _did_you_mean(cmd, list(handlers.keys()))
+        hints = did_you_mean(cmd, list(handlers.keys()))
         raise TicketArgError(
             code="ARG",
             error=f"Unknown command: {cmd}",

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import argparse
-import difflib
 import json
 import os
 import select
@@ -10,7 +9,12 @@ from dataclasses import asdict, is_dataclass
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
-from agent_loom.core.cli_args import rewrite_flag_aliases
+from agent_loom.core.cli_args import (
+    ArgParseError,
+    StrictArgumentParser,
+    did_you_mean,
+    rewrite_flag_aliases,
+)
 from agent_loom.memory.constants import (
     DEFAULT_VAULT_DIR,
     STATUSES,
@@ -53,13 +57,8 @@ from agent_loom.memory.utils import emit_error, format_json, read_all_stdin_text
 from agent_loom.memory.vault import resolve_vault_root, vault_paths
 
 
-class ArgParseError(RuntimeError):
+class MemoryArgumentParser(StrictArgumentParser):
     pass
-
-
-class MemoryArgumentParser(argparse.ArgumentParser):
-    def error(self, message: str) -> None:
-        raise ArgParseError(message)
 
 
 _FLAG_ALIASES = {
@@ -197,13 +196,6 @@ def _infer_error_format(argv: list[str]) -> str:
             if cand in {"json", "jsonl", "text", "md", "prompt"}:
                 return cand
     return fmt
-
-
-def _did_you_mean(value: str, choices: Sequence[str]) -> list[str]:
-    v = str(value or "").strip()
-    if not v:
-        return []
-    return difflib.get_close_matches(v, list(choices), n=3, cutoff=0.6)
 
 
 def _stdin_is_ready() -> bool:
@@ -1203,7 +1195,7 @@ def _parse_args(
         except Exception:
             cmds = []
 
-        suggestions = [f"loom memory {c} -h" for c in _did_you_mean(first, cmds)]
+        suggestions = [f"loom memory {c} -h" for c in did_you_mean(first, cmds)]
         emit_error(
             code="ARGPARSE",
             error=str(e),

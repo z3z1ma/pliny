@@ -20,18 +20,14 @@ from agent_loom.compound.observer import (
     stop_observer,
 )
 from agent_loom.compound.sync import sync as compound_sync
+from agent_loom.core.cli_args import ArgParseError, StrictArgumentParser
 from agent_loom.core.cli_output import emit_json
-from agent_loom.core.git import git_repo_root
+from agent_loom.core.git import resolve_repo_root
 from agent_loom.pack.diff import any_pack_diffs, diff_pack_files
 
 
-class ArgParseError(RuntimeError):
+class CompoundArgumentParser(StrictArgumentParser):
     pass
-
-
-class CompoundArgumentParser(argparse.ArgumentParser):
-    def error(self, message: str) -> None:  # noqa: D401
-        raise ArgParseError(message)
 
 
 def _resolve_repo_root(repo: Optional[str]) -> Path:
@@ -41,16 +37,13 @@ def _resolve_repo_root(repo: Optional[str]) -> Path:
         if p.exists() and p.is_dir():
             return p
 
-    start = Path(repo).expanduser().resolve() if repo else Path.cwd().resolve()
-    return (git_repo_root(start) or start).resolve()
+    return resolve_repo_root(repo)
 
 
 def _resolve_init_dest(dest: Optional[str]) -> Path:
     d = str(dest or ".").strip() or "."
     if d == ".":
-        gr = git_repo_root(Path.cwd().resolve())
-        if gr is not None:
-            return gr.resolve()
+        return resolve_repo_root(Path.cwd())
     return Path(d).expanduser().resolve()
 
 

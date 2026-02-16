@@ -4,13 +4,13 @@ import hashlib
 import json
 import re
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from agent_loom.compound.instincts import Instinct, load_instincts, save_instincts
+from agent_loom.core.time import now_iso_precise
 
 
 @dataclass(frozen=True)
@@ -35,10 +35,6 @@ def _slug(text: str) -> str:
     value = re.sub(r"[^a-z0-9]+", "-", value)
     value = re.sub(r"-{2,}", "-", value).strip("-")
     return value or "general"
-
-
-def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def _instinct_to_dict(inst: Instinct) -> dict[str, Any]:
@@ -79,7 +75,7 @@ def export_instincts(
 
     payload = {
         "version": 1,
-        "generated_at": _now_iso(),
+        "generated_at": now_iso_precise(),
         "instincts": [_instinct_to_dict(i) for i in selected],
     }
 
@@ -125,7 +121,7 @@ def instinct_import(
     source_text = _load_source_text(source)
     source_sha = hashlib.sha256(source_text.encode("utf-8")).hexdigest()[:16]
     source_id = f"import-{source_sha}"
-    source_ts = _now_iso()
+    source_ts = now_iso_precise()
 
     incoming = _parse_import_payload(source_text)
     store = load_instincts(instincts_file)

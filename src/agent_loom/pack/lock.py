@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import json
 from dataclasses import asdict
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict
 
+from agent_loom.core.time import now_iso_precise
 from agent_loom.pack.models import InstalledPack, LockFile, LockFileEntry
 
 
@@ -64,7 +64,7 @@ def save_lock(repo_root: Path, lock: LockFile, *, dry_run: bool) -> None:
 
 
 def now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+    return now_iso_precise()
 
 
 def index_packs(lock: LockFile) -> Dict[str, InstalledPack]:

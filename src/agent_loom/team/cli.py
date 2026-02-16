@@ -1,11 +1,15 @@
 from __future__ import annotations
 
 import argparse
-import difflib
 import sys
 from typing import Optional, Sequence
 
-from agent_loom.core.cli_args import rewrite_flag_aliases
+from agent_loom.core.cli_args import (
+    ArgParseError,
+    StrictArgumentParser,
+    did_you_mean,
+    rewrite_flag_aliases,
+)
 from agent_loom.team.commands.inbox import (
     cmd_inbox_ack,
     cmd_inbox_list,
@@ -73,13 +77,8 @@ from agent_loom.team.output import _emit_error
 __all__ = ["build_parser", "inbox_ack", "main"]
 
 
-class ArgParseError(RuntimeError):
+class TeamArgumentParser(StrictArgumentParser):
     pass
-
-
-class TeamArgumentParser(argparse.ArgumentParser):
-    def error(self, message: str) -> None:
-        raise ArgParseError(message)
 
 
 _FLAG_ALIASES = {
@@ -366,13 +365,6 @@ def _normalize_argv(argv: list[str]) -> list[str]:
         out = ["merge", out[1], "done", out[3], "--result", out[4].lower(), *out[5:]]
 
     return out
-
-
-def _did_you_mean(value: str, choices: Sequence[str]) -> list[str]:
-    v = str(value or "").strip()
-    if not v:
-        return []
-    return difflib.get_close_matches(v, list(choices), n=3, cutoff=0.6)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -1032,7 +1024,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         except Exception:
             cmds = []
         if first and cmds and first not in cmds:
-            with_suggestions = [f"loom team {c}" for c in _did_you_mean(first, cmds)]
+            with_suggestions = [f"loom team {c}" for c in did_you_mean(first, cmds)]
 
         _emit_error(
             code="ARGPARSE",

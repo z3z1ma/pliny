@@ -9,7 +9,7 @@ import webbrowser
 from pathlib import Path
 from typing import Optional, Sequence
 
-from agent_loom.core.git import git_repo_root
+from agent_loom.core.git import resolve_repo_root
 from agent_loom.dashboard.app import create_app
 from agent_loom.dashboard.config import ServerConfig
 
@@ -60,12 +60,6 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
-def _resolve_repo_root(arg: str) -> Path:
-    p = Path(arg or ".").expanduser().resolve()
-    gr = git_repo_root(p)
-    return gr if gr is not None else p
-
-
 def _open_browser(host: str, port: int) -> None:
     safe_host = str(host or "").strip()
     if safe_host in {"", "0.0.0.0", "::"}:
@@ -93,7 +87,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     args = build_parser().parse_args(raw_args)
 
     if args.cmd == "start":
-        repo_root = _resolve_repo_root(str(args.repo_root))
+        repo_root = resolve_repo_root(str(args.repo_root))
         ws_root: Path | None = None
         if str(args.workspace_root or "").strip():
             ws_root = Path(str(args.workspace_root)).expanduser().resolve()

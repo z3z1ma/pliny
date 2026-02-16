@@ -6,8 +6,9 @@ import sys
 from pathlib import Path
 from typing import Optional, Sequence
 
+from agent_loom.core.cli_args import ArgParseError, StrictArgumentParser
 from agent_loom.core.cli_output import emit_json
-from agent_loom.core.git import git_repo_root
+from agent_loom.core.git import resolve_repo_root
 from agent_loom.pack.core import (
     doctor,
     install_pack,
@@ -19,22 +20,12 @@ from agent_loom.pack.core import (
 from agent_loom.pack.diff import diff_pack_file, diff_pack_files
 
 
-class ArgParseError(RuntimeError):
+class PackArgumentParser(StrictArgumentParser):
     pass
-
-
-class PackArgumentParser(argparse.ArgumentParser):
-    def error(self, message: str) -> None:  # noqa: D401
-        raise ArgParseError(message)
 
 
 def _infer_json(argv: Sequence[str]) -> bool:
     return any(str(tok) == "--json" or str(tok).startswith("--json=") for tok in argv)
-
-
-def _resolve_repo_root(repo: Optional[str]) -> Path:
-    start = Path(repo).expanduser().resolve() if repo else Path.cwd().resolve()
-    return (git_repo_root(start) or start).resolve()
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -223,7 +214,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
 
     if args.cmd == "status":
-        repo = _resolve_repo_root(getattr(args, "repo", None))
+        repo = resolve_repo_root(getattr(args, "repo", None))
         payload = status(repo)
         want_diff = bool(getattr(args, "diff", False))
         if bool(getattr(args, "json", False)):
@@ -251,7 +242,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
 
     if args.cmd == "doctor":
-        repo = _resolve_repo_root(getattr(args, "repo", None))
+        repo = resolve_repo_root(getattr(args, "repo", None))
         payload = doctor(repo, pack_id=getattr(args, "pack", None))
         if bool(getattr(args, "json", False)):
             emit_json(payload)
@@ -260,7 +251,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
 
     if args.cmd == "install":
-        repo = _resolve_repo_root(getattr(args, "repo", None))
+        repo = resolve_repo_root(getattr(args, "repo", None))
         res = install_pack(
             repo_root=repo,
             pack_id=str(args.pack_id),
@@ -301,7 +292,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
         return 0
     if args.cmd == "update":
-        repo = _resolve_repo_root(getattr(args, "repo", None))
+        repo = resolve_repo_root(getattr(args, "repo", None))
         res = update_pack(
             repo_root=repo,
             pack_id=str(args.pack_id),
@@ -342,7 +333,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
         return 0
     if args.cmd == "uninstall":
-        repo = _resolve_repo_root(getattr(args, "repo", None))
+        repo = resolve_repo_root(getattr(args, "repo", None))
         res = uninstall_pack(
             repo_root=repo,
             pack_id=str(args.pack_id),

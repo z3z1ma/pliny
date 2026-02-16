@@ -1,6 +1,30 @@
 from __future__ import annotations
 
+import argparse
+import difflib
 from collections.abc import Collection, Mapping, Sequence
+
+
+class ArgParseError(RuntimeError):
+    pass
+
+
+class StrictArgumentParser(argparse.ArgumentParser):
+    def error(self, message: str) -> None:
+        raise ArgParseError(message)
+
+
+def did_you_mean(
+    value: str,
+    choices: Sequence[str],
+    *,
+    n: int = 3,
+    cutoff: float = 0.6,
+) -> list[str]:
+    v = str(value or "").strip()
+    if not v:
+        return []
+    return difflib.get_close_matches(v, list(choices), n=n, cutoff=cutoff)
 
 
 def rewrite_flag_aliases(
@@ -44,4 +68,10 @@ def split_short_value_flags(
     return out
 
 
-__all__ = ["rewrite_flag_aliases", "split_short_value_flags"]
+__all__ = [
+    "ArgParseError",
+    "StrictArgumentParser",
+    "did_you_mean",
+    "rewrite_flag_aliases",
+    "split_short_value_flags",
+]

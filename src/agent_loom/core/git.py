@@ -271,3 +271,12 @@ def git_repo_root(cwd: Path) -> Optional[Path]:
             return wt
 
     return toplevel
+
+
+def resolve_repo_root(path: Path | str | None = None) -> Path:
+    if path is None:
+        start = Path.cwd().resolve()
+    else:
+        raw = str(path).strip()
+        start = Path(raw if raw else ".").expanduser().resolve()
+    return (git_repo_root(start) or start).resolve()

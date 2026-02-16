@@ -4,12 +4,12 @@ import json
 import os
 import re
 from dataclasses import dataclass
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, cast
 from uuid import uuid4
 
 from agent_loom.compound.paths import compound_paths
+from agent_loom.core.time import now_iso_precise
 
 _SECRET_KEY_RE = re.compile(
     r"pass(word)?|secret|token|api[_-]?key|auth(orization)?|cookie|session|private[_-]?key",
@@ -57,10 +57,6 @@ def _limits_from_env() -> HookLimits:
             1, int(os.environ.get("COMPOUND_OBSERVATIONS_MAX_OBJECT_KEYS", "50") or 50)
         ),
     )
-
-
-def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
 
 def _truncate(text: str, max_len: int) -> str:
@@ -269,7 +265,7 @@ def _normalized_observation(
 
     obs: dict[str, Any] = {
         "id": str(uuid4()),
-        "ts": _now_iso(),
+        "ts": now_iso_precise(),
         "event": canonical_event,
         "session_id": str(payload.get("session_id") or ""),
         "cwd": str(payload.get("cwd") or cwd),

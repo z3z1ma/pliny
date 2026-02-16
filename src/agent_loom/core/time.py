@@ -37,6 +37,10 @@ def now_iso() -> str:
     return isoformat_z(utcnow())
 
 
+def now_iso_precise() -> str:
+    return utcnow().isoformat().replace("+00:00", "Z")
+
+
 def parse_duration(spec: str) -> dt.timedelta:
     m = _DURATION_RE.match(spec or "")
     if not m:
