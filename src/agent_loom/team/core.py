@@ -1223,6 +1223,38 @@ def _codex_tui_argv(
         argv.append(prompt)
     return argv
 
+def _seed_codex_home_auth(*, codex_home: Path) -> None:
+    shared_home_env = str(os.environ.get("CODEX_HOME") or "").strip()
+    shared_home = (
+        Path(shared_home_env).expanduser()
+        if shared_home_env
+        else (Path.home() / ".codex")
+    )
+    try:
+        shared_home_resolved = shared_home.resolve()
+        codex_home_resolved = codex_home.resolve()
+    except Exception:
+        return
+    if shared_home_resolved == codex_home_resolved:
+        return
+
+    for name in ("auth.json", "config.toml"):
+        src = shared_home_resolved / name
+        if not src.exists() or not src.is_file():
+            continue
+        dst = codex_home_resolved / name
+        if dst.exists() or dst.is_symlink():
+            continue
+        try:
+            dst.symlink_to(src)
+        except Exception:
+            try:
+                shutil.copy2(src, dst)
+            except Exception:
+                continue
+
+
+
 
 def _team_tui_argv(
     *,
@@ -2002,6 +2034,7 @@ def tui(
             )
             codex_home = paths.run_dir / "sessions" / "codex" / recipient
             codex_home.mkdir(parents=True, exist_ok=True)
+            _seed_codex_home_auth(codex_home=codex_home)
             child_env["CODEX_HOME"] = str(codex_home)
             sandbox = "workspace-write"
             approval = "on-request"

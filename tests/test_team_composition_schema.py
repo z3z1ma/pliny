@@ -37,7 +37,7 @@ class TestTeamRosterSchema(unittest.TestCase):
         data = roster.as_dict()
 
         self.assertEqual(data["metadata"]["labels"], ["a", "b"])
-        self.assertEqual(data["mounts"], ["docs", "src"])
+        self.assertEqual(data["mounts"], [".venv"])
         self.assertEqual([m["id"] for m in data["members"]], ["designer", "ux"])
         self.assertEqual(data["builtins"]["worker"]["model"], "gpt-5-codex")
         self.assertEqual(

@@ -102,6 +102,12 @@ class TestTeamHarnessCodex(unittest.TestCase):
             )
 
             run = {"run_id": "run-123", "team": "cobra"}
+            shared_codex_home = repo_root / "shared-codex-home"
+            shared_codex_home.mkdir(parents=True, exist_ok=True)
+            shared_auth = shared_codex_home / "auth.json"
+            shared_auth.write_text('{"access_token":"token"}\n', encoding="utf-8")
+            shared_config = shared_codex_home / "config.toml"
+            shared_config.write_text('model = "gpt-5.3-codex"\n', encoding="utf-8")
             popen_calls: list[tuple[list[str], dict[str, str]]] = []
 
             def fake_popen(argv, **kwargs):
@@ -115,6 +121,7 @@ class TestTeamHarnessCodex(unittest.TestCase):
                 team.ENV_TEAM_RUN_DIR: str(run_dir),
                 team.ENV_TEAM_ROLE: team.ROLE_MANAGER,
                 team.ENV_TEAM_WORKER_ID: "",
+                "CODEX_HOME": str(shared_codex_home),
             }
             old_env = os.environ.copy()
             os.environ.update(env)
@@ -161,6 +168,19 @@ class TestTeamHarnessCodex(unittest.TestCase):
             self.assertEqual(
                 str(Path(str(codex_home or "")).resolve()),
                 str((run_dir / "sessions" / "codex" / "manager").resolve()),
+            )
+            pane_codex_home = Path(str(codex_home or ""))
+            pane_auth = pane_codex_home / "auth.json"
+            pane_config = pane_codex_home / "config.toml"
+            self.assertTrue(pane_auth.exists())
+            self.assertTrue(pane_config.exists())
+            self.assertEqual(
+                pane_auth.read_text(encoding="utf-8"),
+                shared_auth.read_text(encoding="utf-8"),
+            )
+            self.assertEqual(
+                pane_config.read_text(encoding="utf-8"),
+                shared_config.read_text(encoding="utf-8"),
             )
 
             second_argv, _ = popen_calls[1]

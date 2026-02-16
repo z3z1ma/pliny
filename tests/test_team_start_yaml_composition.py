@@ -166,8 +166,7 @@ class TestTeamStartYamlRoster(unittest.TestCase):
     def test_roster_mounts_are_persisted_when_cli_mounts_are_absent(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             repo_root = Path(td)
-            (repo_root / "docs").mkdir(parents=True, exist_ok=True)
-            (repo_root / "src").mkdir(parents=True, exist_ok=True)
+            (repo_root / ".venv").mkdir(parents=True, exist_ok=True)
 
             roster_path = repo_root / "roster.yaml"
             roster_path.write_text(
@@ -187,7 +186,7 @@ class TestTeamStartYamlRoster(unittest.TestCase):
             run_doc = json.loads(run_path.read_text(encoding="utf-8"))
             self.assertEqual(
                 run_doc.get("mounts"),
-                [{"src": "docs", "dst": "docs"}, {"src": "src", "dst": "src"}],
+                [{"src": ".venv", "dst": ".venv"}],
             )
 
 

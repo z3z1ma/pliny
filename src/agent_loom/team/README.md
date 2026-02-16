@@ -4,6 +4,26 @@ This cookbook documents the Team subsystem CLI and the operating model behind
 it. It is based on direct code tracing of the team module, including run state,
 tmux orchestration, inbox durability, merge queue behavior, and sidecar health.
 
+## Module architecture
+
+- `core.py` orchestrates run lifecycle, tmux spawning, messaging, and merge queue flows.
+- `commands/` contains thin CLI handlers that delegate to `core.py`.
+- `composition.py` parses/validates Team YAML roster schema.
+- `composition_runtime.py` resolves runtime member profiles from roster state.
+- `targets.py` expands/validates send/capture targets and broadcast groups.
+- `prompts.py` renders manager/worker/architect/integrator runtime prompts.
+- `run_state.py` is the source of truth for run path resolution and persisted run state IO.
+
+### Boundaries and guardrails
+
+- Command handlers in `commands/` are wrappers only; orchestration logic belongs in `core.py` or domain modules.
+- Roster parsing/validation belongs in `composition.py`; runtime profile resolution belongs in `composition_runtime.py`.
+- Target expansion belongs in `targets.py`; policy enforcement and delivery stay in `core.py`.
+- Run state reads/writes go through `run_state.py`.
+- CLI handlers use shared output helpers from `agent_loom.core.cli_output` via `team/output.py`; do not duplicate envelope/serialization logic.
+
+
+
 ## Mental model
 
 - Team is tmux-native orchestration for long-horizon, multi-agent work.
@@ -139,7 +159,7 @@ codex sidecar sandboxing is role-aware:
 - manager / architect / integrator run with `--sandbox read-only --ask-for-approval on-request`
 - workers run with `--sandbox workspace-write --ask-for-approval on-request`
 
-codex sidecar state is isolated per pane via `CODEX_HOME=.loom/team/runs/<team>/sessions/codex/<recipient>`.
+codex sidecar sessions are isolated per pane via `CODEX_HOME=.loom/team/runs/<team>/sessions/codex/<recipient>`, while auth/config are inherited from your base `CODEX_HOME` (or `~/.codex`).
 
 ### attach
 
