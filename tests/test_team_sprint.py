@@ -102,6 +102,7 @@ class TestPrepSprint(unittest.TestCase):
                 ),
                 mock.patch.object(team, "_write_charter"),
                 mock.patch.object(team, "write_event"),
+                mock.patch.object(team, "_sync_ticket_sprint_context") as sync_context,
                 mock.patch.object(
                     team,
                     "ticket_create",
@@ -121,6 +122,11 @@ class TestPrepSprint(unittest.TestCase):
 
             _args, kwargs = create.call_args
             self.assertIn(run["sprint"]["tag"], str(kwargs["tags"]))
+            sync_context.assert_called_once_with(
+                tickets_dir=repo_root / ".loom" / "ticket",
+                sprint_name="Alpha Sprint",
+                sprint_tag=run["sprint"]["tag"],
+            )
 
     def test_prep_sprint_rejects_existing_without_force(self) -> None:
         paths = RunPaths(repo_root=Path("/repo"), team="CobraKai")
@@ -162,6 +168,13 @@ class TestSprintStateCommands(unittest.TestCase):
             mock.patch.object(team, "_require_role"),
             mock.patch.object(team, "_paths_for", return_value=paths),
             mock.patch.object(team, "locked_run", fake_locked_run),
+            mock.patch.object(team, "run_root", return_value=Path("/repo")),
+            mock.patch.object(
+                team,
+                "ensure_run_tickets_dir",
+                return_value=Path("/repo/.loom/ticket"),
+            ),
+            mock.patch.object(team, "_sync_ticket_sprint_context") as sync_context,
             mock.patch.object(team, "_write_charter", return_value=Path("/repo/CHARTER.md")),
             mock.patch.object(team, "write_event"),
         ):
@@ -171,6 +184,11 @@ class TestSprintStateCommands(unittest.TestCase):
         self.assertEqual(result.sprint["name"], "Alpha Sprint")
         self.assertEqual(result.sprint["slug"], "Alpha-Sprint")
         self.assertEqual(result.sprint["tag"], "sprint:Alpha-Sprint")
+        sync_context.assert_called_once_with(
+            tickets_dir=Path("/repo/.loom/ticket"),
+            sprint_name="Alpha Sprint",
+            sprint_tag="sprint:Alpha-Sprint",
+        )
 
     def test_sprint_clear_increments_rev(self) -> None:
         paths = RunPaths(repo_root=Path("/repo"), team="CobraKai")
@@ -189,6 +207,13 @@ class TestSprintStateCommands(unittest.TestCase):
             mock.patch.object(team, "_require_role"),
             mock.patch.object(team, "_paths_for", return_value=paths),
             mock.patch.object(team, "locked_run", fake_locked_run),
+            mock.patch.object(team, "run_root", return_value=Path("/repo")),
+            mock.patch.object(
+                team,
+                "ensure_run_tickets_dir",
+                return_value=Path("/repo/.loom/ticket"),
+            ),
+            mock.patch.object(team, "_clear_ticket_sprint_context") as clear_context,
             mock.patch.object(team, "_write_charter", return_value=Path("/repo/CHARTER.md")),
             mock.patch.object(team, "write_event"),
         ):
@@ -196,6 +221,7 @@ class TestSprintStateCommands(unittest.TestCase):
 
         self.assertEqual(result.rev, 3)
         self.assertEqual(run["sprint"], {})
+        clear_context.assert_called_once_with(tickets_dir=Path("/repo/.loom/ticket"))
 
 
 if __name__ == "__main__":

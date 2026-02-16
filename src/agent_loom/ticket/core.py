@@ -459,7 +459,9 @@ def sprint_show() -> TicketSprintContextResult:
     return _stored_sprint_context(store)
 
 
-def sprint_set(*, name: str, tag: str) -> TicketSprintContextResult:
+def sprint_set_in_dir(
+    *, tickets_dir: Path, name: str, tag: str
+) -> TicketSprintContextResult:
     sprint_name = str(name or "").strip()
     if not sprint_name:
         raise TicketArgError(
@@ -482,7 +484,7 @@ def sprint_set(*, name: str, tag: str) -> TicketSprintContextResult:
             ],
         )
 
-    store = store_for_cmd("create")
+    store = TicketStore(Path(tickets_dir).resolve())
     raw = _load_config_raw(store)
     sprint_raw = raw.get("sprint", {})
     sprint_data = dict(sprint_raw) if isinstance(sprint_raw, dict) else {}
@@ -495,8 +497,13 @@ def sprint_set(*, name: str, tag: str) -> TicketSprintContextResult:
     return TicketSprintContextResult(name=sprint_name, tag=sprint_tag)
 
 
-def sprint_clear() -> TicketSprintContextResult:
+def sprint_set(*, name: str, tag: str) -> TicketSprintContextResult:
     store = store_for_cmd("create")
+    return sprint_set_in_dir(tickets_dir=store.tickets_dir, name=name, tag=tag)
+
+
+def sprint_clear_in_dir(*, tickets_dir: Path) -> TicketSprintContextResult:
+    store = TicketStore(Path(tickets_dir).resolve())
     raw = _load_config_raw(store)
     raw.pop("sprint", None)
     raw.pop("sprint_name", None)
@@ -504,6 +511,11 @@ def sprint_clear() -> TicketSprintContextResult:
     if raw or store.config_path.exists():
         _write_config_raw(store, raw)
     return TicketSprintContextResult(name="", tag="")
+
+
+def sprint_clear() -> TicketSprintContextResult:
+    store = store_for_cmd("create")
+    return sprint_clear_in_dir(tickets_dir=store.tickets_dir)
 
 
 def create(
