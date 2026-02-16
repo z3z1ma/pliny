@@ -45,6 +45,8 @@ class TicketConfig:
     prefix: str = ""
     github_default_repo: str = ""  # owner/repo
     jira_base_url: str = ""  # e.g. https://example.atlassian.net
+    sprint_name: str = ""
+    sprint_tag: str = ""
     extra: Dict[str, Any] = dataclasses.field(default_factory=dict)
 
 
@@ -58,6 +60,11 @@ class TicketVersionResult:
 class TicketInitResult:
     initialized: str
 
+
+@dataclasses.dataclass(frozen=True)
+class TicketSprintContextResult:
+    name: str
+    tag: str
 
 @dataclasses.dataclass(frozen=True)
 class TicketCreateResult:
@@ -281,6 +288,7 @@ __all__ = [
     "TicketLinkManyResult",
     "TicketListResult",
     "TicketPrimeResult",
+    "TicketSprintContextResult",
     "TicketQueryResult",
     "TicketReleaseResult",
     "TicketRelationships",

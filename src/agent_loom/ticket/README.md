@@ -113,7 +113,7 @@ Core
 
 - `TICKET_DIR`: override tickets directory
 - `TICKET_AGENT`: agent identifier for claims (default `user@host:pid`)
-- `TEAM_SPRINT_TAG`: auto-added tag on `create` (use `--no-sprint-tag` to skip)
+- `TEAM_SPRINT_TAG`: fallback sprint tag used by ticket create/list defaults when no explicit ticket sprint context is set
 
 Audit and policy
 
@@ -207,7 +207,7 @@ Flags
 - `--external-ref`
 - `--parent`
 - `--tags` (comma-separated)
-- `--no-sprint-tag`
+- `--no-sprint-tag` (skip auto-added sprint tag from ticket sprint context or `TEAM_SPRINT_TAG`)
 
 Examples
 
@@ -218,6 +218,24 @@ loom ticket create "Spec UI" --design "Figma: https://..." --acceptance "- butto
 loom ticket create "Follow up" --parent ab-1234 --tags followup
 loom ticket create "Default assignee from git config"
 loom ticket create "Skip sprint tag" --no-sprint-tag
+```
+
+### sprint
+
+Manage ticket sprint context persisted in `.loom/ticket/config.yaml`.
+
+Subcommands
+
+- `show`
+- `set --name ... --tag ...`
+- `clear`
+
+Examples
+
+```
+loom ticket sprint show
+loom ticket sprint set --name "YAML Sprint Foundations" --tag sprint:YAML-Sprint-Foundations
+loom ticket sprint clear
 ```
 
 ### status
@@ -248,6 +266,11 @@ loom ticket reopen ab-1234
 
 List tickets with filters. Default excludes closed.
 
+When `--tag` is not provided, list defaults to sprint filtering in this order:
+1) explicit ticket sprint context (`loom ticket sprint set`),
+2) `TEAM_SPRINT_TAG` env fallback,
+3) no sprint tag filter.
+
 Flags
 
 - `--status`
@@ -264,6 +287,7 @@ Examples
 ```
 loom ticket list
 loom ticket ls --status open
+loom ticket list --tag sprint:YAML-Sprint-Foundations
 loom ticket list --type bug --prio-max 1
 loom ticket list --priority P0
 loom ticket list --prio-min 1 --prio-max 2 --tag infra
@@ -527,7 +551,7 @@ watch -n 5 'loom ticket swarm'
 ### Generate a sprint list
 
 ```
-loom ticket list --tag sprint --all --limit 200
+loom ticket list --all --limit 200
 ```
 
 ### Create tickets from a text list

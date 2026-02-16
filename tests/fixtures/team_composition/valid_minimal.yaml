@@ -1,0 +1,33 @@
+version: 1
+metadata:
+  name: YAML Sprint Foundations
+  labels:
+    - sprint:YAML-Sprint-Foundations
+members:
+  - id: manager
+    role: manager
+    lifecycle: always_on
+    source: loom
+    agent: loom-team-manager
+  - id: worker-template
+    role: worker
+    lifecycle: ephemeral
+    source: byo
+    agent: codex-worker
+    harness: codex
+worktree_mappings:
+  - pattern: al-aec3
+    member: worker-template
+  - pattern: mgr/*
+    member: manager
+communication:
+  channel: inbox_only
+  require_ack: true
+  escalation:
+    target_role: manager
+    timeout_seconds: 900
+byo_agents:
+  codex-worker:
+    command: codex --mode worker
+    env:
+      CODEX_APPROVAL: never
