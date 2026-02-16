@@ -55,5 +55,6 @@ reportUnusedParameter = "warning"
 [dependency-groups]
 dev = [
     "basedpyright>=1.37.2",
+    "pytest>=8.0.0",
     "ruff>=0.14.14",
 ]

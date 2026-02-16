@@ -231,7 +231,7 @@ class TestTeamDecompositionBoundaries:
                     if isinstance(sub, ast.Call) and isinstance(sub.func, ast.Name):
                         names.add(sub.func.id)
                 return names
-        pytest.fail(f"Function not found: {function_name}")
+        raise AssertionError(f"Function not found: {function_name}")
 
     def test_team_core_key_commands_delegate_to_extracted_modules(self) -> None:
         tree = self._parse_module(self.TEAM_CORE)

@@ -96,6 +96,11 @@ class TestCoreCliArgs(unittest.TestCase):
         got = core_cli_args.did_you_mean("strat", ["start", "status", "stop"])
         self.assertIn("start", got)
 
+    def test_argv_requests_json_detects_json_flags(self) -> None:
+        self.assertTrue(core_cli_args.argv_requests_json(["status", "--json"]))
+        self.assertTrue(core_cli_args.argv_requests_json(["status", "--json=true"]))
+        self.assertFalse(core_cli_args.argv_requests_json(["status"]))
+
 
 class TestCoreGit(unittest.TestCase):
     def test_resolve_repo_root_returns_path_when_not_git(self) -> None:
