@@ -3,11 +3,11 @@ from __future__ import annotations
 import importlib
 import os
 import platform
-from uuid import uuid4
 from pathlib import Path
+from uuid import uuid4
 from typing import Any
 
-from flask import Flask, Request, jsonify, render_template, request
+from flask import Blueprint, Flask, Request, jsonify, render_template, request
 
 from agent_loom.core.errors import LoomError, coerce_loom_error
 from agent_loom.dashboard.auth import authorize_request
@@ -69,59 +69,39 @@ def _require_auth(
     return False, err(code="UNAUTHORIZED", message=res.reason)
 
 
-def create_app(*, cfg: ServerConfig) -> Flask:
-    app = Flask(__name__, template_folder=TEMPLATE_DIR)
-    app.config["LOOM_SERVER_CFG"] = cfg
+def _json_body() -> dict[str, Any]:
+    payload = request.get_json(silent=True)
+    if payload is None:
+        return {}
+    if isinstance(payload, dict):
+        return payload
+    raise LoomError(
+        "request body must be a JSON object",
+        code="ARG",
+        hint="Send an object payload, not a list or scalar.",
+        http_status=400,
+        exit_code=2,
+    )
 
-    def _json_body() -> dict[str, Any]:
-        payload = request.get_json(silent=True)
-        if payload is None:
-            return {}
-        if isinstance(payload, dict):
-            return payload
-        raise LoomError(
-            "request body must be a JSON object",
-            code="ARG",
-            hint="Send an object payload, not a list or scalar.",
-            http_status=400,
-            exit_code=2,
-        )
 
-    def _api_error(
-        exc: BaseException,
-        *,
-        default_code: str,
-        default_message: str,
-    ) -> tuple[dict[str, Any], int]:
-        error_id = uuid4().hex
-        known = isinstance(exc, LoomError) or isinstance(
-            exc, (ValueError, FileNotFoundError, PermissionError)
-        ) or hasattr(exc, "code")
-        typed = coerce_loom_error(
-            exc,
-            default_code=default_code,
-            default_message=(default_message if known else "internal error"),
-            default_http_status=(400 if known else 500),
-            default_exit_code=2,
-            expose_message=known,
-            error_id=error_id,
-        )
-        if typed.http_status >= 500:
-            app.logger.exception("dashboard error id=%s", error_id, exc_info=exc)
-        details: dict[str, Any] = dict(typed.details)
-        if typed.hint:
-            details["hint"] = typed.hint
-        if typed.suggestions:
-            details["suggestions"] = list(typed.suggestions)
-        return err(code=typed.code, message=str(typed), details=details), int(
-            typed.http_status
-        )
+def _tickets_dir(cfg: ServerConfig) -> Path:
+    return (cfg.repo_root / ".loom" / "ticket").resolve()
 
-    @app.route("/")
-    def dashboard() -> Any:
-        return render_template("dashboard.html")
 
-    @app.get("/api/v1/health")
+def _detect_ws_mode_root(
+    cfg: ServerConfig, *, mode: str, root_arg: str
+) -> tuple[str, Path]:
+    return detect_workspace_mode(
+        cwd=cfg.repo_root,
+        mode=mode,
+        root_arg=root_arg,
+    )
+
+
+def _create_health_blueprint(cfg: ServerConfig) -> Blueprint:
+    bp = Blueprint("dashboard_health", __name__, url_prefix="/api/v1")
+
+    @bp.get("/health")
     def health() -> Any:
         return jsonify(
             ok(
@@ -144,7 +124,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             )
         )
 
-    @app.get("/api/v1/capabilities")
+    @bp.get("/capabilities")
     def capabilities() -> Any:
         return jsonify(
             ok(
@@ -188,7 +168,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             )
         )
 
-    @app.get("/api/v1/introspect/<subsystem>")
+    @bp.get("/introspect/<subsystem>")
     def introspect(subsystem: str) -> Any:
         name = str(subsystem or "").strip().lower()
         mod_name = {
@@ -204,21 +184,23 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         payload = introspect_module(mod)
         return jsonify(ok(data=payload))
 
-    # -----------------
-    # Tickets
-    # -----------------
+    return bp
 
-    def _tickets_dir() -> Path:
-        # Server is repo-root anchored; allow override for testing.
-        return (cfg.repo_root / ".loom" / "ticket").resolve()
 
-    @app.get("/api/v1/tickets")
+def _create_tickets_blueprint(
+    cfg: ServerConfig,
+    *,
+    api_error: Any,
+) -> Blueprint:
+    bp = Blueprint("dashboard_tickets", __name__, url_prefix="/api/v1/tickets")
+
+    @bp.get("")
     def tickets_list() -> Any:
         from agent_loom.ticket.api import list_tickets
 
         q = request.args
         res = list_tickets(
-            tickets_dir=_tickets_dir(),
+            tickets_dir=_tickets_dir(cfg),
             status=str(q.get("status", "")),
             type_=str(q.get("type", "")),
             assignee=str(q.get("assignee", "")),
@@ -230,39 +212,39 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         )
         return jsonify(ok(data=res))
 
-    @app.get("/api/v1/tickets/<ticket_id>")
+    @bp.get("/<ticket_id>")
     def tickets_show(ticket_id: str) -> Any:
         from agent_loom.ticket.api import show
 
-        res = show(ticket_id=str(ticket_id), tickets_dir=_tickets_dir())
+        res = show(ticket_id=str(ticket_id), tickets_dir=_tickets_dir(cfg))
         return jsonify(ok(data=res))
 
-    @app.get("/api/v1/tickets/<ticket_id>/view")
+    @bp.get("/<ticket_id>/view")
     def tickets_view(ticket_id: str) -> Any:
         from agent_loom.ticket.api import view
 
-        res = view(ticket_id=str(ticket_id), tickets_dir=_tickets_dir())
+        res = view(ticket_id=str(ticket_id), tickets_dir=_tickets_dir(cfg))
         return jsonify(ok(data=res))
 
-    @app.get("/api/v1/tickets/<ticket_id>/dep")
+    @bp.get("/<ticket_id>/dep")
     def tickets_dep(ticket_id: str) -> Any:
         from agent_loom.ticket.api import dep
 
-        res = dep(ticket_id=str(ticket_id), tickets_dir=_tickets_dir())
+        res = dep(ticket_id=str(ticket_id), tickets_dir=_tickets_dir(cfg))
         return jsonify(ok(data=res))
 
-    @app.get("/api/v1/tickets/swarm")
+    @bp.get("/swarm")
     def tickets_swarm() -> Any:
         from agent_loom.ticket.api import swarm
 
         q = request.args
         res = swarm(
-            tickets_dir=_tickets_dir(),
+            tickets_dir=_tickets_dir(cfg),
             active_within=str(q.get("active_within") or "2h"),
         )
         return jsonify(ok(data=res))
 
-    @app.post("/api/v1/tickets")
+    @bp.post("")
     def tickets_create() -> Any:
         allowed, payload = _ensure_writes_enabled(cfg)
         if not allowed:
@@ -276,7 +258,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         body = _json_body()
         try:
             res = create(
-                tickets_dir=_tickets_dir(),
+                tickets_dir=_tickets_dir(cfg),
                 title=str(body.get("title") or "").strip(),
                 type=str(body.get("type") or "task").strip(),
                 priority=int(body.get("priority") or 2),
@@ -289,7 +271,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                 acceptance=str(body.get("acceptance") or "").strip(),
             )
         except Exception as e:
-            payload, status = _api_error(
+            payload, status = api_error(
                 e,
                 default_code="CREATE_FAILED",
                 default_message="ticket create failed",
@@ -297,7 +279,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             return jsonify(payload), status
         return jsonify(ok(data=res)), 201
 
-    @app.patch("/api/v1/tickets/<ticket_id>")
+    @bp.patch("/<ticket_id>")
     def tickets_update(ticket_id: str) -> Any:
         allowed, payload = _ensure_writes_enabled(cfg)
         if not allowed:
@@ -311,7 +293,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         body = _json_body()
         try:
             res = update(
-                tickets_dir=_tickets_dir(),
+                tickets_dir=_tickets_dir(cfg),
                 ticket_id=str(ticket_id),
                 title=body.get("title"),
                 status=str(body.get("status") or "").strip(),
@@ -347,7 +329,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                 force=bool(body.get("force")),
             )
         except Exception as e:
-            payload, status = _api_error(
+            payload, status = api_error(
                 e,
                 default_code="UPDATE_FAILED",
                 default_message="ticket update failed",
@@ -355,11 +337,13 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             return jsonify(payload), status
         return jsonify(ok(data=res))
 
-    # -----------------
-    # Teams
-    # -----------------
+    return bp
 
-    @app.get("/api/v1/teams")
+
+def _create_team_blueprint(cfg: ServerConfig) -> Blueprint:
+    bp = Blueprint("dashboard_team", __name__, url_prefix="/api/v1/teams")
+
+    @bp.get("")
     def teams_list() -> Any:
         from agent_loom.team.constants import DEFAULT_RUNS_DIR
 
@@ -375,9 +359,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                 import json
 
                 try:
-                    run = json.loads(
-                        run_json.read_text(encoding="utf-8", errors="replace")
-                    )
+                    run = json.loads(run_json.read_text(encoding="utf-8", errors="replace"))
                 except Exception:
                     run = {}
                 teams.append(
@@ -395,7 +377,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         )
         return jsonify(ok(data={"teams": teams, "count": len(teams)}))
 
-    @app.get("/api/v1/teams/<team>/status")
+    @bp.get("/<team>/status")
     def team_status(team: str) -> Any:
         from agent_loom.team.core import status as team_status_fn
 
@@ -405,24 +387,24 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             return jsonify(err(code="TEAM_STATUS_FAILED", message=str(e))), 400
         return jsonify(ok(data=res))
 
-    @app.get("/api/v1/teams/<team>/run")
+    @bp.get("/<team>/run")
     def team_run(team: str) -> Any:
         from agent_loom.team.constants import DEFAULT_RUNS_DIR
+        import json
 
         run_json = cfg.repo_root / DEFAULT_RUNS_DIR / str(team) / "run.json"
         if not run_json.exists():
             return jsonify(err(code="NOT_FOUND", message="team not found")), 404
-        import json
-
         try:
             run = json.loads(run_json.read_text(encoding="utf-8", errors="replace"))
         except Exception as e:
             return jsonify(err(code="READ_FAILED", message=str(e))), 400
         return jsonify(ok(data=run))
 
-    @app.get("/api/v1/teams/<team>/events")
+    @bp.get("/<team>/events")
     def team_events(team: str) -> Any:
         from agent_loom.team.constants import DEFAULT_RUNS_DIR
+        import json
 
         q = request.args
         limit = int(q.get("limit") or 100)
@@ -435,8 +417,6 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             [p for p in events_dir.glob("*.json")], key=lambda p: p.name, reverse=True
         )
         out: list[dict[str, Any]] = []
-        import json
-
         for p in files:
             if since and p.name < since:
                 continue
@@ -451,9 +431,10 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                 break
         return jsonify(ok(data={"events": out, "count": len(out)}))
 
-    @app.get("/api/v1/teams/<team>/inbox")
+    @bp.get("/<team>/inbox")
     def team_inbox(team: str) -> Any:
         from agent_loom.team.constants import DEFAULT_RUNS_DIR
+        import json
 
         base = cfg.repo_root / DEFAULT_RUNS_DIR / str(team) / "inbox"
         read_dir = base / "read"
@@ -465,8 +446,6 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                 [p for p in d.glob("*.json")], key=lambda p: p.name, reverse=True
             )
             items: list[dict[str, Any]] = []
-            import json
-
             for p in files:
                 try:
                     data = json.loads(p.read_text(encoding="utf-8", errors="replace"))
@@ -485,9 +464,10 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         }
         return jsonify(ok(data=payload))
 
-    @app.get("/api/v1/teams/<team>/captures")
+    @bp.get("/<team>/captures")
     def team_captures(team: str) -> Any:
         from agent_loom.team.constants import DEFAULT_RUNS_DIR
+        import json
 
         captures_dir = cfg.repo_root / DEFAULT_RUNS_DIR / str(team) / "captures"
         if not captures_dir.exists():
@@ -497,8 +477,6 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         )
         limit = int(request.args.get("limit") or 50)
         out: list[dict[str, Any]] = []
-        import json
-
         for p in files:
             try:
                 data = json.loads(p.read_text(encoding="utf-8", errors="replace"))
@@ -511,19 +489,14 @@ def create_app(*, cfg: ServerConfig) -> Flask:
                 break
         return jsonify(ok(data={"captures": out, "count": len(out)}))
 
-    @app.get("/api/v1/teams/<team>/captures/text")
+    @bp.get("/<team>/captures/text")
     def team_capture_text(team: str) -> Any:
-        """Return capture text for a capture meta filename.
-
-        This keeps captures usable in the dashboard without exposing arbitrary file reads.
-        """
-
         from agent_loom.team.constants import DEFAULT_RUNS_DIR
+        import json
 
         meta = str(request.args.get("meta") or "").strip()
         if not meta:
             return jsonify(err(code="ARG", message="missing meta")), 400
-
         mp = Path(meta)
         if mp.name != meta or mp.suffix != ".json":
             return jsonify(err(code="ARG", message="invalid meta")), 400
@@ -537,7 +510,6 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         if not txt_file.exists():
             return jsonify(err(code="NOT_FOUND", message="capture text not found")), 404
 
-        # Guardrail: prevent gigantic reads in the UI.
         cap_bytes = 200_000
         raw = b""
         truncated = False
@@ -553,11 +525,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
 
         meta_payload: dict[str, Any] = {}
         try:
-            import json
-
-            meta_payload0 = json.loads(
-                meta_file.read_text(encoding="utf-8", errors="replace")
-            )
+            meta_payload0 = json.loads(meta_file.read_text(encoding="utf-8", errors="replace"))
             if isinstance(meta_payload0, dict):
                 meta_payload = meta_payload0
         except Exception:
@@ -575,11 +543,13 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         }
         return jsonify(ok(data=payload))
 
-    # -----------------
-    # Memory
-    # -----------------
+    return bp
 
-    @app.get("/api/v1/memory/recall")
+
+def _create_memory_blueprint(cfg: ServerConfig) -> Blueprint:
+    bp = Blueprint("dashboard_memory", __name__, url_prefix="/api/v1/memory")
+
+    @bp.get("/recall")
     def memory_recall() -> Any:
         from agent_loom.memory.core import recall
 
@@ -607,7 +577,7 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         )
         return jsonify(ok(data=res))
 
-    @app.get("/api/v1/memory/notes/<note_id>")
+    @bp.get("/notes/<note_id>")
     def memory_note(note_id: str) -> Any:
         from agent_loom.memory.vault import (
             find_note_path,
@@ -633,20 +603,21 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             return jsonify(err(code="READ_FAILED", message="failed to read note")), 400
         return jsonify(ok(data={"note": note, "warnings": warns}))
 
-    # -----------------
-    # Workspace
-    # -----------------
+    return bp
 
-    @app.get("/api/v1/workspace/meta")
+
+def _create_workspace_blueprint(cfg: ServerConfig) -> Blueprint:
+    bp = Blueprint("dashboard_workspace", __name__, url_prefix="/api/v1/workspace")
+
+    @bp.get("/meta")
     def ws_meta() -> Any:
         q = request.args
         try:
-            mode, root = detect_workspace_mode(
-                cwd=cfg.repo_root,
+            mode, root = _detect_ws_mode_root(
+                cfg,
                 mode=str(q.get("mode") or cfg.workspace_mode),
                 root_arg=str(
-                    q.get("root")
-                    or (str(cfg.workspace_root) if cfg.workspace_root else "")
+                    q.get("root") or (str(cfg.workspace_root) if cfg.workspace_root else "")
                 ),
             )
             payload = workspace_meta(mode=mode, root=root)
@@ -654,16 +625,15 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             return jsonify(err(code="WS_ERROR", message=str(e))), 400
         return jsonify(ok(data=payload))
 
-    @app.get("/api/v1/workspace/worktrees")
+    @bp.get("/worktrees")
     def ws_worktrees() -> Any:
         q = request.args
         try:
-            mode, root = detect_workspace_mode(
-                cwd=cfg.repo_root,
+            mode, root = _detect_ws_mode_root(
+                cfg,
                 mode=str(q.get("mode") or cfg.workspace_mode),
                 root_arg=str(
-                    q.get("root")
-                    or (str(cfg.workspace_root) if cfg.workspace_root else "")
+                    q.get("root") or (str(cfg.workspace_root) if cfg.workspace_root else "")
                 ),
             )
             if mode == "repo":
@@ -687,16 +657,15 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             return jsonify(err(code="WS_ERROR", message=str(e))), 400
         return jsonify(ok(data=payload))
 
-    @app.get("/api/v1/workspace/components/index")
+    @bp.get("/components/index")
     def ws_components_index() -> Any:
         q = request.args
         try:
-            mode, root = detect_workspace_mode(
-                cwd=cfg.repo_root,
+            mode, root = _detect_ws_mode_root(
+                cfg,
                 mode=str(q.get("mode") or cfg.workspace_mode),
                 root_arg=str(
-                    q.get("root")
-                    or (str(cfg.workspace_root) if cfg.workspace_root else "")
+                    q.get("root") or (str(cfg.workspace_root) if cfg.workspace_root else "")
                 ),
             )
             if mode != "harness":
@@ -706,21 +675,19 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         except Exception as e:
             return jsonify(err(code="WS_ERROR", message=str(e))), 400
 
-    @app.get("/api/v1/workspace/services/index")
+    @bp.get("/services/index")
     def ws_services_index() -> Any:
-        # Alias for the components index.
         return ws_components_index()
 
-    @app.get("/api/v1/workspace/worktree/diff")
+    @bp.get("/worktree/diff")
     def ws_worktree_diff() -> Any:
         q = request.args
         try:
-            mode, root = detect_workspace_mode(
-                cwd=cfg.repo_root,
+            mode, root = _detect_ws_mode_root(
+                cfg,
                 mode=str(q.get("mode") or cfg.workspace_mode),
                 root_arg=str(
-                    q.get("root")
-                    or (str(cfg.workspace_root) if cfg.workspace_root else "")
+                    q.get("root") or (str(cfg.workspace_root) if cfg.workspace_root else "")
                 ),
             )
             payload = worktree_diff(
@@ -741,44 +708,91 @@ def create_app(*, cfg: ServerConfig) -> Flask:
             return jsonify(err(code="WS_ERROR", message=str(e))), 400
         return jsonify(ok(data=payload))
 
-    # -----------------
-    # Compound
-    # -----------------
+    return bp
 
-    @app.get("/api/v1/compound/skills")
+
+def _create_compound_blueprint(cfg: ServerConfig) -> Blueprint:
+    bp = Blueprint("dashboard_compound", __name__, url_prefix="/api/v1/compound")
+
+    @bp.get("/skills")
     def compound_skills() -> Any:
         return jsonify(ok(data={"skills": list_skills(cfg.repo_root)}))
 
-    @app.get("/api/v1/compound/skills/<name>")
+    @bp.get("/skills/<name>")
     def compound_skill(name: str) -> Any:
         try:
             return jsonify(ok(data=read_skill(cfg.repo_root, name=str(name))))
         except FileNotFoundError as e:
             return jsonify(err(code="NOT_FOUND", message=str(e))), 404
 
-    @app.get("/api/v1/compound/instincts")
+    @bp.get("/instincts")
     def compound_instincts() -> Any:
         return jsonify(ok(data=read_instincts(cfg.repo_root)))
 
-    # -----------------
-    # Errors
-    # -----------------
+    return bp
 
+
+def _register_error_handlers(app: Flask, *, api_error: Any) -> None:
     @app.errorhandler(404)
     def _not_found(_e: Exception) -> Any:
         return jsonify(err(code="NOT_FOUND", message="not found")), 404
 
     @app.errorhandler(405)
     def _method_not_allowed(_e: Exception) -> Any:
-        return jsonify(
-            err(code="METHOD_NOT_ALLOWED", message="method not allowed")
-        ), 405
+        return jsonify(err(code="METHOD_NOT_ALLOWED", message="method not allowed")), 405
 
     @app.errorhandler(Exception)
     def _unhandled(e: Exception) -> Any:
-        payload, status = _api_error(
+        payload, status = api_error(
             e, default_code="SERVER_ERROR", default_message="server error"
         )
         return jsonify(payload), status
+
+
+def create_app(*, cfg: ServerConfig) -> Flask:
+    app = Flask(__name__, template_folder=TEMPLATE_DIR)
+    app.config["LOOM_SERVER_CFG"] = cfg
+
+    def _api_error(
+        exc: BaseException,
+        *,
+        default_code: str,
+        default_message: str,
+    ) -> tuple[dict[str, Any], int]:
+        error_id = uuid4().hex
+        known = isinstance(exc, LoomError) or isinstance(
+            exc, (ValueError, FileNotFoundError, PermissionError)
+        ) or hasattr(exc, "code")
+        typed = coerce_loom_error(
+            exc,
+            default_code=default_code,
+            default_message=(default_message if known else "internal error"),
+            default_http_status=(400 if known else 500),
+            default_exit_code=2,
+            expose_message=known,
+            error_id=error_id,
+        )
+        if typed.http_status >= 500:
+            app.logger.exception("dashboard error id=%s", error_id, exc_info=exc)
+        details: dict[str, Any] = dict(typed.details)
+        if typed.hint:
+            details["hint"] = typed.hint
+        if typed.suggestions:
+            details["suggestions"] = list(typed.suggestions)
+        return err(code=typed.code, message=str(typed), details=details), int(
+            typed.http_status
+        )
+
+    @app.route("/")
+    def dashboard() -> Any:
+        return render_template("dashboard.html")
+
+    app.register_blueprint(_create_health_blueprint(cfg))
+    app.register_blueprint(_create_tickets_blueprint(cfg, api_error=_api_error))
+    app.register_blueprint(_create_team_blueprint(cfg))
+    app.register_blueprint(_create_memory_blueprint(cfg))
+    app.register_blueprint(_create_workspace_blueprint(cfg))
+    app.register_blueprint(_create_compound_blueprint(cfg))
+    _register_error_handlers(app, api_error=_api_error)
 
     return app

@@ -5,7 +5,7 @@ import json
 import os
 import select
 import sys
-from dataclasses import asdict, is_dataclass
+from dataclasses import asdict, dataclass, is_dataclass
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
@@ -1221,20 +1221,39 @@ def _effective_format(args: argparse.Namespace) -> str:
     return args.format or "json"
 
 
-def _run_with_args(args: argparse.Namespace, *, fmt: str) -> int:
-    quiet = bool(getattr(args, "quiet", False))
+@dataclass(frozen=True)
+class _EditRunOptions:
+    note_id: str
+    title: str | None
+    visibility: str | None
+    status: str | None
+    tag: list[str]
+    remove_tag: list[str]
+    clear_tags: bool
+    alias: list[str]
+    remove_alias: list[str]
+    clear_aliases: bool
+    link: list[str]
+    remove_link: list[str]
+    clear_links: bool
+    related: list[str]
+    scope: list[str]
+    command: str | None
+    remove_scope: list[str]
+    clear_scopes: bool
+    allow_missing_scopes: bool
+    body: str | None
+    append: str | None
+    interactive: bool
+
+
+def _emit_and_ok(payload: Any, *, fmt: str) -> int:
+    emit(payload, fmt)
+    return 0
+
+
+def _ensure_vault_ready(args: argparse.Namespace) -> None:
     vp = vault_paths(resolve_vault_root(str(args.vault), cwd=Path.cwd()))
-
-    if args.cmd == "prime":
-        res = prime()
-        emit(payload_for(res, fmt=fmt), fmt)
-        return 0
-
-    if args.cmd == "init":
-        res = init(vault=str(args.vault))
-        emit(payload_for(res, fmt=fmt), fmt)
-        return 0
-
     if not vp.root.exists():
         raise MemoryError(
             f"Vault not found at {vp.root}",
@@ -1247,389 +1266,482 @@ def _run_with_args(args: argparse.Namespace, *, fmt: str) -> int:
             ],
             details={"vault": str(vp.root)},
         )
-
     if not vp.meta_path.exists():
         init(vault=str(args.vault))
 
-    if args.cmd in {"add", "note", "save"}:
-        body = args.body
-        if body == "-":
-            if not _stdin_is_ready():
-                raise MemoryError(
-                    "--body - requires piped stdin",
-                    code="ARG",
-                    exit_code=2,
-                    hint="Pipe body text into stdin.",
-                    suggestions=[
-                        "cat file.md | loom memory add --title 'Title' --body -",
-                    ],
-                )
-            body = read_all_stdin_text()
-        if body is None and not sys.stdin.isatty():
-            body = read_all_stdin_text()
 
-        res = add(
-            vault=str(args.vault),
-            title=args.title,
-            visibility=str(args.visibility or "shared").strip().lower(),
-            status=str(args.status or "active").strip().lower(),
-            tag=args.tag,
-            alias=args.alias,
-            link=getattr(args, "link", None),
-            related=getattr(args, "related", None),
-            scope=args.scope,
-            command=args.command,
-            allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
-            body=body,
-            interactive=bool(args.interactive),
-            note_id=args.id,
-            folder=args.folder or "",
+def _build_edit_options(args: argparse.Namespace) -> _EditRunOptions:
+    cmd = str(getattr(args, "cmd", "") or "")
+    is_append_cmd = cmd in {"append", "add-note", "append-note"}
+
+    body_override = getattr(args, "body", None)
+    body_append = getattr(args, "append", None)
+    from_stdin = bool(getattr(args, "from_stdin", False))
+    append_from_stdin = bool(getattr(args, "append_from_stdin", False))
+    interactive = bool(getattr(args, "interactive", False))
+
+    title = getattr(args, "title", None)
+    visibility = getattr(args, "visibility", None)
+    status = getattr(args, "status", None)
+    tag = list(getattr(args, "tag", []) or [])
+    remove_tag = list(getattr(args, "remove_tag", []) or [])
+    clear_tags = bool(getattr(args, "clear_tags", False))
+    alias = list(getattr(args, "alias", []) or [])
+    remove_alias = list(getattr(args, "remove_alias", []) or [])
+    clear_aliases = bool(getattr(args, "clear_aliases", False))
+    link_values = list(getattr(args, "link", []) or [])
+    remove_link = list(getattr(args, "remove_link", []) or [])
+    clear_links = bool(getattr(args, "clear_links", False))
+    related = list(getattr(args, "related", []) or [])
+    scope = list(getattr(args, "scope", []) or [])
+    command = getattr(args, "command", None)
+    remove_scope = list(getattr(args, "remove_scope", []) or [])
+    clear_scopes = bool(getattr(args, "clear_scopes", False))
+    allow_missing_scopes = bool(getattr(args, "allow_missing_scopes", False))
+
+    if is_append_cmd:
+        append_from_stdin = bool(getattr(args, "from_stdin", False))
+        from_stdin = False
+        if body_append is None:
+            body_append = getattr(args, "text", None)
+        if body_append is None:
+            body_append = body_override
+        body_override = None
+        interactive = False
+        title = None
+        visibility = None
+        status = None
+        tag = []
+        remove_tag = []
+        clear_tags = False
+        alias = []
+        remove_alias = []
+        clear_aliases = False
+        link_values = []
+        remove_link = []
+        clear_links = False
+        scope = []
+        command = None
+        remove_scope = []
+        clear_scopes = False
+        allow_missing_scopes = False
+
+    if from_stdin and append_from_stdin:
+        raise MemoryError(
+            "edit: cannot combine --from-stdin and --append-from-stdin",
+            code="ARG",
+            exit_code=2,
+            hint="Pick exactly one stdin mode.",
+            suggestions=[
+                "cat file.md | loom memory edit <id> --from-stdin",
+                "cat file.md | loom memory edit <id> --append-from-stdin",
+            ],
         )
-        emit(payload_for(res, fmt=fmt), fmt)
-        return 0
 
-    if args.cmd in {"edit", "update", "append", "add-note", "append-note"}:
-        is_append_cmd = args.cmd in {"append", "add-note", "append-note"}
+    stdin_ready = _stdin_is_ready()
+    uses_stdin = from_stdin or append_from_stdin
+    if (
+        stdin_ready
+        and not uses_stdin
+        and body_override is None
+        and body_append is None
+        and not interactive
+    ):
+        raise MemoryError(
+            "stdin is piped but no body mode was selected",
+            code="ARG",
+            exit_code=2,
+            hint="Choose whether stdin should replace or append to the note body.",
+            suggestions=[
+                "cat file.md | loom memory edit <id> --from-stdin",
+                "cat file.md | loom memory edit <id> --append-from-stdin",
+            ],
+        )
 
-        if is_append_cmd:
-            setattr(args, "append_from_stdin", bool(getattr(args, "from_stdin", False)))
-            setattr(args, "from_stdin", False)
-            append_value = getattr(args, "append", None)
-            if append_value is None:
-                append_value = getattr(args, "text", None)
-            if append_value is None:
-                append_value = getattr(args, "body", None)
-            setattr(args, "append", append_value)
-            setattr(args, "body", None)
-            setattr(args, "interactive", False)
-            setattr(args, "title", None)
-            setattr(args, "visibility", None)
-            setattr(args, "status", None)
-            setattr(args, "tag", [])
-            setattr(args, "remove_tag", [])
-            setattr(args, "clear_tags", False)
-            setattr(args, "alias", [])
-            setattr(args, "remove_alias", [])
-            setattr(args, "clear_aliases", False)
-            setattr(args, "link", [])
-            setattr(args, "remove_link", [])
-            setattr(args, "clear_links", False)
-            setattr(args, "scope", [])
-            setattr(args, "command", None)
-            setattr(args, "remove_scope", [])
-            setattr(args, "clear_scopes", False)
-            setattr(args, "allow_missing_scopes", False)
-
-        if bool(args.from_stdin) and bool(args.append_from_stdin):
+    if body_override == "-":
+        if not _stdin_is_ready():
             raise MemoryError(
-                "edit: cannot combine --from-stdin and --append-from-stdin",
+                "--body - requires piped stdin",
                 code="ARG",
                 exit_code=2,
-                hint="Pick exactly one stdin mode.",
-                suggestions=[
-                    "cat file.md | loom memory edit <id> --from-stdin",
-                    "cat file.md | loom memory edit <id> --append-from-stdin",
-                ],
+                hint="Pipe body text into stdin.",
             )
-
-        stdin_ready = _stdin_is_ready()
-        uses_stdin = bool(args.from_stdin) or bool(args.append_from_stdin)
-        if (
-            stdin_ready
-            and not uses_stdin
-            and args.body is None
-            and args.append is None
-            and not bool(args.interactive)
-        ):
+        body_override = read_all_stdin_text()
+    if from_stdin:
+        if sys.stdin.isatty():
             raise MemoryError(
-                "stdin is piped but no body mode was selected",
+                "edit --from-stdin requires piped stdin",
                 code="ARG",
                 exit_code=2,
-                hint="Choose whether stdin should replace or append to the note body.",
-                suggestions=[
-                    "cat file.md | loom memory edit <id> --from-stdin",
-                    "cat file.md | loom memory edit <id> --append-from-stdin",
-                ],
+                hint="Pipe content: cat file.md | loom memory edit <id> --from-stdin",
             )
+        body_override = read_all_stdin_text()
 
-        body_override = args.body
-        if body_override == "-":
-            if not _stdin_is_ready():
-                raise MemoryError(
-                    "--body - requires piped stdin",
-                    code="ARG",
-                    exit_code=2,
-                    hint="Pipe body text into stdin.",
-                )
-            body_override = read_all_stdin_text()
-        if bool(args.from_stdin):
-            if sys.stdin.isatty():
-                raise MemoryError(
-                    "edit --from-stdin requires piped stdin",
-                    code="ARG",
-                    exit_code=2,
-                    hint="Pipe content: cat file.md | loom memory edit <id> --from-stdin",
-                )
-            body_override = read_all_stdin_text()
-
-        body_append = args.append
-        if body_append == "-":
-            if not _stdin_is_ready():
-                raise MemoryError(
-                    "--append - requires piped stdin",
-                    code="ARG",
-                    exit_code=2,
-                    hint="Pipe append text into stdin.",
-                )
-            body_append = read_all_stdin_text()
-        if bool(args.append_from_stdin):
-            if sys.stdin.isatty():
-                raise MemoryError(
-                    "edit --append-from-stdin requires piped stdin",
-                    code="ARG",
-                    exit_code=2,
-                    hint="Pipe content: cat file.md | loom memory edit <id> --append-from-stdin",
-                )
-            body_append = read_all_stdin_text()
-
-        if (
-            is_append_cmd
-            and body_append is None
-            and not (getattr(args, "related", None) or [])
-        ):
+    if body_append == "-":
+        if not _stdin_is_ready():
             raise MemoryError(
-                "append requires text (--append/--text/--body) or piped stdin",
+                "--append - requires piped stdin",
                 code="ARG",
                 exit_code=2,
-                hint="Provide append text directly or pipe it on stdin.",
-                suggestions=[
-                    "loom memory append <id> --append 'New findings'",
-                    "cat update.md | loom memory append <id> --from-stdin",
-                ],
+                hint="Pipe append text into stdin.",
             )
+        body_append = read_all_stdin_text()
+    if append_from_stdin:
+        if sys.stdin.isatty():
+            raise MemoryError(
+                "edit --append-from-stdin requires piped stdin",
+                code="ARG",
+                exit_code=2,
+                hint="Pipe content: cat file.md | loom memory edit <id> --append-from-stdin",
+            )
+        body_append = read_all_stdin_text()
 
-        res = edit(
-            vault=str(args.vault),
-            note_id=args.id,
-            title=args.title,
-            visibility=(
-                str(args.visibility).strip().lower()
-                if args.visibility is not None
-                else None
-            ),
-            status=(
-                str(args.status).strip().lower() if args.status is not None else None
-            ),
-            tag=args.tag,
-            remove_tag=args.remove_tag,
-            clear_tags=bool(args.clear_tags),
-            alias=args.alias,
-            remove_alias=args.remove_alias,
-            clear_aliases=bool(args.clear_aliases),
-            link=getattr(args, "link", None),
-            remove_link=getattr(args, "remove_link", None),
-            clear_links=bool(getattr(args, "clear_links", False)),
-            related=getattr(args, "related", None),
-            scope=args.scope,
-            command=args.command,
-            remove_scope=args.remove_scope,
-            clear_scopes=bool(args.clear_scopes),
-            allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
-            body=body_override,
-            append=body_append,
-            interactive=bool(args.interactive),
+    if is_append_cmd and body_append is None and not related:
+        raise MemoryError(
+            "append requires text (--append/--text/--body) or piped stdin",
+            code="ARG",
+            exit_code=2,
+            hint="Provide append text directly or pipe it on stdin.",
+            suggestions=[
+                "loom memory append <id> --append 'New findings'",
+                "cat update.md | loom memory append <id> --from-stdin",
+            ],
         )
-        emit(payload_for(res, fmt=fmt), fmt)
-        return 0
 
-    if args.cmd in {"recall", "get", "remember"}:
-        res = recall(
-            vault=str(args.vault),
-            query=args.query or "",
-            limit=int(args.limit),
-            tag=args.tag,
-            not_tag=args.not_tag,
-            scope=args.scope,
-            not_scope=args.not_scope,
-            command=args.command or "",
-            visibility=args.visibility,
-            include_deprecated=bool(args.include_deprecated),
-            since=args.since,
-            until=getattr(args, "until", None),
-            and_mode=bool(args.and_mode),
-            scoped_only=bool(args.scoped_only),
-            full=bool(args.full),
-            max_body_chars=args.max_body_chars,
-            expand=int(args.expand or 0),
-            max_chars=int(args.max_chars),
-            context=bool(args.context),
-            deterministic=bool(getattr(args, "deterministic", False)),
-            quiet=quiet,
-            allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
-            format=fmt,
-            or_mode=bool(getattr(args, "or_mode", False)),
-            fts_raw=bool(getattr(args, "fts_raw", False)),
-        )
-        if not quiet and res.warnings:
-            print_index_warnings(list(res.warnings))
-        emit(payload_for(res, fmt=fmt), fmt)
-        return 0
-
-    if args.cmd in {"list", "ls", "recent"}:
-        res = list_recent(
-            vault=str(args.vault),
-            limit=int(args.limit),
-            tag=args.tag,
-            not_tag=args.not_tag,
-            scope=args.scope,
-            not_scope=args.not_scope,
-            command=args.command or "",
-            visibility=args.visibility,
-            include_deprecated=bool(args.include_deprecated),
-            since=args.since,
-            until=getattr(args, "until", None),
-            and_mode=False,
-            scoped_only=False,
-            deterministic=bool(getattr(args, "deterministic", False)),
-            quiet=quiet,
-            allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
-            sort=str(getattr(args, "sort", "updated") or "updated"),
-        )
-        if not quiet and res.warnings:
-            print_index_warnings(list(res.warnings))
-        emit(payload_for(res, fmt=fmt), fmt)
-        return 0
-
-    if args.cmd == "grep":
-        payload = grep(
-            vault=str(args.vault),
-            pattern=str(args.pattern),
-            limit=int(args.limit),
-            tag=args.tag,
-            not_tag=args.not_tag,
-            scope=args.scope,
-            not_scope=args.not_scope,
-            command=args.command or "",
-            visibility=args.visibility,
-            include_deprecated=bool(args.include_deprecated),
-            since=args.since,
-            until=getattr(args, "until", None),
-            and_mode=bool(getattr(args, "and_mode", False)),
-            scoped_only=bool(getattr(args, "scoped_only", False)),
-            quiet=quiet,
-            allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
-            ignore_case=bool(getattr(args, "ignore_case", False)),
-        )
-        emit(payload, fmt)
-        return 0
-
-    if args.cmd == "show":
-        text = show(
-            vault=str(args.vault), note_id=str(args.id), meta_only=bool(args.meta)
-        )
-        emit(text, fmt)
-        return 0
-
-    if args.cmd == "open":
-        rel = open_note(vault=str(args.vault), note_id=str(args.id))
-        emit(rel, fmt)
-        return 0
-
-    if args.cmd in {"forget", "archive"}:
-        payload = forget(
-            vault=str(args.vault),
-            query=args.query or "",
-            limit=int(args.limit),
-            tag=args.tag,
-            not_tag=args.not_tag,
-            scope=args.scope,
-            not_scope=args.not_scope,
-            command=args.command or "",
-            visibility=args.visibility,
-            include_deprecated=bool(args.include_deprecated),
-            since=args.since,
-            until=getattr(args, "until", None),
-            and_mode=False,
-            scoped_only=False,
-            deterministic=bool(getattr(args, "deterministic", False)),
-            quiet=quiet,
-            allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
-            or_mode=bool(getattr(args, "or_mode", False)),
-            fts_raw=bool(getattr(args, "fts_raw", False)),
-            apply=bool(getattr(args, "apply", False)),
-            hard=bool(getattr(args, "hard", False)),
-        )
-        emit(payload, fmt)
-        return 0
-
-    if args.cmd == "around":
-        payload = around(
-            vault=str(args.vault),
-            note_id=str(args.id),
-            k=int(getattr(args, "k", 12) or 12),
-            by=str(getattr(args, "by", "updated") or "updated"),
-            window_days=int(getattr(args, "window_days", 14) or 14),
-            visibility=args.visibility,
-            include_deprecated=bool(getattr(args, "include_deprecated", False)),
-            quiet=quiet,
-        )
-        emit(payload, fmt)
-        return 0
-
-    if args.cmd == "timeline":
-        payload = timeline(
-            vault=str(args.vault),
-            days=int(getattr(args, "days", 30) or 30),
-            by=str(getattr(args, "by", "updated") or "updated"),
-            visibility=args.visibility,
-            include_deprecated=bool(getattr(args, "include_deprecated", False)),
-            quiet=quiet,
-        )
-        emit(payload, fmt)
-        return 0
-
-    if args.cmd == "reindex":
-        res = reindex(vault=str(args.vault), quiet=quiet)
-        emit(payload_for(res, fmt=fmt), fmt)
-        return 0
-
-    if args.cmd == "janitor":
-        res = janitor(
-            vault=str(args.vault),
-            cmd=args.janitor_cmd,
-            visibility=args.visibility,
-            limit=int(args.limit),
-            apply=bool(getattr(args, "apply", False)),
-            quiet=quiet,
-        )
-        emit(payload_for(res, fmt=fmt), fmt)
-        return 0
-
-    if args.cmd == "link":
-        res = link(
-            vault=str(args.vault),
-            cmd=args.link_cmd,
-            note_id=getattr(args, "id", ""),
-            limit=int(getattr(args, "limit", 200) or 200),
-            k=int(getattr(args, "k", 1) or 1),
-            include_unresolved=bool(getattr(args, "include_unresolved", False)),
-            visibility=getattr(args, "visibility", None),
-            include_deprecated=bool(getattr(args, "include_deprecated", False)),
-            quiet=quiet,
-        )
-        if not quiet and res.warnings:
-            print_index_warnings(list(res.warnings))
-        emit(payload_for(res, fmt=fmt), fmt)
-        return 0
-
-    raise MemoryError(
-        f"Unknown command: {args.cmd}",
-        code="ARG",
-        exit_code=2,
-        hint="Run `loom memory -h` to see commands.",
-        suggestions=["loom memory -h"],
-        details={"cmd": str(args.cmd)},
+    return _EditRunOptions(
+        note_id=str(getattr(args, "id", "") or ""),
+        title=(str(title) if title is not None else None),
+        visibility=(str(visibility).strip().lower() if visibility is not None else None),
+        status=(str(status).strip().lower() if status is not None else None),
+        tag=tag,
+        remove_tag=remove_tag,
+        clear_tags=clear_tags,
+        alias=alias,
+        remove_alias=remove_alias,
+        clear_aliases=clear_aliases,
+        link=link_values,
+        remove_link=remove_link,
+        clear_links=clear_links,
+        related=related,
+        scope=scope,
+        command=(str(command) if command is not None else None),
+        remove_scope=remove_scope,
+        clear_scopes=clear_scopes,
+        allow_missing_scopes=allow_missing_scopes,
+        body=(str(body_override) if body_override is not None else None),
+        append=(str(body_append) if body_append is not None else None),
+        interactive=interactive,
     )
+
+
+def _run_prime(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    del args, quiet
+    res = prime()
+    return _emit_and_ok(payload_for(res, fmt=fmt), fmt=fmt)
+
+
+def _run_init(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    del quiet
+    res = init(vault=str(args.vault))
+    return _emit_and_ok(payload_for(res, fmt=fmt), fmt=fmt)
+
+
+def _run_add(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    del quiet
+    body = args.body
+    if body == "-":
+        if not _stdin_is_ready():
+            raise MemoryError(
+                "--body - requires piped stdin",
+                code="ARG",
+                exit_code=2,
+                hint="Pipe body text into stdin.",
+                suggestions=[
+                    "cat file.md | loom memory add --title 'Title' --body -",
+                ],
+            )
+        body = read_all_stdin_text()
+    if body is None and not sys.stdin.isatty():
+        body = read_all_stdin_text()
+    res = add(
+        vault=str(args.vault),
+        title=args.title,
+        visibility=str(args.visibility or "shared").strip().lower(),
+        status=str(args.status or "active").strip().lower(),
+        tag=args.tag,
+        alias=args.alias,
+        link=getattr(args, "link", None),
+        related=getattr(args, "related", None),
+        scope=args.scope,
+        command=args.command,
+        allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
+        body=body,
+        interactive=bool(args.interactive),
+        note_id=args.id,
+        folder=args.folder or "",
+    )
+    return _emit_and_ok(payload_for(res, fmt=fmt), fmt=fmt)
+
+
+def _run_edit(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    del quiet
+    options = _build_edit_options(args)
+    res = edit(
+        vault=str(args.vault),
+        note_id=options.note_id,
+        title=options.title,
+        visibility=options.visibility,
+        status=options.status,
+        tag=options.tag,
+        remove_tag=options.remove_tag,
+        clear_tags=options.clear_tags,
+        alias=options.alias,
+        remove_alias=options.remove_alias,
+        clear_aliases=options.clear_aliases,
+        link=options.link,
+        remove_link=options.remove_link,
+        clear_links=options.clear_links,
+        related=options.related,
+        scope=options.scope,
+        command=options.command,
+        remove_scope=options.remove_scope,
+        clear_scopes=options.clear_scopes,
+        allow_missing_scopes=options.allow_missing_scopes,
+        body=options.body,
+        append=options.append,
+        interactive=options.interactive,
+    )
+    return _emit_and_ok(payload_for(res, fmt=fmt), fmt=fmt)
+
+
+def _run_recall(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    res = recall(
+        vault=str(args.vault),
+        query=args.query or "",
+        limit=int(args.limit),
+        tag=args.tag,
+        not_tag=args.not_tag,
+        scope=args.scope,
+        not_scope=args.not_scope,
+        command=args.command or "",
+        visibility=args.visibility,
+        include_deprecated=bool(args.include_deprecated),
+        since=args.since,
+        until=getattr(args, "until", None),
+        and_mode=bool(args.and_mode),
+        scoped_only=bool(args.scoped_only),
+        full=bool(args.full),
+        max_body_chars=args.max_body_chars,
+        expand=int(args.expand or 0),
+        max_chars=int(args.max_chars),
+        context=bool(args.context),
+        deterministic=bool(getattr(args, "deterministic", False)),
+        quiet=quiet,
+        allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
+        format=fmt,
+        or_mode=bool(getattr(args, "or_mode", False)),
+        fts_raw=bool(getattr(args, "fts_raw", False)),
+    )
+    if not quiet and res.warnings:
+        print_index_warnings(list(res.warnings))
+    return _emit_and_ok(payload_for(res, fmt=fmt), fmt=fmt)
+
+
+def _run_list(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    res = list_recent(
+        vault=str(args.vault),
+        limit=int(args.limit),
+        tag=args.tag,
+        not_tag=args.not_tag,
+        scope=args.scope,
+        not_scope=args.not_scope,
+        command=args.command or "",
+        visibility=args.visibility,
+        include_deprecated=bool(args.include_deprecated),
+        since=args.since,
+        until=getattr(args, "until", None),
+        and_mode=False,
+        scoped_only=False,
+        deterministic=bool(getattr(args, "deterministic", False)),
+        quiet=quiet,
+        allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
+        sort=str(getattr(args, "sort", "updated") or "updated"),
+    )
+    if not quiet and res.warnings:
+        print_index_warnings(list(res.warnings))
+    return _emit_and_ok(payload_for(res, fmt=fmt), fmt=fmt)
+
+
+def _run_grep(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    payload = grep(
+        vault=str(args.vault),
+        pattern=str(args.pattern),
+        limit=int(args.limit),
+        tag=args.tag,
+        not_tag=args.not_tag,
+        scope=args.scope,
+        not_scope=args.not_scope,
+        command=args.command or "",
+        visibility=args.visibility,
+        include_deprecated=bool(args.include_deprecated),
+        since=args.since,
+        until=getattr(args, "until", None),
+        and_mode=bool(getattr(args, "and_mode", False)),
+        scoped_only=bool(getattr(args, "scoped_only", False)),
+        quiet=quiet,
+        allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
+        ignore_case=bool(getattr(args, "ignore_case", False)),
+    )
+    return _emit_and_ok(payload, fmt=fmt)
+
+
+def _run_show(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    del quiet
+    text = show(vault=str(args.vault), note_id=str(args.id), meta_only=bool(args.meta))
+    return _emit_and_ok(text, fmt=fmt)
+
+
+def _run_open(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    del quiet
+    rel = open_note(vault=str(args.vault), note_id=str(args.id))
+    return _emit_and_ok(rel, fmt=fmt)
+
+
+def _run_forget(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    payload = forget(
+        vault=str(args.vault),
+        query=args.query or "",
+        limit=int(args.limit),
+        tag=args.tag,
+        not_tag=args.not_tag,
+        scope=args.scope,
+        not_scope=args.not_scope,
+        command=args.command or "",
+        visibility=args.visibility,
+        include_deprecated=bool(args.include_deprecated),
+        since=args.since,
+        until=getattr(args, "until", None),
+        and_mode=False,
+        scoped_only=False,
+        deterministic=bool(getattr(args, "deterministic", False)),
+        quiet=quiet,
+        allow_missing_scopes=bool(getattr(args, "allow_missing_scopes", False)),
+        or_mode=bool(getattr(args, "or_mode", False)),
+        fts_raw=bool(getattr(args, "fts_raw", False)),
+        apply=bool(getattr(args, "apply", False)),
+        hard=bool(getattr(args, "hard", False)),
+    )
+    return _emit_and_ok(payload, fmt=fmt)
+
+
+def _run_around(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    payload = around(
+        vault=str(args.vault),
+        note_id=str(args.id),
+        k=int(getattr(args, "k", 12) or 12),
+        by=str(getattr(args, "by", "updated") or "updated"),
+        window_days=int(getattr(args, "window_days", 14) or 14),
+        visibility=args.visibility,
+        include_deprecated=bool(getattr(args, "include_deprecated", False)),
+        quiet=quiet,
+    )
+    return _emit_and_ok(payload, fmt=fmt)
+
+
+def _run_timeline(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    payload = timeline(
+        vault=str(args.vault),
+        days=int(getattr(args, "days", 30) or 30),
+        by=str(getattr(args, "by", "updated") or "updated"),
+        visibility=args.visibility,
+        include_deprecated=bool(getattr(args, "include_deprecated", False)),
+        quiet=quiet,
+    )
+    return _emit_and_ok(payload, fmt=fmt)
+
+
+def _run_reindex(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    res = reindex(vault=str(args.vault), quiet=quiet)
+    return _emit_and_ok(payload_for(res, fmt=fmt), fmt=fmt)
+
+
+def _run_janitor(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    res = janitor(
+        vault=str(args.vault),
+        cmd=args.janitor_cmd,
+        visibility=args.visibility,
+        limit=int(args.limit),
+        apply=bool(getattr(args, "apply", False)),
+        quiet=quiet,
+    )
+    return _emit_and_ok(payload_for(res, fmt=fmt), fmt=fmt)
+
+
+def _run_link(args: argparse.Namespace, *, fmt: str, quiet: bool) -> int:
+    res = link(
+        vault=str(args.vault),
+        cmd=args.link_cmd,
+        note_id=getattr(args, "id", ""),
+        limit=int(getattr(args, "limit", 200) or 200),
+        k=int(getattr(args, "k", 1) or 1),
+        include_unresolved=bool(getattr(args, "include_unresolved", False)),
+        visibility=getattr(args, "visibility", None),
+        include_deprecated=bool(getattr(args, "include_deprecated", False)),
+        quiet=quiet,
+    )
+    if not quiet and res.warnings:
+        print_index_warnings(list(res.warnings))
+    return _emit_and_ok(payload_for(res, fmt=fmt), fmt=fmt)
+
+
+_RUN_HANDLERS: dict[str, Any] = {
+    "prime": _run_prime,
+    "init": _run_init,
+    "add": _run_add,
+    "note": _run_add,
+    "save": _run_add,
+    "edit": _run_edit,
+    "update": _run_edit,
+    "append": _run_edit,
+    "add-note": _run_edit,
+    "append-note": _run_edit,
+    "recall": _run_recall,
+    "get": _run_recall,
+    "remember": _run_recall,
+    "list": _run_list,
+    "ls": _run_list,
+    "recent": _run_list,
+    "grep": _run_grep,
+    "show": _run_show,
+    "open": _run_open,
+    "forget": _run_forget,
+    "archive": _run_forget,
+    "around": _run_around,
+    "timeline": _run_timeline,
+    "reindex": _run_reindex,
+    "janitor": _run_janitor,
+    "link": _run_link,
+}
+
+
+def _run_with_args(args: argparse.Namespace, *, fmt: str) -> int:
+    quiet = bool(getattr(args, "quiet", False))
+    cmd = str(getattr(args, "cmd", "") or "")
+    handler = _RUN_HANDLERS.get(cmd)
+    if handler is None:
+        raise MemoryError(
+            f"Unknown command: {args.cmd}",
+            code="ARG",
+            exit_code=2,
+            hint="Run `loom memory -h` to see commands.",
+            suggestions=["loom memory -h"],
+            details={"cmd": cmd},
+        )
+
+    if cmd not in {"prime", "init"}:
+        _ensure_vault_ready(args)
+
+    return int(handler(args, fmt=fmt, quiet=quiet))
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:

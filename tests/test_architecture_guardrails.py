@@ -160,7 +160,7 @@ class TestHotspotSizeControl:
             "description": "team/core.py (decomposition in progress)",
         },
         SRC_ROOT / "memory" / "cli.py": {
-            "max_lines": 1800,  # Current ~1693
+            "max_lines": 1850,  # Current ~1805
             "description": "memory/cli.py (parser hotspot)",
         },
         SRC_ROOT / "workspace" / "cli_harness.py": {
@@ -168,7 +168,7 @@ class TestHotspotSizeControl:
             "description": "workspace/cli_harness.py (parser hotspot)",
         },
         SRC_ROOT / "dashboard" / "app.py": {
-            "max_lines": 850,  # Current ~784
+            "max_lines": 820,  # Current ~798
             "description": "dashboard/app.py (API hotspot)",
         },
         SRC_ROOT / "workspace" / "render.py": {
@@ -210,7 +210,7 @@ class TestHotspotComplexityControl:
             "description": "team/core.py sidecar lifecycle complexity",
         },
         SRC_ROOT / "memory" / "cli.py": {
-            "max_function_branch_nodes": 75,  # Current max: _run_with_args ~=66
+            "max_function_branch_nodes": 45,  # Current max: payload_for ~=35
             "description": "memory/cli.py command dispatch complexity",
         },
         SRC_ROOT / "workspace" / "cli_harness.py": {
@@ -218,7 +218,7 @@ class TestHotspotComplexityControl:
             "description": "workspace/cli_harness.py parser complexity",
         },
         SRC_ROOT / "dashboard" / "app.py": {
-            "max_function_branch_nodes": 185,  # Current max: create_app ~=168
+            "max_function_branch_nodes": 80,  # Current max: _create_team_blueprint ~=55
             "description": "dashboard/app.py request handling complexity",
         },
         SRC_ROOT / "workspace" / "render.py": {
