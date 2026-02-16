@@ -1,6 +1,6 @@
 ---
 "id": "al-2bfa"
-"status": "open"
+"status": "in_progress"
 "deps":
 - "al-041e"
 - "al-6677"
@@ -55,3 +55,17 @@ Risks/edge cases:
 - Regression suite demonstrates no command-level behavior changes from decomposition work.
 - Boundary checks enforce key module guardrails and pass in CI/local verification.
 - Any unresolved modularity risks are captured explicitly for subsequent sprint planning.
+
+## Notes
+
+**2026-02-16T06:39:22Z**
+
+Started regression/boundary verification pass. Next: inspect current team tests, identify parity/boundary gaps, then implement targeted assertions.
+
+**2026-02-16T06:41:05Z**
+
+Progress: audited current team regression coverage and module layout. Existing tests cover sprint/send/spawn/wait paths well; objective command parity and explicit team boundary invariants are the main remaining gaps. Also acknowledged manager inbox check-in (msg 7d4e296025d0) and reported no blockers.
+
+**2026-02-16T06:42:14Z**
+
+Implemented boundary/parity updates: added Team decomposition guardrails (core delegation checks for objective/send/spawn/wait; no team command handler imports to team.cli or other command modules), added objective command parity tests, and removed team.commands.inbox ack dependency on team.cli by calling core.inbox_ack directly. Updated spawn headcount tests for role-gating parity.
