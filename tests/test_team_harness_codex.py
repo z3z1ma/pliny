@@ -153,12 +153,9 @@ class TestTeamHarnessCodex(unittest.TestCase):
             self.assertEqual(first_argv[0], "codex")
             self.assertIn("--model", first_argv)
             self.assertIn("gpt-5.3-codex", first_argv)
-            self.assertIn("--sandbox", first_argv)
-            self.assertEqual(first_argv[first_argv.index("--sandbox") + 1], "read-only")
-            self.assertIn("--ask-for-approval", first_argv)
-            self.assertEqual(
-                first_argv[first_argv.index("--ask-for-approval") + 1], "on-request"
-            )
+            self.assertIn("--dangerously-bypass-approvals-and-sandbox", first_argv)
+            self.assertNotIn("--sandbox", first_argv)
+            self.assertNotIn("--ask-for-approval", first_argv)
             self.assertIn("--config", first_argv)
             config_value = first_argv[first_argv.index("--config") + 1]
             self.assertIn("model_instructions_file=", config_value)

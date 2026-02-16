@@ -1200,8 +1200,6 @@ def _codex_tui_argv(
     prompt: str,
     model: str,
     instructions_file: Path,
-    sandbox: str,
-    approval: str,
     resume_last: bool,
     bin: str = "codex",
 ) -> List[str]:
@@ -1209,10 +1207,7 @@ def _codex_tui_argv(
     argv: List[str] = [bin]
     if model:
         argv += ["--model", model]
-    if sandbox:
-        argv += ["--sandbox", sandbox]
-    if approval:
-        argv += ["--ask-for-approval", approval]
+    argv += ["--dangerously-bypass-approvals-and-sandbox"]
     instructions_value = (
         str(instructions_file).replace("\\", "\\\\").replace('"', '\\"')
     )
@@ -2035,16 +2030,10 @@ def tui(
             codex_home.mkdir(parents=True, exist_ok=True)
             _seed_codex_home_auth(codex_home=codex_home)
             child_env["CODEX_HOME"] = str(codex_home)
-            sandbox = "workspace-write"
-            approval = "never"
-            if role in (ROLE_MANAGER, ROLE_ARCHITECT, ROLE_INTEGRATOR):
-                sandbox = "read-only"
             child_argv = _codex_tui_argv(
                 prompt=prompt,
                 model=model,
                 instructions_file=instructions_file,
-                sandbox=sandbox,
-                approval=approval,
                 resume_last=has_spawned_once,
                 bin=agent_bin,
             )

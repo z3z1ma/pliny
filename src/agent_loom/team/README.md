@@ -155,9 +155,7 @@ For `--harness omp`, Team still reads `manager_agent` / `worker_agent` / `archit
 
 For `--harness codex`, Team extracts the same agent prompt body and writes a per-pane instructions file under `.loom/team/runs/<team>/agents/codex/<recipient>.md`, then launches codex with `--config model_instructions_file=...`.
 
-codex sidecar sandboxing is role-aware:
-- manager / architect / integrator run with `--sandbox read-only --ask-for-approval on-request`
-- workers run with `--sandbox workspace-write --ask-for-approval on-request`
+codex sidecars are started with `--dangerously-bypass-approvals-and-sandbox` to ensure full filesystem access for git operations across worktree boundaries.
 
 codex sidecar sessions are isolated per pane via `CODEX_HOME=.loom/team/runs/<team>/sessions/codex/<recipient>`, while auth/config are inherited from your base `CODEX_HOME` (or `~/.codex`).
 
