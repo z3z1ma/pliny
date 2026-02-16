@@ -20,7 +20,11 @@ from agent_loom.compound.observer import (
     stop_observer,
 )
 from agent_loom.compound.sync import sync as compound_sync
-from agent_loom.core.cli_args import ArgParseError, StrictArgumentParser
+from agent_loom.core.cli_args import (
+    ArgParseError,
+    StrictArgumentParser,
+    argv_requests_json,
+)
 from agent_loom.core.cli_output import emit_json
 from agent_loom.core.git import resolve_repo_root
 from agent_loom.pack.diff import any_pack_diffs, diff_pack_files
@@ -48,7 +52,7 @@ def _resolve_init_dest(dest: Optional[str]) -> Path:
 
 
 def _infer_json(argv: Sequence[str]) -> bool:
-    return any(str(tok) == "--json" or str(tok).startswith("--json=") for tok in argv)
+    return argv_requests_json(argv)
 
 
 def _echo_claude_payload(payload_raw: str, stdin_text: str) -> None:

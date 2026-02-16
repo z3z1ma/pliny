@@ -27,6 +27,10 @@ def did_you_mean(
     return difflib.get_close_matches(v, list(choices), n=n, cutoff=cutoff)
 
 
+def argv_requests_json(argv: Sequence[str]) -> bool:
+    return any(str(tok) == "--json" or str(tok).startswith("--json=") for tok in argv)
+
+
 def rewrite_flag_aliases(
     argv: Sequence[str],
     aliases: Mapping[str, str],
@@ -71,6 +75,7 @@ def split_short_value_flags(
 __all__ = [
     "ArgParseError",
     "StrictArgumentParser",
+    "argv_requests_json",
     "did_you_mean",
     "rewrite_flag_aliases",
     "split_short_value_flags",

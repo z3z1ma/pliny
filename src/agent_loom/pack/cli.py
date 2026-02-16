@@ -6,7 +6,11 @@ import sys
 from pathlib import Path
 from typing import Optional, Sequence
 
-from agent_loom.core.cli_args import ArgParseError, StrictArgumentParser
+from agent_loom.core.cli_args import (
+    ArgParseError,
+    StrictArgumentParser,
+    argv_requests_json,
+)
 from agent_loom.core.cli_output import emit_json
 from agent_loom.core.git import resolve_repo_root
 from agent_loom.pack.core import (
@@ -25,7 +29,7 @@ class PackArgumentParser(StrictArgumentParser):
 
 
 def _infer_json(argv: Sequence[str]) -> bool:
-    return any(str(tok) == "--json" or str(tok).startswith("--json=") for tok in argv)
+    return argv_requests_json(argv)
 
 
 def build_parser() -> argparse.ArgumentParser:
