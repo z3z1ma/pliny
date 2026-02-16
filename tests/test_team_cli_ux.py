@@ -326,7 +326,7 @@ class TestTeamCliUx(unittest.TestCase):
 
         with (
             _patched_env({"TMUX": ""}),
-            mock.patch.object(team, "inbox_ack", return_value=res),
+            mock.patch("agent_loom.team.commands.inbox.inbox_ack", return_value=res),
         ):
             code, out, err = _team_text(["inbox", "MyTeam", "ack", "abc123"])
 
@@ -367,7 +367,7 @@ class TestTeamCliUx(unittest.TestCase):
 
         with (
             _patched_env({"TMUX": ""}),
-            mock.patch.object(team, "inbox_ack", return_value=res),
+            mock.patch("agent_loom.team.commands.inbox.inbox_ack", return_value=res),
         ):
             code, payload = _team_json(["--json", "inbox", "MyTeam", "ack", "abc123"])
 

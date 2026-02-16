@@ -74,6 +74,7 @@ class TestTeamSpawnHeadcount(unittest.TestCase):
                     return_value=repo_root,
                 ),
                 mock.patch.object(team, "_require_bin"),
+                mock.patch.object(team, "_require_role"),
                 mock.patch.object(team, "tmux_has_session", return_value=True),
                 mock.patch.object(team, "ticket_show") as ticket_show,
             ):
@@ -129,6 +130,7 @@ class TestTeamSpawnHeadcount(unittest.TestCase):
                     return_value=repo_root,
                 ),
                 mock.patch.object(team, "_require_bin"),
+                mock.patch.object(team, "_require_role"),
                 mock.patch.object(team, "tmux_has_session", return_value=True),
                 mock.patch.object(
                     team, "ticket_show", side_effect=sentinel_ticket_show

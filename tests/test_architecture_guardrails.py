@@ -211,6 +211,96 @@ class TestImportDirection:
             self._check_no_command_imports(module)
 
 
+class TestTeamDecompositionBoundaries:
+    """Guardrails for Team decomposition parity and layering boundaries."""
+
+    TEAM_CORE = SRC_ROOT / "team" / "core.py"
+    TEAM_COMMANDS = SRC_ROOT / "team" / "commands"
+
+    @staticmethod
+    def _parse_module(path: Path) -> ast.Module:
+        return ast.parse(path.read_text(encoding="utf-8"), filename=str(path))
+
+    @staticmethod
+    def _function_call_names(tree: ast.Module, function_name: str) -> set[str]:
+        for node in tree.body:
+            if isinstance(node, ast.FunctionDef) and node.name == function_name:
+                names: set[str] = set()
+                for sub in ast.walk(node):
+                    if isinstance(sub, ast.Call) and isinstance(sub.func, ast.Name):
+                        names.add(sub.func.id)
+                return names
+        pytest.fail(f"Function not found: {function_name}")
+
+    def test_team_core_key_commands_delegate_to_extracted_modules(self) -> None:
+        tree = self._parse_module(self.TEAM_CORE)
+
+        expected_calls = {
+            "objective_set": {
+                "_objective_state_read_text_input",
+                "_objective_state_apply_objective_mutation",
+            },
+            "objective_append": {
+                "_objective_state_read_text_input",
+                "_objective_state_apply_objective_mutation",
+            },
+            "spawn": {
+                "_max_headcount",
+                "_active_spawn_headcount",
+                "_agent_for_role",
+                "_model_for_role",
+            },
+            "send": {
+                "sender_for_send",
+                "resolve_send_target",
+                "communication_policy_from_run",
+                "route_allows_target",
+                "delivery_suggestions",
+            },
+            "wait": {
+                "wait_for_wake",
+                "_maybe_manager_checkin_after_wait",
+            },
+        }
+
+        for function_name, required in expected_calls.items():
+            calls = self._function_call_names(tree, function_name)
+            missing = sorted(name for name in required if name not in calls)
+            assert not missing, (
+                f"{self.TEAM_CORE.relative_to(PROJECT_ROOT)}::{function_name} "
+                f"missing delegation calls: {missing}"
+            )
+
+    def test_team_commands_do_not_import_team_cli_or_other_command_modules(self) -> None:
+        for module_path in sorted(self.TEAM_COMMANDS.glob("*.py")):
+            if module_path.name == "__init__.py":
+                continue
+
+            tree = self._parse_module(module_path)
+            for node in ast.walk(tree):
+                if isinstance(node, ast.Import):
+                    for alias in node.names:
+                        name = str(alias.name or "")
+                        assert not name.startswith("agent_loom.team.cli"), (
+                            f"{module_path.relative_to(PROJECT_ROOT)} imports team.cli; "
+                            "command handlers must depend on core/domain modules only."
+                        )
+                        assert not name.startswith("agent_loom.team.commands."), (
+                            f"{module_path.relative_to(PROJECT_ROOT)} imports another command module ({name}); "
+                            "no command->command imports allowed."
+                        )
+                if isinstance(node, ast.ImportFrom):
+                    name = str(node.module or "")
+                    assert name not in {"agent_loom.team.cli", ".cli"}, (
+                        f"{module_path.relative_to(PROJECT_ROOT)} imports team.cli; "
+                        "command handlers must depend on core/domain modules only."
+                    )
+                    assert not name.startswith("agent_loom.team.commands"), (
+                        f"{module_path.relative_to(PROJECT_ROOT)} imports another command module ({name}); "
+                        "no command->command imports allowed."
+                    )
+
+
 class TestModuleBoundaryDocumentation:
     """Guardrail: Module README architecture sections exist and are non-trivial."""
 

@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from agent_loom.core.cli_output import emit_json, make_ok_envelope, normalize_payload
-from agent_loom.team.core import inbox_list, inbox_send, inbox_show
+from agent_loom.team.core import inbox_ack, inbox_list, inbox_send, inbox_show
 from agent_loom.team.strings import message_preview
 
 
@@ -50,10 +50,7 @@ def cmd_inbox_show(args: argparse.Namespace) -> None:
 
 
 def cmd_inbox_ack(args: argparse.Namespace) -> None:
-    import importlib
-
-    team_cli = importlib.import_module("agent_loom.team.cli")
-    res = team_cli.inbox_ack(
+    res = inbox_ack(
         team=args.team,
         msg_id=str(args.msg_id or ""),
         repo=Path(args.repo).resolve() if args.repo else None,
