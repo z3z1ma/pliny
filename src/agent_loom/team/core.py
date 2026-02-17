@@ -1609,7 +1609,6 @@ def tui(
     bounce_killed_pid: Optional[int] = None
     bounce_pending = threading.Event()
     has_spawned_once = False
-    next_heartbeat_at = 0.0
 
     def stop_all(reason: str) -> None:
         nonlocal stop_reason
@@ -1695,6 +1694,12 @@ def tui(
             )
         except Exception as exc:
             _record_sidecar_warning("heartbeat.write", error=exc, once=True)
+
+    def heartbeat_loop() -> None:
+        while not stop.is_set():
+            emit_heartbeat()
+            if stop.wait(timeout=heartbeat_interval_s):
+                return
 
     def _handle_control_message(msg: Mapping[str, Any]) -> bool:
         nonlocal bounce_killed_pid
@@ -1820,6 +1825,7 @@ def tui(
 
     threading.Thread(target=inbox_loop, daemon=True).start()
     threading.Thread(target=stall_loop, daemon=True).start()
+    threading.Thread(target=heartbeat_loop, daemon=True).start()
 
     def orphan_loop() -> None:
         # If the tmux session goes away, this wrapper should exit and take its child with it.
@@ -2018,9 +2024,6 @@ def tui(
             )
 
         now = time.time()
-        if now >= next_heartbeat_at:
-            emit_heartbeat()
-            next_heartbeat_at = now + heartbeat_interval_s
 
         spawn_due_to_bounce = bounce_pending.is_set()
         if spawn_due_to_bounce:
