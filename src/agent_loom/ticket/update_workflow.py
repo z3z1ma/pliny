@@ -66,7 +66,12 @@ def _validate_parent_chain(
                 hint=f"Setting parent={parent_id} would make {ticket_id} its own ancestor.",
             )
         if cur in seen:
-            return
+            raise TicketArgError(
+                code="ARG",
+                error=f"Parent chain contains a cycle at: {cur}",
+                hint="Resolve existing parent cycles before assigning this parent.",
+                suggestions=["loom ticket list", "loom ticket dep-cycle"],
+            )
         seen.add(cur)
         try:
             parent_ticket = store.load_ticket_by_id(cur)
@@ -341,4 +346,3 @@ def apply_ticket_update_workflow(
         )
     _apply_body_title_updates(ticket, body=spec.body, title=spec.title)
     _persist_ticket_updates(store, tickets_to_save=tickets_to_save, agent=agent)
-
