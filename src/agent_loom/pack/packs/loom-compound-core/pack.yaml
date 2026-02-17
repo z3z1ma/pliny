@@ -16,13 +16,16 @@ managed_globs:
   - ".claude/settings.json"
   - ".opencode/compound/**"
   - ".opencode/plugins/**"
-  - ".omp/extensions/**"
 scaffold_globs:
   - "AGENTS.md"
   - "LOOM.md"
   - ".loom/compound/**"
   - ".omp/extensions/compound_engineering.ts"
+  - ".opencode/.gitignore"
+  - ".opencode/README.md"
   - ".opencode/memory/.gitignore"
+  - ".opencode/tsconfig.json"
+  - ".opencode/types/**"
   - ".opencode/skills/skill-authoring/**"
   - ".claude/skills/skill-authoring/**"
 protected_globs:

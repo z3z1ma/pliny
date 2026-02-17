@@ -1,0 +1,3 @@
+kind: Fixed
+body: Expanded built-in pack regression coverage (loom-compound-core and loom-team-core), restored pack lock path normalization helper for lockfile validation, and refreshed pack docs with current CLI drift/diff workflow and explicit lockfile commit guidance.
+time: 2026-02-16T23:59:31-07:00
