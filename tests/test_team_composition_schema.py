@@ -1,149 +1,103 @@
 from __future__ import annotations
 
+import tempfile
 import unittest
 from pathlib import Path
 
-from agent_loom.team.composition import (
-    SCHEMA_VERSION,
-    TeamCompositionError,
-    load_team_roster_yaml,
-    parse_team_roster_yaml,
+from agent_loom.team.team_config import (
+    TeamConfigError,
+    default_liveness_spec,
+    default_team_config_spec,
+    load_team_config_yaml,
+    normalize_team_config_spec,
 )
 
-_FIXTURE_DIR = Path(__file__).parent / "fixtures" / "team_composition"
 
-
-def _fixture_text(name: str) -> str:
-    return (_FIXTURE_DIR / name).read_text(encoding="utf-8")
-
-
-class TestTeamRosterSchema(unittest.TestCase):
-    def test_load_minimal_fixture(self) -> None:
-        roster = load_team_roster_yaml(_FIXTURE_DIR / "valid_minimal.yaml")
-        data = roster.as_dict()
-
-        self.assertEqual(data["version"], SCHEMA_VERSION)
-        self.assertEqual(data["metadata"]["name"], "YAML Sprint Foundations")
+class TestTeamConfigSchema(unittest.TestCase):
+    def test_defaults_are_stable(self) -> None:
+        spec = default_team_config_spec()
+        self.assertEqual(str(spec.get("worker", {}).get("subagents") or ""), "encouraged")
         self.assertEqual(
-            list(data["builtins"].keys()),
-            ["manager", "architect", "worker", "integrator"],
-        )
-        self.assertEqual(data["builtins"]["worker"]["harness"], "codex")
-        self.assertNotIn("members", data)
-        self.assertNotIn("communication", data)
-
-    def test_parse_unsorted_fixture_is_deterministically_normalized(self) -> None:
-        roster = parse_team_roster_yaml(_fixture_text("valid_unsorted.yaml"), source="fixture")
-        data = roster.as_dict()
-
-        self.assertEqual(data["metadata"]["labels"], ["a", "b"])
-        self.assertEqual(data["mounts"], [".venv"])
-        self.assertEqual([m["id"] for m in data["members"]], ["designer", "ux"])
-        self.assertEqual(data["builtins"]["worker"]["model"], "gpt-5-codex")
-        self.assertEqual(
-            data["communication"]["routes"],
-            [{"from_role": "reviewer", "to": ["manager", "role:architect"]}],
+            int(spec.get("liveness", {}).get("heartbeat_interval_s") or 0),
+            int(default_liveness_spec()["heartbeat_interval_s"]),
         )
 
-    def test_unknown_top_level_key_fails_fast_with_hint(self) -> None:
-        with self.assertRaises(TeamCompositionError) as ctx:
-            parse_team_roster_yaml(_fixture_text("invalid_unknown_key.yaml"), source="fixture")
+    def test_normalize_valid_full_config(self) -> None:
+        spec = normalize_team_config_spec(
+            {
+                "harness": "CoDeX",
+                "model": "gpt-5-codex",
+                "role_prompts": {
+                    "append": {
+                        "manager": "Do concise check-ins.",
+                        "worker": "Use subagents for research.",
+                    }
+                },
+                "worker": {"subagents": "encouraged"},
+                "liveness": {
+                    "heartbeat_interval_s": 15,
+                    "stale_after_s": 90,
+                    "dead_after_s": 240,
+                    "recovery_cooldown_s": 180,
+                    "max_recoveries_per_hour": 4,
+                },
+            }
+        )
+        self.assertEqual(str(spec.get("harness") or ""), "codex")
+        self.assertEqual(str(spec.get("model") or ""), "gpt-5-codex")
+        self.assertEqual(
+            str(spec.get("role_prompts", {}).get("append", {}).get("manager") or ""),
+            "Do concise check-ins.",
+        )
+        self.assertEqual(
+            str(spec.get("role_prompts", {}).get("append", {}).get("worker") or ""),
+            "Use subagents for research.",
+        )
 
-        self.assertIn("unknown key(s): unexpected_section", str(ctx.exception))
-        self.assertIn("Allowed keys", ctx.exception.hint)
+    def test_unknown_top_level_key_is_rejected(self) -> None:
+        with self.assertRaises(TeamConfigError) as ctx:
+            normalize_team_config_spec({"unknown": 1})
+        self.assertIn("unknown key(s): unknown", str(ctx.exception))
 
-    def test_invalid_enum_fails_fast(self) -> None:
-        with self.assertRaises(TeamCompositionError) as ctx:
-            parse_team_roster_yaml(_fixture_text("invalid_enum.yaml"), source="fixture")
+    def test_invalid_harness_value_is_rejected(self) -> None:
+        with self.assertRaises(TeamConfigError) as ctx:
+            normalize_team_config_spec({"harness": "bad-harness"})
+        self.assertIn("team_config.harness", str(ctx.exception))
 
-        self.assertIn("members[0].always_on", str(ctx.exception))
-        self.assertIn("expected boolean", str(ctx.exception))
+    def test_invalid_worker_subagents_value_is_rejected(self) -> None:
+        with self.assertRaises(TeamConfigError) as ctx:
+            normalize_team_config_spec({"worker": {"subagents": "disabled"}})
+        self.assertIn("worker.subagents", str(ctx.exception))
 
-    def test_builtin_extra_keys_are_rejected(self) -> None:
-        with self.assertRaises(TeamCompositionError) as ctx:
-            parse_team_roster_yaml(
-                _fixture_text("invalid_ambiguous_mapping.yaml"),
-                source="fixture",
+    def test_liveness_requires_stale_less_than_dead(self) -> None:
+        with self.assertRaises(TeamConfigError) as ctx:
+            normalize_team_config_spec(
+                {"liveness": {"stale_after_s": 300, "dead_after_s": 200}}
             )
+        self.assertIn("stale_after_s must be < dead_after_s", str(ctx.exception))
 
-        self.assertIn("builtins.manager", str(ctx.exception))
-        self.assertIn("unknown key(s): lifecycle", str(ctx.exception))
+    def test_load_yaml_file(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td) / "team-config.yaml"
+            p.write_text(
+                """
+model: gpt-5-codex
+worker:
+  subagents: encouraged
+liveness:
+  heartbeat_interval_s: 12
+""".strip()
+                + "\n",
+                encoding="utf-8",
+            )
+            data = load_team_config_yaml(p)
 
-    def test_malformed_yaml_reports_source_context(self) -> None:
-        payload = "version: [1"
-        with self.assertRaises(TeamCompositionError) as ctx:
-            parse_team_roster_yaml(payload, source="fixture")
-
-        self.assertIn("fixture: invalid YAML", str(ctx.exception))
-
-    def test_member_worktree_key_is_rejected(self) -> None:
-        payload = """
-version: 3
-builtins:
-  manager:
-    harness: opencode
-    agent: loom-team-manager
-  architect:
-    harness: opencode
-    agent: loom-team-architect
-  worker:
-    harness: codex
-    agent: loom-team-worker
-  integrator:
-    harness: claude
-    agent: loom-team-integrator
-members:
-  - id: designer
-    role: designer
-    harness: codex
-    agent: loom-team-worker
-    always_on: true
-    workspace: worktree
-    worktree_key: design-hub
-"""
-        with self.assertRaises(TeamCompositionError) as ctx:
-            parse_team_roster_yaml(payload, source="inline")
-
-        self.assertIn("members[0]", str(ctx.exception))
-        self.assertIn("unknown key(s): worktree_key", str(ctx.exception))
-
-    def test_builtin_route_override_is_rejected(self) -> None:
-        payload = """
-version: 3
-builtins:
-  manager:
-    harness: opencode
-    agent: loom-team-manager
-  architect:
-    harness: opencode
-    agent: loom-team-architect
-  worker:
-    harness: codex
-    agent: loom-team-worker
-  integrator:
-    harness: claude
-    agent: loom-team-integrator
-communication:
-  routes:
-    - from_role: manager
-      to:
-        - all
-"""
-        with self.assertRaises(TeamCompositionError) as ctx:
-            parse_team_roster_yaml(payload, source="inline")
-
-        self.assertIn("built-in route overrides are not allowed", str(ctx.exception))
-
-    def test_v2_schema_is_rejected(self) -> None:
-        payload = """
-version: 2
-builtins: {}
-"""
-        with self.assertRaises(TeamCompositionError) as ctx:
-            parse_team_roster_yaml(payload, source="inline")
-
-        self.assertIn("unsupported schema version 2", str(ctx.exception))
-        self.assertIn("Use version: 3", ctx.exception.hint)
+        self.assertTrue(str(data.get("source") or "").endswith("team-config.yaml"))
+        spec = dict(data.get("spec") or {})
+        self.assertEqual(str(spec.get("model") or ""), "gpt-5-codex")
+        self.assertEqual(
+            int(spec.get("liveness", {}).get("heartbeat_interval_s") or 0), 12
+        )
 
 
 if __name__ == "__main__":

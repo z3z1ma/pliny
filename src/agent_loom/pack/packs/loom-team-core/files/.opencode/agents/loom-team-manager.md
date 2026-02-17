@@ -52,10 +52,10 @@ Sprint loop (fan-out / fan-in):
 - Each sprint is a tight iteration: Fan-out -> Plan -> Execute -> Integrate -> Ship -> Cleanup -> Repeat.
 
 1) Fan-out (sprint prep): Objective -> Backlog.
-- Preferred: run `loom team prep-sprint <TEAM> --name "..."` to set sprint + create+spawn the investigator prep ticket.
-- Investigator creates the backlog tickets directly.
+- Preferred: run `loom team prep-sprint <TEAM> --name "..."` to set sprint + create+spawn the architect prep ticket.
+- Architect creates the backlog tickets directly.
 - You may create one-off tickets yourself if it is truly small and obvious.
-- For open-ended objectives and big work: always use the Investigator.
+- For open-ended objectives and big work: always use the Architect.
 
 2) Plan: Backlog -> Parallel work.
 - Decide what can run concurrently and what must sequence.
@@ -105,7 +105,7 @@ Merge queue (tight, boring, fast):
  - Integrator merges into the per-run merge branch only (default: `team/merge-queue-<8hex>`); you ship to the configured target branch with `loom team ship <TEAM>`.
 - On merge success, retire the originating worker.
 - When a worktree is safe to delete: mark it retirable; janitor is the only thing that deletes worktrees.
-- Retire Investigators when they report `INVESTIGATOR_DONE`. Keep integrator persistent.
+- Retire Architects when they report `ARCHITECT_DONE`. Keep integrator persistent.
 
 Follow-ups:
 - Workers may create follow-up tickets. Treat them as backlog input.
@@ -123,7 +123,7 @@ Compound learning (repo-root only):
 Objective changes:
 - Treat the run CHARTER as the current source of truth.
 - When you get an objective update in your inbox: re-read the CHARTER and pivot immediately.
-- If the objective implies new tickets: spawn an Investigator to produce a crisp ticket set.
+- If the objective implies new tickets: spawn an Architect to produce a crisp ticket set.
 
 Completion + disband:
 - When the objective is satisfied AND everything is merged/shipped: disband the team.

@@ -16,56 +16,21 @@ from agent_loom.team.run_state import RunPaths
 from agent_loom.team.strings import sanitize
 
 
-def communication_policy_from_run(run: Mapping[str, Any]) -> Dict[str, Any]:
+def communication_policy_from_run(_run: Mapping[str, Any]) -> Dict[str, Any]:
     routes: Dict[str, Tuple[str, ...]] = {
         ROLE_MANAGER: ("all",),
-        ROLE_WORKER: ("manager", "escalate"),
-        ROLE_ARCHITECT: ("all", "escalate"),
-        ROLE_INTEGRATOR: ("manager", "role:architect"),
+        ROLE_WORKER: ("manager", "architect", "escalate"),
+        ROLE_ARCHITECT: ("manager", "workers", "escalate"),
+        ROLE_INTEGRATOR: ("manager", "architect"),
     }
-
-    roster = _roster_state_from_run(run)
-    raw_spec = roster.get("spec")
-    spec = dict(raw_spec) if isinstance(raw_spec, dict) else {}
-    raw_communication = spec.get("communication")
-    communication = (
-        dict(raw_communication) if isinstance(raw_communication, dict) else {}
-    )
-
-    raw_routes = communication.get("routes")
-    if isinstance(raw_routes, list):
-        for item in raw_routes:
-            if not isinstance(item, dict):
-                continue
-            from_role = str(item.get("from_role") or "").strip().lower()
-            if not from_role:
-                continue
-            if from_role in {
-                ROLE_MANAGER,
-                ROLE_WORKER,
-                ROLE_ARCHITECT,
-                ROLE_INTEGRATOR,
-            }:
-                continue
-            to_raw = item.get("to")
-            if not isinstance(to_raw, list):
-                continue
-            to: List[str] = []
-            for entry in to_raw:
-                token = str(entry or "").strip().lower()
-                if token:
-                    to.append(token)
-            if to:
-                routes[from_role] = tuple(sorted(set(to)))
-
-    return {
-        "routes": routes,
-    }
+    return {"routes": routes}
 
 
 def sender_for_send() -> Tuple[str, str]:
     role = str(os.getenv(ENV_TEAM_ROLE) or "").strip().lower()
-    worker_id = sanitize(str(os.getenv(ENV_TEAM_WORKER_ID) or ""), max_len=48)
+    worker_id = sanitize(
+        str(os.getenv(ENV_TEAM_WORKER_ID) or "").strip().lower(), max_len=48
+    )
     if not role:
         return ROLE_MANAGER, "manager"
     if role == ROLE_MANAGER:
@@ -92,7 +57,7 @@ def active_targets_for_role(run: Mapping[str, Any], role: str) -> List[str]:
             continue
         worker_role = str((worker or {}).get("role") or "").strip().lower()
         if worker_role == role_norm:
-            targets.append(str(wid))
+            targets.append(str(wid).strip().lower())
     return sorted(set(targets))
 
 
@@ -145,36 +110,24 @@ def route_allows_target(
             return True
         if value == "escalate" and requested in {"escalate", "escalation"}:
             return True
-        if value.startswith("member:"):
-            member = value.split(":", 1)[1].strip()
-            if member and member == worker_id:
+        if value == "manager" and role == ROLE_MANAGER:
+            return True
+        if value == "architect" and role == ROLE_ARCHITECT:
+            return True
+        if value == "integrator" and role == ROLE_INTEGRATOR:
+            return True
+        if value == "workers" and role == ROLE_WORKER:
+            return True
+        if value.startswith("worker:"):
+            wid = value.split(":", 1)[1].strip()
+            if wid and wid == worker_id:
                 return True
             continue
-        if value.startswith("role:"):
-            target_role = value.split(":", 1)[1].strip()
-            if target_role and target_role == role:
+        if value.startswith("ticket:"):
+            tid = value.split(":", 1)[1].strip()
+            if tid and tid == ticket_id:
                 return True
             continue
-        if value.startswith("group:"):
-            group_name = value.split(":", 1)[1].strip()
-            if group_name and requested in {value, group_name}:
-                return True
-            continue
-        if value in {"manager", "mgr"} and role == ROLE_MANAGER:
-            return True
-        if value in {"worker", "workers"} and role == ROLE_WORKER:
-            return True
-        if value in {"integrator", "integrators"} and role == ROLE_INTEGRATOR:
-            return True
-        if (
-            value in {"architect", "architects", "investigator", "investigators"}
-            and role == ROLE_ARCHITECT
-        ):
-            return True
-        if value == worker_id and worker_id:
-            return True
-        if value == ticket_id and ticket_id:
-            return True
     return False
 
 
@@ -191,17 +144,19 @@ def delivery_suggestions(
     ]
 
     role = str((meta or {}).get("role") or "").strip().lower()
-    wid = str((meta or {}).get("worker_id") or "").strip()
-    tnorm = str(target or "").strip()
+    wid = str((meta or {}).get("worker_id") or "").strip().lower()
+    tnorm = str(target or "").strip().lower()
 
     if delivery_reason in {"session_missing", "tmux_missing"}:
         suggestions.append(f"loom team start {paths.team} --repo {paths.repo_root}")
     elif delivery_reason in {"pane_missing", "unknown_target"}:
-        if role == ROLE_INTEGRATOR or tnorm in {"integrator", "merge-queue"}:
+        if role == ROLE_INTEGRATOR or tnorm == "integrator":
             suggestions.append(f"loom team spawn-integrator {paths.team}")
             suggestions.append(f"loom team spawn-integrator {paths.team} --force")
         elif wid:
-            suggestions.append(f"loom team retire {paths.team} {wid}")
+            suggestions.append(
+                f"loom team bounce {paths.team} {wid} --reason delivery_failure"
+            )
             suggestions.append(f"loom team resume-worker {paths.team} {wid}")
     elif delivery_reason == "unsafe_pane":
         suggestions.append(
@@ -209,16 +164,6 @@ def delivery_suggestions(
         )
 
     return suggestions
-
-
-def _roster_state_from_run(run: Mapping[str, Any]) -> Mapping[str, Any]:
-    roster = run.get("roster")
-    if isinstance(roster, dict):
-        return roster
-    legacy = run.get("composition")
-    if isinstance(legacy, dict):
-        return legacy
-    return {}
 
 
 __all__ = [

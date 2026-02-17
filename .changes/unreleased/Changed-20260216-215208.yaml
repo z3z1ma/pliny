@@ -1,0 +1,3 @@
+kind: Changed
+body: Simplified Loom Team to a fixed core model (manager/architect/workers/integrator), replaced roster runtime input with --config/team_config, introduced heartbeat-based liveness with bounded recovery, and unified canonical team prompts across runtime and pack-managed agent files.
+time: 2026-02-16T21:52:08.840617-07:00

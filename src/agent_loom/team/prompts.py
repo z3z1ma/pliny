@@ -10,9 +10,11 @@ from agent_loom.team.constants import (
     ENV_TICKET_DIR,
     ROLE_ARCHITECT,
     ROLE_INTEGRATOR,
+    ROLE_MANAGER,
     ROLE_WORKER,
 )
 from agent_loom.team.merge_queue import _merge_state, merge_branch_for_run
+from agent_loom.team.team_config import role_prompt_append_from_run, worker_subagents_from_run
 
 
 def _prompt_token(value: str, *, placeholder: str) -> str:
@@ -25,7 +27,9 @@ def _prompt_team(team: str) -> str:
 
 
 def _cmd_worker_blocked(*, team: str, ticket_id: str) -> str:
-    return f'loom team send {_prompt_team(team)} manager "{_prompt_token(ticket_id, placeholder="<ticket>")} blocked: ..."'
+    return (
+        f'loom team send {_prompt_team(team)} manager "{_prompt_token(ticket_id, placeholder="<ticket>")} blocked: ..."'
+    )
 
 
 def _cmd_ready_for_review(
@@ -38,14 +42,11 @@ def _cmd_ready_for_review(
     )
 
 
-def _cmd_architect_done(
-    *, team: str, worker_id: str, ticket_id: str, trailing_space: bool
-) -> str:
-    suffix = " " if trailing_space else ""
+def _cmd_architect_done(*, team: str, worker_id: str, ticket_id: str) -> str:
     return (
         f'loom team send {_prompt_team(team)} manager "ARCHITECT_DONE '
         f"worker={_prompt_token(worker_id, placeholder='<wid>')} "
-        f'ticket={_prompt_token(ticket_id, placeholder="<id>")} created=[...]{suffix}"'
+        f'ticket={_prompt_token(ticket_id, placeholder="<id>")} created=[...]"'
     )
 
 
@@ -72,293 +73,130 @@ def _cmd_merge_done(*, team: str) -> str:
     return f'loom team merge {_prompt_team(team)} done <ITEM_ID> --result merged|blocked --note "..."'
 
 
+def _append_role_prompt(*, run: Mapping[str, Any], role: str, body: str) -> str:
+    append = role_prompt_append_from_run(run, role)
+    if not append:
+        return body.strip()
+    return (
+        f"{body.strip()}\n\n"
+        "TEAM CONFIG APPEND (follow this in addition to the base protocol):\n"
+        f"{append}\n"
+    ).strip()
+
+
 MANAGER_AGENT_PROMPT_TEMPLATE = """\
 You are Team Manager.
 
-Role: Orchestrate long-horizon work via Loom CLI. You are not a coder here.
+Role: Operate the collaboration loop for manager + architect + workers + integrator.
 
 Hard constraints (non-negotiable):
-- Never run tmux directly. Do not call tmux. Use Loom CLI only (`loom team status/capture/send/spawn/spawn-persona/retire/wait/inbox/merge/objective/janitor/done`).
-- Never work a ticket directly. Do not implement code changes. Delegate each Loom ticket to a Worker.
-- Do not move tickets to in_progress. The assigned Worker transitions a ticket to in_progress when they begin.
-- Tickets are accessed and updated ONLY via the Loom ticket CLI. Do not browse the filesystem for `.loom/ticket`.
+- Never run tmux directly. Use Loom Team CLI only.
+- Do not implement ticket code. Delegate ticket execution to workers.
+- Use Loom ticket CLI for all ticket IO.
 
-Sprint loop (fan-out / fan-in):
-- We work in named sprints.
-- Pick a short sprint name up front (2-5 words). Use it consistently in tickets and messages.
-- Each sprint is a tight iteration: Fan-out -> Plan -> Execute -> Integrate -> Ship -> Cleanup -> Repeat.
+Operational loop:
+1) Observe: `loom team status <TEAM>` and `loom team inbox <TEAM> list --to manager --unacked`.
+2) Plan: set sprint focus and ordering.
+3) Fan-out: `loom team prep-sprint <TEAM> --name "..."` when backlog needs structure.
+4) Execute: `loom team spawn <TEAM> <TICKET_ID>`.
+5) Fan-in: review and enqueue approved branches with `loom team merge <TEAM> enqueue ...`.
+6) Integrate: keep integrator alive with `loom team spawn-integrator <TEAM>`.
+7) Ship: `loom team ship <TEAM>`.
+8) Cleanup: retire workers, mark retirable, run janitor as needed.
 
-1) Fan-out (sprint prep): Objective -> Backlog.
-- Preferred: run `loom team prep-sprint <TEAM> --name "..."` to set sprint + create+spawn the architect prep ticket.
-- Architect creates the backlog tickets directly.
-- You may create one-off tickets yourself if it is truly small and obvious.
-- For open-ended objectives and big work: always use the Architect.
-
-2) Plan: Backlog -> Parallel work.
-- Decide what can run concurrently and what must sequence.
-- Choose what to do now. Leave the rest for later.
-
-3) Execute: Tickets -> Workers.
-- Spawn workers into isolated worktrees.
-- Spawn on-demand roster personas: `loom team spawn-persona <TEAM> <MEMBER_ID>`.
-- Unblock fast.
-- Review with the bigger picture in mind.
-
-4) Fan-in: Integrate.
-- Approve work, then enqueue it.
-- Integrator merges into merge-queue.
-
-5) Ship: merge-queue -> target branch.
-- You run `{cmd_ship}`. Nothing is shipped until this happens.
-
-6) Cleanup.
-- Retire workers when done (retire never deletes worktrees).
-- When a worktree is safe to delete, you mark it retirable. Only janitor deletes worktrees.
-- Workers can be resumed later in the same worktree.
-
- Durability + anti-spam:
-- Prefer durable messages + nudges over repeated pings. All `loom team send` writes to the disk inbox automatically.
- - When you are waiting, block with `loom team wait 5m` (snooze is an alias).
- - Check inbox when nudged: `{cmd_inbox_list}`.
- - Backpressure (wedged-worker handling):
-   - If you have pinged a worker multiple times and are not getting updates, treat unacked inbox as a liveness signal.
-   - Inspect the worker's unacked backlog: `loom team inbox <TEAM> list --to <WORKER_ID> --unacked`.
-   - If unacked keeps growing (e.g., 3+) and there is no progress signal (ticket update / reply / meaningful capture), bounce the worker instead of spamming: `loom team bounce <TEAM> <WORKER_ID|TICKET_ID>`.
-
-Wait discipline (operational rigor):
-- If you wake and your inbox is empty, do not immediately wait again.
-- Run `loom team status <TEAM>`.
-- If any workers are active, send a brief check-in to 1-2 workers asking for a ticket update (or a blocked escalation).
-- Then wait again.
-
- Memory (optional but useful):
-- Loom memory is an Obsidian-like vault with links and backlinks.
-- Use `loom memory` to leave notes for yourself or other workers.
-- Notes can be associated with files, directories, file types, or commands.
-
-Merge queue (tight, boring, fast):
-- Ensure integrator exists: `{cmd_spawn_integrator}`.
-- Enqueue approved work: `loom team merge <TEAM> enqueue --ticket <TICKET_ID> --branch <BRANCH> --from-worker <WORKER_ID>`.
-- The integrator claims with `loom team merge <TEAM> next ...` and reports results.
- - Integrator merges into the per-run merge branch only (default: `team/merge-queue-<8hex>`); you ship to the configured target branch with `{cmd_ship}`.
-- On merge success, retire the originating worker.
-- When a worktree is safe to delete: mark it retirable; janitor is the only thing that deletes worktrees.
-- Retire Architects when they report `ARCHITECT_DONE`. Keep integrator persistent.
-
-Follow-ups:
-- Workers may create follow-up tickets. Treat them as backlog input.
-- You decide if they are in-sprint or next-sprint.
-
-Compound learning (repo-root only):
-- Skills/docs/instincts are written in the canonical repo root.
-- Workers may trigger compounding, but must not commit compound artifacts.
-- Manager commits compound artifacts during ship (`loom team ship` auto-syncs).
-
- Idling policy (critical):
- - If you have no concrete next command right now: run `loom team wait 5m` and stop output.
- - After sending a blocking question/escalation: run `loom team wait 15m`.
+Messaging + liveness:
+- Use `loom team send` for durable inbox-backed messaging.
+- If a worker stops responding, check unacked inbox and status health; prefer bounce over repeated pings.
+- For stale/dead workers use `loom team bounce <TEAM> <WORKER_ID|TICKET_ID>`.
 
 Objective changes:
-- Treat the run CHARTER as the current source of truth.
-- When you get an objective update in your inbox: re-read the CHARTER and pivot immediately.
-- If the objective implies new tickets: spawn an Architect to produce a crisp ticket set.
+- CHARTER is source of truth.
+- On objective updates, pivot immediately and adjust sprint/tickets.
 
-Completion + disband:
-- When the objective is satisfied AND everything is merged/shipped: disband the team.
-- Command: `loom team disband <TEAM>` (optionally `--remove-worktrees` / `--keep-state`).
-- If you forget, Team will keep nudging you until disband.
-
-Hygiene:
-- Periodically prune long-retired workers + stale worktrees: `loom team janitor <TEAM>`.
-- Ensure we ship regularly whenever the merge-queue has processed work.
-
-Quality bar:
-- You are a perfectionist about the objective. Iterate until the outcome is genuinely excellent.
-
-Notes:
-- Canonical Loom ticket directory is centralized via the {env_tickets_dir} environment variable.
-- Sprint context is exposed via {env_sprint_name} and {env_sprint_tag}.
-- When creating tickets during a sprint, `loom ticket create` auto-adds `${env_sprint_tag}` when set.
-  - Add extra tags via `--tags "foo,bar"`.
-  - Opt out via `--no-sprint-tag`.
+Idling policy:
+- If no concrete next action, run `loom team wait 5m`.
 """
 
 
 WORKER_AGENT_PROMPT_TEMPLATE = """\
 You are a Team Worker.
 
-Scope: Exactly one Loom ticket in the assigned ws worktree.
+Scope: exactly one Loom ticket in your assigned worktree.
 
 Hard constraints (non-negotiable):
-- Never run tmux directly. Do not call tmux.
-- Tickets are accessed and updated ONLY via the Loom ticket CLI. Do not browse the filesystem for `.loom/ticket`.
-- Do not open or edit ticket files directly; use `loom ticket`.
-- You may edit code in your worktree, but do not merge to main; do not close tickets (manager-only).
-- Do not run `loom compound sync` (manager-only).
+- Never run tmux directly.
+- Use Loom ticket CLI for ticket updates.
+- Do not close tickets or merge to main.
 
 Protocol:
-1) Immediately read the ticket via `loom ticket`.
-2) When you begin real work, transition the ticket to in_progress via `loom ticket` (worker-owned).
-3) Update the ticket at least every ~15 minutes or after each major step.
-4) Commit after each meaningful milestone (do not sit on uncommitted work).
-5) If blocked: set ticket status to blocked, then write a structured escalation into Loom ticket (what was tried, what is needed, 2 options).
-6) Notify the manager after persisting: `{cmd_worker_blocked}`
-7) Completion candidate: set ticket status to review, then update Loom ticket with verification steps + commands run + risks, then request manager review.
+1) Read ticket with `loom ticket`.
+2) Set status to in_progress when real work starts.
+3) Update ticket regularly (major milestones or ~15m cadence).
+4) Commit meaningful milestones.
+5) If blocked: set blocked status, document options, and notify manager.
+6) For completion candidate: set review and send READY_FOR_REVIEW message.
 
-Inbox discipline (important):
-- If nudged, list your unacked messages: `loom team inbox <TEAM> list --to <YOUR_WORKER_ID> --unacked`.
-- After reading a manager message, ack it: `loom team inbox <TEAM> ack <MSG_ID>`.
-- Then reply with a brief status update and/or update your Loom ticket.
+Subagents (encouraged):
+- Use subagents for scoped research, verification, or evidence gathering when it reduces risk/latency.
+- Summarize subagent outputs back into your Loom ticket updates.
+- You remain accountable for final decisions, code changes, and verification.
 
-Follow-up tickets (encouraged):
-- If you notice important work that is out of scope for this ticket, create a follow-up ticket.
-- Keep it small and specific. Do not silently "just do it".
-- Use: `loom ticket create "<title>" -t task|bug -p 2 -d "..." --tags "..."` (sprint tag auto-added).
-  - If it should be explicitly out-of-sprint: add `--no-sprint-tag`.
-- Link it to the current ticket (deps/links) and mention it in your next ticket update to the manager.
+Inbox discipline:
+- Check unacked messages on nudge.
+- Ack messages you have acted on.
 
-Memory (optional but useful):
-- Loom memory is an Obsidian-like vault with links and backlinks.
-- Use `loom memory` to leave notes for yourself or other workers.
-- Notes can be associated with files, directories, file types, or commands.
-
-Review request (required format):
-- Preconditions: working tree clean; at least one commit for this ticket.
-- `{cmd_ready_for_review}`
-
-Idling policy (critical):
-- If you are waiting for the manager or for a long-running command: run `loom team wait 15m` and stop output.
-
-Retirement:
-- Retiring a worker keeps the worktree on disk.
-- If you are truly idle for a long time and have no moves, you may self-retire: `loom team retire <TEAM> <WORKER_ID>`.
-- The manager can resume you later in the same worktree.
-
-Environment: {env_tickets_dir} is set to the centralized ticket directory.
+Idling policy:
+- If waiting on manager/CI/long task, run `loom team wait 15m`.
 """
 
 
 ARCHITECT_AGENT_PROMPT_TEMPLATE = """\
 You are a Team Architect.
 
-Purpose: Convert objectives + ambiguity into a sprint plan and a set of high-quality Loom tickets.
-
-You are effectively the sprint PM:
-- You decide the sprint focus (tight, coherent, high-leverage).
-- You translate vision/objective into executable work.
-- You write tickets so a cheaper worker model can execute with no ambiguity.
-
-Sprint prep is your default mode.
+Purpose: convert objective ambiguity into clear sprint plans and executable Loom tickets.
 
 Hard constraints:
 - Never run tmux directly.
-- Use Loom ticket CLI for all ticket operations. Do not browse `.loom/ticket` directories.
-- Do not run `loom compound sync` (manager-only).
+- Use Loom ticket CLI for ticket operations.
+- Do not run ship/disband/merge actions reserved for manager/integrator.
 
-Deliverables (required):
-1) Sprint focus + sprint brief (written into your assigned sprint-prep ticket)
-- Restate the current objective in your own words.
-- Explain the sprint focus and why it is the best next step.
-- Capture current state: relevant existing tickets + relevant codebase state.
-- List risks and unknowns (and how they will be resolved).
+Default workflow:
+1) Read assigned prep ticket and CHARTER.
+2) Inspect backlog + repo context enough to remove ambiguity.
+3) Write sprint brief into prep ticket.
+4) Create/refine tickets with concrete implementation plans and verification commands.
+5) Encode ordering/parallelism with dependencies.
+6) Report completion with ARCHITECT_DONE token.
 
-2) A ticket set that a lower-quality worker can execute
-- Create/refine Loom tickets with clear scope, step-by-step plan, acceptance criteria, verification steps, and dependencies.
-- Propose ordering and what can run in parallel.
-- Keep flexibility, but no ambiguity: a worker should not need to ask what to do next.
+Ticket quality bar (required):
+- Objective alignment, clear scope/non-goals, implementation steps, verification, acceptance criteria, risks.
+- If Python is involved, verification commands use `uv run ...`.
 
-3) Naming
-- Propose a short sprint name (2-5 words).
-
-Critical workflow rule:
-- You create the tickets directly. Do not ask the manager to create tickets on your behalf.
-
-How you operate (do this, in order):
-1) Read your assigned ticket and its context
-- `loom ticket show <TICKET_ID>`
-- Extract sprint name/tag from the ticket/run context.
-
-2) Read the run charter (source of truth)
-- Read the `CHARTER` file path provided in your runtime prompt.
-- Pay attention to objective history (appends) to understand direction and prior decisions.
-
-3) Inspect the backlog and current direction
-- List sprint-tagged tickets (if sprint tag exists): `loom ticket list -T <SPRINT_TAG>`
-- List open tickets: `loom ticket list --status open`
-- Note the highest-leverage work and what is currently blocking progress.
-
-4) Inspect the codebase state (fast, relevant)
-- `git status` (what is dirty / in-flight)
-- `git log -n 20 --oneline` (recent direction)
-- Open files / search code ONLY as needed to remove ambiguity.
-
-5) Write the sprint brief into your assigned ticket
-- Include: objective restatement, sprint focus, current state, plan overview, risks/unknowns.
-
-6) Create the sprint tickets
-- Use `loom ticket create` and prefer:
-  - `--parent <SPRINT_PREP_TICKET_ID>` to group tickets under the sprint prep ticket
-  - `--tags` for additional tags (sprint tag is auto-added when set)
-  - `--acceptance` for crisp acceptance criteria
-- Use `loom ticket dep-add <id> <dep-id>` to encode ordering.
-
-7) Ticket quality rubric (non-negotiable)
-Every ticket you create/refine must include:
-- Objective alignment: 1-2 sentences on why this matters now.
-- Scope and non-goals (explicit).
-- Implementation plan: concrete steps; include file paths when possible.
-- Verification: exact commands to run.
-  - If Python is involved, commands MUST use `uv run ...`.
-- Acceptance criteria: observable outcomes, not vibes.
-- Risks/edge cases: what could go wrong and how we detect it.
-
-8) Final self-check before you stop
-- For each ticket: would a cheaper worker model know exactly what to do, where, and how to verify?
-- If not, edit the ticket until the answer is yes.
-
-Ticket tagging rule:
-- For sprint tickets, `${env_sprint_tag}` is auto-added by `loom ticket create` when set.
-  - Opt out via `--no-sprint-tag`.
-
-Completion protocol:
-- Update the assigned ticket with a concise summary + list of created/updated ticket IDs.
-- Notify the manager you are done: `{cmd_architect_done}`
-- Then stop. The manager will retire your pane.
-Idling policy (critical):
-- If you have produced tickets and are waiting: run `loom team wait 15m` and stop output.
+Idling policy:
+- If no active planning request, run `loom team wait 15m`.
 """
 
 
 INTEGRATOR_AGENT_PROMPT_TEMPLATE = """\
 You are a Team Integrator.
 
-Purpose: Serialize merges and ship code fast under manager authority.
+Purpose: serialize fan-in merges safely and quickly.
 
-You are the fan-in stage of the sprint.
+Hard constraints:
+- Never run tmux directly.
+- Do not implement features or broad refactors.
+- Merge only manager-approved branches into the merge-queue branch.
 
- Hard constraints:
- - Never run tmux directly.
- - Do not implement features. Do not refactor. Only ship manager-approved branches.
- - You do NOT merge into the target branch. You only merge approved work into the merge-queue branch (default: per-run `team/merge-queue-<8hex>`).
- - Do not run `loom compound sync` (manager-only).
-- Keep merges mechanical:
-  1) Update merge-queue to latest target branch (fast-forward/merge origin/<target> as policy dictates).
-  2) Merge/cherry-pick the approved topic branch.
-  3) Resolve conflicts, commit, and report.
- - Compound artifacts are written in the canonical repo root. Do not commit compound artifacts from the merge worktree.
-- If your merge worktree is in a weird state, ask the manager to run: `loom team spawn-integrator <TEAM> --force`.
-- Use Loom ticket for ticket updates when a ticket_id is provided (some queue items may be ticketless).
+Queue protocol:
+- Claim: `{cmd_merge_next}`
+- Complete: `{cmd_merge_done}`
+- Manager ships with: `{cmd_ship}`
 
-Queue protocol (deterministic):
-- Manager enqueues with: `loom team merge <TEAM> enqueue --ticket <id> --branch <branch>` (ticket optional).
-- Claim next with: `{cmd_merge_next}`.
-- Mark done with: `{cmd_merge_done}`.
+Recovery:
+- If worktree is wedged, ask manager for `loom team spawn-integrator <TEAM> --force`.
 
-Shipping:
-- After you accumulate merges into merge-queue, the manager ships with: `{cmd_ship}`.
-
-Idling policy (critical):
-- If the queue is empty, run `loom team wait 10m` and stop output.
+Idling policy:
+- If queue is empty, run `loom team wait 10m`.
 """
 
 
@@ -371,9 +209,7 @@ def default_agent_prompts() -> Dict[str, str]:
         "cmd_ready_for_review": _cmd_ready_for_review(
             team="", ticket_id="", worker_id="", branch=""
         ),
-        "cmd_architect_done": _cmd_architect_done(
-            team="", worker_id="", ticket_id="", trailing_space=True
-        ),
+        "cmd_architect_done": _cmd_architect_done(team="", worker_id="", ticket_id=""),
         "cmd_merge_next": _cmd_merge_next(team="", worker_id=""),
         "cmd_merge_done": _cmd_merge_done(team=""),
         "env_tickets_dir": ENV_TICKET_DIR,
@@ -381,10 +217,10 @@ def default_agent_prompts() -> Dict[str, str]:
         "env_sprint_tag": ENV_TEAM_SPRINT_TAG,
     }
     return {
-        "manager": MANAGER_AGENT_PROMPT_TEMPLATE.format(**fmt),
-        "worker": WORKER_AGENT_PROMPT_TEMPLATE.format(**fmt),
-        "architect": ARCHITECT_AGENT_PROMPT_TEMPLATE.format(**fmt),
-        "integrator": INTEGRATOR_AGENT_PROMPT_TEMPLATE.format(**fmt),
+        ROLE_MANAGER: MANAGER_AGENT_PROMPT_TEMPLATE.format(**fmt).strip(),
+        ROLE_WORKER: WORKER_AGENT_PROMPT_TEMPLATE.format(**fmt).strip(),
+        ROLE_ARCHITECT: ARCHITECT_AGENT_PROMPT_TEMPLATE.format(**fmt).strip(),
+        ROLE_INTEGRATOR: INTEGRATOR_AGENT_PROMPT_TEMPLATE.format(**fmt).strip(),
     }
 
 
@@ -405,91 +241,44 @@ def render_manager_prompt(*, run: Mapping[str, Any], charter_path: Path) -> str:
     push = bool(cfg.get("push"))
     merge_branch = merge_branch_for_run(run)
 
-    tickets_line = f"{ENV_TICKET_DIR}: {tickets_dir}\n" if tickets_dir else ""
-    sprint_lines = ""
+    lines: List[str] = []
+    lines.append("You are Team Manager.\n\n")
+    lines.append(f"TEAM: {team}\n")
+    lines.append(f"RUN_ID: {run_id}\n")
+    lines.append(f"TMUX_SESSION: {session}\n")
+    lines.append(f"CHARTER: {charter_path}\n")
+    if tickets_dir:
+        lines.append(f"{ENV_TICKET_DIR}: {tickets_dir}\n")
     if sprint_name:
-        sprint_lines += f"SPRINT: {sprint_name}\n"
+        lines.append(f"SPRINT: {sprint_name}\n")
     if sprint_tag:
-        sprint_lines += f"SPRINT_TAG: {sprint_tag}\n"
+        lines.append(f"SPRINT_TAG: {sprint_tag}\n")
 
-    roster_lines = ""
-    raw_roster = run.get("roster")
-    roster: Dict[str, Any] = dict(raw_roster) if isinstance(raw_roster, dict) else {}
-    roster_source = str(roster.get("source") or "").strip()
-    if roster_source:
-        roster_lines += f"ROSTER: {roster_source}\n"
-    raw_spec = roster.get("spec")
-    spec: Dict[str, Any] = dict(raw_spec) if isinstance(raw_spec, dict) else {}
-    raw_members = spec.get("members")
-    if isinstance(raw_members, list):
-        members_lines: list[str] = []
-        for item in raw_members:
-            if not isinstance(item, dict):
-                continue
-            rid = str(item.get("id") or "").strip()
-            rrole = str(item.get("role") or "").strip().lower()
-            if not rid or not rrole:
-                continue
-            always_on = bool(item.get("always_on"))
-            workspace = (
-                str(item.get("workspace") or "repo_root").strip().lower() or "repo_root"
-            )
-            lifecycle = "always_on" if always_on else "on_demand"
-            spawn_hint = (
-                "" if always_on else f" (spawn: loom team spawn-persona {team} {rid})"
-            )
-            members_lines.append(
-                f"- {rid}: role={rrole} {lifecycle} workspace={workspace}{spawn_hint}"
-            )
-        if members_lines:
-            roster_lines += "ROSTER_MEMBERS:\n" + "\n".join(members_lines) + "\n"
+    lines.append("\nHARD CONSTRAINTS:\n")
+    lines.append("- Do NOT run tmux directly.\n")
+    lines.append("- Do NOT implement tickets or edit code.\n")
+    lines.append("- Use Loom ticket CLI for ticket operations.\n\n")
 
-    return (
-        "You are Team Manager.\n\n"
-        f"TEAM: {team}\n"
-        f"RUN_ID: {run_id}\n"
-        f"TMUX_SESSION: {session}\n"
-        f"CHARTER: {charter_path}\n{tickets_line}{sprint_lines}{roster_lines}\n"
-        "HARD CONSTRAINTS (non-negotiable):\n"
-        "- Do NOT run tmux directly. Use Loom CLI only.\n"
-        "- Do NOT implement tickets or edit code. Delegate tickets to workers.\n"
-        "- Do NOT move tickets to in_progress (workers do that when they start).\n"
-        "- Use Loom ticket CLI for all ticket IO; do not browse `.loom/ticket` directories.\n\n"
-        "OBJECTIVE:\n"
-        f"{objective}\n\n"
-        "Immediate sprint loop:\n"
-        f'1) Fan-out: if backlog is unclear, start a sprint + spawn architect: `loom team prep-sprint {team} --name "..."`.\n'
-        f"   - You may create a one-off ticket yourself if it is truly small and obvious.\n"
-        f"2) Plan: decide what runs in parallel and what must sequence.\n"
-        f"3) Execute: spawn workers: `loom team spawn {team} <TICKET_ID>`.\n"
-        f"   - Resume a retired worker in-place: `loom team resume-worker {team} <WORKER_ID>`.\n"
-        f"4) Monitor: `loom team status {team}` / `loom team capture {team} <target>`.\n"
-        f"5) Fan-in: ensure integrator: `{_cmd_spawn_integrator(team=team)}`; approve+enqueue: `loom team merge {team} enqueue --ticket <id> --branch <branch>`.\n"
-        f"   - Integrator merges into merge-queue only (merge branch: {merge_branch}).\n"
-        f"6) Ship: run `{_cmd_ship(team=team)}` to merge merge-queue -> {remote}/{target_branch} (push={push}). Nothing is shipped until this happens.\n"
-        f"7) Cleanup: retire workers: `loom team retire {team} <WORKER_ID>`.\n"
-        f"   - When safe to delete: `loom team mark-retirable {team} <WORKER_ID>` then later `loom team janitor {team}`.\n"
-        f"   - Recovery: bounce a wedged worker: `loom team bounce {team} <WORKER_ID|TICKET_ID>`.\n"
-        f"8) Objective updates: treat CHARTER as source of truth; pivot immediately.\n"
-        f'   - Update objective yourself: `loom team objective {team} set|append --message "..."` (updates CHARTER + inbox).\n'
-        f"9) When 100% done: `loom team disband {team}`.\n"
-        f"10) Waiting: if you have no concrete next command, run `loom team wait 5m` and stop output.\n"
-        f"   - Clock out/in: `loom team clock-out {team}` (pause) and later `loom team clock-in {team}` (resume).\n"
-        f"   - If you wake and inbox is empty: run `loom team status {team}`, then check in with 1-2 active workers, then wait again.\n"
-        f"11) Inbox: `{_cmd_inbox_list(team=team, to='manager')}` when nudged.\n"
-        f"   - Per-worker backlog: `loom team inbox {team} list --to <WORKER_ID> --unacked`.\n"
-        f"   - If you have pinged a worker multiple times and unacked keeps growing (e.g., 3+): bounce them: `loom team bounce {team} <WORKER_ID|TICKET_ID>`.\n"
-        "\n"
-        "Memory (optional but useful):\n"
-        "- Loom memory is an Obsidian-like vault with links and backlinks.\n"
-        "- Use `loom memory` to leave notes for yourself or other workers.\n"
-        "- Notes can be associated with files, directories, file types, or commands.\n"
-        "\n"
-        "Compound learning (repo-root only):\n"
-        "- Skills/docs/instincts are written in the canonical repo root (not worker worktrees).\n"
-        "- Workers may trigger compounding, but must not commit compound artifacts.\n"
-        "- Manager commits compound artifacts during ship (ship auto-syncs).\n"
-    ).strip()
+    lines.append("OBJECTIVE:\n")
+    lines.append(f"{objective}\n\n")
+
+    lines.append("Command loop:\n")
+    lines.append(f"1) Observe: `loom team status {team}` and `{_cmd_inbox_list(team=team, to='manager')}`.\n")
+    lines.append(f"2) Sprint prep when needed: `loom team prep-sprint {team} --name \"...\"`.\n")
+    lines.append(f"3) Spawn execution: `loom team spawn {team} <TICKET_ID>`.\n")
+    lines.append(f"4) Fan-in: `loom team merge {team} enqueue --ticket <id> --branch <branch> --from-worker <wid>`.\n")
+    lines.append(f"5) Keep integrator alive: `{_cmd_spawn_integrator(team=team)}`.\n")
+    lines.append(
+        f"6) Ship: `{_cmd_ship(team=team)}` (merge-queue `{merge_branch}` -> {remote}/{target_branch}, push={push}).\n"
+    )
+    lines.append(f"7) Cleanup: `loom team retire {team} <WORKER_ID>` / `loom team janitor {team}`.\n")
+    lines.append(
+        f"8) Liveness: if stale/dead worker, `loom team bounce {team} <WORKER_ID|TICKET_ID>`, then reassess with `loom team doctor {team}`.\n"
+    )
+    lines.append(f"9) Done: `loom team disband {team}` when objective is fully shipped.\n")
+    lines.append("10) If no concrete next step: `loom team wait 5m`.\n")
+
+    return _append_role_prompt(run=run, role=ROLE_MANAGER, body="".join(lines))
 
 
 def render_worker_prompt(
@@ -504,6 +293,10 @@ def render_worker_prompt(
     base: str,
     charter_path: Path,
 ) -> str:
+    role_norm = str(role or "").strip().lower()
+    if role_norm not in {ROLE_WORKER, ROLE_ARCHITECT}:
+        role_norm = ROLE_WORKER
+
     team = str(run.get("team") or "")
     run_id = str(run.get("run_id") or "")
     tickets_dir = str(run.get("tickets_dir") or "").strip()
@@ -515,113 +308,67 @@ def render_worker_prompt(
     status = str(ticket.get("status") or "").strip()
     ticket_id = str(ticket.get("id") or ticket.get("ticket") or "")
 
-    tickets_line = f"{ENV_TICKET_DIR}: {tickets_dir}\n" if tickets_dir else ""
-    sprint_lines = ""
+    lines: List[str] = []
+    lines.append(f"You are Team {role_norm.title()}.\n\n")
+    lines.append(f"TEAM: {team}\n")
+    lines.append(f"RUN_ID: {run_id}\n")
+    lines.append(f"WORKER_ID: {worker_id}\n")
+    lines.append(f"TICKET: {ticket_id}\n")
+    lines.append(f"TITLE: {title}\n")
+    lines.append(f"STATUS: {status}\n")
+    lines.append(f"WORKTREE: {worktree_path}\n")
+    lines.append(f"BRANCH: {branch}\n")
+    lines.append(f"BASE: {base}\n")
+    lines.append(f"CHARTER: {charter_path}\n")
+    if tickets_dir:
+        lines.append(f"{ENV_TICKET_DIR}: {tickets_dir}\n")
     if sprint_name:
-        sprint_lines += f"SPRINT: {sprint_name}\n"
+        lines.append(f"SPRINT: {sprint_name}\n")
     if sprint_tag:
-        sprint_lines += f"SPRINT_TAG: {sprint_tag}\n"
+        lines.append(f"SPRINT_TAG: {sprint_tag}\n")
 
-    role_specific = ""
-    if role == ROLE_ARCHITECT:
-        role_specific = (
-            "ROLE-SPECIFIC (ARCHITECT):\n"
-            "- You are the sprint PM. Your job is to turn the objective + current state into a coherent sprint and a crisp backlog.\n"
-            "- First, read the run CHARTER to understand objective + historical direction.\n"
-            "- Then inspect current backlog + repo state enough to remove ambiguity (tickets + git status/log).\n"
-            "- Write a sprint brief INTO THIS assigned ticket (objective restatement, sprint focus, current state, plan, risks/unknowns).\n"
-            "- Create/refine sprint tickets directly (prefer `loom ticket create --parent <THIS_TICKET>`).\n"
-            "- Every ticket must include: scope/non-goals, step-by-step plan, acceptance criteria, verification commands (use `uv run ...` for Python), risks/edge cases, deps/ordering.\n"
-            "- Before you stop: update THIS assigned ticket with (1) the list of created/updated ticket IDs and (2) suggested ordering + parallelization.\n"
-            f"- Then notify manager: `{_cmd_architect_done(team=team, worker_id=worker_id, ticket_id=ticket_id, trailing_space=False)}`.\n"
-            "- Then stop. The manager will retire your pane.\n"
+    lines.append("\nHARD CONSTRAINTS:\n")
+    lines.append("- Do NOT run tmux directly.\n")
+    lines.append("- Use Loom ticket CLI only for ticket state updates.\n")
+    lines.append("- Do not close tickets or merge to main.\n\n")
+
+    lines.append("Protocol:\n")
+    lines.append("1) Move ticket to in_progress when work starts.\n")
+    lines.append("2) Keep ticket updates frequent and concrete.\n")
+    lines.append("3) Commit meaningful milestones.\n")
+    lines.append("4) If blocked, set blocked + record options + notify manager.\n")
+    lines.append(f"   - `{_cmd_worker_blocked(team=team, ticket_id=ticket_id)}`\n")
+    lines.append("5) On completion candidate, set review and send structured review request.\n")
+    lines.append(
+        f"   - `{_cmd_ready_for_review(team=team, ticket_id=ticket_id, worker_id=worker_id, branch=branch)}`\n"
+    )
+    lines.append(
+        f"6) Inbox on nudge: `loom team inbox {team} list --to {worker_id} --unacked`, then ack handled messages.\n"
+    )
+
+    if role_norm == ROLE_WORKER and worker_subagents_from_run(run) == "encouraged":
+        lines.append("\nSubagents (encouraged):\n")
+        lines.append(
+            "- Use subagents for scoped research/verification when that reduces risk or latency.\n"
         )
-    elif role == ROLE_WORKER:
-        role_specific = (
-            "ROLE-SPECIFIC (WORKER):\n"
-            "- When you believe work is complete, request manager review.\n"
-            "- Preconditions: working tree clean; at least one commit for this ticket.\n"
-            f"- Required: `{_cmd_ready_for_review(team=team, ticket_id=ticket_id, worker_id=worker_id, branch=branch)}`.\n"
+        lines.append("- Summarize subagent outputs in ticket updates.\n")
+        lines.append("- You remain accountable for final implementation decisions.\n")
+
+    if role_norm == ROLE_ARCHITECT:
+        lines.append("\nROLE-SPECIFIC (ARCHITECT):\n")
+        lines.append(
+            "- Convert objective ambiguity into sprint tickets that a lower-cost worker can execute without follow-up.\n"
+        )
+        lines.append("- Include explicit scope, verification, acceptance criteria, and dependency ordering.\n")
+        lines.append(
+            f"- Completion token: `{_cmd_architect_done(team=team, worker_id=worker_id, ticket_id=ticket_id)}`\n"
         )
 
-    parts: List[str] = []
-    parts.append(f"You are Team {role.title()}.\n\n")
-    parts.append(f"TEAM: {team}\n")
-    parts.append(f"RUN_ID: {run_id}\n")
-    parts.append(f"WORKER_ID: {worker_id}\n")
-    parts.append(f"TICKET: {ticket_id}\n")
-    parts.append(f"TITLE: {title}\n")
-    parts.append(f"STATUS: {status}\n")
-    parts.append(f"WORKTREE: {worktree_path}\n")
-    parts.append(f"BRANCH: {branch}\n")
-    parts.append(f"BASE: {base}\n")
-    parts.append(f"CHARTER: {charter_path}\n{tickets_line}{sprint_lines}\n")
+    lines.append("\nIdling policy: if no concrete next command, run `loom team wait 15m`.\n\n")
+    lines.append("Ticket payload:\n")
+    lines.append(json.dumps(ticket_payload, indent=2) + "\n")
 
-    parts.append("HARD CONSTRAINTS:\n")
-    parts.append("- Do NOT run tmux directly.\n")
-    parts.append(
-        "- Do NOT browse `.loom/ticket` directories; use Loom ticket CLI only.\n"
-    )
-    parts.append(
-        "- Transition ticket to in_progress when you begin real work (worker-owned).\n"
-    )
-    parts.append("- Keep a steady cadence of Loom ticket updates.\n")
-    parts.append("- Do not close tickets; do not merge to main (manager-owned).\n\n")
-
-    parts.append("Instructions:\n")
-    parts.append("- Work only on the assigned ticket.\n")
-    parts.append(
-        "- Use Loom ticket to update progress after each major step or every ~15 minutes.\n"
-    )
-    parts.append(
-        "- Commit after each meaningful milestone (do not sit on uncommitted work).\n"
-    )
-    parts.append(
-        "- If blocked: write a structured escalation in Loom ticket (what was tried, what is needed, 2 options)\n"
-    )
-    parts.append(
-        f"  - Set status: `loom ticket status {ticket_id or '<id>'} blocked`\n"
-    )
-    parts.append(
-        f"  and notify the manager via `{_cmd_worker_blocked(team=team, ticket_id=ticket_id)}`.\n"
-    )
-    parts.append(
-        f"- Inbox discipline: when nudged, run `loom team inbox {team} list --to {worker_id} --unacked` and ack messages you read with `loom team inbox {team} ack <MSG_ID>`.\n"
-    )
-    parts.append(
-        "- Then respond with a brief status update and/or a Loom ticket update.\n"
-    )
-    parts.append(
-        "- If completion candidate: set status to review and provide verification steps + commands run + risks.\n"
-    )
-    parts.append(
-        f"  - Set status: `loom ticket status {ticket_id or '<id>'} review`\n\n"
-    )
-
-    parts.append(
-        "Idling policy: if you have no concrete next command right now, run `loom team wait 15m` and stop output.\n\n"
-    )
-
-    parts.append(
-        "Follow-up tickets (encouraged): if you find important out-of-scope work, create a follow-up ticket with `loom ticket create`, link it, and mention it in your next update.\n\n"
-    )
-
-    parts.append("Memory (optional but useful):\n")
-    parts.append("- Loom memory is an Obsidian-like vault with links and backlinks.\n")
-    parts.append("- Use `loom memory` to leave notes for yourself or other workers.\n")
-    parts.append(
-        "- Notes can be associated with files, directories, file types, or commands.\n\n"
-    )
-
-    if role_specific:
-        parts.append(role_specific + "\n")
-
-    parts.append(
-        "Ticket payload (from Loom ticket) is available; follow acceptance criteria and dependencies.\n"
-    )
-    parts.append(json.dumps(ticket_payload, indent=2) + "\n")
-
-    return "".join(parts).strip()
+    return _append_role_prompt(run=run, role=role_norm, body="".join(lines))
 
 
 def render_architect_prompt(
@@ -630,96 +377,35 @@ def render_architect_prompt(
     worker_id: str,
     charter_path: Path,
 ) -> str:
-    return render_persona_prompt(
-        run=run,
-        role=ROLE_ARCHITECT,
-        worker_id=worker_id,
-        charter_path=charter_path,
-        description="",
-        triggers=[],
-        primary_workflows=[],
-    )
-
-
-def render_persona_prompt(
-    *,
-    run: Mapping[str, Any],
-    role: str,
-    worker_id: str,
-    charter_path: Path,
-    description: str,
-    triggers: List[str],
-    primary_workflows: List[str],
-) -> str:
     team = str(run.get("team") or "")
     run_id = str(run.get("run_id") or "")
-    role_norm = str(role or "").strip().lower()
-    role_label = role_norm.title() if role_norm else "Persona"
     tickets_dir = str(run.get("tickets_dir") or "").strip()
     sprint = run.get("sprint") if isinstance(run.get("sprint"), dict) else {}
     sprint_name = str((sprint or {}).get("name") or "").strip()
     sprint_tag = str((sprint or {}).get("tag") or "").strip()
 
-    tickets_line = f"{ENV_TICKET_DIR}: {tickets_dir}\n" if tickets_dir else ""
-    sprint_lines = ""
+    lines: List[str] = []
+    lines.append("You are Team Architect.\n\n")
+    lines.append(f"TEAM: {team}\n")
+    lines.append(f"RUN_ID: {run_id}\n")
+    lines.append(f"WORKER_ID: {worker_id}\n")
+    lines.append(f"CHARTER: {charter_path}\n")
+    if tickets_dir:
+        lines.append(f"{ENV_TICKET_DIR}: {tickets_dir}\n")
     if sprint_name:
-        sprint_lines += f"SPRINT: {sprint_name}\n"
+        lines.append(f"SPRINT: {sprint_name}\n")
     if sprint_tag:
-        sprint_lines += f"SPRINT_TAG: {sprint_tag}\n"
+        lines.append(f"SPRINT_TAG: {sprint_tag}\n")
 
-    parts: List[str] = []
-    parts.append(f"You are Team {role_label}.\n\n")
-    parts.append(f"TEAM: {team}\n")
-    parts.append(f"RUN_ID: {run_id}\n")
-    parts.append(f"WORKER_ID: {worker_id}\n")
-    parts.append(f"ROLE: {role_norm}\n")
-    parts.append(f"CHARTER: {charter_path}\n{tickets_line}{sprint_lines}\n")
+    lines.append("\nAlways-on architect protocol:\n")
+    lines.append("- Monitor inbox for sprint prep/planning tasks.\n")
+    lines.append("- Convert objective requests into concrete tickets with clear sequencing.\n")
+    lines.append(
+        "- Raise ambiguity as options with tradeoffs instead of blocking silently.\n"
+    )
+    lines.append("- If idle, run `loom team wait 15m`.\n")
 
-    parts.append("HARD CONSTRAINTS:\n")
-    parts.append("- Do NOT run tmux directly.\n")
-    parts.append(
-        "- Use Loom ticket CLI for ticket work; do not browse `.loom/ticket` directly.\n"
-    )
-    parts.append(
-        "- Do not close tickets unless explicitly instructed by the manager.\n"
-    )
-    parts.append(
-        "- Keep communication durable via `loom team send` and inbox acknowledgements.\n\n"
-    )
-
-    if role_norm == ROLE_ARCHITECT:
-        parts.append("Mode: always-on architect persona.\n")
-        parts.append("- Watch inbox for sprint prep and planning requests.\n")
-        parts.append(
-            "- Produce sprint plans and high-quality tickets with clear ordering/dependencies.\n"
-        )
-        parts.append(
-            "- Escalate unclear requirements to manager with concrete options.\n"
-        )
-        parts.append(
-            "- When no immediate action is available, run `loom team wait 15m`.\n\n"
-        )
-    else:
-        if description:
-            parts.append(f"Persona description: {description}\n")
-        if triggers:
-            parts.append(f"Primary triggers: {', '.join(str(x) for x in triggers)}\n")
-        if primary_workflows:
-            parts.append(
-                "Primary workflows: "
-                + ", ".join(str(x) for x in primary_workflows)
-                + "\n"
-            )
-        parts.append(
-            "- Stay in-role and execute only relevant requests from manager/inbox.\n"
-        )
-        parts.append("- If blocked, escalate to manager with concrete options.\n")
-        parts.append("- If idle, run `loom team wait 15m`.\n\n")
-
-    parts.append(
-        "Acknowledge incoming inbox messages before acting on follow-up requests.\n"
-    )
-    return "".join(parts).strip()
+    return _append_role_prompt(run=run, role=ROLE_ARCHITECT, body="".join(lines))
 
 
 def render_integrator_prompt(
@@ -737,57 +423,48 @@ def render_integrator_prompt(
     sprint = run.get("sprint") if isinstance(run.get("sprint"), dict) else {}
     sprint_name = str((sprint or {}).get("name") or "").strip()
     sprint_tag = str((sprint or {}).get("tag") or "").strip()
-    tickets_line = f"{ENV_TICKET_DIR}: {tickets_dir}\n" if tickets_dir else ""
-    sprint_lines = ""
-    if sprint_name:
-        sprint_lines += f"SPRINT: {sprint_name}\n"
-    if sprint_tag:
-        sprint_lines += f"SPRINT_TAG: {sprint_tag}\n"
 
     ms = _merge_state(run)
     cfg = dict(ms.get("config") or {})
     target_branch = str(cfg.get("target_branch") or "main")
     remote = str(cfg.get("remote") or "origin")
     push = bool(cfg.get("push"))
-    cfg_line = f"MERGE_TARGET: {remote}/{target_branch}  push={push}\n"
 
-    parts: List[str] = []
-    parts.append("You are Team Integrator.\n\n")
-    parts.append(f"TEAM: {team}\n")
-    parts.append(f"RUN_ID: {run_id}\n")
-    parts.append(f"WORKER_ID: {worker_id}\n")
-    parts.append(f"ROLE: {ROLE_INTEGRATOR}\n")
-    parts.append(f"WORKTREE: {worktree_path}\n")
-    parts.append(f"BRANCH: {branch}\n")
-    parts.append(f"BASE: {base}\n")
-    parts.append(f"CHARTER: {charter_path}\n{tickets_line}{sprint_lines}")
-    parts.append(cfg_line)
-    parts.append("\n")
+    lines: List[str] = []
+    lines.append("You are Team Integrator.\n\n")
+    lines.append(f"TEAM: {team}\n")
+    lines.append(f"RUN_ID: {run_id}\n")
+    lines.append(f"WORKER_ID: {worker_id}\n")
+    lines.append(f"ROLE: {ROLE_INTEGRATOR}\n")
+    lines.append(f"WORKTREE: {worktree_path}\n")
+    lines.append(f"BRANCH: {branch}\n")
+    lines.append(f"BASE: {base}\n")
+    lines.append(f"CHARTER: {charter_path}\n")
+    if tickets_dir:
+        lines.append(f"{ENV_TICKET_DIR}: {tickets_dir}\n")
+    if sprint_name:
+        lines.append(f"SPRINT: {sprint_name}\n")
+    if sprint_tag:
+        lines.append(f"SPRINT_TAG: {sprint_tag}\n")
+    lines.append(f"MERGE_TARGET: {remote}/{target_branch}  push={push}\n")
 
-    parts.append("HARD CONSTRAINTS:\n")
-    parts.append("- Do NOT run tmux directly.\n")
-    parts.append("- Do not implement features; ship only manager-approved branches.\n")
-    parts.append(
-        "- You do NOT merge into the target branch. You only merge into the merge-queue branch shown above.\n"
+    lines.append("\nHARD CONSTRAINTS:\n")
+    lines.append("- Do NOT run tmux directly.\n")
+    lines.append("- Do not implement feature work.\n")
+    lines.append(
+        "- Merge only approved branches into the merge-queue branch shown above.\n"
     )
-    parts.append(
-        "- If your merge worktree is wedged, ask the manager to run: `loom team spawn-integrator <TEAM> --force`.\n"
-    )
-    parts.append(
-        "- Use `loom team merge` commands for deterministic queue operations.\n\n"
+    lines.append(
+        "- If merge worktree is unhealthy, ask manager to respawn integrator with --force.\n\n"
     )
 
-    parts.append("Queue ops:\n")
-    parts.append(f"- Claim next: `{_cmd_merge_next(team=team, worker_id=worker_id)}`\n")
-    parts.append(f"- Mark done: `{_cmd_merge_done(team=team)}`\n")
-    parts.append(
-        f"- Manager ships merge-queue -> target with: `{_cmd_ship(team=team)}`\n"
-    )
-    parts.append("\n")
+    lines.append("Queue ops:\n")
+    lines.append(f"- Claim next: `{_cmd_merge_next(team=team, worker_id=worker_id)}`\n")
+    lines.append(f"- Mark done: `{_cmd_merge_done(team=team)}`\n")
+    lines.append(f"- Manager ships with: `{_cmd_ship(team=team)}`\n\n")
+    lines.append("Idling: if no queue work, run `loom team wait 10m`.\n")
 
-    parts.append("Idling: If no work, run `loom team wait 10m` and stop output.\n")
-
-    return "".join(parts).strip()
+    return _append_role_prompt(run=run, role=ROLE_INTEGRATOR, body="".join(lines))
 
 
 __all__ = [
@@ -798,7 +475,6 @@ __all__ = [
     "default_agent_prompts",
     "render_manager_prompt",
     "render_architect_prompt",
-    "render_persona_prompt",
     "render_worker_prompt",
     "render_integrator_prompt",
 ]

@@ -23,7 +23,8 @@ These files should parse args, call core/domain functions, and emit output. They
 
 - `run_state.py`: canonical run-path resolution and persisted run state IO (`run.json` lifecycle).
 - `start_state.py`: typed mutations used by start/resume flows.
-- `composition.py` / `composition_runtime.py`: roster schema and runtime role/profile resolution.
+- `team_config.py`: team config schema and runtime defaults (`--config`).
+- `health.py`: sidecar heartbeat artifacts and state transitions.
 - `communication_policy.py`: route authorization and delivery policy.
 - `permissions.py`: role/environment guardrails.
 - `targets.py`: target resolution for send/capture.
@@ -76,16 +77,13 @@ Canonical run root:
 - Preserve built-in persona semantics (manager/architect/worker/integrator operating model).
 - `team/core.py` is a known hotspot; prefer decomposition over growth when adding substantial logic.
 
-## Roster model (version 3)
+## Team config model
 
-Roster YAML is optional and loaded by `loom team start --roster <path>`.
+Team config YAML is optional and loaded by `loom team start --config <path>`.
 
-- Built-ins: `manager`, `architect`, `worker`, `integrator`
-- Optional sections include `mounts`, `members`, and `communication`
-- Built-in operating model remains fixed:
-  - manager + architect in repo root
-  - workers in ticket-scoped worktrees
-  - integrator in persistent merge-queue worktree
+- Core operating model is fixed: manager + architect + workers + integrator.
+- Config supports run-level `harness`/`model`, role prompt appends, worker subagent policy, and liveness thresholds.
+- Communication/targeting is limited to core targets (`manager`, `architect`, `integrator`, `workers`, `worker:<id>`, `ticket:<id>`).
 
 ## Fast tests for team changes
 

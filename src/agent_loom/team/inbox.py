@@ -187,17 +187,19 @@ def _inbox_recipient_for_target(run: Mapping[str, Any], target: str) -> str:
     t = str(target or "").strip()
     if not t:
         return ""
-    if t in ("manager", "mgr"):
+    tnorm = t.lower()
+    if tnorm in ("manager", "mgr"):
         return "manager"
+    if tnorm in {"architect", "integrator"}:
+        return tnorm
+    if tnorm.startswith("worker:"):
+        return str(tnorm.split(":", 1)[1] or "").strip().lower()
     try:
         _pane_id0, meta0 = _resolve_target(run, t)
         wid = str(meta0.get("worker_id") or "").strip()
         return wid or t
     except Exception:
-        # Fail-forward aliases.
-        if t in {"merge-queue", "merge_queue", "mergequeue"}:
-            return "integrator"
-        return t
+        return tnorm
 
 
 def _inbox_write_and_maybe_nudge(

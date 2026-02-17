@@ -175,6 +175,10 @@ class RunPaths:
         return self.run_dir / "sidecars"
 
     @property
+    def health_dir(self) -> Path:
+        return self.run_dir / "health"
+
+    @property
     def charter_file(self) -> Path:
         return self.run_dir / "CHARTER.md"
 

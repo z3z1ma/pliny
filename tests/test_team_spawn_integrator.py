@@ -199,6 +199,15 @@ class TestTeamSpawnIntegrator(unittest.TestCase):
                 mock.patch.object(team, "tmux_window_exists", return_value=True),
                 mock.patch.object(team, "tmux_format", return_value="%71"),
                 mock.patch.object(
+                    team,
+                    "_recipient_health",
+                    return_value=(
+                        "alive",
+                        {},
+                        {"pane_id": "%71", "dead": "0", "current_command": "opencode"},
+                    ),
+                ),
+                mock.patch.object(
                     team, "_ensure_worktree", side_effect=fake_ensure_worktree
                 ),
                 mock.patch.object(team, "_ensure_opencode_worktree_runtime"),

@@ -1,39 +1,7 @@
-"""team — tmux-native orchestration for long-horizon, multi-agent software work.
+"""Team orchestration core.
 
-Team is intentionally small and composable.
-
-Authoritative systems:
-  - tmux: live execution substrate and observability
-  - workspace: git/worktree lifecycle and naming conventions
-  - ticket: durable ticket ledger
-  - opencode / claude / omp / codex: interactive TUI agents
-
-Team is orchestration only. It does not replace git, tmux, ws, or loom ticket.
-
-Happy-path CLI (human or an outer AI agent):
-  - loom team start <team> --objective="..." # create a new team/run
-  - loom team attach <team>                  # attach to the manager window
-  - loom team disband <team>                 # kill tmux session; worktrees preserved by default
-
- Manager-facing primitives (called from inside the manager agent pane):
-  - loom team spawn <team> <ticket>         # create worktree + spawn worker agent
-  - loom team status <team>                 # machine-readable roster + tmux pane metadata
-  - loom team send <team> <target> "..."    # send a message via tmux send-keys
-  - loom team capture <team> <target>       # capture pane output via tmux capture-pane
-   - loom team retire <team> <worker_id>     # kill worker window; worktree stays on disk
-   - loom team wait [<team>] <dur>           # manager self-throttle (blocks; wakes early on inbox)
-  - loom team inbox <team> list             # disk-backed inbox (durable messages)
-    - loom team spawn-integrator <team>       # persistent integrator + worktree (ticketless)
-   - loom team merge <team> ...              # merge queue primitives (enqueue/next/done/list)
-   - loom team ship <team>                   # merge merge-queue -> target branch (shipping)
-
-Design constraints:
-  - Single-file script; no background daemon.
-  - State is explicit and inspectable under .loom/team/runs/<team>/run.json
-  - Tmux session/window/pane is the source of truth for live state.
-  - ws is the exclusive interface for worktree lifecycle.
-  - loom ticket is the exclusive interface for durable ticket state.
-
+Coordinates tmux-backed manager/architect/workers/integrator flows, run lifecycle,
+durable inbox messaging, merge queue, and harness sidecars.
 """
 
 from __future__ import annotations
@@ -59,6 +27,7 @@ from agent_loom.pack.core import install_pack as pack_install
 from agent_loom.pack.core import update_pack as pack_update
 from agent_loom.pack.lock import index_packs as pack_index
 from agent_loom.pack.lock import load_lock as pack_load_lock
+from agent_loom.team.charter import write_charter as _write_charter
 from agent_loom.team.channels import channel_for, resolve_team_from_session
 from agent_loom.team.communication_policy import (
     communication_policy_from_run,
@@ -66,12 +35,6 @@ from agent_loom.team.communication_policy import (
     resolve_send_target,
     route_allows_target,
     sender_for_send,
-)
-from agent_loom.team.composition import load_team_roster_yaml
-from agent_loom.team.composition_runtime import (
-    enforce_member_lifecycle,
-    resolve_builtin_profile,
-    resolve_member_profile,
 )
 from agent_loom.team.constants import (
     CANONICAL_TICKET_DIRNAME,
@@ -81,6 +44,7 @@ from agent_loom.team.constants import (
     DEFAULT_DISBAND_REMINDER_RESEND_S,
     DEFAULT_DONE_CHECK_S,
     DEFAULT_HARNESS,
+    DEFAULT_HEARTBEAT_INTERVAL_S,
     DEFAULT_IDLE_SCREEN_S,
     DEFAULT_INTEGRATOR_AGENT,
     DEFAULT_MANAGER_AGENT,
@@ -164,7 +128,6 @@ from agent_loom.team.models import (
     SendResult,
     ShipResult,
     SpawnIntegratorResult,
-    SpawnPersonaResult,
     SpawnResult,
     SprintClearResult,
     SprintSetResult,
@@ -204,11 +167,17 @@ from agent_loom.team.permissions import (
     _require_self_worker_id,
 )
 from agent_loom.team.prompts import (
+    default_agent_prompts,
     render_architect_prompt,
     render_integrator_prompt,
     render_manager_prompt,
-    render_persona_prompt,
     render_worker_prompt,
+)
+from agent_loom.team.health import (
+    clear_heartbeat,
+    health_state as _health_state,
+    recipient_key as _recipient_key,
+    write_heartbeat,
 )
 from agent_loom.team.run_state import (
     RunPaths,
@@ -237,6 +206,12 @@ from agent_loom.team.start_state import (
     initialize_harness_configs,
     migrate_merge_role_workers,
     normalize_harness_configs,
+)
+from agent_loom.team.team_config import (
+    default_team_config_spec,
+    load_team_config_yaml,
+    liveness_from_run,
+    team_config_summary_from_run,
 )
 from agent_loom.team.strings import generate_stable_key, message_preview, sanitize
 from agent_loom.team.targets import _resolve_target, _resolve_targets
@@ -279,9 +254,6 @@ from agent_loom.team.worker_planning import (
     agent_for_role as _agent_for_role,
 )
 from agent_loom.team.worker_planning import (
-    always_on_profiles_for_run as _always_on_profiles_for_run,
-)
-from agent_loom.team.worker_planning import (
     max_headcount as _max_headcount,
 )
 from agent_loom.team.worker_planning import (
@@ -289,12 +261,6 @@ from agent_loom.team.worker_planning import (
 )
 from agent_loom.team.worker_planning import (
     normalize_harness as _normalize_harness,
-)
-from agent_loom.team.worker_planning import (
-    persona_worktree_branch as _persona_worktree_branch,
-)
-from agent_loom.team.worker_planning import (
-    workspace_for_always_on_profile as _workspace_for_always_on_profile,
 )
 from agent_loom.ticket.api import create as ticket_create
 from agent_loom.ticket.api import show as ticket_show
@@ -349,9 +315,7 @@ __all__ = [
     "wait",
 ]
 
-# -----------------------------
 # ws / loom ticket
-# -----------------------------
 
 
 def _git_status_porcelain(*, cwd: Path, pathspec: Optional[str] = None) -> str:
@@ -489,19 +453,13 @@ def _remove_worktree(*, cwd: Path, path: Path) -> None:
     repo_worktree_rm_path(path=str(path), root=cwd, confirm=True)
 
 
-# -----------------------------
 # tmux
-# -----------------------------
 
 
-# -----------------------------
 # Pathing + run state
-# -----------------------------
 
 
-# -----------------------------
 # Inbox + merge queue (disk-backed scheduling primitives)
-# -----------------------------
 
 
 def _parse_duration_seconds(s: str) -> int:
@@ -516,9 +474,7 @@ def _message_preview(text: str, *, max_len: int = 100) -> str:
     return message_preview(text, max_len=max_len)
 
 
-# -----------------------------
 # Agent bootstrapping
-# -----------------------------
 
 
 TEAM_AGENT_PROMPT_BEGIN = "<!-- BEGIN:agent-loom-team:prompt -->"
@@ -548,6 +504,73 @@ def _required_team_agent_relpaths() -> list[str]:
     return out
 
 
+def _role_for_agent_file(path: Path) -> str:
+    agent = path.stem.strip().lower()
+    mapping = {
+        str(DEFAULT_MANAGER_AGENT).strip().lower(): ROLE_MANAGER,
+        str(DEFAULT_WORKER_AGENT).strip().lower(): ROLE_WORKER,
+        str(DEFAULT_ARCHITECT_AGENT).strip().lower(): ROLE_ARCHITECT,
+        str(DEFAULT_INTEGRATOR_AGENT).strip().lower(): ROLE_INTEGRATOR,
+    }
+    return mapping.get(agent, "")
+
+
+def _replace_managed_prompt_block(*, text: str, prompt: str) -> tuple[str, bool]:
+    begin_idx = text.find(TEAM_AGENT_PROMPT_BEGIN)
+    if begin_idx < 0:
+        return text, False
+    end_idx = text.find(TEAM_AGENT_PROMPT_END, begin_idx + len(TEAM_AGENT_PROMPT_BEGIN))
+    if end_idx < 0:
+        return text, False
+
+    head = text[: begin_idx + len(TEAM_AGENT_PROMPT_BEGIN)]
+    tail = text[end_idx:]
+    replacement = f"\n{str(prompt or '').strip()}\n"
+    updated = f"{head}{replacement}{tail}"
+    return updated, updated != text
+
+
+def _sync_agent_prompt_blocks(*, repo_root: Path) -> tuple[list[str], list[str]]:
+    prompts = default_agent_prompts()
+    updated: list[str] = []
+    warnings: list[str] = []
+
+    for rel in _required_team_agent_relpaths():
+        path = (repo_root / rel).resolve()
+        if not path.exists():
+            continue
+        role = _role_for_agent_file(path)
+        if not role:
+            warnings.append(f"Unknown Team agent file role for prompt sync: {rel}")
+            continue
+        prompt = str(prompts.get(role) or "").strip()
+        if not prompt:
+            warnings.append(f"Missing canonical Team prompt for role={role}: {rel}")
+            continue
+        try:
+            text = path.read_text(encoding="utf-8")
+        except OSError as exc:
+            warnings.append(f"Unable to read Team agent file for prompt sync: {rel} ({exc})")
+            continue
+
+        new_text, changed = _replace_managed_prompt_block(text=text, prompt=prompt)
+        if TEAM_AGENT_PROMPT_BEGIN not in text or TEAM_AGENT_PROMPT_END not in text:
+            warnings.append(
+                f"Team agent file missing managed prompt markers; skipped sync: {rel}"
+            )
+            continue
+        if not changed:
+            continue
+        try:
+            _atomic_write_text(path, new_text, encoding="utf-8")
+        except OSError as exc:
+            warnings.append(f"Unable to write Team agent prompt sync: {rel} ({exc})")
+            continue
+        updated.append(rel)
+
+    return updated, warnings
+
+
 def init_agents(
     *, repo: Optional[Path] = None, create_missing: bool = True, force: bool = False
 ) -> InitAgentsResult:
@@ -562,6 +585,7 @@ def init_agents(
     root = canonical_repo_root(repo.resolve() if repo else Path.cwd())
 
     wrote: list[str] = []
+    updated: list[str] = []
     skipped: list[str] = []
     warnings: list[str] = []
 
@@ -583,6 +607,9 @@ def init_agents(
         wrote.extend(list(pr.wrote or []))
         skipped.extend(list(pr.skipped or []))
         warnings.extend(list(pr.warnings or []))
+        synced, sync_warnings = _sync_agent_prompt_blocks(repo_root=root)
+        updated.extend(synced)
+        warnings.extend(sync_warnings)
 
     missing: list[str] = []
     for rel in _required_team_agent_relpaths():
@@ -592,7 +619,7 @@ def init_agents(
     return InitAgentsResult(
         repo_root=str(root),
         wrote=sorted(set(wrote)),
-        updated=[],
+        updated=sorted(set(updated)),
         skipped=sorted(set(skipped)),
         missing=sorted(set(missing)),
         warnings=sorted(set(warnings)),
@@ -910,221 +937,164 @@ def _apply_mounts(*, repo_root: Path, worktree_root: Path, mounts: list[dict]) -
             )
 
 
-def _roster_state_from_run(run: Mapping[str, Any]) -> Dict[str, Any]:
-    raw_roster = run.get("roster")
-    if isinstance(raw_roster, dict):
-        return dict(raw_roster)
-    return {}
-
-
-def _roster_summary_from_run(run: Mapping[str, Any]) -> Dict[str, Any]:
-    raw = _roster_state_from_run(run)
-
-    raw_spec = raw.get("spec")
-    spec: Dict[str, Any] = dict(raw_spec) if isinstance(raw_spec, dict) else {}
-
-    raw_metadata = spec.get("metadata")
-    metadata: Dict[str, Any] = (
-        dict(raw_metadata) if isinstance(raw_metadata, dict) else {}
+def _canonical_worker_id(value: str) -> str:
+    return (
+        sanitize(str(value or "").strip().lower(), allow=r"a-z0-9._-", max_len=48) or ""
     )
 
-    name = str(metadata.get("name") or "").strip()
-    purpose = str(metadata.get("purpose") or "").strip()
-    source = str(raw.get("source") or "").strip()
-    loaded_at = str(raw.get("loaded_at") or "").strip()
 
-    version = 0
-    raw_version = spec.get("version")
-    if isinstance(raw_version, (int, float, str)) and str(raw_version).strip():
-        try:
-            version = int(str(raw_version).strip())
-        except Exception:
-            version = 0
+def _canonical_ticket_id(value: str) -> str:
+    return str(value or "").strip().lower()
 
-    raw_builtins = spec.get("builtins")
-    builtins: Dict[str, Any] = (
-        dict(raw_builtins) if isinstance(raw_builtins, dict) else {}
+
+def _canonical_send_target(value: str) -> str:
+    raw = str(value or "").strip()
+    if not raw:
+        raise TeamError("Empty target", code="ARG", exit_code=2)
+    token = raw.lower()
+    if token in {"manager", "mgr"}:
+        return "manager"
+    if token in {"architect", "integrator", "workers"}:
+        return token
+    if token in {"escalate", "escalation"}:
+        return token
+    if token.startswith("worker:"):
+        worker_id = _canonical_worker_id(token.split(":", 1)[1])
+        if not worker_id:
+            raise TeamError("Invalid worker target", code="ARG", exit_code=2)
+        return f"worker:{worker_id}"
+    if token.startswith("ticket:"):
+        ticket_id = _canonical_ticket_id(token.split(":", 1)[1])
+        if not ticket_id:
+            raise TeamError("Invalid ticket target", code="ARG", exit_code=2)
+        return f"ticket:{ticket_id}"
+
+    raise TeamError(
+        f"Invalid target syntax: {value!r}",
+        code="ARG",
+        exit_code=2,
+        hint=(
+            "Use one of: manager | architect | integrator | workers | "
+            "worker:<id> | ticket:<id>"
+        ),
     )
 
-    raw_members = spec.get("members")
-    members: list[Any] = list(raw_members) if isinstance(raw_members, list) else []
 
-    raw_labels = metadata.get("labels")
-    labels: list[Any] = list(raw_labels) if isinstance(raw_labels, list) else []
+def _parse_iso_ts(value: str) -> float:
+    text = str(value or "").strip()
+    if not text:
+        return 0.0
+    try:
+        if text.endswith("Z"):
+            return dt.datetime.fromisoformat(text.replace("Z", "+00:00")).timestamp()
+        return dt.datetime.fromisoformat(text).timestamp()
+    except Exception:
+        return 0.0
 
-    if not any((name, purpose, source, loaded_at, version, builtins, members, labels)):
-        return {}
 
-    return {
-        "name": name,
-        "purpose": purpose,
-        "source": source,
-        "loaded_at": loaded_at,
-        "version": version,
-        "builtins": len(builtins),
-        "members": len(members),
-        "labels": [str(label) for label in labels if str(label).strip()],
+def _recovery_state(run: Dict[str, Any]) -> Dict[str, Any]:
+    raw_ops = run.get("ops")
+    ops = dict(raw_ops) if isinstance(raw_ops, dict) else {}
+    raw_recovery = ops.get("recovery")
+    recovery = dict(raw_recovery) if isinstance(raw_recovery, dict) else {}
+    in_flight = str(recovery.get("recovery_in_flight") or "").strip()
+    cooldown_until = str(recovery.get("cooldown_until") or "").strip()
+    raw_entries = recovery.get("recoveries_in_window")
+    entries: list[dict[str, str]] = []
+    if isinstance(raw_entries, list):
+        for item in raw_entries:
+            if not isinstance(item, dict):
+                continue
+            at = str(item.get("at") or "").strip()
+            recipient = _recipient_key(str(item.get("recipient") or ""))
+            if at and recipient:
+                entries.append({"at": at, "recipient": recipient})
+    normalized = {
+        "recovery_in_flight": in_flight,
+        "cooldown_until": cooldown_until,
+        "recoveries_in_window": entries,
     }
+    ops["recovery"] = normalized
+    run["ops"] = ops
+    return normalized
 
 
-def _roster_mount_specs_from_run(run: Mapping[str, Any]) -> list[str]:
-    raw = _roster_state_from_run(run)
-    raw_spec = raw.get("spec")
-    spec: Dict[str, Any] = dict(raw_spec) if isinstance(raw_spec, dict) else {}
+def _recovery_gate_allows(
+    *,
+    run: Dict[str, Any],
+    recipient: str,
+    now_ts: float | None = None,
+) -> tuple[bool, str]:
+    now = float(now_ts) if now_ts is not None else time.time()
+    recovery = _recovery_state(run)
+    recipient_key = _recipient_key(recipient)
+    in_flight = str(recovery.get("recovery_in_flight") or "").strip()
+    if in_flight and in_flight != recipient_key:
+        return False, "recovery_in_flight"
 
-    raw_mounts = spec.get("mounts")
-    if not isinstance(raw_mounts, list):
-        return []
+    cooldown_until = str(recovery.get("cooldown_until") or "").strip()
+    cooldown_ts = _parse_iso_ts(cooldown_until)
+    if cooldown_ts > now:
+        return False, "cooldown_active"
 
-    out: list[str] = []
-    for item in raw_mounts:
-        tok = str(item or "").strip()
-        if tok:
-            out.append(tok)
-    return out
+    liveness = liveness_from_run(run)
+    max_per_hour = int(liveness.get("max_recoveries_per_hour") or 0)
+    cutoff = now - 3600.0
+    entries: list[dict[str, str]] = []
+    for item in list(recovery.get("recoveries_in_window") or []):
+        at_ts = _parse_iso_ts(str(item.get("at") or ""))
+        if at_ts >= cutoff:
+            entries.append({"at": str(item.get("at") or ""), "recipient": _recipient_key(str(item.get("recipient") or ""))})
+    recovery["recoveries_in_window"] = entries
+    if max_per_hour > 0 and len(entries) >= max_per_hour:
+        return False, "recoveries_capped"
+    return True, ""
 
 
-def _write_charter(paths: RunPaths, run: Mapping[str, Any]) -> Path:
-    """Write a run-local charter (human/agent reference)."""
-
-    objective = str(run.get("objective") or "").strip()
-    objective_rev = int(run.get("objective_rev") or 0)
-    objective_updated_at = str(run.get("objective_updated_at") or "").strip()
-    tickets_dir = str(run.get("tickets_dir") or "").strip()
-    sprint = run.get("sprint") if isinstance(run.get("sprint"), dict) else {}
-    sprint_name = str((sprint or {}).get("name") or "").strip()
-    sprint_tag = str((sprint or {}).get("tag") or "").strip()
-    sprint_started_at = str((sprint or {}).get("started_at") or "").strip()
-
-    lines = []
-    lines.append(f"# Team Charter — {paths.team}\n")
-    lines.append(f"Run ID: {run.get('run_id', '')}\n")
-    lines.append(f"Repo: {run.get('repo_root', '')}\n")
-    if tickets_dir:
-        lines.append(f"{ENV_TICKET_DIR}: {tickets_dir}\n")
-    lines.append("\n")
-    lines.append("## Objective (current)\n\n")
-    if objective_rev:
-        lines.append(f"Objective rev: {objective_rev}\n")
-    if objective_updated_at:
-        lines.append(f"Objective updated_at: {objective_updated_at}\n")
-    lines.append("\n")
-    lines.append(objective + "\n\n")
-
-    lines.append("## Sprint (current)\n\n")
-    if sprint_name:
-        lines.append(f"Name: {sprint_name}\n")
-    if sprint_started_at:
-        lines.append(f"Started: {sprint_started_at}\n")
-    if sprint_tag:
-        lines.append(f"Tag: {sprint_tag}\n")
-        lines.append(f"Ticket rule: include tag `{sprint_tag}` on sprint tickets.\n")
-    if not sprint_name:
-        lines.append("(none)\n")
-    lines.append("\n")
-    roster = _roster_summary_from_run(run)
-    lines.append("## Roster (current)\n\n")
-    if roster:
-        if roster.get("name"):
-            lines.append(f"Name: {roster.get('name')}\n")
-        if roster.get("version"):
-            lines.append(f"Schema version: {roster.get('version')}\n")
-        if roster.get("builtins"):
-            lines.append(f"Built-ins: {roster.get('builtins')}\n")
-        if roster.get("members"):
-            lines.append(f"Additional members: {roster.get('members')}\n")
-        if roster.get("source"):
-            lines.append(f"Source: {roster.get('source')}\n")
-        if roster.get("loaded_at"):
-            lines.append(f"Loaded at: {roster.get('loaded_at')}\n")
+def _recovery_mark_begin(*, run: Dict[str, Any], recipient: str) -> None:
+    recovery = _recovery_state(run)
+    recipient_key = _recipient_key(recipient)
+    now_iso = _iso_z()
+    entries = list(recovery.get("recoveries_in_window") or [])
+    entries.append({"at": now_iso, "recipient": recipient_key})
+    recovery["recoveries_in_window"] = entries
+    recovery["recovery_in_flight"] = recipient_key
+    liveness = liveness_from_run(run)
+    cooldown_s = int(liveness.get("recovery_cooldown_s") or 0)
+    if cooldown_s > 0:
+        recovery["cooldown_until"] = (
+            dt.datetime.now(dt.UTC) + dt.timedelta(seconds=cooldown_s)
+        ).isoformat().replace("+00:00", "Z")
     else:
-        lines.append("(none)\n")
-    lines.append("\n")
-    lines.append("## Manager quickstart\n\n")
-    lines.append("Sprint loop:\n")
-    lines.append(f'- Start sprint: `loom team prep-sprint {paths.team} --name "..."`\n')
-    lines.append(
-        "- Fan-out (preferred): spawn an Architect; architect creates tickets directly.\n"
-    )
-    lines.append("- Plan: decide concurrency + ordering.\n")
-    lines.append("- Execute: spawn workers.\n")
-    lines.append("- Fan-in: integrate via merge queue; ship.\n")
-    lines.append("- Cleanup: retire workers; mark worktrees retirable when safe.\n")
-    lines.append("\n")
+        recovery["cooldown_until"] = ""
 
-    lines.append("Core:\n")
-    lines.append(f"- Observe roster: `loom team status {paths.team}`\n")
-    lines.append(
-        f"- Capture output: `loom team capture {paths.team} <manager|worker|ticket>`\n"
-    )
-    lines.append(f'- Send message: `loom team send {paths.team} <target> "..."`\n')
-    lines.append(f"- Spawn worker: `loom team spawn {paths.team} <TICKET_ID>`\n")
-    lines.append(
-        f"- Resume worker: `loom team resume-worker {paths.team} <WORKER_ID>` (reuse existing worktree)\n"
-    )
-    lines.append(f"- Retire worker: `loom team retire {paths.team} <WORKER_ID>`\n")
-    lines.append(
-        f"- Mark worktree retirable: `loom team mark-retirable {paths.team} <WORKER_ID>` (manager-only)\n"
-    )
-    lines.append(
-        f"- Bounce worker: `loom team bounce {paths.team} <WORKER_ID|TICKET_ID>`\n"
-    )
-    lines.append("\n")
-    lines.append("Durability + waiting:\n")
-    lines.append(
-        f"- Inbox list: `loom team inbox {paths.team} list --to manager --unacked`\n"
-    )
-    lines.append(f"- Ack message: `loom team inbox {paths.team} ack <MSG_ID>`\n")
-    lines.append(
-        f"- Wait (blocks; wakes early on inbox): `loom team wait {paths.team} 5m` (or `loom team wait 5m` inside tmux; `snooze` is an alias)\n"
-    )
-    lines.append(
-        f"- Clock out (pause team): `loom team clock-out {paths.team}` (keeps state; stops tmux session)\n"
-    )
-    lines.append(
-        f"- Clock in (resume team): `loom team clock-in {paths.team}` (restores manager + active workers)\n"
-    )
-    lines.append(
-        f'- Update objective: `loom team objective {paths.team} set|append --message "..."`\n'
-    )
-    lines.append(
-        f"- Team hygiene: `loom team janitor {paths.team}` (deletes only marked-retirable worktrees)\n"
-    )
-    lines.append(
-        f"- When 100% done: `loom team disband {paths.team}` (preserves worktrees by default)\n"
-    )
-    lines.append("\n")
-    lines.append("Merge queue (ship code):\n")
 
-    ms = _merge_state(run)
-    cfg = dict(ms.get("config") or {})
-    target_branch = str(cfg.get("target_branch") or "main").strip() or "main"
-    remote = str(cfg.get("remote") or "origin").strip() or "origin"
-    push = bool(cfg.get("push"))
-    lines.append(
-        f"- Ensure integrator exists: `loom team spawn-integrator {paths.team}`\n"
-    )
-    lines.append(
-        f"- Enqueue approved branch: `loom team merge {paths.team} enqueue --ticket <TICKET_ID> --branch <BRANCH> --from-worker <WORKER_ID>`\n"
-    )
-    lines.append(f"- Queue status: `loom team merge {paths.team} list`\n")
-    lines.append(
-        f"- Ship (merge-queue -> {remote}/{target_branch}, push={push}): `loom team ship {paths.team}` (nothing is shipped until you do this)\n"
-    )
-    lines.append("\n")
-    lines.append("## Worker protocol\n\n")
-    lines.append("Workers must:\n")
-    lines.append("- Work exactly one ticket in their assigned worktree.\n")
-    lines.append(
-        "- Update the ticket via loom ticket at least every ~15 minutes or after major steps.\n"
-    )
-    lines.append("- Escalate when blocked (structured) and notify manager.\n")
-    lines.append("- Request review before considering a ticket complete.\n\n")
+def _recovery_mark_end(*, run: Dict[str, Any], recipient: str) -> None:
+    recovery = _recovery_state(run)
+    recipient_key = _recipient_key(recipient)
+    if str(recovery.get("recovery_in_flight") or "").strip() == recipient_key:
+        recovery["recovery_in_flight"] = ""
 
-    paths.charter_file.parent.mkdir(parents=True, exist_ok=True)
-    _atomic_write_text(paths.charter_file, "".join(lines))
 
-    return paths.charter_file
+def _recipient_health(
+    *,
+    paths: RunPaths,
+    run: Mapping[str, Any],
+    session: str,
+    recipient: str,
+    pane_id: str,
+) -> tuple[str, Dict[str, Any], Dict[str, str]]:
+    state, heartbeat = _health_state(
+        paths=paths,
+        run=run,
+        recipient=recipient,
+    )
+    panes = tmux_list_panes(session) if session and tmux_has_session(session) else {}
+    pane = panes.get(str(pane_id or "").strip(), {})
+    if state == "alive" and pane:
+        if not _pane_can_receive_chat(pane):
+            state = "stale"
+    return state, dict(heartbeat or {}), dict(pane or {})
 
 
 def _opencode_tui_argv(
@@ -1599,6 +1569,10 @@ def tui(
     objective_nudge_s = float(objective_nudge_s or DEFAULT_OBJECTIVE_NUDGE_S)
     done_check_s = float(done_check_s or DEFAULT_DONE_CHECK_S)
     disband_resend_s = float(disband_resend_s or DEFAULT_DISBAND_REMINDER_RESEND_S)
+    liveness = liveness_from_run(run)
+    heartbeat_interval_s = max(
+        1.0, float(liveness.get("heartbeat_interval_s") or DEFAULT_HEARTBEAT_INTERVAL_S)
+    )
 
     safe_write_event(
         paths,
@@ -1630,6 +1604,7 @@ def tui(
     bounce_killed_pid: Optional[int] = None
     bounce_pending = threading.Event()
     has_spawned_once = False
+    next_heartbeat_at = 0.0
 
     def stop_all(reason: str) -> None:
         nonlocal stop_reason
@@ -1694,6 +1669,22 @@ def tui(
         except Exception as exc:
             _record_sidecar_warning("nudge.send_text", error=exc, once=True)
             return
+
+    def emit_heartbeat() -> None:
+        with lock:
+            child = proc
+        pid = int(child.pid) if child is not None and child.poll() is None else int(os.getpid())
+        try:
+            write_heartbeat(
+                paths=paths,
+                recipient=recipient,
+                role=role,
+                pane_id=pane_id,
+                pid=pid,
+                current_command="",
+            )
+        except Exception as exc:
+            _record_sidecar_warning("heartbeat.write", error=exc, once=True)
 
     def _handle_control_message(msg: Mapping[str, Any]) -> bool:
         nonlocal bounce_killed_pid
@@ -2038,6 +2029,10 @@ def tui(
             )
 
         now = time.time()
+        if now >= next_heartbeat_at:
+            emit_heartbeat()
+            next_heartbeat_at = now + heartbeat_interval_s
+
         spawn_due_to_bounce = bounce_pending.is_set()
         if spawn_due_to_bounce:
             backoff_s = 1.0
@@ -2231,6 +2226,10 @@ def tui(
             lambda: _sidecar_pid_clear(paths=paths, recipient=recipient),
             label="sidecar.pid.clear",
         )
+        best_effort(
+            lambda: clear_heartbeat(paths=paths, recipient=recipient),
+            label="sidecar.heartbeat.clear",
+        )
 
         exit_was_bounce = bool(bounce_killed_pid == p.pid)
         if exit_was_bounce:
@@ -2282,7 +2281,7 @@ def _ensure_always_on_personas(*, team: str, repo: Optional[Path] = None) -> Non
         session = run_session(run)
         if not tmux_has_session(session):
             raise TeamError(
-                f"tmux session not found while ensuring always-on roster: {session}",
+                f"tmux session not found while ensuring always-on roles: {session}",
                 code="TMUX",
                 exit_code=2,
             )
@@ -2290,215 +2289,150 @@ def _ensure_always_on_personas(*, team: str, repo: Optional[Path] = None) -> Non
         root = run_root(paths, run)
         tickets_dir = ensure_run_tickets_dir(run, repo_root=root)
         sprint = _objective_state_sprint_state(run)
-        defaults = run.get("defaults") if isinstance(run.get("defaults"), dict) else {}
-        base_ref_default = str((defaults or {}).get("base_ref") or "").strip() or None
-
         harness_default = _normalize_harness(str(run.get("harness") or ""))
-        raw_mounts = run.get("mounts")
-        mounts: list[dict] = []
-        if isinstance(raw_mounts, list):
-            mounts = [dict(item) for item in raw_mounts if isinstance(item, dict)]
-
         now_iso = _iso_z()
         workers = dict(run.get("workers") or {})
+        role = ROLE_ARCHITECT
+        worker_id = "architect"
+        cfg = (
+            (run.get(harness_default) or {})
+            if isinstance(run.get(harness_default), dict)
+            else (run.get("opencode") or {})
+        )
+        agent_bin = str(cfg.get("bin") or "").strip() or harness_default
+        _require_bin(agent_bin)
+        agent = _agent_for_role(run, role, harness=harness_default)
+        _require_agent_file_present(workdir=root, harness=harness_default, agent=agent)
+        model = _model_for_role(run, role, harness=harness_default)
+        prompt = render_architect_prompt(
+            run=run,
+            worker_id=worker_id,
+            charter_path=paths.charter_file,
+        )
+        oc_argv = _team_tui_argv(
+            project_dir=root,
+            agent=agent,
+            prompt=prompt,
+            model=model,
+            harness=harness_default,
+            bin=str(cfg.get("bin") or "").strip(),
+        )
+        pane_env = {
+            ENV_TICKET_DIR: str(tickets_dir),
+            ENV_TEAM_NAME: str(run.get("team") or paths.team),
+            ENV_TEAM_RUN_ID: str(run.get("run_id") or ""),
+            ENV_TEAM_RUN_DIR: str(paths.run_dir),
+            ENV_TEAM_ROLE: role,
+            ENV_TEAM_WORKER_ID: worker_id,
+            ENV_TEAM_TICKET_ID: "",
+            ENV_TEAM_SPRINT_NAME: sprint.get("name", ""),
+            ENV_TEAM_SPRINT_TAG: sprint.get("tag", ""),
+            "COMPOUND_ROOT": str(root),
+        }
 
-        for profile in _always_on_profiles_for_run(run):
-            role = str(profile.role or "").strip().lower()
-            if role in {ROLE_MANAGER, ROLE_INTEGRATOR}:
-                continue
-
-            member_id = sanitize(str(profile.member_id or ""), max_len=48)
-            if not member_id:
-                continue
-
-            workspace, workspace_key = _workspace_for_always_on_profile(profile)
-            persona_harness = _normalize_harness(
-                str(profile.harness or "") or harness_default
+        existing = dict(workers.get(worker_id) or {})
+        window = str(existing.get("window") or "architect").strip() or "architect"
+        pane_id = ""
+        should_spawn = True
+        if not bool(existing.get("retired")) and window and tmux_window_exists(session, window):
+            pane_id = tmux_format(f"{session}:{window}", "#{pane_id}")
+            state, _heartbeat, pane = _recipient_health(
+                paths=paths,
+                run=run,
+                session=session,
+                recipient=worker_id,
+                pane_id=pane_id,
             )
-            cfg = (
-                (run.get(persona_harness) or {})
-                if isinstance(run.get(persona_harness), dict)
-                else (run.get("opencode") or {})
-            )
-            agent_bin = str(cfg.get("bin") or "").strip() or persona_harness
-            _require_bin(agent_bin)
-
-            agent = str(profile.agent or "").strip() or _agent_for_role(
-                run,
-                role,
-                harness=persona_harness,
-            )
-            project_dir = root
-            branch = ""
-            base = ""
-            worktree_key = ""
-
-            if workspace == "worktree":
-                worktree_key = workspace_key
-                desired_wt_path = (paths.worktrees_dir / worktree_key).resolve()
-                if not _is_path_within(paths.worktrees_dir, desired_wt_path):
-                    raise TeamError(
-                        f"Refusing to create worktree outside run worktrees dir: {desired_wt_path}",
-                        code="WORKTREE_PATH",
-                        exit_code=2,
-                    )
-
-                wt = _ensure_worktree(
-                    cwd=root,
-                    path=desired_wt_path,
-                    branch=_persona_worktree_branch(
-                        run_id=str(run.get("run_id") or ""),
-                        member_id=member_id,
-                    ),
-                    base_ref=base_ref_default,
-                    allow_dirty=True,
-                )
-                project_dir = Path(str(wt.get("path") or desired_wt_path)).resolve()
-                branch = str(wt.get("branch") or "").strip()
-                base = str(wt.get("base") or "").strip()
-                _apply_mounts(repo_root=root, worktree_root=project_dir, mounts=mounts)
-                if persona_harness == "opencode":
-                    _ensure_opencode_worktree_runtime(
-                        workdir=project_dir, repo_root=root
-                    )
-
-            _require_agent_file_present(
-                workdir=project_dir,
-                harness=persona_harness,
-                agent=agent,
-            )
-            model = _model_for_role(run, role, harness=persona_harness)
-            if not model and profile.model:
-                model = str(profile.model)
-
-            if role == ROLE_ARCHITECT:
-                prompt = render_architect_prompt(
-                    run=run,
-                    worker_id=member_id,
-                    charter_path=paths.charter_file,
-                )
+            if state == "alive" and pane and _pane_can_receive_chat(pane):
+                should_spawn = False
             else:
-                prompt = render_persona_prompt(
-                    run=run,
+                allowed, reason = _recovery_gate_allows(run=run, recipient=worker_id)
+                if allowed:
+                    _recovery_mark_begin(run=run, recipient=worker_id)
+                    tmux_kill_window(session, window)
+                    _recovery_mark_end(run=run, recipient=worker_id)
+                    should_spawn = True
+                else:
+                    _record_runtime_warning(
+                        paths=paths,
+                        run=run,
+                        code="architect.recovery.gated",
+                        summary=f"Architect recovery gated reason={reason}",
+                        refs={
+                            "worker_id": worker_id,
+                            "window": window,
+                            "health": state,
+                        },
+                    )
+                    should_spawn = False
+
+        if should_spawn:
+            desired_window = sanitize(window, allow=r"a-zA-Z0-9._-", max_len=60) or "architect"
+            window = tmux_unique_window_name(session, desired_window)
+            tmux_cmd(
+                [
+                    "new-window",
+                    "-d",
+                    "-t",
+                    session,
+                    "-n",
+                    window,
+                    "-c",
+                    str(root),
+                    *tmux_env_flags(pane_env),
+                    *oc_argv,
+                ],
+                check=True,
+            )
+            pane_id = tmux_format(f"{session}:{window}", "#{pane_id}")
+            if pane_id:
+                tmux_mark_pane(
+                    pane_id=pane_id,
                     role=role,
-                    worker_id=member_id,
-                    charter_path=paths.charter_file,
-                    description=str(profile.description or ""),
-                    triggers=list(profile.triggers),
-                    primary_workflows=list(profile.primary_workflows),
+                    worker_id=worker_id,
+                    ticket_id="",
                 )
 
-            oc_argv = _team_tui_argv(
-                project_dir=project_dir,
-                agent=agent,
-                prompt=prompt,
-                model=model,
-                harness=persona_harness,
-                bin=str(cfg.get("bin") or "").strip(),
-            )
-
-            pane_env = {
-                ENV_TICKET_DIR: str(tickets_dir),
-                ENV_TEAM_NAME: str(run.get("team") or paths.team),
-                ENV_TEAM_RUN_ID: str(run.get("run_id") or ""),
-                ENV_TEAM_RUN_DIR: str(paths.run_dir),
-                ENV_TEAM_ROLE: role,
-                ENV_TEAM_WORKER_ID: member_id,
-                ENV_TEAM_TICKET_ID: "",
-                ENV_TEAM_SPRINT_NAME: sprint.get("name", ""),
-                ENV_TEAM_SPRINT_TAG: sprint.get("tag", ""),
-                "COMPOUND_ROOT": str(root),
-            }
-
-            existing = dict(workers.get(member_id) or {})
-            existing_window = str(existing.get("window") or "").strip()
-            pane_id = ""
-            window = existing_window
-
-            if (
-                window
-                and not bool(existing.get("retired"))
-                and tmux_window_exists(session, window)
-            ):
-                pane_id = tmux_format(f"{session}:{window}", "#{pane_id}")
-            else:
-                desired_window = (
-                    sanitize(
-                        existing_window or member_id,
-                        allow=r"a-zA-Z0-9._-",
-                        max_len=60,
-                    )
-                    or member_id
-                )
-                window = tmux_unique_window_name(session, desired_window)
-                tmux_cmd(
-                    [
-                        "new-window",
-                        "-d",
-                        "-t",
-                        session,
-                        "-n",
-                        window,
-                        "-c",
-                        str(project_dir),
-                        *tmux_env_flags(pane_env),
-                        *oc_argv,
-                    ],
-                    check=True,
-                )
-                pane_id = tmux_format(f"{session}:{window}", "#{pane_id}")
-                if pane_id:
-                    tmux_mark_pane(
-                        pane_id=pane_id,
-                        role=role,
-                        worker_id=member_id,
-                        ticket_id="",
-                    )
-
-            workers[member_id] = {
-                **existing,
-                "worker_id": member_id,
-                "role": role,
-                "ticket_id": "",
-                "roster_member_id": str(profile.member_id or ""),
-                "roster_source": str(profile.source or ""),
-                "roster_lifecycle": str(profile.lifecycle or ""),
-                "roster_description": str(profile.description or ""),
-                "roster_triggers": list(profile.triggers),
-                "roster_primary_workflows": list(profile.primary_workflows),
-                "window": window,
-                "pane_id": pane_id,
-                "workspace": workspace,
-                "worktree": str(project_dir),
-                "worktree_key": worktree_key,
-                "branch": branch,
-                "base": base,
-                "created_at": str(existing.get("created_at") or now_iso),
-                "spawned_at": str(existing.get("spawned_at") or now_iso),
-                "revived_at": now_iso
-                if bool(existing.get("retired"))
-                else str(existing.get("revived_at") or ""),
-                "retired": False,
-                "retired_at": "",
-                "worktree_retirable": False,
-                "worktree_retirable_at": "",
-            }
+        workers[worker_id] = {
+            **existing,
+            "worker_id": worker_id,
+            "role": role,
+            "ticket_id": "",
+            "window": window,
+            "pane_id": pane_id,
+            "workspace": "repo_root",
+            "worktree": str(root),
+            "worktree_key": "",
+            "branch": "",
+            "base": "",
+            "created_at": str(existing.get("created_at") or now_iso),
+            "spawned_at": str(existing.get("spawned_at") or now_iso),
+            "revived_at": (
+                now_iso
+                if should_spawn and bool(existing)
+                else str(existing.get("revived_at") or "")
+            ),
+            "retired": False,
+            "retired_at": "",
+            "worktree_retirable": False,
+            "worktree_retirable_at": "",
+        }
 
         run["workers"] = workers
 
 
-# -----------------------------
 # Prompt construction (initial --prompt only)
-# -----------------------------
 
 
 @dataclasses.dataclass(frozen=True)
 class _StartBootstrap:
     harness_provided: bool
+    config_provided: bool
     requested_harness: str
     requested_bin: str
-    roster_state: Optional[Dict[str, Any]]
-    roster_harness: str
+    team_config_state: Dict[str, Any]
+    team_config_harness: str
+    team_config_model: str
 
 
 def _validated_start_max_headcount(max_headcount: Optional[int | str]) -> Optional[int]:
@@ -2519,41 +2453,41 @@ def _resolve_start_bootstrap(
     *,
     harness: str,
     bin_override: str,
-    roster: str,
+    config: str,
 ) -> _StartBootstrap:
     harness_raw = str(harness or "")
     harness_provided = bool(harness_raw.strip())
     requested_harness = _normalize_harness(harness_raw)
     requested_bin = str(bin_override or "").strip()
 
-    roster_state: Optional[Dict[str, Any]] = None
-    roster_harness = ""
-    roster_raw = str(roster or "").strip()
-    if roster_raw:
-        roster_path = Path(roster_raw).expanduser()
-        parsed = load_team_roster_yaml(roster_path)
-        roster_state = {
-            "source": str(roster_path.resolve()),
-            "loaded_at": _iso_z(),
-            "spec": parsed.as_dict(),
-        }
-        manager_profile = resolve_builtin_profile(
-            {"roster": roster_state},
-            ROLE_MANAGER,
-        )
-        enforce_member_lifecycle(profile=manager_profile, role=ROLE_MANAGER)
-        if manager_profile is not None and manager_profile.harness:
-            roster_harness = _normalize_harness(manager_profile.harness)
+    team_config_state = {
+        "source": "",
+        "loaded_at": _iso_z(),
+        "spec": default_team_config_spec(),
+    }
+    team_config_harness = ""
+    team_config_model = ""
+    config_raw = str(config or "").strip()
+    config_provided = bool(config_raw)
+    if config_provided:
+        team_config_state = load_team_config_yaml(Path(config_raw).expanduser())
+    config_spec = dict(team_config_state.get("spec") or {})
+    team_config_harness = _normalize_harness(str(config_spec.get("harness") or ""))
+    if not str(config_spec.get("harness") or "").strip():
+        team_config_harness = ""
+    team_config_model = str(config_spec.get("model") or "").strip()
 
-    if not harness_provided and roster_harness:
-        requested_harness = roster_harness
+    if not harness_provided and team_config_harness:
+        requested_harness = team_config_harness
 
     return _StartBootstrap(
         harness_provided=harness_provided,
+        config_provided=config_provided,
         requested_harness=requested_harness,
         requested_bin=requested_bin,
-        roster_state=roster_state,
-        roster_harness=roster_harness,
+        team_config_state=team_config_state,
+        team_config_harness=team_config_harness,
+        team_config_model=team_config_model,
     )
 
 
@@ -2564,6 +2498,7 @@ def _ensure_start_run_paths(paths: RunPaths) -> None:
     paths.inbox_read_dir.mkdir(parents=True, exist_ok=True)
     paths.merge_dir.mkdir(parents=True, exist_ok=True)
     paths.sidecars_dir.mkdir(parents=True, exist_ok=True)
+    paths.health_dir.mkdir(parents=True, exist_ok=True)
     paths.events_dir.mkdir(parents=True, exist_ok=True)
     paths.artifacts_dir.mkdir(parents=True, exist_ok=True)
     paths.snapshots_dir.mkdir(parents=True, exist_ok=True)
@@ -2614,11 +2549,13 @@ def _start_update_existing_run(
     root: Path,
     session: str,
     session_provided: bool,
+    config_provided: bool,
     requested_harness: str,
     requested_bin: str,
     harness_provided: bool,
-    roster_state: Optional[Dict[str, Any]],
-    roster_harness: str,
+    team_config_state: Dict[str, Any],
+    team_config_harness: str,
+    team_config_model: str,
     mounts: Optional[list[str]],
     clear_mounts: bool,
     max_headcount: Optional[int],
@@ -2632,12 +2569,18 @@ def _start_update_existing_run(
     integrator_model: str,
 ) -> Tuple[Dict[str, Any], str]:
     run = load_run(paths)
+    run.pop("roster", None)
+    run.pop("composition", None)
     run["merge"] = _merge_state(run)
     if not isinstance(run.get("sprint"), dict):
         run["sprint"] = {}
+    if config_provided:
+        run["team_config"] = dict(team_config_state)
+    elif not isinstance(run.get("team_config"), dict):
+        run["team_config"] = dict(team_config_state)
 
     model_overrides = StartModelOverrides.from_inputs(
-        model=model,
+        model=(str(model or "").strip() or str(team_config_model or "").strip()),
         manager_model=manager_model,
         architect_model=architect_model,
         worker_model=worker_model,
@@ -2648,10 +2591,6 @@ def _start_update_existing_run(
         remote=remote,
         push=push,
     )
-
-    if roster_state is not None:
-        run["roster"] = roster_state
-        save_run(paths, run)
 
     if bool(clear_mounts):
         run["mounts"] = []
@@ -2664,19 +2603,10 @@ def _start_update_existing_run(
         )
         save_run(paths, run)
     else:
-        roster_mount_specs = _roster_mount_specs_from_run(run)
-        if roster_mount_specs:
-            run["mounts"] = _parse_mount_specs(
-                repo_root=root,
-                paths=paths,
-                specs=roster_mount_specs,
-            )
+        raw_mounts = run.get("mounts")
+        if not isinstance(raw_mounts, list):
+            run["mounts"] = []
             save_run(paths, run)
-        else:
-            raw_mounts = run.get("mounts")
-            if not isinstance(raw_mounts, list):
-                run["mounts"] = []
-                save_run(paths, run)
 
     apply_max_headcount(run, max_headcount=max_headcount)
     if max_headcount is not None:
@@ -2694,14 +2624,14 @@ def _start_update_existing_run(
         if str(run.get("harness") or "") != requested_harness:
             run["harness"] = requested_harness
             save_run(paths, run)
-    elif roster_harness:
+    elif team_config_harness:
         if str(run.get("harness") or "") != requested_harness:
             run["harness"] = requested_harness
             save_run(paths, run)
     if requested_bin:
         bin_harness = (
             requested_harness
-            if (harness_provided or roster_harness)
+            if (harness_provided or team_config_harness)
             else existing_harness
         )
         bin_current = (
@@ -2744,7 +2674,8 @@ def _start_create_run(
     session: str,
     requested_harness: str,
     requested_bin: str,
-    roster_state: Optional[Dict[str, Any]],
+    team_config_state: Dict[str, Any],
+    team_config_model: str,
     mounts: Optional[list[str]],
     clear_mounts: bool,
     max_headcount: Optional[int],
@@ -2769,7 +2700,7 @@ def _start_create_run(
         push=(True if push is None else bool(push)),
     )
     model_overrides = StartModelOverrides.from_inputs(
-        model=model,
+        model=(str(model or "").strip() or str(team_config_model or "").strip()),
         manager_model=manager_model,
         architect_model=architect_model,
         worker_model=worker_model,
@@ -2792,6 +2723,7 @@ def _start_create_run(
         "session": session,
         "manager": {},
         "workers": {},
+        "team_config": dict(team_config_state),
         "mounts": [],
         "limits": {
             "max_headcount": max_headcount if max_headcount is not None else 0,
@@ -2804,8 +2736,6 @@ def _start_create_run(
         "defaults": {},
     }
     initialize_harness_configs(run, default_model=model_overrides.default_model)
-    if roster_state is not None:
-        run["roster"] = roster_state
 
     apply_model_overrides(run, harness=requested_harness, overrides=model_overrides)
 
@@ -2825,13 +2755,7 @@ def _start_create_run(
             specs=list(mounts),
         )
     else:
-        roster_mount_specs = _roster_mount_specs_from_run(run)
-        if roster_mount_specs:
-            run["mounts"] = _parse_mount_specs(
-                repo_root=root,
-                paths=paths,
-                specs=roster_mount_specs,
-            )
+        run["mounts"] = []
 
     merge_cfg = apply_merge_options(run, options=merge_options)
     apply_defaults_from_merge(
@@ -2866,13 +2790,6 @@ def _start_boot_manager_session(
         or DEFAULT_MANAGER_WINDOW
     )
     harness = _normalize_harness(str(run.get("harness") or requested_harness))
-    manager_profile = resolve_builtin_profile(
-        run,
-        ROLE_MANAGER,
-    )
-    enforce_member_lifecycle(profile=manager_profile, role=ROLE_MANAGER)
-    if manager_profile is not None and manager_profile.harness:
-        harness = _normalize_harness(manager_profile.harness)
     cfg = (
         (run.get(harness) or {})
         if isinstance(run.get(harness), dict)
@@ -2881,13 +2798,7 @@ def _start_boot_manager_session(
     agent_bin = str(cfg.get("bin") or "").strip() or harness
     _require_bin(agent_bin)
     model = _model_for_role(run, ROLE_MANAGER, harness=harness)
-    if not model and manager_profile is not None and manager_profile.model:
-        model = str(manager_profile.model)
-    manager_agent = (
-        str(manager_profile.agent)
-        if manager_profile is not None
-        else str(cfg.get("manager_agent") or DEFAULT_MANAGER_AGENT)
-    )
+    manager_agent = str(cfg.get("manager_agent") or DEFAULT_MANAGER_AGENT)
     manager_prompt = render_manager_prompt(run=run, charter_path=charter_path)
     oc_argv = _team_tui_argv(
         project_dir=root,
@@ -2929,10 +2840,37 @@ def _start_boot_manager_session(
             check=True,
         )
     else:
-        if tmux_window_exists(session, manager_window) and bool(force):
+        manager_exists = tmux_window_exists(session, manager_window)
+        if manager_exists and bool(force):
             tmux_kill_window(session, manager_window)
+            manager_exists = False
 
-        if not tmux_window_exists(session, manager_window):
+        if manager_exists:
+            current_pane = tmux_format(f"{session}:{manager_window}", "#{pane_id}")
+            health, _heartbeat, pane = _recipient_health(
+                paths=paths,
+                run=run,
+                session=session,
+                recipient="manager",
+                pane_id=current_pane,
+            )
+            if not (health == "alive" and pane and _pane_can_receive_chat(pane)):
+                allowed, reason = _recovery_gate_allows(run=run, recipient="manager")
+                if allowed:
+                    _recovery_mark_begin(run=run, recipient="manager")
+                    tmux_kill_window(session, manager_window)
+                    _recovery_mark_end(run=run, recipient="manager")
+                    manager_exists = False
+                else:
+                    _record_runtime_warning(
+                        paths=paths,
+                        run=run,
+                        code="manager.recovery.gated",
+                        summary=f"Manager recovery gated reason={reason}",
+                        refs={"window": manager_window, "health": health},
+                    )
+
+        if not manager_exists:
             tmux_cmd(
                 [
                     "new-window",
@@ -3000,7 +2938,7 @@ def start(
     *,
     team: str,
     objective: str = "",
-    roster: str = "",
+    config: str = "",
     session: str = "",
     harness: str = "",
     bin_override: str = "",
@@ -3026,13 +2964,15 @@ def start(
     start_bootstrap = _resolve_start_bootstrap(
         harness=harness,
         bin_override=bin_override,
-        roster=roster,
+        config=config,
     )
     harness_provided = start_bootstrap.harness_provided
+    config_provided = start_bootstrap.config_provided
     requested_harness = start_bootstrap.requested_harness
     requested_bin = start_bootstrap.requested_bin
-    roster_state = start_bootstrap.roster_state
-    roster_harness = start_bootstrap.roster_harness
+    team_config_state = start_bootstrap.team_config_state
+    team_config_harness = start_bootstrap.team_config_harness
+    team_config_model = start_bootstrap.team_config_model
 
     root = canonical_repo_root(repo.resolve() if repo else Path.cwd())
     team = sanitize(team or "", max_len=80) or default_team_name(root)
@@ -3058,11 +2998,13 @@ def start(
                 root=root,
                 session=session,
                 session_provided=session_provided,
+                config_provided=config_provided,
                 requested_harness=requested_harness,
                 requested_bin=requested_bin,
                 harness_provided=harness_provided,
-                roster_state=roster_state,
-                roster_harness=roster_harness,
+                team_config_state=team_config_state,
+                team_config_harness=team_config_harness,
+                team_config_model=team_config_model,
                 mounts=mounts,
                 clear_mounts=bool(clear_mounts),
                 max_headcount=max_headcount,
@@ -3085,7 +3027,8 @@ def start(
                 session=session,
                 requested_harness=requested_harness,
                 requested_bin=requested_bin,
-                roster_state=roster_state,
+                team_config_state=team_config_state,
+                team_config_model=team_config_model,
                 mounts=mounts,
                 clear_mounts=bool(clear_mounts),
                 max_headcount=max_headcount,
@@ -3200,9 +3143,7 @@ def attach(*, team: str) -> AttachResult:
     )
 
 
-# -----------------------------
 # Objective + completion + janitor
-# -----------------------------
 
 
 def _parse_rfc3339(ts: str) -> Optional[dt.datetime]:
@@ -3888,6 +3829,8 @@ def disband(
     pidfiles_removed: List[str] = []
     pidfiles_left: List[str] = []
     sidecar_pidfiles: List[str] = []
+    health_files_removed: List[str] = []
+    health_files_left: List[str] = []
     if paths is not None:
         try:
             if paths.sidecars_dir.exists():
@@ -3898,6 +3841,13 @@ def disband(
                         pidfiles_removed.append(str(f))
                     except Exception:
                         pidfiles_left.append(str(f))
+            if paths.health_dir.exists():
+                for f in sorted(paths.health_dir.glob("*.json")):
+                    try:
+                        f.unlink()
+                        health_files_removed.append(str(f))
+                    except Exception:
+                        health_files_left.append(str(f))
         except Exception:
             pidfiles_left = list(pidfiles_left) or sidecar_pidfiles
 
@@ -3906,6 +3856,8 @@ def disband(
         "sidecar_pidfiles": list(sidecar_pidfiles),
         "pidfiles_removed": list(pidfiles_removed),
         "pidfiles_left": list(pidfiles_left),
+        "health_files_removed": list(health_files_removed),
+        "health_files_left": list(health_files_left),
     }
 
     if paths is not None:
@@ -3952,9 +3904,7 @@ def disband(
     )
 
 
-# -----------------------------
 # Team lifecycle (pause/resume)
-# -----------------------------
 
 
 def pause_team(*, team: str, repo: Optional[Path] = None) -> PauseResult:
@@ -4031,24 +3981,39 @@ def _respawn_active_worker_if_missing(
             exit_code=2,
         )
 
-    # If the recorded window still exists, just refresh pane_id.
+    # If the recorded window still exists and heartbeat is healthy, just refresh pane_id.
     win = str(worker.get("window") or "").strip()
     if win and tmux_window_exists(session, win):
         pane_id = tmux_format(f"{session}:{win}", "#{pane_id}")
-        out = dict(worker)
-        out["pane_id"] = pane_id
-        return False, out
+        state, _heartbeat, pane = _recipient_health(
+            paths=paths,
+            run=run,
+            session=session,
+            recipient=worker_id,
+            pane_id=pane_id,
+        )
+        if state == "alive" and pane and _pane_can_receive_chat(pane):
+            out = dict(worker)
+            out["pane_id"] = pane_id
+            return False, out
+        allowed, reason = _recovery_gate_allows(run=run, recipient=worker_id)
+        if allowed:
+            _recovery_mark_begin(run=run, recipient=worker_id)
+            tmux_kill_window(session, win)
+            _recovery_mark_end(run=run, recipient=worker_id)
+        else:
+            _record_runtime_warning(
+                paths=paths,
+                run=run,
+                code="worker.recovery.gated",
+                summary=f"Worker recovery gated reason={reason}",
+                refs={"worker_id": worker_id, "window": win, "health": state},
+            )
+            out = dict(worker)
+            out["pane_id"] = pane_id
+            return False, out
 
     harness = _normalize_harness(str(run.get("harness") or ""))
-    profile = resolve_member_profile(
-        run,
-        role=role,
-        ticket_id=ticket_id,
-        worktree_key=str(worker.get("worktree_key") or ""),
-    )
-    enforce_member_lifecycle(profile=profile, role=role)
-    if profile is not None and profile.harness:
-        harness = _normalize_harness(profile.harness)
 
     cfg = (
         (run.get(harness) or {})
@@ -4083,15 +4048,9 @@ def _respawn_active_worker_if_missing(
         charter_path=charter_path,
     )
 
-    agent = (
-        str(profile.agent)
-        if profile is not None
-        else _agent_for_role(run, role, harness=harness)
-    )
+    agent = _agent_for_role(run, role, harness=harness)
     _require_agent_file_present(workdir=worktree_path, harness=harness, agent=agent)
     model = _model_for_role(run, role, harness=harness)
-    if not model and profile is not None and profile.model:
-        model = str(profile.model)
     oc_argv = _team_tui_argv(
         project_dir=worktree_path,
         agent=agent,
@@ -4288,9 +4247,7 @@ def resume_team(*, team: str, repo: Optional[Path] = None) -> ResumeTeamResult:
     )
 
 
-# -----------------------------
 # Worker lifecycle commands (manager-facing)
-# -----------------------------
 
 
 def _next_worker_id(run: Mapping[str, Any]) -> str:
@@ -4334,7 +4291,7 @@ def spawn(
         if role != ROLE_WORKER:
             raise TeamError(f"Invalid role: {role}", code="ARG", exit_code=2)
 
-        ticket_id = str(ticket_id).strip()
+        ticket_id = _canonical_ticket_id(ticket_id)
         if not ticket_id:
             raise TeamError("Missing ticket", code="ARG", exit_code=2)
 
@@ -4378,10 +4335,10 @@ def spawn(
         }
         ticket_payload_dict = dataclasses.asdict(ticket_payload)
         # Normalization: ensure id is set.
-        ticket = {**ticket, "id": str(ticket.get("id") or ticket_id)}
+        ticket = {**ticket, "id": _canonical_ticket_id(str(ticket.get("id") or ticket_id))}
 
         workers = dict(run.get("workers") or {})
-        requested_worker_id = sanitize(str(worker_id or ""), max_len=16)
+        requested_worker_id = _canonical_worker_id(worker_id)
         resume = bool(resume)
 
         base_ref_effective = str(base_ref or "").strip()
@@ -4513,16 +4470,6 @@ def spawn(
                 "worker_id resolution failed", code="BAD_STATE", exit_code=2
             )
 
-        profile = resolve_member_profile(
-            run,
-            role=role,
-            ticket_id=ticket_id,
-            worktree_key=worktree_key,
-        )
-        enforce_member_lifecycle(profile=profile, role=role)
-        if profile is not None and profile.harness:
-            harness = _normalize_harness(profile.harness)
-
         cfg = (
             (run.get(harness) or {})
             if isinstance(run.get(harness), dict)
@@ -4554,15 +4501,9 @@ def spawn(
             charter_path=charter_path,
         )
 
-        agent = (
-            str(profile.agent)
-            if profile is not None
-            else _agent_for_role(run, role, harness=harness)
-        )
+        agent = _agent_for_role(run, role, harness=harness)
         _require_agent_file_present(workdir=worktree_path, harness=harness, agent=agent)
         model = _model_for_role(run, role, harness=harness)
-        if not model and profile is not None and profile.model:
-            model = str(profile.model)
         oc_argv = _team_tui_argv(
             project_dir=worktree_path,
             agent=agent,
@@ -4618,10 +4559,7 @@ def spawn(
             **prev,
             "worker_id": worker_id,
             "role": role,
-            "ticket_id": ticket_id,
-            "roster_member_id": str(profile.member_id) if profile is not None else "",
-            "roster_source": str(profile.source) if profile is not None else "",
-            "roster_lifecycle": str(profile.lifecycle) if profile is not None else "",
+            "ticket_id": _canonical_ticket_id(ticket_id),
             "window": window,
             "pane_id": pane_id,
             "worktree": str(worktree_path),
@@ -4668,10 +4606,6 @@ def spawn(
                 "base_ref": str(base_ref_effective or ""),
                 "branch_override": branch_override or "",
                 "resumed": bool(resume) and bool(prev),
-                "roster_member_id": str(profile.member_id)
-                if profile is not None
-                else "",
-                "roster_source": str(profile.source) if profile is not None else "",
             },
         )
     return SpawnResult(
@@ -4809,7 +4743,7 @@ def prep_sprint(
     if notify_architect:
         architects = [
             recipient
-            for recipient in _resolve_targets(run2, "role:architect")
+            for recipient in _resolve_targets(run2, "architect")
             if str(recipient.get("worker_id") or "").strip()
         ]
         if not architects:
@@ -4826,7 +4760,7 @@ def prep_sprint(
             _inbox_write_and_maybe_nudge(
                 paths=paths,
                 run=run2,
-                target=architect_id,
+                target="architect",
                 message=(
                     f"Sprint prep ticket created: {created.id}. "
                     f"Sprint={sprint_name} tag={tag}. "
@@ -4988,13 +4922,6 @@ def spawn_integrator(
 
     with locked_run(paths) as run:
         harness = _normalize_harness(str(run.get("harness") or ""))
-        profile = resolve_builtin_profile(
-            run,
-            ROLE_INTEGRATOR,
-        )
-        enforce_member_lifecycle(profile=profile, role=ROLE_INTEGRATOR)
-        if profile is not None and profile.harness:
-            harness = _normalize_harness(profile.harness)
         cfg = (
             (run.get(harness) or {})
             if isinstance(run.get(harness), dict)
@@ -5018,7 +4945,7 @@ def spawn_integrator(
         paths.inbox_dir.mkdir(parents=True, exist_ok=True)
         paths.worktrees_dir.mkdir(parents=True, exist_ok=True)
 
-        worker_id = sanitize(str(worker_id or "integrator"), max_len=32) or "integrator"
+        worker_id = _canonical_worker_id(worker_id or "integrator") or "integrator"
         window_hint = str(window or "integrator").strip() or "integrator"
         worktree_key = (
             sanitize(str(worktree or "merge-queue"), max_len=60) or "merge-queue"
@@ -5156,11 +5083,7 @@ def spawn_integrator(
         if harness == "opencode":
             _ensure_opencode_worktree_runtime(workdir=wt_path, repo_root=root)
 
-        agent = (
-            str(profile.agent)
-            if profile is not None
-            else _agent_for_role(run, ROLE_INTEGRATOR, harness=harness)
-        )
+        agent = _agent_for_role(run, ROLE_INTEGRATOR, harness=harness)
         _require_agent_file_present(workdir=wt_path, harness=harness, agent=agent)
         cfg = (
             (run.get(harness) or {})
@@ -5168,8 +5091,6 @@ def spawn_integrator(
             else (run.get("opencode") or {})
         )
         model = _model_for_role(run, ROLE_INTEGRATOR, harness=harness)
-        if not model and profile is not None and profile.model:
-            model = str(profile.model)
         prompt = render_integrator_prompt(
             run=run,
             worker_id=worker_id,
@@ -5204,57 +5125,86 @@ def spawn_integrator(
         workers = dict(run.get("workers") or {})
         existing = dict(workers.get(worker_id) or {})
 
-        # Idempotency: if it exists and tmux window still exists, just return refreshed meta.
+        # Idempotency: if it exists and heartbeat is healthy, keep current pane.
         if existing and not existing.get("retired"):
             win = str(existing.get("window") or "")
             if win and tmux_window_exists(session, win):
                 pane_id = tmux_format(f"{session}:{win}", "#{pane_id}")
-                existing["pane_id"] = pane_id
-                existing["worktree"] = str(wt_path)
-                existing["ticket_id"] = ""
-                existing["role"] = ROLE_INTEGRATOR
-                workers[worker_id] = existing
-                run["workers"] = workers
-                ms = _merge_state(run)
-                ms["worker_id"] = worker_id
-                ms["worktree"] = str(wt_path)
-                ms["branch"] = str(wt.get("branch") or merge_branch)
-                run["merge"] = ms
-
-                write_event(
-                    paths,
-                    event_type="integrator.refreshed",
+                state, _heartbeat, pane = _recipient_health(
+                    paths=paths,
                     run=run,
-                    summary=f"Integrator present worker_id={worker_id}",
-                    refs={
-                        "worker_id": worker_id,
-                        "window": win,
-                        "pane_id": pane_id,
-                        "worktree": str(wt_path),
-                        "branch": str(wt.get("branch") or merge_branch),
-                    },
+                    session=session,
+                    recipient=worker_id,
+                    pane_id=pane_id,
                 )
-                return SpawnIntegratorResult(
-                    team=str(run.get("team") or paths.team),
-                    worker_id=worker_id,
-                    window=str(existing.get("window") or ""),
-                    pane_id=str(existing.get("pane_id") or ""),
-                    worktree=str(wt_path),
-                    respawned=False,
-                    worker=dict(existing),
-                )
-            else:
-                # Record respawn history (best-effort).
-                hist = list(existing.get("respawn_history") or [])
-                hist.append(
-                    {
-                        "at": _iso_z(),
-                        "window": win,
-                        "pane_id": existing.get("pane_id"),
-                        "reason": "missing",
-                    }
-                )
-                existing["respawn_history"] = hist
+                if state == "alive" and pane and _pane_can_receive_chat(pane):
+                    existing["pane_id"] = pane_id
+                    existing["worktree"] = str(wt_path)
+                    existing["ticket_id"] = ""
+                    existing["role"] = ROLE_INTEGRATOR
+                    workers[worker_id] = existing
+                    run["workers"] = workers
+                    ms = _merge_state(run)
+                    ms["worker_id"] = worker_id
+                    ms["worktree"] = str(wt_path)
+                    ms["branch"] = str(wt.get("branch") or merge_branch)
+                    run["merge"] = ms
+
+                    write_event(
+                        paths,
+                        event_type="integrator.refreshed",
+                        run=run,
+                        summary=f"Integrator present worker_id={worker_id}",
+                        refs={
+                            "worker_id": worker_id,
+                            "window": win,
+                            "pane_id": pane_id,
+                            "worktree": str(wt_path),
+                            "branch": str(wt.get("branch") or merge_branch),
+                        },
+                    )
+                    return SpawnIntegratorResult(
+                        team=str(run.get("team") or paths.team),
+                        worker_id=worker_id,
+                        window=str(existing.get("window") or ""),
+                        pane_id=str(existing.get("pane_id") or ""),
+                        worktree=str(wt_path),
+                        respawned=False,
+                        worker=dict(existing),
+                    )
+                allowed, reason = _recovery_gate_allows(run=run, recipient=worker_id)
+                if allowed:
+                    _recovery_mark_begin(run=run, recipient=worker_id)
+                    tmux_kill_window(session, win)
+                    _recovery_mark_end(run=run, recipient=worker_id)
+                else:
+                    _record_runtime_warning(
+                        paths=paths,
+                        run=run,
+                        code="integrator.recovery.gated",
+                        summary=f"Integrator recovery gated reason={reason}",
+                        refs={"worker_id": worker_id, "window": win, "health": state},
+                    )
+                    return SpawnIntegratorResult(
+                        team=str(run.get("team") or paths.team),
+                        worker_id=worker_id,
+                        window=str(existing.get("window") or ""),
+                        pane_id=str(pane_id or existing.get("pane_id") or ""),
+                        worktree=str(wt_path),
+                        respawned=False,
+                        worker=dict(existing),
+                    )
+            # Record respawn history (best-effort).
+            hist = list(existing.get("respawn_history") or [])
+            hist.append(
+                {
+                    "at": _iso_z(),
+                    "window": win,
+                    "pane_id": existing.get("pane_id"),
+                    "reason": "missing_or_unhealthy",
+                }
+            )
+            existing["respawn_history"] = hist
 
         window = tmux_unique_window_name(session, window_hint)
         pane_id = tmux_new_window(
@@ -5280,9 +5230,6 @@ def spawn_integrator(
             "worker_id": worker_id,
             "role": ROLE_INTEGRATOR,
             "ticket_id": "",
-            "roster_member_id": str(profile.member_id) if profile is not None else "",
-            "roster_source": str(profile.source) if profile is not None else "",
-            "roster_lifecycle": str(profile.lifecycle) if profile is not None else "",
             "worktree": str(wt_path),
             "worktree_key": worktree_key,
             "branch": str(wt.get("branch") or merge_branch),
@@ -5332,10 +5279,6 @@ def spawn_integrator(
                 "base_ref": base_ref,
                 "forced": bool(force),
                 "config": dict(cfg),
-                "roster_member_id": str(profile.member_id)
-                if profile is not None
-                else "",
-                "roster_source": str(profile.source) if profile is not None else "",
             },
         )
     return SpawnIntegratorResult(
@@ -5347,18 +5290,6 @@ def spawn_integrator(
         respawned=True,
         worker=dict(workers.get(worker_id) or {}),
     )
-
-
-def spawn_persona(
-    *,
-    team: str,
-    member_id: str,
-    repo: Optional[Path] = None,
-    force: bool = False,
-) -> SpawnPersonaResult:
-    from agent_loom.team.personas import spawn_persona as _spawn_persona
-
-    return _spawn_persona(team=team, member_id=member_id, repo=repo, force=force)
 
 
 def status(*, team: str, repo: Optional[Path] = None) -> StatusResult:
@@ -5401,15 +5332,19 @@ def status(*, team: str, repo: Optional[Path] = None) -> StatusResult:
     for wid, w in (run.get("workers") or {}).items():
         pane_id = str((w or {}).get("pane_id") or "")
         pane = panes.get(pane_id) if pane_id else None
+        health, heartbeat = _health_state(paths=paths, run=run, recipient=str(wid))
+        alive = bool(health == "alive" and pane and _pane_can_receive_chat(pane))
         workers_out[wid] = {
             **(w or {}),
-            "alive": bool(pane and _pane_can_receive_chat(pane)),
+            "alive": alive,
+            "health": {"state": health, **dict(heartbeat or {})},
             "tmux": pane or {},
         }
 
     mgr = dict(run.get("manager") or {})
     mgr_pane = str(mgr.get("pane_id") or "")
     mgr_info = panes.get(mgr_pane) if mgr_pane else None
+    mgr_health, mgr_heartbeat = _health_state(paths=paths, run=run, recipient="manager")
 
     # Warnings (pathing + anchoring guardrails).
     warnings: List[Dict[str, str]] = []
@@ -5487,7 +5422,7 @@ def status(*, team: str, repo: Optional[Path] = None) -> StatusResult:
         "run_dir": str(run.get("run_dir") or paths.run_dir),
         "tickets_dir": str(run.get("tickets_dir") or ""),
         "sprint": dict(run.get("sprint") or {}),
-        "roster": _roster_summary_from_run(run),
+        "team_config": team_config_summary_from_run(run),
         "inbox": {
             "unacked_to_manager": inbox_unacked_mgr,
             "unacked_total": inbox_unacked_all,
@@ -5501,7 +5436,14 @@ def status(*, team: str, repo: Optional[Path] = None) -> StatusResult:
             "remote": merge_remote,
             "push": merge_push,
         },
-        "manager": {**mgr, "tmux": mgr_info or {}},
+        "manager": {
+            **mgr,
+            "alive": bool(
+                mgr_health == "alive" and mgr_info and _pane_can_receive_chat(mgr_info)
+            ),
+            "health": {"state": mgr_health, **dict(mgr_heartbeat or {})},
+            "tmux": mgr_info or {},
+        },
         "workers": workers_out,
         "warnings": warnings,
     }
@@ -5544,7 +5486,7 @@ def status(*, team: str, repo: Optional[Path] = None) -> StatusResult:
         run_dir=str(payload.get("run_dir") or ""),
         tickets_dir=str(payload.get("tickets_dir") or ""),
         sprint=dict(payload.get("sprint") or {}),
-        roster=dict(payload.get("roster") or {}),
+        team_config=dict(payload.get("team_config") or {}),
         inbox=dict(payload.get("inbox") or {}),
         merge_queue=dict(payload.get("merge_queue") or {}),
         manager=dict(payload.get("manager") or {}),
@@ -5602,6 +5544,21 @@ def doctor(*, team: str, repo: Optional[Path] = None) -> DoctorResult:
         )
         add_suggestion(f"loom team start {paths.team} --repo {paths.repo_root}")
 
+    manager_health, manager_heartbeat = _health_state(
+        paths=paths,
+        run=run,
+        recipient="manager",
+    )
+    if manager_health in {"stale", "dead", "missing"}:
+        issues.append(
+            {
+                "code": f"MANAGER_{manager_health.upper()}",
+                "message": f"manager heartbeat state={manager_health}",
+                **({"heartbeat": dict(manager_heartbeat)} if manager_heartbeat else {}),
+            }
+        )
+        add_suggestion(f"loom team start {paths.team} --repo {paths.repo_root} --force")
+
     raw_workers = run.get("workers")
     workers: Dict[str, Any] = dict(raw_workers) if isinstance(raw_workers, dict) else {}
 
@@ -5614,6 +5571,24 @@ def doctor(*, team: str, repo: Optional[Path] = None) -> DoctorResult:
         role = str(w.get("role") or "").strip().lower()
         win = str(w.get("window") or "").strip()
         pane_id = str(w.get("pane_id") or "").strip()
+        health, heartbeat = _health_state(paths=paths, run=run, recipient=str(wid))
+
+        if health in {"stale", "dead", "missing"}:
+            issues.append(
+                {
+                    "code": f"WORKER_{health.upper()}",
+                    "message": f"worker {wid} heartbeat state={health}",
+                    "worker_id": wid,
+                    "role": role,
+                    **({"heartbeat": dict(heartbeat)} if heartbeat else {}),
+                }
+            )
+            if role == ROLE_INTEGRATOR or wid == "integrator":
+                add_suggestion(f"loom team spawn-integrator {paths.team}")
+                add_suggestion(f"loom team spawn-integrator {paths.team} --force")
+            else:
+                add_suggestion(f"loom team bounce {paths.team} {wid} --reason liveness")
+                add_suggestion(f"loom team resume-worker {paths.team} {wid}")
 
         if (
             session
@@ -5681,9 +5656,10 @@ def doctor(*, team: str, repo: Optional[Path] = None) -> DoctorResult:
         ]
         alive = False
         for wid, w in integrators:
+            health, _heartbeat = _health_state(paths=paths, run=run, recipient=str(wid))
             pid = str(w.get("pane_id") or "").strip()
             pane = panes.get(pid) if pid else None
-            if pane and _pane_can_receive_chat(pane):
+            if health == "alive" and pane and _pane_can_receive_chat(pane):
                 alive = True
                 break
         if not alive:
@@ -5811,7 +5787,7 @@ def capture(
             wid = str((meta or {}).get("worker_id") or "").strip()
             sugg = [f"loom team status {paths.team} --show-dead"]
             if role == ROLE_INTEGRATOR or (
-                str(target or "").strip() in {"integrator", "merge-queue"}
+                str(target or "").strip() in {"integrator"}
             ):
                 sugg += [
                     f"loom team spawn-integrator {paths.team}",
@@ -5884,7 +5860,8 @@ def send(
 
     with locked_run(paths, save=False) as run:
         sender_role, sender_target = sender_for_send()
-        requested_target = str(target or "").strip()
+        requested_input = str(target or "").strip()
+        requested_target = _canonical_send_target(requested_input)
         concrete_target, used_escalation = resolve_send_target(
             run=run,
             target=requested_target,
@@ -5903,21 +5880,19 @@ def send(
                 exit_code=2,
             )
 
-        requested_norm = str(requested_target or "").strip().lower()
-        if used_escalation:
-            requested_norm = "escalate"
+        route_target = "escalate" if used_escalation else requested_target
 
         for recipient in resolved_targets:
             if not route_allows_target(
                 allowed_tokens=allowed_tokens,
-                requested_target=requested_norm,
+                requested_target=route_target,
                 recipient=recipient,
             ):
                 raise TeamError(
                     (
                         "Communication route forbidden: "
                         f"{sender_role} -> {recipient.get('role') or 'unknown'} "
-                        f"for target {requested_target!r}"
+                        f"for target {requested_input!r}"
                     ),
                     code="PERMISSION",
                     exit_code=2,
@@ -5925,6 +5900,7 @@ def send(
                         "sender_role": sender_role,
                         "sender_target": sender_target,
                         "requested_target": requested_target,
+                        "requested_input": requested_input,
                         "recipient": dict(recipient),
                         "allowed": list(allowed_tokens),
                     },
@@ -5934,7 +5910,20 @@ def send(
         suggestion_set: set[str] = set()
 
         for recipient in resolved_targets:
-            dispatch_target = str(recipient.get("worker_id") or "").strip() or "manager"
+            recipient_role = str(recipient.get("role") or "").strip().lower()
+            recipient_worker_id = _canonical_worker_id(
+                str(recipient.get("worker_id") or "")
+            )
+            if recipient_role == ROLE_MANAGER:
+                dispatch_target = "manager"
+            elif recipient_worker_id:
+                dispatch_target = f"worker:{recipient_worker_id}"
+            else:
+                raise TeamError(
+                    f"Unable to dispatch message for recipient: {recipient}",
+                    code="BAD_STATE",
+                    exit_code=2,
+                )
             inbox_msg, _recipient, delivered, delivery_reason, meta = (
                 _inbox_write_and_maybe_nudge(
                     paths=paths,
@@ -5945,7 +5934,9 @@ def send(
                     kind="send",
                     meta_extra={
                         "team": str(run.get("team") or paths.team),
+                        "requested_input": requested_input,
                         "requested_target": requested_target,
+                        "route_target": route_target,
                         "dispatch_target": dispatch_target,
                     },
                     nudge=True,
@@ -6028,6 +6019,7 @@ def send(
             },
             data={
                 "target": requested_target,
+                "requested_input": requested_input,
                 "resolved_target": concrete_target,
                 "used_escalation": bool(used_escalation),
                 "delivered": bool(all_delivered),
@@ -6796,7 +6788,29 @@ def bounce(
     if not tmux_has_session(session):
         raise TeamError(f"tmux session not found: {session}", code="TMUX", exit_code=2)
 
-    pane_id, meta = _resolve_target(run, str(target or ""))
+    requested_target = str(target or "").strip()
+    resolved_target = requested_target
+    if ":" not in requested_target and requested_target.lower() not in {
+        "manager",
+        "mgr",
+        "architect",
+        "integrator",
+        "workers",
+    }:
+        worker_guess = _canonical_worker_id(requested_target)
+        workers = dict(run.get("workers") or {})
+        known_worker_ids = {
+            _canonical_worker_id(str((w or {}).get("worker_id") or wid))
+            for wid, w in workers.items()
+            if isinstance(w, dict)
+        }
+        if worker_guess and worker_guess in known_worker_ids:
+            resolved_target = f"worker:{worker_guess}"
+        else:
+            ticket_guess = _canonical_ticket_id(requested_target)
+            resolved_target = f"ticket:{ticket_guess}" if ticket_guess else requested_target
+
+    pane_id, meta = _resolve_target(run, resolved_target)
     if str(meta.get("role") or "").strip().lower() == ROLE_MANAGER:
         raise TeamError("Refusing to bounce manager", code="ARG", exit_code=2)
 
@@ -6855,7 +6869,8 @@ def bounce(
             "sprint": sprint,
             "worker_id": worker_id,
             "pane_id": pane_id,
-            "target": str(target or ""),
+            "target": requested_target,
+            "resolved_target": resolved_target,
         },
     )
     tmux_signal(channel_for(run_id=run_id, to=worker_id))
@@ -6870,7 +6885,11 @@ def bounce(
             "pane_id": pane_id,
             "inbox_id": str(inbox_msg.get("id") or ""),
         },
-        data={"reason": reason, "target": str(target or "")},
+        data={
+            "reason": reason,
+            "target": requested_target,
+            "resolved_target": resolved_target,
+        },
     )
 
     return BounceResult(

@@ -58,7 +58,6 @@ from agent_loom.team.commands.workers import (
     cmd_retire,
     cmd_spawn,
     cmd_spawn_integrator,
-    cmd_spawn_persona,
 )
 from agent_loom.team.constants import (
     DEFAULT_AUTOCAPTURE_LINES,
@@ -410,12 +409,7 @@ def build_parser() -> argparse.ArgumentParser:
     sp = sub.add_parser("start", help="Start or resume a team run")
     sp.add_argument("team", help="Team name")
     sp.add_argument("--objective", default="", help="High-level objective text")
-    sp.add_argument(
-        "--roster",
-        dest="roster",
-        default="",
-        help="Path to YAML team roster file",
-    )
+    sp.add_argument("--config", default="", help="Path to Team config YAML file")
     sp.add_argument(
         "--session",
         default="",
@@ -433,45 +427,45 @@ def build_parser() -> argparse.ArgumentParser:
         help="Override harness binary (wrapper/shim). Must be CLI-compatible with the selected harness",
     )
     sp.add_argument("--model", default="", help="Model override")
-    sp.add_argument("--manager-model", default="", help="Manager model override")
-    sp.add_argument("--architect-model", default="", help="Architect model override")
-    sp.add_argument("--worker-model", default="", help="Worker model override")
-    sp.add_argument("--integrator-model", default="", help="Integrator model override")
+    sp.add_argument("--manager-model", default="", help=argparse.SUPPRESS)
+    sp.add_argument("--architect-model", default="", help=argparse.SUPPRESS)
+    sp.add_argument("--worker-model", default="", help=argparse.SUPPRESS)
+    sp.add_argument("--integrator-model", default="", help=argparse.SUPPRESS)
     sp.add_argument(
         "--manager-window",
         default=DEFAULT_MANAGER_WINDOW,
-        help="tmux window name for manager",
+        help=argparse.SUPPRESS,
     )
     sp.add_argument(
         "--mount",
         dest="mount",
         action="append",
         default=None,
-        help="Symlink a repo-root path into worker worktrees (repeatable): SRC[:DEST]",
+        help=argparse.SUPPRESS,
     )
     sp.add_argument(
         "--clear-mounts",
         dest="clear_mounts",
         action="store_true",
-        help="Clear persisted mounts for this run",
+        help=argparse.SUPPRESS,
     )
     sp.add_argument(
         "--max-headcount",
         dest="max_headcount",
         type=int,
         default=None,
-        help="Maximum active worker count (0 = unlimited). Persisted in run state.",
+        help=argparse.SUPPRESS,
     )
     sp.add_argument(
         "--target-branch",
         dest="target_branch",
         default="",
-        help="Ship destination branch (default: main)",
+        help=argparse.SUPPRESS,
     )
     sp.add_argument(
         "--remote",
         default="",
-        help="Git remote used for ship push (default: origin)",
+        help=argparse.SUPPRESS,
     )
     push_grp0 = sp.add_mutually_exclusive_group()
     push_grp0.add_argument(
@@ -480,7 +474,7 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_const",
         const=True,
         default=None,
-        help="Enable push after successful ship (default)",
+        help=argparse.SUPPRESS,
     )
     push_grp0.add_argument(
         "--no-push",
@@ -488,10 +482,10 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_const",
         const=False,
         default=None,
-        help="Disable push after successful ship",
+        help=argparse.SUPPRESS,
     )
     sp.add_argument(
-        "--force", action="store_true", help="Recreate manager window even if exists"
+        "--force", action="store_true", help=argparse.SUPPRESS
     )
     sp.set_defaults(func=cmd_start)
 
@@ -509,7 +503,7 @@ def build_parser() -> argparse.ArgumentParser:
     cap.add_argument("team", help="Team name")
     cap.add_argument(
         "target",
-        help="Target: manager | worker_id | ticket_id | window | worktree_key (e.g. merge-queue)",
+        help="Target: manager | architect | integrator | worker:<id> | ticket:<id>",
     )
     cap.add_argument(
         "--lines", type=int, default=DEFAULT_AUTOCAPTURE_LINES, help="Number of lines"
@@ -537,7 +531,7 @@ def build_parser() -> argparse.ArgumentParser:
     snd.add_argument("team", help="Team name")
     snd.add_argument(
         "target",
-        help="Target: manager | worker_id | ticket_id | window | worktree_key (e.g. merge-queue)",
+        help="Target: manager | architect | integrator | workers | worker:<id> | ticket:<id>",
     )
     snd.add_argument("message", nargs="?", default="", help="Message text")
     snd.add_argument(
@@ -837,13 +831,6 @@ def build_parser() -> argparse.ArgumentParser:
         help="Default push disabled",
     )
     sm.set_defaults(func=cmd_spawn_integrator)
-
-    spm = sub.add_parser(
-        "spawn-persona", help="Spawn an additional roster persona by member id"
-    )
-    spm.add_argument("team", help="Team name")
-    spm.add_argument("member_id", help="Roster member id")
-    spm.set_defaults(func=cmd_spawn_persona)
 
     doc = sub.add_parser(
         "doctor",

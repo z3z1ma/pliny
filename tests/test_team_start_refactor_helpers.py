@@ -12,6 +12,32 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
         team._ensure_start_run_paths(paths)
         return paths
 
+    def _config_state(self, source_root: Path) -> dict:
+        return {
+            "source": str((source_root / "team-config.yaml").resolve()),
+            "loaded_at": "2026-02-17T00:00:00Z",
+            "spec": {
+                "harness": "opencode",
+                "model": "gpt-main",
+                "role_prompts": {
+                    "append": {
+                        "manager": "",
+                        "architect": "",
+                        "worker": "",
+                        "integrator": "",
+                    }
+                },
+                "worker": {"subagents": "encouraged"},
+                "liveness": {
+                    "heartbeat_interval_s": 20,
+                    "stale_after_s": 90,
+                    "dead_after_s": 240,
+                    "recovery_cooldown_s": 180,
+                    "max_recoveries_per_hour": 3,
+                },
+            },
+        }
+
     def test_validated_start_max_headcount(self) -> None:
         self.assertIsNone(team._validated_start_max_headcount(None))
         self.assertEqual(team._validated_start_max_headcount(3), 3)
@@ -33,14 +59,15 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
                 session="session-cobra",
                 requested_harness="opencode",
                 requested_bin="custom-opencode",
-                roster_state=None,
+                team_config_state=self._config_state(repo_root),
+                team_config_model="gpt-main",
                 mounts=None,
                 clear_mounts=False,
                 max_headcount=5,
                 target_branch="dev/next",
                 remote="origin",
                 push=True,
-                model="gpt-main",
+                model="",
                 manager_model="gpt-manager",
                 architect_model="",
                 worker_model="",
@@ -53,22 +80,14 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
                 str(((run.get("merge") or {}).get("config") or {}).get("target_branch") or ""),
                 "dev/next",
             )
-            self.assertEqual(
-                str((run.get("defaults") or {}).get("base_ref") or ""),
-                "dev/next",
-            )
+            self.assertEqual(str((run.get("defaults") or {}).get("base_ref") or ""), "dev/next")
             self.assertEqual(
                 str((((run.get("opencode") or {}).get("models") or {}).get("manager") or "")),
                 "gpt-manager",
             )
-            self.assertEqual(
-                str((run.get("opencode") or {}).get("bin") or ""),
-                "custom-opencode",
-            )
-            self.assertEqual(
-                int(((run.get("limits") or {}).get("max_headcount") or 0)),
-                5,
-            )
+            self.assertEqual(str((run.get("opencode") or {}).get("bin") or ""), "custom-opencode")
+            self.assertEqual(int(((run.get("limits") or {}).get("max_headcount") or 0)), 5)
+            self.assertIn("team_config", run)
 
             persisted = json.loads(paths.run_file.read_text(encoding="utf-8"))
             self.assertEqual(str(persisted.get("session") or ""), "session-cobra")
@@ -85,7 +104,8 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
                 session="persisted-session",
                 requested_harness="opencode",
                 requested_bin="",
-                roster_state=None,
+                team_config_state=self._config_state(repo_root),
+                team_config_model="gpt-main",
                 mounts=None,
                 clear_mounts=False,
                 max_headcount=None,
@@ -104,11 +124,13 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
                 root=repo_root,
                 session="cli-session",
                 session_provided=False,
+                config_provided=False,
                 requested_harness="opencode",
                 requested_bin="",
                 harness_provided=False,
-                roster_state=None,
-                roster_harness="",
+                team_config_state=self._config_state(repo_root),
+                team_config_harness="",
+                team_config_model="gpt-main",
                 mounts=None,
                 clear_mounts=False,
                 max_headcount=None,
@@ -124,9 +146,7 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
 
             self.assertEqual(adopted_session, "persisted-session")
             self.assertEqual(
-                str(
-                    (((updated_run.get("opencode") or {}).get("models") or {}).get("manager") or "")
-                ),
+                str((((updated_run.get("opencode") or {}).get("models") or {}).get("manager") or "")),
                 "override-manager",
             )
 
@@ -143,7 +163,8 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
                 session="persisted-session",
                 requested_harness="opencode",
                 requested_bin="",
-                roster_state=None,
+                team_config_state=self._config_state(repo_root),
+                team_config_model="",
                 mounts=[".venv:.venv"],
                 clear_mounts=False,
                 max_headcount=None,
@@ -162,11 +183,13 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
                 root=repo_root,
                 session="explicit-session",
                 session_provided=True,
+                config_provided=False,
                 requested_harness="opencode",
                 requested_bin="",
                 harness_provided=False,
-                roster_state=None,
-                roster_harness="",
+                team_config_state=self._config_state(repo_root),
+                team_config_harness="",
+                team_config_model="",
                 mounts=None,
                 clear_mounts=True,
                 max_headcount=None,
@@ -184,11 +207,10 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
             self.assertEqual(str(updated_run.get("session") or ""), "explicit-session")
             self.assertEqual(list(updated_run.get("mounts") or []), [])
 
-    def test_start_create_run_cli_mounts_take_precedence_over_roster_mounts(self) -> None:
+    def test_start_create_run_uses_cli_mounts_when_provided(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             repo_root = Path(td)
             (repo_root / ".env").write_text("KEY=VALUE\n", encoding="utf-8")
-            (repo_root / ".venv").mkdir(parents=True, exist_ok=True)
             paths = self._paths(repo_root)
 
             run = team._start_create_run(
@@ -199,11 +221,8 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
                 session="persisted-session",
                 requested_harness="opencode",
                 requested_bin="",
-                roster_state={
-                    "source": str((repo_root / "roster.yaml").resolve()),
-                    "loaded_at": "2026-02-16T00:00:00Z",
-                    "spec": {"mounts": [".venv:.venv"]},
-                },
+                team_config_state=self._config_state(repo_root),
+                team_config_model="",
                 mounts=[".env:.env"],
                 clear_mounts=False,
                 max_headcount=None,
@@ -217,10 +236,7 @@ class TestTeamStartRefactorHelpers(unittest.TestCase):
                 integrator_model="",
             )
 
-            self.assertEqual(
-                list(run.get("mounts") or []),
-                [{"src": ".env", "dst": ".env"}],
-            )
+            self.assertEqual(list(run.get("mounts") or []), [{"src": ".env", "dst": ".env"}])
 
 
 if __name__ == "__main__":

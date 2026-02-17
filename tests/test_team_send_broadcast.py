@@ -7,8 +7,8 @@ from agent_loom.team import core as team
 from agent_loom.team.run_state import RunPaths
 
 
-class TestTeamSendBroadcast(unittest.TestCase):
-    def test_send_group_fanout_deduplicates_and_reports_partial_delivery(self) -> None:
+class TestTeamSendWorkersFanout(unittest.TestCase):
+    def test_send_workers_fanout_reports_partial_delivery(self) -> None:
         paths = RunPaths(repo_root=Path("/repo"), team="CobraKai")
         run = {
             "team": "CobraKai",
@@ -21,7 +21,6 @@ class TestTeamSendBroadcast(unittest.TestCase):
                     "ticket_id": "tk-1",
                     "pane_id": "%3",
                     "window": "w1",
-                    "worktree_key": "tk-1",
                     "retired": False,
                 },
                 "w2": {
@@ -30,18 +29,8 @@ class TestTeamSendBroadcast(unittest.TestCase):
                     "ticket_id": "tk-2",
                     "pane_id": "%4",
                     "window": "w2",
-                    "worktree_key": "tk-2",
                     "retired": False,
                 },
-            },
-            "roster": {
-                "spec": {
-                    "communication": {
-                        "broadcast_groups": {
-                            "ops": ["workers", "w1"],
-                        }
-                    }
-                }
             },
         }
 
@@ -55,7 +44,7 @@ class TestTeamSendBroadcast(unittest.TestCase):
         def fake_inbox_write_and_maybe_nudge(**kwargs):
             target = str(kwargs.get("target") or "")
             calls.append(target)
-            if target == "w1":
+            if target == "worker:w1":
                 return ({"id": "m-1"}, target, True, "", {"worker_id": "w1", "role": "worker"})
             return (
                 {"id": "m-2"},
@@ -74,19 +63,11 @@ class TestTeamSendBroadcast(unittest.TestCase):
                 side_effect=fake_inbox_write_and_maybe_nudge,
             ),
             mock.patch.object(team, "write_event"),
-            mock.patch.dict(
-                "os.environ",
-                {"TEAM_ROLE": "manager"},
-                clear=False,
-            ),
+            mock.patch.dict("os.environ", {"TEAM_ROLE": "manager"}, clear=False),
         ):
-            result = team.send(
-                team="CobraKai",
-                target="group:ops",
-                message="status check",
-            )
+            result = team.send(team="CobraKai", target="workers", message="status check")
 
-        self.assertEqual(calls, ["w1", "w2"])
+        self.assertEqual(calls, ["worker:w1", "worker:w2"])
         self.assertFalse(result.delivered)
         self.assertEqual(result.delivery_reason, "partial_delivery")
         self.assertEqual(len(result.deliveries), 2)

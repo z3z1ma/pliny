@@ -12,7 +12,6 @@ from agent_loom.team.core import (
     retire,
     spawn,
     spawn_integrator,
-    spawn_persona,
 )
 from agent_loom.team.output import emit_json_result
 
@@ -65,21 +64,6 @@ def cmd_spawn_integrator(args: argparse.Namespace) -> None:
         print("exists")
         return
     print(res.worker_id)
-
-
-def cmd_spawn_persona(args: argparse.Namespace) -> None:
-    res = spawn_persona(
-        team=args.team,
-        member_id=str(args.member_id or ""),
-        repo=Path(args.repo).resolve() if args.repo else None,
-    )
-    if args.json:
-        emit_json_result(res)
-        return
-
-    print(f"spawned {res.member_id} ({res.role})")
-    print(f"- window: {res.window}")
-    print(f"- worktree: {res.worktree}")
 
 
 def cmd_retire(args: argparse.Namespace) -> None:

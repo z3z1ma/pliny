@@ -6,102 +6,121 @@ from agent_loom.team.errors import TeamError
 
 
 class TestTeamTargets(unittest.TestCase):
-    def test_resolve_target_by_worktree_key(self) -> None:
-        run = {
+    def _run(self) -> dict:
+        return {
             "manager": {"pane_id": "%1"},
             "workers": {
+                "W1": {
+                    "worker_id": "W1",
+                    "role": "worker",
+                    "ticket_id": "AL-1",
+                    "pane_id": "%3",
+                    "window": "w1",
+                    "retired": False,
+                },
+                "architect": {
+                    "worker_id": "architect",
+                    "role": "architect",
+                    "ticket_id": "",
+                    "pane_id": "%8",
+                    "window": "architect",
+                    "retired": False,
+                },
                 "integrator": {
                     "worker_id": "integrator",
                     "role": "integrator",
                     "ticket_id": "",
-                    "pane_id": "%71",
+                    "pane_id": "%9",
                     "window": "integrator",
-                    "worktree_key": "merge-queue",
                     "retired": False,
-                }
+                },
             },
         }
 
-        pane_id, meta = targets._resolve_target(run, "merge-queue")
-        self.assertEqual(pane_id, "%71")
+    def test_resolve_manager_alias(self) -> None:
+        pane_id, meta = targets._resolve_target(self._run(), "mgr")
+        self.assertEqual(pane_id, "%1")
+        self.assertEqual(str(meta.get("role") or ""), "manager")
+
+    def test_resolve_architect(self) -> None:
+        pane_id, meta = targets._resolve_target(self._run(), "architect")
+        self.assertEqual(pane_id, "%8")
+        self.assertEqual(str(meta.get("worker_id") or ""), "architect")
+
+    def test_resolve_integrator(self) -> None:
+        pane_id, meta = targets._resolve_target(self._run(), "integrator")
+        self.assertEqual(pane_id, "%9")
         self.assertEqual(str(meta.get("worker_id") or ""), "integrator")
 
-    def test_resolve_target_by_window_name(self) -> None:
-        run = {
-            "manager": {"pane_id": "%1"},
-            "workers": {
-                "w1": {
-                    "worker_id": "w1",
-                    "role": "worker",
-                    "ticket_id": "tk-1",
-                    "pane_id": "%3",
-                    "window": "alpha",
-                    "worktree_key": "tk-1",
-                    "retired": False,
-                }
-            },
-        }
-
-        pane_id, meta = targets._resolve_target(run, "alpha")
+    def test_resolve_worker_target_casefolds_worker_id(self) -> None:
+        pane_id, meta = targets._resolve_target(self._run(), "worker:w1")
         self.assertEqual(pane_id, "%3")
         self.assertEqual(str(meta.get("worker_id") or ""), "w1")
 
-    def test_worktree_key_ignores_retired_workers(self) -> None:
-        run = {
-            "manager": {"pane_id": "%1"},
-            "workers": {
-                "w1": {
-                    "worker_id": "w1",
-                    "role": "worker",
-                    "ticket_id": "",
-                    "pane_id": "%2",
-                    "window": "alpha",
-                    "worktree_key": "merge-queue",
-                    "retired": True,
-                },
-                "w2": {
-                    "worker_id": "w2",
-                    "role": "worker",
-                    "ticket_id": "",
-                    "pane_id": "%3",
-                    "window": "beta",
-                    "worktree_key": "merge-queue",
-                    "retired": False,
-                },
-            },
-        }
+        pane_id2, meta2 = targets._resolve_target(self._run(), "worker:W1")
+        self.assertEqual(pane_id2, "%3")
+        self.assertEqual(str(meta2.get("worker_id") or ""), "w1")
 
-        pane_id, meta = targets._resolve_target(run, "merge-queue")
+    def test_resolve_ticket_target_casefolds_ticket_id(self) -> None:
+        pane_id, meta = targets._resolve_target(self._run(), "ticket:al-1")
         self.assertEqual(pane_id, "%3")
-        self.assertEqual(str(meta.get("worker_id") or ""), "w2")
+        self.assertEqual(str(meta.get("ticket_id") or ""), "al-1")
 
-    def test_ambiguous_worktree_key_raises(self) -> None:
+        pane_id2, meta2 = targets._resolve_target(self._run(), "ticket:AL-1")
+        self.assertEqual(pane_id2, "%3")
+        self.assertEqual(str(meta2.get("ticket_id") or ""), "al-1")
+
+    def test_plain_worker_id_is_not_valid_target_syntax(self) -> None:
+        with self.assertRaises(TeamError):
+            targets._resolve_target(self._run(), "w1")
+
+    def test_workers_group_includes_only_worker_role(self) -> None:
+        resolved = targets._resolve_targets(self._run(), "workers")
+        self.assertEqual(len(resolved), 1)
+        self.assertEqual(str(resolved[0].get("worker_id") or ""), "w1")
+        self.assertEqual(str(resolved[0].get("target") or ""), "worker:w1")
+
+    def test_workers_group_raises_when_empty(self) -> None:
+        run = {
+            "manager": {"pane_id": "%1"},
+            "workers": {
+                "architect": {
+                    "worker_id": "architect",
+                    "role": "architect",
+                    "ticket_id": "",
+                    "pane_id": "%8",
+                    "window": "architect",
+                    "retired": False,
+                }
+            },
+        }
+        with self.assertRaises(TeamError):
+            targets._resolve_targets(run, "workers")
+
+    def test_ticket_target_ambiguous_raises(self) -> None:
         run = {
             "manager": {"pane_id": "%1"},
             "workers": {
                 "w1": {
                     "worker_id": "w1",
                     "role": "worker",
-                    "ticket_id": "",
-                    "pane_id": "%2",
-                    "window": "alpha",
-                    "worktree_key": "merge-queue",
+                    "ticket_id": "al-1",
+                    "pane_id": "%3",
+                    "window": "w1",
                     "retired": False,
                 },
                 "w2": {
                     "worker_id": "w2",
                     "role": "worker",
-                    "ticket_id": "",
-                    "pane_id": "%3",
-                    "window": "beta",
-                    "worktree_key": "merge-queue",
+                    "ticket_id": "al-1",
+                    "pane_id": "%4",
+                    "window": "w2",
                     "retired": False,
                 },
             },
         }
-
         with self.assertRaises(TeamError) as ctx:
-            targets._resolve_target(run, "merge-queue")
+            targets._resolve_target(run, "ticket:AL-1")
         self.assertEqual(str(getattr(ctx.exception, "code", "")), "AMBIGUOUS")
 
     def test_best_effort_tmux_nudge_uses_ctrl_enter_for_omp(self) -> None:
@@ -129,117 +148,6 @@ class TestTeamTargets(unittest.TestCase):
         self.assertTrue(ok)
         self.assertEqual(reason, "")
         send_text.assert_called_once_with("%3", "TEAM inbox id=abc", enter=True, ctrl_enter=True)
-
-    def test_best_effort_tmux_nudge_uses_enter_for_non_omp(self) -> None:
-        run = {"harness": "opencode", "manager": {"pane_id": "%1"}, "workers": {}}
-
-        with (
-            mock.patch.object(targets, "tmux_available", return_value=True),
-            mock.patch.object(targets, "tmux_has_session", return_value=True),
-            mock.patch.object(targets, "_resolve_target", return_value=("%3", {"pane_id": "%3"})),
-            mock.patch.object(
-                targets,
-                "tmux_list_panes",
-                return_value={"%3": {"current_command": "opencode", "dead": "0"}},
-            ),
-            mock.patch.object(targets, "tmux_send_text") as send_text,
-        ):
-            ok, reason, _meta = targets._best_effort_tmux_nudge(
-                run=run,
-                session="team-cobra",
-                target="manager",
-                line="TEAM inbox id=abc",
-                force=False,
-            )
-
-        self.assertTrue(ok)
-        self.assertEqual(reason, "")
-        send_text.assert_called_once_with("%3", "TEAM inbox id=abc", enter=True, ctrl_enter=False)
-
-    def test_resolve_targets_workers_group(self) -> None:
-        run = {
-            "manager": {"pane_id": "%1"},
-            "workers": {
-                "w1": {
-                    "worker_id": "w1",
-                    "role": "worker",
-                    "ticket_id": "tk-1",
-                    "pane_id": "%3",
-                    "window": "alpha",
-                    "worktree_key": "tk-1",
-                    "retired": False,
-                },
-                "w2": {
-                    "worker_id": "w2",
-                    "role": "worker",
-                    "ticket_id": "tk-2",
-                    "pane_id": "%4",
-                    "window": "beta",
-                    "worktree_key": "tk-2",
-                    "retired": False,
-                },
-                "w3": {
-                    "worker_id": "w3",
-                    "role": "architect",
-                    "ticket_id": "tk-3",
-                    "pane_id": "%5",
-                    "window": "gamma",
-                    "worktree_key": "tk-3",
-                    "retired": False,
-                },
-            },
-        }
-
-        resolved = targets._resolve_targets(run, "workers")
-        self.assertEqual([str(x.get("worker_id") or "") for x in resolved], ["w1", "w2"])
-
-    def test_resolve_targets_policy_group(self) -> None:
-        run = {
-            "manager": {"pane_id": "%1"},
-            "workers": {
-                "w1": {
-                    "worker_id": "w1",
-                    "role": "worker",
-                    "ticket_id": "tk-1",
-                    "pane_id": "%3",
-                    "window": "alpha",
-                    "worktree_key": "tk-1",
-                    "retired": False,
-                },
-                "w2": {
-                    "worker_id": "w2",
-                    "role": "integrator",
-                    "ticket_id": "",
-                    "pane_id": "%7",
-                    "window": "integrator",
-                    "worktree_key": "merge-queue",
-                    "retired": False,
-                },
-            },
-            "roster": {
-                "spec": {
-                    "communication": {
-                        "broadcast_groups": {
-                            "ops": ["workers", "integrators"],
-                        }
-                    }
-                }
-            },
-        }
-
-        resolved = targets._resolve_targets(run, "group:ops")
-        self.assertEqual([str(x.get("worker_id") or "") for x in resolved], ["w1", "w2"])
-
-    def test_resolve_targets_unknown_policy_group_raises(self) -> None:
-        run = {
-            "manager": {"pane_id": "%1"},
-            "workers": {},
-            "roster": {"spec": {"communication": {"broadcast_groups": {"ops": ["manager"]}}}},
-        }
-
-        with self.assertRaises(TeamError) as ctx:
-            targets._resolve_targets(run, "group:missing")
-        self.assertIn("Unknown broadcast group", str(ctx.exception))
 
 
 if __name__ == "__main__":

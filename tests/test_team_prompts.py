@@ -1,118 +1,78 @@
-import hashlib
+from __future__ import annotations
+
+import dataclasses
 import tempfile
-import textwrap
 import unittest
-from unittest import mock
-from typing import Callable, cast
 from pathlib import Path
+from typing import Callable, cast
+from unittest import mock
 
 from agent_loom.team import core as team
 
-init_agents = cast(Callable[..., object], getattr(team, "init_agents"))
+init_agents = cast(Callable[..., team.InitAgentsResult], getattr(team, "init_agents"))
 
 
-def _sha256_text(s: str) -> str:
-    return hashlib.sha256(s.encode("utf-8")).hexdigest()
+@dataclasses.dataclass
+class _PackResult:
+    wrote: list[str]
+    skipped: list[str]
+    warnings: list[str]
 
 
-class TestYamlLines(unittest.TestCase):
-    """Deprecated: Team agent files are now shipped via loom packs."""
-
-    def test_placeholder(self) -> None:
-        self.assertTrue(True)
-
-
-class TestAgentFileContent(unittest.TestCase):
-    """Deprecated: Team agent files are now shipped via loom packs."""
-
-    def test_placeholder(self) -> None:
-        self.assertTrue(True)
+def _extract_prompt_block(text: str) -> str:
+    begin = team.TEAM_AGENT_PROMPT_BEGIN
+    end = team.TEAM_AGENT_PROMPT_END
+    i = text.find(begin)
+    j = text.find(end)
+    if i < 0 or j < 0 or j <= i:
+        return ""
+    return text[i + len(begin) : j].strip()
 
 
-class TestRenderManagerPrompt(unittest.TestCase):
-    def test_snapshot(self) -> None:
+class TestRenderPrompts(unittest.TestCase):
+    def test_manager_prompt_has_core_loop_and_no_legacy_terms(self) -> None:
         run = {
             "objective": "Ship fast, stay correct.",
             "team": "CobraKai",
             "run_id": "b2ede2554eec",
             "session": "team-cobrakai",
             "tickets_dir": "/repo/.loom/ticket",
+            "team_config": {"source": "", "loaded_at": "", "spec": team.default_team_config_spec()},
+            "merge": {"config": {"target_branch": "main", "remote": "origin", "push": True}},
         }
 
         out = team.render_manager_prompt(run=run, charter_path=Path("CHARTER.md"))
 
-        self.assertEqual(
-            out,
-            textwrap.dedent(
-                """\
-You are Team Manager.
+        self.assertIn("loom team prep-sprint CobraKai", out)
+        self.assertIn("loom team spawn CobraKai <TICKET_ID>", out)
+        self.assertIn("loom team spawn-integrator CobraKai", out)
+        self.assertNotIn("spawn-persona", out)
+        self.assertNotIn("Investigator", out)
+        self.assertNotIn("INVESTIGATOR_DONE", out)
 
-TEAM: CobraKai
-RUN_ID: b2ede2554eec
-TMUX_SESSION: team-cobrakai
-CHARTER: CHARTER.md
-TICKET_DIR: /repo/.loom/ticket
-
-HARD CONSTRAINTS (non-negotiable):
-- Do NOT run tmux directly. Use Loom CLI only.
-- Do NOT implement tickets or edit code. Delegate tickets to workers.
-- Do NOT move tickets to in_progress (workers do that when they start).
-- Use Loom ticket CLI for all ticket IO; do not browse `.loom/ticket` directories.
-
-OBJECTIVE:
-Ship fast, stay correct.
-
-Immediate sprint loop:
-1) Fan-out: if backlog is unclear, start a sprint + spawn architect: `loom team prep-sprint CobraKai --name "..."`.
-   - You may create a one-off ticket yourself if it is truly small and obvious.
-2) Plan: decide what runs in parallel and what must sequence.
-3) Execute: spawn workers: `loom team spawn CobraKai <TICKET_ID>`.
-   - Resume a retired worker in-place: `loom team resume-worker CobraKai <WORKER_ID>`.
-4) Monitor: `loom team status CobraKai` / `loom team capture CobraKai <target>`.
-5) Fan-in: ensure integrator: `loom team spawn-integrator CobraKai`; approve+enqueue: `loom team merge CobraKai enqueue --ticket <id> --branch <branch>`.
-   - Integrator merges into merge-queue only (merge branch: team/merge-queue-b2ede255).
-6) Ship: run `loom team ship CobraKai` to merge merge-queue -> origin/main (push=True). Nothing is shipped until this happens.
-7) Cleanup: retire workers: `loom team retire CobraKai <WORKER_ID>`.
-   - When safe to delete: `loom team mark-retirable CobraKai <WORKER_ID>` then later `loom team janitor CobraKai`.
-   - Recovery: bounce a wedged worker: `loom team bounce CobraKai <WORKER_ID|TICKET_ID>`.
-8) Objective updates: treat CHARTER as source of truth; pivot immediately.
-   - Update objective yourself: `loom team objective CobraKai set|append --message "..."` (updates CHARTER + inbox).
-9) When 100% done: `loom team disband CobraKai`.
-10) Waiting: if you have no concrete next command, run `loom team wait 5m` and stop output.
-   - Clock out/in: `loom team clock-out CobraKai` (pause) and later `loom team clock-in CobraKai` (resume).
-   - If you wake and inbox is empty: run `loom team status CobraKai`, then check in with 1-2 active workers, then wait again.
-11) Inbox: `loom team inbox CobraKai list --to manager --unacked` when nudged.
-   - Per-worker backlog: `loom team inbox CobraKai list --to <WORKER_ID> --unacked`.
-   - If you have pinged a worker multiple times and unacked keeps growing (e.g., 3+): bounce them: `loom team bounce CobraKai <WORKER_ID|TICKET_ID>`.
-
-Memory (optional but useful):
-- Loom memory is an Obsidian-like vault with links and backlinks.
-- Use `loom memory` to leave notes for yourself or other workers.
-- Notes can be associated with files, directories, file types, or commands.
-
-Compound learning (repo-root only):
-- Skills/docs/instincts are written in the canonical repo root (not worker worktrees).
-- Workers may trigger compounding, but must not commit compound artifacts.
-- Manager commits compound artifacts during ship (ship auto-syncs).
-"""
-            ).strip(),
-        )
-
-
-class TestRenderWorkerPrompt(unittest.TestCase):
-    def test_snapshot_worker_role(self) -> None:
+    def test_worker_prompt_includes_subagent_guidance_and_role_append(self) -> None:
         run = {
-            "objective": "Freeze prompt UX.",
             "team": "CobraKai",
             "run_id": "b2ede2554eec",
             "tickets_dir": "/repo/.loom/ticket",
+            "team_config": {
+                "source": "",
+                "loaded_at": "",
+                "spec": {
+                    **team.default_team_config_spec(),
+                    "role_prompts": {
+                        "append": {
+                            "manager": "",
+                            "architect": "",
+                            "worker": "Always include a rollback note.",
+                            "integrator": "",
+                        }
+                    },
+                },
+            },
         }
         ticket = {"id": "mem-127d", "title": "Lock prompts", "status": "open"}
-        ticket_payload = {
-            "ok": True,
-            "ticket": {"id": "mem-127d", "status": "open"},
-            "body": "Unit tests only.",
-        }
+        ticket_payload = {"ok": True, "ticket": {"id": "mem-127d", "status": "open"}}
 
         out = team.render_worker_prompt(
             run=run,
@@ -126,91 +86,24 @@ class TestRenderWorkerPrompt(unittest.TestCase):
             charter_path=Path("CHARTER.md"),
         )
 
-        self.assertEqual(
-            out,
-            textwrap.dedent(
-                """\
-                You are Team Worker.
+        self.assertIn("Subagents (encouraged)", out)
+        self.assertIn("TEAM CONFIG APPEND", out)
+        self.assertIn("Always include a rollback note.", out)
 
-                TEAM: CobraKai
-                RUN_ID: b2ede2554eec
-                WORKER_ID: w5
-                TICKET: mem-127d
-                TITLE: Lock prompts
-                STATUS: open
-                WORKTREE: worktrees/mem-127d
-                BRANCH: team/mem-127d
-                BASE: main
-                CHARTER: CHARTER.md
-                TICKET_DIR: /repo/.loom/ticket
-
-                HARD CONSTRAINTS:
-                - Do NOT run tmux directly.
-                - Do NOT browse `.loom/ticket` directories; use Loom ticket CLI only.
-                - Transition ticket to in_progress when you begin real work (worker-owned).
-                - Keep a steady cadence of Loom ticket updates.
-                - Do not close tickets; do not merge to main (manager-owned).
-
-                Instructions:
-                - Work only on the assigned ticket.
-                - Use Loom ticket to update progress after each major step or every ~15 minutes.
-                - Commit after each meaningful milestone (do not sit on uncommitted work).
-                - If blocked: write a structured escalation in Loom ticket (what was tried, what is needed, 2 options)
-                  - Set status: `loom ticket status mem-127d blocked`
-                  and notify the manager via `loom team send CobraKai manager "mem-127d blocked: ..."`.
-                - Inbox discipline: when nudged, run `loom team inbox CobraKai list --to w5 --unacked` and ack messages you read with `loom team inbox CobraKai ack <MSG_ID>`.
-                - Then respond with a brief status update and/or a Loom ticket update.
-                - If completion candidate: set status to review and provide verification steps + commands run + risks.
-                  - Set status: `loom ticket status mem-127d review`
-
-                Idling policy: if you have no concrete next command right now, run `loom team wait 15m` and stop output.
-
-                Follow-up tickets (encouraged): if you find important out-of-scope work, create a follow-up ticket with `loom ticket create`, link it, and mention it in your next update.
-
-                Memory (optional but useful):
-                - Loom memory is an Obsidian-like vault with links and backlinks.
-                - Use `loom memory` to leave notes for yourself or other workers.
-                - Notes can be associated with files, directories, file types, or commands.
-
-                ROLE-SPECIFIC (WORKER):
-                - When you believe work is complete, request manager review.
-                - Preconditions: working tree clean; at least one commit for this ticket.
-                - Required: `loom team send CobraKai manager "READY_FOR_REVIEW ticket=mem-127d worker=w5 branch=team/mem-127d sha=<shortsha> summary=... verify=... risks=..."`.
-
-                Ticket payload (from Loom ticket) is available; follow acceptance criteria and dependencies.
-                {
-                  "ok": true,
-                  "ticket": {
-                    "id": "mem-127d",
-                    "status": "open"
-                  },
-                  "body": "Unit tests only."
-                }
-                """
-            ).strip(),
-        )
-
-
-class TestRenderArchitectPrompt(unittest.TestCase):
-    def test_snapshot_architect_role(self) -> None:
+    def test_architect_ticket_prompt_uses_architect_done_token(self) -> None:
         run = {
-            "objective": "Freeze prompt UX.",
             "team": "CobraKai",
             "run_id": "b2ede2554eec",
             "tickets_dir": "/repo/.loom/ticket",
-            "sprint": {"name": "Alpha", "tag": "sprint:alpha"},
+            "team_config": {"source": "", "loaded_at": "", "spec": team.default_team_config_spec()},
         }
-        ticket = {"id": "t-1", "title": "Sprint prep: Alpha", "status": "open"}
-        ticket_payload = {
-            "ok": True,
-            "ticket": {"id": "t-1", "status": "open"},
-            "body": "Write sprint brief, then create tickets.",
-        }
+        ticket = {"id": "t-1", "title": "Sprint prep", "status": "open"}
+        ticket_payload = {"ok": True, "ticket": {"id": "t-1", "status": "open"}}
 
         out = team.render_worker_prompt(
             run=run,
             role=team.ROLE_ARCHITECT,
-            worker_id="w9",
+            worker_id="architect",
             ticket=ticket,
             ticket_payload=ticket_payload,
             worktree_path=Path("worktrees/t-1"),
@@ -219,177 +112,79 @@ class TestRenderArchitectPrompt(unittest.TestCase):
             charter_path=Path("CHARTER.md"),
         )
 
-        self.assertEqual(
-            out,
-            textwrap.dedent(
-                """\
-                You are Team Architect.
+        self.assertIn("ARCHITECT_DONE", out)
+        self.assertNotIn("INVESTIGATOR_DONE", out)
+        self.assertNotIn("Investigator", out)
 
-                TEAM: CobraKai
-                RUN_ID: b2ede2554eec
-                WORKER_ID: w9
-                TICKET: t-1
-                TITLE: Sprint prep: Alpha
-                STATUS: open
-                WORKTREE: worktrees/t-1
-                BRANCH: team/t-1
-                BASE: main
-                CHARTER: CHARTER.md
-                TICKET_DIR: /repo/.loom/ticket
-                SPRINT: Alpha
-                SPRINT_TAG: sprint:alpha
-
-                HARD CONSTRAINTS:
-                - Do NOT run tmux directly.
-                - Do NOT browse `.loom/ticket` directories; use Loom ticket CLI only.
-                - Transition ticket to in_progress when you begin real work (worker-owned).
-                - Keep a steady cadence of Loom ticket updates.
-                - Do not close tickets; do not merge to main (manager-owned).
-
-                Instructions:
-                - Work only on the assigned ticket.
-                - Use Loom ticket to update progress after each major step or every ~15 minutes.
-                - Commit after each meaningful milestone (do not sit on uncommitted work).
-                - If blocked: write a structured escalation in Loom ticket (what was tried, what is needed, 2 options)
-                  - Set status: `loom ticket status t-1 blocked`
-                  and notify the manager via `loom team send CobraKai manager "t-1 blocked: ..."`.
-                - Inbox discipline: when nudged, run `loom team inbox CobraKai list --to w9 --unacked` and ack messages you read with `loom team inbox CobraKai ack <MSG_ID>`.
-                - Then respond with a brief status update and/or a Loom ticket update.
-                - If completion candidate: set status to review and provide verification steps + commands run + risks.
-                  - Set status: `loom ticket status t-1 review`
-
-                Idling policy: if you have no concrete next command right now, run `loom team wait 15m` and stop output.
-
-                Follow-up tickets (encouraged): if you find important out-of-scope work, create a follow-up ticket with `loom ticket create`, link it, and mention it in your next update.
-
-                Memory (optional but useful):
-                - Loom memory is an Obsidian-like vault with links and backlinks.
-                - Use `loom memory` to leave notes for yourself or other workers.
-                - Notes can be associated with files, directories, file types, or commands.
-
-                ROLE-SPECIFIC (ARCHITECT):
-                - You are the sprint PM. Your job is to turn the objective + current state into a coherent sprint and a crisp backlog.
-                - First, read the run CHARTER to understand objective + historical direction.
-                - Then inspect current backlog + repo state enough to remove ambiguity (tickets + git status/log).
-                - Write a sprint brief INTO THIS assigned ticket (objective restatement, sprint focus, current state, plan, risks/unknowns).
-                - Create/refine sprint tickets directly (prefer `loom ticket create --parent <THIS_TICKET>`).
-                - Every ticket must include: scope/non-goals, step-by-step plan, acceptance criteria, verification commands (use `uv run ...` for Python), risks/edge cases, deps/ordering.
-                - Before you stop: update THIS assigned ticket with (1) the list of created/updated ticket IDs and (2) suggested ordering + parallelization.
-                - Then notify manager: `loom team send CobraKai manager "ARCHITECT_DONE worker=w9 ticket=t-1 created=[...]"`.
-                - Then stop. The manager will retire your pane.
-
-                Ticket payload (from Loom ticket) is available; follow acceptance criteria and dependencies.
-                {
-                  "ok": true,
-                  "ticket": {
-                    "id": "t-1",
-                    "status": "open"
-                  },
-                  "body": "Write sprint brief, then create tickets."
-                }
-                """
-            ).strip(),
-        )
+    def test_default_agent_prompts_use_core_roles_only(self) -> None:
+        prompts = team.default_agent_prompts()
+        self.assertEqual(set(prompts.keys()), {"manager", "worker", "architect", "integrator"})
+        joined = "\n".join(prompts.values())
+        self.assertNotIn("Investigator", joined)
+        self.assertNotIn("spawn-persona", joined)
 
 
-class TestRenderMergeWorkerPrompt(unittest.TestCase):
-    def test_snapshot(self) -> None:
-        run = {
-            "objective": "Merge safely.",
-            "team": "CobraKai",
-            "run_id": "b2ede2554eec",
-            "tickets_dir": "/repo/.loom/ticket",
-            "merge": {
-                "config": {"target_branch": "main", "remote": "origin", "push": True}
-            },
-        }
+class TestInitAgentsPromptSync(unittest.TestCase):
+    def test_init_agents_syncs_managed_prompt_blocks_from_canonical_templates(self) -> None:
+        prompt_map = team.default_agent_prompts()
 
-        out = team.render_integrator_prompt(
-            run=run,
-            worker_id="merge-1",
-            worktree_path=Path("worktrees/merge"),
-            branch="team/merge-queue",
-            base="main",
-            charter_path=Path("CHARTER.md"),
-        )
+        with tempfile.TemporaryDirectory() as td:
+            repo_root = Path(td)
+            rels = [
+                f".opencode/agents/{team.DEFAULT_MANAGER_AGENT}.md",
+                f".opencode/agents/{team.DEFAULT_WORKER_AGENT}.md",
+                f".opencode/agents/{team.DEFAULT_ARCHITECT_AGENT}.md",
+                f".opencode/agents/{team.DEFAULT_INTEGRATOR_AGENT}.md",
+                f".claude/agents/{team.DEFAULT_MANAGER_AGENT}.md",
+                f".claude/agents/{team.DEFAULT_WORKER_AGENT}.md",
+                f".claude/agents/{team.DEFAULT_ARCHITECT_AGENT}.md",
+                f".claude/agents/{team.DEFAULT_INTEGRATOR_AGENT}.md",
+            ]
+            for rel in rels:
+                p = repo_root / rel
+                p.parent.mkdir(parents=True, exist_ok=True)
+                p.write_text(
+                    "\n".join(
+                        [
+                            "---",
+                            "name: test-agent",
+                            "---",
+                            team.TEAM_AGENT_PROMPT_BEGIN,
+                            "STALE PROMPT",
+                            team.TEAM_AGENT_PROMPT_END,
+                            "",
+                        ]
+                    ),
+                    encoding="utf-8",
+                )
 
-        self.assertEqual(
-            out,
-            textwrap.dedent(
-                """\
-                You are Team Integrator.
+            with (
+                mock.patch.object(team, "canonical_repo_root", return_value=repo_root),
+                mock.patch.object(team, "_pack_installed", return_value=True),
+                mock.patch.object(
+                    team,
+                    "pack_update",
+                    return_value=_PackResult(wrote=[], skipped=[], warnings=[]),
+                ),
+            ):
+                res = init_agents(repo=repo_root, create_missing=True)
 
-                TEAM: CobraKai
-                RUN_ID: b2ede2554eec
-                WORKER_ID: merge-1
-                ROLE: integrator
-                WORKTREE: worktrees/merge
-                BRANCH: team/merge-queue
-                BASE: main
-                CHARTER: CHARTER.md
-                TICKET_DIR: /repo/.loom/ticket
-                MERGE_TARGET: origin/main  push=True
+            self.assertFalse(res.missing)
+            self.assertEqual(len(res.updated), 8)
 
-                HARD CONSTRAINTS:
-                - Do NOT run tmux directly.
-                - Do not implement features; ship only manager-approved branches.
-                - You do NOT merge into the target branch. You only merge into the merge-queue branch shown above.
-                - If your merge worktree is wedged, ask the manager to run: `loom team spawn-integrator <TEAM> --force`.
-                - Use `loom team merge` commands for deterministic queue operations.
-
-                Queue ops:
-                - Claim next: `loom team merge CobraKai next --claim-by merge-1`
-                - Mark done: `loom team merge CobraKai done <ITEM_ID> --result merged|blocked --note "..."`
-                - Manager ships merge-queue -> target with: `loom team ship CobraKai`
-
-                Idling: If no work, run `loom team wait 10m` and stop output.
-                """
-            ).strip(),
-        )
-
-
-class TestEnsureOpenCodeAgents(unittest.TestCase):
-    def test_default_agent_markdown_snapshot_sha256(self) -> None:
-        expected = {
-            "loom-team-integrator.md": "117230b87c34c0d6899724e29c116e998cc9449826c74aad084a52616bfc72fd",
-            "loom-team-architect.md": "33025d6ed6f090aada7622477892a1c7d19ec1bc9ad4fde6dcd3bc5e952ce4ec",
-            "loom-team-manager.md": "6120aaee3cf12089fc2728623c0a2ccce2035e93c44ccf3520a77e91e24139aa",
-            "loom-team-worker.md": "bc575a1f793d32f917d913dbe995a5837984aaeadbb8765e3fa303ee34fedbbd",
-        }
-
-        with tempfile.TemporaryDirectory() as d:
-            workdir = Path(d)
-            with mock.patch.object(team, "canonical_repo_root", return_value=workdir):
-                init_agents(repo=workdir, create_missing=True)
-            agents_dir = workdir / ".opencode" / "agents"
-
-            got = {}
-            for p in sorted(agents_dir.glob("*.md")):
-                got[p.name] = _sha256_text(p.read_text(encoding="utf-8"))
-
-        self.assertEqual(got, expected)
-
-
-class TestEnsureClaudeAgents(unittest.TestCase):
-    def test_default_agent_markdown_snapshot_sha256(self) -> None:
-        expected = {
-            "loom-team-integrator.md": "61439d8e9cdbaaee174586fe87b180308fd1483e4e6fb0a6f0fc543d7cafa8a9",
-            "loom-team-architect.md": "eac69402cb208eba1f6d9dd7455dabcac36e014ed987b6be32894292017692bd",
-            "loom-team-manager.md": "ed904d4706d26c8a980385ba4ab688aa018220986ce7806efd542208159c8e0e",
-            "loom-team-worker.md": "9986678c38498c0bd3031ab06490bc803e2e808d5b4a3ea58ff5bf56b76f25cd",
-        }
-
-        with tempfile.TemporaryDirectory() as d:
-            workdir = Path(d)
-            with mock.patch.object(team, "canonical_repo_root", return_value=workdir):
-                init_agents(repo=workdir, create_missing=True)
-            agents_dir = workdir / ".claude" / "agents"
-
-            got = {}
-            for p in sorted(agents_dir.glob("*.md")):
-                got[p.name] = _sha256_text(p.read_text(encoding="utf-8"))
-
-        self.assertEqual(got, expected)
+            for rel in rels:
+                text = (repo_root / rel).read_text(encoding="utf-8")
+                block = _extract_prompt_block(text)
+                name = Path(rel).stem
+                if name == team.DEFAULT_MANAGER_AGENT:
+                    expected_role = "manager"
+                elif name == team.DEFAULT_WORKER_AGENT:
+                    expected_role = "worker"
+                elif name == team.DEFAULT_ARCHITECT_AGENT:
+                    expected_role = "architect"
+                else:
+                    expected_role = "integrator"
+                self.assertEqual(block, str(prompt_map[expected_role]).strip())
 
 
 if __name__ == "__main__":

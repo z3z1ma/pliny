@@ -1,12 +1,7 @@
 from __future__ import annotations
 
-import uuid
 from typing import Any, Dict, Mapping
 
-from agent_loom.team.composition_runtime import (
-    ResolvedMemberProfile,
-    list_always_on_member_profiles,
-)
 from agent_loom.team.constants import (
     DEFAULT_ARCHITECT_AGENT,
     DEFAULT_HARNESS,
@@ -18,7 +13,6 @@ from agent_loom.team.constants import (
     ROLE_MANAGER,
     ROLE_WORKER,
 )
-from agent_loom.team.strings import sanitize
 
 
 def normalize_harness(value: str) -> str:
@@ -64,79 +58,6 @@ def model_for_role(run: Mapping[str, Any], role: str, *, harness: str) -> str:
     return str(cfg.get("model") or "").strip()
 
 
-def _default_architect_profile(
-    *, run: Mapping[str, Any], harness: str
-) -> ResolvedMemberProfile:
-    return ResolvedMemberProfile(
-        member_id="architect",
-        role=ROLE_ARCHITECT,
-        lifecycle="always_on",
-        source="loom",
-        agent=agent_for_role(run, ROLE_ARCHITECT, harness=harness),
-        harness=harness,
-        model="",
-        workspace="repo_root",
-        worktree_key="",
-        description="",
-        triggers=(),
-        primary_workflows=(),
-    )
-
-
-def always_on_profiles_for_run(run: Mapping[str, Any]) -> list[ResolvedMemberProfile]:
-    profiles = list(list_always_on_member_profiles(run))
-    if not any(
-        str(profile.role or "").strip().lower() == ROLE_ARCHITECT
-        for profile in profiles
-    ):
-        harness = normalize_harness(str(run.get("harness") or ""))
-        profiles.append(_default_architect_profile(run=run, harness=harness))
-
-    deduped: dict[str, ResolvedMemberProfile] = {}
-    for profile in profiles:
-        member_id = str(profile.member_id or "").strip()
-        if not member_id:
-            continue
-        deduped[member_id] = profile
-
-    return sorted(
-        deduped.values(),
-        key=lambda profile: (
-            0 if str(profile.role or "").strip().lower() == ROLE_ARCHITECT else 1,
-            str(profile.member_id or "").strip(),
-        ),
-    )
-
-
-def workspace_for_always_on_profile(profile: ResolvedMemberProfile) -> tuple[str, str]:
-    role = str(profile.role or "").strip().lower()
-    if role in {ROLE_MANAGER, ROLE_ARCHITECT}:
-        return "repo_root", ""
-    if role == ROLE_INTEGRATOR:
-        return "worktree", "merge-queue"
-
-    workspace = str(profile.workspace or "").strip().lower()
-    if workspace not in {"repo_root", "worktree"}:
-        workspace = "repo_root"
-
-    worktree_key = sanitize(str(profile.worktree_key or ""), max_len=80) or sanitize(
-        str(profile.member_id or ""),
-        max_len=80,
-    )
-    if not worktree_key:
-        worktree_key = f"persona-{uuid.uuid4().hex[:8]}"
-
-    return workspace, worktree_key
-
-
-def persona_worktree_branch(*, run_id: str, member_id: str) -> str:
-    run_key = sanitize(str(run_id or ""), allow=r"a-zA-Z0-9._-", max_len=16) or "run"
-    member_key = (
-        sanitize(str(member_id or ""), allow=r"a-zA-Z0-9._-", max_len=40) or "persona"
-    )
-    return f"team/{run_key}-{member_key}"
-
-
 def max_headcount(run: Mapping[str, Any]) -> int:
     raw_limits = run.get("limits")
     limits: Dict[str, Any] = dict(raw_limits) if isinstance(raw_limits, dict) else {}
@@ -167,3 +88,4 @@ def active_spawn_headcount(
         active_ids.append(str(worker_id))
         active_roles[str(worker_id)] = role
     return len(active_ids), active_ids, active_roles
+
