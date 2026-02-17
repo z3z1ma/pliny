@@ -69,22 +69,9 @@ from agent_loom.team.constants import (
     TMUX_OPT_TEAM,
 )
 from agent_loom.team.errors import TeamError
-from agent_loom.team.events import (
-    best_effort,
-    safe_write_event,
-    write_event,
-)
+from agent_loom.team.events import best_effort, safe_write_event, write_event
 from agent_loom.team.exec import _require_bin, _run
-from agent_loom.team.health import (
-    clear_heartbeat,
-    write_heartbeat,
-)
-from agent_loom.team.health import (
-    health_state as _health_state,
-)
-from agent_loom.team.health import (
-    recipient_key as _recipient_key,
-)
+from agent_loom.team.health import clear_heartbeat, recipient_key as _recipient_key, write_heartbeat
 from agent_loom.team.inbox import (
     _inbox_msg_path,
     _inbox_unacked,
@@ -93,12 +80,8 @@ from agent_loom.team.inbox import (
     inbox_list_messages,
     inbox_write_message,
 )
-from agent_loom.team.io import (
-    FileLock,
-    _atomic_write_json,
-    _atomic_write_text,
-    _read_json,
-)
+from agent_loom.team.io import FileLock, _atomic_write_json, _atomic_write_text, _read_json
+from agent_loom.team.liveness_runtime import _effective_recipient_health, _recipient_health, _sidecar_pid_file
 from agent_loom.team.merge_queue import (
     _merge_state,
     merge_branch_for_run,
@@ -1087,27 +1070,6 @@ def _recovery_mark_end(*, run: Dict[str, Any], recipient: str) -> None:
         recovery["recovery_in_flight"] = ""
 
 
-def _recipient_health(
-    *,
-    paths: RunPaths,
-    run: Mapping[str, Any],
-    session: str,
-    recipient: str,
-    pane_id: str,
-) -> tuple[str, Dict[str, Any], Dict[str, str]]:
-    state, heartbeat = _health_state(
-        paths=paths,
-        run=run,
-        recipient=recipient,
-    )
-    panes = tmux_list_panes(session) if session and tmux_has_session(session) else {}
-    pane = panes.get(str(pane_id or "").strip(), {})
-    if state == "alive" and pane:
-        if not _pane_can_receive_chat(pane):
-            state = "stale"
-    return state, dict(heartbeat or {}), dict(pane or {})
-
-
 def _opencode_tui_argv(
     *,
     project_dir: Path,
@@ -1360,13 +1322,6 @@ def _record_runtime_warning(
         refs=dict(refs or {}),
         data=payload_data,
     )
-
-
-def _sidecar_pid_file(paths: RunPaths, recipient: str) -> Path:
-    safe = (
-        sanitize(str(recipient or ""), allow=r"a-zA-Z0-9._-", max_len=48) or "unknown"
-    )
-    return paths.sidecars_dir / f"{safe}.pid.json"
 
 
 def _sidecar_pid_write(
@@ -5333,19 +5288,30 @@ def status(*, team: str, repo: Optional[Path] = None) -> StatusResult:
     for wid, w in (run.get("workers") or {}).items():
         pane_id = str((w or {}).get("pane_id") or "")
         pane = panes.get(pane_id) if pane_id else None
-        health, heartbeat = _health_state(paths=paths, run=run, recipient=str(wid))
-        alive = bool(health == "alive" and pane and _pane_can_receive_chat(pane))
+        alive, _state, health = _effective_recipient_health(
+            paths=paths,
+            run=run,
+            recipient=str(wid),
+            pane_id=pane_id,
+            pane=pane,
+        )
         workers_out[wid] = {
             **(w or {}),
             "alive": alive,
-            "health": {"state": health, **dict(heartbeat or {})},
+            "health": dict(health or {}),
             "tmux": pane or {},
         }
 
     mgr = dict(run.get("manager") or {})
     mgr_pane = str(mgr.get("pane_id") or "")
     mgr_info = panes.get(mgr_pane) if mgr_pane else None
-    mgr_health, mgr_heartbeat = _health_state(paths=paths, run=run, recipient="manager")
+    mgr_alive, _mgr_state, mgr_health = _effective_recipient_health(
+        paths=paths,
+        run=run,
+        recipient="manager",
+        pane_id=mgr_pane,
+        pane=mgr_info,
+    )
 
     # Warnings (pathing + anchoring guardrails).
     warnings: List[Dict[str, str]] = []
@@ -5439,10 +5405,8 @@ def status(*, team: str, repo: Optional[Path] = None) -> StatusResult:
         },
         "manager": {
             **mgr,
-            "alive": bool(
-                mgr_health == "alive" and mgr_info and _pane_can_receive_chat(mgr_info)
-            ),
-            "health": {"state": mgr_health, **dict(mgr_heartbeat or {})},
+            "alive": mgr_alive,
+            "health": dict(mgr_health or {}),
             "tmux": mgr_info or {},
         },
         "workers": workers_out,
@@ -5545,16 +5509,24 @@ def doctor(*, team: str, repo: Optional[Path] = None) -> DoctorResult:
         )
         add_suggestion(f"loom team start {paths.team} --repo {paths.repo_root}")
 
-    manager_health, manager_heartbeat = _health_state(
+    manager_meta = dict(run.get("manager") or {})
+    manager_pane_id = str(manager_meta.get("pane_id") or "").strip()
+    manager_pane = panes.get(manager_pane_id) if manager_pane_id else None
+    _manager_alive, manager_health, manager_heartbeat = _effective_recipient_health(
         paths=paths,
         run=run,
         recipient="manager",
+        pane_id=manager_pane_id,
+        pane=manager_pane,
     )
     if manager_health in {"stale", "dead", "missing"}:
         issues.append(
             {
                 "code": f"MANAGER_{manager_health.upper()}",
-                "message": f"manager heartbeat state={manager_health}",
+                "message": (
+                    "manager state="
+                    f"{manager_health} heartbeat={manager_heartbeat.get('heartbeat_state', manager_health)}"
+                ),
                 **({"heartbeat": dict(manager_heartbeat)} if manager_heartbeat else {}),
             }
         )
@@ -5572,13 +5544,23 @@ def doctor(*, team: str, repo: Optional[Path] = None) -> DoctorResult:
         role = str(w.get("role") or "").strip().lower()
         win = str(w.get("window") or "").strip()
         pane_id = str(w.get("pane_id") or "").strip()
-        health, heartbeat = _health_state(paths=paths, run=run, recipient=str(wid))
+        pane = panes.get(pane_id) if pane_id else None
+        _alive, health, heartbeat = _effective_recipient_health(
+            paths=paths,
+            run=run,
+            recipient=str(wid),
+            pane_id=pane_id,
+            pane=pane,
+        )
 
         if health in {"stale", "dead", "missing"}:
             issues.append(
                 {
                     "code": f"WORKER_{health.upper()}",
-                    "message": f"worker {wid} heartbeat state={health}",
+                    "message": (
+                        f"worker {wid} state={health} "
+                        f"heartbeat={heartbeat.get('heartbeat_state', health)}"
+                    ),
                     "worker_id": wid,
                     "role": role,
                     **({"heartbeat": dict(heartbeat)} if heartbeat else {}),
@@ -5657,10 +5639,16 @@ def doctor(*, team: str, repo: Optional[Path] = None) -> DoctorResult:
         ]
         alive = False
         for wid, w in integrators:
-            health, _heartbeat = _health_state(paths=paths, run=run, recipient=str(wid))
             pid = str(w.get("pane_id") or "").strip()
             pane = panes.get(pid) if pid else None
-            if health == "alive" and pane and _pane_can_receive_chat(pane):
+            ok, _state, _health = _effective_recipient_health(
+                paths=paths,
+                run=run,
+                recipient=str(wid),
+                pane_id=pid,
+                pane=pane,
+            )
+            if ok:
                 alive = True
                 break
         if not alive:
