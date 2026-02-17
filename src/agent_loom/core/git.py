@@ -71,12 +71,6 @@ def is_git_repo(path: Path) -> bool:
     return gitp.is_dir() or gitp.is_file()
 
 
-def git_quiet_result(
-    cwd: Path, args: Sequence[str], *, env: Optional[dict[str, str]] = None
-) -> GitCommandResult:
-    return git_result(cwd, args, env=env)
-
-
 def git_stdout_result(
     cwd: Path,
     args: Sequence[str],
@@ -89,13 +83,6 @@ def git_stdout_result(
         return GitStdoutResult(value=None, command=command)
     stdout = command.stdout.strip() if strip else command.stdout
     return GitStdoutResult(value=(stdout or None), command=command)
-
-
-def git_quiet(cwd: Path, args: Sequence[str]) -> str:
-    result = git_quiet_result(cwd, args)
-    if not result.ok:
-        return ""
-    return result.stdout.strip()
 
 
 def _stdout_or_raise(result: GitCommandResult) -> str:

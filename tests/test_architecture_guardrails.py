@@ -172,12 +172,28 @@ class TestHotspotSizeControl:
             "description": "workspace/cli_harness_groups.py (parser hotspot)",
         },
         SRC_ROOT / "dashboard" / "app.py": {
-            "max_lines": 820,  # Current ~798
-            "description": "dashboard/app.py (API hotspot)",
+            "max_lines": 160,  # Public composition root should remain thin.
+            "description": "dashboard/app.py (composition root)",
+        },
+        SRC_ROOT / "dashboard" / "blueprints" / "team.py": {
+            "max_lines": 280,  # Current ~229
+            "description": "dashboard/blueprints/team.py (team API hotspot)",
+        },
+        SRC_ROOT / "dashboard" / "blueprints" / "tickets.py": {
+            "max_lines": 220,  # Current ~170
+            "description": "dashboard/blueprints/tickets.py (tickets API hotspot)",
+        },
+        SRC_ROOT / "dashboard" / "blueprints" / "workspace.py": {
+            "max_lines": 190,  # Current ~137
+            "description": "dashboard/blueprints/workspace.py (workspace API hotspot)",
         },
         SRC_ROOT / "workspace" / "render.py": {
-            "max_lines": 700,  # Current ~669
-            "description": "workspace/render.py (text rendering hotspot)",
+            "max_lines": 120,  # Public shim should remain thin.
+            "description": "workspace/render.py (public shim)",
+        },
+        SRC_ROOT / "workspace" / "render_text.py": {
+            "max_lines": 760,  # Current ~669
+            "description": "workspace/render_text.py (text rendering hotspot)",
         },
         SRC_ROOT / "ticket" / "core.py": {
             "max_lines": 1850,  # Current ~1744
@@ -226,12 +242,28 @@ class TestHotspotComplexityControl:
             "description": "workspace/cli_harness_groups.py parser complexity",
         },
         SRC_ROOT / "dashboard" / "app.py": {
-            "max_function_branch_nodes": 80,  # Current max: _create_team_blueprint ~=55
-            "description": "dashboard/app.py request handling complexity",
+            "max_function_branch_nodes": 20,  # Current max: create_app ~=10
+            "description": "dashboard/app.py composition complexity",
+        },
+        SRC_ROOT / "dashboard" / "blueprints" / "team.py": {
+            "max_function_branch_nodes": 65,  # Current max: create_team_blueprint ~=55
+            "description": "dashboard/blueprints/team.py request handling complexity",
+        },
+        SRC_ROOT / "dashboard" / "blueprints" / "tickets.py": {
+            "max_function_branch_nodes": 50,  # Current max: create_tickets_blueprint ~=42
+            "description": "dashboard/blueprints/tickets.py request handling complexity",
+        },
+        SRC_ROOT / "dashboard" / "blueprints" / "workspace.py": {
+            "max_function_branch_nodes": 45,  # Current max: create_workspace_blueprint ~=35
+            "description": "dashboard/blueprints/workspace.py request handling complexity",
         },
         SRC_ROOT / "workspace" / "render.py": {
+            "max_function_branch_nodes": 2,  # Public shim should not branch.
+            "description": "workspace/render.py shim complexity",
+        },
+        SRC_ROOT / "workspace" / "render_text.py": {
             "max_function_branch_nodes": 40,  # Current max: _render_worktree_group_diff ~=17
-            "description": "workspace/render.py text rendering complexity",
+            "description": "workspace/render_text.py text rendering complexity",
         },
         SRC_ROOT / "ticket" / "core.py": {
             "max_function_branch_nodes": 95,  # Current max: update ~=86
