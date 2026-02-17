@@ -164,12 +164,24 @@ class TestHotspotSizeControl:
             "description": "memory/cli.py (public shim)",
         },
         SRC_ROOT / "memory" / "cli_runtime.py": {
-            "max_lines": 900,  # Current ~823
-            "description": "memory/cli_runtime.py (dispatch/runtime hotspot)",
+            "max_lines": 140,  # Public runtime entrypoint should remain thin.
+            "description": "memory/cli_runtime.py (runtime entrypoint)",
+        },
+        SRC_ROOT / "memory" / "cli_handlers.py": {
+            "max_lines": 440,  # Current ~363
+            "description": "memory/cli_handlers.py (command dispatch hotspot)",
         },
         SRC_ROOT / "memory" / "cli_parser.py": {
             "max_lines": 1100,  # Current ~994
             "description": "memory/cli_parser.py (parser hotspot)",
+        },
+        SRC_ROOT / "memory" / "cli_output.py": {
+            "max_lines": 260,  # Current ~196
+            "description": "memory/cli_output.py (output/payload hotspot)",
+        },
+        SRC_ROOT / "memory" / "cli_edit_options.py": {
+            "max_lines": 280,  # Current ~211
+            "description": "memory/cli_edit_options.py (edit option hotspot)",
         },
         SRC_ROOT / "workspace" / "cli_harness.py": {
             "max_lines": 120,  # Public shim should remain thin.
@@ -242,12 +254,24 @@ class TestHotspotComplexityControl:
             "description": "memory/cli.py shim complexity",
         },
         SRC_ROOT / "memory" / "cli_runtime.py": {
-            "max_function_branch_nodes": 45,  # Current max: payload_for ~=35
-            "description": "memory/cli_runtime.py command dispatch complexity",
+            "max_function_branch_nodes": 20,  # Current max: main ~=14
+            "description": "memory/cli_runtime.py runtime entrypoint complexity",
+        },
+        SRC_ROOT / "memory" / "cli_handlers.py": {
+            "max_function_branch_nodes": 15,  # Current max: _run_add ~=7
+            "description": "memory/cli_handlers.py command dispatch complexity",
         },
         SRC_ROOT / "memory" / "cli_parser.py": {
             "max_function_branch_nodes": 35,  # Current max: _normalize_argv ~=30
             "description": "memory/cli_parser.py parser complexity",
+        },
+        SRC_ROOT / "memory" / "cli_output.py": {
+            "max_function_branch_nodes": 40,  # Current max: payload_for ~=35
+            "description": "memory/cli_output.py output mapping complexity",
+        },
+        SRC_ROOT / "memory" / "cli_edit_options.py": {
+            "max_function_branch_nodes": 40,  # Current max: _build_edit_options ~=35
+            "description": "memory/cli_edit_options.py edit option complexity",
         },
         SRC_ROOT / "workspace" / "cli_harness.py": {
             "max_function_branch_nodes": 2,  # Public shim should not branch.
