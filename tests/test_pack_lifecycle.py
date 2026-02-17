@@ -18,12 +18,35 @@ from agent_loom.pack.lock import load_lock
 from agent_loom.pack.util import sha256_text
 
 
+BUILTIN_PACK_SMOKE_PATHS: dict[str, list[str]] = {
+    "loom-compound-core": [
+        ".opencode/commands/loom-compound.md",
+        ".claude/commands/loom-compound.md",
+        ".opencode/plugins/compound_engineering.ts",
+    ],
+    "loom-team-core": [
+        ".opencode/agents/loom-team-worker.md",
+        ".opencode/agents/loom-team-manager.md",
+        ".claude/agents/loom-team-worker.md",
+    ],
+}
+
+
 def test_pack_lists_builtin_sample_pack() -> None:
     assert "sample" in list_pack_ids()
     assert "loom-compound-core" in list_pack_ids()
     assert "loom-team-core" in list_pack_ids()
     mf = load_manifest("sample")
     assert mf.id == "sample"
+
+
+@pytest.mark.parametrize("pack_id", ["loom-compound-core", "loom-team-core"])
+def test_pack_loads_builtin_manifest_contract(pack_id: str) -> None:
+    manifest = load_manifest(pack_id)
+    assert manifest.id == pack_id
+    assert manifest.install_roots
+    assert manifest.managed_globs
+    assert manifest.protected_globs
 
 
 def test_pack_install_writes_files_and_lock(tmp_path: Path) -> None:
@@ -45,6 +68,28 @@ def test_pack_install_loom_agile_core_pack(tmp_path: Path) -> None:
     assert res.ok is True
     assert (repo / ".opencode" / "commands" / "loom-agile-help.md").exists()
     assert (repo / ".opencode" / "agents" / "loom-agile-developer.md").exists()
+
+
+@pytest.mark.parametrize(
+    ("pack_id", "expected_paths"),
+    [
+        ("loom-compound-core", BUILTIN_PACK_SMOKE_PATHS["loom-compound-core"]),
+        ("loom-team-core", BUILTIN_PACK_SMOKE_PATHS["loom-team-core"]),
+    ],
+)
+def test_pack_install_uninstall_builtin_pack_smoke(
+    tmp_path: Path, pack_id: str, expected_paths: list[str]
+) -> None:
+    repo = tmp_path
+    install = install_pack(repo_root=repo, pack_id=pack_id, dry_run=False)
+    assert install.ok is True
+    for rel in expected_paths:
+        assert (repo / rel).exists(), f"missing installed path {rel} for {pack_id}"
+
+    uninstall = uninstall_pack(repo_root=repo, pack_id=pack_id, dry_run=False, force=True)
+    assert uninstall.ok is True
+    for rel in expected_paths:
+        assert not (repo / rel).exists(), f"expected uninstall to remove {rel} for {pack_id}"
 
 
 def test_pack_update_respects_drift_without_force(tmp_path: Path) -> None:

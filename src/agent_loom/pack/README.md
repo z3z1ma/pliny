@@ -11,8 +11,10 @@ It installs prebuilt, OpenCode-first artifacts into a target repo in a way that 
 ### Concepts
 
 - Pack: a versioned bundle of files that install into a repo (commonly `.opencode/agents` and `.opencode/commands`).
-- Lock file: `.loom/pack/lock.json` records installed packs and per-file sha256. Commit it.
- - Scaffold files: optional pack paths installed only if missing; they are not tracked in the lock, never updated, and never removed.
+- Lock file: `.loom/pack/lock.json` records installed packs and per-file sha256.
+  Commit lockfile changes whenever install/update/uninstall mutates it.
+- Scaffold files: optional pack paths installed only if missing; they are not tracked
+  in the lock, never updated, and never removed.
 
 ### Commands
 
@@ -22,10 +24,28 @@ List packs:
 loom pack list
 ```
 
+List packs as JSON:
+
+```bash
+loom pack list --json
+```
+
 Install a pack into the current repo:
 
 ```bash
 loom pack install <pack-id>
+```
+
+Install against a different repo path:
+
+```bash
+loom pack install <pack-id> --repo /path/to/repo
+```
+
+Preview write/remove operations:
+
+```bash
+loom pack install <pack-id> --dry-run
 ```
 
 Update an installed pack:
@@ -47,10 +67,20 @@ loom pack status
 loom pack doctor
 ```
 
+Emit machine-readable output:
+
+```bash
+loom pack status --json
+loom pack doctor --json
+```
+
 Show diffs for drifted managed files:
 
 ```bash
 loom pack status --diff
+loom pack install <pack-id> --diff
+loom pack update <pack-id> --diff
+loom pack uninstall <pack-id> --diff
 ```
 
 Uninstall:
@@ -59,6 +89,15 @@ Uninstall:
 loom pack uninstall <pack-id>
 loom pack uninstall <pack-id> --force
 ```
+
+## Drift review workflow
+
+When install/update/uninstall reports drifted files:
+
+1. Review intended changes with `--diff` (or `loom pack status --diff`).
+2. Keep local edits and skip overwrite/removal (default), or apply with `--force`.
+3. Re-run `loom pack status` or `loom pack doctor` until drift is resolved.
+4. Commit resulting `.loom/pack/lock.json` changes.
 
 ### Included packs
 

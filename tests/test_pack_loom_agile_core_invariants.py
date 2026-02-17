@@ -40,3 +40,32 @@ def test_loom_agile_core_pack_is_language_agnostic_and_not_bmad_branded() -> Non
         text = p.read_text(encoding="utf-8", errors="replace")
         for rx in forbidden:
             assert not rx.search(text), f"forbidden {rx.pattern} in {rel}"
+
+
+def test_builtin_compound_and_team_manifests_are_loadable() -> None:
+    for pack_id in ("loom-compound-core", "loom-team-core"):
+        assert pack_id in list_pack_ids()
+        mf = load_manifest(pack_id)
+        assert mf.id == pack_id
+        assert mf.install_roots
+        assert mf.managed_globs
+        assert mf.protected_globs
+
+
+def test_builtin_compound_core_contains_expected_critical_files() -> None:
+    files = dict(iter_pack_files("loom-compound-core"))
+    assert ".opencode/commands/loom-compound.md" in files
+    assert ".claude/commands/loom-compound.md" in files
+    assert ".opencode/plugins/compound_engineering.ts" in files
+    assert ".omp/extensions/compound_engineering.ts" in files
+    assert ".loom/compound/config.json" in files
+    assert "AGENTS.md" in files
+    assert "LOOM.md" in files
+
+
+def test_builtin_team_core_contains_expected_critical_files() -> None:
+    files = dict(iter_pack_files("loom-team-core"))
+    assert ".opencode/agents/loom-team-manager.md" in files
+    assert ".opencode/agents/loom-team-worker.md" in files
+    assert ".claude/agents/loom-team-manager.md" in files
+    assert ".claude/agents/loom-team-worker.md" in files
