@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from typing import Any, Dict, List, Mapping, Tuple
 
 from agent_loom.team.constants import (
@@ -12,6 +13,8 @@ from agent_loom.team.errors import TeamError
 from agent_loom.team.strings import sanitize
 from agent_loom.team.tmux import (
     _pane_can_receive_chat,
+    _pane_is_busy,
+    _pane_last_activity_ts,
     tmux_available,
     tmux_format,
     tmux_has_session,
@@ -237,38 +240,73 @@ def _best_effort_tmux_nudge(
         return False, "unknown_target", {"target": target, "error": str(e)}
 
     try:
-        panes = tmux_list_panes(session)
-        pane = panes.get(pane_id)
-        if not pane:
-            wid = str(meta.get("worker_id") or "").strip()
-            win = (
-                str(
-                    ((run.get("workers") or {}).get(wid) or {}).get("window") or ""
-                ).strip()
-                if wid
-                else ""
-            )
-            if win and tmux_window_exists(session, win):
-                try:
-                    refreshed = tmux_format(f"{session}:{win}", "#{pane_id}")
-                except Exception:
-                    refreshed = ""
-                if refreshed:
-                    pane_id = refreshed
-                    meta["pane_id"] = refreshed
-                    panes = tmux_list_panes(session)
-                    pane = panes.get(pane_id)
+        max_attempts = 2
+        for attempt in range(1, max_attempts + 1):
+            panes = tmux_list_panes(session)
+            pane = panes.get(pane_id)
             if not pane:
-                return False, "pane_missing", meta
-        if not _pane_can_receive_chat(pane) and not force:
-            return False, "unsafe_pane", meta
-        tmux_send_text(
-            pane_id,
-            line,
-            enter=True,
-            ctrl_enter=(str(run.get("harness") or "").strip().lower() == "omp"),
-        )
-        return True, "", meta
+                wid = str(meta.get("worker_id") or "").strip()
+                win = (
+                    str(
+                        ((run.get("workers") or {}).get(wid) or {}).get("window") or ""
+                    ).strip()
+                    if wid
+                    else ""
+                )
+                if win and tmux_window_exists(session, win):
+                    try:
+                        refreshed = tmux_format(f"{session}:{win}", "#{pane_id}")
+                    except Exception:
+                        refreshed = ""
+                    if refreshed:
+                        pane_id = refreshed
+                        meta["pane_id"] = refreshed
+                        panes = tmux_list_panes(session)
+                        pane = panes.get(pane_id)
+                if not pane:
+                    return False, "pane_missing", meta
+            if not _pane_can_receive_chat(pane) and not force:
+                return False, "unsafe_pane", meta
+
+            before = _pane_last_activity_ts(pane)
+            busy_before = _pane_is_busy(pane, busy_window_s=8.0)
+            tmux_send_text(
+                pane_id,
+                line,
+                enter=True,
+                ctrl_enter=(str(run.get("harness") or "").strip().lower() == "omp"),
+            )
+
+            if before <= 0:
+                meta["attempts"] = attempt
+                meta["confirm"] = "skipped_no_activity"
+                return True, "", meta
+
+            deadline = time.time() + 1.2
+            confirmed = False
+            while time.time() < deadline:
+                time.sleep(0.2)
+                latest = tmux_list_panes(session).get(pane_id)
+                if not latest:
+                    break
+                after = _pane_last_activity_ts(latest)
+                if after > before:
+                    confirmed = True
+                    break
+            if confirmed or busy_before:
+                meta["attempts"] = attempt
+                meta["confirm"] = "activity" if confirmed else "busy_pre_send"
+                return True, "", meta
+
+            if attempt < max_attempts:
+                time.sleep(0.3 * float(attempt))
+                continue
+
+            meta["attempts"] = attempt
+            meta["confirm"] = "unconfirmed"
+            return False, "unconfirmed_delivery", meta
+
+        return False, "unconfirmed_delivery", meta
     except TeamError as e:
         if e.code == "MISSING_BIN":
             return False, "tmux_missing", meta

@@ -1,0 +1,3 @@
+kind: Fixed
+body: Hardened Team tmux nudge reliability by adding sidecar busy-aware inbox retry/backoff, post-send activity confirmation, and explicit unconfirmed-delivery handling to reduce swallowed or no-op nudges in interactive TUIs.
+time: 2026-02-16T22:37:14.374134-07:00

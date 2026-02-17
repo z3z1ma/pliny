@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import random
+import re
 import time
 import uuid
 from typing import Any, Callable, Dict, Mapping, Optional
@@ -31,6 +32,9 @@ from agent_loom.team.worker_planning import active_spawn_headcount
 _CHECKIN_STREAK_THRESHOLD = 2
 _CHECKIN_PER_WORKER_COOLDOWN_S = 20.0 * 60.0
 _CHECKIN_MAX_TARGETS = 2
+_IDLE_NOISE_TIME_RE = re.compile(r"\b\d{1,2}:\d{2}(:\d{2})?\b")
+_IDLE_NOISE_TS_RE = re.compile(r"\b\d{4}-\d{2}-\d{2}[T ][0-9:.+-Z]+\b")
+_IDLE_NOISE_PCT_RE = re.compile(r"(?<!\d)\d{1,3}%")
 
 
 def wait_for_wake(
@@ -75,6 +79,23 @@ def next_autocapture_delay_s(*, initial: bool) -> float:
     if hi <= 0 or hi <= lo:
         return max(60.0, lo)
     return lo + (random.random() * (hi - lo))
+
+
+def normalize_capture_for_idle(text: str) -> str:
+    out_lines: list[str] = []
+    for raw in str(text or "").splitlines():
+        line = raw.rstrip()
+        line = _IDLE_NOISE_TS_RE.sub("<ts>", line)
+        line = _IDLE_NOISE_TIME_RE.sub("<time>", line)
+        line = _IDLE_NOISE_PCT_RE.sub("<pct>", line)
+        line = re.sub(r"\s+", " ", line).strip()
+        if not line:
+            continue
+        out_lines.append(line)
+    if not out_lines:
+        return ""
+    # Keep a bounded tail so a scrolling transcript can still be compared cheaply.
+    return "\n".join(out_lines[-120:])
 
 
 def capture_pane_and_persist(

@@ -162,6 +162,14 @@ def delivery_suggestions(
         suggestions.append(
             f'loom team send {paths.team} {tnorm} --force --message "..."'
         )
+    elif delivery_reason == "unconfirmed_delivery":
+        suggestions.append(
+            f"loom team send {paths.team} {tnorm} --message \"...\""
+        )
+        if wid:
+            suggestions.append(
+                f"loom team bounce {paths.team} {wid} --reason unconfirmed_delivery"
+            )
 
     return suggestions
 

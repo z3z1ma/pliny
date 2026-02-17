@@ -1,8 +1,4 @@
-"""Team orchestration core.
-
-Coordinates tmux-backed manager/architect/workers/integrator flows, run lifecycle,
-durable inbox messaging, merge queue, and harness sidecars.
-"""
+"""Team orchestration core for tmux-backed manager/architect/workers/integrator lifecycle and messaging."""
 
 from __future__ import annotations
 
@@ -198,6 +194,7 @@ from agent_loom.team.run_state import (
     run_session,
     save_run,
 )
+from agent_loom.team.sidecar_nudge import SidecarNudger
 from agent_loom.team.start_state import (
     StartMergeOptions,
     StartModelOverrides,
@@ -249,6 +246,7 @@ from agent_loom.team.waiting import (
 )
 from agent_loom.team.waiting import (
     next_autocapture_delay_s,
+    normalize_capture_for_idle,
     wait_for_wake,
 )
 from agent_loom.team.worker_planning import (
@@ -1449,11 +1447,6 @@ def _paths_for(*, team: str, repo: Optional[Path]) -> RunPaths:
             return candidate
     return resolve_run_paths(team=team, repo=repo_root)
 
-
-def _should_nudge(*, last_at: float, now: float, cooldown_s: float) -> bool:
-    return (now - last_at) >= cooldown_s
-
-
 def _capture_pane_and_persist(
     paths: RunPaths,
     *,
@@ -1612,7 +1605,6 @@ def tui(
     wake = threading.Event()
     proc: Optional[subprocess.Popen[Any]] = None
     stop_reason = "stopped"
-    last_nudge_at = 0.0
     respawn_times: List[float] = []
     bounce_killed_pid: Optional[int] = None
     bounce_pending = threading.Event()
@@ -1662,26 +1654,27 @@ def tui(
             p = proc
         return bool(p and p.poll() is None)
 
-    def safe_nudge(text: str) -> None:
-        nonlocal last_nudge_at
-        now = time.time()
-        if not _should_nudge(last_at=last_nudge_at, now=now, cooldown_s=cooldown_s):
-            return
-        if not child_alive():
-            return
-        try:
-            session = tmux_format(pane_id, "#{session_name}")
-            if not session:
-                return
-            panes = tmux_list_panes(session)
-            pane = panes.get(pane_id)
-            if not pane or not _pane_can_receive_chat(pane):
-                return
-            tmux_send_text(pane_id, text, enter=True, ctrl_enter=(harness == "omp"))
-            last_nudge_at = now
-        except Exception as exc:
-            _record_sidecar_warning("nudge.send_text", error=exc, once=True)
-            return
+    nudger = SidecarNudger(
+        pane_id=pane_id,
+        harness=harness,
+        cooldown_s=cooldown_s,
+        child_alive_fn=child_alive,
+        record_warning_fn=_record_sidecar_warning,
+    )
+
+    def safe_nudge(
+        text: str,
+        *,
+        key: str = "general",
+        cooldown_override_s: Optional[float] = None,
+        confirm_activity: bool = False,
+    ) -> tuple[bool, str]:
+        return nudger.safe_nudge(
+            text,
+            key=key,
+            cooldown_override_s=cooldown_override_s,
+            confirm_activity=confirm_activity,
+        )
 
     def emit_heartbeat() -> None:
         with lock:
@@ -1760,34 +1753,11 @@ def tui(
         return True
 
     def inbox_nudge() -> None:
-        try:
-            msgs = inbox_list_messages(paths, to=recipient, unacked_only=True, limit=25)
-        except Exception as exc:
-            _record_sidecar_warning("inbox.list", error=exc, once=True)
-            return
-        if not msgs:
-            return
-
-        user_msgs: List[Dict[str, Any]] = []
-        for m in msgs:
-            if _handle_control_message(m):
-                continue
-            user_msgs.append(dict(m))
-
-        if not user_msgs:
-            return
-
-        newest = user_msgs[0]
-        mid = str(newest.get("id") or "")
-        first = (
-            str(newest.get("message") or "").splitlines()[0]
-            if newest.get("message")
-            else ""
-        )
-        if len(first) > 100:
-            first = first[:97] + "..."
-        safe_nudge(
-            f"TEAM: inbox has {len(user_msgs)} unacked. Run: loom team inbox {paths.team} list --to {recipient} --unacked (newest id={mid}: {first})"
+        nudger.inbox_nudge(
+            paths=paths,
+            recipient=recipient,
+            inbox_list_messages_fn=inbox_list_messages,
+            handle_control_message_fn=_handle_control_message,
         )
 
     def inbox_loop() -> None:
@@ -1929,7 +1899,9 @@ def tui(
                 role_norm = str(role or "").strip().lower()
                 if role_norm in (ROLE_WORKER, ROLE_ARCHITECT):
                     out = str((cap or {}).get("output") or "")
-                    h = hashlib.sha256(out.encode("utf-8")).hexdigest()
+                    h = hashlib.sha256(
+                        normalize_capture_for_idle(out).encode("utf-8")
+                    ).hexdigest()
                     if last_screen_hash and h == last_screen_hash:
                         if not screen_unchanged_since:
                             screen_unchanged_since = last_capture_at or now

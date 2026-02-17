@@ -149,6 +149,38 @@ class TestTeamTargets(unittest.TestCase):
         self.assertEqual(reason, "")
         send_text.assert_called_once_with("%3", "TEAM inbox id=abc", enter=True, ctrl_enter=True)
 
+    def test_best_effort_tmux_nudge_returns_unconfirmed_after_retries(self) -> None:
+        run = {"harness": "codex", "manager": {"pane_id": "%1"}, "workers": {}}
+        pane = {"current_command": "codex", "dead": "0", "last_activity": "10"}
+        t = {"v": 20.0}
+
+        def _fake_time() -> float:
+            t["v"] += 0.7
+            return float(t["v"])
+
+        with (
+            mock.patch.object(targets, "tmux_available", return_value=True),
+            mock.patch.object(targets, "tmux_has_session", return_value=True),
+            mock.patch.object(targets, "_resolve_target", return_value=("%3", {"pane_id": "%3"})),
+            mock.patch.object(targets, "tmux_list_panes", return_value={"%3": dict(pane)}),
+            mock.patch.object(targets.time, "time", side_effect=_fake_time),
+            mock.patch.object(targets.time, "sleep"),
+            mock.patch.object(targets, "tmux_send_text") as send_text,
+        ):
+            ok, reason, meta = targets._best_effort_tmux_nudge(
+                run=run,
+                session="team-cobra",
+                target="manager",
+                line="TEAM inbox id=abc",
+                force=False,
+            )
+
+        self.assertFalse(ok)
+        self.assertEqual(reason, "unconfirmed_delivery")
+        self.assertEqual(str(meta.get("confirm") or ""), "unconfirmed")
+        self.assertEqual(int(meta.get("attempts") or 0), 2)
+        self.assertEqual(send_text.call_count, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

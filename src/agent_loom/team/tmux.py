@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import shutil
 import subprocess
+import time
 import uuid
 from pathlib import Path
 from typing import Any, Dict, Mapping, Optional, Sequence
@@ -265,6 +266,25 @@ def _pane_can_receive_chat(pane: Mapping[str, str]) -> bool:
     return True
 
 
+def _pane_last_activity_ts(pane: Mapping[str, str]) -> float:
+    raw = str(pane.get("last_activity") or "").strip()
+    if not raw:
+        return 0.0
+    try:
+        return float(raw)
+    except Exception:
+        return 0.0
+
+
+def _pane_is_busy(pane: Mapping[str, str], *, busy_window_s: float = 45.0) -> bool:
+    if not _pane_can_receive_chat(pane):
+        return False
+    last = _pane_last_activity_ts(pane)
+    if last <= 0:
+        return False
+    return (time.time() - last) <= max(1.0, float(busy_window_s))
+
+
 def tmux_env_flags(env: Mapping[str, str]) -> list[str]:
     out: list[str] = []
     for k, v in (env or {}).items():
@@ -273,6 +293,8 @@ def tmux_env_flags(env: Mapping[str, str]) -> list[str]:
 
 
 __all__ = [
+    "_pane_is_busy",
+    "_pane_last_activity_ts",
     "_pane_can_receive_chat",
     "tmux_available",
     "tmux_capture",
