@@ -484,9 +484,7 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help=argparse.SUPPRESS,
     )
-    sp.add_argument(
-        "--force", action="store_true", help=argparse.SUPPRESS
-    )
+    sp.add_argument("--force", action="store_true", help=argparse.SUPPRESS)
     sp.set_defaults(func=cmd_start)
 
     st = sub.add_parser("status", help="Show run status")

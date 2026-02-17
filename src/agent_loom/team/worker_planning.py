@@ -88,4 +88,3 @@ def active_spawn_headcount(
         active_ids.append(str(worker_id))
         active_roles[str(worker_id)] = role
     return len(active_ids), active_ids, active_roles
-

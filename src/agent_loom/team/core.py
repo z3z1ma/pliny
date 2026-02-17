@@ -27,8 +27,8 @@ from agent_loom.pack.core import install_pack as pack_install
 from agent_loom.pack.core import update_pack as pack_update
 from agent_loom.pack.lock import index_packs as pack_index
 from agent_loom.pack.lock import load_lock as pack_load_lock
-from agent_loom.team.charter import write_charter as _write_charter
 from agent_loom.team.channels import channel_for, resolve_team_from_session
+from agent_loom.team.charter import write_charter as _write_charter
 from agent_loom.team.communication_policy import (
     communication_policy_from_run,
     delivery_suggestions,
@@ -79,6 +79,16 @@ from agent_loom.team.events import (
     write_event,
 )
 from agent_loom.team.exec import _require_bin, _run
+from agent_loom.team.health import (
+    clear_heartbeat,
+    write_heartbeat,
+)
+from agent_loom.team.health import (
+    health_state as _health_state,
+)
+from agent_loom.team.health import (
+    recipient_key as _recipient_key,
+)
 from agent_loom.team.inbox import (
     _inbox_msg_path,
     _inbox_unacked,
@@ -173,12 +183,6 @@ from agent_loom.team.prompts import (
     render_manager_prompt,
     render_worker_prompt,
 )
-from agent_loom.team.health import (
-    clear_heartbeat,
-    health_state as _health_state,
-    recipient_key as _recipient_key,
-    write_heartbeat,
-)
 from agent_loom.team.run_state import (
     RunPaths,
     _is_path_within,
@@ -207,14 +211,14 @@ from agent_loom.team.start_state import (
     migrate_merge_role_workers,
     normalize_harness_configs,
 )
-from agent_loom.team.team_config import (
-    default_team_config_spec,
-    load_team_config_yaml,
-    liveness_from_run,
-    team_config_summary_from_run,
-)
 from agent_loom.team.strings import generate_stable_key, message_preview, sanitize
 from agent_loom.team.targets import _resolve_target, _resolve_targets
+from agent_loom.team.team_config import (
+    default_team_config_spec,
+    liveness_from_run,
+    load_team_config_yaml,
+    team_config_summary_from_run,
+)
 from agent_loom.team.time import _iso_z
 from agent_loom.team.tmux import (
     _pane_can_receive_chat,
@@ -550,7 +554,9 @@ def _sync_agent_prompt_blocks(*, repo_root: Path) -> tuple[list[str], list[str]]
         try:
             text = path.read_text(encoding="utf-8")
         except OSError as exc:
-            warnings.append(f"Unable to read Team agent file for prompt sync: {rel} ({exc})")
+            warnings.append(
+                f"Unable to read Team agent file for prompt sync: {rel} ({exc})"
+            )
             continue
 
         new_text, changed = _replace_managed_prompt_block(text=text, prompt=prompt)
@@ -1044,7 +1050,12 @@ def _recovery_gate_allows(
     for item in list(recovery.get("recoveries_in_window") or []):
         at_ts = _parse_iso_ts(str(item.get("at") or ""))
         if at_ts >= cutoff:
-            entries.append({"at": str(item.get("at") or ""), "recipient": _recipient_key(str(item.get("recipient") or ""))})
+            entries.append(
+                {
+                    "at": str(item.get("at") or ""),
+                    "recipient": _recipient_key(str(item.get("recipient") or "")),
+                }
+            )
     recovery["recoveries_in_window"] = entries
     if max_per_hour > 0 and len(entries) >= max_per_hour:
         return False, "recoveries_capped"
@@ -1063,8 +1074,10 @@ def _recovery_mark_begin(*, run: Dict[str, Any], recipient: str) -> None:
     cooldown_s = int(liveness.get("recovery_cooldown_s") or 0)
     if cooldown_s > 0:
         recovery["cooldown_until"] = (
-            dt.datetime.now(dt.UTC) + dt.timedelta(seconds=cooldown_s)
-        ).isoformat().replace("+00:00", "Z")
+            (dt.datetime.now(dt.UTC) + dt.timedelta(seconds=cooldown_s))
+            .isoformat()
+            .replace("+00:00", "Z")
+        )
     else:
         recovery["cooldown_until"] = ""
 
@@ -1673,7 +1686,11 @@ def tui(
     def emit_heartbeat() -> None:
         with lock:
             child = proc
-        pid = int(child.pid) if child is not None and child.poll() is None else int(os.getpid())
+        pid = (
+            int(child.pid)
+            if child is not None and child.poll() is None
+            else int(os.getpid())
+        )
         try:
             write_heartbeat(
                 paths=paths,
@@ -2334,7 +2351,11 @@ def _ensure_always_on_personas(*, team: str, repo: Optional[Path] = None) -> Non
         window = str(existing.get("window") or "architect").strip() or "architect"
         pane_id = ""
         should_spawn = True
-        if not bool(existing.get("retired")) and window and tmux_window_exists(session, window):
+        if (
+            not bool(existing.get("retired"))
+            and window
+            and tmux_window_exists(session, window)
+        ):
             pane_id = tmux_format(f"{session}:{window}", "#{pane_id}")
             state, _heartbeat, pane = _recipient_health(
                 paths=paths,
@@ -2367,7 +2388,9 @@ def _ensure_always_on_personas(*, team: str, repo: Optional[Path] = None) -> Non
                     should_spawn = False
 
         if should_spawn:
-            desired_window = sanitize(window, allow=r"a-zA-Z0-9._-", max_len=60) or "architect"
+            desired_window = (
+                sanitize(window, allow=r"a-zA-Z0-9._-", max_len=60) or "architect"
+            )
             window = tmux_unique_window_name(session, desired_window)
             tmux_cmd(
                 [
@@ -4335,7 +4358,10 @@ def spawn(
         }
         ticket_payload_dict = dataclasses.asdict(ticket_payload)
         # Normalization: ensure id is set.
-        ticket = {**ticket, "id": _canonical_ticket_id(str(ticket.get("id") or ticket_id))}
+        ticket = {
+            **ticket,
+            "id": _canonical_ticket_id(str(ticket.get("id") or ticket_id)),
+        }
 
         workers = dict(run.get("workers") or {})
         requested_worker_id = _canonical_worker_id(worker_id)
@@ -5786,9 +5812,7 @@ def capture(
             role = str((meta or {}).get("role") or "").strip().lower()
             wid = str((meta or {}).get("worker_id") or "").strip()
             sugg = [f"loom team status {paths.team} --show-dead"]
-            if role == ROLE_INTEGRATOR or (
-                str(target or "").strip() in {"integrator"}
-            ):
+            if role == ROLE_INTEGRATOR or (str(target or "").strip() in {"integrator"}):
                 sugg += [
                     f"loom team spawn-integrator {paths.team}",
                     f"loom team spawn-integrator {paths.team} --force",
@@ -6808,7 +6832,9 @@ def bounce(
             resolved_target = f"worker:{worker_guess}"
         else:
             ticket_guess = _canonical_ticket_id(requested_target)
-            resolved_target = f"ticket:{ticket_guess}" if ticket_guess else requested_target
+            resolved_target = (
+                f"ticket:{ticket_guess}" if ticket_guess else requested_target
+            )
 
     pane_id, meta = _resolve_target(run, resolved_target)
     if str(meta.get("role") or "").strip().lower() == ROLE_MANAGER:

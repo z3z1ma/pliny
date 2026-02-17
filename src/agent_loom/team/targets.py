@@ -242,7 +242,9 @@ def _best_effort_tmux_nudge(
         if not pane:
             wid = str(meta.get("worker_id") or "").strip()
             win = (
-                str(((run.get("workers") or {}).get(wid) or {}).get("window") or "").strip()
+                str(
+                    ((run.get("workers") or {}).get(wid) or {}).get("window") or ""
+                ).strip()
                 if wid
                 else ""
             )

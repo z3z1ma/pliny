@@ -8,9 +8,9 @@ import yaml
 from agent_loom.team.constants import (
     DEFAULT_DEAD_AFTER_S,
     DEFAULT_HEARTBEAT_INTERVAL_S,
+    DEFAULT_MAX_RECOVERIES_PER_HOUR,
     DEFAULT_RECOVERY_COOLDOWN_S,
     DEFAULT_STALE_AFTER_S,
-    DEFAULT_MAX_RECOVERIES_PER_HOUR,
     ROLE_ARCHITECT,
     ROLE_INTEGRATOR,
     ROLE_MANAGER,
@@ -122,7 +122,9 @@ def normalize_team_config_spec(raw: Mapping[str, Any] | None) -> Dict[str, Any]:
         append_raw = role_prompts.get("append")
         if append_raw is not None:
             append_obj = _expect_mapping("team_config.role_prompts.append", append_raw)
-            _reject_unknown_keys("team_config.role_prompts.append", append_obj, set(_ROLES))
+            _reject_unknown_keys(
+                "team_config.role_prompts.append", append_obj, set(_ROLES)
+            )
             append = dict(spec["role_prompts"]["append"] or {})
             for role in _ROLES:
                 value = append_obj.get(role)

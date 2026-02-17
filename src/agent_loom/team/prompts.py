@@ -14,7 +14,10 @@ from agent_loom.team.constants import (
     ROLE_WORKER,
 )
 from agent_loom.team.merge_queue import _merge_state, merge_branch_for_run
-from agent_loom.team.team_config import role_prompt_append_from_run, worker_subagents_from_run
+from agent_loom.team.team_config import (
+    role_prompt_append_from_run,
+    worker_subagents_from_run,
+)
 
 
 def _prompt_token(value: str, *, placeholder: str) -> str:
@@ -27,9 +30,7 @@ def _prompt_team(team: str) -> str:
 
 
 def _cmd_worker_blocked(*, team: str, ticket_id: str) -> str:
-    return (
-        f'loom team send {_prompt_team(team)} manager "{_prompt_token(ticket_id, placeholder="<ticket>")} blocked: ..."'
-    )
+    return f'loom team send {_prompt_team(team)} manager "{_prompt_token(ticket_id, placeholder="<ticket>")} blocked: ..."'
 
 
 def _cmd_ready_for_review(
@@ -263,19 +264,29 @@ def render_manager_prompt(*, run: Mapping[str, Any], charter_path: Path) -> str:
     lines.append(f"{objective}\n\n")
 
     lines.append("Command loop:\n")
-    lines.append(f"1) Observe: `loom team status {team}` and `{_cmd_inbox_list(team=team, to='manager')}`.\n")
-    lines.append(f"2) Sprint prep when needed: `loom team prep-sprint {team} --name \"...\"`.\n")
+    lines.append(
+        f"1) Observe: `loom team status {team}` and `{_cmd_inbox_list(team=team, to='manager')}`.\n"
+    )
+    lines.append(
+        f'2) Sprint prep when needed: `loom team prep-sprint {team} --name "..."`.\n'
+    )
     lines.append(f"3) Spawn execution: `loom team spawn {team} <TICKET_ID>`.\n")
-    lines.append(f"4) Fan-in: `loom team merge {team} enqueue --ticket <id> --branch <branch> --from-worker <wid>`.\n")
+    lines.append(
+        f"4) Fan-in: `loom team merge {team} enqueue --ticket <id> --branch <branch> --from-worker <wid>`.\n"
+    )
     lines.append(f"5) Keep integrator alive: `{_cmd_spawn_integrator(team=team)}`.\n")
     lines.append(
         f"6) Ship: `{_cmd_ship(team=team)}` (merge-queue `{merge_branch}` -> {remote}/{target_branch}, push={push}).\n"
     )
-    lines.append(f"7) Cleanup: `loom team retire {team} <WORKER_ID>` / `loom team janitor {team}`.\n")
+    lines.append(
+        f"7) Cleanup: `loom team retire {team} <WORKER_ID>` / `loom team janitor {team}`.\n"
+    )
     lines.append(
         f"8) Liveness: if stale/dead worker, `loom team bounce {team} <WORKER_ID|TICKET_ID>`, then reassess with `loom team doctor {team}`.\n"
     )
-    lines.append(f"9) Done: `loom team disband {team}` when objective is fully shipped.\n")
+    lines.append(
+        f"9) Done: `loom team disband {team}` when objective is fully shipped.\n"
+    )
     lines.append("10) If no concrete next step: `loom team wait 5m`.\n")
 
     return _append_role_prompt(run=run, role=ROLE_MANAGER, body="".join(lines))
@@ -338,7 +349,9 @@ def render_worker_prompt(
     lines.append("3) Commit meaningful milestones.\n")
     lines.append("4) If blocked, set blocked + record options + notify manager.\n")
     lines.append(f"   - `{_cmd_worker_blocked(team=team, ticket_id=ticket_id)}`\n")
-    lines.append("5) On completion candidate, set review and send structured review request.\n")
+    lines.append(
+        "5) On completion candidate, set review and send structured review request.\n"
+    )
     lines.append(
         f"   - `{_cmd_ready_for_review(team=team, ticket_id=ticket_id, worker_id=worker_id, branch=branch)}`\n"
     )
@@ -359,12 +372,16 @@ def render_worker_prompt(
         lines.append(
             "- Convert objective ambiguity into sprint tickets that a lower-cost worker can execute without follow-up.\n"
         )
-        lines.append("- Include explicit scope, verification, acceptance criteria, and dependency ordering.\n")
+        lines.append(
+            "- Include explicit scope, verification, acceptance criteria, and dependency ordering.\n"
+        )
         lines.append(
             f"- Completion token: `{_cmd_architect_done(team=team, worker_id=worker_id, ticket_id=ticket_id)}`\n"
         )
 
-    lines.append("\nIdling policy: if no concrete next command, run `loom team wait 15m`.\n\n")
+    lines.append(
+        "\nIdling policy: if no concrete next command, run `loom team wait 15m`.\n\n"
+    )
     lines.append("Ticket payload:\n")
     lines.append(json.dumps(ticket_payload, indent=2) + "\n")
 
@@ -399,7 +416,9 @@ def render_architect_prompt(
 
     lines.append("\nAlways-on architect protocol:\n")
     lines.append("- Monitor inbox for sprint prep/planning tasks.\n")
-    lines.append("- Convert objective requests into concrete tickets with clear sequencing.\n")
+    lines.append(
+        "- Convert objective requests into concrete tickets with clear sequencing.\n"
+    )
     lines.append(
         "- Raise ambiguity as options with tradeoffs instead of blocking silently.\n"
     )
