@@ -16,6 +16,7 @@ from agent_loom.dashboard.compound_fs import list_skills, read_instincts, read_s
 from agent_loom.dashboard.config import ServerConfig
 from agent_loom.dashboard.http import err, ok
 from agent_loom.dashboard.introspect import introspect_module
+from agent_loom.dashboard.requests import json_body, parse_int_field, require_token_default
 from agent_loom.dashboard.workspace_read import (
     WorkspaceReadError,
     components_index,
@@ -28,18 +29,6 @@ from agent_loom.dashboard.workspace_read import (
 
 SERVER_DIR = os.path.dirname(os.path.abspath(__file__))
 TEMPLATE_DIR = os.path.join(SERVER_DIR, "templates")
-
-
-def _is_loopback(host: str) -> bool:
-    h = (host or "").strip().lower()
-    return h in {"127.0.0.1", "localhost"}
-
-
-def _require_token_default(host: str, require_token: bool) -> bool:
-    if require_token:
-        return True
-    # If bound to non-loopback, require a token by default.
-    return not _is_loopback(host)
 
 
 def _subsystem_versions() -> dict[str, str]:
@@ -63,26 +52,11 @@ def _ensure_writes_enabled(cfg: ServerConfig) -> tuple[bool, dict[str, Any] | No
 def _require_auth(
     cfg: ServerConfig, req: Request
 ) -> tuple[bool, dict[str, Any] | None]:
-    need = _require_token_default(str(req.host.split(":")[0]), cfg.require_token)
+    need = require_token_default(str(req.host.split(":")[0]), cfg.require_token)
     res = authorize_request(req=req, token=cfg.token, require_token=need)
     if res.ok:
         return True, None
     return False, err(code="UNAUTHORIZED", message=res.reason)
-
-
-def _json_body() -> dict[str, Any]:
-    payload = request.get_json(silent=True)
-    if payload is None:
-        return {}
-    if isinstance(payload, dict):
-        return payload
-    raise LoomError(
-        "request body must be a JSON object",
-        code="ARG",
-        hint="Send an object payload, not a list or scalar.",
-        http_status=400,
-        exit_code=2,
-    )
 
 
 def _tickets_dir(cfg: ServerConfig) -> Path:
@@ -116,7 +90,7 @@ def _create_health_blueprint(cfg: ServerConfig) -> Blueprint:
                     else "",
                     "writes_enabled": bool(cfg.enable_writes),
                     "token_required": bool(
-                        _require_token_default("127.0.0.1", cfg.require_token)
+                        require_token_default("127.0.0.1", cfg.require_token)
                     ),
                 },
                 meta={
@@ -228,13 +202,16 @@ def _create_tickets_blueprint(
 
         from agent_loom.ticket.api import create
 
-        body = _json_body()
         try:
+            body = json_body(request)
+            priority = parse_int_field(body, field="priority", default=2)
+            if priority is None:
+                priority = 2
             res = create(
                 tickets_dir=_tickets_dir(cfg),
                 title=str(body.get("title") or "").strip(),
                 type=str(body.get("type") or "task").strip(),
-                priority=int(body.get("priority") or 2),
+                priority=priority,
                 tags=str(body.get("tags") or ""),
                 description=str(body.get("description") or ""),
                 assignee=str(body.get("assignee") or "").strip(),
@@ -263,14 +240,18 @@ def _create_tickets_blueprint(
 
         from agent_loom.ticket.api import update
 
-        body = _json_body()
         try:
+            body = json_body(request)
             res = update(
                 tickets_dir=_tickets_dir(cfg),
                 ticket_id=str(ticket_id),
                 title=body.get("title"),
                 status=str(body.get("status") or "").strip(),
-                priority=(int(body["priority"]) if "priority" in body else None),
+                priority=(
+                    parse_int_field(body, field="priority", default=None)
+                    if "priority" in body
+                    else None
+                ),
                 type_=str(body.get("type") or "").strip(),
                 assignee=str(body.get("assignee") or "").strip(),
                 tags=(str(body.get("tags")) if "tags" in body else None),
@@ -774,23 +755,25 @@ def create_app(*, cfg: ServerConfig) -> Flask:
         default_message: str,
     ) -> tuple[dict[str, Any], int]:
         error_id = uuid4().hex
-        known = isinstance(exc, LoomError) or isinstance(
-            exc, (ValueError, FileNotFoundError, PermissionError, WorkspaceReadError)
-        ) or hasattr(exc, "code")
         default_http_status = 500
-        if known:
+        if isinstance(exc, LoomError):
+            default_http_status = int(exc.http_status)
+        elif isinstance(exc, FileNotFoundError):
+            default_http_status = 404
+        elif isinstance(exc, PermissionError):
+            default_http_status = 403
+        elif isinstance(exc, (ValueError, WorkspaceReadError)) or hasattr(exc, "code"):
             default_http_status = 400
-            if isinstance(exc, FileNotFoundError):
-                default_http_status = 404
-            elif isinstance(exc, PermissionError):
-                default_http_status = 403
+        expose_message = isinstance(exc, LoomError) and default_http_status < 500
         typed = coerce_loom_error(
             exc,
             default_code=default_code,
-            default_message=(default_message if known else "internal error"),
+            default_message=(
+                default_message if default_http_status < 500 else "internal error"
+            ),
             default_http_status=default_http_status,
             default_exit_code=2,
-            expose_message=known,
+            expose_message=expose_message,
             error_id=error_id,
         )
         if typed.http_status >= 500:

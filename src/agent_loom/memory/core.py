@@ -148,6 +148,69 @@ def _hydration_feedback(hydration: Dict[str, Any]) -> tuple[Dict[str, int], List
     return summary, actions
 
 
+def _old_base_for_note_rel(vp: VaultPaths, *, rel: str) -> Path:
+    if rel.startswith("personal/ephemeral/"):
+        return vp.ephemeral_notes_dir
+    if rel.startswith("personal/"):
+        return vp.personal_notes_dir
+    return vp.notes_dir
+
+
+def _format_move_skipped_warning(
+    *, note_id: str, from_path: Path, to_path: Path, error: BaseException
+) -> str:
+    return (
+        "warning: note move skipped "
+        f"(id={note_id} from={from_path} to={to_path} error={type(error).__name__}: {error})"
+    )
+
+
+def _move_note_for_visibility(
+    *,
+    vp: VaultPaths,
+    note_id: str,
+    note_path: Path,
+    note_rel: str,
+    target_base: Path,
+    explicit_visibility_change: bool,
+) -> tuple[Path, bool, Optional[str]]:
+    old_base = _old_base_for_note_rel(vp, rel=note_rel)
+    candidate = target_base / note_path.name
+    try:
+        rel_under_old = note_path.relative_to(old_base)
+        candidate = target_base / rel_under_old
+        if candidate == note_path:
+            return note_path, False, None
+        if candidate.exists():
+            raise ValueError(
+                "Refusing to move note: destination already exists: "
+                f"{note_rel_path(vp, candidate)}"
+            )
+        safe_mkdir(candidate.parent)
+        shutil.move(str(note_path), str(candidate))
+        return candidate, True, None
+    except Exception as exc:
+        if explicit_visibility_change:
+            raise MemoryError(
+                "failed to move note to requested visibility location",
+                code="CONFLICT",
+                exit_code=2,
+                hint="Resolve destination conflicts and retry the visibility change.",
+                details={
+                    "id": note_id,
+                    "from": str(note_path),
+                    "to": str(candidate),
+                    "error": f"{type(exc).__name__}: {exc}",
+                },
+            ) from exc
+        return note_path, False, _format_move_skipped_warning(
+            note_id=note_id,
+            from_path=note_path,
+            to_path=candidate,
+            error=exc,
+        )
+
+
 # -----------------------------
 # Init / meta / gitignore safety
 # -----------------------------
@@ -734,44 +797,16 @@ def edit(
     # If visibility changed, move file to the correct base dir (id stays stable).
     new_vis = fm.get("visibility") or default_vis
     base = choose_base_dir(vp, new_vis)
-    # Keep subfolder structure relative to its current base, if possible.
-    # We move to base/<same relative subpath minus old base>.
-    old_base = vp.notes_dir
-    if rel.startswith("personal/ephemeral/"):
-        old_base = vp.ephemeral_notes_dir
-    elif rel.startswith("personal/"):
-        old_base = vp.personal_notes_dir
-
-    moved = False
-    new_path = p
-    try:
-        rel_under_old = p.relative_to(old_base)
-        candidate = base / rel_under_old
-        if candidate != p:
-            if candidate.exists():
-                raise ValueError(
-                    "Refusing to move note: destination already exists: "
-                    f"{note_rel_path(vp, candidate)}"
-                )
-            safe_mkdir(candidate.parent)
-            shutil.move(str(p), str(candidate))
-            new_path = candidate
-            moved = True
-    except Exception as exc:
-        if visibility is not None:
-            raise MemoryError(
-                "failed to move note to requested visibility location",
-                code="CONFLICT",
-                exit_code=2,
-                hint="Resolve destination conflicts and retry the visibility change.",
-                details={
-                    "id": note_id,
-                    "from": str(p),
-                    "to": str(base),
-                    "error": str(exc),
-                },
-            ) from exc
-        warns.append(f"warning: note move skipped ({exc})")
+    new_path, moved, move_warning = _move_note_for_visibility(
+        vp=vp,
+        note_id=note_id,
+        note_path=p,
+        note_rel=rel,
+        target_base=base,
+        explicit_visibility_change=visibility is not None,
+    )
+    if move_warning is not None:
+        warns.append(move_warning)
 
     hydration_summary, next_actions = _hydration_feedback(hydration)
 

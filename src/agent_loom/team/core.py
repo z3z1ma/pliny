@@ -5025,8 +5025,15 @@ def spawn_integrator(
                     and tmux_window_exists(session, win)
                 ):
                     tmux_kill_window(session, win)
-            except Exception:
-                pass
+            except Exception as exc:
+                _record_runtime_warning(
+                    paths=paths,
+                    run=run,
+                    code="spawn_integrator.force.kill_window",
+                    summary="Failed to kill stale integrator tmux window during force recovery",
+                    error=exc,
+                    refs={"session": session, "worker_id": worker_id},
+                )
             try:
                 repo_worktree_rm_path(
                     path=str(desired_wt_path),
@@ -5034,8 +5041,18 @@ def spawn_integrator(
                     force=True,
                     confirm=True,
                 )
-            except Exception:
-                pass
+            except Exception as exc:
+                _record_runtime_warning(
+                    paths=paths,
+                    run=run,
+                    code="spawn_integrator.force.remove_worktree_path",
+                    summary="Failed to remove stale merge worktree path during force recovery",
+                    error=exc,
+                    refs={
+                        "worker_id": worker_id,
+                        "worktree_path": str(desired_wt_path),
+                    },
+                )
             try:
                 repo_worktree_rm(
                     branch=merge_branch,
@@ -5043,18 +5060,39 @@ def spawn_integrator(
                     force=True,
                     confirm=True,
                 )
-            except Exception:
-                pass
+            except Exception as exc:
+                _record_runtime_warning(
+                    paths=paths,
+                    run=run,
+                    code="spawn_integrator.force.remove_branch_worktree",
+                    summary="Failed to remove stale merge branch worktree during force recovery",
+                    error=exc,
+                    refs={"worker_id": worker_id, "branch": merge_branch},
+                )
             try:
                 # Force means: treat the merge branch as disposable.
                 # If it's corrupted (e.g. accidental commits), delete and recreate from base_ref.
                 _run(["git", "branch", "-D", merge_branch], cwd=root, timeout=30.0)
-            except Exception:
-                pass
+            except Exception as exc:
+                _record_runtime_warning(
+                    paths=paths,
+                    run=run,
+                    code="spawn_integrator.force.delete_branch",
+                    summary="Failed to delete merge branch during force recovery",
+                    error=exc,
+                    refs={"worker_id": worker_id, "branch": merge_branch},
+                )
             try:
                 repo_worktree_prune(root=root)
-            except Exception:
-                pass
+            except Exception as exc:
+                _record_runtime_warning(
+                    paths=paths,
+                    run=run,
+                    code="spawn_integrator.force.prune_worktrees",
+                    summary="Failed to prune worktree metadata during force recovery",
+                    error=exc,
+                    refs={"worker_id": worker_id},
+                )
 
         # Integrator is the system role responsible for cleaning/repairing its own
         # merge-queue worktree when needed. Do not block spawn on a dirty worktree
