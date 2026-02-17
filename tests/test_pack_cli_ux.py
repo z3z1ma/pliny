@@ -102,5 +102,78 @@ class TestPackCliUx(unittest.TestCase):
         self.assertIn("diff (drifted): sample/.opencode/commands/pack-sample.md", out)
         self.assertIn("--- pack:sample/.opencode/commands/pack-sample.md", out)
 
+    def test_status_invalid_lockfile_returns_structured_error(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td)
+            lock = repo / ".loom" / "pack" / "lock.json"
+            lock.parent.mkdir(parents=True, exist_ok=True)
+            lock.write_text(
+                json.dumps({"version": 1, "packs": "bad-shape"}),
+                encoding="utf-8",
+            )
+            rc, out, err = _run_text(["status", "--json"], cwd=repo)
+        self.assertEqual(rc, 2)
+        self.assertEqual(err, "")
+        payload = json.loads(out.strip())
+        self.assertEqual(payload.get("code"), "LOCK_INVALID")
+        self.assertIn("loom pack doctor", str(payload.get("hint") or ""))
+
+    def test_doctor_repairs_safe_duplicate_lock_entries(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            repo = Path(td)
+            lock = repo / ".loom" / "pack" / "lock.json"
+            lock.parent.mkdir(parents=True, exist_ok=True)
+            sha = "a" * 64
+            lock.write_text(
+                json.dumps(
+                    {
+                        "version": 1,
+                        "packs": [
+                            {
+                                "id": "sample",
+                                "version": "1.0.0",
+                                "installed_at": "2026-01-01T00:00:00Z",
+                                "files": [
+                                    {
+                                        "path": ".opencode/commands/pack-sample.md",
+                                        "sha256": sha,
+                                    },
+                                    {
+                                        "path": ".opencode/commands/pack-sample.md",
+                                        "sha256": sha,
+                                    },
+                                ],
+                            },
+                            {
+                                "id": "sample",
+                                "version": "1.0.0",
+                                "installed_at": "2026-01-01T00:00:00Z",
+                                "files": [
+                                    {
+                                        "path": ".opencode/commands/pack-sample.md",
+                                        "sha256": sha,
+                                    }
+                                ],
+                            },
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            rc, out, err = _run_text(["doctor", "--json"], cwd=repo)
+
+            repaired = json.loads(lock.read_text(encoding="utf-8"))
+
+        self.assertEqual(rc, 0)
+        self.assertEqual(err, "")
+        payload = json.loads(out.strip())
+        warnings = payload.get("warnings")
+        self.assertIsInstance(warnings, list)
+        self.assertGreaterEqual(len(cast(list[object], warnings)), 1)
+        packs = repaired.get("packs")
+        self.assertIsInstance(packs, list)
+        self.assertEqual(len(cast(list[object], packs)), 1)
+
 if __name__ == "__main__":
     unittest.main()

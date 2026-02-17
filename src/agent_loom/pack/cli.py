@@ -22,6 +22,7 @@ from agent_loom.pack.core import (
     update_pack,
 )
 from agent_loom.pack.diff import diff_pack_file, diff_pack_files
+from agent_loom.pack.lock import LockFileError
 
 
 class PackArgumentParser(StrictArgumentParser):
@@ -183,6 +184,21 @@ def _print_drift_guidance(*, cmd: str, pack_id: str, drifted_count: int) -> None
     sys.stdout.write(f"apply overwrites: loom pack {cmd} {pack_id} --force\n")
 
 
+def _emit_runtime_error(
+    *, json_output: bool, code: str, error: str, hint: str = ""
+) -> int:
+    payload = {"ok": False, "code": code, "error": error}
+    if hint:
+        payload["hint"] = hint
+    if json_output:
+        emit_json(payload)
+    else:
+        sys.stderr.write(f"Error: {error}\n")
+        if hint:
+            sys.stderr.write(f"{hint}\n")
+    return 2
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     raw_argv = list(argv) if argv is not None else sys.argv[1:]
     try:
@@ -205,178 +221,200 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             sys.stderr.write("Run: loom pack -h\n")
         return 2
 
-    if args.cmd == "list":
-        packs = list_packs()
-        payload = {"ok": True, "packs": [p.__dict__ for p in packs]}
-        if bool(getattr(args, "json", False)):
-            emit_json(payload)
-        else:
-            if not packs:
-                sys.stdout.write("(no packs)\n")
-            for pck in packs:
-                sys.stdout.write(f"{pck.id} {pck.version} - {pck.description}\n")
-        return 0
+    try:
+        if args.cmd == "list":
+            packs = list_packs()
+            payload = {"ok": True, "packs": [p.__dict__ for p in packs]}
+            if bool(getattr(args, "json", False)):
+                emit_json(payload)
+            else:
+                if not packs:
+                    sys.stdout.write("(no packs)\n")
+                for pck in packs:
+                    sys.stdout.write(f"{pck.id} {pck.version} - {pck.description}\n")
+            return 0
 
-    if args.cmd == "status":
-        repo = resolve_repo_root(getattr(args, "repo", None))
-        payload = status(repo)
-        want_diff = bool(getattr(args, "diff", False))
-        if bool(getattr(args, "json", False)):
-            if want_diff:
-                payload = {**payload, "diffs": _status_diff_items(repo_root=repo)}
-            emit_json(payload)
-        else:
-            sys.stdout.write(json.dumps(payload, indent=2) + "\n")
-            drifted_val = payload.get("drifted")
-            drifted = int(drifted_val) if isinstance(drifted_val, int) else 0
-            if drifted and not want_diff:
-                sys.stdout.write(
-                    "note: some pack files drifted; rerun with --diff to view diffs\n"
-                )
-            if want_diff and drifted:
-                sys.stdout.write("\n")
-                for it in _status_diff_items(repo_root=repo):
+        if args.cmd == "status":
+            repo = resolve_repo_root(getattr(args, "repo", None))
+            payload = status(repo)
+            want_diff = bool(getattr(args, "diff", False))
+            if bool(getattr(args, "json", False)):
+                if want_diff:
+                    payload = {**payload, "diffs": _status_diff_items(repo_root=repo)}
+                emit_json(payload)
+            else:
+                sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+                drifted_val = payload.get("drifted")
+                drifted = int(drifted_val) if isinstance(drifted_val, int) else 0
+                if drifted and not want_diff:
                     sys.stdout.write(
-                        f"diff (drifted): {it.get('pack_id')}/{it.get('relpath')}\n"
+                        "note: some pack files drifted; rerun with --diff to view diffs\n"
                     )
-                    if bool(it.get("ok")) and str(it.get("diff") or "").strip():
-                        sys.stdout.write(str(it.get("diff") or ""))
-                    else:
-                        sys.stdout.write("(diff unavailable)\n")
-        return 0
+                if want_diff and drifted:
+                    sys.stdout.write("\n")
+                    for it in _status_diff_items(repo_root=repo):
+                        sys.stdout.write(
+                            f"diff (drifted): {it.get('pack_id')}/{it.get('relpath')}\n"
+                        )
+                        if bool(it.get("ok")) and str(it.get("diff") or "").strip():
+                            sys.stdout.write(str(it.get("diff") or ""))
+                        else:
+                            sys.stdout.write("(diff unavailable)\n")
+            return 0
 
-    if args.cmd == "doctor":
-        repo = resolve_repo_root(getattr(args, "repo", None))
-        payload = doctor(repo, pack_id=getattr(args, "pack", None))
-        if bool(getattr(args, "json", False)):
-            emit_json(payload)
-        else:
-            sys.stdout.write(json.dumps(payload, indent=2) + "\n")
-        return 0
+        if args.cmd == "doctor":
+            repo = resolve_repo_root(getattr(args, "repo", None))
+            payload = doctor(repo, pack_id=getattr(args, "pack", None))
+            if bool(getattr(args, "json", False)):
+                emit_json(payload)
+            else:
+                sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+            return 0
 
-    if args.cmd == "install":
-        repo = resolve_repo_root(getattr(args, "repo", None))
-        res = install_pack(
-            repo_root=repo,
-            pack_id=str(args.pack_id),
-            dry_run=bool(getattr(args, "dry_run", False)),
-            force=bool(getattr(args, "force", False)),
-        )
-        want_diff = bool(getattr(args, "diff", False))
-        diffs = (
-            _result_diffs(
+        if args.cmd == "install":
+            repo = resolve_repo_root(getattr(args, "repo", None))
+            res = install_pack(
                 repo_root=repo,
                 pack_id=str(args.pack_id),
-                relpaths=list(res.drifted or []),
+                dry_run=bool(getattr(args, "dry_run", False)),
+                force=bool(getattr(args, "force", False)),
             )
-            if want_diff
-            else []
-        )
-        payload = {**res.__dict__, **({"diffs": diffs} if want_diff else {})}
-        if bool(getattr(args, "json", False)):
-            emit_json(payload)
-        else:
-            sys.stdout.write(json.dumps(payload, indent=2) + "\n")
-            sys.stdout.write("note: commit .loom/pack/lock.json\n")
-            drifted = len(list(res.drifted or []))
-            if drifted and not want_diff:
-                _print_drift_guidance(
-                    cmd="install", pack_id=str(args.pack_id), drifted_count=drifted
+            want_diff = bool(getattr(args, "diff", False))
+            diffs = (
+                _result_diffs(
+                    repo_root=repo,
+                    pack_id=str(args.pack_id),
+                    relpaths=list(res.drifted or []),
                 )
-            if want_diff and drifted:
-                sys.stdout.write("\n")
-                for it in diffs:
-                    sys.stdout.write(
-                        f"diff (drifted): {it.get('pack_id')}/{it.get('relpath')}\n"
+                if want_diff
+                else []
+            )
+            payload = {**res.__dict__, **({"diffs": diffs} if want_diff else {})}
+            if bool(getattr(args, "json", False)):
+                emit_json(payload)
+            else:
+                sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+                sys.stdout.write("note: commit .loom/pack/lock.json\n")
+                drifted = len(list(res.drifted or []))
+                if drifted and not want_diff:
+                    _print_drift_guidance(
+                        cmd="install", pack_id=str(args.pack_id), drifted_count=drifted
                     )
-                    if bool(it.get("ok")) and str(it.get("diff") or "").strip():
-                        sys.stdout.write(str(it.get("diff") or ""))
-                    else:
-                        sys.stdout.write("(diff unavailable)\n")
+                if want_diff and drifted:
+                    sys.stdout.write("\n")
+                    for it in diffs:
+                        sys.stdout.write(
+                            f"diff (drifted): {it.get('pack_id')}/{it.get('relpath')}\n"
+                        )
+                        if bool(it.get("ok")) and str(it.get("diff") or "").strip():
+                            sys.stdout.write(str(it.get("diff") or ""))
+                        else:
+                            sys.stdout.write("(diff unavailable)\n")
+            return 0
 
-        return 0
-    if args.cmd == "update":
-        repo = resolve_repo_root(getattr(args, "repo", None))
-        res = update_pack(
-            repo_root=repo,
-            pack_id=str(args.pack_id),
-            dry_run=bool(getattr(args, "dry_run", False)),
-            force=bool(getattr(args, "force", False)),
-        )
-        want_diff = bool(getattr(args, "diff", False))
-        diffs = (
-            _result_diffs(
+        if args.cmd == "update":
+            repo = resolve_repo_root(getattr(args, "repo", None))
+            res = update_pack(
                 repo_root=repo,
                 pack_id=str(args.pack_id),
-                relpaths=list(res.drifted or []),
+                dry_run=bool(getattr(args, "dry_run", False)),
+                force=bool(getattr(args, "force", False)),
             )
-            if want_diff
-            else []
-        )
-        payload = {**res.__dict__, **({"diffs": diffs} if want_diff else {})}
-        if bool(getattr(args, "json", False)):
-            emit_json(payload)
-        else:
-            sys.stdout.write(json.dumps(payload, indent=2) + "\n")
-            sys.stdout.write("note: commit .loom/pack/lock.json\n")
-            drifted = len(list(res.drifted or []))
-            if drifted and not want_diff:
-                _print_drift_guidance(
-                    cmd="update", pack_id=str(args.pack_id), drifted_count=drifted
+            want_diff = bool(getattr(args, "diff", False))
+            diffs = (
+                _result_diffs(
+                    repo_root=repo,
+                    pack_id=str(args.pack_id),
+                    relpaths=list(res.drifted or []),
                 )
-            if want_diff and drifted:
-                sys.stdout.write("\n")
-                for it in diffs:
-                    sys.stdout.write(
-                        f"diff (drifted): {it.get('pack_id')}/{it.get('relpath')}\n"
+                if want_diff
+                else []
+            )
+            payload = {**res.__dict__, **({"diffs": diffs} if want_diff else {})}
+            if bool(getattr(args, "json", False)):
+                emit_json(payload)
+            else:
+                sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+                sys.stdout.write("note: commit .loom/pack/lock.json\n")
+                drifted = len(list(res.drifted or []))
+                if drifted and not want_diff:
+                    _print_drift_guidance(
+                        cmd="update", pack_id=str(args.pack_id), drifted_count=drifted
                     )
-                    if bool(it.get("ok")) and str(it.get("diff") or "").strip():
-                        sys.stdout.write(str(it.get("diff") or ""))
-                    else:
-                        sys.stdout.write("(diff unavailable)\n")
+                if want_diff and drifted:
+                    sys.stdout.write("\n")
+                    for it in diffs:
+                        sys.stdout.write(
+                            f"diff (drifted): {it.get('pack_id')}/{it.get('relpath')}\n"
+                        )
+                        if bool(it.get("ok")) and str(it.get("diff") or "").strip():
+                            sys.stdout.write(str(it.get("diff") or ""))
+                        else:
+                            sys.stdout.write("(diff unavailable)\n")
+            return 0
 
-        return 0
-    if args.cmd == "uninstall":
-        repo = resolve_repo_root(getattr(args, "repo", None))
-        res = uninstall_pack(
-            repo_root=repo,
-            pack_id=str(args.pack_id),
-            dry_run=bool(getattr(args, "dry_run", False)),
-            force=bool(getattr(args, "force", False)),
-        )
-        want_diff = bool(getattr(args, "diff", False))
-        diffs = (
-            _result_diffs(
+        if args.cmd == "uninstall":
+            repo = resolve_repo_root(getattr(args, "repo", None))
+            res = uninstall_pack(
                 repo_root=repo,
                 pack_id=str(args.pack_id),
-                relpaths=list(res.drifted or []),
+                dry_run=bool(getattr(args, "dry_run", False)),
+                force=bool(getattr(args, "force", False)),
             )
-            if want_diff
-            else []
-        )
-        payload = {**res.__dict__, **({"diffs": diffs} if want_diff else {})}
-        if bool(getattr(args, "json", False)):
-            emit_json(payload)
-        else:
-            sys.stdout.write(json.dumps(payload, indent=2) + "\n")
-            sys.stdout.write("note: commit .loom/pack/lock.json\n")
-            drifted = len(list(res.drifted or []))
-            if drifted and not want_diff:
-                _print_drift_guidance(
-                    cmd="uninstall", pack_id=str(args.pack_id), drifted_count=drifted
+            want_diff = bool(getattr(args, "diff", False))
+            diffs = (
+                _result_diffs(
+                    repo_root=repo,
+                    pack_id=str(args.pack_id),
+                    relpaths=list(res.drifted or []),
                 )
-            if want_diff and drifted:
-                sys.stdout.write("\n")
-                for it in diffs:
-                    sys.stdout.write(
-                        f"diff (drifted): {it.get('pack_id')}/{it.get('relpath')}\n"
+                if want_diff
+                else []
+            )
+            payload = {**res.__dict__, **({"diffs": diffs} if want_diff else {})}
+            if bool(getattr(args, "json", False)):
+                emit_json(payload)
+            else:
+                sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+                sys.stdout.write("note: commit .loom/pack/lock.json\n")
+                drifted = len(list(res.drifted or []))
+                if drifted and not want_diff:
+                    _print_drift_guidance(
+                        cmd="uninstall",
+                        pack_id=str(args.pack_id),
+                        drifted_count=drifted,
                     )
-                    if bool(it.get("ok")) and str(it.get("diff") or "").strip():
-                        sys.stdout.write(str(it.get("diff") or ""))
-                    else:
-                        sys.stdout.write("(diff unavailable)\n")
-
-        return 0
+                if want_diff and drifted:
+                    sys.stdout.write("\n")
+                    for it in diffs:
+                        sys.stdout.write(
+                            f"diff (drifted): {it.get('pack_id')}/{it.get('relpath')}\n"
+                        )
+                        if bool(it.get("ok")) and str(it.get("diff") or "").strip():
+                            sys.stdout.write(str(it.get("diff") or ""))
+                        else:
+                            sys.stdout.write("(diff unavailable)\n")
+            return 0
+    except LockFileError as e:
+        return _emit_runtime_error(
+            json_output=bool(getattr(args, "json", False)),
+            code="LOCK_INVALID",
+            error=str(e),
+            hint="Fix .loom/pack/lock.json, then rerun. `loom pack doctor` can auto-repair safe duplicate entries.",
+        )
+    except FileNotFoundError as e:
+        return _emit_runtime_error(
+            json_output=bool(getattr(args, "json", False)),
+            code="NOT_FOUND",
+            error=str(e),
+        )
+    except ValueError as e:
+        return _emit_runtime_error(
+            json_output=bool(getattr(args, "json", False)),
+            code="ARG",
+            error=str(e),
+            hint="Run: loom pack -h",
+        )
     return 2
 
 
