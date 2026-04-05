@@ -1,7 +1,7 @@
 ---
 name: loom-docs
 description: Authoritative Loom documentation skill for durable explanatory records, documentation updates, operator guides, workflow guides, and architecture explanations grounded in evidence. Use when accepted system reality, workflows, or architecture need durable explanation for future operators or maintainers. Not for unsettled proposals, live execution journaling, or speculative future state.
-compatibility: Designed for this Markdown-first Loom repository. Assumes repository-local scripts, canonical Markdown records, and direct child launches via `opencode run`.
+compatibility: Designed for this Markdown-first Loom repository. Assumes repository-local scripts, canonical Markdown records, and harness-agnostic child launches resolved through `.loom/harness.md` profiles, harness self-discovery, or operator guidance.
 metadata:
   author: agent-loom
   version: "0.1"

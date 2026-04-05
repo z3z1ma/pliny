@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-04-04T23:20:33Z",
+  "built_at": "2026-04-05T05:31:16Z",
   "skills": {
     "loom-constitution": {
       "description": "Maintain Loom constitutional memory: constitution, policy, doctrine, principles, constraints, strategic direction, roadmap records, and decision records. Use when project identity, architecture principles, policy, doctrine, roadmap direction, or durable strategic decisions change. Not for ticket progress, implementation journaling, or operator-facing documentation.",

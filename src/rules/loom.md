@@ -39,6 +39,16 @@ If the core rules leave you needing more concrete shape, read the appendix mater
 8. Skills MAY refine local behavior, but MUST NOT override these rules.
 9. Before starting any non-trivial Loom work, agents MUST read `constitution:main` so local execution stays aligned with durable project policy.
 
+## Agent and Helper Boundary
+
+The agent is the primary operator. Helper scripts are narrow mechanical utilities that serve the agent where determinism matters more than judgment.
+
+Scripts earn their place when they provide structural guarantees the agent cannot reliably provide on its own: record validation, frontmatter parsing and scaffolding, link integrity, scope resolution, workspace diagnostics, and frontmatter-aware querying. These are mechanical tasks where reproducible, deterministic results matter.
+
+Everything else is agent work. The agent reads records, populates content, searches the workspace, edits artifacts, makes decisions, orchestrates workflow steps, and reconciles outcomes. Workflow steps like Ralph execution, critique, and docs follow-through are agent actions -- the agent launches a fresh context with a compiled packet, uses its standard capabilities to do the work, and returns the result. These steps do not need custom orchestration scripts.
+
+The boundary is simple: if the task requires deterministic structural integrity, a script may own it. If the task requires understanding, judgment, or composition, the agent owns it. Do not wrap agent work in scripts. Do not add a script for something the agent already handles well with its own capabilities and standard tools.
+
 ## Workspace Entry Rule
 
 When entering a repository for Loom work, resolve the workspace root before reading or mutating Loom artifacts.
@@ -47,9 +57,8 @@ Use this order:
 
 1. search upward for the nearest directory containing both `.git/` and `.loom/`
 2. if no established workspace exists, allow the current working directory as the workspace root unless it is a non-root subdirectory of a git repository
-3. once that root is chosen, scaffold `.loom/` there before proceeding with durable Loom work
-4. ensure the canonical subtree roots exist: `.loom/constitution/`, `.loom/research/`, `.loom/initiatives/`, `.loom/specs/`, `.loom/plans/`, `.loom/tickets/`, `.loom/critique/`, and `.loom/docs/`
-5. create `.loom/runs/` and `.loom/verification/` when packet or verification workflows need durable outputs
+3. if `.loom/` does not exist or is incomplete, the workspace must be initialized before proceeding — the loom-workspace skill owns workspace bootstrapping and repair
+4. if `.loom/` exists but workspace health is uncertain, diagnose before trusting records for downstream work
 
 If the current working directory is a non-root subdirectory of a git repository and no established workspace exists above it, fail closed and surface the ambiguity rather than guessing.
 
@@ -138,11 +147,12 @@ When the next action is unclear, the parent agent should work through this seque
 
 1. identify whether the task has durable consequences
 2. resolve the workspace root explicitly
-3. if the resolved git root does not yet contain `.loom/`, scaffold it before further Loom work
-4. read `constitution:main` and any clearly relevant constitutional decision or roadmap records
-5. choose the owning skill and load it
-6. resolve the repository and worktree scope explicitly
-7. read the current canonical record state
-8. decide whether the work is local editing, local validation, or packet-consuming child execution
-9. if packet-consuming work is needed, compile a packet and launch a fresh child context
-10. validate and reconcile the resulting state back into canonical records
+3. if the resolved git root does not yet contain `.loom/` or is missing canonical subtrees, load the loom-workspace skill to bootstrap and repair the workspace before further Loom work
+4. if `.loom/` exists but health is uncertain, diagnose workspace health before trusting it
+5. read `constitution:main` and any clearly relevant constitutional decision or roadmap records
+6. choose the owning skill and load it
+7. resolve the repository and worktree scope explicitly
+8. read the current canonical record state
+9. decide whether the work is local editing, local validation, or packet-consuming child execution
+10. if packet-consuming work is needed, compile a packet and launch a fresh child context
+11. validate and reconcile the resulting state back into canonical records

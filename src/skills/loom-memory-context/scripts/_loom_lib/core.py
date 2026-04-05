@@ -197,6 +197,11 @@ CANONICAL_SUBTREES = [
     ".loom/docs",
 ]
 
+SUPPORTING_SUBTREES = [
+    ".loom/runs",
+    ".loom/verification",
+]
+
 KIND_TO_PATH = {
     "constitution": ".loom/constitution",
     "decision": ".loom/constitution/decisions",
@@ -1108,6 +1113,13 @@ def doctor_report(workspace: Path) -> dict:
         for label, path in required_dirs.items()
         if path is None or not path.exists()
     ]
+    # Check canonical and supporting subtrees under .loom/
+    missing_subtrees: list[str] = []
+    loom_root = workspace / ".loom"
+    if loom_root.exists():
+        for subtree in CANONICAL_SUBTREES + SUPPORTING_SUBTREES:
+            if not (workspace / subtree).exists():
+                missing_subtrees.append(subtree)
     skill_dirs = (
         sorted(path for path in skills_root.glob("loom-*") if path.is_dir())
         if skills_root is not None and skills_root.exists()
@@ -1136,10 +1148,13 @@ def doctor_report(workspace: Path) -> dict:
         if skills_root is None
         else relative_to_workspace(skills_root, workspace),
         "missing_directories": missing,
+        "missing_subtrees": missing_subtrees,
         "skill_count": len(skill_dirs),
         "skill_issues": skill_issues,
         "record_issue_count": len(record_issues),
         "link_issue_count": len(link_issues),
         "repositories": repos,
-        "healthy": not (missing or skill_issues or record_issues or link_issues),
+        "healthy": not (
+            missing or missing_subtrees or skill_issues or record_issues or link_issues
+        ),
     }

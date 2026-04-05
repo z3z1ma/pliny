@@ -8,11 +8,17 @@ This is a fresh documentation-maintainer pass, not a continuation of the parent'
 
 The launch should produce a durable explanation that can stand on its own for a later reader.
 
-## Command Shape
+## Resolving The Command
 
-```bash
-opencode run -f <packet-path> -- <prompt>
-```
+Resolve the harness invocation using the standard resolution order before launching:
+
+1. **Check `.loom/harness.md`** — if the workspace has operator-defined harness profiles, select the profile that best matches the current task. Read the profile's prose to understand when it applies, then substitute `{{ packet_path }}` and `{{ prompt }}` into the command template.
+
+2. **Discover the current harness** — if no `.loom/harness.md` exists, discover the harness you are running inside. Check the parent process name (`ps -o comm= -p $PPID`), check for environment markers, then learn the discovered tool's headless invocation syntax via its help output. Construct the command using that tool's file-attachment and prompt arguments.
+
+3. **Ask the operator** — if discovery is ambiguous, ask the operator to create `.loom/harness.md` or provide the invocation command directly. Do not guess.
+
+For the full harness profile convention and resolution details, read the harness-invocation-templates appendix in the core rules.
 
 ## Preflight Checklist
 
@@ -24,6 +30,7 @@ Before launching docs work, the parent should confirm:
 4. the packet declares the allowed write set
 5. the parent is ready to review the claims afterward
 6. the parent knows whether the work should update an existing doc or create a new governed explanation
+7. the harness invocation is resolved (not guessed)
 
 If the surrounding reality is still unsettled, postpone docs work and return to execution or critique first.
 

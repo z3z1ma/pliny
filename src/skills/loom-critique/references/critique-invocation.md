@@ -8,11 +8,17 @@ This is a fresh reviewer session, not a continuation of the executor's prior rea
 
 The launch should create a clean review pass that is durable enough to remain useful after the current session ends.
 
-## Command Shape
+## Resolving The Command
 
-```bash
-opencode run -f <packet-path> -- <prompt>
-```
+Resolve the harness invocation using the standard resolution order before launching:
+
+1. **Check `.loom/harness.md`** — if the workspace has operator-defined harness profiles, select the profile that best matches the current task. Read the profile's prose to understand when it applies, then substitute `{{ packet_path }}` and `{{ prompt }}` into the command template.
+
+2. **Discover the current harness** — if no `.loom/harness.md` exists, discover the harness you are running inside. Check the parent process name (`ps -o comm= -p $PPID`), check for environment markers, then learn the discovered tool's headless invocation syntax via its help output. Construct the command using that tool's file-attachment and prompt arguments.
+
+3. **Ask the operator** — if discovery is ambiguous, ask the operator to create `.loom/harness.md` or provide the invocation command directly. Do not guess.
+
+For the full harness profile convention and resolution details, read the harness-invocation-templates appendix in the core rules.
 
 ## Preflight Checklist
 
@@ -23,6 +29,7 @@ Before launching critique, the parent should confirm:
 3. the evidence set is narrow enough for one bounded review
 4. the packet says what kind of output is expected
 5. the parent knows where the durable critique result should land
+6. the harness invocation is resolved (not guessed)
 
 If the review question is vague, fix that before launch. Broad critique prompts create broad, shallow review.
 

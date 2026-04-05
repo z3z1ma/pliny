@@ -1,7 +1,7 @@
 ---
 name: loom-ralph
 description: Managed Loom orchestration skill for Ralph packetized execution: bounded ticket execution through persisted packets, fresh child runs, verification, and ticket-ledger reconciliation. Use when one exact ticket should advance through one bounded fresh-context execution step with explicit scope and write boundaries. Not for local-only edits, critique-first work, or vague multi-ticket execution.
-compatibility: Designed for this Markdown-first Loom repository. Assumes repository-local scripts, canonical Markdown records, and direct child launches via `opencode run`.
+compatibility: Designed for this Markdown-first Loom repository. Assumes repository-local scripts, canonical Markdown records, and harness-agnostic child launches resolved through `.loom/harness.md` profiles, harness self-discovery, or operator guidance.
 metadata:
   author: agent-loom
   version: "0.1"
@@ -63,7 +63,8 @@ Tickets remain the durable source of live execution truth before, during, and af
 
 1. compile and persist the packet before child execution
 2. inspect the packet contract enough to confirm target, scope, and write set are correct
-3. launch the child in a fresh context through the documented harness command
+3. resolve the harness invocation: check `.loom/harness.md` for a matching profile, then try harness self-discovery, then ask the operator (see `references/harness-invocation.md`)
+4. launch the child in a fresh context using the resolved command
 4. capture durable run evidence after the child returns
 5. validate affected records and graph integrity
 6. reconcile the result back into ticket truth immediately so the packet does not become shadow state

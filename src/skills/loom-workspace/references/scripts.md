@@ -30,14 +30,18 @@ python3 "scripts/show_status.py" --json
 Purpose:
 
 - check workspace health before trusting packet, review, or durable-edit flows
+- with `--fix`, create missing `.loom/` root and canonical subtree directories before reporting
 
 Arguments:
 
 - `--json`: emit a machine-readable doctor report
+- `--fix`: create missing `.loom/` directories, then re-check and report the final state
 
 Output:
 
 - text summary with workspace path, health, skill count, record issue count, and link issue count
+- lists fixed directories when `--fix` created them
+- lists remaining missing directories or subtrees that could not be auto-fixed
 - JSON doctor report when `--json` is provided
 - non-zero exit status when the workspace is unhealthy
 
@@ -45,6 +49,8 @@ Example:
 
 ```bash
 python3 "scripts/diagnose_workspace.py" --json
+python3 "scripts/diagnose_workspace.py" --fix
+python3 "scripts/diagnose_workspace.py" --fix --json
 ```
 
 ## `scripts/list_records.py`

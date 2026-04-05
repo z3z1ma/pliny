@@ -78,15 +78,27 @@ The packet tells the child:
 
 ## Step 4 — Launch The Fresh Child Run
 
-The parent invokes the harness directly using the documented command shape.
+The parent resolves the harness invocation using the standard resolution order (see the harness-invocation-templates appendix), then launches the child.
 
-Example:
+Resolution:
+
+1. check `.loom/harness.md` for a matching profile
+2. if absent, discover the current harness from the parent process (`ps -o comm= -p $PPID`) and learn its headless invocation syntax
+3. if discovery is ambiguous, ask the operator
+
+The parent substitutes the packet path and prompt into the resolved command template. For example, if the operator's `default` profile uses OpenCode:
 
 ```bash
-opencode run --agent build -f "<packet-path>" -- "Execute the bounded Ralph packet for the attached ticket target. Perform the implementation or mutation work described by the packet, stay inside the declared write boundary, and return outcome status, files changed, verification summary, blockers, and continue/stop/blocked/escalate recommendation."
+opencode run -f "<packet-path>" -- "Execute the bounded Ralph packet for the attached ticket target. Perform the implementation or mutation work described by the packet, stay inside the declared write boundary, and return outcome status, files changed, verification summary, blockers, and continue/stop/blocked/escalate recommendation."
 ```
 
-The child performs one bounded execution step and returns an outcome.
+Or if the operator's `backend` profile uses Claude:
+
+```bash
+claude -p "Read @<packet-path> and proceed with: Execute the bounded Ralph packet for the attached ticket target. Perform the implementation or mutation work described by the packet, stay inside the declared write boundary, and return outcome status, files changed, verification summary, blockers, and continue/stop/blocked/escalate recommendation."
+```
+
+The specific CLI varies by operator setup. The packet and prompt content are the same regardless of harness.
 
 ## Step 5 — Reconcile Back Into Ticket Truth
 

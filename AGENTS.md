@@ -6,6 +6,30 @@ This repository develops a distributable product. The product is the entire `src
 
 There is no `package.json`, `pyproject.toml`, `Makefile`, test runner, or CI pipeline.
 
+## Agent and Script Boundary
+
+The agent is the primary operator in a Loom workspace. Scripts are narrow mechanical utilities that serve the agent at specific structural points.
+
+**Scripts are justified when they provide determinism the agent cannot reliably provide on its own:**
+
+- structural record validation (schema, required sections, status invariants)
+- frontmatter parsing, creation, and scaffolding
+- cross-record link integrity checking
+- workspace diagnostics and scope resolution
+- record listing and frontmatter-aware querying
+
+**Everything else is agent work with standard tools:**
+
+- reading and understanding records
+- populating record content
+- searching and navigating the workspace
+- editing records and artifacts
+- orchestrating workflow steps (Ralph execution, critique, docs follow-through)
+- reconciling outcomes into the ticket ledger
+- deciding what to do next
+
+Workflow steps like Ralph execution, critique, and docs work are agent actions -- the agent launches a fresh context with a compiled packet, not a custom orchestration script. Do not wrap agent work in scripts. Do not add a script for something the agent already handles well with its own capabilities and standard tools. When in doubt, the agent does the work directly and invokes a script only for the mechanical structural check afterward.
+
 ## Repo Structure
 
 There are two clearly separated concerns: **product source** and **build tooling**.

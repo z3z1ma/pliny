@@ -30,6 +30,7 @@ MANAGED_SHARED_SCRIPT_NAMES = {
 
 LEGACY_SHARED_SCRIPT_NAMES = {
     "doctor.py",
+    "init_workspace.py",
     "link_refs.py",
     "new_verification.py",
     "scope_scan.py",
