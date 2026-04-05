@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from typing import Any
 
 from ..cli import (
@@ -14,48 +13,13 @@ from ..cli import (
 )
 from ..core import (
     create_record,
-    extract_headings,
     find_workspace_root,
-    issue,
-    read_record,
     relative_to_workspace,
-    scan_records,
     set_sections,
     slugify,
 )
 from ..schema import SCHEMAS
-
-
-def validate(workspace: Path, kind: str | None = None) -> list[dict]:
-    """Validate records. If *kind* is given, validate only that kind."""
-    problems: list[dict] = []
-    kinds = [kind] if kind else sorted(SCHEMAS)
-    for path in scan_records(workspace):
-        try:
-            frontmatter, body = read_record(path)
-        except Exception as exc:
-            problems.append(issue(path, workspace, str(exc)))
-            continue
-        record_kind = frontmatter.get("kind")
-        if record_kind not in kinds:
-            continue
-        schema = SCHEMAS.get(record_kind)
-        if schema is None:
-            continue
-        record_status = frontmatter.get("status")
-        if record_status not in schema["statuses"]:
-            problems.append(
-                issue(
-                    path,
-                    workspace,
-                    f"invalid status for {record_kind}: {record_status}",
-                )
-            )
-        headings = extract_headings(body)
-        for section in schema["sections"]:
-            if section not in headings:
-                problems.append(issue(path, workspace, f"missing section: {section}"))
-    return problems
+from ..validate import validate_kind
 
 
 def register(subparsers: Any) -> None:
@@ -91,7 +55,7 @@ def run(args: Any) -> int:
 
     # Validate mode: no slug (or no kind at all)
     if not args.slug:
-        problems = validate(workspace, kind=args.kind)
+        problems = validate_kind(workspace, kind=args.kind)
         if args.json:
             print(json.dumps({"issues": problems}, indent=2))
         elif problems:
