@@ -32,78 +32,77 @@ Workflow steps like Ralph execution, critique, and docs work are agent actions -
 
 ## Repo Structure
 
-There are two clearly separated concerns: **product source** and **build tooling**.
+Everything lives in `src/`. There is no build step.
 
 ### Product source: `src/`
 
-Everything a user receives lives here. Three subdirectories:
+Everything a user receives lives here:
 
 - `src/rules/` -- always-on doctrine files (Markdown + `appendices/`)
-- `src/skills/` -- 16 self-contained skill directories, each with `SKILL.md`, `references/`, and `scripts/`
+- `src/skills/` -- self-contained skill directories, each with `SKILL.md`, `references/`, and `scripts/`
+- `src/skills/_loom/` -- shared Python library used by skill scripts (`core.py` for record primitives, `cli.py` for argparse helpers)
 - `src/commands/` -- slash-command definitions (Markdown files that define prompt-based commands)
 
-**Isolation rule**: nothing inside `src/` may reference anything outside `src/`. No `build/` paths, no `.loom/` paths, no repo-root paths. When `src/` is copied to a user's machine, only `src/`-internal paths exist. Skills reference their own scripts as `scripts/...` and their own docs as `references/...`.
-
-### Build tooling: `build/`
-
-Maintainer-only assembly and shared code:
-
-- `build/assemble-skills.py` -- copies shared scripts into each skill's `scripts/` directory
-- `build/shared/_loom_lib/` -- shared Python library (`core.py`, `records.py`, `cli.py`, `memory.py`)
-- `build/shared/scripts/` -- shared CLI scripts distributed to skills by the assembly step
+**Isolation rule**: nothing inside `src/` may reference anything outside `src/`. No `.loom/` paths, no repo-root paths. When `src/` is copied to a user's machine, only `src/`-internal paths exist. Skills reference their own scripts as `scripts/...` and their own docs as `references/...`. Scripts import from `_loom` via the `sys.path.insert(0, str(SCRIPT_DIR.parent.parent))` pattern.
 
 ### Dogfooding artifacts: `.opencode/` and `.loom/`
 
 This repo uses its own product. `.opencode/rules`, `.opencode/skills`, and `.opencode/commands` are symlinks pointing back into `src/`, so the development environment consumes the product in the same way an end user would. `.loom/` contains Loom records (tickets, specs, plans, etc.) created by using the product on this repo.
 
-Neither `.opencode/` nor `.loom/` is a maintained source surface. They are consumption artifacts. Do not treat them as source of truth for how the product works -- look at `src/` and `build/` instead.
+Neither `.opencode/` nor `.loom/` is a maintained source surface. They are consumption artifacts. Do not treat them as source of truth for how the product works -- look at `src/` instead.
 
 ## Commands
-
-### Assembly (the only routine build command)
-
-```bash
-python3 build/assemble-skills.py
-```
-
-Copies shared scripts from `build/shared/scripts/` and `build/shared/_loom_lib/` into each skill's `scripts/` directory. Validates SKILL.md frontmatter. Produces `build/manifest.json`.
 
 ### Linting
 
 ```bash
-uvx ruff check build/ src/            # lint all Python
+uvx ruff check src/                   # lint all Python
 uvx ruff check path/to/file.py        # lint a single file
-uvx ruff format --check build/ src/   # verify formatting (all files currently pass)
+uvx ruff format --check src/          # verify formatting
 uvx ruff format path/to/file.py       # auto-format a single file
 ```
 
-No ruff config file exists; default settings apply.
-Known suppressions: `# noqa: E402` on imports after `sys.path.insert` in CLI scripts.
+E402 (module-level import not at top of file) is suppressed in `ruff.toml` because every CLI script uses the `sys.path.insert` pattern before importing from `_loom`.
 
-### Validation scripts (run from workspace root)
+### Validation scripts (run from any skill's scripts/ dir or use full paths)
 
 ```bash
-python3 build/shared/scripts/validate_record.py                     # validate all Loom records
-python3 build/shared/scripts/validate_record.py .loom/tickets/x.md  # validate one record
-python3 build/shared/scripts/check_links.py                         # check cross-record link integrity
-python3 build/shared/scripts/diagnose_workspace.py                  # workspace health report
-python3 build/shared/scripts/diagnose_workspace.py --json           # machine-readable output
+python3 src/skills/loom-workspace/scripts/validate_record.py                     # validate all Loom records
+python3 src/skills/loom-workspace/scripts/validate_record.py .loom/tickets/x.md  # validate one record
+python3 src/skills/loom-workspace/scripts/check_links.py                         # check cross-record link integrity
+python3 src/skills/loom-workspace/scripts/diagnose_workspace.py                  # workspace health report
+python3 src/skills/loom-workspace/scripts/diagnose_workspace.py --fix            # create missing .loom/ dirs
+python3 src/skills/loom-workspace/scripts/diagnose_workspace.py --json           # machine-readable output
 ```
 
 ### Testing
 
-There is no test suite. Verification is structural: run `ruff check`, assembly, and the validation scripts above.
+There is no test suite. Verification is structural: run `ruff check` and the validation scripts above.
 
 ## Python Style
 
-Match the existing style in `build/assemble-skills.py` and `build/shared/`.
+Match the existing style in `src/skills/_loom/` and skill scripts.
 
 ### File structure
 
 - Shebang: `#!/usr/bin/env python3`
 - First import: `from __future__ import annotations`
 - Standard-library imports only (no third-party dependencies)
-- CLI scripts use the `sys.path.insert` pattern for `_loom_lib`, then `# noqa: E402` on those imports
+- CLI scripts use the `sys.path.insert(0, str(SCRIPT_DIR.parent.parent))` pattern, then `# noqa: E402` on `_loom` imports
+
+### Import pattern for skill scripts
+
+Every script that uses the shared library follows this pattern:
+
+```python
+SCRIPT_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(SCRIPT_DIR.parent.parent))
+
+from _loom.core import find_workspace_root, ...  # noqa: E402
+from _loom.cli import ...  # noqa: E402
+```
+
+The `SCRIPT_DIR.parent.parent` resolves to `src/skills/` (or `.opencode/skills/` when installed), where the `_loom` package lives.
 
 ### CLI entrypoint pattern
 
@@ -149,7 +148,7 @@ if __name__ == "__main__":
 ### Imports
 
 - Standard-library only; never add third-party deps
-- Group: stdlib first, then blank line, then `_loom_lib` imports
+- Group: stdlib first, then blank line, then `_loom` imports
 - Keep import lists alphabetical within groups
 - `from pathlib import Path` is always present
 
@@ -170,7 +169,7 @@ if __name__ == "__main__":
 ## Markdown Content Guidelines
 
 - Records use JSON frontmatter between `---` fences
-- Required sections per record kind are defined in `build/shared/_loom_lib/core.py` (`SECTIONS_BY_KIND`)
+- Required sections per record kind are defined in `src/skills/_loom/core.py` (`SECTIONS_BY_KIND`)
 - Valid statuses per kind are in `STATUS_BY_KIND` in the same file
 - SKILL.md frontmatter must include `name` (matching directory) and `description` (must contain "Use when" and "Not for")
 - Command files in `src/commands/` are pure Markdown prompt definitions with no script dependencies
@@ -178,8 +177,8 @@ if __name__ == "__main__":
 ## Editing Guidance
 
 - Prefer the smallest correct change
-- Content inside `src/` must be self-contained -- no references to `build/`, `.loom/`, or repo-root paths
-- After changing shared code in `build/shared/`, run `python3 build/assemble-skills.py` to propagate
+- Content inside `src/` must be self-contained -- no references to `.loom/` or repo-root paths
+- When changing `src/skills/_loom/`, check that dependent scripts still work
 - When changing a rule, check related skills, references, and helper scripts
 - Do not add dependencies, scaffolding, or invent a monolithic CLI without explicit need
 
@@ -189,16 +188,14 @@ If a change touches multiple surfaces, verify:
 - `src/rules/` doctrine wording
 - `src/skills/*/SKILL.md` instructions
 - `src/skills/*/references/` docs
+- `src/skills/_loom/` shared library
 - `src/commands/` command definitions
-- `build/shared/scripts/` helper behavior
-- `build/shared/_loom_lib/` library code
-- `build/assemble-skills.py` assembly logic
 
 ## Key Architecture Facts
 
-- `_loom_lib/core.py` (~1145 lines) is the shared library: frontmatter parsing, record CRUD, validation, scope resolution, packet compilation, workspace discovery
-- `_loom_lib/records.py` has record mutation helpers (link management, section updates)
-- `_loom_lib/cli.py` has argparse helpers (scope args, link/assignment parsing)
-- `_loom_lib/memory.py` has `.loom/memories/` module validation and indexing
-- Each skill gets a subset of shared scripts (defined in `SKILL_SCRIPTS` dict in `assemble-skills.py`)
-- Skill-local create scripts (e.g., `create_critique.py`) are authored per-skill, not shared
+- `src/skills/_loom/core.py` (~810 lines) is the shared library: workspace discovery, frontmatter parsing, record CRUD, scope resolution, and record mutation helpers
+- `src/skills/_loom/cli.py` (~100 lines) has argparse helpers (scope args, link/assignment parsing)
+- Feature-specific logic (validation, link checking, packet compilation, diagnostics, memory indexing) is inlined directly into the scripts that use it
+- Each skill owns its scripts directly in `scripts/` -- no assembly step, no copying
+- Skill-local create scripts (e.g., `create_critique.py`) are authored per-skill
+- Scripts that appear in multiple skills (e.g., `validate_record.py`) are identical copies -- edit one and propagate to the others

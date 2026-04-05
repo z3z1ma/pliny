@@ -6,15 +6,19 @@ import sys
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(SCRIPT_DIR))
+sys.path.insert(0, str(SCRIPT_DIR.parent.parent))
 
-from _loom_lib.cli import (  # noqa: E402
+from _loom.cli import (  # noqa: E402
     add_scope_arguments,
     collect_assignments,
     resolve_record_scope_args,
 )
-from _loom_lib.core import create_record, find_workspace_root, relative_to_workspace  # noqa: E402
-from _loom_lib.records import set_sections  # noqa: E402
+from _loom.core import (
+    create_record,
+    find_workspace_root,
+    relative_to_workspace,
+    set_sections,
+)  # noqa: E402
 
 
 def main() -> int:

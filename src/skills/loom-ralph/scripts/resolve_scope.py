@@ -7,14 +7,9 @@ import sys
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(SCRIPT_DIR))
-sys.path.insert(0, str(SCRIPT_DIR.parent))
+sys.path.insert(0, str(SCRIPT_DIR.parent.parent))
 
-from _loom_lib.core import (
-    discover_repositories,
-    find_workspace_root,
-    resolve_repository_for_path,
-)  # noqa: E402
+from _loom.core import discover_repositories, find_workspace_root, resolve_repository_for_path  # noqa: E402
 
 
 def main() -> int:

@@ -7,10 +7,23 @@ import sys
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(SCRIPT_DIR))
-sys.path.insert(0, str(SCRIPT_DIR.parent))
+sys.path.insert(0, str(SCRIPT_DIR.parent.parent))
 
-from _loom_lib.core import find_workspace_root, summarize_workspace  # noqa: E402
+from _loom.core import find_workspace_root, read_record, scan_records  # noqa: E402
+
+
+def summarize_workspace(workspace: Path) -> dict:
+    counts: dict[str, dict[str, int]] = {}
+    for path in scan_records(workspace):
+        try:
+            frontmatter, _ = read_record(path)
+        except Exception:
+            continue
+        kind = frontmatter.get("kind", "unknown")
+        status = frontmatter.get("status", "unknown")
+        counts.setdefault(kind, {})
+        counts[kind][status] = counts[kind].get(status, 0) + 1
+    return counts
 
 
 def main() -> int:

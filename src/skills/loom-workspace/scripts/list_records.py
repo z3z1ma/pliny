@@ -7,11 +7,41 @@ import sys
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(SCRIPT_DIR))
-sys.path.insert(0, str(SCRIPT_DIR.parent))
+sys.path.insert(0, str(SCRIPT_DIR.parent.parent))
 
-from _loom_lib.core import find_workspace_root  # noqa: E402
-from _loom_lib.records import list_records  # noqa: E402
+from _loom.core import (  # noqa: E402
+    find_workspace_root,
+    read_record,
+    relative_to_workspace,
+    scan_records,
+)
+
+
+def list_records(
+    workspace: Path,
+    *,
+    kind: str | None = None,
+    status: str | None = None,
+    include_runs: bool = False,
+) -> list[dict[str, str]]:
+    results: list[dict[str, str]] = []
+    for path in scan_records(workspace, include_runs=include_runs):
+        frontmatter, _body = read_record(path)
+        record_kind = frontmatter.get("kind")
+        record_status = frontmatter.get("status")
+        if kind and record_kind != kind:
+            continue
+        if status and record_status != status:
+            continue
+        results.append(
+            {
+                "id": frontmatter.get("id", "unknown"),
+                "kind": record_kind or "unknown",
+                "status": record_status or "unknown",
+                "path": relative_to_workspace(path, workspace),
+            }
+        )
+    return results
 
 
 def main() -> int:
