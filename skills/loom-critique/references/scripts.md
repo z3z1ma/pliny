@@ -2,9 +2,9 @@
 
 Use package-local script paths from this skill bundle.
 
-The examples below assume invocation through `scripts/loom` inside `loom-critique`.
+The examples below assume invocation through `scripts/critique.py` inside `loom-critique`.
 
-## `scripts/loom create critique`
+## `scripts/critique.py create`
 
 Purpose:
 
@@ -13,22 +13,22 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom create critique review-ticket-0002 --title "Review admin UI and query service contract docs" --link ticket=ticket:0002
+scripts/critique.py create review-ticket-0002 --link ticket=ticket:0002
 ```
 
-## `scripts/loom packet`
+## `scripts/critique.py packet`
 
 Purpose:
 
-- compile a critique packet for bounded fresh-context review work
+- scaffold a critique packet record under `.loom/runs/critique/`
 
 Example:
 
 ```bash
-scripts/loom packet "ticket:0002" critique --mode review-only --style reference-first
+scripts/critique.py packet "ticket:0002" critique --mode review-only --style reference-first
 ```
 
-## `scripts/loom link`
+## `scripts/critique.py link`
 
 Purpose:
 
@@ -37,10 +37,10 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom link "critique:review-ticket-0002" --add "doc:admin-query-contract-reference"
+scripts/critique.py link "critique:review-ticket-0002" --add "doc:admin-query-contract-reference"
 ```
 
-## `scripts/loom verify`
+## `scripts/critique.py verify`
 
 Purpose:
 
@@ -49,9 +49,4 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom verify critique-ticket-0002-evidence --title "Critique evidence" --link "critique:review-ticket-0002"
-```
-
-## `scripts/loom diagnose`, `scripts/loom check-links`, `scripts/loom scope`
-
-Use these commands for structural validation, graph integrity, and scope resolution around critique work.
+scripts/critique.py verify critique-ticket-0002-evidence --link "critique:review-ticket-0002"

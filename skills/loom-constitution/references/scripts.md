@@ -2,9 +2,9 @@
 
 Use package-local script paths from this skill bundle.
 
-The examples below assume invocation through `scripts/loom` inside `loom-constitution`.
+The examples below assume invocation through `scripts/constitution.py` inside `loom-constitution`.
 
-## `scripts/loom create constitution`
+## `scripts/constitution.py create constitution`
 
 Purpose:
 
@@ -14,10 +14,10 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom create constitution main --title "Main Constitution"
+scripts/constitution.py create constitution main
 ```
 
-## `scripts/loom create decision`
+## `scripts/constitution.py create decision`
 
 Purpose:
 
@@ -26,10 +26,10 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom create decision packet-trust-boundary --title "Make packet trust boundaries explicit"
+scripts/constitution.py create decision packet-trust-boundary
 ```
 
-## `scripts/loom create roadmap`
+## `scripts/constitution.py create roadmap`
 
 Purpose:
 
@@ -38,10 +38,10 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom create roadmap bootstrap-the-markdown-first-protocol-corpus --title "Bootstrap the Markdown-first protocol corpus"
+scripts/constitution.py create roadmap bootstrap-the-markdown-first-protocol-corpus
 ```
 
-## `scripts/loom link`
+## `scripts/constitution.py link`
 
 Purpose:
 
@@ -50,10 +50,10 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom link "roadmap:bootstrap-the-markdown-first-protocol-corpus" --add "decision:0002"
+scripts/constitution.py link "roadmap:bootstrap-the-markdown-first-protocol-corpus" --add "decision:0002"
 ```
 
-## `scripts/loom diagnose`
+## `scripts/constitution.py diagnose`
 
 Purpose:
 
@@ -62,5 +62,5 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom diagnose --json
+scripts/constitution.py diagnose --json
 ```

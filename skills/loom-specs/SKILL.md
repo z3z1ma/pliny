@@ -63,10 +63,9 @@ Do not let specs degrade into rollout notes, progress notes, or ledger state.
 
 Read `references/scripts.md` for the bundled CLI surface, including argument meanings and example invocations.
 
-- `scripts/loom create spec`: use when new behavior needs a durable contract in `.loom/specs/`
-- `scripts/loom create spec`: after running it, fill the body immediately; the command only creates the scaffold
-- `scripts/loom link`: use to add or remove typed upstream and downstream links once the contract shape is real
-- `scripts/loom diagnose`: use before handing the spec to plans, tickets, critique, or docs
+- `scripts/specs.py create`: use when new behavior needs a durable contract in `.loom/specs/`
+- `scripts/specs.py create`: after running it, fill the body immediately; the command only creates the scaffold
+- `scripts/specs.py link`: use to add or remove typed upstream and downstream links once the contract shape is real
 
 ## Neighboring Layer Boundaries
 
@@ -104,7 +103,7 @@ Read `references/scripts.md` for the bundled CLI surface, including argument mea
 - one spec clearly owns the behavior boundary
 - behavior, constraints, scenarios, and acceptance are explicit
 - relevant links are present
-- `scripts/loom diagnose` passes
+- the scaffold and frontmatter are explicit enough for later workspace validation
 
 ## Read In This Order
 

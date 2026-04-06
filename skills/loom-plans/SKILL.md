@@ -61,10 +61,9 @@ Plans explain how work should unfold. They do not replace the ticket ledger.
 
 Read `references/scripts.md` for the bundled CLI surface, including argument meanings and example invocations.
 
-- `scripts/loom create plan`: use when execution strategy needs a durable home in `.loom/plans/`
-- `scripts/loom create plan`: after running it, populate the body immediately; the command only creates the scaffold
-- `scripts/loom link`: use to add or remove linked constitution, initiative, spec, and ticket refs once the strategy is real
-- `scripts/loom diagnose`: use before relying on the plan as live strategic guidance
+- `scripts/plans.py create`: use when execution strategy needs a durable home in `.loom/plans/`
+- `scripts/plans.py create`: after running it, populate the body immediately; the command only creates the scaffold
+- `scripts/plans.py link`: use to add or remove linked constitution, initiative, spec, and ticket refs once the strategy is real
 
 ## Neighboring Layer Boundaries
 
@@ -101,7 +100,7 @@ Read `references/scripts.md` for the bundled CLI surface, including argument mea
 - the strategy is durable, legible, and linked to real ticket execution
 - milestones, dependencies, validation, and risks are explicit
 - relevant links are present
-- `scripts/loom diagnose` passes
+- the scaffold and frontmatter are explicit enough for later workspace validation
 
 ## Read In This Order
 

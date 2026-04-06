@@ -146,8 +146,8 @@ When the user shares information or asks to save something:
 
 ## How To Use The Scripts
 
-- `scripts/loom memory scan`: scan memory file summaries before doing wide reads
-- `scripts/loom memory validate`: validate manifest, required files, and L0 coverage before relying on the module
+- `scripts/memory.py memory scan`: scan memory file summaries before doing wide reads
+- `scripts/memory.py memory validate`: validate manifest, required files, and L0 coverage before relying on the module
 
 ## Failure Conditions
 

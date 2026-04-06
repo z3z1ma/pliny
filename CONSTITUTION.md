@@ -28,7 +28,7 @@ These decisions are treated as settled unless explicitly reopened:
 - Markdown records in designated canonical `.loom/` subtrees are canonical from day 1
 - always-on cross-cutting doctrine lives in `src/rules/`
 - subsystem detail lives in flat sibling skills under `src/skills/`
-- distributed skills must be self-contained, even if a build step copies shared script code into each skill
+- distributed skills must be self-contained, with standalone script behavior committed directly inside each skill
 - packet-consuming flows such as Ralph, critique, and docs update run in fresh harness contexts
 - the parent agent invokes the harness directly via bash using the command shape documented in the relevant skill
 - tickets remain the sole execution ledger
@@ -517,7 +517,7 @@ Only the canonical truth subtrees are canonical project state.
 
 ## 7.3 Build/distribution principle
 
-Source authoring MAY use shared script modules.
+Source authoring SHOULD stay direct and skill-local.
 Distributed skills MUST be self-contained.
 
 That means a loaded skill MUST NOT require another skill just to function.
@@ -698,14 +698,9 @@ The build layer exists only to make skill distribution boring and reliable.
 
 ## 11.2 Build responsibilities
 
-The build step SHOULD:
+The repository SHOULD prefer direct standalone skill scripts over a separate generation layer.
 
-- copy shared helper code into skill-local scripts as needed
-- verify that all local references exist
-- verify that a skill does not depend on undeclared out-of-band files
-- stamp build metadata
-- generate a manifest of distributed skills
-- validate internal version consistency
+If a mechanical script rewrite step exists in the future, it should stay optional, local, and subordinate to the committed skill-local source files.
 
 ## 11.3 What build MUST NOT do
 

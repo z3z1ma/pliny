@@ -1,14 +1,12 @@
-"""Loom memory module operations: scan, validate, rebuild indexes."""
-
+#!/usr/bin/env python3
+# vi: set ft=python :
 from __future__ import annotations
 
+import argparse
 import json
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
-
-from ..core import find_workspace_root, parse_frontmatter
 
 MEMORY_ROOT = Path(".loom/memories")
 MANIFEST_PATH = MEMORY_ROOT / "manifest.json"
@@ -26,9 +24,12 @@ L0_PATTERN = re.compile(r"^<!-- L0: .+ -->$")
 WIKI_LINK_PATTERN = re.compile(r"\[\[([^\]]+)\]\]")
 
 
-# ---------------------------------------------------------------------------
-# Shared helpers
-# ---------------------------------------------------------------------------
+def find_workspace_root(start: Path | None = None) -> Path:
+    current = (start or Path.cwd()).resolve()
+    for candidate in [current, *current.parents]:
+        if (candidate / ".git").exists() and (candidate / ".loom").exists():
+            return candidate
+    return current
 
 
 def memory_root(workspace: Path) -> Path:
@@ -65,6 +66,26 @@ def read_l0_summary(path: Path) -> str | None:
     return first_line.removeprefix("<!-- L0: ").removesuffix(" -->")
 
 
+def parse_frontmatter(text: str) -> dict:
+    lines = text.splitlines()
+    if len(lines) < 3 or lines[0].strip() != "---":
+        raise SystemExit("Archive file missing opening frontmatter fence")
+    closing = None
+    for index in range(1, len(lines)):
+        if lines[index].strip() == "---":
+            closing = index
+            break
+    if closing is None:
+        raise SystemExit("Archive file missing closing frontmatter fence")
+    try:
+        frontmatter = json.loads("\n".join(lines[1:closing]).strip())
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"Archive frontmatter must be JSON-compatible: {exc}") from exc
+    if not isinstance(frontmatter, dict):
+        raise SystemExit("Archive frontmatter must be a JSON object")
+    return frontmatter
+
+
 def collect_archive_rows(workspace: Path) -> list[dict[str, str | int]]:
     glacier_root = memory_root(workspace) / "glacier"
     if not glacier_root.exists():
@@ -73,7 +94,7 @@ def collect_archive_rows(workspace: Path) -> list[dict[str, str | int]]:
     for path in sorted(glacier_root.rglob("*.md")):
         if path.name == "index.md":
             continue
-        frontmatter, _ = parse_frontmatter(path.read_text())
+        frontmatter = parse_frontmatter(path.read_text())
         rows.append(
             {
                 "path": str(path.relative_to(memory_root(workspace))),
@@ -97,10 +118,9 @@ def validate_memory_structure(workspace: Path) -> dict:
         raise SystemExit("Memory manifest domains must be a JSON object")
     actual_domains = tuple(sorted(domains))
     if actual_domains != EXPECTED_DOMAINS:
-        expected = ", ".join(EXPECTED_DOMAINS)
-        actual = ", ".join(actual_domains) or "<none>"
         raise SystemExit(
-            f"Memory manifest domains must be exactly {expected}; got {actual}"
+            "Memory manifest domains must be exactly system, user; got "
+            + (", ".join(actual_domains) or "<none>")
         )
     root = memory_root(workspace)
     if not root.exists():
@@ -118,10 +138,9 @@ def validate_memory_structure(workspace: Path) -> dict:
             raise SystemExit(
                 f"Memory domain {domain_name} must use path '{domain_name}'"
             )
-        files = domain.get("files")
-        if files != expected_files:
+        if domain.get("files") != expected_files:
             raise SystemExit(
-                f"Memory domain {domain_name} files must be {expected_files}; got {files}"
+                f"Memory domain {domain_name} files must be {expected_files}; got {domain.get('files')}"
             )
         required_paths.extend(
             root / domain_name / file_name for file_name in expected_files
@@ -153,15 +172,6 @@ def validate_memory_structure(workspace: Path) -> dict:
     }
 
 
-def utc_today() -> str:
-    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
-
-
-# ---------------------------------------------------------------------------
-# Scan: L0 summaries
-# ---------------------------------------------------------------------------
-
-
 def collect_l0_rows(workspace: Path, domain: str | None = None) -> list[dict[str, str]]:
     root = memory_root(workspace)
     rows = []
@@ -170,9 +180,10 @@ def collect_l0_rows(workspace: Path, domain: str | None = None) -> list[dict[str
         if relative_path.parts[:1] == ("glacier",) and relative_path.name != "index.md":
             continue
         if domain and domain != "all":
-            if relative_path.parts[:1] == (domain,):
-                pass
-            elif relative_path.as_posix() != "hot-memory.md":
+            if (
+                relative_path.parts[:1] != (domain,)
+                and relative_path.as_posix() != "hot-memory.md"
+            ):
                 continue
         summary = read_l0_summary(path)
         if summary is None:
@@ -181,36 +192,8 @@ def collect_l0_rows(workspace: Path, domain: str | None = None) -> list[dict[str
     return rows
 
 
-def run_scan(args: Any) -> int:
-    workspace = find_workspace_root()
-    rows = collect_l0_rows(workspace, domain=args.domain)
-    if args.json:
-        print(json.dumps(rows, indent=2, sort_keys=True))
-    else:
-        for row in rows:
-            print(f"{row['path']}: {row['summary']}")
-    return 0
-
-
-# ---------------------------------------------------------------------------
-# Validate
-# ---------------------------------------------------------------------------
-
-
-def run_validate(args: Any) -> int:
-    workspace = find_workspace_root()
-    summary = validate_memory_structure(workspace)
-    if args.json:
-        print(json.dumps(summary, indent=2, sort_keys=True))
-    else:
-        for key, value in summary.items():
-            print(f"{key}: {value}")
-    return 0
-
-
-# ---------------------------------------------------------------------------
-# Rebuild glacier index
-# ---------------------------------------------------------------------------
+def utc_today() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
 
 def render_glacier_index(rows: list[dict[str, str | int]]) -> str:
@@ -218,7 +201,7 @@ def render_glacier_index(rows: list[dict[str, str | int]]) -> str:
         "<!-- L0: Archive catalog for stored memory snapshots -->",
         "# Memory Glacier Index",
         "",
-        "<!-- Auto-generated by loom memory rebuild-glacier. Do not edit manually. -->",
+        "<!-- Auto-generated by memory.py memory rebuild-glacier. Do not edit manually. -->",
         f"<!-- Last updated: {utc_today()} -->",
         "",
         "| File | Domain | Type | Tags | Date Range | Entries | Summary |",
@@ -227,8 +210,7 @@ def render_glacier_index(rows: list[dict[str, str | int]]) -> str:
     if rows:
         for row in rows:
             lines.append(
-                "| `{path}` | {domain} | {type} | {tags} | {date_range} "
-                "| {entries} | {summary} |".format(
+                "| `{path}` | {domain} | {type} | {tags} | {date_range} | {entries} | {summary} |".format(
                     path=row["path"],
                     domain=row["domain"] or "-",
                     type=row["type"] or "-",
@@ -244,21 +226,6 @@ def render_glacier_index(rows: list[dict[str, str | int]]) -> str:
     return "\n".join(lines)
 
 
-def run_rebuild_glacier(args: Any) -> int:
-    workspace = find_workspace_root()
-    validate_memory_structure(workspace)
-    output = memory_root(workspace) / "glacier/index.md"
-    rows = collect_archive_rows(workspace)
-    output.write_text(render_glacier_index(rows))
-    print(output.relative_to(workspace))
-    return 0
-
-
-# ---------------------------------------------------------------------------
-# Rebuild link index
-# ---------------------------------------------------------------------------
-
-
 def source_ref_from_path(root: Path, path: Path) -> str:
     relative = path.relative_to(root).as_posix()
     if relative.endswith(".md"):
@@ -271,20 +238,16 @@ def collect_link_index_rows(workspace: Path) -> list[dict[str, str]]:
     inbound: dict[str, set[str]] = {}
     for path in list_memory_markdown_files(workspace):
         relative = path.relative_to(root).as_posix()
-        if relative.startswith("glacier/"):
-            continue
-        if relative == "link-index.md":
+        if relative.startswith("glacier/") or relative == "link-index.md":
             continue
         text = path.read_text()
         source = source_ref_from_path(root, path)
         for target in WIKI_LINK_PATTERN.findall(text):
             inbound.setdefault(target, set()).add(source)
-    rows = []
-    for target in sorted(inbound):
-        rows.append(
-            {"target": target, "linked_from": ", ".join(sorted(inbound[target]))}
-        )
-    return rows
+    return [
+        {"target": target, "linked_from": ", ".join(sorted(inbound[target]))}
+        for target in sorted(inbound)
+    ]
 
 
 def render_link_index(rows: list[dict[str, str]]) -> str:
@@ -292,7 +255,7 @@ def render_link_index(rows: list[dict[str, str]]) -> str:
         "<!-- L0: Backlink map showing which memory files point to which topics -->",
         "# Memory Link Index",
         "",
-        "<!-- Auto-generated by loom memory rebuild-links. Do not edit manually. -->",
+        "<!-- Auto-generated by memory.py memory rebuild-links. Do not edit manually. -->",
         f"<!-- Last updated: {utc_today()} -->",
         "",
         "| Target | Linked from |",
@@ -307,35 +270,56 @@ def render_link_index(rows: list[dict[str, str]]) -> str:
     return "\n".join(lines)
 
 
-def run_rebuild_links(args: Any) -> int:
+def run_scan(args: argparse.Namespace) -> int:
+    workspace = find_workspace_root()
+    rows = collect_l0_rows(workspace, domain=args.domain)
+    if args.json:
+        print(json.dumps(rows, indent=2, sort_keys=True))
+    else:
+        for row in rows:
+            print(f"{row['path']}: {row['summary']}")
+    return 0
+
+
+def run_validate(args: argparse.Namespace) -> int:
+    workspace = find_workspace_root()
+    summary = validate_memory_structure(workspace)
+    if args.json:
+        print(json.dumps(summary, indent=2, sort_keys=True))
+    else:
+        for key, value in summary.items():
+            print(f"{key}: {value}")
+    return 0
+
+
+def run_rebuild_glacier(args: argparse.Namespace) -> int:
     workspace = find_workspace_root()
     validate_memory_structure(workspace)
-    output = memory_root(workspace) / "link-index.md"
-    rows = collect_link_index_rows(workspace)
-    output.write_text(render_link_index(rows))
+    output = memory_root(workspace) / "glacier/index.md"
+    output.write_text(render_glacier_index(collect_archive_rows(workspace)))
     print(output.relative_to(workspace))
     return 0
 
 
-# ---------------------------------------------------------------------------
-# Registration
-# ---------------------------------------------------------------------------
+def run_rebuild_links(args: argparse.Namespace) -> int:
+    workspace = find_workspace_root()
+    validate_memory_structure(workspace)
+    output = memory_root(workspace) / "link-index.md"
+    output.write_text(render_link_index(collect_link_index_rows(workspace)))
+    print(output.relative_to(workspace))
+    return 0
 
 
-def register(subparsers: Any) -> None:
-    memory_parser = subparsers.add_parser(
-        "memory",
-        help="Loom memory module operations",
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        prog="memory.py", description="Memory housekeeping CLI"
     )
+    subparsers = parser.add_subparsers(dest="command")
+    memory_parser = subparsers.add_parser("memory", help="Memory module operations")
     memory_sub = memory_parser.add_subparsers(dest="memory_command")
 
     scan = memory_sub.add_parser("scan", help="List L0 summaries from memory files")
-    scan.add_argument(
-        "--domain",
-        choices=["all", *EXPECTED_DOMAINS],
-        default="all",
-        help="Restrict output to one memory domain",
-    )
+    scan.add_argument("--domain", choices=["all", *EXPECTED_DOMAINS], default="all")
     scan.add_argument("--json", action="store_true")
     scan.set_defaults(func=run_scan)
 
@@ -345,12 +329,22 @@ def register(subparsers: Any) -> None:
     validate.add_argument("--json", action="store_true")
     validate.set_defaults(func=run_validate)
 
-    rebuild_glacier = memory_sub.add_parser(
+    glacier = memory_sub.add_parser(
         "rebuild-glacier", help="Rebuild glacier archive index"
     )
-    rebuild_glacier.set_defaults(func=run_rebuild_glacier)
+    glacier.set_defaults(func=run_rebuild_glacier)
 
-    rebuild_links = memory_sub.add_parser(
+    links = memory_sub.add_parser(
         "rebuild-links", help="Rebuild wiki-link backlink index"
     )
-    rebuild_links.set_defaults(func=run_rebuild_links)
+    links.set_defaults(func=run_rebuild_links)
+
+    args = parser.parse_args()
+    if not hasattr(args, "func"):
+        parser.print_help()
+        return 1
+    return args.func(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

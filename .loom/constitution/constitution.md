@@ -10,7 +10,7 @@
   },
   "schema_version": 1,
   "status": "active",
-  "updated_at": "2026-04-01T18:05:00Z"
+  "updated_at": "2026-04-06T06:53:44Z"
 }
 ---
 
@@ -18,7 +18,7 @@
 
 Make Loom a harness-agnostic Markdown-defined operating protocol for durable AI work.
 
-In this repository, that means `src/rules/`, `src/skills/`, canonical `.loom/` records, and the thin helper layer under `build/` together form the visible source bundle for Loom's operating model.
+In this repository, that means `rules/`, `skills/`, canonical `.loom/` records, and the committed standalone `skills/*/scripts/*.py` files together form the visible source bundle for Loom's operating model.
 
 Another agent should be able to enter this repository cold, read the corpus, and continue work without reconstructing hidden norms from chat history, private memory, or a hidden runtime.
 
@@ -44,7 +44,7 @@ Another agent should be able to enter this repository cold, read the corpus, and
 - no implicit widening of scope or write authority
 - no canonical truth outside designated canonical `.loom/` subtrees
 - strict structural validation with soft prose validation
-- helpers should stay thin, deterministic, and standard-library-first unless the repository explicitly changes that policy
+- helpers should stay thin, deterministic, self-contained, and standard-library-first
 
 This repository is a Markdown-first product with bundled Python helpers rather than a conventional application stack. Structural completeness without instructional clarity is not enough.
 
@@ -52,7 +52,7 @@ This repository is a Markdown-first product with bundled Python helpers rather t
 
 Keep building Loom as a visible protocol corpus rather than as a hidden engine.
 
-The repository now contains the first-pass doctrine set, appendix corpus, ten flat subsystem skills, shared helper code, assembly logic, and an initial canonical record set. The next durable direction is to turn that scaffold into a stronger constitutional record graph and a proven operational workflow set.
+The repository now contains the first-pass doctrine set, appendix corpus, flat subsystem skills, committed standalone skill-local CLIs, and an initial canonical record set. The next durable direction is to turn that scaffold into a stronger constitutional record graph and a proven operational workflow set.
 
 That means future work should keep rules, skills, canonical records, packet contracts, validation behavior, and acceptance gates visible in prose rather than only inferable from helpers or from `CONSTITUTION.md`.
 
@@ -62,7 +62,7 @@ The constitutional layer should also preserve the main architectural judgment fr
 
 - reconcile the canonical constitution layer with `CONSTITUTION.md` and the repository's shipped structure
 - expand canonical records beyond the seed constitution and one smoke-test ticket so more of the workflow is grounded in durable examples
-- preserve the current shipped state truthfully: the rules corpus, appendix corpus, ten subsystem skills, shared helper/build layer, one roadmap, four active constitutional records, and only one smoke-test ticket so far
+- preserve the current shipped state truthfully: the rules corpus, appendix corpus, the current skill bundle, standalone skill-local CLIs, one roadmap, four active constitutional records, and only one smoke-test ticket so far
 - exercise real Ralph, critique, and docs packet flows against current helpers and records
 - tighten validation, link integrity, and workspace diagnostics only where they mechanize already-published rules
 
@@ -84,3 +84,4 @@ The immediate quality bar is no longer just that the files exist. The most impor
 - 2026-04-01: made reading `constitution:main` before starting work an explicit project rule
 - 2026-04-01: reconciled `constitution:main` with `CONSTITUTION.md`, the shipped rules/skills/build layout, and new supporting decision and roadmap records
 - 2026-04-01: expanded the constitutional baseline to capture control-plane/data-plane boundaries, self-contained flat skill distribution, and a sharper inventory of shipped repository state
+- 2026-04-06: replaced the committed shared zipapp with committed standalone skill-local CLI files as the direct source of truth

@@ -76,14 +76,14 @@ If more than one of those sounds plausible, prefer the narrowest record that sti
 
 Read `references/scripts.md` for the bundled CLI surface, including argument meanings and example invocations.
 
-- `scripts/loom create constitution`: use when the main constitution record itself must be seeded or intentionally replaced
-- `scripts/loom create constitution`: after running it, fill in the actual constitutional content immediately; the command only scaffolds the record and does not accept outbound links for `constitution:main`
-- `scripts/loom create decision`: use when one bounded decision needs its own durable record under `.loom/constitution/decisions/`
-- `scripts/loom create decision`: after running it, explain the decision, why it matters, and what it changes downstream
-- `scripts/loom create roadmap`: use when strategic direction needs roadmap framing rather than identity or one decision
-- `scripts/loom create roadmap`: after running it, populate milestones, scope, and strategic intent so the roadmap is operationally useful
-- `scripts/loom link`: use after the prose is in place to add or remove typed downstream links on decision and roadmap records; `constitution:main` is implicitly linked to everything and should stay link-free
-- `scripts/loom diagnose`: use before leaving the constitutional layer so structure, status, and required sections are trustworthy
+- `scripts/constitution.py create constitution`: use when the main constitution record itself must be seeded or intentionally replaced
+- `scripts/constitution.py create constitution`: after running it, fill in the actual constitutional content immediately; the command only scaffolds the record and does not accept outbound links for `constitution:main`
+- `scripts/constitution.py create decision`: use when one bounded decision needs its own durable record under `.loom/constitution/decisions/`
+- `scripts/constitution.py create decision`: after running it, explain the decision, why it matters, and what it changes downstream
+- `scripts/constitution.py create roadmap`: use when strategic direction needs roadmap framing rather than identity or one decision
+- `scripts/constitution.py create roadmap`: after running it, populate milestones, scope, and strategic intent so the roadmap is operationally useful
+- `scripts/constitution.py link`: use after the prose is in place to add or remove typed downstream links on decision and roadmap records; `constitution:main` is implicitly linked to everything and should stay link-free
+- `scripts/constitution.py diagnose`: use before leaving the constitutional layer so structure, status, and required sections are trustworthy
 
 ## Neighboring Layer Boundaries
 
@@ -117,7 +117,7 @@ Read `references/scripts.md` for the bundled CLI surface, including argument mea
 - the right constitutional record owns the change
 - the prose preserves durable strategic meaning
 - `constitution:main` stays link-free while decision and roadmap links remain explicit where needed
-- `scripts/loom diagnose` passes
+- `scripts/constitution.py diagnose` passes
 
 ## Read In This Order
 

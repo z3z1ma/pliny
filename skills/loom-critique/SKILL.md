@@ -83,14 +83,11 @@ If a launched critique lands no durable review state, treat that as a failed cri
 
 Read `references/scripts.md` for the bundled CLI surface, including argument meanings and example invocations.
 
-- `scripts/loom create critique`: use when the review needs a durable critique record in `.loom/critique/`
-- `scripts/loom create critique`: after running it, populate the review body immediately; the command only creates the shell
-- `scripts/loom packet`: use when a bounded fresh-context critique run is required
-- `scripts/loom link`: use to add or remove reviewed-artifact, follow-up, and verification refs after the body is real
-- `scripts/loom verify`: use when the critique run or its supporting checks produce durable evidence
-- `scripts/loom diagnose`: use before trusting the review result as durable
-- `scripts/loom check-links`: use to confirm graph integrity across reviewed artifacts and follow-up refs
-- `scripts/loom scope`: use before compiling a review set with ambiguous ownership
+- `scripts/critique.py create`: use when the review needs a durable critique record in `.loom/critique/`
+- `scripts/critique.py create`: after running it, populate the review body immediately; the command only creates the shell
+- `scripts/critique.py packet`: use when you want a packet scaffold under `.loom/runs/critique/` for a bounded review run
+- `scripts/critique.py link`: use to add or remove reviewed-artifact, follow-up, and verification refs after the body is real
+- `scripts/critique.py verify`: use when the critique run or its supporting checks produce durable evidence
 
 ## What Good Looks Like
 
@@ -114,7 +111,7 @@ Treat critique as failed or incomplete when:
 - the critique record captures a bounded review question and a real verdict
 - findings are durable, evidence-backed, and actionable
 - follow-up refs and verification refs are explicit where needed
-- `scripts/loom diagnose` passes and `scripts/loom check-links` does not surface unresolved graph problems
+- frontmatter and downstream links are explicit enough for later workspace validation
 
 ## Read In This Order
 

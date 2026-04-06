@@ -14,7 +14,7 @@
   },
   "schema_version": 1,
   "status": "active",
-  "updated_at": "2026-04-01T17:43:00Z"
+  "updated_at": "2026-04-06T06:53:44Z"
 }
 ---
 
@@ -28,7 +28,7 @@ The repository itself should remain the inspectable source of system meaning: ru
 
 `CONSTITUTION.md` locks the repository onto a Markdown-first, harness-agnostic direction where the durable asset is the work discipline rather than one implementation shell.
 
-The current codebase already reflects that choice through `src/rules/`, `src/skills/`, canonical `.loom/` subtrees, and a thin build/helper layer instead of a central runtime product.
+The current codebase already reflects that choice through `rules/`, `skills/`, canonical `.loom/` subtrees, and committed standalone skill-local CLIs instead of a central runtime product.
 
 # Alternatives Considered
 
@@ -39,7 +39,7 @@ The current codebase already reflects that choice through `src/rules/`, `src/ski
 # Consequences
 
 - visible Markdown rules and records outrank packaging or runtime convenience
-- `build/assemble-skills.py` and `build/shared/` exist only to package self-contained skill bundles and deterministic helpers
+- committed skill-local CLIs are the shipped helper layer rather than a hidden generated runtime
 - future adapters and accelerators stay derivative unless a later constitutional change explicitly promotes them
 - downstream specs, plans, docs, and tickets should explain how they align with the protocol corpus instead of assuming a hidden engine will fill the gap
 

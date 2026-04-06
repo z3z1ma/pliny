@@ -60,8 +60,8 @@ Don't just log what you found. Fix stale summaries, tighten routing, merge dupli
 
 ## How To Use The Scripts
 
-- `scripts/loom memory scan`: scope the current memory surface before broad reads
-- `scripts/loom memory validate`: confirm the module shape before and after meaningful edits
+- `scripts/memory.py memory scan`: scope the current memory surface before broad reads
+- `scripts/memory.py memory validate`: confirm the module shape before and after meaningful edits
 
 ## Manual Invocation
 

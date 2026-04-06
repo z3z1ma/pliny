@@ -17,7 +17,7 @@
   },
   "schema_version": 1,
   "status": "active",
-  "updated_at": "2026-04-01T17:45:00Z"
+  "updated_at": "2026-04-06T06:53:44Z"
 }
 ---
 
@@ -27,15 +27,15 @@ Turn this repository from a strong source architecture memo plus first-pass corp
 
 # Why Now
 
-The repository already contains the core rule set, appendix material, ten subsystem skills, shared helper code, build assembly, and an initial canonical record surface.
+The repository already contains the core rule set, appendix material, the current skill bundle, committed standalone skill-local CLIs, and an initial canonical record surface.
 
 What it does not yet have is the same depth of durable canonical state and real end-to-end workflow proof across the major Loom layers. This roadmap keeps the next stage focused on that gap rather than on speculative platform growth.
 
 Current shipped state at the time of this roadmap update:
 
-- core doctrine files under `src/rules/` plus appendix support material under `src/rules/appendices/`
-- ten flat subsystem skills under `src/skills/`
-- shared helper code under `build/shared/` and assembly via `build/assemble-skills.py`
+- core doctrine files under `rules/` plus appendix support material under `rules/appendices/`
+- flat subsystem skills and auxiliary authoring skills under `skills/`
+- committed standalone `skills/*/scripts/*.py` files inside the skill bundle
 - canonical `.loom/constitution/` records plus one smoke-test ticket under `.loom/tickets/`
 - no populated canonical research, initiative, spec, plan, critique, docs, run, or verification record families yet
 
@@ -85,7 +85,7 @@ The most important still-missing canonical depth is in:
 
 # Status Summary
 
-The repository is past the earliest bootstrap stage: doctrine, skill-map, schema-reference, packet, and helper surfaces are substantially present in source form.
+The repository is past the earliest bootstrap stage: doctrine, skill-map, schema-reference, packet, and helper surfaces are substantially present in source form, including the committed standalone skill-local CLIs.
 
 The work is still early in broader canonical record population and in real end-to-end execution proof. The constitutional layer now captures the major architectural judgment frames more clearly, but the broader record graph is still sparse.
 

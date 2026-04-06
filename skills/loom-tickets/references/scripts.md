@@ -2,9 +2,9 @@
 
 Use package-local script paths from this skill bundle.
 
-The examples below assume invocation through `scripts/loom` inside `loom-tickets`.
+The examples below assume invocation through `scripts/tickets.py` inside `loom-tickets`.
 
-## `scripts/loom create ticket`
+## `scripts/tickets.py create`
 
 Purpose:
 
@@ -14,19 +14,17 @@ Purpose:
 Arguments:
 
 - `slug`: ticket slug used in the generated filename
-- `--title`: optional human-readable title
 - `--status`: optional ticket status override
 - `--link=KEY=REF` or `--link=kind:ref`: repeatable typed link assignment; plain refs infer their link key from the ref prefix
-- `--section=Heading=Body`: repeatable section assignment
 - `--path`, `--repository`, `--workspace-scope`: scope controls
 
 Example:
 
 ```bash
-scripts/loom create ticket inventory-shared-script-clis --title "Inventory shared Loom script CLIs" --status ready --path "repos/admin-ui/src/main.ts" --link "plan:bootstrap-cli-reference-docs"
+scripts/tickets.py create inventory-shared-script-clis --status ready --path "repos/admin-ui/src/main.ts" --link "plan:bootstrap-cli-reference-docs"
 ```
 
-## `scripts/loom link`
+## `scripts/tickets.py link`
 
 Purpose:
 
@@ -41,10 +39,10 @@ Arguments:
 Example:
 
 ```bash
-scripts/loom link "ticket:0002" --add "verification:admin-query-contract-sync-validation"
+scripts/tickets.py link "ticket:0002" --add "verification:admin-query-contract-sync-validation"
 ```
 
-## `scripts/loom verify`
+## `scripts/tickets.py verify`
 
 Purpose:
 
@@ -53,60 +51,11 @@ Purpose:
 Arguments:
 
 - `slug`: verification slug
-- `--title`, `--link`, `--section`: verification content inputs
+- `--link`: verification frontmatter links
 - `--path`, `--repository`, `--workspace-scope`: scope inputs
 
 Example:
 
 ```bash
-scripts/loom verify admin-query-contract-sync-validation --title "Validate admin UI and query service contract sync" --link "ticket:0002"
-```
-
-## `scripts/loom diagnose`
-
-Purpose:
-
-- validate structural record health before status changes or handoff
-
-Arguments:
-
-- `--json`: emit a machine-readable doctor report
-
-Example:
-
-```bash
-scripts/loom diagnose --json
-```
-
-## `scripts/loom check-links`
-
-Purpose:
-
-- check whether linked record refs resolve across the visible record graph
-
-Arguments:
-
-- `--json`: emit structured JSON issues
-
-Example:
-
-```bash
-scripts/loom check-links
-```
-
-## `scripts/loom scope`
-
-Purpose:
-
-- discover repository ownership before broadening ticket scope
-
-Arguments:
-
-- `--path`: optional target path to resolve to one owner
-- `--json`: emit structured JSON output
-
-Example:
-
-```bash
-scripts/loom scope --json --path "repos/query-service/src/service.py"
+scripts/tickets.py verify admin-query-contract-sync-validation --link "ticket:0002"
 ```

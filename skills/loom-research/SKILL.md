@@ -64,10 +64,9 @@ Do not let research collapse into a raw transcript dump. The durable value is cu
 
 Read `references/scripts.md` for the bundled CLI surface, including argument meanings and example invocations.
 
-- `scripts/loom create research`: use when a new question needs durable investigation space in `.loom/research/`
-- `scripts/loom create research`: after running it, populate the body immediately; the command only creates the record shell
-- `scripts/loom link`: use after the note has meaningful conclusions so downstream consumers are explicit
-- `scripts/loom diagnose`: use before handing the note to downstream work that will rely on it as evidence
+- `scripts/research.py create`: use when a new question needs durable investigation space in `.loom/research/`
+- `scripts/research.py create`: after running it, populate the body immediately; the command only creates the record shell
+- `scripts/research.py link`: use after the note has meaningful conclusions so downstream consumers are explicit
 
 ## Neighboring Layer Boundaries
 
@@ -104,7 +103,7 @@ Read `references/scripts.md` for the bundled CLI surface, including argument mea
 - the note preserves reusable findings rather than ephemeral chat
 - evidence, conclusions, and recommendations are explicit
 - downstream links are present where useful
-- `scripts/loom diagnose` passes
+- the scaffold and frontmatter are explicit enough for later workspace validation
 
 ## Read In This Order
 

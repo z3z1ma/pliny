@@ -45,9 +45,9 @@ Good next action:
 ## Example Implementation Helper Pattern
 
 ```bash
-scripts/loom diagnose --json
-scripts/loom status --json
-scripts/loom scope --json --path "<target-path>"
+scripts/workspace.py diagnose --json
+scripts/workspace.py status --json
+scripts/workspace.py scope --json --path "<target-path>"
 ```
 
 These commands are only one implementation of the larger control-plane procedure above. The important concept is:

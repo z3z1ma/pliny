@@ -76,14 +76,11 @@ If a docs-maintainer pass completes without a durable docs revision or leaves a 
 
 Read `references/scripts.md` for the bundled CLI surface, including argument meanings and example invocations.
 
-- `scripts/loom create doc`: use when a new governed explanation is needed in `.loom/docs/`
-- `scripts/loom create doc`: after running it, populate the body immediately; the command only creates the shell
-- `scripts/loom packet`: use when docs work should be done through a fresh-context packetized pass
-- `scripts/loom link`: use to add or remove truth-source and verification refs after the explanation is grounded
-- `scripts/loom verify`: use when docs work or its supporting checks produce durable evidence
-- `scripts/loom diagnose`: use before treating the doc as accepted enough to cite
-- `scripts/loom check-links`: use to confirm truth-source and verification links resolve across the graph
-- `scripts/loom scope`: use before editing across ambiguous repository or worktree boundaries
+- `scripts/docs.py create`: use when a new governed explanation is needed in `.loom/docs/`
+- `scripts/docs.py create`: after running it, populate the body immediately; the command only creates the shell
+- `scripts/docs.py packet`: use when you want a packet scaffold under `.loom/runs/docs/` for a fresh-context docs pass
+- `scripts/docs.py link`: use to add or remove truth-source and verification refs after the explanation is grounded
+- `scripts/docs.py verify`: use when docs work or its supporting checks produce durable evidence
 
 ## What Good Looks Like
 
@@ -107,7 +104,7 @@ Treat docs work as failed or incomplete when:
 - the right governed doc owns the accepted explanation
 - the prose is grounded in accepted truth and linked evidence
 - the docs surface is clearer rather than more fragmented
-- `scripts/loom diagnose` passes and `scripts/loom check-links` does not surface unresolved graph problems
+- frontmatter and downstream links are explicit enough for later workspace validation
 
 ## Read In This Order
 

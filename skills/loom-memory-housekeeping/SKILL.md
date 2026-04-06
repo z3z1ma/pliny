@@ -76,10 +76,10 @@ All glacier files must have JSON-compatible frontmatter.
 
 ## How To Use The Scripts
 
-- `scripts/loom memory validate`: validate manifest, required files, and L0 coverage
-- `scripts/loom memory scan`: inspect the current memory surface quickly
-- `scripts/loom memory rebuild-glacier`: rewrite `.loom/memories/glacier/index.md` from archive frontmatter
-- `scripts/loom memory rebuild-links`: rewrite `.loom/memories/link-index.md` from `[[wiki-links]]`
+- `scripts/memory.py memory validate`: validate manifest, required files, and L0 coverage
+- `scripts/memory.py memory scan`: inspect the current memory surface quickly
+- `scripts/memory.py memory rebuild-glacier`: rewrite `.loom/memories/glacier/index.md` from archive frontmatter
+- `scripts/memory.py memory rebuild-links`: rewrite `.loom/memories/link-index.md` from `[[wiki-links]]`
 
 ## Manual Invocation
 

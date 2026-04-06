@@ -21,10 +21,10 @@ Before choosing a task-specific path, the parent reads `constitution:main` so th
 Typical actions:
 
 ```bash
-# Read the loom-workspace skill; the bundled CLI is exposed as scripts/loom
-scripts/loom diagnose --json
-scripts/loom status --json
-scripts/loom scope --json --path ".loom/constitution/constitution.md"
+# Read the loom-workspace skill; the bundled CLI is exposed as scripts/workspace.py
+scripts/workspace.py diagnose --json
+scripts/workspace.py status --json
+scripts/workspace.py scope --json --path ".loom/constitution/constitution.md"
 ```
 
 The parent uses these checks to confirm:
@@ -62,8 +62,8 @@ The parent compiles a persisted Ralph packet for the bounded execution step.
 Example:
 
 ```bash
-# Read the loom-ralph skill; the bundled CLI is exposed as scripts/loom
-scripts/loom packet "<ticket-ref>" ralph --mode execution --style reference-first --allow-write-ref "<ticket-ref>"
+# Read the loom-ralph skill; the bundled CLI is exposed as scripts/ralph.py
+scripts/ralph.py packet "<ticket-ref>" ralph --mode execution --style reference-first --allow-write-ref "<ticket-ref>"
 ```
 
 The resulting packet is a durable Ralph packet artifact for that ticket.

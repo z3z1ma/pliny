@@ -1,6 +1,6 @@
 # Memory Context Scripts
 
-## `scripts/loom memory scan`
+## `scripts/memory.py memory scan`
 
 Purpose:
 
@@ -14,12 +14,12 @@ Arguments:
 Examples:
 
 ```bash
-scripts/loom memory scan
-scripts/loom memory scan --domain user
-scripts/loom memory scan --json
+scripts/memory.py memory scan
+scripts/memory.py memory scan --domain user
+scripts/memory.py memory scan --json
 ```
 
-## `scripts/loom memory validate`
+## `scripts/memory.py memory validate`
 
 Purpose:
 
@@ -32,6 +32,6 @@ Arguments:
 Examples:
 
 ```bash
-scripts/loom memory validate
-scripts/loom memory validate --json
+scripts/memory.py memory validate
+scripts/memory.py memory validate --json
 ```

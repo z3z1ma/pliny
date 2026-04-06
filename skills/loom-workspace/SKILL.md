@@ -43,21 +43,21 @@ Use this skill as the parent-side Loom control plane for workspace discovery, re
 
 ## Execution Playbook
 
-1. if `.loom/` does not exist or is missing canonical subtrees, run `scripts/loom diagnose --fix` to create missing structure before doing anything else
-2. start with `scripts/loom status` to summarize the current workspace state and locate likely owning surfaces
-3. run `scripts/loom diagnose` before trusting downstream records, packets, or operator guidance
+1. if `.loom/` does not exist or is missing canonical subtrees, run `scripts/workspace.py diagnose --fix` to create missing structure before doing anything else
+2. start with `scripts/workspace.py status` to summarize the current workspace state and locate likely owning surfaces
+3. run `scripts/workspace.py diagnose` before trusting downstream records, packets, or operator guidance
 4. check for `.loom/harness.md` — if present, the operator has defined harness profiles for child invocation; note which profiles exist so downstream skills can use them
-5. use `scripts/loom list` when you need canonical refs before linking, reviewing, or compiling packets
-6. run `scripts/loom scope` for any path or repository ownership question and fail closed if it cannot assign scope cleanly
-7. use `scripts/loom diagnose` and `scripts/loom check-links` before depending on a record graph that may have drifted
+5. use `scripts/workspace.py list` when you need canonical refs before linking, reviewing, or compiling packets
+6. run `scripts/workspace.py scope` for any path or repository ownership question and fail closed if it cannot assign scope cleanly
+7. use `scripts/workspace.py diagnose` and `scripts/workspace.py check-links` before depending on a record graph that may have drifted
 8. route into the owning subsystem only after the workspace is structurally trustworthy enough to proceed
 9. if the workspace is not trustworthy, fix that first instead of pushing uncertainty into the next skill
 
 ## Decision Rules
 
-If `scripts/loom diagnose` or validation reports structural issues, fix those before trusting downstream packet work.
+If `scripts/workspace.py diagnose` or validation reports structural issues, fix those before trusting downstream packet work.
 
-If `scripts/loom scope` cannot assign ownership, escalate immediately rather than guessing.
+If `scripts/workspace.py scope` cannot assign ownership, escalate immediately rather than guessing.
 
 If subsystem ownership is unclear, read the relevant canonical record and choose the skill that owns the next durable mutation or review step.
 
@@ -75,14 +75,12 @@ Do not proceed as if the workspace is trustworthy when:
 
 Read `references/scripts.md` for the bundled CLI surface, including argument meanings and example invocations.
 
-- `scripts/loom status`: use first when you need quick orientation by record kind and status
-- `scripts/loom diagnose`: use before depending on the workspace for packet work, review, or durable edits; use `--fix` to create missing directories
-- `scripts/loom list`: use when you need discoverable canonical refs before linking or routing work
-- `scripts/loom create`: use for kind-specific validation when structural trust matters around one record family
-- `scripts/loom check-links`: use to validate the record graph; treat this as a workspace-level integrity check rather than a one-file command
-- `scripts/loom scope`: use for any path, repository, or worktree ownership question and fail closed if it cannot assign one owner
-- `scripts/loom link`: use when you need to add or remove typed links between records
-- `scripts/loom verify`: use when a verification artifact should become durable
+- `scripts/workspace.py diagnose`: use before depending on the workspace for packet work, review, or durable edits; use `--fix` to create missing directories
+- `scripts/workspace.py create`: use for kind-specific validation when structural trust matters around one record family
+- `scripts/workspace.py check-links`: use to validate the record graph; treat this as a workspace-level integrity check rather than a one-file command
+- `scripts/workspace.py link`: use when you need to add or remove typed links between records
+- `scripts/workspace.py verify`: use when a verification artifact should become durable
+- `scripts/workspace.py scope`: use when you need a deterministic repository owner for one path
 
 ## What Good Looks Like
 

@@ -14,13 +14,13 @@
   },
   "schema_version": 1,
   "status": "active",
-  "updated_at": "2026-04-01T18:07:00Z"
+  "updated_at": "2026-04-06T06:53:44Z"
 }
 ---
 
 # Decision
 
-Loom skills in this repository remain flat sibling subsystems, and each distributed skill bundle must stay self-contained even when shared helper code is copied in during assembly.
+Loom skills in this repository remain flat sibling subsystems, and each distributed skill bundle must stay self-contained with its own standalone script committed directly in the skill bundle.
 
 No skill should depend on hidden inheritance from another skill in order to function correctly when loaded.
 
@@ -28,7 +28,7 @@ No skill should depend on hidden inheritance from another skill in order to func
 
 `CONSTITUTION.md` locks in both the flat sibling skill rule and the self-contained distribution rule because they keep subsystem behavior visible, inspectable, and portable across harnesses.
 
-The current repository already implements that choice through ten top-level skills under `src/skills/`, skill-local references, skill-local `scripts/` directories, and `build/assemble-skills.py` copying shared helper code into each bundle rather than creating a central runtime dependency.
+The current repository already implements that choice through top-level skills, skill-local references, and skill-local `scripts/*.py` files that are edited directly rather than generated from a central runtime layer.
 
 # Alternatives Considered
 
@@ -39,7 +39,7 @@ The current repository already implements that choice through ten top-level skil
 # Consequences
 
 - every skill should remain understandable from its own `SKILL.md`, references, and bundled scripts
-- shared helper code is acceptable only as packaging support for already-published behavior
+- each skill's CLI behavior should be visible in that skill's own script file
 - build assembly remains a distribution mechanism, not a new ontology layer
 - future skill additions should preserve flat routing and self-contained operation unless a later constitutional change explicitly reopens this choice
 

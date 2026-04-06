@@ -1,8 +1,0 @@
-[project]
-name = "loom"
-version = "0.1.0"
-description = "Loom workspace CLI — Markdown-first project management"
-requires-python = ">=3.10"
-
-[project.scripts]
-loom = "loom.__main__:main"

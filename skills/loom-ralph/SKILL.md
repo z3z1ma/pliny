@@ -86,11 +86,8 @@ If a child run returns without durable ticket activity, the run is incomplete fr
 
 Read `references/scripts.md` for the bundled CLI surface, including argument meanings and example invocations.
 
-- `scripts/loom packet`: use before launch to persist the Ralph contract under `.loom/runs/ralph/`
-- `scripts/loom verify`: use after the run when the outcome or supporting checks should become durable evidence
-- `scripts/loom diagnose`: use before and after execution when structural trust matters
-- `scripts/loom check-links`: use to confirm the record graph stayed coherent after reconciliation
-- `scripts/loom scope`: use whenever scope is unclear before packet compilation or launch
+- `scripts/ralph.py packet`: use before launch to scaffold the Ralph contract under `.loom/runs/ralph/`
+- `scripts/ralph.py verify`: use after the run when the outcome or supporting checks should become durable evidence
 
 ## What Good Looks Like
 
@@ -114,7 +111,7 @@ Treat the Ralph run as failed or incomplete when:
 - one bounded execution step completed or blocked truthfully
 - the packet, evidence, and ticket reconciliation all tell the same story
 - verification and outcome classification are explicit
-- `scripts/loom diagnose` passes and `scripts/loom check-links` does not surface unresolved graph problems after reconciliation
+- frontmatter and downstream links are explicit enough for later workspace validation
 
 ## Read In This Order
 

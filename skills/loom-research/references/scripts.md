@@ -2,9 +2,9 @@
 
 Use package-local script paths from this skill bundle.
 
-The examples below assume invocation through `scripts/loom` inside `loom-research`.
+The examples below assume invocation through `scripts/research.py` inside `loom-research`.
 
-## `scripts/loom create research`
+## `scripts/research.py create`
 
 Purpose:
 
@@ -14,10 +14,10 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom create research shared-script-cli-inventory --title "Inventory shared Loom script CLIs"
+scripts/research.py create shared-script-cli-inventory
 ```
 
-## `scripts/loom link`
+## `scripts/research.py link`
 
 Purpose:
 
@@ -26,17 +26,5 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom link "research:shared-script-cli-inventory" --add "ticket:0002"
-```
-
-## `scripts/loom diagnose`
-
-Purpose:
-
-- validate structural integrity before downstream work relies on the note as evidence
-
-Example:
-
-```bash
-scripts/loom diagnose --json
+scripts/research.py link "research:shared-script-cli-inventory" --add "ticket:0002"
 ```

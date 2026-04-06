@@ -2,9 +2,9 @@
 
 Use package-local script paths from this skill bundle.
 
-The examples below assume invocation through `scripts/loom` inside `loom-plans`.
+The examples below assume invocation through `scripts/plans.py` inside `loom-plans`.
 
-## `scripts/loom create plan`
+## `scripts/plans.py create`
 
 Purpose:
 
@@ -14,10 +14,10 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom create plan bootstrap-cli-reference-docs --title "Bootstrap Loom CLI reference docs" --status active
+scripts/plans.py create bootstrap-cli-reference-docs --status active
 ```
 
-## `scripts/loom link`
+## `scripts/plans.py link`
 
 Purpose:
 
@@ -26,17 +26,5 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom link "plan:bootstrap-cli-reference-docs" --add "ticket:0002"
-```
-
-## `scripts/loom diagnose`
-
-Purpose:
-
-- validate structural integrity before relying on the plan as live strategic guidance
-
-Example:
-
-```bash
-scripts/loom diagnose --json
+scripts/plans.py link "plan:bootstrap-cli-reference-docs" --add "ticket:0002"
 ```

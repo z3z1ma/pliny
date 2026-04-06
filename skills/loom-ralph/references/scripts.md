@@ -2,13 +2,13 @@
 
 Use package-local script paths from this skill bundle.
 
-The examples below assume invocation through `scripts/loom` inside `loom-ralph`.
+The examples below assume invocation through `scripts/ralph.py` inside `loom-ralph`.
 
-## `scripts/loom packet`
+## `scripts/ralph.py packet`
 
 Purpose:
 
-- compile a bounded Ralph execution packet for one target record
+- scaffold a bounded Ralph execution packet record under `.loom/runs/ralph/`
 
 Arguments:
 
@@ -26,10 +26,10 @@ Output:
 Example:
 
 ```bash
-scripts/loom packet "ticket:0002" ralph --mode execution --style reference-first --allow-write-ref "ticket:0002"
+scripts/ralph.py packet "ticket:0002" ralph --mode execution --style reference-first --allow-write-ref "ticket:0002"
 ```
 
-## `scripts/loom verify`
+## `scripts/ralph.py verify`
 
 Purpose:
 
@@ -38,60 +38,11 @@ Purpose:
 Arguments:
 
 - `slug`: verification slug
-- `--title`, `--link`, `--section`: verification content inputs
+- `--link`: verification frontmatter links
 - `--path`, `--repository`, `--workspace-scope`: scope inputs
 
 Example:
 
 ```bash
-scripts/loom verify ralph-ticket-0002-run --title "Record Ralph run across admin UI and query service" --link "ticket:0002"
-```
-
-## `scripts/loom diagnose`
-
-Purpose:
-
-- validate structural record health before and after execution
-
-Arguments:
-
-- `--json`: emit a machine-readable doctor report
-
-Example:
-
-```bash
-scripts/loom diagnose --json
-```
-
-## `scripts/loom check-links`
-
-Purpose:
-
-- confirm that reconciliation did not leave broken record links
-
-Arguments:
-
-- `--json`: emit structured JSON issues
-
-Example:
-
-```bash
-scripts/loom check-links
-```
-
-## `scripts/loom scope`
-
-Purpose:
-
-- resolve repository ownership before packet compilation or launch
-
-Arguments:
-
-- `--path`: optional target path to resolve to one owner
-- `--json`: emit structured JSON output
-
-Example:
-
-```bash
-scripts/loom scope --json --path "repos/admin-ui/src/main.ts"
+scripts/ralph.py verify ralph-ticket-0002-run --link "ticket:0002"
 ```

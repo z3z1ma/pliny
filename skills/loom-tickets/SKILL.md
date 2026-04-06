@@ -80,14 +80,11 @@ If another layer changes execution reality, the ticket should absorb that truth 
 
 Read `references/scripts.md` for the bundled CLI surface, including argument meanings and example invocations.
 
-- `scripts/loom create ticket`: use when a new ticket record needs to be created in `.loom/tickets/`
-- `scripts/loom create ticket`: after running it, fill the body immediately; the command only scaffolds the record
-- `scripts/loom create ticket`: prefer shorthand links like `--link ticket:0004` when you already know the related refs
-- `scripts/loom link`: use to add or remove typed refs such as dependencies, verification, critique, and docs links after the body is in place
-- `scripts/loom verify`: use as soon as the ticket gains real execution evidence that should participate in the durable graph
-- `scripts/loom diagnose`: use before changing status or treating the ticket as ready, reviewable, or closed
-- `scripts/loom check-links`: use to validate the record graph; this is a workspace-level link integrity check, not a single-file linter
-- `scripts/loom scope`: use before broadening scope or assuming repository ownership
+- `scripts/tickets.py create`: use when a new ticket record needs to be created in `.loom/tickets/`
+- `scripts/tickets.py create`: after running it, fill the body immediately; the command only scaffolds the record
+- `scripts/tickets.py create`: prefer shorthand links like `--link ticket:0004` when you already know the related refs
+- `scripts/tickets.py link`: use to add or remove typed refs such as dependencies, verification, critique, and docs links after the body is in place
+- `scripts/tickets.py verify`: use as soon as the ticket gains real execution evidence that should participate in the durable graph
 
 ## Neighboring Layer Boundaries
 
@@ -118,8 +115,7 @@ Read `references/scripts.md` for the bundled CLI surface, including argument mea
 - one ticket clearly owns the live execution truth
 - status matches reality
 - verification and docs disposition are explicit
-- link integrity is clean
-- `scripts/loom diagnose` passes and `scripts/loom check-links` does not surface unresolved graph problems
+- link integrity is explicit in frontmatter and can be validated later by workspace tooling
 
 ## Read In This Order
 

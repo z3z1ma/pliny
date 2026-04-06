@@ -32,7 +32,7 @@ Advance one bounded execution step for the packet compiler, verify the resulting
 Use the shortest command that still makes the relationship graph explicit:
 
 ```bash
-scripts/loom create ticket smoke-test-run \
+scripts/tickets.py create smoke-test-run \
   --status ready \
   --path "repos/admin-ui/src/main.ts" \
   --link initiative:bootstrap-markdown-first-loom \

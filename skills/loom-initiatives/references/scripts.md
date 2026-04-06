@@ -2,9 +2,9 @@
 
 Use package-local script paths from this skill bundle.
 
-The examples below assume invocation through `scripts/loom` inside `loom-initiatives`.
+The examples below assume invocation through `scripts/initiatives.py` inside `loom-initiatives`.
 
-## `scripts/loom create initiative`
+## `scripts/initiatives.py create`
 
 Purpose:
 
@@ -14,10 +14,10 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom create initiative improve-operator-workflows --title "Improve operator workflows"
+scripts/initiatives.py create improve-operator-workflows
 ```
 
-## `scripts/loom link`
+## `scripts/initiatives.py link`
 
 Purpose:
 
@@ -26,17 +26,5 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom link "initiative:improve-operator-workflows" --add "plan:bootstrap-cli-reference-docs"
-```
-
-## `scripts/loom diagnose`
-
-Purpose:
-
-- validate structural integrity before relying on an initiative as strategic truth
-
-Example:
-
-```bash
-scripts/loom diagnose --json
+scripts/initiatives.py link "initiative:improve-operator-workflows" --add "plan:bootstrap-cli-reference-docs"
 ```

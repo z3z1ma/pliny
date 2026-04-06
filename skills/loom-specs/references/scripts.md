@@ -2,9 +2,9 @@
 
 Use package-local script paths from this skill bundle.
 
-The examples below assume invocation through `scripts/loom` inside `loom-specs`.
+The examples below assume invocation through `scripts/specs.py` inside `loom-specs`.
 
-## `scripts/loom create spec`
+## `scripts/specs.py create`
 
 Purpose:
 
@@ -14,10 +14,10 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom create spec helper-cli-reference --title "Helper CLI reference" --link constitution=constitution:main
+scripts/specs.py create helper-cli-reference --link constitution=constitution:main
 ```
 
-## `scripts/loom link`
+## `scripts/specs.py link`
 
 Purpose:
 
@@ -26,17 +26,5 @@ Purpose:
 Example:
 
 ```bash
-scripts/loom link "spec:helper-cli-reference" --add "plan:bootstrap-cli-reference-docs"
-```
-
-## `scripts/loom diagnose`
-
-Purpose:
-
-- validate structural integrity before handing the spec to plans, tickets, critique, or docs
-
-Example:
-
-```bash
-scripts/loom diagnose --json
+scripts/specs.py link "spec:helper-cli-reference" --add "plan:bootstrap-cli-reference-docs"
 ```

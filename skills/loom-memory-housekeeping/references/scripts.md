@@ -1,34 +1,34 @@
 # Memory Housekeeping Scripts
 
-## `scripts/loom memory validate`
+## `scripts/memory.py memory validate`
 
 Use this command to validate the module before and after structural edits.
 
 ```bash
-scripts/loom memory validate
-scripts/loom memory validate --json
+scripts/memory.py memory validate
+scripts/memory.py memory validate --json
 ```
 
-## `scripts/loom memory scan`
+## `scripts/memory.py memory scan`
 
 Use this command when you want a quick summary of regular memory files.
 
 ```bash
-scripts/loom memory scan
+scripts/memory.py memory scan
 ```
 
-## `scripts/loom memory rebuild-glacier`
+## `scripts/memory.py memory rebuild-glacier`
 
 Use this command after archive edits so the glacier catalog stays truthful.
 
 ```bash
-scripts/loom memory rebuild-glacier
+scripts/memory.py memory rebuild-glacier
 ```
 
-## `scripts/loom memory rebuild-links`
+## `scripts/memory.py memory rebuild-links`
 
 Use this command after link-heavy edits so the backlink map stays truthful.
 
 ```bash
-scripts/loom memory rebuild-links
+scripts/memory.py memory rebuild-links
 ```

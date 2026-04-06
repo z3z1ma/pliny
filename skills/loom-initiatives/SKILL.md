@@ -62,10 +62,9 @@ Use initiatives to organize outcome-level truth, not to track every small step.
 
 Read `references/scripts.md` for the bundled CLI surface, including argument meanings and example invocations.
 
-- `scripts/loom create initiative`: use when a new strategic outcome needs a durable record in `.loom/initiatives/`
-- `scripts/loom create initiative`: after running it, populate the strategy immediately; the command only scaffolds the record
-- `scripts/loom link`: use to add or remove linked research, specs, plans, and tickets once the initiative body is real
-- `scripts/loom diagnose`: use before relying on the initiative as strategic truth
+- `scripts/initiatives.py create`: use when a new strategic outcome needs a durable record in `.loom/initiatives/`
+- `scripts/initiatives.py create`: after running it, populate the strategy immediately; the command only scaffolds the record
+- `scripts/initiatives.py link`: use to add or remove linked research, specs, plans, and tickets once the initiative body is real
 
 ## Neighboring Layer Boundaries
 
@@ -102,7 +101,7 @@ Read `references/scripts.md` for the bundled CLI surface, including argument mea
 - one initiative clearly owns the strategic outcome
 - the outcome, scope, metrics, and milestones are explicit
 - downstream links are present where needed
-- `scripts/loom diagnose` passes
+- the scaffold and frontmatter are explicit enough for later workspace validation
 
 ## Read In This Order
 
