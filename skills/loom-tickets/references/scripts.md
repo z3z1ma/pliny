@@ -4,13 +4,15 @@ Use package-local script paths from this skill bundle.
 
 The examples below assume invocation through `scripts/tickets.py` inside `loom-tickets`.
 
-## Direct Ticket Queries
+## Direct Ticket Query Ideas
 
 The bundled CLI scaffolds, links, and verifies ticket artifacts. It does not provide a separate "list open tickets" command.
 
 When you need to inspect ticket state directly, query the frontmatter in `.loom/tickets/`.
 
 The CLI does provide first-class dependency management through `depends_on`.
+
+The queries below are examples, not a canonical command surface. They are meant as portable operator patterns you can adapt to the current ticket corpus and the question you are trying to answer.
 
 `open` is not a first-class stored status. Treat every non-terminal status as open:
 
@@ -26,10 +28,76 @@ Terminal statuses are:
 - `closed`
 - `cancelled`
 
-Example:
+These examples intentionally use native shell tooling directly against `.loom/tickets/`.
+
+### Example Status Queries
+
+Open tickets:
 
 ```bash
 rg -l '"status":\s*"(proposed|ready|active|blocked|review_required|complete_pending_acceptance)"' .loom/tickets
+```
+
+Not-yet-started tickets:
+
+```bash
+rg -l '"status":\s*"(proposed|ready)"' .loom/tickets
+```
+
+Needs-attention queue:
+
+```bash
+rg -l '"status":\s*"(blocked|review_required|complete_pending_acceptance)"' .loom/tickets
+```
+
+### Example Status Rollups
+
+Count tickets by status:
+
+```bash
+rg --no-filename -o '"status":\s*"[^"]+"' .loom/tickets | sort | uniq -c
+```
+
+Show newest ticket updates first:
+
+```bash
+rg -H -o '"updated_at":\s*"[^"]+"' .loom/tickets | sort -t'"' -k4,4r
+```
+
+### Example Dependency Queries
+
+Tickets with first-class upstream dependencies:
+
+```bash
+rg --multiline -P -l '"depends_on":\s*\[\s*"ticket:\d+' .loom/tickets
+```
+
+Tickets that depend on one specific upstream ticket:
+
+```bash
+rg --multiline -P -l '"depends_on":\s*\[(?:(?!\]).)*"ticket:0003"' .loom/tickets
+```
+
+Use `--multiline -P` for dependency queries because `depends_on` is formatted as a multi-line JSON array in frontmatter.
+
+### Example Evidence And Structure Checks
+
+Tickets with no linked verification refs yet:
+
+```bash
+rg --files-without-match 'verification:' .loom/tickets
+```
+
+Tickets missing the `Verification` section:
+
+```bash
+rg --files-without-match '^# Verification$' .loom/tickets
+```
+
+Tickets missing the `Documentation Disposition` section:
+
+```bash
+rg --files-without-match '^# Documentation Disposition$' .loom/tickets
 ```
 
 ## `scripts/tickets.py create`
