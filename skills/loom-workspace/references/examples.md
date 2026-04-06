@@ -15,7 +15,7 @@ These questions are about orientation, trust, and routing. That is why they belo
 
 ```text
 1. Inspect status to see where active work is concentrated.
-2. Run workspace diagnostics before trusting packet or review workflows.
+2. Inspect the workspace trees directly before trusting packet or review workflows.
 3. Resolve repository ownership for the target path or artifact.
 4. Choose the owning artifact skill only after health and scope are clear.
 ```
@@ -24,7 +24,7 @@ These questions are about orientation, trust, and routing. That is why they belo
 
 ```text
 If the main question is “what owns this work?” or “is the workspace healthy enough to proceed?”, start with loom-workspace.
-If the main question is about one specific artifact family, switch to the owning sibling skill after workspace diagnosis.
+If the main question is about one specific artifact family, switch to the owning sibling skill after direct workspace inspection.
 ```
 
 ## Worked Parent Example
@@ -38,16 +38,16 @@ Good first questions:
 - Which Loom layer owns the next durable mutation or review step?
 
 Good next action:
-- Use workspace diagnosis first.
+- Use direct workspace inspection first.
 - Then switch to the owning sibling skill once the next step is clear.
 ```
 
 ## Example Implementation Helper Pattern
 
 ```bash
-scripts/workspace.py diagnose --json
-scripts/workspace.py status --json
-scripts/workspace.py scope --json --path "<target-path>"
+find .loom -maxdepth 2 -type d | sort
+rg -n '"status":\s*"(active|blocked|review_required|complete_pending_acceptance|draft|accepted|stale)"' .loom/{tickets,plans,critique,docs}
+git -C "<target-dir>" rev-parse --show-toplevel
 ```
 
 These commands are only one implementation of the larger control-plane procedure above. The important concept is:
@@ -56,11 +56,11 @@ These commands are only one implementation of the larger control-plane procedure
 - establish scope ownership
 - choose the next owning Loom layer
 
-The scripts help mechanize those steps, but they are not the whole meaning of the workspace layer.
+These queries help mechanize those steps, but they are not the whole meaning of the workspace layer.
 
 ## What A Good Outcome Looks Like
 
-- diagnose workspace reports structural readiness clearly
+- direct workspace inspection makes structural readiness clear
 - show status gives quick orientation by record kind and status
 - resolve scope assigns one owning repository or fails closed
 
@@ -89,7 +89,7 @@ It is bad because it skips the exact control-plane work that prevents scope mist
 ```text
 I do not yet know whether this is a ticket update, a critique pass, a docs update, or a planning task.
 
-First I should confirm the workspace is healthy enough to trust.
+First I should inspect the workspace directly enough to trust it.
 Then I should confirm which repository owns the target.
 Then I should choose the owning sibling skill and move into that artifact layer.
 ```

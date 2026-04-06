@@ -65,7 +65,6 @@ uvx ruff format path/to/file.py       # auto-format a single file
 
 ```bash
 skills/loom-tickets/scripts/tickets.py create ticket
-skills/loom-workspace/scripts/workspace.py diagnose --json
 ```
 
 ### Testing

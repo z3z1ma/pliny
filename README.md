@@ -100,17 +100,18 @@ For a cold start, the minimum useful reading path is:
 
 ### 3. Establish workspace trust first
 
-In a Loom-enabled workspace, the normal first move is to diagnose the workspace before trusting downstream records or packet work.
+In a Loom-enabled workspace, the normal first move is to inspect the workspace directly before trusting downstream records or packet work.
 
 From this repo, for example:
 
 ```bash
-skills/loom-workspace/scripts/workspace.py diagnose --json
+find .loom -maxdepth 2 -type d | sort
+rg -n '"status":\s*"(active|blocked|review_required|complete_pending_acceptance|draft|accepted|stale)"' .loom/{tickets,plans,critique,docs}
 ```
 
 ## Typical Workflow
 
-1. Diagnose workspace health and scope ownership.
+1. Inspect workspace structure and scope ownership.
 2. Read or create the owning ticket.
 3. Decide whether the work is local editing, validation, or bounded child execution.
 4. If execution should happen in a fresh context, compile a Ralph packet.
@@ -122,7 +123,7 @@ Loom keeps those layers separate on purpose: plans stay strategic, tickets stay 
 
 ## Bundled Workflow Areas
 
-- `loom-workspace` - workspace bootstrap, status, diagnosis, links, scope
+- `loom-workspace` - workspace bootstrap, status, links, scope
 - `loom-tickets` - ticket creation, linking, dependencies, verification
 - `loom-ralph` - packet scaffolding and post-run verification
 - `loom-critique` - review packets and durable critique records
@@ -140,16 +141,18 @@ The normal verification path is structural:
 ```bash
 uvx ruff check skills/*/scripts/*.py
 uvx ruff format --check skills/*/scripts/*.py
-skills/loom-workspace/scripts/workspace.py diagnose --json
+skills/loom-constitution/scripts/constitution.py diagnose --json
 skills/loom-tickets/scripts/tickets.py create ticket
 ```
 
 Useful repo-local commands:
 
 ```bash
-skills/loom-workspace/scripts/workspace.py status
-skills/loom-workspace/scripts/workspace.py diagnose --fix
-skills/loom-workspace/scripts/workspace.py scope README.md
+find .loom -maxdepth 2 -type d | sort
+rg -n '"status":\s*"(active|blocked|review_required|complete_pending_acceptance|draft|accepted|stale)"' .loom/{tickets,plans,critique,docs}
+mkdir -p .loom/{constitution,research,initiatives,specs,plans,tickets,critique,docs,runs,verification}
+git rev-parse --show-toplevel
+skills/loom-tickets/scripts/tickets.py create ticket
 skills/loom-ralph/scripts/ralph.py packet "ticket:0002" ralph --mode execution --style reference-first --allow-write-ref "ticket:0002"
 ```
 

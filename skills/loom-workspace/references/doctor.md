@@ -1,8 +1,8 @@
-# Workspace Doctor Reference
+# Workspace Health Reference
 
 ## Purpose
 
-Doctor is the parent agent's structural readiness check.
+Workspace health inspection is the parent agent's structural readiness check.
 
 Use this reference when the next question is whether the workspace is healthy enough to trust for further work.
 
@@ -37,12 +37,12 @@ A strong health check usually inspects:
 
 ## How To Interpret A Health Report
 
-Treat doctor output as a routing decision, not just a report.
+Treat workspace health output as a routing decision, not just a report.
 
-- if doctor is healthy, continue with the owning subsystem workflow
-- if doctor reports missing structure, repair that structure first
-- if doctor reports validation or link issues, fix those before trusting packetized work
-- if doctor reports scope problems, resolve scope before continuing
+- if direct inspection shows the workspace is healthy, continue with the owning subsystem workflow
+- if direct inspection shows missing structure, repair that structure first
+- if validation or link checks show issues, fix those before trusting packetized work
+- if ownership or scope is unclear, resolve scope before continuing
 
 Healthy output should change behavior. If the workspace is unhealthy, do not proceed as though the report were informational only.
 
@@ -56,6 +56,13 @@ Run a workspace health check:
 2. before a significant build or packet run
 3. after broad structural changes
 4. after assembling skills
+
+Native tools are usually enough:
+
+- use `find` to inspect the `.loom/`, `rules/`, and `skills/` trees directly
+- use `rg` to spot active work, malformed frontmatter, or suspiciously sparse record families
+- use `mkdir -p` to restore missing Loom directories
+- use targeted `rg` across `.loom/` when you need to reconcile refs before an important handoff or packet run
 
 ## Strong Workspace Health Output Characteristics
 
@@ -91,7 +98,7 @@ Good interpretation:
 This is a bad parent reaction:
 
 ```text
-The health report mentions broken links, but the task is probably unrelated, so I will continue with packet work anyway.
+Direct inspection shows broken links, but the task is probably unrelated, so I will continue with packet work anyway.
 ```
 
 Why this is bad:

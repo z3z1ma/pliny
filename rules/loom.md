@@ -133,7 +133,7 @@ When entering a repository for Loom work, resolve the workspace root before read
 1. search upward for the nearest directory containing both `.git/` and `.loom/`
 2. if no established workspace exists, allow the current working directory as the workspace root unless it is a non-root subdirectory of a git repository
 3. if `.loom/` does not exist or is incomplete, the workspace must be initialized before proceeding
-4. if `.loom/` exists but workspace health is uncertain, diagnose before trusting records for downstream work
+4. if `.loom/` exists but workspace health is uncertain, inspect it directly with native file tools before trusting records for downstream work
 
 If the current working directory is a non-root subdirectory of a git repository and no established workspace exists above it, fail closed.
 
@@ -191,7 +191,7 @@ Work through this sequence:
 1. identify whether the task has durable consequences
 2. resolve the workspace root explicitly
 3. if `.loom/` is missing or incomplete, bootstrap it before further Loom work
-4. if `.loom/` exists but health is uncertain, diagnose it
+4. if `.loom/` exists but health is uncertain, inspect it directly with native file tools and targeted checks
 5. read `constitution:main` and any clearly relevant constitutional records
 6. choose the owning skill and load it
 7. resolve repository and worktree scope explicitly

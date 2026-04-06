@@ -18,14 +18,17 @@ The parent starts with always-on doctrine and workspace health.
 
 Before choosing a task-specific path, the parent reads `constitution:main` so the next actions stay aligned with durable project policy.
 
-The parent treats Loom artifacts as ordinary files first. That means the normal order is: read the rules, read the relevant records directly, search the corpus directly, and use the workspace CLI only for deterministic health or scope checks.
+The parent treats Loom artifacts as ordinary files first. That means the normal order is: read the rules, read the relevant records directly, search the corpus directly, and use the workspace CLI only where deterministic scope or mutation behavior adds value.
 
 Typical actions:
 
 ```bash
-# Use the workspace CLI only for deterministic checks
-scripts/workspace.py diagnose --json
-scripts/workspace.py scope --json --path ".loom/constitution/constitution.md"
+# Inspect workspace structure directly
+find .loom -maxdepth 2 -type d | sort
+rg -n '"status":\s*"(active|blocked|review_required|complete_pending_acceptance|draft|accepted|stale)"' .loom/{tickets,plans,critique,docs}
+
+# Confirm repository ownership directly from the target path
+git rev-parse --show-toplevel
 
 # Read and search the actual corpus with native tools
 grep -R "<ticket-ref>" .loom

@@ -38,7 +38,7 @@ Good follow-up moves after status are often:
 - read the active ticket if work seems execution-heavy
 - read the active critique if review seems to be gating progress
 - read the governing spec or plan if behavior or sequencing questions dominate
-- run workspace diagnostics if the summary looks suspiciously sparse or inconsistent
+- inspect the workspace directly if the summary looks suspiciously sparse or inconsistent
 
 ## Worked Example
 
