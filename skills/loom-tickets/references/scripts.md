@@ -4,6 +4,34 @@ Use package-local script paths from this skill bundle.
 
 The examples below assume invocation through `scripts/tickets.py` inside `loom-tickets`.
 
+## Direct Ticket Queries
+
+The bundled CLI scaffolds, links, and verifies ticket artifacts. It does not provide a separate "list open tickets" command.
+
+When you need to inspect ticket state directly, query the frontmatter in `.loom/tickets/`.
+
+The CLI does provide first-class dependency management through `depends_on`.
+
+`open` is not a first-class stored status. Treat every non-terminal status as open:
+
+- `proposed`
+- `ready`
+- `active`
+- `blocked`
+- `review_required`
+- `complete_pending_acceptance`
+
+Terminal statuses are:
+
+- `closed`
+- `cancelled`
+
+Example:
+
+```bash
+rg -l '"status":\s*"(proposed|ready|active|blocked|review_required|complete_pending_acceptance)"' .loom/tickets
+```
+
 ## `scripts/tickets.py create`
 
 Purpose:
@@ -15,6 +43,7 @@ Arguments:
 
 - `slug`: ticket slug used in the generated filename
 - `--status`: optional ticket status override
+- `--depends-on`: repeatable upstream ticket dependency; accepts a ticket ref or an existing ticket path and stores the canonical `ticket:NNNN` ref in `depends_on`
 - `--link=KEY=REF` or `--link=kind:ref`: repeatable typed link assignment; plain refs infer their link key from the ref prefix
 - `--path`, `--repository`, `--workspace-scope`: scope controls
 
@@ -24,11 +53,37 @@ Example:
 scripts/tickets.py create inventory-shared-script-clis --status ready --path "repos/admin-ui/src/main.ts" --link "plan:bootstrap-cli-reference-docs"
 ```
 
+## `scripts/tickets.py depends-on`
+
+Purpose:
+
+- add or remove first-class upstream ticket dependencies in `depends_on`
+
+Arguments:
+
+- `target`: ticket ref or path to mutate
+- `--add`: repeatable upstream dependency to append
+- `--remove`: repeatable upstream dependency to remove
+
+Behavior:
+
+- dependencies are stored as canonical `ticket:NNNN` refs in frontmatter `depends_on`
+- the CLI resolves refs or ticket paths to existing tickets before writing
+- a ticket cannot depend on itself
+
+Example:
+
+```bash
+scripts/tickets.py depends-on "ticket:0005" --add "ticket:0003"
+```
+
 ## `scripts/tickets.py link`
 
 Purpose:
 
 - add or remove typed ticket links such as verification, critique, docs, or related work
+
+Use `depends-on` for hard upstream ticket prerequisites. Use `link` for non-dependency relationships.
 
 Arguments:
 

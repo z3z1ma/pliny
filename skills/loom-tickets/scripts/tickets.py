@@ -131,6 +131,52 @@ def parse_links(values: list[str]) -> dict[str, list[str]]:
     return links
 
 
+def normalize_ticket_ref(workspace: Path, target: str) -> str:
+    path = resolve_ticket_target(workspace, target)
+    try:
+        frontmatter, _body = parse_frontmatter(path.read_text())
+    except Exception as exc:
+        raise SystemExit(
+            f"Failed to parse dependency target {relative_to_workspace(path, workspace)}: {exc}"
+        ) from exc
+    record_id = frontmatter.get("id")
+    if not isinstance(record_id, str) or not re.match(r"^ticket:\d+$", record_id):
+        raise SystemExit(
+            f"Dependency target is not a valid ticket ref: {relative_to_workspace(path, workspace)}"
+        )
+    return record_id
+
+
+def normalize_ticket_refs(workspace: Path, values: list[str]) -> list[str]:
+    refs: list[str] = []
+    for value in values:
+        record_id = normalize_ticket_ref(workspace, value)
+        if record_id not in refs:
+            refs.append(record_id)
+    return refs
+
+
+def read_depends_on(frontmatter: dict, path: Path, workspace: Path) -> list[str]:
+    depends_on = frontmatter.get("depends_on", [])
+    if depends_on is None:
+        return []
+    if not isinstance(depends_on, list) or any(
+        not isinstance(item, str) for item in depends_on
+    ):
+        raise SystemExit(
+            f"Ticket has invalid depends_on field: {relative_to_workspace(path, workspace)}"
+        )
+    refs: list[str] = []
+    for item in depends_on:
+        if not re.match(r"^ticket:\d+$", item):
+            raise SystemExit(
+                f"Ticket has invalid dependency ref {item!r}: {relative_to_workspace(path, workspace)}"
+            )
+        if item not in refs:
+            refs.append(item)
+    return refs
+
+
 def ticket_directory(workspace: Path) -> Path:
     return workspace / ".loom/tickets"
 
@@ -176,12 +222,14 @@ def create_ticket(args: argparse.Namespace) -> int:
     number = next_ticket_number(workspace)
     slug = slugify(args.slug)
     path = ticket_directory(workspace) / f"ticket-{number:04d}-{slug}.md"
+    depends_on = normalize_ticket_refs(workspace, args.depends_on)
     frontmatter = {
         "id": f"ticket:{number:04d}",
         "kind": "ticket",
         "schema_version": 1,
         "status": args.status or "active",
         "repository_scope": resolve_scope(args, workspace),
+        "depends_on": depends_on,
         "links": parse_links(args.link),
         "created_at": utc_now(),
         "updated_at": utc_now(),
@@ -241,6 +289,33 @@ def link_ticket(args: argparse.Namespace) -> int:
     return 0
 
 
+def update_ticket_dependencies(args: argparse.Namespace) -> int:
+    if not args.add and not args.remove:
+        raise SystemExit("Provide at least one --add or --remove argument")
+    workspace = find_workspace_root()
+    path = resolve_ticket_target(workspace, args.target)
+    frontmatter, body = parse_frontmatter(path.read_text())
+    ticket_id = frontmatter.get("id")
+    if not isinstance(ticket_id, str) or not re.match(r"^ticket:\d+$", ticket_id):
+        raise SystemExit(
+            f"Ticket has invalid id: {relative_to_workspace(path, workspace)}"
+        )
+    depends_on = read_depends_on(frontmatter, path, workspace)
+    for record_id in normalize_ticket_refs(workspace, args.add):
+        if record_id == ticket_id:
+            raise SystemExit("A ticket cannot depend on itself")
+        if record_id not in depends_on:
+            depends_on.append(record_id)
+    remove_refs = set(normalize_ticket_refs(workspace, args.remove))
+    frontmatter["depends_on"] = [
+        record_id for record_id in depends_on if record_id not in remove_refs
+    ]
+    frontmatter["updated_at"] = utc_now()
+    path.write_text(render_markdown(frontmatter, body))
+    print(relative_to_workspace(path, workspace))
+    return 0
+
+
 def create_ticket_verification(args: argparse.Namespace) -> int:
     workspace = find_workspace_root()
     path = workspace / ".loom/verification" / f"{slugify(args.slug)}.md"
@@ -280,6 +355,7 @@ def main() -> int:
     create_parser = subparsers.add_parser("create", help="Create a ticket record")
     create_parser.add_argument("slug")
     create_parser.add_argument("--status")
+    create_parser.add_argument("--depends-on", action="append", default=[])
     create_parser.add_argument("--link", action="append", default=[])
     create_parser.add_argument("--path", action="append", default=[])
     create_parser.add_argument("--repository", action="append", default=[])
@@ -291,6 +367,15 @@ def main() -> int:
     link_parser.add_argument("--add", action="append", default=[])
     link_parser.add_argument("--remove", action="append", default=[])
     link_parser.set_defaults(func=link_ticket)
+
+    depends_on_parser = subparsers.add_parser(
+        "depends-on",
+        help="Add or remove first-class ticket dependencies",
+    )
+    depends_on_parser.add_argument("target")
+    depends_on_parser.add_argument("--add", action="append", default=[])
+    depends_on_parser.add_argument("--remove", action="append", default=[])
+    depends_on_parser.set_defaults(func=update_ticket_dependencies)
 
     verify_parser = subparsers.add_parser(
         "verify", help="Create ticket verification evidence"

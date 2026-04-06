@@ -34,6 +34,7 @@ Use the shortest command that still makes the relationship graph explicit:
 ```bash
 scripts/tickets.py create smoke-test-run \
   --status ready \
+  --depends-on ticket:0002 \
   --path "repos/admin-ui/src/main.ts" \
   --link initiative:bootstrap-markdown-first-loom \
   --link plan:bootstrap-repository \
@@ -42,6 +43,16 @@ scripts/tickets.py create smoke-test-run \
 ```
 
 `--link` accepts either `KEY=VALUE` or a record ref like `ticket:0004`, where the key is inferred from the ref prefix.
+
+`--depends-on` is for hard upstream ticket prerequisites. Keep explanatory prose in the ticket `Dependencies` section even when the frontmatter edge exists.
+
+## Example Dependency Mutation Command
+
+```bash
+scripts/tickets.py depends-on "ticket:0005" --add "ticket:0003"
+```
+
+Use this when the dependency edge should change without editing ticket frontmatter by hand.
 
 The generated ticket id stays in `ticket:0004` form. The filename uses a scope-derived prefix such as `<repo-short-slug>-0004-smoke-test-run.md`, `multi-0004-smoke-test-run.md`, or `wksp-0004-smoke-test-run.md`.
 

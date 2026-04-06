@@ -31,6 +31,7 @@ Use this skill to create, maintain, and close the durable record of live executi
 
 - ticket records
 - ticket status transitions
+- first-class upstream ticket dependencies via `depends_on`
 - the durable ledger view of execution work
 
 ## Ticket Posture
@@ -59,7 +60,7 @@ If another layer changes execution reality, the ticket should absorb that truth 
 1. create a new ticket only when the work is genuinely new or when you intentionally need a separate ledger entry
 2. if you create one, populate it immediately; a ticket shell is not a usable ledger record
 3. write the body so `Summary`, `Context`, `Scope`, `Acceptance Criteria`, `Implementation Plan`, `Verification`, `Documentation Disposition`, and `Journal` teach the next actor what to do
-4. add dependencies and related refs after the body is clear
+4. record hard upstream ticket prerequisites in frontmatter `depends_on`, then explain the blocking context in the `Dependencies` section or `Journal`
 5. create verification records as soon as execution produces durable evidence
 6. validate structure and link integrity before changing status or handing the ticket off
 7. after Ralph, critique, docs, or local execution changes reality, update the ticket immediately so it remains the single live ledger
@@ -70,7 +71,7 @@ If another layer changes execution reality, the ticket should absorb that truth 
 - use `proposed` when the work exists conceptually but is not yet execution-ready
 - use `ready` when the ticket is strong enough that another agent can begin without guessing
 - use `active` when execution is underway now
-- use `blocked` when progress depends on an unresolved external or upstream condition
+- use `blocked` when progress depends on an unresolved external or upstream condition; if another ticket is the blocker, keep that ticket in `depends_on`
 - use `review_required` when execution landed far enough that critique or acceptance review is now next
 - use `complete_pending_acceptance` when implementation and validation are substantially done but final acceptance or reconciliation remains
 - use `closed` only when the durable state really supports completion
@@ -82,8 +83,10 @@ Read `references/scripts.md` for the bundled CLI surface, including argument mea
 
 - `scripts/tickets.py create`: use when a new ticket record needs to be created in `.loom/tickets/`
 - `scripts/tickets.py create`: after running it, fill the body immediately; the command only scaffolds the record
+- `scripts/tickets.py create`: use `--depends-on ticket:0004` for hard upstream ticket prerequisites that should be machine-visible in frontmatter
 - `scripts/tickets.py create`: prefer shorthand links like `--link ticket:0004` when you already know the related refs
-- `scripts/tickets.py link`: use to add or remove typed refs such as dependencies, verification, critique, and docs links after the body is in place
+- `scripts/tickets.py link`: use to add or remove typed refs such as verification, critique, docs, and related work after the body is in place
+- `scripts/tickets.py depends-on`: use to add or remove first-class upstream ticket dependencies without editing frontmatter manually
 - `scripts/tickets.py verify`: use as soon as the ticket gains real execution evidence that should participate in the durable graph
 
 ## Neighboring Layer Boundaries

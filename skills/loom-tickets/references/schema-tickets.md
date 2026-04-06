@@ -52,10 +52,24 @@ Tickets should preserve:
 - `kind: ticket`
 - truthful `status`
 - `repository_scope`
+- `depends_on` for hard upstream ticket prerequisites that should be machine-visible
 - links to governing plan, spec, initiative, related tickets, critique, docs, and verification where relevant
 - timestamps that move when the durable execution state changes
 
 Ticket ids remain stable as `ticket:<number>`. Ticket filenames may include a repository-derived prefix such as `<repo-short-slug>-0001-<slug>.md`.
+
+## Dependency Semantics
+
+Use first-class `depends_on` frontmatter when another ticket is a real upstream prerequisite for this one.
+
+Use the prose `Dependencies` section and `Journal` to explain why the dependency matters, what is blocked, and what evidence or handoff is still needed.
+
+Use frontmatter `links.ticket` for related ticket references that are informative but not strict prerequisites.
+
+If a ticket is blocked by another ticket, prefer both:
+
+- `status: blocked`
+- the blocking ticket ref in `depends_on`
 
 ## Ticket Writing Standard
 
