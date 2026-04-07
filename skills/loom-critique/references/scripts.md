@@ -51,11 +51,18 @@ scripts/critique.py create review-ticket-0002 --link ticket=ticket:0002
 Purpose:
 
 - scaffold a critique packet record under `.loom/runs/critique/`
+- pair with a parent-supplied launch prompt that tells the child what review lens or emphasis to apply
 
 Example:
 
 ```bash
 scripts/critique.py packet "ticket:0002" critique --mode review-only --style reference-first
+```
+
+Common pattern after packet creation:
+
+```text
+Run a bounded critique from the supplied packet. Use a verifier-style lens: focus on whether the ticket's claims are actually supported by the cited evidence, and call out where confidence is stronger than the proof warrants.
 ```
 
 ## `scripts/critique.py link`

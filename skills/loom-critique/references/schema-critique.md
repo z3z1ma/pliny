@@ -4,6 +4,8 @@
 
 Critique records capture one bounded adversarial review in a way that can be resumed, inspected, and linked to follow-up work.
 
+The durable record does not need a special subtype for every critique lens. The parent may steer one critique pass through the launch prompt, and that chosen emphasis should be reflected in the record's review question, focus areas, evidence reviewed, and verdict reasoning.
+
 ## A Strong Critique Record Answers
 
 1. what was reviewed
@@ -30,7 +32,7 @@ Critique records should preserve:
 
 - `Target Under Review`: identify the exact artifact or artifact set
 - `Review Question`: state the question the critique is answering
-- `Focus Areas`: name the dimensions the review emphasized
+- `Focus Areas`: name the dimensions the review emphasized, including any parent-directed lens such as devil's-advocate pressure testing or verifier-style evidence scrutiny when that emphasis materially shaped the review
 - `Relevant Context`: include only the context that changes interpretation of the findings
 - `Evidence Reviewed`: say what was actually read or checked
 - `Verdict`: classify the reviewed target in plain language
@@ -40,11 +42,14 @@ Critique records should preserve:
 
 The body should make it easy for a later reader to tell exactly what was reviewed, what evidence was used, and why the verdict makes sense.
 
+If the parent supplied a specific critique emphasis in the launch prompt, the record should preserve that emphasis in the body rather than leaving it implicit in transient invocation history.
+
 ## A Strong Critique Run Should Preserve
 
 - what packet or evidence set was used
 - whether the review was performed from a fresh context
 - what broader project context materially affected the verdict
+- what parent-directed review emphasis materially affected the verdict
 - what verification status the reviewer relied on
 - what residual uncertainty remains
 

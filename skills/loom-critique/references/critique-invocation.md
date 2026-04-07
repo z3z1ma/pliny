@@ -37,18 +37,48 @@ If the review question is vague, fix that before launch. Broad critique prompts 
 
 Use a short prompt that tells the child what review job to perform.
 
+The parent-supplied `{{ prompt }}` is the main place to specify critique emphasis. Use it to tell the child what lens to apply while keeping the packet as the bounded target, scope, and evidence contract.
+
 Recommended prompt template:
 
 ```text
-Run a bounded critique from the supplied packet. Answer the review question using the listed evidence, classify findings by severity and confidence, summarize residual risk, and recommend the next action the parent should take.
+Run a bounded critique from the supplied packet. Follow the packet contract and review the target using the emphasis below. Answer the review question using the listed evidence, classify findings by severity and confidence, summarize residual risk, and recommend the next action the parent should take.
 ```
 
 Strong prompt qualities:
 
 - names the review question explicitly
+- names the emphasis explicitly
 - tells the child to use the packet evidence set rather than broadening scope casually
 - asks for verdict, findings, residual risk, and next action
 - does not ask the child to both implement and critique in one pass
+
+Good emphasis examples:
+
+- devil's-advocate pressure test: assume the target may hide subtle flaws and look for unsupported optimism, hidden failure modes, and missing edge-case handling
+- verifier-style review: test whether the claimed conclusions are actually supported by the cited evidence and note where confidence is too strong for the available proof
+- focused review: spend most of the review budget on one area such as tests, packet boundaries, architectural drift, or acceptance readiness
+
+Prompt responsibility:
+
+- the packet carries the bounded contract: target, scope, evidence set, and output expectations
+- the prompt carries the dynamic review lens: what to stress, what to doubt most, and where to spend the child's attention
+
+Keep the prompt bounded. It may sharpen the review, but it should not silently widen scope, override the packet, or pre-decide the verdict.
+
+Example prompt patterns:
+
+```text
+Run a bounded critique from the supplied packet. Use a devil's-advocate lens: assume the target may still be wrong even if it looks plausible, and spend extra attention on hidden failure modes, edge cases, and unsupported claims. Stay inside the listed evidence and return verdict, findings, residual risks, and next action.
+```
+
+```text
+Run a bounded critique from the supplied packet. Use a verifier-style lens: focus on whether the target's claims are actually supported by the cited evidence, whether confidence is overstated, and what proof is still missing. Stay inside the listed evidence and return verdict, findings, residual risks, and next action.
+```
+
+```text
+Run a bounded critique from the supplied packet. Focus most of the review on packet boundary clarity and follow-up readiness. Stay inside the listed evidence and return verdict, findings, residual risks, and next action.
+```
 
 ## Child Procedure
 
@@ -59,6 +89,8 @@ Before making judgments:
 - look for bugs, unsafe assumptions, missing tests, edge cases, architectural drift, and unsupported claims
 
 The reviewer should assume plausible work may still be wrong and should prefer evidence-backed concerns over impressionistic disagreement.
+
+When the parent supplies an emphasis in the prompt, the child should follow that emphasis without treating it as permission to broaden scope or skip the normal critique quality bar.
 
 When done:
 
@@ -120,5 +152,6 @@ Review this and let me know what you think.
 Why this is bad:
 
 - the review question is missing
+- the review emphasis is missing
 - the evidence boundary is missing
 - the child is likely to produce broad, shallow commentary instead of a durable bounded review

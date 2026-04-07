@@ -32,6 +32,26 @@ Focus Areas
 - parent reconciliation readiness
 ```
 
+## Example Parent Prompt Lenses
+
+Default adversarial or devil's-advocate prompt:
+
+```text
+Run a bounded critique from the supplied packet. Use a devil's-advocate lens: assume the target may still be wrong even if it looks plausible, and look for hidden flaws, unsupported assumptions, and unhandled edge cases. Stay inside the listed evidence and return verdict, findings, residual risks, and next action.
+```
+
+Verifier-style prompt:
+
+```text
+Run a bounded critique from the supplied packet. Use a verifier-style lens: focus on whether the target's claims are actually supported by the cited evidence, whether confidence is overstated, and what proof is still missing. Stay inside the listed evidence and return verdict, findings, residual risks, and next action.
+```
+
+Focused prompt:
+
+```text
+Run a bounded critique from the supplied packet. Spend most of the review budget on packet boundary clarity, write restrictions, and whether the current evidence is strong enough to justify acceptance. Stay inside the listed evidence and return verdict, findings, residual risks, and next action.
+```
+
 ## Example Durable Finding
 
 ```text
@@ -54,7 +74,7 @@ Residual Risks
 
 ## Why This Example Matters
 
-It shows critique as a bounded review protocol that sharpens acceptance quality instead of becoming a second execution ledger.
+It shows critique as a bounded review protocol that sharpens acceptance quality instead of becoming a second execution ledger, while still letting the parent choose the review lens through the launch prompt.
 
 ## Weak Example
 

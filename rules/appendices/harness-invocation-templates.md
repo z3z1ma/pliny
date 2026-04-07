@@ -150,6 +150,9 @@ They should name:
 - the subsystem
 - the target
 - the kind of work to perform
+- any important emphasis or lens the child should apply
 - the output contract the child must satisfy
 
 The prompt should not try to restate the entire protocol if the packet already contains that context.
+
+When a subsystem supports parent-directed emphasis, such as critique, use the prompt to sharpen the child's attention without widening scope or overriding the packet contract.
