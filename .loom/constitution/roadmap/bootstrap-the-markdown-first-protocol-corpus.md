@@ -1,92 +1,128 @@
 ---
-{
-  "created_at": "2026-04-01T17:45:00Z",
-  "id": "roadmap:bootstrap-the-markdown-first-protocol-corpus",
-  "kind": "roadmap",
-  "links": {
-    "decision": [
-      "decision:0001",
-      "decision:0002",
-      "decision:0003",
-      "decision:0004"
-    ]
-  },
-  "repository_scope": {
-    "kind": "repository",
-    "repository_id": "repo:root"
-  },
-  "schema_version": 1,
-  "status": "active",
-  "updated_at": "2026-04-06T06:53:44Z"
-}
+id: roadmap:bootstrap-the-markdown-first-protocol-corpus
+kind: roadmap
+status: active
+created_at: 2026-04-01T17:45:00Z
+updated_at: 2026-04-17T23:48:34Z
+scope:
+  kind: workspace
+links:
+  decision:
+    - decision:0001
+    - decision:0002
+    - decision:0003
+    - decision:0004
 ---
 
 # Strategic Theme
 
-Turn this repository from a strong source architecture memo plus first-pass corpus into an operational, self-validating Loom protocol pack that another agent can enter cold and use without transcript archaeology.
+Turn this repository into an operational Loom protocol pack that another agent
+can enter cold and use without transcript archaeology, helper-specific runtime
+assumptions, or hidden command wrappers.
 
 # Why Now
 
-The repository already contains the core rule set, appendix material, the current skill bundle, committed standalone skill-local CLIs, and an initial canonical record surface.
+The product-level rewrite has already changed the protocol's public shape:
+skills now teach templates and native recipes instead of shipping Python
+scripts, YAML frontmatter replaces helper-oriented JSON frontmatter, and
+`wiki`, `packets`, and `evidence` replace `docs`, `runs`, and `verification` as
+the intended durable vocabulary.
 
-What it does not yet have is the same depth of durable canonical state and real end-to-end workflow proof across the major Loom layers. This roadmap keeps the next stage focused on that gap rather than on speculative platform growth.
+What the repository does not yet have is full constitutional and dogfooded
+record reconciliation to that rewrite. Some in-repo records and wrappers still
+carry the old vocabulary or structure. This roadmap keeps the next stage
+focused on that reconciliation and on real workflow proof rather than on
+speculative platform growth.
 
 Current shipped state at the time of this roadmap update:
 
-- core doctrine files under `rules/` plus appendix support material under `rules/appendices/`
-- flat subsystem skills and auxiliary authoring skills under `skills/`
-- committed standalone `skills/*/scripts/*.py` files inside the skill bundle
-- canonical `.loom/constitution/` records plus one smoke-test ticket under `.loom/tickets/`
-- no populated canonical research, initiative, spec, plan, critique, docs, run, or verification record families yet
+- core doctrine files under `rules/` plus appendix support material under
+  `rules/appendices/`
+- flat subsystem skills and auxiliary authoring skills under `skills/`, each
+  carrying references and templates
+- no shipped `skills/*/scripts/*.py` files in the core Loom bundle
+- top-level docs now describe YAML frontmatter, template-first record creation,
+  and a native-tool operating posture
+- optional harness-specific wrappers may still exist in-repo, but they are not
+  part of the protocol core
+- parts of the canonical `.loom/` dogfooding state still carry legacy
+  `docs`/`runs`/`verification` naming and older frontmatter shape and should be
+  reconciled
 
 # Focus Areas
 
-- keep this repository as the source tree for the portable Markdown-first Loom bundle
-- maintain a populated constitutional layer grounded in `CONSTITUTION.md` and the current repository shape
-- deepen canonical examples and durable records across the main Loom layers as real work appears
-- exercise real Ralph, critique, and docs packet flows against the current helper layer
-- improve validation, scope, and link integrity helpers only when they mechanize already-published rules
-- make the current state legible enough that future agents can distinguish between shipped architecture, durable policy, and still-missing operational proof
+- keep this repository as the source tree for the portable Markdown-first Loom
+  bundle
+- maintain a populated constitutional layer grounded in the rewrite's actual
+  protocol shape
+- deepen canonical examples and durable records across the main Loom layers as
+  real work appears
+- reconcile legacy constitutional and dogfooded record vocabulary to
+  `wiki`/`packets`/`evidence` and YAML frontmatter
+- exercise real Ralph, critique, and wiki packet flows through templates and
+  native Unix recipes rather than helper CLIs
+- improve validation, scope, and link integrity guidance only when it
+  mechanizes already-published rules
+- make the current state legible enough that future agents can distinguish
+  between shipped architecture, durable policy, and still-missing operational
+  proof
 
 # Milestones
 
 1. Constitutional baseline
-   Update `constitution:main` and seed durable decision and roadmap records that capture the locked architectural direction already reflected in the repository.
+   Update `constitution:main`, the decision records, and the roadmap so they
+   capture the template-first, native-tool rewrite explicitly.
 
-2. Canonical record depth
-   Add stronger durable examples and real records across the `.loom/` subtrees so the record graph stops being mostly aspirational.
+2. Dogfooded record reconciliation
+   Reconcile canonical `.loom/` examples and support records that still use the
+   old vocabulary or frontmatter shape so the repository stops teaching two
+   competing models.
 
 3. Fresh-context workflow proof
-   Run real bounded Ralph, critique, and docs flows that exercise packet compilation, child execution, verification, and parent reconciliation.
+   Run real bounded Ralph, critique, and wiki flows that exercise packet
+   authoring, child execution, evidence capture, and parent reconciliation.
 
 4. Acceptance hardening
-   Tighten critique, docs, freshness, and validation behavior using evidence from real flows instead of only from design intuition.
+   Tighten critique, wiki, freshness, and validation behavior using evidence
+   from real flows instead of only from design intuition.
 
 5. Optional accelerators
-   Only after repeated real use, evaluate whether indexes or adapters earn their added complexity without becoming hidden ontology.
+   Only after repeated real use, evaluate whether wrappers, indexes, or adapters
+   earn their added complexity without becoming hidden ontology.
 
 # Sequencing Assumptions
 
-- do not treat speculative adapters or packaging growth as the next milestone while the canonical record graph is still thin
+- do not treat speculative adapters or packaging growth as the next milestone
+  while the canonical record graph is still thin
 - use real packetized workflows to shape later validation and acceptance rules
-- keep the protocol corpus visible and coherent before adding speed or convenience layers
+- keep the protocol corpus visible and coherent before adding speed or
+  convenience layers
 
 # Downstream Work
 
-No downstream initiative, spec, or plan graph exists yet beneath this roadmap.
+An initiative/spec/plan/ticket chain now exists beneath this roadmap, but parts
+of that graph still reflect pre-rewrite assumptions about command surfaces and
+legacy vocabulary.
 
-`ticket:14eh8c66` exists as a smoke-test ticket, but it is a workflow example rather than the delivery vehicle for this roadmap. Real roadmap progress should eventually be expressed through linked specs, plans, research notes, and execution tickets.
+That graph should be reconciled before it is treated as the current durable
+operator path.
 
 The most important still-missing canonical depth is in:
 
 - research records that capture option analysis and experiments
 - initiative, spec, and plan records that bind strategic direction to execution
-- critique, docs, runs, and verification artifacts produced by real packetized workflows
+- critique, wiki, packets, and evidence artifacts produced by real packetized
+  workflows
 
 # Status Summary
 
-The repository is past the earliest bootstrap stage: doctrine, skill-map, schema-reference, packet, and helper surfaces are substantially present in source form, including the committed standalone skill-local CLIs.
+The repository is past the earliest bootstrap stage: doctrine, skill-map,
+template, query, and packet surfaces are present in source form, and the core
+package no longer depends on shipped Python helpers.
 
-The work is still early in broader canonical record population and in real end-to-end execution proof. The constitutional layer now captures the major architectural judgment frames more clearly, but the broader record graph is still sparse.
+The remaining work is to reconcile the constitutional and dogfooded record
+layers fully to that rewrite and to prove the main workflows end to end with
+real packet and evidence artifacts.
 
-This roadmap is therefore active and focused on turning a strong static corpus into a proven operational one.
+This roadmap is therefore active and focused on turning a rewritten static
+corpus into a coherent and proven operational one.
