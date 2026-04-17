@@ -1,180 +1,106 @@
-# Agent Loom
+# Loom — Markdown-Native Protocol
 
-Agent Loom is a harness-agnostic, Markdown-first protocol for durable AI work.
+Loom is a harness-agnostic protocol for long-horizon AI work.
 
-This repository does not ship a conventional app, service, or framework runtime. It ships a reusable bundle of `rules/`, `skills/`, `commands/`, and standalone skill-local Python helpers that another project can copy into its own harness surface and use as an operating system for long-horizon agent work.
+It treats the filesystem as the interface, Markdown as the durable medium, and fresh-context packet execution as the default way to do bounded implementation, review, and knowledge-compilation work.
 
-## What This Repository Ships
+This package is intentionally **not** a runtime, service, daemon, MCP, or product CLI.
 
-The product in this repo is the top-level:
+It ships:
 
-- `rules/` - always-on Loom doctrine
-- `skills/` - self-contained task-specific operating bundles
-- `commands/` - slash-command prompt definitions
-- `skills/*/scripts/*.py` - standalone, standard-library-only helper CLIs shipped directly inside each skill
+- always-on `rules/` that teach the model how Loom thinks and how Loom must be used
+- on-demand `skills/` that teach the model how to operate each subsystem in detail
+- Markdown templates and query recipes instead of bundled Python helpers
+- a cohesive replacement for the old docs layer: **Loom Wiki**
 
-Today that bundle includes:
+## The Core Shape
 
-- 16 skills
-- 13 bundled Python CLIs
-- 2 slash commands
+Loom has two loops.
 
-End users typically copy those directories into their own project under `.opencode/` or another harness-specific location.
+### Outer loop
 
-## What Loom Is
+The outer loop scopes and re-scopes the work.
 
-Loom treats the filesystem as the interface.
+Its normal progression is:
 
-- Markdown files hold durable project state
-- tickets are the live execution ledger
-- packets are bounded handoff contracts for fresh-context execution
-- critique and docs stay separate from execution truth
-- helper scripts only mechanize structural work that benefits from determinism
+`constitution -> initiative -> research/spec -> plan -> ticket`
 
-The point is to let another agent enter a repository cold, read the visible corpus, and continue safely without reconstructing hidden norms from chat history or a private runtime.
+The four most important binding layers are:
 
-## What Loom Is Not
+`constitution -> initiative -> plan -> ticket`
 
-- not a monolithic `loom` CLI
-- not a long-running orchestration service
-- not a database-backed project manager
-- not a normal app or library with a runtime and test suite
+Research and specs are optional amplifiers. They tighten evidence and behavior when the work needs them, but they do not replace the backbone.
 
-Verification here is primarily structural: lint the shipped CLIs, validate record structure, validate links, and keep the Markdown corpus truthful.
+### Inner loop
 
-## Repository Structure
+The inner loop is **Ralph**.
+
+Ralph is one bounded packet, one fresh worker, one iteration, one reconciliation pass.
+
+A parent agent compiles a packet, launches or delegates one fresh-context execution step, receives a bounded outcome, merges truth back into the ticket, and either continues, stops, escalates, or routes into critique/wiki.
+
+Critique and Wiki are Ralph variants with different output contracts.
+
+## Repository Layout
 
 ```text
 .
-├── rules/       # always-on doctrine and appendices
-├── skills/      # skill bundles with SKILL.md, references/, scripts/
-├── commands/    # slash-command prompt definitions
-├── .loom/       # dogfooding records, packets, verification, memory
-├── .opencode/   # local consumption surface used by this repo itself
-├── AGENTS.md    # repository-specific contributor guidance
-└── README.md
+├── README.md
+├── INSTALL.md
+├── ARCHITECTURE.md
+├── RULES.md
+├── SKILLS.md
+├── MIGRATION.md
+├── rules/
+└── skills/
 ```
 
-Important boundary:
+Inside a Loom-enabled project, the canonical runtime tree is expected to look roughly like this:
 
-- `rules/`, `skills/`, and `commands/` are the maintained product source
-- `.loom/` and `.opencode/` are dogfooding and consumption artifacts, not the source of truth for the shipped product
-
-## Core Surfaces
-
-If you are new to the repo, start here:
-
-- `rules/loom.md` - core Loom doctrine and operating order
-- `rules/layers.md` - artifact boundaries and truth ownership
-- `skills/loom-workspace/` - workspace discovery, diagnostics, scope resolution
-- `skills/loom-tickets/` - canonical execution ledger workflow
-- `skills/loom-ralph/` - bounded packetized fresh-context execution
-
-Other included skills cover specs, plans, research, initiatives, critique, docs, constitution maintenance, and the memory subsystem.
-
-The current slash-command surface is:
-
-- `commands/loom-memory-reflect.md`
-- `commands/loom-memory-housekeeping.md`
-
-## Quickstart
-
-### 1. Copy the Loom bundle into your project
-
-Example:
-
-```bash
-mkdir -p .opencode
-cp -R /path/to/agent-loom/rules /path/to/agent-loom/skills /path/to/agent-loom/commands .opencode/
+```text
+.loom/
+├── constitution/
+│   ├── constitution.md
+│   ├── decisions/
+│   └── roadmap/
+├── initiatives/
+├── research/
+├── specs/
+├── plans/
+├── tickets/
+├── critique/
+├── wiki/
+├── packets/
+│   ├── ralph/
+│   ├── critique/
+│   └── wiki/
+├── evidence/
+└── memory/        # optional
 ```
 
-That gives your project the always-on doctrine, skill bundle, slash commands, and each skill's standalone helper scripts.
+## Installation Model
 
-### 2. Read the doctrine in order
+The intended installation pattern is simple:
 
-For a cold start, the minimum useful reading path is:
+1. load `rules/*.md` as always-on context, in order
+2. keep `SKILLS.md` or the skill names/descriptions always visible
+3. hydrate the full `skills/<name>/SKILL.md` only when that skill is relevant
+4. let the model read templates and references from that skill as needed
 
-1. `rules/loom.md`
-2. `constitution:main` in your workspace
-3. the skill that owns the next durable action
+Read `INSTALL.md` for the recommended adoption path.
 
-### 3. Establish workspace trust first
+## Design Goal
 
-In a Loom-enabled workspace, the normal first move is to inspect the workspace directly before trusting downstream records or packet work.
+A capable agent should be able to enter a Loom workspace cold and do all of the following without hidden runtime magic:
 
-From this repo, for example:
+- determine what layer owns the next truth change
+- find the right files with native tools
+- scaffold or edit the right record from Markdown templates
+- compile a Ralph packet as a Markdown contract
+- launch a fresh worker through whatever harness is available
+- reconcile the result back into ticket truth
+- run adversarial critique
+- promote accepted understanding into the wiki
+- leave a durable, searchable corpus behind
 
-```bash
-find .loom -maxdepth 2 -type d | sort
-rg -n '"status":\s*"(active|blocked|review_required|complete_pending_acceptance|draft|accepted|stale)"' .loom/{tickets,plans,critique,docs}
-```
-
-## Typical Workflow
-
-1. Inspect workspace structure and scope ownership.
-2. Read or create the owning ticket.
-3. Decide whether the work is local editing, validation, or bounded child execution.
-4. If execution should happen in a fresh context, compile a Ralph packet.
-5. Run the bounded step.
-6. Reconcile the result back into the ticket ledger.
-7. Run critique or docs follow-through when the change class calls for it.
-
-Loom keeps those layers separate on purpose: plans stay strategic, tickets stay operational, critique stays adversarial, docs stay explanatory.
-
-## Bundled Workflow Areas
-
-- `loom-workspace` - workspace bootstrap, status, links, scope
-- `loom-tickets` - ticket creation, linking, dependencies, verification
-- `loom-ralph` - packet scaffolding and post-run verification
-- `loom-critique` - review packets and durable critique records
-- `loom-docs` - durable explanatory docs and docs packets
-- `loom-specs`, `loom-plans`, `loom-research`, `loom-initiatives`, `loom-constitution` - canonical record maintenance
-- `loom-memory-context`, `loom-memory-reflect`, `loom-memory-housekeeping` - optional memory subsystem operations
-- `loom-explainer`, `loom-humanizer`, `loom-skill-authoring` - supporting authoring skills
-
-## Verification And Development
-
-There is no traditional test suite in this repo.
-
-The normal verification path is structural:
-
-```bash
-uvx ruff check skills/*/scripts/*.py
-uvx ruff format --check skills/*/scripts/*.py
-skills/loom-constitution/scripts/constitution.py diagnose --json
-skills/loom-tickets/scripts/tickets.py create ticket
-```
-
-Useful repo-local commands:
-
-```bash
-find .loom -maxdepth 2 -type d | sort
-rg -n '"status":\s*"(active|blocked|review_required|complete_pending_acceptance|draft|accepted|stale)"' .loom/{tickets,plans,critique,docs}
-mkdir -p .loom/{constitution,research,initiatives,specs,plans,tickets,critique,docs,runs,verification}
-git rev-parse --show-toplevel
-skills/loom-tickets/scripts/tickets.py create ticket
-skills/loom-ralph/scripts/ralph.py packet "ticket:z8h0g58e" ralph --mode execution --style reference-first --allow-write-ref "ticket:z8h0g58e"
-```
-
-## Contributing
-
-If you are changing the product, treat these as the source surfaces:
-
-- `rules/`
-- `skills/`
-- `commands/`
-
-Important repo rules:
-
-- edit skill-local CLI behavior directly in `skills/*/scripts/*.py`
-- keep shipped skills self-contained
-- do not treat `.loom/` or `.opencode/` as product source of truth
-- prefer small, direct changes over scaffolding or hidden abstraction
-
-Read `AGENTS.md` before making non-trivial changes. It contains the repository's authoritative guidance on structure, style, validation, and cross-surface consistency.
-
-## Why This Repo Exists
-
-The goal is to make Loom portable, inspectable, and usable across harnesses.
-
-Instead of hiding the system inside one runtime, Agent Loom puts the operating model in visible Markdown doctrine, skill bundles, canonical records, and thin deterministic helpers. The durable asset is the protocol and work discipline, not a single implementation shell.
+That is Loom.
