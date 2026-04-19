@@ -14,8 +14,8 @@
     "repository_id": "repo:root"
   },
   "schema_version": 1,
-  "status": "complete_pending_acceptance",
-  "updated_at": "2026-04-08T16:22:11Z"
+  "status": "closed",
+  "updated_at": "2026-04-19T23:34:12Z"
 }
 ---
 
@@ -163,3 +163,4 @@ prefix as `YYYYMMDD-<token>-<slug>.md`.
 - 2026-04-08: verified the shipped scripts with Ruff and smoke-tested ticket
   creation, linking, and dependency mutation in a disposable temp workspace;
   moved the ticket to `complete_pending_acceptance`.
+- 2026-04-19: closed per user confirmation that this ticket is completed.

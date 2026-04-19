@@ -125,7 +125,7 @@ parts = [
     "This block is managed by the Loom bundle's `make install` target.",
     f"Rules directory: `{rules_dir}`.",
     f"Skills directory: `{skills_dir}`.",
-    f"Commands directory: `{commands_dir}`.",
+    f"Command surface directory: `{commands_dir}`.",
 ]
 
 if extra_note:
@@ -183,7 +183,9 @@ adapt_commands() {
   mkdir -p "$dest_dir"
   "$python_bin" - "$mode" "$src_dir" "$dest_dir" <<'PY'
 from pathlib import Path
+import json
 import re
+import shutil
 import sys
 
 mode = sys.argv[1]
@@ -210,6 +212,31 @@ def parse_command(path: Path):
         "body": body.lstrip(),
     }
 
+def codex_command_skill_name(command_name: str) -> str:
+    if command_name.startswith("loom-"):
+        return "loom-command-" + command_name[len("loom-"):]
+    return command_name + "-command"
+
+def yaml_scalar(value: str) -> str:
+    return json.dumps(value)
+
+def adapt_codex_command_body(body: str, source_name: str) -> str:
+    adapted = body.replace("`$ARGUMENTS`", "`<invocation request>`")
+    adapted = adapted.replace("$ARGUMENTS", "the invocation request")
+    adapted = re.sub(
+        r"/(loom-[a-z0-9-]+)",
+        lambda match: "$" + codex_command_skill_name(match.group(1)),
+        adapted,
+    )
+    adapted = re.sub(
+        r"^#\s+\$" + re.escape(codex_command_skill_name(source_name)) + r"\s*\n+",
+        "",
+        adapted,
+        count=1,
+        flags=re.M,
+    )
+    return adapted.strip()
+
 for path in sorted(src_dir.glob("*.md")):
     data = parse_command(path)
     name = data["name"]
@@ -217,18 +244,54 @@ for path in sorted(src_dir.glob("*.md")):
     arguments = data["arguments"]
     body = data["body"].rstrip() + "\n"
 
-    if mode == "codex-prompt":
-        content = "\n".join([
+    if mode == "codex-skill":
+        skill_name = codex_command_skill_name(name)
+        skill_dir = dest_dir / skill_name
+        if skill_dir.exists():
+            shutil.rmtree(skill_dir)
+        (skill_dir / "agents").mkdir(parents=True)
+
+        skill_description = (
+            f"Explicit user-invoked Loom command adapter for /{name}. "
+            f"Invoke as ${skill_name}; implicit invocation is disabled."
+        )
+        adapted_body = adapt_codex_command_body(body, name)
+        argument_note = arguments or "No formal argument hint was declared."
+
+        skill_content = "\n".join([
             "---",
-            f'description: "{description.replace(chr(34), chr(92) + chr(34))}"',
-            f'argument-hint: "{arguments.replace(chr(34), chr(92) + chr(34))}"' if arguments else None,
+            f"name: {skill_name}",
+            f"description: {yaml_scalar(skill_description)}",
+            "metadata:",
+            "  loom_command_adapter: true",
+            f"  loom_source_command: {yaml_scalar(name)}",
+            f"  loom_command_arguments: {yaml_scalar(arguments)}",
             "---",
             "",
-            body.rstrip(),
+            f"# ${skill_name}",
+            "",
+            f"This skill is the Codex command adapter for `/{name}`.",
+            "",
+            "Use the user's current request, including any text after the skill mention, as `<invocation request>`.",
+            f"Original argument hint: `{argument_note}`",
+            "",
+            "Run this workflow only when the user explicitly invokes this skill or asks for this exact command adapter.",
+            "",
+            adapted_body,
             "",
         ])
-        content = "\n".join(line for line in content.splitlines() if line is not None)
-        (dest_dir / f"{name}.md").write_text(content)
+        (skill_dir / "SKILL.md").write_text(skill_content)
+
+        openai_yaml = "\n".join([
+            "interface:",
+            f"  display_name: {yaml_scalar('/' + name)}",
+            f"  short_description: {yaml_scalar(description)}",
+            f"  default_prompt: {yaml_scalar('$' + skill_name + ' ')}",
+            "policy:",
+            "  allow_implicit_invocation: false",
+            "",
+        ])
+        (skill_dir / "agents" / "openai.yaml").write_text(openai_yaml)
     elif mode == "gemini-command":
         prompt = body.replace("$ARGUMENTS", "{{args}}")
         content = "\n".join([
@@ -253,6 +316,25 @@ remove_codex_prompts() {
     name="${file##*/}"
     name="${name%.md}"
     rm -f "$dest_dir/$name.md"
+  done
+  rmdir "$dest_dir" 2>/dev/null || true
+}
+
+remove_codex_command_skills() {
+  local src_dir="$1"
+  local dest_dir="$2"
+  local file name suffix skill_name
+  for file in "$src_dir"/*.md; do
+    [ -f "$file" ] || continue
+    name="${file##*/}"
+    name="${name%.md}"
+    if [[ "$name" == loom-* ]]; then
+      suffix="${name#loom-}"
+      skill_name="loom-command-$suffix"
+    else
+      skill_name="$name-command"
+    fi
+    rm -rf "$dest_dir/$skill_name"
   done
   rmdir "$dest_dir" 2>/dev/null || true
 }
@@ -370,10 +452,12 @@ handle_codex() {
   if [ "$action" = "install" ]; then
     copy_rules "$root/rules" "$rules_dir"
     copy_skill_dirs "$root/skills" "$skills_dir"
-    adapt_commands "codex-prompt" "$root/commands" "$prompts_dir"
-    upsert_managed_block "$base/AGENTS.md" "$block_name" "Codex" "$rules_dir" "$skills_dir" "$prompts_dir" "Codex loads global instructions from ~/.codex/AGENTS.md, global skills from ~/.agents/skills/, and explicit command prompts from ~/.codex/prompts/*.md. Loom rules are mirrored into this managed block because Codex's ~/.codex/rules/ surface is for shell execution policy, not Markdown instructions."
+    remove_codex_prompts "$root/commands" "$prompts_dir"
+    adapt_commands "codex-skill" "$root/commands" "$skills_dir"
+    upsert_managed_block "$base/AGENTS.md" "$block_name" "Codex" "$rules_dir" "$skills_dir" "$skills_dir" "Codex loads global instructions from ~/.codex/AGENTS.md and global skills from ~/.agents/skills/. Loom command wrappers are installed as explicit-only command adapter skills under ~/.agents/skills/loom-command-* with Codex implicit invocation disabled via agents/openai.yaml. Loom rules are mirrored into this managed block because Codex's ~/.codex/rules/ surface is for shell execution policy, not Markdown instructions."
     printf 'Installed Loom for Codex in %s and %s\n' "$base" "$skills_dir"
   else
+    remove_codex_command_skills "$root/commands" "$skills_dir"
     remove_codex_prompts "$root/commands" "$prompts_dir"
     remove_skill_dirs "$root/skills" "$skills_dir"
     remove_rules "$root/rules" "$rules_dir"

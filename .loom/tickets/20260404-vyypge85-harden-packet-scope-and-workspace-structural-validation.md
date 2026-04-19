@@ -1,9 +1,9 @@
 ---
 id: ticket:vyypge85
 kind: ticket
-status: active
+status: closed
 created_at: 2026-04-04T23:57:49Z
-updated_at: 2026-04-19T21:12:40Z
+updated_at: 2026-04-19T23:34:12Z
 scope:
   kind: repository
   repositories:
@@ -140,3 +140,4 @@ rules or skill references.
   narrow ergonomic exceptions rather than the main tooling model.
 - 2026-04-19: revised the same rule again to blend that tooling posture more
   cleanly into the surrounding doctrine and anti-pattern language.
+- 2026-04-19: closed per user confirmation that this ticket is completed.

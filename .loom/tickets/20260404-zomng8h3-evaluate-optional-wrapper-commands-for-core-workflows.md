@@ -1,9 +1,9 @@
 ---
 id: ticket:zomng8h3
 kind: ticket
-status: proposed
+status: closed
 created_at: 2026-04-04T23:57:49Z
-updated_at: 2026-04-17T23:58:42Z
+updated_at: 2026-04-19T23:34:12Z
 scope:
   kind: repository
   repositories:
@@ -118,3 +118,4 @@ accepted workflow pattern worth preserving beyond the wrapper files themselves.
   the proved core workflow path into a discoverable command surface.
 - 2026-04-17: narrowed the ticket so wrapper commands are now explicitly
   optional harness sugar rather than a required core-protocol milestone.
+- 2026-04-19: closed per user confirmation that this ticket is completed.

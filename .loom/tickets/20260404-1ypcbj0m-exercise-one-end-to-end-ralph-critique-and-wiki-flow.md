@@ -1,9 +1,9 @@
 ---
 id: ticket:1ypcbj0m
 kind: ticket
-status: ready
+status: closed
 created_at: 2026-04-04T23:57:49Z
-updated_at: 2026-04-17T23:58:42Z
+updated_at: 2026-04-19T23:34:12Z
 scope:
   kind: repository
   repositories:
@@ -131,3 +131,4 @@ explicitly instead of implying it.
 - 2026-04-17: reconciled the ticket to the rewrite-era model: template-authored
   packets, YAML frontmatter, and `wiki`/`packets`/`evidence` vocabulary instead
   of the old `docs`/`runs`/`verification` and helper-script assumptions.
+- 2026-04-19: closed per user confirmation that this ticket is completed.

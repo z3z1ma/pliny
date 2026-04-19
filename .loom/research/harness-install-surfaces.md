@@ -3,7 +3,7 @@ id: research:harness-install-surfaces
 kind: research
 status: active
 created_at: 2026-04-18T03:03:47Z
-updated_at: 2026-04-18T03:03:47Z
+updated_at: 2026-04-19T21:59:26Z
 scope:
   kind: repository
   repositories:
@@ -11,6 +11,8 @@ scope:
 links:
   ticket:
     - ticket:ffg8elkb
+  research:
+    - research:codex-command-skill-installation
 ---
 
 # Question
@@ -56,8 +58,6 @@ Cross-check those findings against the local filesystem under
 - Codex AGENTS docs:
   `https://developers.openai.com/codex/guides/agents-md`
 - Codex skills docs: `https://developers.openai.com/codex/skills`
-- Codex custom prompts docs:
-  `https://developers.openai.com/codex/custom-prompts`
 - Gemini CLI configuration docs:
   `https://google-gemini.github.io/gemini-cli/docs/get-started/configuration.html`
 - Gemini CLI custom commands docs:
@@ -77,9 +77,10 @@ Cross-check those findings against the local filesystem under
   `~/.claude/commands/`.
 - Codex uses a split global surface:
   `~/.codex/AGENTS.md` for always-on instructions,
-  `$HOME/.agents/skills` for global skills,
-  and deprecated but still supported `~/.codex/prompts/*.md` for explicit
-  slash-command prompts.
+  `$HOME/.agents/skills` for global skills, and skills as the current reusable
+  workflow surface.
+- Codex skills support explicit `$skill` invocation and can disable implicit
+  invocation with `agents/openai.yaml` policy `allow_implicit_invocation: false`.
 - Codex's `~/.codex/rules/` is a shell-exec policy surface, not an equivalent
   home for Loom Markdown rules, so Loom rules should not be copied there.
 - Gemini CLI uses `~/.gemini/settings.json` plus hierarchical context from
@@ -99,8 +100,9 @@ Cross-check those findings against the local filesystem under
   always-on rules need a small config update so the installed rule files are
   loaded.
 - Codex and Gemini CLI both need translation for at least one surface:
-  Codex needs Loom rules aggregated into `~/.codex/AGENTS.md`, and Gemini
-  commands need Markdown-to-TOML conversion.
+  Codex needs Loom rules aggregated into `~/.codex/AGENTS.md` and Loom commands
+  adapted into explicit-only skill directories; Gemini commands need
+  Markdown-to-TOML conversion.
 - `~/.agents/skills` is the most interoperable global skill destination for
   both Codex and Gemini CLI.
 
@@ -110,9 +112,10 @@ Cross-check those findings against the local filesystem under
   `harness=<name>`.
 - Support `opencode`, `claude`, `codex`, `gemini`, and `all` harness values.
 - Keep direct directory copies where the harness supports them.
-- Use small inline Python only for the two format-translation cases:
-  updating OpenCode `opencode.json`, aggregating Codex `AGENTS.md`, and
-  converting Gemini command Markdown files to TOML.
+- Use small inline Python only for the format-translation cases:
+  updating OpenCode `opencode.json`, aggregating Codex `AGENTS.md`, adapting
+  Codex command Markdown files into skills, and converting Gemini command
+  Markdown files to TOML.
 - Keep installs namespaced under a Loom-owned marker or header where a single
   file must be generated so uninstall can cleanly reverse only Loom-managed
   content.
@@ -121,8 +124,8 @@ Cross-check those findings against the local filesystem under
 
 - Whether Gemini CLI should receive Loom commands as top-level `/name` commands
   or under a namespaced subtree such as `/loom:name` for collision safety.
-- Whether Codex should receive Loom commands only through deprecated prompts now
-  or whether the repo should skip that surface and rely on skills instead.
+- Whether future Codex UI behavior should show the generated command adapter
+  skill name or the original slash-command-style display name more prominently.
 
 # Linked Work
 

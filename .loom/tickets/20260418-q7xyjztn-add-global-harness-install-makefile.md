@@ -1,9 +1,9 @@
 ---
 id: ticket:q7xyjztn
 kind: ticket
-status: active
+status: closed
 created_at: 2026-04-18T02:58:42Z
-updated_at: 2026-04-18T02:58:42Z
+updated_at: 2026-04-19T23:34:12Z
 scope:
   kind: repository
   repositories:
@@ -101,3 +101,4 @@ accepted long-term operator path that future agents will need to read.
 
 - 2026-04-18: created `ticket:q7xyjztn` and marked it active for the Makefile-
   based multi-harness global install work.
+- 2026-04-19: closed per user confirmation that this ticket is completed.

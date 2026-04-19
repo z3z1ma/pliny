@@ -153,8 +153,10 @@ needed:
   directory, and updates `~/.config/opencode/opencode.json` so those rules load
   through `instructions`
 - Claude Code: copies rules, skills, and commands into `~/.claude/`
-- Codex: copies skills, converts commands into `~/.codex/prompts/*.md`, and
-  mirrors Loom rules into a managed block inside `~/.codex/AGENTS.md`
+- Codex: copies skills, converts commands into explicit-only command adapter
+  skills under `~/.agents/skills/loom-command-*`, removes Loom-managed legacy
+  prompt files from `~/.codex/prompts/`, and mirrors Loom rules into a managed
+  block inside `~/.codex/AGENTS.md`
 - Gemini CLI: copies skills, converts commands into `~/.gemini/commands/*.toml`,
   and mirrors Loom rules into a managed block inside `~/.gemini/GEMINI.md`
 

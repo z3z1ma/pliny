@@ -1,9 +1,9 @@
 ---
 id: ticket:ffg8elkb
 kind: ticket
-status: complete_pending_acceptance
+status: closed
 created_at: 2026-04-18T03:03:47Z
-updated_at: 2026-04-18T03:39:56Z
+updated_at: 2026-04-19T23:34:12Z
 scope:
   kind: repository
   repositories:
@@ -11,6 +11,8 @@ scope:
 links:
   research:
     - research:harness-install-surfaces
+  related:
+    - ticket:p9m4x2qt
 depends_on: []
 ---
 
@@ -91,8 +93,9 @@ Evidence gathered:
   - OpenCode wrote `~/.config/opencode/opencode.json` with Loom rules under
     `instructions`
   - Claude installed rules under `~/.claude/rules/loom/`
-  - Codex installed prompts under `~/.codex/prompts/` and mirrored Loom rules
-    into `~/.codex/AGENTS.md`
+  - Codex originally installed prompts under `~/.codex/prompts/` and mirrored
+    Loom rules into `~/.codex/AGENTS.md`; follow-up `ticket:p9m4x2qt`
+    superseded the prompt portion with explicit-only command adapter skills
   - Gemini installed TOML commands under `~/.gemini/commands/` and mirrored
     Loom rules into `~/.gemini/GEMINI.md`
 
@@ -118,3 +121,6 @@ cross-harness installation pattern worth preserving beyond `INSTALL.md`.
 - 2026-04-18: added `Makefile`, added `scripts/install-loom.sh`, updated
   `INSTALL.md`, and validated install/uninstall across OpenCode, Claude Code,
   Codex, and Gemini CLI using a throwaway `HOME`.
+- 2026-04-19: follow-up ticket `ticket:p9m4x2qt` superseded the original Codex
+  prompt conversion with explicit-only Codex command adapter skills.
+- 2026-04-19: closed per user confirmation that this ticket is completed.

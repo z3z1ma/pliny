@@ -9,8 +9,8 @@
     "repository_id": "repo:root"
   },
   "schema_version": 1,
-  "status": "proposed",
-  "updated_at": "2026-04-01T08:49:37Z"
+  "status": "closed",
+  "updated_at": "2026-04-19T23:34:12Z"
 }
 ---
 
@@ -93,3 +93,4 @@ This ticket does not introduce an accepted workflow change; it only provides a c
 
 - 2026-04-01: created `ticket:14eh8c66` as a non-execution smoke-test ticket to exercise Loom ticket creation in a workspace that previously had no ticket records.
 - 2026-04-01: validated the ticket structure successfully with `validate_record.py` and observed unrelated pre-existing missing-link errors from workspace-wide `check_links.py` under `.loom/constitution`.
+- 2026-04-19: closed per user confirmation that this ticket is completed.
