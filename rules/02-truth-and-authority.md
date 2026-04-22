@@ -25,6 +25,8 @@ Loom does not use "newest file wins" as a truth model.
 
 Instead, the owning layer wins for the kind of truth it owns.
 
+This prevents claims from drifting into artifacts that cannot safely own them.
+
 ### Ownership map
 
 - **constitution** owns durable identity, principles, and constraints
@@ -33,6 +35,7 @@ Instead, the owning layer wins for the kind of truth it owns.
 - **spec** owns intended behavior and acceptance contract
 - **plan** owns sequencing and rollout strategy
 - **ticket** owns live execution state
+- **packet** owns a bounded child-worker contract, not project truth
 - **critique** owns adversarial findings and review verdicts
 - **wiki** owns accepted explanation and interlinked understanding
 - **evidence** owns proof artifacts, not primary project truth
@@ -63,9 +66,14 @@ The memory tree is durable but non-canonical:
 
 - `.loom/memory/`
 
+External trackers, pull requests, chat transcripts, dashboards, generated
+context files, and path-local instruction files are also support surfaces unless
+the constitution explicitly says otherwise.
+
 Packets help bounded work.
 Memory helps recall and continuity.
-Neither outranks the canonical record owners.
+External systems help mirror or transport work.
+None of them outrank the canonical record owners.
 
 ## Tickets Are Special
 

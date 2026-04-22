@@ -16,6 +16,11 @@ It exists to make execution reliable by using:
 
 One packet, one fresh worker, one bounded iteration, one truthful merge.
 
+A parent frames the next bounded mutation, a packet declares the
+read/write/stop/output contract, a fresh worker executes one slice, and the
+parent reconciles the result back into ticket truth and any other owner layer
+that needs to change.
+
 ## Parent And Child Roles
 
 ### Parent owns
@@ -190,3 +195,7 @@ That makes the iteration history inspectable without turning packets into the ca
 A Ralph run is not complete because the child said "done".
 
 It is complete only when the ticket and supporting evidence tell the truth about what actually happened.
+
+If the child surfaced a durable claim, behavior change, proof artifact, risk,
+or explanation, the parent must route it to the layer that owns that kind of
+truth instead of leaving it only in the packet or transcript.

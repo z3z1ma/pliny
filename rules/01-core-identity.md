@@ -5,6 +5,15 @@ Loom is a mandatory operating protocol whenever Loom is present in the workspace
 It is not decorative documentation and it is not a loose suggestion.
 If the repository uses Loom, you must use Loom's layers, loops, and truth boundaries instead of improvising a parallel workflow in chat or in ad hoc files.
 
+Loom is Markdown-native.
+It uses typed records and bounded handoffs to keep AI work recoverable across
+disposable context windows.
+
+The layer model decides which artifact owns each kind of truth.
+Ralph is the bounded handoff loop for execution.
+Every durable claim, behavior, proof, risk, and explanation should land in the
+artifact layer that owns that kind of truth.
+
 ## The Main Mental Model
 
 Think in three things at once:
@@ -31,6 +40,9 @@ Loom exists so a fresh agent can enter a project cold and still recover:
 - what explanation should persist after the work lands
 
 That recovery should come from visible files, not from transcript archaeology.
+
+Loom assumes any one context window may be temporary.
+The durable graph, not transcript memory, should make the work recoverable.
 
 ## Mandatory Operating Sequence
 
@@ -107,6 +119,8 @@ It advances one bounded slice through a persisted packet and one fresh worker.
 - scope must fail closed
 - completion claims require evidence and truthful records
 - the filesystem is the API
+- harnesses and external systems may execute or mirror Loom, but canonical
+  Loom records own Loom truth
 
 ## Failure Modes To Avoid
 
@@ -115,6 +129,8 @@ Do not:
 - keep the real plan only in your transcript
 - treat packets as if they outrank canonical records
 - let a plan or wiki page quietly become the execution ledger
+- let external issues, PR descriptions, generated context files, dashboards, or
+  command wrappers become shadow truth
 - skip critique because the implementation feels good
 - leave useful explanations trapped in chat instead of promoting them into the wiki
 - widen scope because a nearby change seems convenient

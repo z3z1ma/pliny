@@ -168,6 +168,16 @@ A retrospective is a named workflow — not a new record kind and not a new dire
 - changed principles, constraints, or citable decisions → constitution (including decision records)
 - support-only continuity → memory
 
+Every repeated mistake should be promoted into exactly one prevention artifact:
+
+- behavior ambiguity → spec
+- missed test case or proof gap → evidence or a test expectation
+- bad architectural choice → constitution decision
+- recurring operator confusion → wiki workflow or reference page
+- repeated implementation pitfall → research null result or wiki troubleshooting page
+- repeated project-local technique → project-local skill
+- support-only reminder → memory
+
 Run a retrospective when:
 
 - a non-trivial ticket is closing
