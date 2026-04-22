@@ -3,7 +3,7 @@ id: constitution:main
 kind: constitution
 status: active
 created_at: 2026-03-31T12:00:00Z
-updated_at: 2026-04-22T05:54:46Z
+updated_at: 2026-04-22T06:39:03Z
 scope:
   kind: workspace
 links: {}
@@ -136,22 +136,18 @@ only inferable from helper code, wrapper conventions, or external work systems.
 
 # Current Focus
 
-- fix product-surface inconsistencies so public docs match the files that
-  actually ship
+- keep public docs, always-on rules, skills, templates, optional commands, and
+  examples aligned as one protocol corpus
 - reconcile remaining canonical examples that still describe scripts, `docs`,
-  `runs`, `verification`, `.loom/memories`, or helper-oriented frontmatter
-- add shared status lifecycle grammar for non-ticket records
-- add claim-level coverage conventions across specs, tickets, packets,
-  evidence, and critique
-- add packet freshness and context-budget conventions for Ralph contracts
-- add codebase atlas, debug, spike, execution-wave, external-reference, ship,
-  retrospective-prevention, and golden-example guidance as disciplined routes
-  through existing layers
+  `runs`, `verification`, or helper-oriented frontmatter
+- prove the new lifecycle, claim coverage, packet freshness, execution wave,
+  critique profile, external reference, map, debug, spike, sketch, ship, and
+  retrospective-prevention guidance through real workflows
 - deepen durable examples across initiatives, research, specs, plans, tickets,
   critique, wiki, packets, and evidence so the protocol is shown, not only
   stated
-- keep optional harness wrappers clearly secondary to rules, skills, and
-  canonical records
+- keep optional harness wrappers and external systems clearly secondary to
+  rules, skills, and canonical records
 
 The immediate quality bar is no longer just that the files exist. The most
 important rules, skills, appendices, and canonical records should read like one
@@ -208,3 +204,7 @@ coherent operating manual.
 - 2026-04-22: promoted the Markdown-native control-plane, typed ownership, and
   transaction-protocol framing into the constitutional direction and identified
   the next regularization priorities
+- 2026-04-22: added first-pass protocol surfaces for lifecycle grammar, claim
+  coverage, packet freshness, execution waves, critique profiles, external
+  references, map/debug/spike/sketch/ship workflows, retrospective prevention,
+  examples, and singular `.loom/memory`

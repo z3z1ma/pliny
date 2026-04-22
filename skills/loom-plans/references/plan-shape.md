@@ -7,6 +7,7 @@
 - Progress
 - Workstreams
 - Sequencing
+- Execution Waves
 - Risks
 - Evidence Strategy
 - Exit Criteria
@@ -26,3 +27,18 @@ Plans usually link to:
 - spec
 - tickets
 - critique when review changes the route
+
+## Execution Waves
+
+Use `# Execution Waves` when a plan contains tickets that may be run in
+parallel or must be staged.
+
+Parallel work is allowed only when:
+
+- ticket `depends_on` relationships do not conflict
+- expected packet `write_scope` values do not overlap
+- there is no shared generated file, migration, lockfile, or stateful resource
+  contention
+
+The plan names the wave. Each ticket and packet still owns its own execution
+truth.

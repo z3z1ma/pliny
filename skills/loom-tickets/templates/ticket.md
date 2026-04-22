@@ -9,6 +9,7 @@ scope:
   repositories:
     - repo:root
 links: {}
+external_refs: {}
 depends_on: []
 ---
 
@@ -36,6 +37,11 @@ What should not happen inside this ticket.
 
 What must be true for this ticket to be accepted.
 
+# Coverage
+
+Covers:
+- ACC-000
+
 # Execution Notes
 
 Useful implementation notes, but not a transcript dump.
@@ -46,7 +52,12 @@ What evidence exists or is expected.
 
 # Critique Disposition
 
-Whether critique is required, completed, deferred, or still pending.
+Risk class: low | medium | high
+
+Required critique profiles:
+- operator-clarity
+
+Status: required | completed | deferred | not_required
 
 # Wiki Disposition
 

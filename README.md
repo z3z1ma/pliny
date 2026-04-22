@@ -90,6 +90,7 @@ kind of truth.
 ├── AGENTS.md
 ├── Makefile
 ├── commands/         # optional harness-wrapper prompt files
+├── examples/         # protocol traces, not truth owners
 ├── rules/
 └── skills/
 ```
@@ -140,10 +141,11 @@ operator commands:
 | Phase | Commands |
 | --- | --- |
 | Orient | `/loom-orient`, `/loom-status` |
-| Shape | `/loom-brainstorm`, `/loom-research`, `/loom-spec`, `/loom-decide`, `/loom-plan`, `/loom-ticket` |
-| Execute | `/loom-work` |
+| Shape | `/loom-brainstorm`, `/loom-research`, `/loom-spike`, `/loom-sketch`, `/loom-spec`, `/loom-decide`, `/loom-plan`, `/loom-ticket`, `/loom-map` |
+| Execute | `/loom-work`, `/loom-debug` |
 | Verify | `/loom-review`, `/loom-accept` |
 | Assimilate | `/loom-wiki`, `/loom-retrospective` |
+| Package | `/loom-ship` |
 | Maintain | `/loom-repair` |
 
 Commands are convenience wrappers. They do not replace the rules, skills, or
@@ -151,15 +153,19 @@ canonical records.
 
 ## Current Roadmap Direction
 
-The next phase is protocol sharpening, not platform expansion:
+The current phase is protocol sharpening, not platform expansion.
 
-- fix product-surface inconsistencies
-- add shared non-ticket status lifecycle grammar
-- add claim-level coverage from specs through tickets, packets, evidence, and critique
-- add packet freshness and context-budget guidance
-- add named critique risk profiles
-- add codebase atlas, debug, spike, sketch, execution-wave, external-reference, ship, and retrospective-prevention workflows as routes through existing layers
-- add golden examples that make the protocol evaluable across harnesses
+The package now includes first-pass surfaces for:
+
+- shared non-ticket status lifecycle grammar
+- claim-level coverage from specs through tickets, packets, evidence, and critique
+- packet freshness and context-budget guidance
+- named critique risk profiles
+- codebase atlas, debug, spike, sketch, execution-wave, external-reference, ship, and retrospective-prevention workflows as routes through existing layers
+- golden examples that make the protocol evaluable across harnesses
+
+The next proving step is to exercise those surfaces in real Loom work and
+reconcile any stale dogfooding records that still teach older shapes.
 
 ## Design Goal
 

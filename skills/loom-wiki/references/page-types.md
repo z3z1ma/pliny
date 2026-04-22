@@ -32,6 +32,25 @@ Examples:
 - scope conventions
 - naming rules
 
+## Codebase atlas page
+
+Use for accepted repository or module structure.
+
+Codebase atlas pages explain structure. They do not own behavior, policy, or
+live execution.
+
+Recommended sections:
+
+- Summary
+- Major Modules
+- Important Entry Points
+- Test Surface
+- Build / Validation Commands
+- Data / Persistence Boundaries
+- Risky Areas
+- Source Records
+- Last Verified
+
 ## A simple rule
 
 If the page is mostly about *what something means*, use a concept page.

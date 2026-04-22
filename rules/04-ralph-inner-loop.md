@@ -69,9 +69,11 @@ Every Ralph packet should answer these questions:
 3. what mode and style is being used
 4. what the worker may read
 5. what the worker may write
-6. what counts as progress
-7. what should happen if the worker gets blocked
-8. what output the parent expects back
+6. what source version the packet was compiled against
+7. what context budget the worker should use
+8. what counts as progress
+9. what should happen if the worker gets blocked
+10. what output the parent expects back
 
 The packet body should normally include:
 
@@ -174,6 +176,19 @@ Reuse a packet only if all of these are still true:
 - the intended iteration is still the same iteration
 
 If any of those drifted, compile a fresh packet.
+
+Before launch, compare the packet's source fingerprint with the governing
+records and write-scope files. If they changed materially, supersede the packet
+instead of asking the child to guess.
+
+## Parallel Ralph Rule
+
+Parallel Ralph is allowed only when tickets have no dependency conflict and
+packet write scopes do not overlap.
+
+If shared migrations, generated files, lockfiles, stateful resources, or
+ambiguous ownership could make two packets interfere, run them sequentially or
+return to planning.
 
 ## The Working Pad Principle
 

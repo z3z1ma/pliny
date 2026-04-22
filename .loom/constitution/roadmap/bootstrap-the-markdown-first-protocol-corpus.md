@@ -3,7 +3,7 @@ id: roadmap:bootstrap-the-markdown-first-protocol-corpus
 kind: roadmap
 status: active
 created_at: 2026-04-01T17:45:00Z
-updated_at: 2026-04-22T05:54:46Z
+updated_at: 2026-04-22T06:39:03Z
 scope:
   kind: workspace
 links:
@@ -42,18 +42,23 @@ cleanly instead of turning Loom into a larger platform.
 
 Current shipped state at the time of this roadmap update:
 
-- core doctrine files under `rules/` plus appendix support material under
-  `rules/appendices/`
+- core doctrine files under `rules/`
 - flat subsystem skills and auxiliary authoring skills under `skills/`, each
   carrying references and templates
+- workflow skills now exist for codebase atlas, debugging, spikes/sketches, and
+  shipping, all routed through existing owner layers
 - no shipped `skills/*/scripts/*.py` files in the core Loom bundle
 - top-level docs now describe YAML frontmatter, template-first record creation,
   and a native-tool operating posture
+- shared record guidance now covers lifecycle statuses, claim coverage,
+  external references, packet freshness, and context budgets
+- optional command wrappers cover map, debug, spike, sketch, and ship workflows
 - optional harness-specific wrappers may still exist in-repo, but they are not
   part of the protocol core
-- parts of the canonical `.loom/` dogfooding state still carry legacy
-  `docs`/`runs`/`verification` naming and older frontmatter shape and should be
-  reconciled
+- examples now provide protocol traces for representative routes
+- parts of the canonical `.loom/` dogfooding state may still carry legacy
+  record vocabulary or older frontmatter shape and should be reconciled when
+  touched
 
 # Focus Areas
 
@@ -84,8 +89,8 @@ Current shipped state at the time of this roadmap update:
 
 2. Dogfooded record reconciliation
    Reconcile canonical `.loom/` examples and support records that still use old
-   vocabulary, plural `.loom/memories`, or outdated frontmatter shape so the
-   repository stops teaching two competing models.
+   vocabulary or outdated frontmatter shape so the repository stops teaching
+   two competing models.
 
 3. Lifecycle grammar
    Add shared status lifecycle guidance for non-ticket records and reflect it
@@ -134,9 +139,9 @@ Current shipped state at the time of this roadmap update:
 
 # Downstream Work
 
-The next implementation chain should begin with the product-surface correction
-and then move into lifecycle, coverage, packet freshness, and critique profile
-work.
+The first implementation pass has landed the product-surface correction,
+lifecycle, coverage, packet freshness, critique profile, workflow command, and
+golden-example scaffolding.
 
 Existing initiative/spec/plan/ticket records may need reconciliation before
 they are treated as the current durable operator path because parts of that
@@ -145,16 +150,13 @@ vocabulary.
 
 The most important still-missing canonical depth is in:
 
-- shared record lifecycle guidance
-- claim coverage guidance and examples
-- packet freshness and context-budget guidance
-- risk-profiled critique guidance
-- codebase atlas, debug, spike, execution-wave, external-reference, ship, and
-  retrospective-prevention workflow guidance
-- golden examples that show route selection, expected artifacts, final state,
-  and common wrong behavior
+- full dogfooded reconciliation of older initiative/spec/plan/ticket records
+- deeper examples that include concrete starting `.loom` slices, not only
+  protocol traces
 - critique, wiki, packets, and evidence artifacts produced by real packetized
   workflows
+- repair/status/accept command hardening against the new lifecycle and coverage
+  grammar after real use
 
 # Status Summary
 

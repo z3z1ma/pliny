@@ -9,6 +9,7 @@ scope:
   repositories:
     - repo:root
 links: {}
+external_refs: {}
 ---
 
 # Question
@@ -26,6 +27,9 @@ What the investigation covers and excludes.
 # Method
 
 How the investigation was carried out.
+
+For spikes or sketches, include the experiment matrix, variants, throwaway
+write scope, and cleanup expectation.
 
 # Sources
 

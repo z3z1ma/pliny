@@ -5,4 +5,4 @@
 
 ## Watch
 
-- Keep supporting context routed through `.loom/memories/` without letting it outrank canonical `.loom/` records.
+- Keep supporting context routed through `.loom/memory/` without letting it outrank canonical `.loom/` records.

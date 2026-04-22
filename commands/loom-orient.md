@@ -60,6 +60,10 @@ Hydrate only what you need from:
 
 6. **Route explicitly.**
    - If the request is still exploratory, route to `/loom-brainstorm`.
+   - If the request is a bounded experiment, route to `/loom-spike`.
+   - If the request is UI/product variant exploration, route to `/loom-sketch`.
+   - If the request is bug or incident investigation, route to `/loom-debug`.
+   - If the request is codebase orientation, route to `/loom-map`.
    - If scope is still fuzzy, route to `/loom-plan`.
    - If evidence is missing, route to `/loom-research`.
    - If behavior is missing, route to `/loom-spec`.
@@ -69,6 +73,7 @@ Hydrate only what you need from:
    - If the main need is accepted explanation, route to `/loom-wiki`.
    - If graph drift is blocking honest work, route to `/loom-repair`.
    - If closure is the question, route to `/loom-accept`.
+   - If packaging for PR/release/handoff is the question, route to `/loom-ship`.
    - If recent work should be assimilated into owner layers, route to `/loom-retrospective`.
 
 ## Native tools to prefer

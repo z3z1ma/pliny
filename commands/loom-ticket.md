@@ -49,6 +49,8 @@ Hydrate only what you need from:
 
 3. **Tighten or split.**
    - Tighten summary, scope, non-goals, acceptance criteria, evidence expectations, and critique/wiki disposition.
+   - Add `# Coverage` entries for spec acceptance IDs this ticket covers.
+   - Add critique risk class and required profiles when the work warrants review.
    - If several independent slices are hiding inside one ticket, split them.
    - Use `depends_on` only for hard prerequisites.
 

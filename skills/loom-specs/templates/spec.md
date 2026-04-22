@@ -9,6 +9,7 @@ scope:
   repositories:
     - repo:root
 links: {}
+external_refs: {}
 ---
 
 # Summary
@@ -31,6 +32,8 @@ What boundaries or limits shape the design.
 
 Concrete requirements the implementation must satisfy.
 
+- REQ-001: First stable requirement.
+
 # Scenarios
 
 Representative usage and edge cases.
@@ -38,6 +41,9 @@ Representative usage and edge cases.
 # Acceptance
 
 What will count as acceptable behavior.
+
+- ACC-001: Given the relevant precondition, the expected outcome is observable
+  and supported by evidence.
 
 # Open Questions
 

@@ -28,6 +28,24 @@ rg -l '^status: (proposed|ready|active|blocked|review_required|complete_pending_
 rg -l '^status: stale$' .loom/wiki
 ```
 
+### Trace one acceptance claim
+
+```bash
+rg -n 'ACC-002' .loom
+```
+
+### Find evidence support declarations
+
+```bash
+rg -n '^# Supports Claims|^Supports:' .loom/evidence
+```
+
+### Find critique challenges
+
+```bash
+rg -n '^Challenges:' .loom/critique
+```
+
 ## Linking Rules
 
 Use typed `links:` frontmatter for real structural relationships.
@@ -42,6 +60,10 @@ Examples:
 
 Also use prose links or ordinary Markdown links where they help reading.
 But do not rely on prose alone when the relationship matters to navigation.
+
+Use `external_refs:` for outside systems such as GitHub, Jira, Linear, Trello,
+Azure DevOps, Confluence, or project boards. External refs are provenance and
+mirrors; they do not replace typed Loom links.
 
 ## Reference Reconciliation
 

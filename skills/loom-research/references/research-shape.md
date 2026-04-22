@@ -15,6 +15,25 @@
 - Open Questions
 - Linked Work
 
+## Spike And Sketch Variants
+
+A spike is a bounded experiment recorded as research.
+
+A sketch is a bounded product or UI variant exploration recorded as research.
+
+Both variants should still preserve:
+
+- question
+- method
+- evidence
+- rejected options
+- null results
+- conclusions
+- downstream route
+
+Use a spike or sketch command when the workflow needs more structure, but keep
+the canonical truth in research, evidence, specs, tickets, critique, and wiki.
+
 ## Writing standard
 
 Separate:

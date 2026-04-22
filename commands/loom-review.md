@@ -33,6 +33,7 @@ Hydrate only what you need from:
 ## Goals
 
 - choose a pass split proportional to the target's risk
+- choose named critique profiles proportional to the target's risk
 - pressure-test claims against evidence
 - leave behind durable critique records
 - reconcile review back into the ticket without hiding the trail
@@ -62,6 +63,10 @@ Default split:
 
 Each pass produces its own critique record, or one consolidated record with clearly separated pass sections. Severity and confidence stay explicit per finding.
 
+Use the named profiles from `skills/loom-critique/references/critique-lens.md`
+when the target declares them or when the risk class implies them. Profiles are
+lenses, not new owner layers.
+
 If the harness supports subagents or multiple fresh reviewers, launch the passes in parallel with a critique packet per pass. If not, run them sequentially as distinct fresh-context passes with narrow prompts. The transport is flexible; the pass boundaries are not.
 
 ## Procedure
@@ -79,14 +84,13 @@ If the harness supports subagents or multiple fresh reviewers, launch the passes
    - Compile one critique packet per pass under `.loom/packets/critique/` when fresh-context review is warranted.
 
 4. **Review through the chosen lenses.**
-   - correctness
-   - scope discipline
+   - correctness and scope discipline
    - evidence sufficiency
-   - hidden assumptions
-   - failure modes
+   - hidden assumptions and failure modes
    - maintenance burden
-   - operator clarity
-   - security or performance when relevant
+   - the declared named profiles, such as `protocol-change`,
+     `api-contract`, `data-migration`, `security`, `performance`, or
+     `operator-clarity`
 
 5. **Write findings durably.**
    - Each material finding: short title, severity, confidence, observation, why it matters, follow-up.
@@ -116,6 +120,7 @@ If the harness supports subagents or multiple fresh reviewers, launch the passes
 ## Required output
 
 - pass split chosen and why
+- critique profiles used
 - critique record and packet paths or IDs
 - prioritized findings with severity and confidence
 - ticket or follow-up updates performed

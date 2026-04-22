@@ -33,6 +33,7 @@ Hydrate only what you need from:
 - summarize the current execution graph truthfully
 - surface the ready queue and the blocked queue
 - notice review and wiki follow-through debt
+- notice lifecycle and claim-coverage drift
 - identify contradictions or suspicious state drift
 - recommend the next explicit command
 
@@ -53,6 +54,8 @@ Hydrate only what you need from:
 4. **Check for state drift.**
    - A ticket says `review_required` but has no critique path.
    - A ticket says `complete_pending_acceptance` but evidence is weak or dispositions are unresolved.
+   - A ticket names coverage IDs but evidence does not support them.
+   - A non-ticket record uses a status outside the shared lifecycle grammar.
    - A plan is driving live execution instead of the ticket.
    - A wiki page or memory note is carrying owner truth it should not own.
 
@@ -64,11 +67,15 @@ Hydrate only what you need from:
    - What looks stale or suspicious?
 
 6. **Recommend the next move.**
-   - Usually one of `/loom-plan`, `/loom-work`, `/loom-review`, `/loom-retrospective`, `/loom-accept`, or `/loom-repair` when graph drift is the blocker.
+   - Usually one of `/loom-plan`, `/loom-work`, `/loom-debug`,
+     `/loom-review`, `/loom-ship`, `/loom-retrospective`, `/loom-accept`, or
+     `/loom-repair` when graph drift is the blocker.
 
 ## Native tools to prefer
 
 - `rg -n '^status:' .loom/tickets --glob '*.md'`
+- `rg -n '^status:' .loom/{constitution,initiatives,research,specs,plans,critique,wiki,evidence,packets} --glob '*.md'`
+- `rg -n 'REQ-[0-9]{3}|ACC-[0-9]{3}|CLAIM-[0-9]{3}' .loom --glob '*.md'`
 - `rg -n '^(id|status|review_target):' .loom/{plans,tickets,critique,wiki} --glob '*.md'`
 - `find .loom/{tickets,critique,wiki,evidence} -type f -name '*.md' | sort`
 - `git status --short`

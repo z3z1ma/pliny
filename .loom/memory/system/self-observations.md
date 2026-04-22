@@ -3,4 +3,4 @@
 
 <!-- Append-only. Format: - YYYY-MM-DD [tag]: observation -->
 
-- 2026-04-01 [bootstrap]: Ported Cog-inspired memory conventions into `.loom/memories/` with `system` and `user` domains.
+- 2026-04-01 [bootstrap]: Ported Cog-inspired memory conventions into `.loom/memory/` with `system` and `user` domains.

@@ -55,6 +55,8 @@ Hydrate only what you need from:
 
 3. **Test the closure claim.**
    - Are the acceptance criteria actually met?
+   - If the ticket names coverage IDs, does evidence support each relevant
+     `ACC-*` or `CLAIM-*` target?
    - Is the evidence real and sufficient?
    - Were required critique steps completed or truthfully deferred?
    - Were required wiki or knowledge-promotion steps completed or truthfully deferred?

@@ -82,6 +82,9 @@ Hydrate only what you need from:
 7. **Decide the next command.**
    - Usually `/loom-work <ticket-id>`.
    - If evidence is still missing, `/loom-research ...`.
+   - If the work is a bounded experiment, `/loom-spike ...`.
+   - If the work is bug investigation, `/loom-debug ...`.
+   - If orientation is the blocker, `/loom-map ...`.
    - If behavior is still missing, `/loom-spec ...`.
    - If the work hinges on a citable architectural or policy choice, `/loom-decide ...` before proceeding.
 

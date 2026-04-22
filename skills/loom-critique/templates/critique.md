@@ -10,6 +10,7 @@ scope:
     - repo:root
 review_target: <record ref>
 links: {}
+external_refs: {}
 ---
 
 # Summary
@@ -27,6 +28,11 @@ Overall judgment.
 # Findings
 
 List concrete findings with severity and confidence.
+
+For claim-specific findings, include:
+
+Challenges:
+- ACC-000
 
 # Evidence Reviewed
 

@@ -20,6 +20,7 @@ If execution truth changed, the ticket should absorb it.
 - ticket status transitions
 - execution notes
 - acceptance criteria
+- claim coverage
 - dependencies
 - evidence / critique / wiki disposition
 - journal updates
@@ -49,6 +50,7 @@ A good ticket should let a fresh agent answer:
 - what is in scope
 - what is out of scope
 - what counts as done
+- which acceptance IDs it covers, when a spec names them
 - what evidence exists
 - what the blockers are
 - what the next move is
@@ -83,4 +85,5 @@ Then replace the placeholders in the copied file.
 1. `references/state-machine.md`
 2. `references/dependencies.md`
 3. `references/readiness.md`
-4. `templates/ticket.md`
+4. `skills/loom-records/references/claim-coverage.md`
+5. `templates/ticket.md`

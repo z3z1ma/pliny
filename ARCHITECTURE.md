@@ -139,6 +139,16 @@ research for investigation, specs for intended behavior, plans for sequencing,
 tickets for live execution, packets for bounded work, evidence for proof,
 critique for adversarial review, and wiki for accepted explanation.
 
+### 9. Examples make the protocol reviewable
+
+The `examples/` tree contains golden traces, not runtime fixtures and not
+canonical project truth.
+
+Each example should show a starting `.loom` slice, operator request, expected
+route, expected artifacts, final state, and common wrong behavior. That gives
+contributors a way to review whether a protocol change preserves Loom's
+intended shape across harnesses.
+
 ## Design Philosophy
 
 This rewrite optimizes for:

@@ -30,7 +30,7 @@ Retrospective is not a new record kind. It produces no `.loom/retrospectives/` d
 
 The loop is:
 
-**observe → distill → promote**
+**observe → distill → promote → prevent**
 
 Hydrate only what you need from:
 - `loom-workspace`
@@ -52,6 +52,7 @@ Hydrate only what you need from:
 - promote that knowledge into the correct Loom owner layers
 - leave the corpus easier for the next agent to reuse
 - propose constitutional amendments when the project's principles or constraints shifted
+- prevent repeated mistakes by promoting them into exactly one owner artifact
 
 ## When to run a retrospective
 
@@ -96,6 +97,22 @@ Retrospective is the concrete trigger for:
 - capturing rejected options and null results in research
 - proposing constitution amendments or decision records when policy shifted
 - trimming memory entries that canonical records now cover
+
+### 4. Prevent
+
+For each repeated mistake, choose exactly one prevention artifact:
+
+| Repeated mistake | Prevention artifact |
+| --- | --- |
+| behavior ambiguity | spec |
+| missed test case or proof gap | evidence or test expectation |
+| bad architectural choice | constitution decision |
+| recurring operator confusion | wiki workflow or reference page |
+| repeated implementation pitfall | research null result or wiki troubleshooting |
+| repeated project-local technique | project-local skill |
+| support-only reminder | memory |
+
+If no repeated mistake exists, say so and avoid creating filler artifacts.
 
 ## Procedure
 

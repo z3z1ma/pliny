@@ -17,6 +17,8 @@ This skill is for the parent agent that is preparing, launching, and reconciling
 
 - Ralph packet creation
 - packet style selection
+- source fingerprint and freshness checks
+- context budget declaration
 - parent/child handshake
 - iteration outcome vocabulary
 - ticket reconciliation after return
@@ -43,11 +45,13 @@ This skill is for the parent agent that is preparing, launching, and reconciling
 3. choose packet style
 4. choose verification posture (`test-first`, `observation-first`, or `none`)
 5. decide write scope
-6. compile the packet from the template
-7. read it once as if you were the child
-8. launch the fresh worker through the available harness transport
-9. inspect and reconcile the result back into the ticket
-10. route to Ralph again, critique, wiki, or outer-loop refinement
+6. declare source fingerprint and context budget
+7. compile the packet from the template
+8. read it once as if you were the child
+9. check whether sources or write-scope files changed materially before launch
+10. launch the fresh worker through the available harness transport
+11. inspect and reconcile the result back into the ticket
+12. route to Ralph again, critique, wiki, or outer-loop refinement
 
 ## Strong Ralph Discipline
 
@@ -57,6 +61,9 @@ A strong packet should make all of these explicit:
 - bounded goal for this iteration
 - sources that matter
 - write scope
+- source fingerprint
+- context budget
+- verification targets when claim coverage exists
 - verification posture and what counts as proof for this iteration
 - stop conditions
 - output contract

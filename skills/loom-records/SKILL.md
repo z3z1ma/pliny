@@ -22,8 +22,11 @@ It is the place to consult when you need to know:
 ## What This Skill Owns
 
 - common YAML frontmatter conventions
+- shared status lifecycle conventions
+- claim and acceptance coverage conventions
 - naming and ID conventions
 - typed link conventions
+- external reference provenance
 - evidence record shape
 - reference reconciliation discipline
 - cross-record validation recipes
@@ -81,7 +84,9 @@ Prefer records that are:
 ## Read In This Order
 
 1. `references/frontmatter.md`
-2. `references/naming-and-ids.md`
-3. `references/query-and-linking.md`
-4. `references/validation.md`
-5. `templates/evidence.md` when proof artifacts are needed
+2. `references/status-lifecycle.md`
+3. `references/claim-coverage.md`
+4. `references/naming-and-ids.md`
+5. `references/query-and-linking.md`
+6. `references/validation.md`
+7. `templates/evidence.md` when proof artifacts are needed

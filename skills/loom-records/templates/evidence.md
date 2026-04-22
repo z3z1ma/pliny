@@ -9,6 +9,7 @@ scope:
   repositories:
     - repo:root
 links: {}
+external_refs: {}
 ---
 
 # Summary
@@ -22,6 +23,12 @@ Exactly what was run, checked, or inspected.
 # Artifacts
 
 List files, outputs, screenshots, logs, commands, or observations that matter.
+
+# Supports Claims
+
+List stable claim or acceptance IDs this evidence supports.
+
+- ACC-000
 
 # Result
 

@@ -18,6 +18,7 @@ This skill exists so review has the same durability and rigor as execution.
 - critique records
 - critique packets
 - findings and verdicts
+- named critique profiles
 - review severity and disposition
 - follow-up pressure on tickets, specs, plans, and wiki pages
 
@@ -47,11 +48,12 @@ Critique should be:
 ## Default Procedure
 
 1. choose the review target
-2. compile a critique packet if fresh-context review is warranted
-3. inspect the relevant records, evidence, and changed files
-4. write findings with severity and confidence
-5. record the verdict and required follow-up
-6. link the critique back to the target ticket and related artifacts
+2. choose critique profiles proportional to the risk
+3. compile a critique packet if fresh-context review is warranted
+4. inspect the relevant records, evidence, and changed files
+5. write findings with severity, confidence, and challenged claims when relevant
+6. record the verdict and required follow-up
+7. link the critique back to the target ticket and related artifacts
 
 ## Done Means
 

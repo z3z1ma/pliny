@@ -36,9 +36,13 @@ links:
 Some kinds add more:
 
 - tickets add `depends_on`
-- packets add `target`, `mode`, `style`, `write_scope`, and `sources`
+- packets add `target`, `mode`, `style`, `write_scope`, `sources`,
+  `source_fingerprint`, and `context_budget`
 - wiki pages may add `page_type`
 - critique records may add `review_target`
+
+Most canonical records may also carry optional `external_refs` when outside
+systems request, mirror, or package the work.
 
 ## Scope Shape
 
@@ -89,3 +93,27 @@ links: {}
 ```
 
 Typed links are not a substitute for prose, but they make the graph legible to search tools.
+
+## External References
+
+Use `external_refs` for outside systems. External systems can request, mirror,
+or package Loom work. They do not own Loom truth unless the constitution says
+so.
+
+Example:
+
+```yaml
+external_refs:
+  github_issue:
+    - owner/repo#123
+  github_pr:
+    - owner/repo#456
+  linear:
+    - ENG-123
+  jira:
+    - ENG-123
+```
+
+Keep external IDs exact enough that a future agent can find the outside record.
+Do not duplicate live execution state from those systems into Loom unless a
+Loom owner record needs to preserve it.

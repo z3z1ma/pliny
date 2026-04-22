@@ -15,6 +15,16 @@ scope:
 write_scope:
   records: []
   paths: []
+source_fingerprint:
+  git_commit: <sha or unknown>
+  git_status_summary: <clean|dirty|unknown>
+  compiled_from:
+    - <record ref>
+context_budget:
+  posture: normal
+  max_source_files: 8
+  max_excerpt_lines_per_file: 80
+  avoid_full_file_reads: true
 sources: {}
 links: {}
 ---
@@ -26,6 +36,9 @@ What should be reviewed and why.
 # Review Lens
 
 What kinds of weakness or risk the reviewer should focus on.
+
+Named critique profiles to apply:
+- operator-clarity
 
 # Source Snapshot
 

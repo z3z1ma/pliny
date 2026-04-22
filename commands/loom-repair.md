@@ -48,6 +48,8 @@ Narrow scans are preferred for routine hygiene. Whole-workspace scans are for pe
 5. **Owner-layer conflicts.** A plan carrying live execution state. A wiki page carrying behavior-contract authority. Memory carrying canonical facts. A ticket redefining policy.
 6. **Structural record failures.** Missing frontmatter fields, filename-vs-ID mismatches, malformed typed IDs.
 7. **Dangling follow-up.** Critique findings that required follow-up with no corresponding ticket; tickets referencing deferred critique that never happened.
+8. **Lifecycle drift.** Non-ticket records using statuses outside the shared lifecycle grammar.
+9. **Coverage drift.** Tickets, packets, evidence, or critique records naming claim IDs that no longer resolve to the intended spec or claim.
 
 ## Goals
 
@@ -61,6 +63,7 @@ Narrow scans are preferred for routine hygiene. Whole-workspace scans are for pe
 1. **Walk the scope.**
    - `find .loom -type f -name '*.md' | sort`
    - `rg -n '^(id|kind|status|links|target):' .loom --glob '*.md'`
+   - `rg -n 'REQ-[0-9]{3}|ACC-[0-9]{3}|CLAIM-[0-9]{3}' .loom --glob '*.md'`
 
 2. **Collect findings per class.**
    - Keep evidence with each finding: the file path, the line, and what made you classify it.
@@ -77,6 +80,10 @@ Narrow scans are preferred for routine hygiene. Whole-workspace scans are for pe
    - Owner-layer conflicts → `/loom-spec`, `/loom-decide`, `/loom-wiki`, or `/loom-ticket`, usually disciplined by `/loom-plan`.
    - Status-vs-journal mismatches → `/loom-ticket` or `/loom-accept`.
    - Orphan packets → `/loom-work` to close out, or mark the packet superseded.
+   - Lifecycle drift → owner skill for that record kind, or `/loom-records`
+     when the status vocabulary itself is unclear.
+   - Coverage drift → `/loom-spec`, `/loom-ticket`, or `/loom-accept`
+     depending on which owner is wrong.
    - Constitutional contradictions → `/loom-decide` to amend or supersede precedent explicitly.
    - Dangling critique follow-up → `/loom-ticket` to create the follow-up.
 
@@ -90,6 +97,8 @@ Narrow scans are preferred for routine hygiene. Whole-workspace scans are for pe
 - `rg -n '^id:' .loom --glob '*.md'`
 - `rg -n '<kind>:<id>' .loom --glob '*.md'`
 - `rg -n '^status:' .loom/tickets --glob '*.md'`
+- `rg -n '^status:' .loom/{constitution,initiatives,research,specs,plans,critique,wiki,evidence,packets} --glob '*.md'`
+- `rg -n 'REQ-[0-9]{3}|ACC-[0-9]{3}|CLAIM-[0-9]{3}' .loom --glob '*.md'`
 - `git log --oneline -- .loom/ | head -20`
 - `git diff --stat`
 

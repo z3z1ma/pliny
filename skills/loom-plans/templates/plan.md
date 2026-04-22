@@ -31,6 +31,16 @@ Major streams or phases of work.
 
 Why the order looks the way it does.
 
+# Execution Waves
+
+Use when multiple tickets can be sequenced or run independently from the plan.
+
+Wave 1:
+- ticket:<id> — reason it can run independently — expected write scope
+
+Wave 2:
+- ticket:<id> — depends on Wave 1 result
+
 # Risks
 
 What could break or distort the plan.

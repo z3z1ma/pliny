@@ -16,6 +16,16 @@ write_scope:
   records:
     - wiki:<slug>
   paths: []
+source_fingerprint:
+  git_commit: <sha or unknown>
+  git_status_summary: <clean|dirty|unknown>
+  compiled_from:
+    - <record ref>
+context_budget:
+  posture: normal
+  max_source_files: 8
+  max_excerpt_lines_per_file: 80
+  avoid_full_file_reads: true
 sources: {}
 links: {}
 ---
