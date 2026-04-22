@@ -1,12 +1,12 @@
 ---
-name: loom-codebase-atlas
+name: loom-codemap
 description: "Map a repository or module into Loom wiki, research, and evidence without creating a new truth layer. Use when orientation cost is high, packet compilation keeps rediscovering structure, or path-local context adapters need safe source records."
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: workflow
 ---
 
-# loom-codebase-atlas
+# loom-codemap
 
 Codebase atlas work makes repository structure easier to recover.
 

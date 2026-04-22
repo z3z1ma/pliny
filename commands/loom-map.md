@@ -6,7 +6,7 @@ category: support
 suggested_skills:
   - loom-workspace
   - loom-records
-  - loom-codebase-atlas
+  - loom-codemap
   - loom-wiki
   - loom-research
 ---
@@ -24,7 +24,7 @@ It does not create a new canonical layer.
 Hydrate only what you need from:
 - `loom-workspace`
 - `loom-records`
-- `loom-codebase-atlas`
+- `loom-codemap`
 - `loom-wiki`
 - `loom-research`
 
@@ -37,7 +37,7 @@ Hydrate only what you need from:
 
 ## Canonical Procedure
 
-Use `skills/loom-codebase-atlas/SKILL.md` as the procedure.
+Use `skills/loom-codemap/SKILL.md` as the procedure.
 
 In short:
 
