@@ -50,3 +50,8 @@ Which research, specs, plans, and tickets carry this initiative forward.
 # Status Summary
 
 What is true about the initiative right now.
+
+# Completion Basis
+
+When `status: completed`, explain which success metrics were met and what
+remaining work, if any, moved to another owner.

@@ -4,7 +4,6 @@ description: "Maintain behavior contracts, requirements, scenarios, constraints,
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: spec
-  protocol_version: "2.0"
 ---
 
 # loom-specs

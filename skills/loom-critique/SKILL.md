@@ -4,7 +4,6 @@ description: "Run adversarial review as a first-class Loom layer. Use when code 
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: critique
-  protocol_version: "2.0"
 ---
 
 # loom-critique

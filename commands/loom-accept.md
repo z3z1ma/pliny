@@ -46,8 +46,8 @@ Use `skills/loom-tickets/references/acceptance-gate.md` as the procedure.
 In short:
 
 1. anchor the ticket
-2. read the acceptance chain
-3. test evidence, coverage, critique, and wiki disposition
+2. read the acceptance dossier
+3. test evidence, coverage, claim matrix, critique, and wiki disposition
 4. choose the honest ticket state
 5. record the decision in the ticket journal
 

@@ -41,47 +41,8 @@ Hydrate only what you need from:
 
 Produce or update one targeted wiki page from accepted truth.
 
-### Goals
-
-- promote accepted understanding into a durable page
-- ground the page in accepted records and evidence
-- prefer improving an existing page over forking a new one
-- refuse policy or behavior-contract drift into the wiki
-
-### Procedure
-
-1. **Anchor the page.**
-   - Decide whether `$ARGUMENTS` points at a concept, workflow, or reference page.
-   - Find existing pages first; prefer updating the right page over creating duplicates.
-
-2. **Gather accepted sources.**
-   - Read the canonical owners and evidence that ground the page.
-   - Use critique and research where they sharpen the explanation.
-   - Do not source the wiki from unsettled chat residue.
-
-3. **Decide whether a wiki packet is warranted.**
-   - If synthesis is non-trivial or the source set is wide, compile a wiki packet under `.loom/packets/wiki/`.
-   - Otherwise write directly with the accepted source set in view.
-
-4. **Write or update the page.**
-   - Choose the proper page family.
-   - Explain clearly, link related pages, and cite the source records or evidence.
-   - Make the page genuinely reusable by a future agent.
-
-5. **Reconnect the graph.**
-   - Add or update links from the originating ticket, critique, or plan when helpful.
-   - If a neighboring page should exist, note it.
-
-6. **Check truth boundaries.**
-   - If the page starts carrying behavior contract or policy authority, move that truth back into spec or constitution and make the wiki refer to it.
-
-### Write-mode required output
-
-- pages created or updated, with paths and IDs
-- key claims promoted
-- accepted sources used
-- related pages or follow-up knowledge gaps
-- recommended next command
+Use `skills/loom-wiki/references/wiki-write.md` as the canonical write
+procedure.
 
 ## Audit mode
 

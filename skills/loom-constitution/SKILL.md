@@ -4,7 +4,6 @@ description: "Maintain durable project identity, principles, constraints, strate
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: constitution
-  protocol_version: "2.0"
 ---
 
 # loom-constitution

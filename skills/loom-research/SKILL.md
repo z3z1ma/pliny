@@ -4,7 +4,6 @@ description: "Maintain reusable investigations, experiments, evidence synthesis,
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: research
-  protocol_version: "2.0"
 ---
 
 # loom-research

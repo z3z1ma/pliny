@@ -42,10 +42,10 @@ precedent in downstream repositories.
 
 - fix incorrect native query recipes and stale skill references
 - make problem shaping discoverable without command wrappers
-- clarify lazy `.loom/` tree materialization and conformance tiers
+- clarify lazy `.loom/` tree materialization
 - add implementation reality and change class guidance
 - add a minimal workspace scope registry pattern
-- harden examples into minimal conformant golden fixtures
+- harden examples into minimal consistent golden fixtures
 - quarantine stale local draft material from current protocol truth
 - normalize legacy dogfood JSON frontmatter in canonical owner records
 - update related templates, rules, README, architecture notes, and dogfood
@@ -54,8 +54,8 @@ precedent in downstream repositories.
 # Non-goals
 
 - do not add a runtime, validator, dashboard, database, or mandatory helper
-- do not add a new canonical layer for workspace scoping, examples, debug,
-  shipping, or conformance
+- do not add a new canonical layer for workspace scoping, examples, debug, or
+  shipping
 - do not copy review prose into product rules or skills
 
 # Acceptance Criteria
@@ -73,7 +73,7 @@ precedent in downstream repositories.
 - records explain that source code owns implementation reality while specs own
   intended behavior
 - tickets and packets can declare `change_class`
-- conformance supports Lite / Standard / Strict adoption tiers
+- workspace checks stay lightweight and human-readable
 - workspace scope aliases are documented without becoming product truth
 
 # Coverage

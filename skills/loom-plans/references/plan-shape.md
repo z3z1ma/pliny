@@ -11,6 +11,7 @@
 - Risks
 - Evidence Strategy
 - Exit Criteria
+- Completion Basis when `status: completed`
 
 ## Notes
 

@@ -12,6 +12,8 @@ review_target: ticket:risk0001
 links:
   ticket:
     - ticket:risk0001
+  evidence:
+    - evidence:evidence-gate-structural-check
 external_refs: {}
 ---
 
@@ -47,9 +49,13 @@ Follow-up:
 
 - ticket:risk0001
 
+Challenges:
+- ticket:risk0001#CLAIM-001
+
 # Evidence Reviewed
 
 - ticket:risk0001
+- evidence:evidence-gate-structural-check
 - `after/rules/07-validation-and-honesty.md`
 
 # Residual Risks

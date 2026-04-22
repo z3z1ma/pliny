@@ -17,6 +17,23 @@ implementation.
 - recent Ralph packet outcomes
 - relevant plan or initiative context
 
+## Acceptance Dossier
+
+The acceptance dossier is the composed ticket-owned view used for closure.
+It is not a new record kind.
+
+```text
+Acceptance Dossier =
+  Acceptance Criteria
+  + Coverage
+  + Claim Matrix
+  + Evidence
+  + Critique Disposition
+  + Wiki Disposition
+  + Journal
+  + Acceptance Decision when required
+```
+
 ## Closure Questions
 
 - Are acceptance criteria met?
@@ -30,6 +47,9 @@ implementation.
   converted into follow-up tickets?
 - Are finding references qualified, for example `critique:<slug>#FIND-001`?
 - Is wiki or retrospective follow-through complete or truthfully deferred?
+- If human signoff or accepted-risk provenance is required, does
+  `# Acceptance Decision` name who accepted, when, on what basis, and with what
+  residual risks?
 - Are links and status fields coherent?
 
 ## Outcomes
@@ -48,6 +68,21 @@ implementation.
 - Do not close over unresolved required critique.
 - Do not let acceptance live only in chat.
 - Create follow-up tickets for substantial residual work.
+
+## Acceptance Provenance
+
+For regulated work, accepted risk, or explicit human gates, record:
+
+```md
+# Acceptance Decision
+
+Accepted by:
+Accepted at:
+Basis:
+Residual risks:
+```
+
+Leave fields blank only while the ticket is not yet accepted.
 
 ## Native Queries
 

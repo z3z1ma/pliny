@@ -16,6 +16,8 @@ It ships:
 - Markdown templates and query recipes instead of bundled Python helpers
 - a cohesive explanation layer: **Loom Wiki**
 
+Read `PROTOCOL.md` for the stable protocol summary.
+
 Loom is best understood as a source-of-truth type system plus a transaction
 protocol for fallible AI workers. The workers are disposable. The graph is
 durable. The parent is the transaction coordinator. Tickets are the execution
@@ -89,6 +91,7 @@ kind of truth.
 ```text
 .
 ├── README.md
+├── PROTOCOL.md
 ├── INSTALL.md
 ├── ARCHITECTURE.md
 ├── AGENTS.md
@@ -156,18 +159,31 @@ operator commands:
 Commands are convenience wrappers. They do not replace the rules, skills, or
 canonical records.
 
-## Product Tiers
+## Protocol Core And Workflows
 
-Loom is split by role:
+The core protocol is the persisted owner graph:
 
-- **Protocol kernel**: rules, workspace, records, constitution, tickets, Ralph,
-  critique, wiki
-- **Dev pack**: initiatives, research, specs, plans, debugging, spikes,
-  codebase atlas, shipping
-- **Maintenance guidance**: status, repair, acceptance, validation, conformance
-- **Harness adapters**: optional command wrappers and installer translations
-- **Optional utilities**: local helper skills under `optional-utilities/`, not
-  installed as part of the default protocol surface
+- constitution
+- initiative
+- research
+- spec
+- plan
+- ticket
+- packet
+- evidence
+- critique
+- wiki
+- memory
+- workspace support records
+
+Workflows such as brainstorm, debug, spike, sketch, map, review, accept, ship,
+retrospective, repair, and wiki write/audit are compositions through those
+layers. They should not create new truth owners unless a genuinely new kind of
+truth exists.
+
+Harness adapters install, translate, or wrap the protocol. They do not own
+semantics. Optional utilities stay under `optional-utilities/` and are not part
+of the default protocol install.
 
 ## Current Roadmap Direction
 

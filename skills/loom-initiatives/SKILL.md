@@ -4,7 +4,6 @@ description: "Maintain strategic outcome containers above plans and tickets. Use
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: initiative
-  protocol_version: "2.0"
 ---
 
 # loom-initiatives

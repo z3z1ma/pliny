@@ -4,7 +4,6 @@ description: "Maintain the sole live execution ledger. Use when new work needs a
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: ticket
-  protocol_version: "2.0"
 ---
 
 # loom-tickets

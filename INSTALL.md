@@ -177,3 +177,17 @@ needed:
 
 Those generated blocks are bracketed with Loom markers so `make uninstall` can
 remove only Loom-managed content.
+
+## Adapter Fixture Expectations
+
+Adapter checks verify transport fidelity. They do not define Loom semantics.
+
+Useful adapter smoke checks:
+
+- rules are installed or mirrored where the harness actually reads always-on instructions
+- skill descriptions are discoverable before full skill hydration
+- optional command wrappers remain explicit invocation surfaces
+- generated command adapters are marked as Loom-managed when the harness needs generated files
+- uninstall removes Loom-managed adapter surfaces without touching project `.loom/` truth
+
+See `examples/adapters/` for non-normative adapter fixture expectations.

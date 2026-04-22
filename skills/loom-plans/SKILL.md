@@ -4,7 +4,6 @@ description: "Maintain execution strategy, decomposition, sequencing, rollout, a
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: plan
-  protocol_version: "2.0"
 ---
 
 # loom-plans

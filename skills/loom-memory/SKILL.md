@@ -4,7 +4,6 @@ description: "Maintain optional support memory without letting it become shadow 
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: memory
-  protocol_version: "2.0"
 ---
 
 # loom-memory

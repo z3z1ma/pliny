@@ -105,6 +105,7 @@ the claim being made, such as:
 If a change touches multiple surfaces, verify:
 
 - `rules/` doctrine wording
+- `PROTOCOL.md`, `README.md`, and `ARCHITECTURE.md` when package framing changes
 - `skills/*/SKILL.md` instructions
 - `skills/*/references/` docs
 - `skills/*/templates/` artifacts

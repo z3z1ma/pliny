@@ -27,7 +27,7 @@ dogfood tree still contains `.loom/docs`, `.loom/runs`, and
 
 # Why Now
 
-The protocol hardening pass added conformance guidance and clearer tree
+The protocol hardening pass added clearer tree-shape guidance and
 expectations. The repository should not teach two competing runtime trees.
 
 # Scope

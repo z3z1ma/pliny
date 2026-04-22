@@ -4,7 +4,6 @@ description: "Run the inner implementation loop through bounded fresh-context pa
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: inner-loop
-  protocol_version: "2.0"
 ---
 
 # loom-ralph

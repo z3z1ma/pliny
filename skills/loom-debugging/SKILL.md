@@ -4,7 +4,6 @@ description: "Run a reproduce-first debug or incident workflow through existing 
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: workflow
-  protocol_version: "2.0"
 ---
 
 # loom-debugging

@@ -52,3 +52,8 @@ How the work under this plan should generally be proved.
 # Exit Criteria
 
 What must be true before the plan can be considered complete or retired.
+
+# Completion Basis
+
+When `status: completed`, explain which exit criteria were met and where any
+remaining execution truth lives.

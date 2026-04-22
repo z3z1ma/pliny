@@ -47,7 +47,7 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| spec:<slug>#ACC-000 | evidence:<slug> | critique:<slug>#FIND-000 | supported \| challenged \| open |
+| spec:<slug>#ACC-000 | evidence:<slug> | critique:<slug>#FIND-000 | open \| supported \| supported_pending_review \| challenged \| accepted_risk \| superseded |
 
 # Execution Notes
 
@@ -72,6 +72,16 @@ Status: required | completed | deferred | not_required
 # Wiki Disposition
 
 Whether accepted knowledge should be promoted into the wiki.
+
+# Acceptance Decision
+
+Required when the workspace, team, accepted risk, or operator asks for explicit
+acceptance provenance.
+
+Accepted by:
+Accepted at:
+Basis:
+Residual risks:
 
 # Dependencies
 

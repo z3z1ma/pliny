@@ -4,7 +4,6 @@ description: "What it does, when to use it, and when not to."
 compatibility: Markdown-native Loom.
 metadata:
   loom_layer: custom
-  protocol_version: "2.0"
 ---
 
 # my-skill

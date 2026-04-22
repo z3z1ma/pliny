@@ -163,6 +163,20 @@ Local writing or style utilities belong under `optional-utilities/`, not in the
 default protocol skill set. They may be useful, but they are not Loom protocol
 semantics.
 
+### 11. Core layers and workflows keep growth disciplined
+
+The protocol core is the persisted owner graph. Constitution, initiative,
+research, spec, plan, ticket, packet, evidence, critique, wiki, memory, and
+workspace support records are core Loom surfaces because they own durable truth
+or support durable operation.
+
+Workflows are routes through those surfaces. Brainstorming, debugging, spikes,
+sketches, mapping, shipping, acceptance, retrospective, repair, and wiki work
+compose the owner graph; they do not become new owner layers by default.
+
+Harness adapters transport the protocol into particular tools. Optional
+utilities stay outside the default protocol surface.
+
 ## Design Philosophy
 
 This rewrite optimizes for:

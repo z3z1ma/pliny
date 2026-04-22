@@ -14,6 +14,7 @@ A good initiative stays strategic.
 - Risks
 - Linked Work
 - Status Summary
+- Completion Basis when `status: completed`
 
 ## Anti-patterns
 

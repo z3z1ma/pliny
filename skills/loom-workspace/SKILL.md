@@ -4,7 +4,6 @@ description: "Enter a Loom workspace safely: discover structure, bootstrap the t
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: control-plane
-  protocol_version: "2.0"
 ---
 
 # loom-workspace

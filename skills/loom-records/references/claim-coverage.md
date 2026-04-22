@@ -58,6 +58,26 @@ Covers:
 - spec:acceptance-hardening#ACC-002
 ```
 
+Tickets nearing acceptance may also carry a claim matrix. The matrix is a
+ticket-owned view over links; it is not a new truth owner.
+
+```md
+# Claim Matrix
+
+| Claim | Evidence | Critique | Status |
+| --- | --- | --- | --- |
+| spec:acceptance-hardening#ACC-001 | evidence:acceptance-red-green | critique:acceptance-review#FIND-001 resolved | supported |
+```
+
+Use this status vocabulary:
+
+- `open` — no sufficient support or challenge has been reconciled yet
+- `supported` — evidence supports the claim and required review is complete or not required
+- `supported_pending_review` — evidence supports the claim but required critique or acceptance review remains
+- `challenged` — evidence or critique currently challenges the claim
+- `accepted_risk` — the claim has a known challenge or limitation accepted by the ticket owner
+- `superseded` — the claim reference has been replaced by a successor
+
 ## Packet Shape
 
 Packets should declare the verification targets for the bounded iteration:

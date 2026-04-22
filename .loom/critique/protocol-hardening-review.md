@@ -49,7 +49,7 @@ will still see the older vocabulary.
 
 Why it matters:
 
-This weakens the conformance story and can confuse agents trying to infer the
+This weakens the workspace-shape story and can confuse agents trying to infer the
 current canonical tree from the repository's own `.loom` state.
 
 Follow-up:

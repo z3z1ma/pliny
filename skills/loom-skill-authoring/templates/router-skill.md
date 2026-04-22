@@ -4,7 +4,6 @@ description: "Choose among several nearby paths when one family of work needs a 
 compatibility: Markdown-native Loom.
 metadata:
   loom_layer: router
-  protocol_version: "2.0"
 ---
 
 # my-router-skill

@@ -4,7 +4,6 @@ description: "Map a repository or module into Loom wiki, research, and evidence 
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: workflow
-  protocol_version: "2.0"
 ---
 
 # loom-codebase-atlas

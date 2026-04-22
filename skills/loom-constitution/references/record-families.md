@@ -44,6 +44,7 @@ A roadmap record answers:
 - what milestones mark meaningful advancement
 - what the current chapter of work is
 - what explicitly comes after the current chapter
+- whether the roadmap is active, completed, superseded, or retired
 
 Store roadmap records under `.loom/constitution/roadmap/`.
 

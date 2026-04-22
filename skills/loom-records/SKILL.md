@@ -4,7 +4,6 @@ description: "Shared Loom record grammar: frontmatter, IDs, filenames, typed lin
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: shared-grammar
-  protocol_version: "2.0"
 ---
 
 # loom-records
@@ -26,6 +25,7 @@ It is the place to consult when you need to know:
 - claim and acceptance coverage conventions
 - naming and ID conventions
 - typed link conventions
+- semantic link usage and relationship routing
 - external reference provenance
 - implementation reality boundaries for software work
 - change class taxonomy for routing evidence and critique
@@ -33,8 +33,6 @@ It is the place to consult when you need to know:
 - reference reconciliation discipline
 - cross-record validation recipes
 - repair and drift taxonomy
-- protocol conformance checklist
-- protocol versioning and migration guidance
 
 ## The Core Principle
 
@@ -102,17 +100,16 @@ Then read conditionally:
    critique need traceable claim IDs.
 5. `references/query-and-linking.md` when searching graph edges or reconciling
    references.
-6. `references/implementation-reality.md` when code, tests, specs, and
+6. `references/semantic-link-usage.md` when deciding whether a relationship
+   belongs in `links:`, `depends_on`, coverage, evidence, critique, or
+   external refs.
+7. `references/implementation-reality.md` when code, tests, specs, and
    evidence need their truth boundaries separated.
-7. `references/change-class.md` when tickets or packets need evidence,
+8. `references/change-class.md` when tickets or packets need evidence,
    critique, or verification defaults.
-8. `references/validation.md` when checking structural record health.
-9. `references/repair-and-drift.md` when graph drift needs classification or
+9. `references/validation.md` when checking structural record health.
+10. `references/repair-and-drift.md` when graph drift needs classification or
    safe repair.
-10. `references/conformance.md` when judging whether a workspace or patch still
-   matches the protocol.
-11. `references/protocol-versioning.md` when changing grammar or migrating old
-   records.
-12. `references/retrospective.md` when assimilating durable learning into owner
+11. `references/retrospective.md` when assimilating durable learning into owner
    layers.
-13. `templates/evidence.md` only when creating a proof artifact.
+12. `templates/evidence.md` only when creating a proof artifact.

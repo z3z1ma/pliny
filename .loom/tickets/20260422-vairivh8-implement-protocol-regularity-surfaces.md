@@ -50,7 +50,7 @@ explicit improves cold-agent recovery before deeper implementation work starts.
 - quarantine non-protocol utility skills from the default protocol skill set
 - tighten ticket readiness defaults, claim namespacing, packet transaction
   boundaries, critique findings, evidence validity, packet lifecycle, and
-  protocol conformance guidance
+  structural protocol checks
 
 # Non-goals
 
@@ -85,7 +85,7 @@ explicit improves cold-agent recovery before deeper implementation work starts.
 - critique findings have stable IDs and disposition vocabulary
 - evidence records capture environment, validity, limitations, supported
   claims, and challenged claims
-- protocol conformance and protocol versioning guidance exists
+- structural protocol check guidance exists
 - local prose utility skills are outside the default protocol `skills/` tree
 - at least one example includes before/after fixture slices
 
@@ -158,7 +158,7 @@ None.
 - 2026-04-22T08:42:44Z: Added semantic hardening: skill-owned command
   procedures, proposed-by-default tickets, namespaced claim references,
   child/parent packet scopes, execution context, packet lifecycle, critique
-  finding IDs, stronger evidence metadata, conformance/versioning guidance,
+  finding IDs, stronger evidence metadata, structural check guidance,
   optional utility quarantine, and one before/after fixture example.
 - 2026-04-22T09:10:31Z: Ran packetized implementation critique and recorded
   `critique:protocol-hardening-review`. Follow-up tickets created for legacy

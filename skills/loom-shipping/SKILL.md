@@ -4,7 +4,6 @@ description: "Package already-truthful Loom work for merge, release, or handoff 
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: workflow
-  protocol_version: "2.0"
 ---
 
 # loom-shipping

@@ -216,5 +216,5 @@ coherent operating manual.
   examples, and singular `.loom/memory`
 - 2026-04-22: hardened the protocol/kernel boundary by moving command-owned
   procedures into skill references, quarantining optional utility skills, and
-  tightening ticket, claim, packet, critique, evidence, conformance, and
+  tightening ticket, claim, packet, critique, evidence, structural checks, and
   versioning guidance

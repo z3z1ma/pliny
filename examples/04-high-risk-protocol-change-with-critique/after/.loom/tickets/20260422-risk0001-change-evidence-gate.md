@@ -12,6 +12,8 @@ scope:
 links:
   critique:
     - critique:evidence-gate-review
+  evidence:
+    - evidence:evidence-gate-structural-check
 external_refs: {}
 depends_on: []
 ---
@@ -24,6 +26,17 @@ Change evidence requirements before closure.
 
 - Evidence minimums are clear enough that future agents do not close work with
   unsupported claims.
+
+# Local Claims
+
+- CLAIM-001: The evidence gate protocol change is structurally routed through
+  ticket, evidence, and critique before acceptance.
+
+# Claim Matrix
+
+| Claim | Evidence | Critique | Status |
+| --- | --- | --- | --- |
+| ticket:risk0001#CLAIM-001 | evidence:evidence-gate-structural-check | critique:evidence-gate-review#FIND-001 open | challenged |
 
 # Critique Disposition
 

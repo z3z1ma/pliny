@@ -36,3 +36,8 @@ Which initiatives, specs, plans, or tickets should exist beneath this roadmap.
 # Status Summary
 
 What is true about the roadmap right now.
+
+# Completion Basis
+
+When `status: completed`, explain which milestones were reached and what
+roadmap, initiative, or plan owns the next chapter.

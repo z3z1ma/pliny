@@ -4,7 +4,6 @@ description: "Create or refine Loom-compatible skills that are scoped, durable, 
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: authoring
-  protocol_version: "2.0"
 ---
 
 # loom-skill-authoring

@@ -4,7 +4,6 @@ description: "Run bounded spike and sketch investigations as research variants. 
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: workflow
-  protocol_version: "2.0"
 ---
 
 # loom-spike

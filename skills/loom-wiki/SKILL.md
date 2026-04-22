@@ -4,7 +4,6 @@ description: "Maintain the persistent, interlinked explanation layer for accepte
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   loom_layer: wiki
-  protocol_version: "2.0"
 ---
 
 # loom-wiki
@@ -88,10 +87,12 @@ Read immediately before creating or substantially changing wiki pages:
 
 Then read conditionally:
 
-3. `references/maintenance.md` when updating, staling, or superseding existing
+3. `references/wiki-write.md` when creating or substantially rewriting a wiki
+   page from accepted truth.
+4. `references/maintenance.md` when updating, staling, or superseding existing
    pages.
-4. `references/wiki-audit.md` when auditing pages for staleness, duplication,
+5. `references/wiki-audit.md` when auditing pages for staleness, duplication,
    broken sources, or misplaced authority.
-5. `templates/index.md` only when creating or refreshing a wiki index.
-6. The relevant page template only when writing that page type.
-7. `templates/wiki-packet.md` only when a fresh synthesis pass is warranted.
+6. `templates/index.md` only when creating or refreshing a wiki index.
+7. The relevant page template only when writing that page type.
+8. `templates/wiki-packet.md` only when a fresh synthesis pass is warranted.
