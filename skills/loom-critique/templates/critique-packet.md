@@ -8,6 +8,7 @@ review_target:
   kind: code_change
   diff: <branch | commit | PR | diff target>
 mode: review
+change_class: <record-hygiene|documentation-explanation|behavior-contract|code-behavior|protocol-authority|data-migration|security-sensitive|release-packaging>
 style: reference-first
 created_at: <UTC timestamp>
 updated_at: <UTC timestamp>
@@ -59,6 +60,11 @@ What kinds of weakness or risk the reviewer should focus on.
 
 Named critique profiles to apply:
 - operator-clarity
+
+# Change Class
+
+Declared above as `change_class`. Use it to choose the evidence and critique
+profiles most relevant to this review.
 
 # Source Snapshot
 

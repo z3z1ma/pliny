@@ -11,6 +11,7 @@ A Ralph packet is a contract, not a reminder note.
 - child write scope
 - parent merge scope
 - mode and style
+- change class
 - source fingerprint
 - context budget
 - execution context
@@ -38,6 +39,10 @@ A strong packet usually includes:
 The packet does not need to duplicate every source file.
 
 It does need to include enough excerpts, summaries, or references that the child knows where the real constraints live.
+
+For code work, separate intended behavior from implementation reality. The
+packet should tell the child what the project intends and where to inspect what
+the code currently does.
 
 ## Source Fingerprint
 

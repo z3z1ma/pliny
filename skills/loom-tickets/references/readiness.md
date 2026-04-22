@@ -10,6 +10,7 @@ this checklist passes.
 - the problem is clearly named
 - why now is clearly named
 - scope and non-goals are separated
+- `change_class` is set when it would affect evidence, critique, or packet posture
 - acceptance criteria are concrete enough to guide behavior
 - coverage names relevant spec acceptance IDs when the work implements or
   verifies a spec

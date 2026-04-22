@@ -19,6 +19,7 @@ inspect the workspace directly, make structural trust explicit, then route to th
 - workspace bootstrap
 - workspace diagnosis
 - repository / scope discovery
+- fuzzy-request problem shaping before owner commitment
 - first-read order
 - subsystem routing
 - status snapshot synthesis
@@ -93,8 +94,13 @@ Read immediately for normal workspace entry:
 
 Then read conditionally:
 
-3. `references/status-snapshot.md` when summarizing current queues, blockers,
+3. `references/problem-shaping.md` when the operator request is too fuzzy to
+   route directly into an owner record.
+4. `references/status-snapshot.md` when summarizing current queues, blockers,
    review debt, or acceptance debt.
-4. `references/doctor.md` when structural trust is questionable.
-5. `templates/harness.md` only when documenting fresh-context invocation
+5. `references/doctor.md` when structural trust is questionable.
+6. `references/scope-registry.md` when repository aliases or multi-worktree
+   scope need to be made explicit.
+7. `templates/workspace.md` only when creating `.loom/workspace.md`.
+8. `templates/harness.md` only when documenting fresh-context invocation
    mechanics.

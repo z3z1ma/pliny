@@ -31,6 +31,7 @@ Use these sets unless the owning skill records a narrower one:
 - packet: `compiled | consumed | superseded | abandoned`
 - evidence: `recorded | superseded | invalidated`
 - critique: `draft | final | superseded`
+- workspace support records: `active | superseded | retired`
 
 ## Transition Guidance
 

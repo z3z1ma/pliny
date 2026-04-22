@@ -57,8 +57,8 @@ Read immediately for normal plan creation or review:
 
 Then read conditionally:
 
-2. `references/problem-shaping.md` when the request is still fuzzy and should
-   not yet become a plan.
-3. `references/slicing.md` when decomposing a plan into ticket-sized work.
+2. `references/slicing.md` when decomposing a plan into ticket-sized work.
+3. `skills/loom-workspace/references/problem-shaping.md` when the request is
+   still too fuzzy to become a plan.
 4. `templates/plan.md` only when creating or substantially reshaping a plan
    record.

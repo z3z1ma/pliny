@@ -40,6 +40,10 @@ It should search for mismatches, hidden assumptions, weak evidence, brittle reas
 
 Use this as the default until a project records something stricter.
 
+Risk class says how dangerous the change is. Change class says what kind of
+mutation it is. Use both when deciding whether critique is optional,
+recommended, or mandatory.
+
 ### Low risk
 
 Examples:
@@ -72,6 +76,10 @@ Examples:
 - architecture changes with broad downstream impact
 
 Default: critique mandatory.
+
+Change classes can tighten these defaults. Code behavior, protocol authority,
+data migration, and security-sensitive changes usually need named critique
+profiles even when the diff looks small.
 
 ## What Good Critique Produces
 

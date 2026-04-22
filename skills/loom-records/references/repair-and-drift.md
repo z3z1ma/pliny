@@ -49,7 +49,8 @@ rg -n 'REQ-[0-9]{3}|ACC-[0-9]{3}|CLAIM-[0-9]{3}' .loom --glob '*.md'
 - orphan packet -> `loom-ralph` or mark the packet `superseded` / `abandoned`
 - dangling critique follow-up -> `loom-tickets`
 - lifecycle ambiguity -> `loom-records`
-- coverage drift -> `loom-specs`, `loom-tickets`, or `loom-acceptance`
+- coverage drift -> `loom-specs`, `loom-tickets`, or
+  `skills/loom-tickets/references/acceptance-gate.md`
 
 ## Done Means
 

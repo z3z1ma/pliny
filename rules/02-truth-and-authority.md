@@ -44,6 +44,23 @@ This prevents claims from drifting into artifacts that cannot safely own them.
 If two artifacts disagree, do not average them together.
 Find which layer is supposed to own that fact, then reconcile the non-owner.
 
+## Implementation Reality
+
+For software projects, the source tree owns current implementation reality.
+That does not mean it owns intended behavior.
+
+Use this split:
+
+- specs and tickets say what should happen
+- source code says what currently happens
+- tests are executable instruments for expectations
+- evidence records what was observed
+- critique judges whether the evidence and implementation are good enough
+
+When code and records disagree, do not let either side silently win. Decide
+whether the intended behavior, implementation, evidence, or explanation needs
+to change, then route to the owner.
+
 ## Canonical vs Support Layers
 
 Inside a Loom workspace, the normal canonical tree is:

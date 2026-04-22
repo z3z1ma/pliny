@@ -1,24 +1,19 @@
 ---
-{
-  "created_at": "2026-04-01T17:44:27Z",
-  "id": "research:shared-script-cli-inventory",
-  "kind": "research",
-  "links": {
-    "plan": [
-      "plan:bootstrap-cli-reference-docs"
-    ],
-    "ticket": [
-      "ticket:z8h0g58e"
-    ]
-  },
-  "repository_scope": {
-    "kind": "repository",
-    "repository_id": "repo:root"
-  },
-  "schema_version": 1,
-  "status": "active",
-  "updated_at": "2026-04-01T18:01:56Z"
-}
+id: research:shared-script-cli-inventory
+kind: research
+status: active
+created_at: 2026-04-01T17:44:27Z
+updated_at: 2026-04-22T17:20:00Z
+scope:
+  kind: repository
+  repositories:
+    - repo:root
+links:
+  plan:
+    - plan:bootstrap-cli-reference-docs
+  ticket:
+    - ticket:z8h0g58e
+external_refs: {}
 ---
 
 # Question

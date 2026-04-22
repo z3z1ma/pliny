@@ -1,22 +1,19 @@
 ---
-{
-  "created_at": "2026-04-08T15:25:50Z",
-  "depends_on": [],
-  "id": "ticket:psh7h282",
-  "kind": "ticket",
-  "links": {
-    "plan": [
-      "plan:simplify-ticket-identity-to-random-tokens"
-    ]
-  },
-  "repository_scope": {
-    "kind": "repository",
-    "repository_id": "repo:root"
-  },
-  "schema_version": 1,
-  "status": "closed",
-  "updated_at": "2026-04-19T23:34:12Z"
-}
+id: ticket:psh7h282
+kind: ticket
+status: closed
+change_class: protocol-authority
+created_at: 2026-04-08T15:25:50Z
+updated_at: 2026-04-22T17:20:00Z
+scope:
+  kind: repository
+  repositories:
+    - repo:root
+links:
+  plan:
+    - plan:simplify-ticket-identity-to-random-tokens
+external_refs: {}
+depends_on: []
 ---
 
 # Summary

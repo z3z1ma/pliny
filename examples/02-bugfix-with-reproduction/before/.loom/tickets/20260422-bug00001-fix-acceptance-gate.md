@@ -2,6 +2,7 @@
 id: ticket:bug00001
 kind: ticket
 status: ready
+change_class: code-behavior
 created_at: 2026-04-22T00:00:00Z
 updated_at: 2026-04-22T00:00:00Z
 scope:

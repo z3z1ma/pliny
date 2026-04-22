@@ -49,6 +49,10 @@ The layer model is the type system:
 The rule that keeps the graph coherent is simple: truth ownership is by layer,
 not by recency.
 
+For software work, the codebase owns current implementation reality while specs
+and tickets own intended behavior. Evidence bridges the two, and critique
+judges whether the bridge is strong enough.
+
 ## The Two Loops
 
 ### Outer loop
@@ -90,7 +94,7 @@ kind of truth.
 ├── AGENTS.md
 ├── Makefile
 ├── commands/         # optional harness-wrapper prompt files
-├── examples/         # protocol traces, not truth owners
+├── examples/         # golden protocol fixtures and traces, not truth owners
 ├── optional-utilities/
 ├── rules/
 └── skills/
@@ -173,10 +177,12 @@ The package now includes first-pass surfaces for:
 
 - shared non-ticket status lifecycle grammar
 - claim-level coverage from specs through tickets, packets, evidence, and critique
+- change classes that guide evidence, critique, and verification posture
 - packet freshness and context-budget guidance
+- workspace scope aliases for multi-repo or multi-worktree resolution
 - named critique risk profiles
 - codebase atlas, debug, spike, sketch, execution-wave, external-reference, ship, and retrospective-prevention workflows as routes through existing layers
-- golden examples that make the protocol evaluable across harnesses
+- golden examples and fixture slices that make the protocol evaluable across harnesses
 
 The next proving step is to exercise those surfaces in real Loom work and
 reconcile any stale dogfooding records that still teach older shapes.

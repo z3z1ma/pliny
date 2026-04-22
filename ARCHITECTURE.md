@@ -112,6 +112,11 @@ It is the source-of-truth type system:
 When records disagree, the owning layer wins for that kind of truth. Newer
 files do not automatically outrank older owner records.
 
+For software projects, source code owns current implementation reality but not
+intended behavior. Specs and tickets say what should happen; tests and
+observations expose what happens; evidence records the result; critique judges
+whether the proof is sufficient.
+
 ### 6. Docs evolves into Wiki
 
 The old docs layer was close to a wiki but framed too narrowly.
@@ -141,13 +146,13 @@ critique for adversarial review, and wiki for accepted explanation.
 
 ### 9. Examples make the protocol reviewable
 
-The `examples/` tree contains golden traces, not runtime fixtures and not
-canonical project truth.
+The `examples/` tree contains golden protocol fixtures and traces. They are not
+automated tests and not canonical project truth.
 
 Each example should show a starting `.loom` slice, operator request, expected
-route, expected artifacts, final state, and common wrong behavior. That gives
-contributors a way to review whether a protocol change preserves Loom's
-intended shape across harnesses.
+route, expected artifacts, final state, common wrong behavior, and when useful
+before/after fixture slices. That gives contributors a way to review whether a
+protocol change preserves Loom's intended shape across harnesses.
 
 ### 10. Commands and utilities stay outside the kernel
 

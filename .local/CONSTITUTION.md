@@ -1,3 +1,16 @@
+# Archived, Non-Authoritative Draft
+
+This file is retained as historical research only.
+It does not define current Loom protocol truth.
+
+Current product truth lives in `rules/`, `skills/`, `ARCHITECTURE.md`, and
+`README.md`. Current dogfood truth lives in `.loom/` owner records.
+
+The terminology below may mention retired surfaces such as `src/rules`,
+`src/skills`, `.loom/docs`, `.loom/runs`, or `.loom/verification`.
+
+---
+
 # Markdown-First Pi Loom
 
 ## Status

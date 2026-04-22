@@ -25,6 +25,11 @@ A Loom-enabled project normally uses this canonical tree:
     └── user/
 ```
 
+The tree is lazily materialized. Git may not preserve empty directories, so a
+fresh checkout may omit owner paths that have no records yet. Bootstrap should
+create the standard tree when needed, and any directory that contains records
+should use the canonical path.
+
 ## Bootstrap Command
 
 ```bash
@@ -49,6 +54,7 @@ mkdir -p \
 ## First Files Worth Creating
 
 - `.loom/constitution/constitution.md`
+- `.loom/workspace.md` if repository aliases or multi-worktree scope need to be explicit
 - `.loom/harness.md` if the project wants repeatable fresh-context launch profiles
 - the first initiative / plan / ticket chain required by the work
 

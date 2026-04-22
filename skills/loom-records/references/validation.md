@@ -32,13 +32,13 @@ Ask:
 ### Missing IDs
 
 ```bash
-rg -L '^id:' .loom --glob '*.md'
+rg --files-without-match '^id:' .loom --glob '{constitution,initiatives,research,specs,plans,tickets,critique,wiki,evidence,packets}/**/*.md'
 ```
 
 ### Missing status
 
 ```bash
-rg -L '^status:' .loom --glob '*.md'
+rg --files-without-match '^status:' .loom --glob '{constitution,initiatives,research,specs,plans,tickets,critique,wiki,evidence,packets}/**/*.md'
 ```
 
 ### Status vocabulary spot check

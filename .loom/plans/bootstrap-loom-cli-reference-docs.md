@@ -1,24 +1,19 @@
 ---
-{
-  "created_at": "2026-04-01T17:44:27Z",
-  "id": "plan:bootstrap-cli-reference-docs",
-  "kind": "plan",
-  "links": {
-    "roadmap": [
-      "roadmap:bootstrap-the-markdown-first-protocol-corpus"
-    ],
-    "ticket": [
-      "ticket:z8h0g58e"
-    ]
-  },
-  "repository_scope": {
-    "kind": "repository",
-    "repository_id": "repo:root"
-  },
-  "schema_version": 1,
-  "status": "active",
-  "updated_at": "2026-04-01T18:01:56Z"
-}
+id: plan:bootstrap-cli-reference-docs
+kind: plan
+status: active
+created_at: 2026-04-01T17:44:27Z
+updated_at: 2026-04-22T17:20:00Z
+scope:
+  kind: repository
+  repositories:
+    - repo:root
+links:
+  roadmap:
+    - roadmap:bootstrap-the-markdown-first-protocol-corpus
+  ticket:
+    - ticket:z8h0g58e
+external_refs: {}
 ---
 
 # Purpose / Big Picture

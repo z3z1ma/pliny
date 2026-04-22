@@ -118,3 +118,7 @@ Profiles are lenses, not permanent agents or new layers.
 - high risk: require the profile matching the domain plus `operator-clarity`
 
 If the risk class is unclear, treat it as medium and explain the uncertainty.
+
+Use `skills/loom-records/references/change-class.md` when the review target
+declares a `change_class` or when profile selection would otherwise be
+ambiguous.

@@ -38,7 +38,7 @@ Hydrate only what you need from:
 
 ## Canonical Procedure
 
-Use `skills/loom-plans/references/problem-shaping.md` as the procedure.
+Use `skills/loom-workspace/references/problem-shaping.md` as the procedure.
 
 In short:
 

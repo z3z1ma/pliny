@@ -18,6 +18,10 @@ test -d .loom/packets/ralph
 test -d .loom/wiki
 ```
 
+If an empty canonical directory is absent in a Git checkout, treat that as a
+bootstrap gap rather than automatic corruption. If records exist in a retired
+or incorrect path, route to repair.
+
 ## Graph Discovery Checks
 
 ```bash
@@ -36,7 +40,8 @@ git -C path/to/target rev-parse --show-toplevel
 
 A workspace is healthy enough when:
 
-- the canonical directories exist
+- canonical owner paths exist where records exist, or bootstrap can create
+  missing empty paths
 - `constitution:main` exists or bootstrapping is clearly underway
 - the owner chain for the current task is discoverable
 - target repository ownership is explicit

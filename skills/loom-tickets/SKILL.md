@@ -20,6 +20,7 @@ If execution truth changed, the ticket should absorb it.
 - ticket status transitions
 - execution notes
 - acceptance criteria
+- change class and its evidence / critique implications
 - claim coverage
 - dependencies
 - evidence / critique / wiki disposition
@@ -93,7 +94,9 @@ Then read conditionally:
 
 3. `references/dependencies.md` when modeling hard prerequisites or softer
    links.
-4. `skills/loom-records/references/claim-coverage.md` when tying the ticket to
+4. `skills/loom-records/references/change-class.md` when selecting evidence,
+   critique profiles, or verification posture from the kind of mutation.
+5. `skills/loom-records/references/claim-coverage.md` when tying the ticket to
    spec acceptance or critique findings.
-5. `references/acceptance-gate.md` when deciding whether closure is honest.
-6. `templates/ticket.md` only when creating a ticket.
+6. `references/acceptance-gate.md` when deciding whether closure is honest.
+7. `templates/ticket.md` only when creating a ticket.

@@ -45,8 +45,8 @@ Everything a user receives lives here:
   and templates
 - `commands/` -- optional harness-wrapper prompt files when this repository
   wants to ship them
-- `examples/` -- protocol traces and eval fixtures; useful for review, but not
-  a truth owner
+- `examples/` -- golden protocol fixtures and traces; useful for review, but
+  not a truth owner
 - `optional-utilities/` -- local utility skills excluded from the default
   protocol install
 
@@ -109,7 +109,7 @@ If a change touches multiple surfaces, verify:
 - `skills/*/references/` docs
 - `skills/*/templates/` artifacts
 - optional `commands/` wrappers when they cover the same workflow
-- `examples/` traces when behavior or workflow routing changes
+- `examples/` fixtures when behavior or workflow routing changes
 - canonical `.loom/` examples when they are meant to teach the product
 
 ## Key Architecture Facts

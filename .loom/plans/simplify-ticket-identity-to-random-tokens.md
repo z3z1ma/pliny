@@ -1,24 +1,19 @@
 ---
-{
-  "created_at": "2026-04-08T07:54:09Z",
-  "id": "plan:simplify-ticket-identity-to-random-tokens",
-  "kind": "plan",
-  "links": {
-    "constitution": [
-      "constitution:main"
-    ],
-    "ticket": [
-      "ticket:psh7h282"
-    ]
-  },
-  "repository_scope": {
-    "kind": "repository",
-    "repository_id": "repo:root"
-  },
-  "schema_version": 1,
-  "status": "active",
-  "updated_at": "2026-04-08T16:22:11Z"
-}
+id: plan:simplify-ticket-identity-to-random-tokens
+kind: plan
+status: active
+created_at: 2026-04-08T07:54:09Z
+updated_at: 2026-04-22T17:20:00Z
+scope:
+  kind: repository
+  repositories:
+    - repo:root
+links:
+  constitution:
+    - constitution:main
+  ticket:
+    - ticket:psh7h282
+external_refs: {}
 ---
 
 # Purpose / Big Picture

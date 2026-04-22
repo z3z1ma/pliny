@@ -27,6 +27,8 @@ It is the place to consult when you need to know:
 - naming and ID conventions
 - typed link conventions
 - external reference provenance
+- implementation reality boundaries for software work
+- change class taxonomy for routing evidence and critique
 - evidence record shape
 - reference reconciliation discipline
 - cross-record validation recipes
@@ -100,13 +102,17 @@ Then read conditionally:
    critique need traceable claim IDs.
 5. `references/query-and-linking.md` when searching graph edges or reconciling
    references.
-6. `references/validation.md` when checking structural record health.
-7. `references/repair-and-drift.md` when graph drift needs classification or
+6. `references/implementation-reality.md` when code, tests, specs, and
+   evidence need their truth boundaries separated.
+7. `references/change-class.md` when tickets or packets need evidence,
+   critique, or verification defaults.
+8. `references/validation.md` when checking structural record health.
+9. `references/repair-and-drift.md` when graph drift needs classification or
    safe repair.
-8. `references/conformance.md` when judging whether a workspace or patch still
+10. `references/conformance.md` when judging whether a workspace or patch still
    matches the protocol.
-9. `references/protocol-versioning.md` when changing grammar or migrating old
+11. `references/protocol-versioning.md` when changing grammar or migrating old
    records.
-10. `references/retrospective.md` when assimilating durable learning into owner
+12. `references/retrospective.md` when assimilating durable learning into owner
    layers.
-11. `templates/evidence.md` only when creating a proof artifact.
+13. `templates/evidence.md` only when creating a proof artifact.

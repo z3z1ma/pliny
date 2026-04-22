@@ -1,17 +1,17 @@
 ---
-{
-  "created_at": "2026-04-01T08:49:37Z",
-  "id": "ticket:14eh8c66",
-  "kind": "ticket",
-  "links": {},
-  "repository_scope": {
-    "kind": "repository",
-    "repository_id": "repo:root"
-  },
-  "schema_version": 1,
-  "status": "closed",
-  "updated_at": "2026-04-19T23:34:12Z"
-}
+id: ticket:14eh8c66
+kind: ticket
+status: closed
+change_class: record-hygiene
+created_at: 2026-04-01T08:49:37Z
+updated_at: 2026-04-22T17:20:00Z
+scope:
+  kind: repository
+  repositories:
+    - repo:root
+links: {}
+external_refs: {}
+depends_on: []
 ---
 
 # Summary

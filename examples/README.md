@@ -1,9 +1,11 @@
 # Loom Protocol Examples
 
-These examples are protocol traces, not runnable fixtures.
+These examples are golden protocol fixtures and traces.
 
 They exist so contributors can judge whether a Loom change preserves the
 intended route through owner layers.
+
+They are not automated tests and not canonical project truth.
 
 Each example names:
 
@@ -14,7 +16,7 @@ Each example names:
 - expected final state
 - common wrong behavior
 
-Stronger examples may also include:
+Each example should include:
 
 ```text
 before/
@@ -25,4 +27,5 @@ common-wrong-behavior.md
 ```
 
 Examples are outside the core product source. They may demonstrate the product,
-but they do not define Loom truth.
+but they do not define Loom truth. Keep them minimal but conformant because
+agents learn protocol shape from examples.

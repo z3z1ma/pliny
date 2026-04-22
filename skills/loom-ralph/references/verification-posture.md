@@ -68,6 +68,11 @@ Dishonest uses of `none`:
 - if the behavior is real but not yet testable, default to `observation-first`
 - if the iteration genuinely does not change behavior, `none` is the honest choice
 
+Use `skills/loom-records/references/change-class.md` to confirm the default.
+For `code-behavior`, start from `test-first` or `observation-first`; for
+`record-hygiene`, `none` is often enough when structural checks cover the
+claim.
+
 When in doubt, prefer the stricter posture. The discipline compounds.
 
 ## What goes in the packet body
@@ -85,5 +90,8 @@ Posture is not a substitute for acceptance criteria on the ticket, and it is not
 - the ticket owns what "acceptance" means across iterations
 - the packet owns what "this iteration proved it worked" means
 - critique pressure-tests whether the evidence actually supports the claim
+
+Source code shows current implementation reality. Specs and tickets state
+intended behavior. Evidence is the bridge between them.
 
 A green test-first iteration is not the same as a closed ticket. Acceptance still decides.

@@ -2,6 +2,7 @@
 id: ticket:<token>
 kind: ticket
 status: proposed
+change_class: <record-hygiene|documentation-explanation|behavior-contract|code-behavior|protocol-authority|data-migration|security-sensitive|release-packaging>
 created_at: <UTC timestamp>
 updated_at: <UTC timestamp>
 scope:
@@ -41,6 +42,12 @@ What must be true for this ticket to be accepted.
 
 Covers:
 - spec:<slug>#ACC-000
+
+# Claim Matrix
+
+| Claim | Evidence | Critique | Status |
+| --- | --- | --- | --- |
+| spec:<slug>#ACC-000 | evidence:<slug> | critique:<slug>#FIND-000 | supported \| challenged \| open |
 
 # Execution Notes
 

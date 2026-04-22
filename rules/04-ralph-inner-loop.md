@@ -67,21 +67,23 @@ Every Ralph packet should answer these questions:
 1. what exact target owns this iteration
 2. what larger hierarchy constrains it
 3. what mode and style is being used
-4. what the worker may read
-5. what the worker may write
-6. what the parent must reconcile
-7. what source version the packet was compiled against
-8. what execution context is expected
-9. what context budget the worker should use
-10. what counts as progress
-11. what should happen if the worker gets blocked
-12. what output the parent expects back
+4. what change class is being mutated
+5. what the worker may read
+6. what the worker may write
+7. what the parent must reconcile
+8. what source version the packet was compiled against
+9. what execution context is expected
+10. what context budget the worker should use
+11. what counts as progress
+12. what should happen if the worker gets blocked
+13. what output the parent expects back
 
 The packet body should normally include:
 
 - Mission
 - Bound Context
 - Source Snapshot
+- Change Class
 - Task For This Iteration
 - Stop Conditions
 - Output Contract

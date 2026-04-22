@@ -29,6 +29,7 @@ That usually includes some mix of:
 - behavioral tests or observed outputs
 - manual inspection of changed files
 - comparison against acceptance criteria
+- change-class-specific evidence expectations
 
 ## Structural Checklist
 

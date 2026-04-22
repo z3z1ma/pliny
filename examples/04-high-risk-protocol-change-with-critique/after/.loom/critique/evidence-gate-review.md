@@ -15,6 +15,14 @@ links:
 external_refs: {}
 ---
 
+# Summary
+
+Reviewed a high-risk protocol authority change to the evidence gate.
+
+# Review Target
+
+ticket:risk0001 and the changed validation rule fixture.
+
 # Verdict
 
 Do not close until follow-up text clarifies evidence minimums.
@@ -38,3 +46,21 @@ Agents may close work with weak proof.
 Follow-up:
 
 - ticket:risk0001
+
+# Evidence Reviewed
+
+- ticket:risk0001
+- `after/rules/07-validation-and-honesty.md`
+
+# Residual Risks
+
+The evidence rule could still be read as allowing weak proof if the follow-up
+does not define sufficiency.
+
+# Required Follow-up
+
+Clarify evidence minimums before closure.
+
+# Acceptance Recommendation
+
+Keep ticket:risk0001 in `review_required`.

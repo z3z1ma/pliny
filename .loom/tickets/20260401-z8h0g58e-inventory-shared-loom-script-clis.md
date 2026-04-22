@@ -1,24 +1,21 @@
 ---
-{
-  "created_at": "2026-04-01T17:44:27Z",
-  "id": "ticket:z8h0g58e",
-  "kind": "ticket",
-  "links": {
-    "plan": [
-      "plan:bootstrap-cli-reference-docs"
-    ],
-    "research": [
-      "research:shared-script-cli-inventory"
-    ]
-  },
-  "repository_scope": {
-    "kind": "repository",
-    "repository_id": "repo:root"
-  },
-  "schema_version": 1,
-  "status": "closed",
-  "updated_at": "2026-04-19T23:34:12Z"
-}
+id: ticket:z8h0g58e
+kind: ticket
+status: closed
+change_class: documentation-explanation
+created_at: 2026-04-01T17:44:27Z
+updated_at: 2026-04-22T17:20:00Z
+scope:
+  kind: repository
+  repositories:
+    - repo:root
+links:
+  plan:
+    - plan:bootstrap-cli-reference-docs
+  research:
+    - research:shared-script-cli-inventory
+external_refs: {}
+depends_on: []
 ---
 
 # Summary

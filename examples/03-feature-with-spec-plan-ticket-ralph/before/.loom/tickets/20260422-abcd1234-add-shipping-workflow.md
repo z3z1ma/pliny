@@ -2,6 +2,7 @@
 id: ticket:abcd1234
 kind: ticket
 status: proposed
+change_class: release-packaging
 created_at: 2026-04-22T00:00:00Z
 updated_at: 2026-04-22T00:00:00Z
 scope:

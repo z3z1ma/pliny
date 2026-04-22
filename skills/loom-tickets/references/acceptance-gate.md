@@ -8,7 +8,9 @@ implementation.
 ## Inputs
 
 - ticket
+- change class and risk class
 - linked spec and coverage IDs
+- ticket claim matrix when present
 - evidence
 - critique records and finding dispositions
 - wiki disposition
@@ -18,7 +20,11 @@ implementation.
 ## Closure Questions
 
 - Are acceptance criteria met?
+- Does implementation reality match intended behavior, or is the gap explicitly
+  recorded?
 - Does evidence support each covered claim reference?
+- Does the claim matrix accurately summarize support, challenge, and open
+  claims?
 - Are required critique profiles complete?
 - Are medium and high severity findings resolved, explicitly accepted, or
   converted into follow-up tickets?

@@ -5,6 +5,7 @@ packet_kind: ralph
 status: compiled
 target: ticket:<token>
 mode: execution
+change_class: <record-hygiene|documentation-explanation|behavior-contract|code-behavior|protocol-authority|data-migration|security-sensitive|release-packaging>
 style: reference-first
 verification_posture: test-first
 iteration: 1
@@ -58,9 +59,17 @@ What this iteration is meant to achieve.
 
 What larger chain constrains the work.
 
+Name intended behavior separately from current implementation reality when this
+packet touches code.
+
 # Source Snapshot
 
 Curated excerpts, summaries, or directions to the important source records.
+
+# Change Class
+
+Declared above as `change_class`. Explain how this class affects evidence,
+critique, and verification posture for this iteration.
 
 # Verification Targets
 
