@@ -59,13 +59,17 @@ Hydrate only what you need from:
    - Notice if a critique, wiki page, or evidence record already exists for the target.
 
 6. **Route explicitly.**
+   - If the request is still exploratory, route to `/loom-brainstorm`.
    - If scope is still fuzzy, route to `/loom-plan`.
    - If evidence is missing, route to `/loom-research`.
    - If behavior is missing, route to `/loom-spec`.
+   - If a citable choice should be recorded, route to `/loom-decide`.
    - If a ready or active ticket already owns the work, route to `/loom-work`.
    - If implementation needs adversarial review, route to `/loom-review`.
    - If the main need is accepted explanation, route to `/loom-wiki`.
+   - If graph drift is blocking honest work, route to `/loom-repair`.
    - If closure is the question, route to `/loom-accept`.
+   - If recent work should be assimilated into owner layers, route to `/loom-retrospective`.
 
 ## Native tools to prefer
 

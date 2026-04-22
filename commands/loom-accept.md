@@ -66,6 +66,7 @@ Hydrate only what you need from:
    - `review_required` if critique is still the next governed move.
    - `active` or `blocked` if the work is not actually done.
    - Create follow-up tickets when residual work is substantial.
+   - If graph drift (broken references, owner-layer conflicts, dangling follow-up) is blocking an honest closure, route to `/loom-repair` before deciding.
 
 5. **Update the record.**
    - Record the decision in the ticket journal.

@@ -34,10 +34,10 @@ Hydrate only what you need from:
 
 ## Goals
 
-- define what the system should do
-- separate desired behavior from implementation details
+- define what the system should do, separate from how
+- ground the contract in evidence, not wishful behavior
 - make acceptance criteria and scenarios durable
-- align downstream tickets and critique with one contract
+- reconcile downstream tickets and critique with one contract
 
 ## Procedure
 
@@ -50,18 +50,18 @@ Hydrate only what you need from:
    - Read enough to avoid writing a fantasy spec.
 
 3. **Write or refine the spec.**
-   - Make the problem, desired behavior, constraints, scenarios, and acceptance explicit.
-   - Keep the spec precise, but do not let it collapse into code-level trivia.
+   - Make problem, desired behavior, constraints, scenarios, and acceptance explicit.
+   - Keep the spec precise; do not collapse it into code-level trivia.
    - Name edge cases that matter.
 
 4. **Reconcile downstream artifacts.**
    - If tickets or plans now conflict with the spec, fix the owner chain or note the required follow-up.
-   - Make sure acceptance criteria in tickets do not quietly diverge from the spec.
+   - Make sure ticket acceptance criteria do not quietly diverge from the spec.
 
 5. **Decide the next move.**
-   - Usually `/loom-plan` if sequencing still needs work.
-   - Usually `/loom-work` if the ticket is now ready.
-   - Sometimes `/loom-review` if the change was to an already-implemented behavior contract.
+   - `/loom-plan` if sequencing still needs work.
+   - `/loom-work` if the ticket is now ready.
+   - `/loom-review` if the change was to an already-implemented behavior contract.
 
 ## Native tools to prefer
 
@@ -73,13 +73,12 @@ Hydrate only what you need from:
 ## Guardrails
 
 - Do not let the ticket or wiki quietly become the spec.
-- Do not encode wishful behavior that the evidence or constitution contradicts.
+- Do not encode wishful behavior that evidence or constitution contradicts.
 - Do not overfit the contract to one incidental implementation.
 
 ## Required output
 
-- spec summary
 - spec record path and ID
 - key behaviors, constraints, and acceptance expectations
-- downstream artifacts updated or now needing reconciliation
+- downstream artifacts updated or needing reconciliation
 - recommended next command

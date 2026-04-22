@@ -100,6 +100,34 @@ The packet aims to contain everything the child should need and limits dependenc
 
 Use when replayability, portability, or stricter trust boundaries matter more than packet brevity.
 
+## Verification Posture
+
+Packet style governs how much context is carried. Verification posture is a separate axis that governs how the child proves the iteration worked. The parent chooses posture per packet, not per ticket — a test-first ticket can still have a refactor-only iteration that does not demand a new failing check.
+
+Default postures:
+
+### `test-first`
+
+The child must produce a failing check (failing test, failing assertion, failing observed behavior) *before* any implementation change, and drive it to green inside this iteration. This is Loom's native shape for TDD: red first, green second, both inside one packet.
+
+Use when the spec or acceptance criteria name a behavioral outcome that can be exercised. The stop conditions must include "a failing check exists and has been driven to green," and the output contract must carry evidence of both the red and green states.
+
+### `observation-first`
+
+The child must produce observed, inspectable evidence of current behavior before changing it, and produce observed evidence of the new behavior after. Use when automated checks are impractical or premature but the iteration still needs to prove something concrete: a logged output, a captured artifact, a diffed behavior.
+
+### `none`
+
+No explicit verification beyond the normal output contract. Use when the iteration is genuinely verification-neutral — record hygiene, reference reconciliation, a documentation edit, a packet compile.
+
+### Choosing posture
+
+- if the spec or ticket names behavioral acceptance, default to `test-first`
+- if behavior is observable but not yet testable, default to `observation-first`
+- if the iteration does not change behavior, `none` is honest
+
+The posture is declared in the packet frontmatter so the child cannot quietly skip it and the parent cannot retroactively pretend it was demanded. Verification discipline is a property of the contract, not a property of the prose.
+
 ## Child Outcome Vocabulary
 
 The child should return one of:

@@ -10,6 +10,7 @@ A Ralph packet is a contract, not a reminder note.
 - scope
 - write scope
 - mode and style
+- verification posture
 - stop conditions
 - output contract
 

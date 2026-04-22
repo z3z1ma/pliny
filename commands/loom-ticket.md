@@ -1,6 +1,6 @@
 ---
 name: loom-ticket
-description: "Create, split, tighten, relink, or update a bounded execution ledger entry without doing the implementation itself."
+description: "Create, split, tighten, relink, or truthfully update one bounded execution ledger entry without doing the implementation."
 arguments: "<ticket id | plan slice | execution request>"
 category: support
 suggested_skills:
@@ -20,7 +20,7 @@ Ticket target or request:
 `$ARGUMENTS`
 
 This command is for direct ticket work.
-Use it when the operator already knows the work belongs in the execution ledger and wants the ticket itself created, sharpened, split, relinked, or truthfully updated.
+Use it when the work clearly belongs in the execution ledger and the ticket itself should be created, sharpened, split, relinked, or truthfully updated.
 
 Hydrate only what you need from:
 - `loom-workspace`
@@ -35,7 +35,7 @@ Hydrate only what you need from:
 - ensure the work has one truthful ticket owner
 - keep the ticket bounded and ready for Ralph
 - correct links, dependencies, acceptance criteria, and status
-- avoid performing the implementation itself
+- stop before implementation
 
 ## Procedure
 
@@ -47,29 +47,18 @@ Hydrate only what you need from:
    - Read the linked plan, and any relevant spec or research.
    - Pull in only the upstream context that matters for execution readiness.
 
-3. **Create or refine the ticket.**
-   - Use the ticket template and naming guidance.
-   - Tighten:
-     - `Summary`
-     - `Scope`
-     - `Non-goals`
-     - `Acceptance Criteria`
-     - `Evidence`
-     - `Critique Disposition`
-     - `Wiki Disposition`
-   - Add `depends_on` only when a true hard prerequisite exists.
-
-4. **Split if the ticket is too large.**
+3. **Tighten or split.**
+   - Tighten summary, scope, non-goals, acceptance criteria, evidence expectations, and critique/wiki disposition.
    - If several independent slices are hiding inside one ticket, split them.
-   - Keep the current ticket as the next bounded slice or convert it into the right parent/sibling relationship through links.
+   - Use `depends_on` only for hard prerequisites.
 
-5. **Set the truthful status.**
-   - `proposed` if it still needs outer-loop work.
-   - `ready` if a fresh worker could start honestly.
+4. **Set truthful status.**
+   - `proposed` if outer-loop work still remains.
+   - `ready` only if a fresh worker could start without transcript archaeology.
    - `active` only if work is genuinely underway.
-   - `blocked` only if a named blocker exists.
+   - `blocked` only with a named blocker.
 
-6. **Recommend the next step.**
+5. **Recommend the next step.**
    - `/loom-work <ticket-id>` when ready.
    - `/loom-plan ...` if the ticket revealed missing outer-loop structure.
    - `/loom-spec ...` or `/loom-research ...` if the ticket exposed missing contract or evidence.
@@ -83,9 +72,9 @@ Hydrate only what you need from:
 
 ## Guardrails
 
-- Do not start implementation here.
-- Do not let the ticket redefine plan strategy or spec behavior unless you are also updating the owner record.
-- Do not call a ticket `ready` if a fresh worker would still need chat history to begin.
+- Do not start implementation from this command.
+- Do not let the ticket redefine plan strategy or spec behavior. If the owner chain is wrong, fix the owner record.
+- Do not call a ticket `ready` on faith.
 
 ## Required output
 

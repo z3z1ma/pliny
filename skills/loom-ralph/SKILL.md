@@ -41,12 +41,13 @@ This skill is for the parent agent that is preparing, launching, and reconciling
 1. read the governing ticket and upstream chain
 2. decide whether the next move is really Ralph
 3. choose packet style
-4. decide write scope
-5. compile the packet from the template
-6. read it once as if you were the child
-7. launch the fresh worker through the available harness transport
-8. inspect and reconcile the result back into the ticket
-9. route to Ralph again, critique, wiki, or outer-loop refinement
+4. choose verification posture (`test-first`, `observation-first`, or `none`)
+5. decide write scope
+6. compile the packet from the template
+7. read it once as if you were the child
+8. launch the fresh worker through the available harness transport
+9. inspect and reconcile the result back into the ticket
+10. route to Ralph again, critique, wiki, or outer-loop refinement
 
 ## Strong Ralph Discipline
 
@@ -56,9 +57,24 @@ A strong packet should make all of these explicit:
 - bounded goal for this iteration
 - sources that matter
 - write scope
+- verification posture and what counts as proof for this iteration
 - stop conditions
 - output contract
 - what the parent will do after the child returns
+
+## Verification Posture
+
+Packet style governs how much context is carried. Verification posture governs how the child proves this iteration worked. The two are independent axes and both belong in the packet frontmatter.
+
+Postures:
+
+- `test-first` — the child must produce a failing check before any implementation change and drive it to green inside this iteration. This is Loom's native TDD shape.
+- `observation-first` — the child must capture inspectable evidence of current behavior, change it, and capture inspectable evidence of the new behavior.
+- `none` — no explicit verification beyond the normal output contract. Honest only for iterations that do not change behavior (record hygiene, reference reconciliation, documentation edits).
+
+Choose per packet, not per ticket. A test-first ticket can still have a refactor-only iteration that is `none`.
+
+See `references/verification-posture.md` for details.
 
 ## Done Means
 
@@ -71,6 +87,7 @@ A strong packet should make all of these explicit:
 
 1. `references/packet-contract.md`
 2. `references/packet-styles.md`
-3. `references/parent-child-handshake.md`
-4. `references/harness-invocation.md`
-5. `templates/ralph-packet.md`
+3. `references/verification-posture.md`
+4. `references/parent-child-handshake.md`
+5. `references/harness-invocation.md`
+6. `templates/ralph-packet.md`

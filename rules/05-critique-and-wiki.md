@@ -153,3 +153,28 @@ When accepted reality changes:
 - link forward from the old page when practical
 
 Good wiki maintenance makes the knowledge base compound instead of rot.
+
+## Retrospective As The Compounding Trigger
+
+Wiki promotion is not supposed to be ambient. It is supposed to happen at a concrete moment: the **retrospective** pass.
+
+A retrospective is a named workflow — not a new record kind and not a new directory. It assimilates what was learned during a ticket, initiative, or recent work slice into the existing owner layers:
+
+- accepted explanations and workflows → wiki
+- durable investigation results, rejected options, null results → research
+- clarified intended behavior → spec
+- changed sequencing → plan
+- changed strategic framing → initiative
+- changed principles, constraints, or citable decisions → constitution (including decision records)
+- support-only continuity → memory
+
+Run a retrospective when:
+
+- a non-trivial ticket is closing
+- an initiative is closing
+- a critique surfaced stable lessons
+- the same question has been answered from transcript context more than once
+
+A retrospective that produces no promotions is honest if there was nothing durable to promote. Do not manufacture artifacts to look productive, and do not let retrospective become a second ledger.
+
+The retrospective pass is Loom's compounding mechanism. Without it, wiki and memory drift — pages stay stale, questions keep getting re-derived, and the knowledge base rots instead of growing.

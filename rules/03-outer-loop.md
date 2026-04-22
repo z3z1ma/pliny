@@ -118,6 +118,20 @@ Typical loopback routes:
 - Ralph -> ticket refinement
 - Ralph -> constitution in rare architectural cases
 
+## Consult Constitution Before Deciding
+
+Before making a non-trivial architectural or policy choice, check whether the constitution subsystem already speaks to it.
+
+Constitution, decision records, and roadmap records are precedent, not history. Re-deriving a choice the project already made wastes work and risks contradicting accepted policy.
+
+Practical checks at the start of outer-loop work:
+
+- `rg -n '^id:' .loom/constitution` to list the current constitutional surface
+- `find .loom/constitution/decisions -name '*.md' | sort` to scan prior decisions
+- `rg -n '<topic>' .loom/constitution` to see whether this topic already has policy
+
+If prior constitutional truth applies, inherit it. If the new work contradicts it, treat that as a loopback into the constitution subsystem — either amend the policy explicitly or change the work, not silently both.
+
 ## Strategic Restraint
 
 The outer loop should clarify the work without over-architecting it.

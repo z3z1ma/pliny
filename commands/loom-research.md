@@ -35,9 +35,10 @@ Hydrate only what you need from:
 ## Goals
 
 - frame the investigation clearly
-- gather and synthesize evidence
-- leave behind a reusable research note
-- make downstream implications visible without smuggling owner truth into the wrong layer
+- recall prior evidence before inventing new investigation
+- gather and synthesize evidence, separating it from inference
+- capture rejected options and null results so future agents inherit the dead ends
+- route the result to the correct downstream owner
 
 ## Procedure
 
@@ -46,30 +47,23 @@ Hydrate only what you need from:
    - Link the research to any relevant initiative, plan, spec, or ticket.
 
 2. **Read what already exists.**
-   - Search for prior research, accepted wiki pages, specs, ticket journals, and evidence records.
+   - Search prior research, accepted wiki pages, decision records, specs, ticket journals, and evidence records.
    - Reuse prior investigation where it remains valid.
 
 3. **Gather evidence.**
    - Use repository evidence, experiments, or external sources as appropriate.
-   - If the question depends on current outside facts and the harness can browse, gather and cite those sources.
-   - Keep raw evidence separate from your conclusions.
+   - If current outside facts matter and the harness can browse, gather and cite those sources.
+   - Keep raw evidence separate from conclusions.
 
 4. **Write the research record.**
-   - Capture:
-     - question
-     - why it matters
-     - method
-     - evidence
-     - conclusions
-     - recommendation
-     - uncertainty
-   - Make the conclusions proportional to the evidence.
+   - Cover question, why it matters, method, sources, evidence, rejected options, null results, conclusions, recommendations, and open questions.
+   - Make conclusions proportional to the evidence.
 
-5. **Route the result to the right downstream owner.**
-   - If the work clarified behavior, recommend or update a spec.
-   - If it changed sequencing, recommend or update a plan.
-   - If it only produced accepted explanation, recommend or update a wiki page.
-   - If it materially changes durable project direction, escalate to initiative or constitution.
+5. **Route the result.**
+   - Behavior clarified → spec.
+   - Sequencing changed → plan.
+   - Accepted explanation → wiki.
+   - Durable direction changed → initiative or constitution, often via `/loom-decide`.
 
 ## Native tools to prefer
 
@@ -83,11 +77,12 @@ Hydrate only what you need from:
 - Do not present speculation as settled evidence.
 - Do not let research become the behavior contract if a spec should own that truth.
 - Do not bury the downstream recommendation.
+- Do not discard rejected options or null results; they are durable.
 
 ## Required output
 
-- research summary
 - research record path and ID
 - key conclusions and confidence
+- rejected options or null results captured, if any
 - downstream implications
 - recommended next command

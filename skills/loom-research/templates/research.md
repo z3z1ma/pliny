@@ -35,6 +35,18 @@ What sources were read or inspected.
 
 What concrete findings emerged.
 
+# Rejected Options
+
+Options that were considered and rejected, with the reason and the evidence that rejected them.
+
+A rejected option captured here prevents a future agent from re-deriving the same decision.
+
+# Null Results
+
+Approaches that were tried and did not work.
+
+Capture the attempt, what failed, and why. Null results are promotable to the wiki when the dead end is likely to tempt future agents.
+
 # Conclusions
 
 What is justified by the evidence.
@@ -46,6 +58,8 @@ What downstream work should do next.
 # Open Questions
 
 What still remains uncertain.
+
+A research record whose body is predominantly open questions — too uncertain to investigate yet but important enough not to lose — is a valid shape. Use `status: deferred_questions` in the frontmatter for that case. Promote individual questions into their own research records when they mature.
 
 # Linked Work
 

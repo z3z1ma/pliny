@@ -83,6 +83,7 @@ Hydrate only what you need from:
    - Usually `/loom-work <ticket-id>`.
    - If evidence is still missing, `/loom-research ...`.
    - If behavior is still missing, `/loom-spec ...`.
+   - If the work hinges on a citable architectural or policy choice, `/loom-decide ...` before proceeding.
 
 ## Native tools to prefer
 

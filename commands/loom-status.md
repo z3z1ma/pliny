@@ -64,7 +64,7 @@ Hydrate only what you need from:
    - What looks stale or suspicious?
 
 6. **Recommend the next move.**
-   - Usually one of `/loom-plan`, `/loom-work`, `/loom-review`, `/loom-compound`, or `/loom-accept`.
+   - Usually one of `/loom-plan`, `/loom-work`, `/loom-review`, `/loom-retrospective`, `/loom-accept`, or `/loom-repair` when graph drift is the blocker.
 
 ## Native tools to prefer
 
