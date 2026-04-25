@@ -3,7 +3,7 @@ id: initiative:loom-install-experience
 kind: initiative
 status: active
 created_at: 2026-04-25T18:25:20Z
-updated_at: 2026-04-25T20:29:14Z
+updated_at: 2026-04-25T22:14:57Z
 scope:
   kind: repository
   repositories:
@@ -15,8 +15,13 @@ links:
     - research:loom-install-distribution-methods
     - research:harness-install-surfaces
     - research:codex-command-skill-installation
+  spec:
+    - spec:opencode-plugin-install-contract
+  wiki:
+    - wiki:harness-adapter-package-pattern
   ticket:
     - ticket:6uy1rx20
+    - ticket:us1brnsv
     - ticket:q7h1d05q
     - ticket:lx9nnztk
     - ticket:7ex8w32y
@@ -25,6 +30,7 @@ links:
     - ticket:p9m4x2qt
     - ticket:rd48g1kg
   evidence:
+    - evidence:open-loom-smoke
     - evidence:cursor-harness-install-validation
 ---
 
@@ -157,6 +163,10 @@ how to keep the protocol source of truth independent from adapter convenience.
 - Prior research: `research:harness-install-surfaces`
 - Prior research: `research:codex-command-skill-installation`
 - Harness ticket: `ticket:6uy1rx20` - validate `open-loom` OpenCode plugin-first install
+- Follow-up ticket: `ticket:us1brnsv` - investigate OpenCode cold-cache
+  npm-plugin first-run behavior
+- Spec: `spec:opencode-plugin-install-contract`
+- Wiki: `wiki:harness-adapter-package-pattern`
 - Harness ticket: `ticket:q7h1d05q` - prototype Claude Code hybrid install
 - Harness ticket: `ticket:lx9nnztk` - prototype Codex hybrid plugin install
 - Harness ticket: `ticket:7ex8w32y` - prototype Gemini CLI extension install
@@ -170,10 +180,9 @@ how to keep the protocol source of truth independent from adapter convenience.
 
 This initiative is active. The repository has a working proof installer and a
 new execution plan for harness-specific install work. The OpenCode slice has
-been reframed as a plugin-first investigation because the ideal user experience
-is a single `plugin` array entry in `opencode.json`; the ticket must prove which
-OpenCode plugin APIs can actually register or inject Loom rules, skills, and
-commands before changing installer behavior.
+landed the first accepted package-adapter result: `open-loom@0.1.0` is published
+and validates a plugin-array install for OpenCode `>=1.14.22 <2`. The remaining
+OpenCode cold-cache first-run installer caveat is tracked by `ticket:us1brnsv`.
 
 # Completion Basis
 

@@ -1,11 +1,11 @@
 ---
 id: ticket:6uy1rx20
 kind: ticket
-status: complete_pending_acceptance
+status: closed
 change_class: release-packaging
 risk_class: medium
 created_at: 2026-04-25T18:46:08Z
-updated_at: 2026-04-25T22:07:56Z
+updated_at: 2026-04-25T22:14:57Z
 scope:
   kind: repository
   repositories:
@@ -15,11 +15,16 @@ links:
     - initiative:loom-install-experience
   plan:
     - plan:install-experience-harness-adapters
+  spec:
+    - spec:opencode-plugin-install-contract
+  wiki:
+    - wiki:harness-adapter-package-pattern
   research:
     - research:loom-install-distribution-methods
     - research:harness-install-surfaces
   related:
     - ticket:ffg8elkb
+    - ticket:us1brnsv
   packet:
     - packet:ralph-ticket-6uy1rx20-20260425T195559Z
     - packet:critique-ticket-6uy1rx20-open-loom-20260425T201112Z
@@ -240,15 +245,12 @@ Open validation questions:
 
 # Blockers
 
-No implementation blocker. Residual acceptance risk: OpenCode `1.14.22` can log
-`NpmInstallFailedError` on the first cold-cache npm-plugin config-file run, then
-load the cached package correctly on the second run.
+None.
 
 # Next Move / Next Route
 
-Decide whether to accept the cold-cache first-run OpenCode npm-plugin quirk as a
-documented residual risk or create a follow-up investigation/fix ticket. If
-accepted, this ticket is close-ready.
+Closed. Cold-cache npm-plugin first-run investigation is tracked by
+`ticket:us1brnsv`.
 
 # Ralph Readiness
 
@@ -343,7 +345,7 @@ Resolved findings:
 - `critique:open-loom-config-hook-review#FIND-005` - License metadata was absent.
   Resolved conservatively with `license: UNLICENSED`.
 
-Disposition status: prior findings resolved; complete pending acceptance
+Disposition status: completed; cold-cache residual risk linked to follow-up
 
 Deferral / not-required rationale:
 
@@ -351,16 +353,23 @@ None.
 
 # Wiki Disposition
 
-Wiki promotion is optional. Promote only if OpenCode establishes a reusable
-plugin-first adapter pattern or an important null result about plugin API limits.
+Wiki promotion completed in `wiki:harness-adapter-package-pattern`. The accepted
+OpenCode behavior contract was promoted to `spec:opencode-plugin-install-contract`.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
+Accepted by: `/loom-accept` acceptance review
+Accepted at: 2026-04-25T22:14:57Z
+Basis: `open-loom@0.1.0` is published on npm; `evidence:open-loom-smoke`
+supports bundle reads, `config.instructions`, `config.skills.paths`,
+`config.command`, local file/path plugin loading, package-root loading,
+published registry metadata, and normal repo-root `opencode.json` package-cache
+loading. `critique:open-loom-review` is superseded/resolved and
+`critique:open-loom-config-hook-review` findings are resolved. Git URL plugin
+specs remain rejected and documented as unsupported.
 Residual risks: OpenCode `1.14.22` cold-cache npm-plugin config-file run may log
-`NpmInstallFailedError` before a second run loads the cached package correctly.
+`NpmInstallFailedError` before a second run loads the cached package correctly;
+tracked by `ticket:us1brnsv`.
 
 # Dependencies
 
@@ -438,3 +447,11 @@ this work.
   `opencode.json` package loading from OpenCode's package cache, and recorded the
   isolated cold-cache first-run npm-plugin installer caveat. Ticket moved to
   `complete_pending_acceptance` pending accepted-risk or follow-up disposition.
+- 2026-04-25: `/loom-accept` reviewed OpenCode-related tickets. Closed this
+  ticket because package publication, evidence, critique, docs, and fallback
+  dispositions are coherent. Created `ticket:us1brnsv` for the cold-cache
+  first-run npm-plugin behavior instead of leaving the residual risk hidden in
+  this ticket.
+- 2026-04-25: retrospective promoted the accepted OpenCode behavior contract to
+  `spec:opencode-plugin-install-contract` and the reusable adapter-package lesson
+  to `wiki:harness-adapter-package-pattern`.

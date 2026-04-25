@@ -3,7 +3,7 @@ id: plan:install-experience-harness-adapters
 kind: plan
 status: active
 created_at: 2026-04-25T18:46:08Z
-updated_at: 2026-04-25T20:29:14Z
+updated_at: 2026-04-25T22:14:57Z
 scope:
   kind: repository
   repositories:
@@ -15,13 +15,19 @@ links:
     - research:loom-install-distribution-methods
     - research:harness-install-surfaces
     - research:codex-command-skill-installation
+  spec:
+    - spec:opencode-plugin-install-contract
+  wiki:
+    - wiki:harness-adapter-package-pattern
   ticket:
     - ticket:3t93tsci
     - ticket:7ex8w32y
     - ticket:q7h1d05q
     - ticket:lx9nnztk
     - ticket:6uy1rx20
+    - ticket:us1brnsv
   evidence:
+    - evidence:open-loom-smoke
     - evidence:cursor-harness-install-validation
 ---
 
@@ -67,10 +73,11 @@ Current strategic picture:
   skills, and commands.
 - Claude Code and Codex are likely hybrid installs because their plugin systems
   do not cleanly own always-on Loom rules in the fetched docs.
-- OpenCode is no longer assumed to be direct-config only. Official docs still
-  document npm/local plugins mostly as runtime hooks and tools, but source-level
-  evidence shows plugin spec handling and experimental system-prompt hooks worth
-  prototyping.
+- OpenCode is the first accepted adapter-package result. `open-loom@0.1.0` is
+  published and uses the plugin `config(config)` hook to register rules through
+  `config.instructions`, skills through `config.skills.paths`, and commands
+  through `config.command`. The cold-cache npm-plugin first-run caveat is tracked
+  separately by `ticket:us1brnsv`.
 - Generic Agent Skills may reduce duplicated skill installs for OpenCode, Codex,
   Gemini CLI, and Cursor, but they cannot replace ordered always-on rules.
 - Adapter outputs must remain derivative from canonical `rules/`, `skills/`, and
@@ -88,10 +95,12 @@ Hybrid package prototypes:
 - `ticket:q7h1d05q` - prototype Claude Code hybrid install path
 - `ticket:lx9nnztk` - prototype Codex hybrid plugin install path
 
-OpenCode plugin-first investigation:
+Accepted OpenCode plugin-first package:
 
-- `ticket:6uy1rx20` - validate the `open-loom` OpenCode plugin install path and
-  decide whether any fallback direct config copy remains necessary
+- `ticket:6uy1rx20` - closed after publishing and accepting the `open-loom`
+  OpenCode plugin install path
+- `ticket:us1brnsv` - follow-up investigation for OpenCode cold-cache npm-plugin
+  first-run behavior
 
 Shared follow-through inside the harness tickets:
 
@@ -108,10 +117,10 @@ Shared follow-through inside the harness tickets:
    mutation.
 2. Claude and Codex hybrid tickets decide how plugin packaging combines with
    always-on rule installation and explicit command adapters.
-3. OpenCode plugin-first ticket proves or rejects the ideal plugin-array install
-   shape, using npm publication for normal users and local file/path plugins for
-   cloned-repo installs, while documenting any missing skill/command registration
-   APIs.
+3. OpenCode plugin-first ticket proves the ideal plugin-array install shape, using
+   npm publication for normal users and local file/path plugins for cloned-repo
+   installs, while documenting the cold-cache npm-plugin first-run caveat as
+   follow-up work.
 4. The public install docs distinguish user-global install, project-local
    adoption, and adapter-package development.
 5. The current shell installer is either simplified into a fallback/prototype
@@ -182,9 +191,9 @@ Wave 3:
   aggregate rule file less reliable than direct ordered file references.
 - Marketplace package work could expand into release engineering before local
   package fixtures prove the adapter shape.
-- OpenCode's plugin API may be able to inject system instructions but still lack
-  first-class skill or command registration, creating a partial plugin that needs
-  a fallback install step.
+- OpenCode's npm-plugin install cache can log a first-run `NpmInstallFailedError`
+  before resolving the cached package on a second run; `ticket:us1brnsv` owns that
+  residual risk.
 - OpenCode does not currently support Git URL plugin installs, so the user-facing
   plugin distribution path must be an npm package; local clone users can point
   `plugin` at a file or local path.
@@ -231,6 +240,16 @@ This plan can complete when:
 - recommended critique has been completed, deferred with rationale, or marked not
   required by each ticket's acceptance gate
 - no generated adapter output is treated as canonical Loom semantics
+
+# Retrospective Notes
+
+- `open-loom@0.1.0` established the first accepted package-adapter pattern in
+  this plan.
+- Future Cursor, Gemini, Claude, and Codex work should reuse the validation
+  lessons captured in `wiki:harness-adapter-package-pattern` without assuming
+  their harness APIs match OpenCode.
+- `spec:opencode-plugin-install-contract` owns the accepted OpenCode behavior
+  contract; do not keep redefining it in ticket prose.
 
 # Completion Basis
 

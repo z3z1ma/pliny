@@ -3,7 +3,7 @@ id: research:loom-install-distribution-methods
 kind: research
 status: active
 created_at: 2026-04-25T18:25:20Z
-updated_at: 2026-04-25T22:07:56Z
+updated_at: 2026-04-25T22:14:57Z
 scope:
   kind: repository
   repositories:
@@ -13,11 +13,16 @@ links:
     - initiative:loom-install-experience
   plan:
     - plan:install-experience-harness-adapters
+  spec:
+    - spec:opencode-plugin-install-contract
+  wiki:
+    - wiki:harness-adapter-package-pattern
   research:
     - research:harness-install-surfaces
     - research:codex-command-skill-installation
   ticket:
     - ticket:6uy1rx20
+    - ticket:us1brnsv
     - ticket:q7h1d05q
     - ticket:lx9nnztk
     - ticket:7ex8w32y
@@ -26,6 +31,7 @@ links:
     - ticket:p9m4x2qt
     - ticket:rd48g1kg
   evidence:
+    - evidence:open-loom-smoke
     - evidence:cursor-harness-install-validation
 external_refs:
   claude_code:
@@ -450,14 +456,15 @@ Assessment:
 - The ideal OpenCode user experience is a plugin-first install: the user adds one
   entry to the `plugin` array in `opencode.json`, and the plugin exposes bundled
   Loom rules, skills, and commands.
-- That ideal is plausible enough to validate, but not yet proven by official
-  docs. The currently documented plugin API is strongest for tools, hooks,
-  system/prompt mutation, and integrations.
+- That ideal is now accepted for `open-loom@0.1.0` on OpenCode `>=1.14.22 <2`,
+  with the cold-cache first-run installer caveat tracked by `ticket:us1brnsv`.
+  Official docs did not state this full static-resource registration shape; it is
+  supported by source inspection and runtime evidence.
 - A plugin can read its own bundled files using normal JavaScript module
   techniques such as `import.meta.url` in the repository/package-root `open-loom`.
-- First-class plugin registration fields for skills and slash commands were not
-  found, but `config.skills.paths` and `config.command` are sufficient for current
-  OpenCode `1.14.22` validation.
+- Separate first-class plugin registration fields for skills and slash commands
+  were not found, but `config.skills.paths` and `config.command` are sufficient
+  for current OpenCode `1.14.22` validation.
 - GitHub-based plugin installation should not be recommended for OpenCode. The
   viable plugin distribution paths are an npm package for normal users and a
   cloned repo plus file/local path plugin entry for users who want to consume the
@@ -828,7 +835,7 @@ Adopt a hybrid install strategy:
 
 | Harness | Recommended next strategy | Rationale |
 | --- | --- | --- |
-| OpenCode | Prototype a plugin-first install before hardening direct config fallback. | Ideal UX is one `plugin` entry; use npm package distribution for normal users and local file/path plugin entries for cloned-repo installs. Validate bundled-rule injection, skill/command exposure, and bundled-file reads. |
+| OpenCode | Accepted plugin-first install via `open-loom@0.1.0`; investigate cold-cache first-run caveat separately. | Ideal UX is one `plugin` entry; npm package distribution and local file/path entries are validated. `ticket:us1brnsv` owns the remaining first-run installer behavior. |
 | Claude Code | Keep direct or hybrid install; evaluate plugin for skills/commands only if rules are installed separately through `CLAUDE.md` or user rules. | Plugins are first-class but not a complete always-on rules surface in fetched docs. |
 | Codex | Keep hybrid install; evaluate Codex plugin for canonical skills and generated explicit-only command adapter skills, paired with managed `AGENTS.md` rules. | Plugins package skills, but rules still need AGENTS. |
 | Gemini CLI | Prototype a Gemini extension adapter. | Extension docs support context file, skills, and commands. |
@@ -842,10 +849,10 @@ Adopt a hybrid install strategy:
    surfaces and would replace the most brittle current behavior.
 3. Prototype Gemini extension packaging because Gemini appears to cover all Loom
    surfaces and has explicit extension install/link/update commands.
-4. Re-evaluate Claude and Codex hybrid shapes after Cursor/Gemini prove the
+4. Use the accepted OpenCode package as the first concrete adapter-package
+   precedent, but do not assume other harnesses expose equivalent APIs.
+5. Re-evaluate Claude and Codex hybrid shapes after Cursor/Gemini prove the
    generated-adapter discipline.
-5. Prototype OpenCode plugin-first behavior rather than assuming direct config is
-   final.
 6. Decide whether shared `~/.agents/skills` should become the default skill
    destination for Codex/Gemini/Cursor/OpenCode global installs only after plugin
    skill exposure limits are known.
@@ -893,11 +900,9 @@ Split future install docs into three conceptual modes:
   behavior in real sessions?
 - Should generated adapter packages live in the repository as committed fixtures,
   be generated only during release, or remain examples under `examples/`?
-- Can OpenCode plugins expose bundled skills and slash commands through a stable
-  API, or do they only support tools, hooks, and prompt/system mutation today?
-- What npm package layout should Loom use for OpenCode so the plugin can consume
-  or expose the repository's Markdown rules, skills, and commands without copying
-  them into a second canonical surface?
+- What is the root cause of OpenCode `1.14.22` logging `NpmInstallFailedError` on
+  the first cold-cache npm-package config-file run before succeeding on a second
+  run?
 - How should versioning work for adapter packages if Loom itself is source-only
   Markdown?
 - Should install docs recommend marketplace installs for users and direct clone
@@ -912,6 +917,10 @@ Split future install docs into three conceptual modes:
 - Initiative: `initiative:loom-install-experience`
 - Plan: `plan:install-experience-harness-adapters`
 - Harness ticket: `ticket:6uy1rx20` - OpenCode plugin-first install path
+- Follow-up ticket: `ticket:us1brnsv` - OpenCode cold-cache npm-plugin first-run
+  behavior
+- Spec: `spec:opencode-plugin-install-contract`
+- Wiki: `wiki:harness-adapter-package-pattern`
 - Harness ticket: `ticket:q7h1d05q` - Claude Code hybrid install path
 - Harness ticket: `ticket:lx9nnztk` - Codex hybrid plugin install path
 - Harness ticket: `ticket:7ex8w32y` - Gemini CLI extension install path
