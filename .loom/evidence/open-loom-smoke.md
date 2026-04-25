@@ -3,7 +3,7 @@ id: evidence:open-loom-smoke
 kind: evidence
 status: recorded
 created_at: 2026-04-25T20:01:52Z
-updated_at: 2026-04-25T21:31:21Z
+updated_at: 2026-04-25T22:07:56Z
 scope:
   kind: repository
   repositories:
@@ -91,6 +91,25 @@ mutate the resolved OpenCode config. It registers Loom's bundled surfaces as:
     npm publish --dry-run --access public
     npm view open-loom name version --json
     ```
+
+13. Operator attempted real publication and npm rejected the request at the
+    registry security gate because publish requires either a current 2FA OTP or a
+    granular access token with bypass-2FA enabled.
+14. Operator retried with the required npm security path and reported successful
+    publication.
+15. Verified published registry metadata:
+
+    ```bash
+    npm view open-loom name version dist-tags engines license --json
+    ```
+
+16. Validated the published package from repo-root `opencode.json` containing
+    `"plugin": ["open-loom@0.1.0"]` by running OpenCode debug commands from the
+    repository root.
+17. Checked cold-cache behavior in an isolated temporary `HOME`. The first
+    config-file run can report `NpmInstallFailedError` while leaving the package
+    installed in OpenCode's cache; a second run in the same `HOME` resolves the
+    cached package and exposes instructions, skills, and commands.
 
 # Artifacts
 
@@ -213,6 +232,63 @@ npm publish --dry-run --access public -> + open-loom@0.1.0
 npm view open-loom name version --json -> E404 Not Found
 ```
 
+Real publish attempt result:
+
+```text
+npm notice Publishing to https://registry.npmjs.org/ with tag latest and public access
+npm error code E403
+npm error 403 403 Forbidden - PUT https://registry.npmjs.org/open-loom - Two-factor authentication or granular access token with bypass 2fa enabled is required to publish packages.
+npm error A complete log of this run can be found in: /Users/alexanderbutler/.npm/_logs/2026-04-25T21_49_54_840Z-debug-0.log
+```
+
+Published registry metadata:
+
+```json
+{
+  "name": "open-loom",
+  "version": "0.1.0",
+  "dist-tags": {
+    "latest": "0.1.0"
+  },
+  "engines": {
+    "opencode": ">=1.14.22 <2"
+  },
+  "license": "UNLICENSED"
+}
+```
+
+Repo-root `opencode.json` used for package validation:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["open-loom@0.1.0"]
+}
+```
+
+Observed OpenCode package-cache registration from normal repo-root config-file
+loading:
+
+```text
+plugin origin: open-loom@0.1.0 from /Users/alexanderbutler/code_projects/personal/agent-loom/opencode.json
+skills path: /Users/alexanderbutler/.cache/opencode/packages/open-loom@0.1.0/node_modules/open-loom/skills
+commands include: loom-plan
+skill locations include: /Users/alexanderbutler/.cache/opencode/packages/open-loom@0.1.0/node_modules/open-loom/skills/loom-tickets/SKILL.md
+```
+
+Isolated cold-cache first/second run check:
+
+```json
+{
+  "firstFailed": true,
+  "firstHasLoomInstructions": false,
+  "secondFailed": false,
+  "secondHasLoomInstructions": true,
+  "secondHasSkillsPath": true,
+  "secondHasLoomPlan": true
+}
+```
+
 # Supports Claims
 
 - `ticket:6uy1rx20` bundled file-read acceptance: `open-loom` reads ordered rule
@@ -236,12 +312,24 @@ npm view open-loom name version --json -> E404 Not Found
 - `ticket:6uy1rx20` npm pre-publish acceptance: npm authentication is present as
   user `z3z1ma`, `npm publish --dry-run --access public` succeeds, and
   `open-loom` remains unpublished immediately before real publication.
+- `ticket:6uy1rx20` publish blocker: the real publish attempt reached npm but was
+  rejected by the registry because the publish request lacked a valid 2FA OTP or
+  bypass-2FA granular token.
+- `ticket:6uy1rx20` npm publication acceptance: `open-loom@0.1.0` is published on
+  npm with `latest` pointing at `0.1.0`.
+- `ticket:6uy1rx20` normal package config acceptance: a repo-root `opencode.json`
+  with `plugin: ["open-loom@0.1.0"]` loads the published package from OpenCode's
+  package cache and exposes the package skills and command wrappers.
 
 # Challenges Claims
 
 - Challenges the earlier assumption that `experimental.chat.system.transform` is
   the best OpenCode route for Loom rules. `config.instructions` is the supported
   OpenCode config surface for instruction files and now carries the rule files.
+- Challenges an overbroad claim that every cold-cache OpenCode npm-plugin path is
+  clean on first execution. In isolated `HOME` validation, the first config-file
+  run can log `NpmInstallFailedError`; the second run resolves the cached package
+  and exposes Loom surfaces.
 
 # Environment
 
@@ -269,12 +357,16 @@ session. It validates OpenCode's resolved config and skill discovery paths using
 OpenCode debug commands, plus source inspection for how those config surfaces are
 consumed.
 
-This evidence does not validate npm registry installation after publication.
+Npm registry publication is validated. A cold-cache first-run OpenCode npm-plugin
+install quirk remains: OpenCode `1.14.22` can log `NpmInstallFailedError` on the
+first config-file run while still caching the package; a second run in the same
+OpenCode cache succeeds.
 
 # Result
 
-`open-loom` now uses the correct OpenCode integration path for all three Loom
-surfaces that OpenCode exposes through config: instructions, skills, and commands.
+`open-loom@0.1.0` is published and works through a normal repo-root OpenCode
+config file after OpenCode resolves the package from its cache. The remaining
+risk is OpenCode's cold-cache first-run npm-plugin install behavior.
 
 # Related Records
 

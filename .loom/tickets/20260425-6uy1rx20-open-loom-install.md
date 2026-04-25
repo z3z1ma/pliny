@@ -5,7 +5,7 @@ status: complete_pending_acceptance
 change_class: release-packaging
 risk_class: medium
 created_at: 2026-04-25T18:46:08Z
-updated_at: 2026-04-25T21:36:57Z
+updated_at: 2026-04-25T22:07:56Z
 scope:
   kind: repository
   repositories:
@@ -184,6 +184,16 @@ Covers:
   --dry-run --access public` succeeds; `npm view open-loom name version --json`
   returns `E404`, confirming the package name remains available immediately
   before real publication.
+- Npm publication: `open-loom@0.1.0` is published on npm; `latest` points at
+  `0.1.0`, with `engines.opencode: >=1.14.22 <2` and `license: UNLICENSED`.
+- Normal OpenCode package config: repo-root `opencode.json` with
+  `plugin: ["open-loom@0.1.0"]` loads the published package from OpenCode's
+  package cache and exposes package commands and skills.
+- Cold-cache caveat: isolated first-run config-file validation can log
+  `NpmInstallFailedError` and omit Loom surfaces; a second run in the same
+  OpenCode cache succeeds and exposes instructions, skills, and commands. Treat
+  this as an OpenCode npm-plugin installer quirk unless further investigation
+  proves a package-side fix.
 - Git URL specs: recorded as unsupported for current OpenCode practice and not a
   recommended install path.
 - Runtime OpenCode loading: validated for local `file://` plugin loading through
@@ -230,14 +240,15 @@ Open validation questions:
 
 # Blockers
 
-None for implementation. Real npm publish should wait for final operator
-approval.
+No implementation blocker. Residual acceptance risk: OpenCode `1.14.22` can log
+`NpmInstallFailedError` on the first cold-cache npm-plugin config-file run, then
+load the cached package correctly on the second run.
 
 # Next Move / Next Route
 
-Publication is paused by operator choice. If the operator later approves, publish
-`open-loom@0.1.0`, then verify with `npm view open-loom name version --json` and
-record the publish evidence.
+Decide whether to accept the cold-cache first-run OpenCode npm-plugin quirk as a
+documented residual risk or create a follow-up investigation/fix ticket. If
+accepted, this ticket is close-ready.
 
 # Ralph Readiness
 
@@ -289,7 +300,8 @@ Observed evidence:
   module-relative reads, ordered `config.instructions`, `config.skills.paths`,
   `config.command`, local `file://` plugin loading, local package-root plugin
   loading, package dry-run contents, npm auth as `z3z1ma`, and the package name
-  still being unpublished before real publication.
+  being published as `open-loom@0.1.0`. It also records the cold-cache first-run
+  `NpmInstallFailedError` caveat and second-run success.
 
 # Critique Disposition
 
@@ -347,7 +359,8 @@ plugin-first adapter pattern or an important null result about plugin API limits
 Accepted by:
 Accepted at:
 Basis:
-Residual risks:
+Residual risks: OpenCode `1.14.22` cold-cache npm-plugin config-file run may log
+`NpmInstallFailedError` before a second run loads the cached package correctly.
 
 # Dependencies
 
@@ -416,3 +429,12 @@ this work.
 - 2026-04-25: operator chose not to publish yet. Ticket moved to
   `complete_pending_acceptance`: implementation, evidence, critique, and
   pre-publish checks are complete; real npm publication remains paused.
+- 2026-04-25: operator attempted real publication. Npm returned `E403` because
+  two-factor authentication or a granular bypass-2FA token is required to publish.
+  Ticket moved to `blocked`; implementation remains ready, but publication needs
+  a valid OTP or token path.
+- 2026-04-25: operator reported successful publication after satisfying npm's
+  security requirement. Verified `open-loom@0.1.0` on npm, validated repo-root
+  `opencode.json` package loading from OpenCode's package cache, and recorded the
+  isolated cold-cache first-run npm-plugin installer caveat. Ticket moved to
+  `complete_pending_acceptance` pending accepted-risk or follow-up disposition.

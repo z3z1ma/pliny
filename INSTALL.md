@@ -162,6 +162,11 @@ Git URL plugin specs are not recommended for OpenCode. Current validation found
 them unsupported in practice, so use npm package distribution or a local
 file/path entry.
 
+With OpenCode `1.14.22`, a cold-cache first run of an npm plugin may log
+`NpmInstallFailedError` while still installing the package into OpenCode's cache.
+If that happens, run OpenCode again; the second run should resolve the cached
+package.
+
 `open-loom` reads the bundled top-level `rules/`, `skills/`, and optional
 `commands/` surfaces via module-relative file reads. Its server plugin uses
 OpenCode's `config(config)` hook to add ordered rule files to

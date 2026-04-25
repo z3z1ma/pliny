@@ -3,7 +3,7 @@ id: research:loom-install-distribution-methods
 kind: research
 status: active
 created_at: 2026-04-25T18:25:20Z
-updated_at: 2026-04-25T21:29:31Z
+updated_at: 2026-04-25T22:07:56Z
 scope:
   kind: repository
   repositories:
@@ -430,6 +430,12 @@ Doc-backed install surfaces:
   package-root plugin resolution, clean-project skill loading with 20 skills, and
   package dry-run contents. The package now declares `engines.opencode:
   >=1.14.22 <2`.
+- `open-loom@0.1.0` is published on npm. A normal repo-root `opencode.json` with
+  `plugin: ["open-loom@0.1.0"]` can load the package from OpenCode's package
+  cache and expose Loom rules, skills, and commands. In isolated cold-cache
+  validation, OpenCode `1.14.22` can log `NpmInstallFailedError` on the first
+  config-file run while still caching the package; a second run in the same cache
+  succeeds.
 
 Always-on rule fit:
 

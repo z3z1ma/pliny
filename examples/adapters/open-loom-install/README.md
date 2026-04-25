@@ -32,6 +32,8 @@ Relative or absolute local path specs may also be usable when they are resolved 
 
 Git URL plugin specs are not recommended. Source-level handling may mention git-like specs, but current operator validation found Git URL plugin installs unsupported in practice; use npm publication or a local file/path entry instead.
 
+OpenCode `1.14.22` cold-cache npm plugin loading can log `NpmInstallFailedError` on the first config-file run while still caching the package. A second run in the same OpenCode cache resolved `open-loom@0.1.0` and exposed the Loom surfaces in validation.
+
 ## Surface Disposition
 
 - Rules: registered through `config.instructions` with one absolute path per ordered rule file.

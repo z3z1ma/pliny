@@ -3,7 +3,7 @@ id: critique:open-loom-config-hook-review
 kind: critique
 status: final
 created_at: 2026-04-25T21:29:31Z
-updated_at: 2026-04-25T21:31:21Z
+updated_at: 2026-04-25T22:07:56Z
 scope:
   kind: repository
   repositories:
@@ -188,11 +188,16 @@ None after resolution.
 - `npm whoami`
 - `npm publish --dry-run --access public`
 - `npm view open-loom name version --json`
+- published `npm view open-loom name version dist-tags engines license --json`
+- repo-root `opencode.json` package-load validation for `open-loom@0.1.0`
 - `git diff --check`
 
 # Residual Risks
 
-- Npm registry installation is not validated until after publication.
+- Npm registry publication is validated for `open-loom@0.1.0`.
+- OpenCode `1.14.22` cold-cache npm-plugin config-file validation can log
+  `NpmInstallFailedError` on the first run before a second run resolves the
+  cached package and exposes Loom surfaces.
 - No paid model request or interactive TUI session was run. The validation relies
   on OpenCode's documented `instructions`, `skills.paths`, and `command` config
   surfaces plus debug config/skill behavior.
@@ -203,14 +208,15 @@ None after resolution.
 
 # Required Follow-up
 
-Before publish:
+Before closure:
 
-- run `npm publish --access public` only after operator approval
-- verify with `npm view open-loom name version --json` after publication
+- accept the cold-cache first-run OpenCode npm-plugin quirk as residual risk, or
+  create a linked follow-up investigation/fix ticket
 
 # Acceptance Recommendation
 
 `complete pending acceptance`.
 
-The implementation and package-readiness findings are resolved. Final acceptance
-now depends on operator approval and npm publish verification.
+The implementation, package-readiness findings, and npm publication are resolved.
+Final acceptance depends on accepted-risk or follow-up disposition for the
+OpenCode cold-cache first-run npm-plugin behavior.
