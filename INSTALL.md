@@ -43,6 +43,22 @@ There is no supported Makefile, shell installer, or cross-harness fallback copy
 script. Older generated installs should be treated as legacy local state and
 cleaned up manually if they are still present.
 
+## Quick Install Commands
+
+Use the harness-native command for your environment:
+
+| Harness | Command |
+| --- | --- |
+| Claude Code | `claude plugin marketplace add z3z1ma/agent-loom && claude plugin install loom@agent-loom --scope user` |
+| OpenCode | `opencode plugin open-loom --global` |
+| Codex | `codex plugin marketplace add z3z1ma/agent-loom` |
+| Cursor | `mkdir -p ~/.cursor/plugins/local && git clone https://github.com/z3z1ma/agent-loom.git ~/.cursor/plugins/local/agent-loom` |
+
+Codex currently requires opening `/plugins` after marketplace registration to
+install or enable `loom`. Cursor's command above uses Cursor's native local plugin
+directory until `agent-loom` is listed in Cursor Marketplace; after listing, the
+Cursor Agent chat command should be `/add-plugin agent-loom`.
+
 ## Minimal Harness Instruction
 
 When a harness has an `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, user rules, or a
@@ -81,6 +97,12 @@ claude plugin marketplace add /absolute/path/to/agent-loom
 claude plugin install loom@agent-loom --scope project
 ```
 
+Remote install:
+
+```bash
+claude plugin marketplace add z3z1ma/agent-loom && claude plugin install loom@agent-loom --scope user
+```
+
 Validate the local plugin structure with:
 
 ```bash
@@ -101,7 +123,7 @@ The target native remote path is Codex marketplace registration with the
 repository URL:
 
 ```bash
-codex plugin marketplace add https://github.com/z3z1ma/agent-loom.git
+codex plugin marketplace add z3z1ma/agent-loom
 ```
 
 Once installed plugin skill discovery is validated, users should be able to open
@@ -118,8 +140,13 @@ bootstrap references; it is not the product install path.
 This repository includes the `open-loom` OpenCode plugin at `open-loom.mjs`.
 `open-loom` requires OpenCode `>=1.14.22 <2`.
 
-After `open-loom` is published, normal users should configure OpenCode with a
-package plugin entry:
+Normal users can install the OpenCode plugin and update global config with:
+
+```bash
+opencode plugin open-loom --global
+```
+
+Equivalent package plugin entry:
 
 ```json
 {
@@ -143,6 +170,26 @@ For a local structural check that does not require a model request, run:
 
 ```bash
 node open-loom.mjs --smoke
+```
+
+## Cursor
+
+This repository includes a Cursor plugin manifest at `.cursor-plugin/plugin.json`.
+The manifest follows Cursor's native plugin format and exposes canonical `skills/`
+with `"skills": "./skills/"`.
+
+Until `agent-loom` is listed in Cursor Marketplace, install from the Git repository
+as a local native Cursor plugin:
+
+```bash
+mkdir -p ~/.cursor/plugins/local && git clone https://github.com/z3z1ma/agent-loom.git ~/.cursor/plugins/local/agent-loom
+```
+
+Restart Cursor or run Developer: Reload Window after cloning. Once the Marketplace
+listing exists, install from Cursor Agent chat with:
+
+```text
+/add-plugin agent-loom
 ```
 
 ## Workspace Bootstrap

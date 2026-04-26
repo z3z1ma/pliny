@@ -155,7 +155,8 @@ The intended installation pattern is simple:
 4. hydrate the full `skills/<name>/SKILL.md` only when that skill is relevant
 5. let the model read templates and references from that skill as needed
 
-Read `INSTALL.md` for the recommended adoption path.
+Read `INSTALL.md` for the recommended adoption path, native install or
+registration commands, and harness-specific caveats.
 
 ## Protocol Core And Workflows
 

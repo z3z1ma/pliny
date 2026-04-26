@@ -22,7 +22,7 @@ The intended product target is remote install for normal Codex users, pending
 installed plugin skill-discovery validation:
 
 ```bash
-codex plugin marketplace add https://github.com/z3z1ma/agent-loom.git
+codex plugin marketplace add z3z1ma/agent-loom
 ```
 
 After that validation, users should be able to install or enable `loom` from

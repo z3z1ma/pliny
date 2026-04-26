@@ -1,0 +1,21 @@
+{
+  "name": "agent-loom",
+  "displayName": "Agent Loom",
+  "description": "Loom Markdown-native AI work protocol skills for Cursor.",
+  "version": "0.1.0",
+  "author": {
+    "name": "z3z1ma"
+  },
+  "homepage": "https://github.com/z3z1ma/agent-loom",
+  "repository": "https://github.com/z3z1ma/agent-loom",
+  "license": "UNLICENSED",
+  "keywords": [
+    "loom",
+    "ai-agents",
+    "agent-skills",
+    "markdown",
+    "workflow"
+  ],
+  "skills": "./skills/",
+  "hooks": {}
+}
