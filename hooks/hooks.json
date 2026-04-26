@@ -1,23 +1,43 @@
 {
-  "description": "Synchronize Loom always-on rules and guard bootstrap sessions.",
+  "description": "Emit Loom always-on rules as per-rule Claude SessionStart hook context.",
   "hooks": {
     "SessionStart": [
       {
+        "matcher": "startup|clear|compact",
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}/scripts/claude-sync-rules.sh\"",
+            "command": "printf '===== LOOM_RULE_FILE 01-core-identity.md =====\\n'; cat \"${CLAUDE_PLUGIN_ROOT}/rules/01-core-identity.md\"",
             "timeout": 10
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
+          },
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}/scripts/claude-loom-restart-guard.sh\"",
+            "command": "sleep 0.20; printf '===== LOOM_RULE_FILE 02-truth-and-authority.md =====\\n'; cat \"${CLAUDE_PLUGIN_ROOT}/rules/02-truth-and-authority.md\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "sleep 0.40; printf '===== LOOM_RULE_FILE 03-outer-loop.md =====\\n'; cat \"${CLAUDE_PLUGIN_ROOT}/rules/03-outer-loop.md\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "sleep 0.60; printf '===== LOOM_RULE_FILE 04-ralph-inner-loop.md =====\\n'; cat \"${CLAUDE_PLUGIN_ROOT}/rules/04-ralph-inner-loop.md\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "sleep 0.80; printf '===== LOOM_RULE_FILE 05-critique-and-wiki.md =====\\n'; cat \"${CLAUDE_PLUGIN_ROOT}/rules/05-critique-and-wiki.md\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "sleep 1.00; printf '===== LOOM_RULE_FILE 06-filesystem-and-tooling.md =====\\n'; cat \"${CLAUDE_PLUGIN_ROOT}/rules/06-filesystem-and-tooling.md\"",
+            "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "sleep 1.20; printf '===== LOOM_RULE_FILE 07-validation-and-honesty.md =====\\n'; cat \"${CLAUDE_PLUGIN_ROOT}/rules/07-validation-and-honesty.md\"",
             "timeout": 10
           }
         ]

@@ -10,27 +10,24 @@
   the repository root.
 - Claude auto-loads the standard plugin `hooks/hooks.json`; the plugin manifest
   does not repeat that hook path.
-- `hooks/hooks.json` registers a `SessionStart` command hook that runs
-  `scripts/claude-sync-rules.sh`.
-- `hooks/hooks.json` also registers a `UserPromptSubmit` command hook that runs
-  `scripts/claude-loom-restart-guard.sh`.
-- `scripts/claude-sync-rules.sh` generates one managed `loom.md` from canonical
-  `${CLAUDE_PLUGIN_ROOT}/rules/*.md` into a Claude-loaded rule directory:
-  `${CLAUDE_PROJECT_DIR}/.claude/rules/loom/` only when project Claude settings
-  explicitly enable the `loom` plugin, otherwise `~/.claude/rules/loom/` for the
-  user-level path.
-- `scripts/claude-clean-rules.sh` removes generated managed rules for explicit
-  user or project cleanup.
+- `hooks/hooks.json` registers one `SessionStart` hook group with matcher
+  `startup|clear|compact`.
+- that hook group has one command per canonical top-level rule file; each command
+  prints a `===== LOOM_RULE_FILE <filename> =====` source marker and cats exactly
+  one `${CLAUDE_PLUGIN_ROOT}/rules/<filename>` file to stdout.
+- the hook commands use small increasing sleep delays so numeric rule order is
+  likely in practice, especially `01-core-identity.md` first, but Claude hook
+  ordering is not guaranteed.
 
-## Chosen Hybrid Shape
+## Chosen Hook-Context Shape
 
 Use the Claude plugin for discoverable skills, command wrappers, and automatic
-rule synchronization into Claude's user or project rule surface.
+same-session rule context from per-rule `SessionStart` hook stdout.
 
 This avoids three wrong solutions:
 
 - custom agents as a substitute for Loom's rule corpus
-- hook stdout or dynamic context as the static rule loader
+- monolithic full-corpus hook output that Claude exposes only as a preview
 - plugin settings that pretend to register arbitrary always-on instructions
 
 ## Expected Properties
@@ -38,35 +35,34 @@ This avoids three wrong solutions:
 - plugin validation passes with `claude plugin validate .`
 - plugin skills remain `SKILL.md` directories from canonical `skills/`
 - command wrappers remain optional invocation surfaces from canonical `commands/`
-- the plugin session hook generates one managed `loom.md` from canonical `rules/`
-  into a
-  scope-appropriate Claude rule surface without making generated files a new
-  truth owner
-- the sync chooses project rules only from an explicit `enabledPlugins` entry for
-  `loom`, not from `.claude/` directory existence
-- the sync is silent on success so hook stdout does not become a hidden context
-  channel
-- when the sync had to install or update rules for the current session, the
-  prompt guard blocks user prompts and tells the user to restart before
-  resubmitting
+- the `SessionStart` hook emits the canonical top-level `rules/*.md` files as
+  seven source-marked stdout outputs, one file per command
+- same-session startup probes can see all seven rule files without Claude's
+  persisted-output preview/truncation behavior
+- each current rule file remains below Claude's documented 10,000-character
+  hook-output context cap
+- ordering is treated as best effort; source markers, not strict order, are the
+  stable attribution mechanism
 
 ## Limitations
 
 - Claude plugin docs do not currently describe an install-time script hook or a
   plugin manifest field for arbitrary always-on rules.
-- The sync runs when a plugin-enabled session starts, not during the literal
+- Rule context emits when a plugin-enabled session starts, not during the literal
   `claude plugin install` command.
 - `${CLAUDE_PLUGIN_ROOT}` is the plugin installation/cache directory. Claude docs
   do not describe `${CLAUDE_PLUGIN_ROOT}/rules` as a loaded instruction surface.
-- The generated single `loom.md` avoids depending on Claude's ordering of multiple
-  user-rule files.
-- Runtime validation showed newly generated project rules do not load in the same
-  first plugin-enabled session. They load on the next session in the same project.
-- The first prompt after a bootstrap sync is intentionally blocked because Claude
-  has not loaded the newly created rule files yet.
-- Claude plugin docs do not describe an uninstall lifecycle hook that would remove
-  synchronized user-rule files automatically when the plugin is disabled or
-  uninstalled.
+- This adapter depends on Claude adding `SessionStart` hook stdout to same-session
+  context and on each per-rule output remaining below Claude's documented
+  10,000-character cap.
+- Claude runs matching hooks concurrently, so increasing sleep delays make numeric
+  ordering likely but do not guarantee it.
+- Runtime validation covers local `--plugin-dir` startup with project-only
+  settings, no tools, and an empty temporary project. Installed marketplace mode,
+  Windows shell behavior, and headless `clear`/`compact` runtime events remain
+  unproven.
+- Runtime skill and command-wrapper invocation remains outside this fixture's
+  rule-loading proof.
 - The marketplace currently uses source `./` for local/Git marketplace installs,
   which means the repository root is the plugin source. A release-packaged Claude
   plugin artifact should narrow this before broad distribution.
@@ -75,16 +71,12 @@ This avoids three wrong solutions:
 
 - calling a Claude plugin install complete when Loom rules were not installed
 - relying on a plugin custom agent's prompt as the Loom operating layer
-- printing static Loom rules from the `SessionStart` hook instead of installing
-  them into Claude's real rule surface
+- concatenating all Loom rules into one hook output and accepting a truncated
+  preview as full context
+- assuming source-marked per-rule hook output preserves strict numeric order
 - copying dogfooding `.loom/` records into the plugin package
 
 ## Cleanup
 
-```bash
-scripts/claude-clean-rules.sh user
-CLAUDE_PROJECT_DIR=/path/to/project scripts/claude-clean-rules.sh project
-```
-
-The cleanup script only removes files named in `.loom-plugin-manifest`; it refuses
-to clean a Loom rules directory without a managed manifest.
+Use Claude's plugin manager to disable or uninstall the plugin. The adapter's
+rule context is emitted from bundled plugin files at session start.

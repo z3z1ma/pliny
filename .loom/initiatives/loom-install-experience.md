@@ -3,7 +3,7 @@ id: initiative:loom-install-experience
 kind: initiative
 status: active
 created_at: 2026-04-25T18:25:20Z
-updated_at: 2026-04-26T01:04:44Z
+updated_at: 2026-04-26T05:15:49Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,7 @@ links:
     - research:loom-install-distribution-methods
     - research:harness-install-surfaces
     - research:codex-command-skill-installation
+    - research:codex-plugin-distribution-surfaces
   spec:
     - spec:opencode-plugin-install-contract
   wiki:
@@ -34,6 +35,7 @@ links:
     - evidence:open-loom-smoke
     - evidence:cursor-harness-install-validation
     - evidence:claude-plugin-hybrid
+    - evidence:claude-sessionstart-stdout-context
 ---
 
 # Objective
@@ -138,6 +140,8 @@ how to keep the protocol source of truth independent from adapter convenience.
 - `research:harness-install-surfaces` for the earlier concrete path mapping
 - `research:codex-command-skill-installation` for the Codex command adapter
   decision
+- `research:codex-plugin-distribution-surfaces` for the current Codex plugin and
+  marketplace surface assessment
 - `ticket:ffg8elkb`, `ticket:p9m4x2qt`, and `ticket:rd48g1kg` for prior
   implementation and validation history
 - current official harness docs, because plugin and skill surfaces are changing
@@ -164,6 +168,7 @@ how to keep the protocol source of truth independent from adapter convenience.
 - Research: `research:loom-install-distribution-methods`
 - Prior research: `research:harness-install-surfaces`
 - Prior research: `research:codex-command-skill-installation`
+- Focused research: `research:codex-plugin-distribution-surfaces`
 - Harness ticket: `ticket:6uy1rx20` - validate `open-loom` OpenCode plugin-first install
 - Follow-up ticket: `ticket:us1brnsv` - investigate OpenCode cold-cache
   npm-plugin first-run behavior
@@ -188,13 +193,17 @@ new execution plan for harness-specific install work. The OpenCode slice has
 landed the first accepted package-adapter result: `open-loom@0.1.0` is published
 and validates a plugin-array install for OpenCode `>=1.14.22 <2`. The remaining
 OpenCode cold-cache first-run installer caveat is tracked by `ticket:us1brnsv`.
-The Claude slice has closed its local/prototype ticket as an accepted automated
-hybrid: marketplace and plugin for skills/commands, plus a plugin session hook
-that generates one always-on `loom.md` into Claude's user or project rule
-surface. Runtime evidence shows a two-session behavior for project installs:
-first session writes rules, second session loads them. A prompt guard blocks the
-first unsafe prompt after a bootstrap sync and tells the user to restart. Broad
-marketplace distribution remains proposed follow-up work in `ticket:cldrel01`.
+The Claude slice has closed its local/prototype ticket and advanced the release
+path through `ticket:cldrel01`: marketplace and plugin for skills/commands, plus
+same-session, source-marked per-rule `SessionStart` stdout for the always-on rule
+corpus. Remaining Claude release risks are installed marketplace behavior,
+package/cache contents, Windows shell behavior, `clear|compact` runtime events,
+and installed skill/command invocation.
+The Codex slice has been re-researched against current plugin docs and source:
+Codex plugins are now strong enough to prototype as the first-class package for
+skills and generated explicit command adapters, but they still do not own
+always-on `AGENTS.md` rules. `ticket:lx9nnztk` now routes next to a bounded
+package-layout spike.
 
 # Completion Basis
 

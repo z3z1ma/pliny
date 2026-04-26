@@ -3,7 +3,7 @@ id: research:codex-command-skill-installation
 kind: research
 status: active
 created_at: 2026-04-19T21:59:26Z
-updated_at: 2026-04-19T21:59:26Z
+updated_at: 2026-04-26T01:43:51Z
 scope:
   kind: repository
   repositories:
@@ -13,6 +13,7 @@ links:
     - ticket:p9m4x2qt
   related:
     - research:harness-install-surfaces
+    - research:codex-plugin-distribution-surfaces
 ---
 
 # Question

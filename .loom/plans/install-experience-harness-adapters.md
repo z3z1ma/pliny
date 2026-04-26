@@ -3,7 +3,7 @@ id: plan:install-experience-harness-adapters
 kind: plan
 status: active
 created_at: 2026-04-25T18:46:08Z
-updated_at: 2026-04-26T01:04:44Z
+updated_at: 2026-04-26T05:15:49Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,7 @@ links:
     - research:loom-install-distribution-methods
     - research:harness-install-surfaces
     - research:codex-command-skill-installation
+    - research:codex-plugin-distribution-surfaces
   spec:
     - spec:opencode-plugin-install-contract
   wiki:
@@ -31,6 +32,7 @@ links:
     - evidence:open-loom-smoke
     - evidence:cursor-harness-install-validation
     - evidence:claude-plugin-hybrid
+    - evidence:claude-sessionstart-stdout-context
 ---
 
 # Purpose
@@ -73,16 +75,19 @@ Current strategic picture:
 - Cursor plugins and Gemini CLI extensions are the strongest first-class package
   candidates because their docs show package support for rules or context,
   skills, and commands.
-- Claude Code has an accepted automated hybrid prototype: `.claude-plugin/plugin.json`
+- Claude Code has an accepted automated hybrid adapter: `.claude-plugin/plugin.json`
   exposes canonical `skills/` and optional `commands/`, `.claude-plugin/marketplace.json`
-  exposes marketplace `agent-loom`, and a plugin `SessionStart` hook generates
-  `loom.md` from `${CLAUDE_PLUGIN_ROOT}/rules/*.md` into user or project
-  `.claude/rules/loom/`. Runtime evidence shows project rules are installed in the
-  first plugin-enabled session but loaded on the next session, so the prototype
-  includes a `UserPromptSubmit` restart guard for bootstrap sessions. Broad Claude
-  marketplace distribution is separated into proposed follow-up `ticket:cldrel01`.
-- Codex is likely a hybrid install because its plugin system does not cleanly own
-  always-on Loom rules in the fetched docs.
+  exposes marketplace `agent-loom`, and `hooks/hooks.json` emits canonical rules as
+  same-session, source-marked per-rule `SessionStart` stdout. Remaining Claude
+  release risks are installed marketplace behavior, package/cache
+  contents, Windows shell behavior, `clear|compact` runtime events, and installed
+  skill/command invocation.
+- Codex remains a hybrid install, but current plugin docs and source make it a
+  stronger first-class package candidate than earlier research implied. Plugins
+  should package canonical skills and generated explicit-only command adapter
+  skills; ordered rules still need `AGENTS.md` or another documented instruction
+  surface. The next Codex move is a package-layout spike under `ticket:lx9nnztk`,
+  not broad release packaging.
 - OpenCode is the first accepted adapter-package result. `open-loom@0.1.0` is
   published and uses the plugin `config(config)` hook to register rules through
   `config.instructions`, skills through `config.skills.paths`, and commands
@@ -130,7 +135,9 @@ Shared follow-through inside the harness tickets:
    package shape that preserves Loom's three surfaces without direct user-rule
    mutation.
 2. Claude and Codex hybrid tickets decide how plugin packaging combines with
-   always-on rule installation and explicit command adapters.
+   always-on rule installation and explicit command adapters. For Codex, the
+   immediate decision is package layout: repository-root plugin, derivative
+   fixture, or fallback-only.
 3. OpenCode plugin-first ticket proves the ideal plugin-array install shape, using
    npm publication for normal users and local file/path plugins for cloned-repo
    installs, while documenting the cold-cache npm-plugin first-run caveat as

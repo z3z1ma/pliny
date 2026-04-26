@@ -188,10 +188,8 @@ This repository includes a Claude Code plugin manifest at
 `.claude-plugin/plugin.json` and a local marketplace catalog at
 `.claude-plugin/marketplace.json`. The plugin exposes canonical `skills/` and
 optional `commands` directly from the repository root. Claude auto-loads the
-standard plugin `hooks/hooks.json` path, which includes a
-`SessionStart` hook that generates a managed Claude rule file from canonical
-`rules/*.md` into Claude's real rule surface and a `UserPromptSubmit` guard that
-blocks prompts when a restart/new session is needed:
+standard plugin `hooks/hooks.json` path. Loom uses that hook surface to emit the
+canonical top-level rule files as same-session `SessionStart` hook stdout:
 
 ```bash
 claude --plugin-dir /absolute/path/to/agent-loom
@@ -213,43 +211,33 @@ claude plugin validate /absolute/path/to/agent-loom
 
 Claude does not currently document an install-time plugin script hook or a plugin
 manifest field for arbitrary always-on rules. The plugin therefore uses the
-smallest available automatic mechanism: a plugin `SessionStart` command hook runs
-`scripts/claude-sync-rules.sh`, which reads bundled canonical rule files from
-`${CLAUDE_PLUGIN_ROOT}/rules` and writes one generated `loom.md` file into a
-Claude-loaded rules directory. The script does not infer project scope from
-`.claude/` existing. It writes to
-`${CLAUDE_PROJECT_DIR}/.claude/rules/loom/` only when that project's
-`.claude/settings.json` or `.claude/settings.local.json` explicitly enables the
-`loom` plugin. Otherwise it verifies/synchronizes `~/.claude/rules/loom/` for the
-user-level path. Claude's static rule loader, not hook stdout, is then
-responsible for loading the rules as always-on instructions.
+smallest validated automatic mechanism: one `SessionStart` hook group with matcher
+`startup|clear|compact` and one command per canonical top-level rule file. Each
+command prints a source marker such as `===== LOOM_RULE_FILE
+01-core-identity.md =====`, then cats exactly one file from
+`${CLAUDE_PLUGIN_ROOT}/rules/<filename>`.
 
-`${CLAUDE_PLUGIN_ROOT}` is the plugin installation directory, often under
-`~/.claude/plugins/cache` for marketplace plugins. Claude docs do not describe
-`${CLAUDE_PLUGIN_ROOT}/rules` itself as an always-on instruction location; it is
-the source the sync script copies from, not the loaded destination.
+The commands include small increasing `sleep` delays so numeric rule order is
+likely in practice and `01-core-identity.md` is likely to emit first. Claude hook
+execution order is not guaranteed, so the source markers are part of the contract:
+operators and probes should rely on source-marked visibility, not strict ordering.
+Current rule files are each below Claude's documented 10,000-character hook-output
+context cap.
+
+Disabling or uninstalling the plugin follows Claude's plugin manager UX. Loom's
+Claude adapter delivers rule context from bundled plugin files at session start,
+so normal plugin removal removes the active delivery path.
 
 Do not use a plugin custom agent as a substitute for the Loom rule corpus. The
-existing Makefile Claude installer remains a fallback/proof path until plugin
-runtime validation confirms the final acceptance posture for first-session timing
-and uninstall behavior.
+existing Makefile Claude installer remains a fallback/proof path for users who
+prefer static copied Claude rules over plugin hook context.
 
-Current runtime validation shows the Claude plugin hook can create project rules
-on the first plugin-enabled session, but Claude does not load those newly created
-rules into that same initial context. The next session in the same project loads
-them from `.claude/rules/loom/loom.md`. The restart guard turns that lifecycle
-limit into explicit behavior: if rules were just installed or updated for the
-current session, the user's prompt is blocked with a message explaining that the
-prompt was not processed and Claude must be restarted before resubmitting.
-
-Claude docs do not describe a plugin uninstall hook. To remove generated Loom
-rules explicitly, run one of these from this repository or plugin source before or
-after disabling the plugin:
-
-```bash
-scripts/claude-clean-rules.sh user
-CLAUDE_PROJECT_DIR=/path/to/project scripts/claude-clean-rules.sh project
-```
+Runtime validation in this repository has observed all seven canonical rule files
+visible in same-session Claude startup context through local `--plugin-dir` with
+project-only settings, no tools, and an empty temporary project. Validation has
+not yet proven installed marketplace behavior, Windows shell behavior, or
+headless `clear`/`compact` event delivery. Runtime invocation of bundled skills
+and command wrappers is also outside the rule-loading probe.
 
 See `examples/adapters/claude-plugin-install/` for the fixture notes and current
 limitations.

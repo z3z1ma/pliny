@@ -4,7 +4,7 @@ kind: wiki
 page_type: workflow
 status: active
 created_at: 2026-04-25T22:14:57Z
-updated_at: 2026-04-26T01:04:44Z
+updated_at: 2026-04-26T05:15:49Z
 scope:
   kind: repository
   repositories:
@@ -23,9 +23,12 @@ links:
   evidence:
     - evidence:open-loom-smoke
     - evidence:claude-plugin-hybrid
+    - evidence:claude-sessionstart-stdout-context
   critique:
     - critique:open-loom-config-hook-review
     - critique:claude-plugin-integration-review
+    - critique:claude-hook-context-simplification-review
+    - critique:claude-per-rule-hook-implementation-review
   research:
     - research:loom-install-distribution-methods
 ---
@@ -40,9 +43,8 @@ npm plugin that exposes bundled Loom rules, skills, and optional command wrapper
 through OpenCode config surfaces.
 
 Claude Code is the first accepted hybrid example: a Claude plugin exposes skills
-and command wrappers, while a plugin hook generates one static `loom.md` file into
-Claude's documented rule surface and blocks the first unsafe prompt until a new
-session loads that rule file.
+and command wrappers while a plugin `SessionStart` hook emits Loom's canonical
+rules as same-session, source-marked per-rule context.
 
 # When To Use It
 
@@ -56,8 +58,8 @@ In that case, use a hybrid install and document the split.
 
 Use the hybrid form when the harness package can carry some Loom surfaces but not
 all of them. The package should still improve installation, but the missing
-surface must be synchronized into a documented harness-owned surface, not hidden
-inside hook stdout or a custom agent prompt.
+surface must be routed through a documented and evidenced harness-owned mechanism,
+not hidden in an unvalidated hook or custom agent prompt.
 
 # Inputs
 
@@ -73,7 +75,7 @@ inside hook stdout or a custom agent prompt.
    `.opencode/` state into the package.
 2. Choose the smallest harness-native registration path that exposes rules,
    skills, and commands.
-3. Keep generated files derivative and source-marked when generation is required.
+3. Keep generated or emitted adapter content derivative and source-marked.
 4. Declare compatibility metadata when the package manager or harness supports it.
 5. Validate package layout before publication or release.
 6. Validate harness loading through the harness's own debug, install, link, or
@@ -90,11 +92,14 @@ Use this procedure when a harness plugin/package cannot own every Loom surface.
 2. Route the missing surface to a documented static harness surface.
 3. Keep generated outputs derivative from canonical `rules/`, `skills/`, and
    optional `commands/`.
-4. Prefer one generated ordered rule file when the harness does not document
-   ordering across multiple rule files.
-5. Treat hooks as installers or guards, not as the static knowledge channel.
+4. Prefer one generated ordered rule file when the harness supports documented
+   static rule loading but does not document ordering across multiple rule files.
+5. Use hooks as the knowledge channel only when the harness docs and runtime
+   evidence prove complete same-session context delivery and the ticket accepts
+   the tradeoff.
 6. Fail closed when a bootstrap sync changes instructions after the session has
-   already loaded context.
+   already loaded context; avoid bootstrap sync entirely when same-session hook
+   context is validated.
 7. Validate both manifest shape and real install/load behavior; schema validation
    alone is not enough.
 8. Keep disable/uninstall cleanup explicit when the harness provides no lifecycle
@@ -102,7 +107,7 @@ Use this procedure when a harness plugin/package cannot own every Loom surface.
 
 # Claude Hybrid Example
 
-The accepted Claude prototype uses this split:
+The accepted Claude adapter uses this split:
 
 - `.claude-plugin/plugin.json` exposes canonical `skills/` and optional
   `commands/`.
@@ -110,21 +115,25 @@ The accepted Claude prototype uses this split:
   plugin `loom` sourced from `./` for local/prototype installs.
 - Claude auto-loads the standard plugin `hooks/hooks.json`; the manifest should
   not duplicate that standard hook path.
-- `SessionStart` runs `scripts/claude-sync-rules.sh`, which generates one managed
-  `loom.md` from canonical `rules/*.md` into user or project
-  `.claude/rules/loom/`.
-- Project-local sync requires an explicit project settings `enabledPlugins` entry
-  for Loom; `.claude/` directory existence alone is not a project install signal.
-- `UserPromptSubmit` runs `scripts/claude-loom-restart-guard.sh`, which blocks
-  prompts when sync failed, sync is pending, or rules were just installed after
-  Claude loaded instructions.
-- `scripts/claude-clean-rules.sh` is the explicit cleanup path because Claude docs
-  do not describe an uninstall lifecycle hook.
+- `SessionStart` uses matcher `startup|clear|compact` and emits one
+  source-marked stdout block per canonical top-level rule file.
+- Each rule output stays below Claude's documented 10,000-character hook-output
+  context cap.
+- Small increasing sleeps make `01-core-identity.md` appear first in observed
+  startup probes, but strict rule ordering is not guaranteed; source markers are
+  the stable attribution mechanism.
+- Disabling or uninstalling the plugin follows Claude's plugin manager UX because
+  the active rule delivery path is plugin hook context emitted at session start.
 
-The important accepted limitation is the two-session bootstrap: the first
-plugin-enabled session can install `loom.md`, but Claude loads it on the next
-session. The guard prevents the first prompt from reaching the model when the
-session just installed or updated Loom rules.
+The important accepted limitation is ordering: Claude runs matching hooks
+concurrently, so per-rule outputs are source-marked and only best-effort ordered.
+Local startup probes saw all seven rules without preview/truncation and saw
+`01-core-identity.md` first, but did not prove strict numeric order after that.
+
+Validation review: `evidence:claude-sessionstart-stdout-context` showed that
+monolithic full-corpus hook context was previewed/truncated, plugin-root static
+context did not load under local `--plugin-dir`, and arbitrary 26-command chunking
+was more complex than the per-rule design.
 
 # Outputs
 
@@ -151,8 +160,11 @@ session just installed or updated Loom rules.
 - selecting project-local install scope because `.claude/` exists instead of
   because the plugin is explicitly enabled for that project
 - relying on hook stdout or a custom agent prompt as the always-on rule layer
-- proceeding after a bootstrap sync even though the harness loaded instructions
-  before generated rules existed
+  without runtime evidence and explicit ticket acceptance
+- replacing a documented static rule sync with many chunked hook-context commands
+  just because a local probe worked once
+- accepting source-marked per-rule hook output as strictly ordered when the
+  harness only provides best-effort ordering
 
 # Sources
 
@@ -163,8 +175,10 @@ session just installed or updated Loom rules.
 - `ticket:cldrel01`
 - `evidence:open-loom-smoke`
 - `evidence:claude-plugin-hybrid`
+- `evidence:claude-sessionstart-stdout-context`
 - `critique:open-loom-config-hook-review`
 - `critique:claude-plugin-integration-review`
+- `critique:claude-hook-context-simplification-review`
 - `research:loom-install-distribution-methods`
 - `plan:install-experience-harness-adapters`
 - `initiative:loom-install-experience`

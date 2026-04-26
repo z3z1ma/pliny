@@ -3,7 +3,7 @@ id: research:loom-install-distribution-methods
 kind: research
 status: active
 created_at: 2026-04-25T18:25:20Z
-updated_at: 2026-04-26T01:04:44Z
+updated_at: 2026-04-26T05:15:49Z
 scope:
   kind: repository
   repositories:
@@ -20,6 +20,7 @@ links:
   research:
     - research:harness-install-surfaces
     - research:codex-command-skill-installation
+    - research:codex-plugin-distribution-surfaces
   ticket:
     - ticket:6uy1rx20
     - ticket:us1brnsv
@@ -35,6 +36,7 @@ links:
     - evidence:open-loom-smoke
     - evidence:cursor-harness-install-validation
     - evidence:claude-plugin-hybrid
+    - evidence:claude-sessionstart-stdout-context
 external_refs:
   claude_code:
     - https://code.claude.com/docs/en/plugins
@@ -44,10 +46,16 @@ external_refs:
     - https://code.claude.com/docs/en/skills
     - https://code.claude.com/docs/en/memory
     - https://code.claude.com/docs/en/plugin-marketplaces
+    - https://github.com/obra/superpowers
   codex:
+    - https://developers.openai.com/codex/plugins
     - https://developers.openai.com/codex/skills
     - https://developers.openai.com/codex/guides/agents-md
     - https://developers.openai.com/codex/plugins/build
+    - https://developers.openai.com/codex/cli/reference#codex-plugin-marketplace
+    - https://developers.openai.com/codex/concepts/customization
+    - https://developers.openai.com/codex/config-advanced
+    - https://developers.openai.com/codex/changelog
   opencode:
     - https://opencode.ai/docs/config/
     - https://opencode.ai/docs/plugins/
@@ -186,6 +194,7 @@ Repository sources:
 - `scripts/install-loom.sh`
 - `research:harness-install-surfaces`
 - `research:codex-command-skill-installation`
+- `research:codex-plugin-distribution-surfaces`
 - `ticket:ffg8elkb`
 - `ticket:p9m4x2qt`
 - `ticket:rd48g1kg`
@@ -340,11 +349,14 @@ Always-on rule fit:
   plugin settings, but that is not equivalent to installing Loom's always-on
   rule corpus as reusable harness-agnostic instructions. It changes the agent
   selection/system prompt rather than exposing a simple ordered rule bundle.
-- Hook docs explicitly say static context should use `CLAUDE.md` rather than
-  `SessionStart` hook output, and `InstructionsLoaded` can observe but not modify
-  instruction loading. A `SessionStart` hook can still perform file side effects,
-  so using it to synchronize files into `~/.claude/rules/loom/` is a distinct
-  prototype from using hook stdout as the rule loader.
+- Hook docs say static context should use `CLAUDE.md` when no script is needed,
+  but they also state that `SessionStart` stdout is added as Claude context.
+  `evidence:claude-sessionstart-stdout-context` observed a local plugin hook that
+  cats a bundled rule file from `${CLAUDE_PLUGIN_ROOT}/rules/*.md` and has the
+  marker visible to Claude in the same startup session.
+- `obra/superpowers` uses a similar `SessionStart` matcher shape
+  (`startup|clear|compact`) and emits Claude context from a plugin hook, though it
+  uses structured `hookSpecificOutput.additionalContext` rather than raw `cat`.
 
 Assessment:
 
@@ -352,34 +364,28 @@ Assessment:
   namespacing, versioning, and marketplace distribution.
 - Claude plugins do not currently appear to be a complete manifest-only Loom
   install surface because Loom rules must be always-on and ordered.
-- The accepted prototype direction for `ticket:q7h1d05q` is automated hybrid: a
-  Claude plugin exposes canonical `skills` and optional `commands`, and a plugin
-  `SessionStart` hook generates one managed `loom.md` from canonical
-  `${CLAUDE_PLUGIN_ROOT}/rules/*.md` into a Claude-loaded rule directory.
-  Project/local installs should target
-  `${CLAUDE_PROJECT_DIR}/.claude/rules/loom/` when project settings explicitly
-  enable the plugin; otherwise the script should verify or synchronize
-  `~/.claude/rules/loom/` and avoid treating `.claude/` directory existence alone
-  as a project install signal.
+- The accepted Claude adapter direction is automated hybrid: a Claude plugin
+  exposes canonical `skills` and optional `commands`, and a plugin `SessionStart`
+  hook emits canonical top-level rules as same-session, source-marked per-rule
+  stdout context.
 - The current direct copy to `~/.claude/rules/loom`, `~/.claude/skills`, and
   `~/.claude/commands` remains a fallback/proof path until plugin runtime timing
   and uninstall/disable behavior are proven.
-- Runtime probes showed project rules synchronized by a plugin `SessionStart` hook
-  are not available in that same first headless session, but are loaded on the
-  next session from `.claude/rules/loom/loom.md`.
-- Therefore the current prototype adds a `UserPromptSubmit` restart guard: if rule
-  synchronization changed files for the current session, the first prompt is
-  blocked with a restart/new-session message instead of letting Claude operate
-  without Loom loaded.
-- The generated single `loom.md` file avoids relying on undocumented Claude load
-  ordering across multiple rule files.
-- Explicit cleanup uses `scripts/claude-clean-rules.sh`; Claude docs do not
-  describe a plugin uninstall hook.
+- Runtime probes showed per-rule hook stdout made all seven rule files visible in
+  same-session startup context.
+- The per-rule design relies on source markers and best-effort sleep staggering.
+  `01-core-identity.md` appeared first in repeated probes, but strict order after
+  that is not guaranteed because Claude runs matching hooks concurrently.
+- Disabling or uninstalling the plugin follows Claude's plugin manager UX because
+  the active rule delivery path is plugin hook context emitted at session start.
 - Local marketplace install validates `loom@agent-loom` can install without
   hook-load errors after relying on standard hook auto-loading instead of a
   duplicate manifest `hooks` field.
-- Avoid a hook-based rule loader. It would be clever but contrary to Claude's own
-  static-context guidance and Loom's desire for visible, simple file surfaces.
+- Hook-context loading is accepted for the Claude adapter only in the per-rule raw
+  stdout form implemented by `ticket:cldrel01`. Monolithic full-rule raw stdout and
+  structured additional context were previewed/truncated. Plugin-root `CLAUDE.md`
+  and `.claude/rules/loom.md` did not load under local `--plugin-dir`. Arbitrary
+  26-command chunking worked once but was rejected as too brittle.
 
 ## Codex
 
@@ -406,6 +412,17 @@ Doc-backed install surfaces:
   servers, apps/connectors, and assets.
 - Codex plugin marketplaces are JSON catalogs under repo or user `.agents/plugins`
   paths, and plugins install into a Codex plugin cache.
+- `codex plugin marketplace add` can add local, GitHub shorthand, HTTP(S) Git,
+  and SSH marketplace sources.
+- The official CLI reference marks `codex plugin marketplace` experimental.
+- Installed local `codex-cli 0.123.0` exposes marketplace add/upgrade/remove but
+  not a simple non-interactive `codex plugin install` command.
+- OpenAI source inspected in `research:codex-plugin-distribution-surfaces` models
+  plugin manifest paths for `skills`, `mcpServers`, `apps`, and `interface`, not
+  `AGENTS.md`, `commands`, `agents`, or consistently supported plugin hooks.
+- Plugin skill paths are namespaced from the plugin manifest name in inspected
+  source, which should reduce collision risk for a `loom` plugin but still needs
+  runtime validation.
 
 Always-on rule fit:
 
@@ -418,8 +435,9 @@ Always-on rule fit:
 
 Assessment:
 
-- Codex plugins are a good candidate for distributing Loom skills and possibly
-  app integration metadata, but not a complete Loom install by themselves.
+- Codex plugins are a good candidate for distributing Loom skills and generated
+  explicit-only command adapter skills, but not a complete Loom install by
+  themselves.
 - The current generated command adapter skill pattern is aligned with Codex's
   skills-first extension surface because command wrappers become explicit-only
   skills with `allow_implicit_invocation: false`.
@@ -429,6 +447,10 @@ Assessment:
 - The `AGENTS.md` size budget matters: mirroring every rule into one global file
   can consume a meaningful chunk of the documented default project-doc budget if
   project instructions are also large.
+- Current focused recommendation: run a package-layout spike before implementation
+  chooses between a repository-root plugin, a derivative plugin fixture, or
+  fallback-only direct skill generation. See
+  `research:codex-plugin-distribution-surfaces` and `ticket:lx9nnztk`.
 
 ## OpenCode
 
@@ -981,6 +1003,7 @@ Split future install docs into three conceptual modes:
 - Harness ticket: `ticket:3t93tsci` - Cursor plugin install path
 - Prior path-mapping research: `research:harness-install-surfaces`
 - Prior Codex command adapter research: `research:codex-command-skill-installation`
+- Focused Codex plugin research: `research:codex-plugin-distribution-surfaces`
 - Prior installer ticket: `ticket:ffg8elkb`
 - Prior Codex adapter ticket: `ticket:p9m4x2qt`
 - Prior Cursor installer ticket: `ticket:rd48g1kg`
