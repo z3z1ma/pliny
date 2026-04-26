@@ -6,7 +6,7 @@
   surface
 - `.cursor-plugin/plugin.json` exposes canonical `skills/` using Cursor's native
   plugin manifest shape and overrides root hook discovery with an empty Cursor
-  hook config so Claude-specific `hooks/hooks.json` is not loaded by Cursor
+  hook config; Claude-specific hooks live under `claude-hooks/`
 - `loom-bootstrap` is the required first skill; adapters may preload its
   references only through a Cursor-native rule surface when that remains a native
   package feature

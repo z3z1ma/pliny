@@ -7,9 +7,10 @@
 - `.claude-plugin/marketplace.json` makes the repository root a local Claude Code
   marketplace named `agent-loom` with one plugin named `loom`.
 - the plugin exposes canonical `skills/` directly from the repository root.
-- Claude auto-loads the standard plugin `hooks/hooks.json`; the plugin manifest
-  does not repeat that hook path.
-- `hooks/hooks.json` registers one `SessionStart` hook group with matcher
+- `.claude-plugin/plugin.json` declares `claude-hooks/hooks.json` as the Claude
+  hook config so other harnesses do not auto-discover Claude hooks from root
+  `hooks/`.
+- `claude-hooks/hooks.json` registers one `SessionStart` hook group with matcher
   `startup|clear|compact`.
 - that hook group has one command per `loom-bootstrap` reference; each command
   prints a `===== LOOM_BOOTSTRAP_REFERENCE <filename> =====` source marker and

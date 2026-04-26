@@ -114,8 +114,8 @@ The accepted Claude adapter uses this split:
 - `.claude-plugin/plugin.json` exposes canonical `skills/`.
 - `.claude-plugin/marketplace.json` exposes local marketplace `agent-loom` with
   plugin `loom` sourced from `./` for local/prototype installs.
-- Claude auto-loads the standard plugin `hooks/hooks.json`; the manifest should
-  not duplicate that standard hook path.
+- `.claude-plugin/plugin.json` declares `claude-hooks/hooks.json` as the Claude
+  hook config so root `hooks/` remains available for other harnesses if needed.
 - `SessionStart` uses matcher `startup|clear|compact` and emits one
   source-marked stdout block per `loom-bootstrap` reference.
 - Each bootstrap reference output stays below Claude's documented

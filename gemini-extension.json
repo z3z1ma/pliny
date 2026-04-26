@@ -1,0 +1,6 @@
+{
+  "name": "agent-loom",
+  "version": "0.1.1",
+  "description": "Loom Markdown-native AI work protocol skills for Gemini CLI.",
+  "contextFileName": "gemini-bootstrap.md"
+}

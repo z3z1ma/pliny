@@ -53,6 +53,7 @@ Use the harness-native command for your environment:
 | OpenCode | `opencode plugin open-loom --global` |
 | Codex | `codex plugin marketplace add z3z1ma/agent-loom` |
 | Cursor | `mkdir -p ~/.cursor/plugins/local && git clone https://github.com/z3z1ma/agent-loom.git ~/.cursor/plugins/local/agent-loom` |
+| Gemini CLI | `gemini extensions install https://github.com/z3z1ma/agent-loom` |
 
 Codex currently requires opening `/plugins` after marketplace registration to
 install or enable `loom`. Cursor's command above uses Cursor's native local plugin
@@ -79,8 +80,8 @@ This repository includes a Claude Code plugin manifest at
 `.claude-plugin/plugin.json` and a local marketplace catalog at
 `.claude-plugin/marketplace.json`.
 
-The plugin exposes canonical `skills/` directly from the repository root. Claude
-also auto-loads the standard plugin `hooks/hooks.json` path. Loom uses that hook
+The plugin exposes canonical `skills/` directly from the repository root and
+declares `claude-hooks/hooks.json` as its Claude hook config. Loom uses that hook
 surface to emit the ordered `loom-bootstrap` references as same-session
 `SessionStart` hook stdout.
 
@@ -191,6 +192,35 @@ listing exists, install from Cursor Agent chat with:
 ```text
 /add-plugin agent-loom
 ```
+
+## Gemini CLI
+
+This repository includes a Gemini CLI extension manifest at
+`gemini-extension.json`. The extension exposes canonical `skills/` and uses
+`contextFileName` to load `gemini-bootstrap.md`, which imports the ordered
+`skills/loom-bootstrap/references/*.md` files with Gemini's native context import
+syntax.
+
+Install from the Git repository with:
+
+```bash
+gemini extensions install https://github.com/z3z1ma/agent-loom
+```
+
+Local development can link the repository instead:
+
+```bash
+gemini extensions link /absolute/path/to/agent-loom
+```
+
+Validate the local extension structure with:
+
+```bash
+gemini extensions validate /absolute/path/to/agent-loom
+```
+
+The context preload is a bonus. The canonical surface remains `skills/`,
+especially `skills/loom-bootstrap`.
 
 ## Workspace Bootstrap
 

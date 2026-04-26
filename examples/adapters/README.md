@@ -22,3 +22,4 @@ Current fixtures:
 - `codex-plugin-install/` - Codex native plugin / marketplace shape
 - `open-loom-install/` - OpenCode npm/local plugin package behavior
 - `cursor-install/` - Cursor native skill-package target notes
+- `gemini-extension-install/` - Gemini CLI native extension with bootstrap preload

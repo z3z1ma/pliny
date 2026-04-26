@@ -81,7 +81,7 @@ Current strategic picture:
   is the only product surface.
 - Claude Code has an accepted automated boost adapter: `.claude-plugin/plugin.json`
   exposes canonical `skills/`, `.claude-plugin/marketplace.json`
-  exposes marketplace `agent-loom`, and `hooks/hooks.json` emits `loom-bootstrap`
+  exposes marketplace `agent-loom`, and `claude-hooks/hooks.json` emits `loom-bootstrap`
   references as same-session, source-marked `SessionStart` stdout. Remaining
   Claude release risks are installed marketplace behavior, package/cache contents,
   Windows shell behavior, `clear|compact` runtime events, and installed skill

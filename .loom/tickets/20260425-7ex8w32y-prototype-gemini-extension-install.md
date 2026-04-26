@@ -1,11 +1,11 @@
 ---
 id: ticket:7ex8w32y
 kind: ticket
-status: ready
+status: closed
 change_class: release-packaging
 risk_class: medium
 created_at: 2026-04-25T18:46:08Z
-updated_at: 2026-04-25T18:46:08Z
+updated_at: 2026-04-26T08:26:59Z
 scope:
   kind: repository
   repositories:
@@ -20,56 +20,53 @@ links:
     - research:harness-install-surfaces
   related:
     - ticket:ffg8elkb
+  evidence:
+    - evidence:gemini-extension-validation
+  critique:
+    - critique:gemini-extension-review
 external_refs:
   gemini_cli_docs:
     - https://geminicli.com/docs/extensions/
     - https://geminicli.com/docs/extensions/reference/
+    - https://geminicli.com/docs/extensions/writing-extensions/
+    - https://geminicli.com/docs/cli/gemini-md/
     - https://geminicli.com/docs/cli/skills/
-    - https://geminicli.com/docs/cli/custom-commands/
 depends_on: []
 ---
 
 # Summary
 
-Prototype a Gemini CLI extension install path for Loom that packages ordered
-rules, Agent Skills, and optional TOML command adapters through Gemini's
-documented extension system.
+Prototype a first-class Gemini CLI extension install path for Loom that exposes
+canonical `skills/` and preloads the ordered `loom-bootstrap` references through
+Gemini's native `contextFileName` mechanism.
 
 # Context
 
 `research:loom-install-distribution-methods` identifies Gemini CLI extensions as
-a strong first-class package candidate. Gemini extensions distribute prompts,
-MCP servers, custom commands, themes, hooks, sub-agents, and agent skills. Each
-extension root has `gemini-extension.json`, can load a configured context file or
-default `GEMINI.md`, can package skills under `skills/`, and can package custom
-commands as TOML files under `commands/`.
-
-The existing shell fallback mirrors Loom rules into `~/.gemini/GEMINI.md`, copies
-skills to `~/.gemini/skills`, and converts commands into
-`~/.gemini/commands/*.toml`. This ticket tests whether a Gemini extension can
-replace or supplement that direct mutation path.
+a strong first-class package candidate. `decision:0006` removes fallback copy
+installers and top-level command wrappers from the product surface, so this ticket
+tests only the native extension shape: `gemini-extension.json`, bundled `skills/`,
+and optional bootstrap preload via extension context.
 
 # Why Now
 
 Gemini is one of the best proving grounds for a first-class adapter package
-because its extension format appears to include all Loom install needs:
+because its extension format includes Loom's current install needs:
 
-- context file for ordered always-on rules
+- context file for ordered bootstrap preload
 - `skills/` for Agent Skills
-- `commands/*.toml` for slash-command wrappers
 - documented install, link, disable, enable, and update commands
 
 # Scope
 
 - design a Gemini extension package or fixture derived from canonical Loom
-  `rules/`, `skills/`, and optional `commands/`
+  `skills/`
 - create `gemini-extension.json` with appropriate metadata and context file
   configuration
-- generate or write an extension context file that loads Loom rules in numeric
+- write an extension context file that imports bootstrap references in numeric
   order
-- copy canonical skill directories into extension `skills/`
-- convert optional Loom command Markdown into Gemini TOML command files
-- preserve source markers or provenance in generated command/context outputs
+- rely on repository `skills/` as the extension-bundled skill directory
+- preserve source provenance in context outputs by importing canonical references
 - validate extension structure and, if available, local `gemini extensions link`
   or `gemini extensions install` behavior
 - update install docs and adapter fixture notes for the Gemini decision
@@ -79,24 +76,19 @@ because its extension format appears to include all Loom install needs:
 - do not add MCP servers, hooks, themes, or sub-agents to the Loom extension
   unless this ticket is explicitly revised
 - do not publish a Gemini extension gallery entry
-- do not remove the existing direct Gemini fallback until the extension path is
-  proven and replacement scope is accepted
-- do not change canonical Loom rules, skills, or commands to satisfy Gemini
-  formatting
-- do not treat generated TOML commands or extension context as canonical Loom
-  behavior
+- do not restore direct Gemini fallback installers or top-level command wrappers
+- do not change canonical Loom skills to satisfy Gemini formatting
+- do not treat extension context as canonical Loom behavior
 
 # Acceptance Criteria
 
-- a Gemini extension package or fixture exists, or the ticket records a supported
-  reason why an extension cannot currently express Loom install needs
+- a Gemini extension package exists, or the ticket records a supported reason why
+  an extension cannot currently express Loom install needs
 - `gemini-extension.json` matches the documented manifest shape
-- extension context preserves ordered always-on Loom rules
+- extension context preserves ordered bootstrap preload through canonical reference
+  imports
 - skills remain Agent Skill directories with `SKILL.md` and supporting files
-- generated TOML commands preserve optional command wrapper intent and argument
-  handling using Gemini-compatible syntax
-- validation demonstrates package structure and generated files are inspectable
-  and source-marked
+- validation demonstrates package structure and context imports are inspectable
 - install/link/disable validation is run with Gemini CLI when available, or the
   ticket records why only structural validation was possible
 - `INSTALL.md` or adapter examples reflect the proven Gemini recommendation
@@ -111,7 +103,10 @@ Covers:
 
 # Claim Matrix
 
-None - no evidence exists yet for this extension prototype.
+| Claim | Evidence | Critique | Status |
+| --- | --- | --- | --- |
+| Gemini extension can expose canonical Loom skills. | `evidence:gemini-extension-validation` | `critique:gemini-extension-review` | supported |
+| Gemini extension can preload ordered bootstrap references via `contextFileName`. | `evidence:gemini-extension-validation` | `critique:gemini-extension-review` | supported |
 
 # Execution Notes
 
@@ -121,20 +116,15 @@ Gemini facts to preserve from research:
   copied, while linked local extensions are symlinked
 - `gemini-extension.json` can name `contextFileName`; if omitted and `GEMINI.md`
   exists, `GEMINI.md` is loaded
-- custom commands are TOML files under `commands/`
-- `{{args}}` injects command arguments in Gemini commands
 - skills can live in extension `skills/` and are lower precedence than workspace
   and user skills
 
 Likely implementation shape:
 
-- create a non-canonical Gemini extension fixture or package directory
-- generate extension `GEMINI.md` or a configured context file from ordered Loom
-  rules
-- copy `skills/*` into extension `skills/`
-- convert `commands/*.md` into `commands/*.toml`
-- keep the current direct install path available until extension behavior is
-  validated
+- add root `gemini-extension.json`
+- add configured extension context file that imports ordered
+  `skills/loom-bootstrap/references/*.md`
+- rely on root `skills/` for extension-bundled skills
 
 # Blockers
 
@@ -142,7 +132,8 @@ None.
 
 # Next Move / Next Route
 
-Ralph implementation packet.
+Closed after local edit, structural validation, temp-home link/list and disable
+validation, and recommended critique.
 
 # Ralph Readiness
 
@@ -151,17 +142,16 @@ Prototype and validate a Gemini CLI extension package or fixture for Loom, then
 update Gemini install guidance with the proven path and limitations.
 
 Write boundary:
-Gemini adapter package or fixture paths, `INSTALL.md`, `examples/adapters/` if
-used for fixtures, `scripts/install-loom.sh` only if a small fallback adjustment
-is justified, and this ticket/evidence records. Read-only source inputs are
-`rules/`, `skills/`, and `commands/`.
+Gemini extension manifest/context files, `INSTALL.md`, `examples/adapters/`, and
+this ticket/evidence records. Read-only source inputs are `skills/`, especially
+`skills/loom-bootstrap/references/`.
 
 Likely verification posture:
 Observation-first structural validation plus Gemini CLI local extension link or
 install validation when available.
 
 Expected output contract:
-Changed files, extension structure summary, generated context/command behavior,
+Changed files, extension structure summary, bootstrap context import behavior,
 validation commands and results, limitations, recommendation for Gemini install
 path, and ticket state recommendation.
 
@@ -170,11 +160,23 @@ path, and ticket state recommendation.
 Expected evidence:
 
 - structural check of `gemini-extension.json`
-- inspection of generated extension context and TOML commands
-- check that copied skills retain `SKILL.md`, references, and templates
+- inspection of extension context imports
+- check that bundled skills retain `SKILL.md`, references, and templates
 - `git diff --check`
-- `gemini extensions link` or equivalent if available
+- `gemini extensions validate` and `gemini extensions link` or equivalent if
+  available
 - explicit limitation if Gemini CLI runtime validation cannot be run
+
+Observed evidence:
+
+- `evidence:gemini-extension-validation`
+- JSON validation for manifests
+- `gemini extensions validate /Users/alexanderbutler/code_projects/personal/agent-loom`
+- temp-home `gemini extensions link` and `gemini extensions list`
+- temp-home `gemini extensions disable agent-loom` and `gemini extensions list`
+- `node open-loom.mjs --smoke`
+- `claude plugin validate /Users/alexanderbutler/code_projects/personal/agent-loom`
+- `git diff --check`
 
 # Critique Disposition
 
@@ -184,7 +186,7 @@ Critique policy: recommended
 
 Policy rationale:
 This is a meaningful install-path change. Incorrect extension context behavior
-could make users believe Loom rules are always-on when they are not.
+could make users believe Loom bootstrap doctrine is preloaded when it is not.
 
 Required critique profiles:
 
@@ -192,9 +194,11 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:gemini-extension-review` found no remaining blockers after moving Claude
+hooks out of root `hooks/` and simplifying `gemini-extension.json` to documented
+Gemini fields.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -208,10 +212,16 @@ pattern through retrospective.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode agent implementing operator directive
+Accepted at: 2026-04-26T08:26:59Z
+Basis: `evidence:gemini-extension-validation`, `critique:gemini-extension-review`,
+Gemini docs lookup, `gemini extensions validate`, temp-home link/list and disable
+validation, JSON validation, OpenCode smoke, Claude plugin validation, and diff
+whitespace check.
+Residual risks: runtime model-context expansion of `gemini-bootstrap.md` imports
+was not directly inspected; remote `gemini extensions install
+https://github.com/z3z1ma/agent-loom` was not run because it depends on pushed
+repository state.
 
 # Dependencies
 
@@ -223,3 +233,9 @@ prototype.
 
 - 2026-04-25: created as the Gemini CLI harness ticket under
   `plan:install-experience-harness-adapters`.
+- 2026-04-26: updated for `decision:0006`; scope is now native extension with
+  `skills/` plus `contextFileName` bootstrap preload, not fallback installers or
+  command conversion.
+- 2026-04-26: closed after Gemini extension manifest/context implementation,
+  root-hook collision fix, temp-home link/list and disable validation, and
+  critique acceptance.
