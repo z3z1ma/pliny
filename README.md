@@ -473,21 +473,30 @@ That instruction is a pointer, not a new source of truth.
 ## Quick install
 
 > [!TIP]
-> Loom is just a `skills/` directory with zero runtime dependencies. You should be able to use it in almost any coding harness by cloning or downloading this repo and putting `skills/` wherever that harness expects skills. The table below provides first-class install paths per harness as a convenience.
+> Loom at its core is exposed as just a `skills/` directory with zero runtime dependencies. You should be able to use it in almost any coding harness by cloning or downloading this repo and putting `skills/` wherever that harness expects skills. Below we provide first-class install paths per harness as a convenience. https://agentskills.io/home
 
 ### Claude Code
 
+https://code.claude.com/docs/en/overview
+
 ```bash
-claude plugin marketplace add z3z1ma/agent-loom && claude plugin install loom@agent-loom --scope user
+claude plugin marketplace add z3z1ma/agent-loom
+claude plugin install loom@agent-loom --scope user
 ```
 
 ### OpenCode
+
+https://opencode.ai/
 
 ```bash
 opencode plugin open-loom --global
 ```
 
+We maintain an NPM package at https://www.npmjs.com/package/open-loom
+
 ### Codex
+
+https://developers.openai.com/codex/cli
 
 ```bash
 codex plugin marketplace add z3z1ma/agent-loom
@@ -496,6 +505,8 @@ codex plugin marketplace add z3z1ma/agent-loom
 Codex currently requires opening `/plugins` after marketplace registration to install or enable `loom`.
 
 ### Cursor
+
+https://cursor.com/docs
 
 ```bash
 mkdir -p ~/.cursor/plugins/local
@@ -509,6 +520,8 @@ Cursor uses the local plugin directory until `agent-loom` is listed in Cursor Ma
 ```
 
 ### Gemini CLI
+
+https://geminicli.com/docs/
 
 ```bash
 gemini extensions install https://github.com/z3z1ma/agent-loom
