@@ -14,7 +14,7 @@ It treats the filesystem as the interface, Markdown as the durable medium, and f
 
 The worker is disposable. The graph is durable.
 
-Jump to the [quickstart](#quick-install).
+Sounds great, how do I [install](#quick-install) it?
 
 ## The claim
 
@@ -472,6 +472,9 @@ That instruction is a pointer, not a new source of truth.
 
 ## Quick install
 
+> [!TIP]
+> Loom is just a `skills/` directory with zero runtime dependencies. You should be able to use it in almost any coding harness by cloning or downloading this repo and putting `skills/` wherever that harness expects skills. The table below provides first-class install paths per harness as a convenience.
+
 | Harness | Command |
 | --- | --- |
 | Claude Code | `claude plugin marketplace add z3z1ma/agent-loom && claude plugin install loom@agent-loom --scope user` |
@@ -489,6 +492,8 @@ Cursor uses the local plugin directory until `agent-loom` is listed in Cursor Ma
 ```
 
 ## Harness notes
+
+The following sections go into more details on installation compared to the quick install section above. You should only need this if you are interested in specific details or iterating on loom locally.
 
 ### Claude Code
 
