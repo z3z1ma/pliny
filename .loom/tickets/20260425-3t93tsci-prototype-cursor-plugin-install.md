@@ -1,11 +1,11 @@
 ---
 id: ticket:3t93tsci
 kind: ticket
-status: ready
+status: closed
 change_class: release-packaging
 risk_class: medium
 created_at: 2026-04-25T18:46:08Z
-updated_at: 2026-04-25T18:46:08Z
+updated_at: 2026-04-28T18:50:38Z
 scope:
   kind: repository
   repositories:
@@ -117,7 +117,9 @@ Covers:
 
 # Claim Matrix
 
-None - no evidence exists yet for this new plugin prototype.
+No new Cursor plugin prototype evidence was added to this ticket before closure.
+Operator accepted no further action here; prior Cursor harness support remains
+owned by `ticket:rd48g1kg` and `evidence:cursor-harness-install-validation`.
 
 # Execution Notes
 
@@ -145,11 +147,13 @@ Likely implementation shape:
 
 # Blockers
 
-None.
+None. Operator accepted closure without further Cursor plugin prototype work in
+this ticket.
 
 # Next Move / Next Route
 
-Ralph implementation packet.
+Closed. If Cursor plugin packaging becomes the preferred supported install path,
+open a fresh ticket with current Cursor docs/runtime evidence.
 
 # Ralph Readiness
 
@@ -176,7 +180,7 @@ recommendation.
 
 # Evidence
 
-Expected evidence:
+Expected evidence was not gathered in this ticket before operator closure:
 
 - structural review of plugin manifest and component directories
 - source-marker spot-check for generated rules and commands
@@ -205,24 +209,25 @@ Findings:
 
 None - no critique yet.
 
-Disposition status: pending
+Disposition status: not_required by operator acceptance at closure
 
 Deferral / not-required rationale:
 
-None.
+No Cursor plugin package change is being accepted from this ticket; closure rests
+on operator decision that no further prototype work is required here.
 
 # Wiki Disposition
 
-Wiki promotion is optional. If the Cursor plugin pattern becomes the accepted
-model for first-class adapter packages, promote the general adapter-package
-pattern through retrospective or a wiki workflow.
+Wiki promotion is not required for this closure. If the Cursor plugin pattern
+becomes accepted later, promote the general adapter-package pattern through a
+fresh ticket or retrospective.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: operator
+Accepted at: 2026-04-28T18:50:38Z
+Basis: Operator stated the remaining open adapter work was complete and accepted closing this Cursor plugin prototype with no further action. Existing Cursor support remains represented by the prior direct harness-install ticket and evidence.
+Residual risks: This ticket did not create or validate a Cursor plugin package; future Cursor plugin packaging should be handled as new work with current docs/runtime validation.
 
 # Dependencies
 
@@ -234,3 +239,6 @@ ticket prerequisite blocks starting this prototype.
 
 - 2026-04-25: created as the Cursor harness ticket under
   `plan:install-experience-harness-adapters`.
+- 2026-04-28T18:50:38Z: Operator accepted closing the remaining Cursor plugin
+  prototype work with no further action; future Cursor plugin packaging should
+  start from a fresh ticket and current evidence.

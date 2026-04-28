@@ -1,10 +1,10 @@
 ---
 id: ticket:rd48g1kg
 kind: ticket
-status: complete_pending_acceptance
+status: closed
 change_class: release-packaging
 created_at: 2026-04-22T20:51:34Z
-updated_at: 2026-04-22T20:51:34Z
+updated_at: 2026-04-28T18:47:27Z
 scope:
   kind: repository
   repositories:
@@ -106,10 +106,10 @@ fixture should be enough durable explanation for this packaging change.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: operator
+Accepted at: 2026-04-28T18:47:27Z
+Basis: Operator accepted Cursor harness install support after linked validation evidence and critique disposition.
+Residual risks: Cursor's plugin/rules/skills surfaces may evolve; future adapter changes should revalidate against current Cursor docs.
 
 # Dependencies
 
@@ -122,3 +122,4 @@ with the documented or support-described surfaces.
   install support.
 - 2026-04-22: added Cursor install/uninstall support, documentation, adapter
   fixture, and validation evidence. Left ticket pending final acceptance.
+- 2026-04-28T18:47:27Z: Operator accepted the completed work and closed the ticket.

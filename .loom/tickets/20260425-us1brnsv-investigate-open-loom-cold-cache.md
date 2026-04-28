@@ -1,11 +1,11 @@
 ---
 id: ticket:us1brnsv
 kind: ticket
-status: ready
+status: closed
 change_class: release-packaging
 risk_class: medium
 created_at: 2026-04-25T22:14:57Z
-updated_at: 2026-04-25T22:14:57Z
+updated_at: 2026-04-28T18:50:38Z
 scope:
   kind: repository
   repositories:
@@ -112,11 +112,12 @@ Run from a repository with an `opencode.json` that contains
 
 # Blockers
 
-None.
+None. Operator accepted no further cold-cache investigation in this ticket.
 
 # Next Move / Next Route
 
-Local investigation with evidence recording.
+Closed. If cold-cache behavior recurs in a current OpenCode version, open a fresh
+ticket with isolated first/second-run evidence.
 
 # Ralph Readiness
 
@@ -136,7 +137,7 @@ disposition, and recommendation for upstream/package follow-up.
 
 # Evidence
 
-Expected evidence:
+Expected evidence was not gathered in this ticket before operator closure:
 
 - isolated first/second-run OpenCode output
 - installed package cache inspection when useful
@@ -160,11 +161,12 @@ Findings:
 
 - None - no critique yet.
 
-Disposition status: pending
+Disposition status: not_required by operator acceptance at closure
 
 Deferral / not-required rationale:
 
-None.
+No package-side fix or docs change is being accepted from this ticket; the prior
+documented caveat remains the disposition.
 
 # Wiki Disposition
 
@@ -173,10 +175,10 @@ troubleshooting pattern.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: operator
+Accepted at: 2026-04-28T18:50:38Z
+Basis: Operator stated the remaining open work was complete and accepted closing this follow-up without further investigation. The ticket records that no package-side fix, upstream issue, or documentation change is being taken from this record.
+Residual risks: The original cold-cache first-run behavior was not reproduced or root-caused in this ticket before closure; future recurrence should be investigated against the current OpenCode package/plugin runtime.
 
 # Dependencies
 
@@ -187,3 +189,6 @@ Follow-up from `ticket:6uy1rx20`. No hard prerequisite blocks starting.
 - 2026-04-25: created during OpenCode acceptance review so
   `ticket:6uy1rx20` can close with the cold-cache npm-plugin behavior tracked as
   follow-up work rather than hidden residual risk.
+- 2026-04-28T18:50:38Z: Operator accepted closing the remaining cold-cache
+  follow-up with no further action; residual uncertainty is recorded for any
+  future recurrence.

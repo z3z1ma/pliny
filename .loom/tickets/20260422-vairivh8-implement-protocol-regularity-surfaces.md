@@ -1,9 +1,9 @@
 ---
 id: ticket:vairivh8
 kind: ticket
-status: complete_pending_acceptance
+status: closed
 created_at: 2026-04-22T07:07:00Z
-updated_at: 2026-04-22T16:09:59Z
+updated_at: 2026-04-28T18:47:27Z
 scope:
   kind: repository
   repositories:
@@ -137,8 +137,16 @@ Status: completed
 
 # Wiki Disposition
 
-Deferred until critique accepts the shape. A later wiki pass should document
-the regularized workflow map once review findings are resolved.
+Deferred from this ticket. Critique accepted the shape and findings were resolved;
+the product source and examples carry the accepted explanation for closure. A
+future wiki pass may document the regularized workflow map separately.
+
+# Acceptance Decision
+
+Accepted by: operator
+Accepted at: 2026-04-28T18:47:27Z
+Basis: Operator accepted the completed regularity pass after validation evidence and required critique showed all findings resolved.
+Residual risks: Future wiki synthesis may still be useful, but it is not required for this ticket's closure.
 
 # Dependencies
 
@@ -173,3 +181,5 @@ None.
 - 2026-04-22T16:09:59Z: Resolved both critique findings: removed empty legacy
   dogfood directories and expanded every protocol example into fixture form.
   Moved ticket to `complete_pending_acceptance` pending final human acceptance.
+- 2026-04-28T18:47:27Z: Operator accepted the completed work, deferred non-blocking
+  wiki synthesis, and closed the ticket.

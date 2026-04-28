@@ -1,11 +1,11 @@
 ---
 id: ticket:cldrel01
 kind: ticket
-status: complete_pending_acceptance
+status: closed
 change_class: release-packaging
 risk_class: high
 created_at: 2026-04-26T01:04:44Z
-updated_at: 2026-04-26T05:15:49Z
+updated_at: 2026-04-28T18:47:27Z
 scope:
   kind: repository
   repositories:
@@ -231,13 +231,14 @@ historical evidence.
 
 # Acceptance Decision
 
-Accepted by: pending final operator acceptance
-Accepted at:
-Basis: per-rule hook implementation, startup validation, documentation updates,
-and mandatory critique are complete; release risk disposition remains pending.
-Residual risks: installed marketplace mode, package/cache contents, Windows shell
+Accepted by: operator
+Accepted at: 2026-04-28T18:47:27Z
+Basis: Per-rule hook implementation, startup validation, documentation updates,
+wiki update, and mandatory critique are complete.
+Residual risks: Installed marketplace mode, package/cache contents, Windows shell
 behavior, `clear|compact` runtime event behavior, and installed plugin
-skill/command invocation remain unvalidated.
+skill/command invocation remain unvalidated and are accepted as residual release
+risks for this ticket's closure.
 
 # Dependencies
 
@@ -275,3 +276,5 @@ release-hardening work.
   notes, and validated all seven rules visible in same-session startup context.
   Oracle accepted the implementation after wiki and fixture wording fixes. Ticket
   moved to `complete_pending_acceptance` for final risk disposition.
+- 2026-04-28T18:47:27Z: Operator accepted the completed work and residual release
+  risks, then closed the ticket.

@@ -1,11 +1,11 @@
 ---
 id: ticket:k7p4s2q9
 kind: ticket
-status: complete_pending_acceptance
+status: closed
 change_class: behavior-contract
 risk_class: medium
 created_at: 2026-04-28T07:47:02Z
-updated_at: 2026-04-28T15:35:47Z
+updated_at: 2026-04-28T18:47:27Z
 scope:
   kind: repository
   repositories:
@@ -134,10 +134,10 @@ Not required as a separate wiki promotion for this ticket. The accepted workflow
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: operator
+Accepted at: 2026-04-28T18:47:27Z
+Basis: Operator accepted the completed adaptation after linked validation evidence and recommended critique showed all findings resolved.
+Residual risks: Future golden examples may still be useful, but they are not required for this adaptation's closure.
 
 # Dependencies
 
@@ -149,3 +149,4 @@ Depends on `constitution:main`, `decision:0001`, `decision:0002`, `decision:0004
 - 2026-04-28T07:58:23Z: Completed the adaptation matrix, updated existing Loom workflow skills instead of adding a Superpowers namespace, and recorded structural validation in `evidence:superpowers-workflow-adaptation-validation`. Critique remains pending.
 - 2026-04-28T08:05:59Z: Recorded `critique:superpowers-workflow-adaptation-review`; all four findings were resolved, and the ticket moved to `complete_pending_acceptance` pending operator acceptance.
 - 2026-04-28T15:35:47Z: Fixed operator-reported leakage in `skills/loom-critique/references/critique-lens.md` by replacing package-specific `product-surface` language with repository-agnostic `operator-surface` guidance. Verified no matching leakage strings remain in `skills/` and recorded `FIND-005` as resolved.
+- 2026-04-28T18:47:27Z: Operator accepted the completed work and closed the ticket.

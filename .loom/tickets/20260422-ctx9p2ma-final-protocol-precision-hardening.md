@@ -1,9 +1,9 @@
 ---
 id: ticket:ctx9p2ma
 kind: ticket
-status: complete_pending_acceptance
+status: closed
 created_at: 2026-04-22T17:04:49Z
-updated_at: 2026-04-22T17:25:00Z
+updated_at: 2026-04-28T18:47:27Z
 scope:
   kind: repository
   repositories:
@@ -114,6 +114,13 @@ Update architecture and README summaries as needed. Dedicated wiki promotion is
 not required unless a new accepted explanation is introduced beyond product
 source.
 
+# Acceptance Decision
+
+Accepted by: operator
+Accepted at: 2026-04-28T18:47:27Z
+Basis: Operator accepted the completed precision-hardening pass after validation evidence and required critique showed no open findings.
+Residual risks: None recorded for this closure.
+
 # Dependencies
 
 Depends on the prior regularity ticket because this pass tightens its
@@ -126,3 +133,4 @@ interfaces rather than replacing its direction.
   and scope registry guidance, hardened examples, normalized legacy dogfood
   frontmatter, recorded validation evidence, and completed critique. Status is
   `complete_pending_acceptance`.
+- 2026-04-28T18:47:27Z: Operator accepted the completed work and closed the ticket.

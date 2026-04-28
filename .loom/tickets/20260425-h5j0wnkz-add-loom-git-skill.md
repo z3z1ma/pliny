@@ -1,10 +1,10 @@
 ---
 id: ticket:h5j0wnkz
 kind: ticket
-status: complete_pending_acceptance
+status: closed
 change_class: protocol-authority
 created_at: 2026-04-25T07:36:33Z
-updated_at: 2026-04-25T07:48:46Z
+updated_at: 2026-04-28T18:47:27Z
 scope:
   kind: repository
   repositories:
@@ -123,10 +123,10 @@ the shipped skill and references; a wiki page would duplicate product surface.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: operator
+Accepted at: 2026-04-28T18:47:27Z
+Basis: Operator accepted the shipped `loom-git` skill after validation evidence and required critique showed all findings resolved.
+Residual risks: None recorded for this closure.
 
 # Dependencies
 
@@ -144,3 +144,4 @@ No hard upstream ticket dependency found.
   and stale-assumption checks.
 - 2026-04-25T07:48:46Z: Removed the last hosted-Git-specific wording from the
   Git reference and re-ran targeted checks.
+- 2026-04-28T18:47:27Z: Operator accepted the completed work and closed the ticket.

@@ -1,11 +1,11 @@
 ---
 id: ticket:lx9nnztk
 kind: ticket
-status: active
+status: closed
 change_class: release-packaging
 risk_class: medium
 created_at: 2026-04-25T18:46:08Z
-updated_at: 2026-04-26T07:23:57Z
+updated_at: 2026-04-28T18:50:38Z
 scope:
   kind: repository
   repositories:
@@ -215,13 +215,14 @@ Likely implementation choices after the spike:
 
 # Blockers
 
-None after `decision:0005`; plugin-owned hooks are no longer required for the
-remote install model. Installed plugin skill discovery still needs validation.
+None. Operator accepted closure without further Codex plugin validation in this
+ticket; any future Codex install packaging change should open a fresh ticket with
+current runtime evidence.
 
 # Next Move / Next Route
 
-Validate installed Git-backed plugin skill discovery for `loom-bootstrap` and
-update the critique disposition to reflect the new skill-packaged bootstrap model.
+Closed. Future Codex install packaging work should start from current Codex docs
+and runtime evidence in a new ticket rather than reopening this prototype.
 
 # Ralph Readiness
 
@@ -268,7 +269,7 @@ Recorded evidence:
   deliver always-on rules. `decision:0005` resolves that as a model blocker by
   making `loom-bootstrap` the mandatory plugin-packaged entry skill.
 
-Remaining expected evidence before broad release packaging:
+Residual evidence not gathered before closure:
 
 - installed Git-backed plugin skill discovery for `loom-bootstrap`
 - a Codex startup probe after the hook path update to
@@ -312,24 +313,27 @@ remote-install blocker under the prior top-level-rules model. `decision:0005`
 changes the product model so installed plugin skills can carry the mandatory
 bootstrap doctrine. Follow-up critique must verify the new model.
 
-Disposition status: pending
+Disposition status: deferred by operator acceptance at closure
 
 Deferral / not-required rationale:
 
-Installed plugin skill invocation and `loom-bootstrap` discovery remain required
-before Codex remote packaging can be accepted.
+Installed plugin skill invocation and `loom-bootstrap` discovery were not
+revalidated in this ticket before closure. Operator accepted this as residual
+release-packaging risk; future broad Codex packaging should revalidate from
+current runtime behavior.
 
 # Wiki Disposition
 
-Wiki promotion is deferred until the skill-packaged bootstrap model is critiqued
-and accepted.
+Wiki promotion is not required for this prototype closure. Future accepted Codex
+packaging behavior should be promoted through the adapter-package explanation
+surface if it becomes a supported install path.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: operator
+Accepted at: 2026-04-28T18:50:38Z
+Basis: Operator stated the remaining open install-adapter work was completed and accepted closing this prototype with no further action in this ticket. The record preserves prior Codex evidence, model decisions, and deferred validation limits rather than claiming fresh runtime proof.
+Residual risks: Installed Git-backed plugin skill discovery for `loom-bootstrap`, plugin namespace/selector behavior, updated hook-path startup probing, and broad-release package-layout validation were not revalidated in this closure pass.
 
 # Dependencies
 
@@ -368,3 +372,6 @@ ticket prerequisite blocks acceptance review.
 - 2026-04-26: `decision:0006` removed fallback installers and command-wrapper
   product surfaces. Codex work now targets native plugin skill discovery only,
   with `.codex/hooks.json` as optional trusted-project preload proof.
+- 2026-04-28T18:50:38Z: Operator accepted closure of the remaining open Codex
+  prototype work. Closed with residual validation risks recorded; future Codex
+  packaging changes should use a fresh ticket and current runtime evidence.
