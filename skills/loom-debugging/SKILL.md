@@ -39,7 +39,8 @@ Follow:
 `reproduce -> localize -> explain -> fix -> evidence -> prevent`
 
 1. capture reproduction steps or current failing behavior as evidence
-2. create or update research if the root cause is not known
+2. investigate root cause before proposing a fix; create or update research if
+   the root cause is not known
 3. update or create a spec if intended behavior is ambiguous
 4. create or tighten a ticket for the bounded fix
 5. compile a Ralph packet, normally with `verification_posture: test-first`
@@ -72,17 +73,19 @@ Follow:
 
 Read immediately for debugging work:
 
-1. `skills/loom-evidence/SKILL.md` when preserving reproduction, red/green
+1. `references/systematic-debugging.md` when root cause is unknown, time pressure
+   makes guessing tempting, or previous fixes failed.
+2. `skills/loom-evidence/SKILL.md` when preserving reproduction, red/green
    output, logs, screenshots, or other evidence.
 
 Then read conditionally:
 
-2. `skills/loom-research/SKILL.md` when root cause is unknown or rejected
+3. `skills/loom-research/SKILL.md` when root cause is unknown or rejected
    hypotheses should remain citable.
-3. `skills/loom-specs/SKILL.md` when intended behavior is ambiguous.
-4. `skills/loom-tickets/SKILL.md` when creating or tightening the bounded fix
+4. `skills/loom-specs/SKILL.md` when intended behavior is ambiguous.
+5. `skills/loom-tickets/SKILL.md` when creating or tightening the bounded fix
    ticket.
-5. `skills/loom-ralph/SKILL.md` when the fix is ready for a packetized
+6. `skills/loom-ralph/SKILL.md` when the fix is ready for a packetized
    implementation iteration.
-6. `skills/loom-critique/SKILL.md` when the fix or incident carries review
+7. `skills/loom-critique/SKILL.md` when the fix or incident carries review
    risk.

@@ -57,6 +57,10 @@ Record:
 
 `design question -> 2-3 variants -> screenshots or artifacts -> critique -> accepted wiki/spec updates`
 
+Sketches are the Loom adaptation of visual brainstorming. Use them when seeing a
+mockup, diagram, state flow, layout comparison, or spatial relationship would
+make a decision more honest than text alone.
+
 Record:
 
 - design question
@@ -65,6 +69,10 @@ Record:
 - critique findings
 - accepted behavior or explanation
 - downstream spec, wiki, or ticket recommendation
+
+If a harness or local tool helps produce visual artifacts, treat that tool as
+transport. It does not become a Loom layer. Preserve durable outputs in evidence
+and route accepted behavior or explanation to spec or wiki.
 
 ## Done Means
 

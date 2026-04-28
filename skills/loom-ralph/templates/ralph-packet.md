@@ -101,6 +101,10 @@ Expand here with specifics the child needs:
 - for `observation-first`: what must be observed before and after, and how the before/after evidence is captured
 - for `none`: a one-line justification of why this iteration is verification-neutral
 
+For `test-first`, include the expected failure reason, red command or procedure,
+green command or procedure, and whether any broader regression command is
+expected after the targeted check passes.
+
 Use `none` only for verification-neutral work such as non-semantic record
 hygiene, reference reconciliation, packet compilation, or a pure refactor riding
 on an already-green suite. Do not use `none` for protocol authority, routing,
@@ -120,7 +124,7 @@ longer matches the declared execution context closely enough to trust the packet
 Do not run `git fetch`, `git fetch --prune`, remote edits, Git config edits, or
 other shared Git metadata mutations unless this packet explicitly allows them.
 
-For `test-first`, stop conditions must include: a failing check exists before implementation, and the check is driven to green inside this iteration.
+For `test-first`, stop conditions must include: a failing check exists before implementation, fails for the expected reason, and is driven to green inside this iteration.
 
 For `observation-first`, stop conditions must include: before-state evidence is captured, and after-state evidence confirms the intended change.
 
@@ -131,6 +135,8 @@ The child must return:
 - files changed
 - records changed
 - evidence gathered (including red-to-green transition for `test-first`, or before/after observations for `observation-first`)
+- self-review findings or concerns, including any suspected scope, quality,
+  verification, or maintainability issues
 - blockers or risks
 - ticket recommendation
   - The child recommends ticket changes; the parent commits ticket truth.

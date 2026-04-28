@@ -147,7 +147,7 @@ Default postures:
 
 The child must produce a failing check (failing test, failing assertion, failing observed behavior) *before* any implementation change, and drive it to green inside this iteration. This is Loom's native shape for TDD: red first, green second, both inside one packet.
 
-Use when the spec or acceptance criteria name a behavioral outcome that can be exercised. The stop conditions must include "a failing check exists and has been driven to green," and the output contract must carry evidence of both the red and green states.
+Use when the spec or acceptance criteria name a behavioral outcome that can be exercised. The stop conditions must include "a failing check exists, fails for the expected reason, and has been driven to green," and the output contract must carry evidence of both the red and green states.
 
 ### `observation-first`
 

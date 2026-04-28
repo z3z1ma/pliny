@@ -18,12 +18,17 @@ Use for medium or high risk targets when different lenses should stay separate.
 
 Default passes:
 
-1. Correctness and scope
-   Check whether the code or artifact satisfies the ticket, spec, and declared
-   write boundary.
-2. Risk, security, and failure modes
-   Check edge cases, assumptions, auth/data/security, performance, and rollback.
-3. Operator clarity and follow-through
+1. Acceptance and scope compliance
+   Check whether the actual diff or artifact satisfies the ticket, spec,
+   acceptance coverage, and declared write boundary. Look for missing requested
+   behavior and extra unrequested behavior before judging polish.
+2. Implementation quality and maintainability
+   Check separation of concerns, naming, test shape, real-behavior coverage,
+   YAGNI/DRY tradeoffs, and fit with existing patterns.
+3. Risk, security, and failure modes
+   Check edge cases, assumptions, auth/data/security, performance, migration,
+   rollback, and operational hazards.
+4. Operator clarity and follow-through
    Check ticket truth, evidence, critique disposition, wiki disposition, and
    whether the next agent can continue cold.
 
@@ -39,6 +44,10 @@ If the harness supports subagents or multiple fresh reviewers, the parent may
 launch independent passes in parallel with one critique packet per pass. If not,
 run them sequentially as distinct fresh-context passes with narrow prompts. The
 transport is flexible; the pass boundaries are not.
+
+Never let a child report substitute for review. Reviewers inspect the actual
+diff, changed files, records, tests, and evidence. A child report is a source to
+check, not proof.
 
 For direct artifact critique, do not compile packets by default. Use a packet
 only when the review is broad, high risk, or needs fresh-context isolation.

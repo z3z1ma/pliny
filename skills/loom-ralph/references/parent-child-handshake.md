@@ -14,6 +14,7 @@ And it should also return:
 - files changed
 - records changed
 - evidence gathered
+- self-review findings or concerns
 - blockers or risks
 - ticket-state recommendation
 
@@ -26,12 +27,13 @@ The parent should ask:
 3. did the packet source fingerprint remain fresh enough for the work
 4. did the child respect or explicitly justify exceeding the context budget
 5. what evidence exists
-6. what claims or acceptance IDs are now supported or challenged
-7. what does the ticket now need to say
-8. is critique next
-9. is wiki next
-10. is another Ralph iteration next
-11. did the child reveal missing outer-loop work instead
+6. did the child's self-review concerns change risk, scope, or next route
+7. what claims or acceptance IDs are now supported or challenged
+8. what does the ticket now need to say
+9. is critique next
+10. is wiki next
+11. is another Ralph iteration next
+12. did the child reveal missing outer-loop work instead
 
 ## A child does not close the loop alone
 

@@ -8,12 +8,13 @@ metadata:
 
 # loom-skill-authoring
 
-Use this skill to author skills in the same style this package uses.
+Use this skill to author Loom-compatible skills.
 
 ## What This Skill Owns
 
 - skill activation descriptions
 - skill boundaries and overlap review
+- skill review and pressure-scenario validation
 - skill directory structure
 - reference/template placement
 - anti-pattern review for hidden runtimes or vague ownership
@@ -61,4 +62,7 @@ Then read conditionally:
 
 3. `references/anti-patterns.md` when checking overlap, hidden runtime
    dependency, or vague activation.
-4. The relevant template only when creating a new skill.
+4. `references/skill-review.md` when a skill changes operator behavior,
+   discipline, routing, or protocol authority and needs pressure-testing or
+   critique before acceptance.
+5. The relevant template only when creating a new skill.

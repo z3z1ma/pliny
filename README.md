@@ -235,11 +235,20 @@ This is where Loom crosses from coding workflow into knowledge-work protocol.
 Workflow skills coordinate routes through project layers. They do not create new ledgers unless a new kind of work needs a durable place.
 
 ```text
+brainstorm:
+workspace problem shaping -> research/spec as needed -> plan -> ticket
+
+test-first implementation:
+ticket -> packet with verification_posture:test-first -> red evidence -> green evidence -> ticket acceptance
+
 debug:
-evidence -> research -> spec if needed -> ticket -> packet -> evidence -> critique -> retrospective
+evidence -> root-cause research -> spec if needed -> ticket -> packet -> evidence -> critique -> retrospective
 
 spike:
 research -> throwaway scope if needed -> evidence -> conclusions/null results -> downstream spec, plan, ticket, or wiki
+
+sketch:
+design question -> 2-3 variants -> evidence -> critique -> accepted spec or wiki updates
 
 code map:
 scan evidence -> research where structure is uncertain -> wiki atlas when accepted
@@ -247,17 +256,38 @@ scan evidence -> research where structure is uncertain -> wiki atlas when accept
 review:
 critique -> evidence -> ticket reconciliation -> acceptance or repair
 
+review response:
+critique finding -> verify against source/evidence -> resolve, accept risk, supersede, or create follow-up -> ticket disposition
+
+parallel execution:
+plan execution waves -> non-overlapping tickets/packets/worktrees -> child results -> parent integration evidence -> ticket reconciliation
+
+git isolation:
+ticket/packet scope -> explicit baseline -> branch/worktree -> diff provenance -> handoff evidence
+
 implementation:
 ticket -> packet -> worker -> evidence -> reconcile
 
+plan execution:
+plan -> bounded tickets -> Ralph/local edits -> evidence -> critique as needed -> acceptance
+
+branch finish:
+ticket/evidence/critique truth -> ship package -> merge, PR, keep, or abandon handoff -> ticket acceptance gate
+
 ship:
 ticket/evidence/critique/wiki disposition -> PR summary, release note, risk summary, follow-up list
+
+accept:
+ticket acceptance dossier -> evidence/critique/wiki disposition -> close or loop back
 
 repair:
 evidence -> critique -> ticket -> packet -> evidence -> accept
 
 retrospective:
 ticket or initiative lessons -> wiki, research, spec, plan, initiative, constitution, evidence, or memory
+
+wiki write/audit:
+accepted explanation -> wiki page or audit -> links, freshness, and maintenance disposition
 ```
 
 You do not invent a workflow every time. You route through the project graph.

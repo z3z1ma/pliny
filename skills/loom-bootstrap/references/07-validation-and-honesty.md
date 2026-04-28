@@ -34,6 +34,11 @@ That usually includes some mix of:
 - comparison against acceptance criteria
 - change-class-specific evidence expectations
 
+Completion, fixed, passing, or ready-to-merge claims require fresh enough
+evidence for the exact claim. If the supporting observation is not from the
+current source state, say when it was gathered, what changed since then, and why
+it is still valid — or rerun the check before claiming success.
+
 ## Structural Checklist
 
 A record is structurally credible when:

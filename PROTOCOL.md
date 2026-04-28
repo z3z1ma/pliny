@@ -193,15 +193,20 @@ Workflows are compositions through those layers:
 
 ```text
 brainstorm
+test-first implementation
 debug
 spike
 sketch
-map
-work
+code map
+implementation
+plan execution
+parallel execution
 git isolation
 review
+review response
 accept
 ship
+branch finish
 retrospective
 repair
 wiki write/audit

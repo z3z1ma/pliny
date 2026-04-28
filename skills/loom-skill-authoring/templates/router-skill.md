@@ -1,6 +1,6 @@
 ---
 name: my-router-skill
-description: "Choose among several nearby paths when one family of work needs a routing layer."
+description: "Use when <specific family of work> needs routing among <nearby paths>."
 compatibility: Markdown-native Loom.
 metadata:
   skill_kind: router

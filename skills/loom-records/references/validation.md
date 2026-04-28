@@ -27,6 +27,35 @@ Ask:
 - did an external reference become a competing ledger
 - do evidence and critique records support or challenge the claims they name
 
+## Fresh Claim Evidence
+
+Before making a success, completion, fixed, passing, or ready-to-merge claim,
+ask what evidence would prove that exact claim.
+
+Good claim evidence names:
+
+- the command, procedure, review, or observation used
+- the observed result, including exit status, failure count, or relevant output
+- when and where it was observed
+- which claim, acceptance criterion, ticket, packet, or critique question it
+  supports or challenges
+- what the evidence does not establish
+
+Evidence must be fresh enough for the claim being made. A previous run can be
+valid if the ticket or evidence record says when it happened, what source state it
+covered, and why no material change invalidated it. If freshness is uncertain,
+rerun the check, record a limitation, or avoid the completion claim.
+
+Do not accept these as evidence by themselves:
+
+- a child worker saying "done"
+- a test that was written after implementation without a red state when the
+  packet required `test-first`
+- a partial command used to imply a broader suite passed
+- a stale run from before relevant files, records, dependencies, or environment
+  changed
+- confidence that a small change "should" work
+
 ## Spot-Check Recipes
 
 ### Missing IDs

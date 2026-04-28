@@ -42,6 +42,10 @@ If you are about to ask "where should this live?", you are still in workspace/ro
 If you are about to ask "what exactly should this record say?", move to the
 owning skill.
 
+Do not invoke skills by a vague "maybe relevant" sweep. Pick the owner layer for
+the next truth change, then load the skill or workflow coordinator that can move
+that truth honestly.
+
 Workflow skills coordinate routes through owner layers. They do not create new
 truth layers or outrank the owner records they update.
 

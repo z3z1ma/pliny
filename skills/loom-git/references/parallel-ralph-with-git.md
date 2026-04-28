@@ -13,6 +13,8 @@ Both are required. One does not substitute for the other.
 
 Before launching a parallel wave, the parent must verify:
 
+- failures or tasks have been grouped into independent problem domains rather
+  than merely split by convenience
 - every child has one packet
 - every packet targets one ticket or one clearly bounded ticket slice
 - no `depends_on` conflict makes the sequence invalid
@@ -103,7 +105,8 @@ After children return:
 3. record evidence per ticket or per wave, as appropriate
 4. update each ticket separately before summarizing the wave
 5. integrate branches in dependency order
-6. run validation in the integration checkout when combined behavior matters
+6. run validation in the integration checkout when combined behavior matters,
+   especially when several children each reported local success
 7. route unresolved conflicts or shared-state surprises back to plan or ticket
    refinement
 

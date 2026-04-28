@@ -59,6 +59,22 @@ What could break or distort the plan.
 
 How the work under this plan should generally be evidenced or validated.
 
+# Plan Readiness Review
+
+Spec / acceptance coverage:
+
+Placeholder scan:
+
+Ticket-sized slices:
+
+Likely write scopes:
+
+Likely verification posture:
+
+Evidence and critique route:
+
+Stop / loopback conditions:
+
 # Exit Criteria
 
 What must be true before the plan can be considered complete or retired.

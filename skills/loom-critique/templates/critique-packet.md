@@ -77,6 +77,19 @@ or pull request.
 
 The questions the reviewer must answer.
 
+- Did the actual diff or artifact satisfy the ticket, spec, acceptance coverage,
+  and declared write boundary?
+- Did the change add unrequested behavior, scope creep, or a new owner-layer
+  claim in the wrong place?
+- Does the evidence support the implementation and completion claims, or is it
+  stale, partial, missing, or overclaimed?
+- Did the reviewer inspect the actual files, records, tests, and diff rather than
+  trusting the child or implementer report?
+- Are tests or observations checking real behavior rather than only mock behavior
+  or implementation trivia?
+- Are there unresolved risks that should block acceptance, become accepted risk,
+  or turn into linked follow-up work?
+
 # Stop Conditions
 
 When the reviewer should escalate rather than keep guessing.

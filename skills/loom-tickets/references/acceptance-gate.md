@@ -43,6 +43,8 @@ Acceptance Dossier =
 - Does implementation reality match intended behavior, or is the gap explicitly
   recorded?
 - Does evidence support each covered claim reference?
+- Is the evidence fresh enough for the current source, record, dependency, and
+  environment state, or are its limits explicit?
 - Does the claim matrix accurately summarize support, challenge, and open
   claims?
 - Is critique policy explicit enough for this change class and risk class?

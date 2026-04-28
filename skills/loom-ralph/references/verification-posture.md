@@ -17,10 +17,23 @@ Loom's native TDD shape.
 The child must:
 
 1. produce a failing check that expresses the intended behavior — a failing test, a failing assertion, a failing executable observation — *before* any implementation change
-2. drive that check to green inside this iteration
-3. return evidence of both the red state and the green state in the output contract
+2. verify that the check fails for the expected reason, not because of a typo,
+   setup error, or unrelated failure
+3. drive that check to green inside this iteration
+4. return evidence of both the red state and the green state in the output contract
 
-The stop conditions on the packet must include "a failing check exists and has been driven to green." The child cannot satisfy the contract by writing tests after the implementation and calling them new.
+The stop conditions on the packet must include "a failing check exists, fails for
+the expected reason, and has been driven to green." The child cannot satisfy the
+contract by writing tests after the implementation and calling them new.
+
+If the new check passes immediately, the child has not proven the behavior. The
+packet should require the child to revise the check, find the missing assertion,
+or escalate if the intended behavior already exists and the ticket is stale.
+
+Tests should verify real behavior. Mocks and test doubles are allowed only when
+they isolate a boundary the test is not about; they must not become the behavior
+being asserted. If the test mainly proves a mock exists or a test-only production
+method works, the child should revise the test before implementation proceeds.
 
 Use `test-first` when:
 
@@ -83,9 +96,27 @@ When in doubt, prefer the stricter posture. The discipline compounds.
 
 The packet's Verification Posture section should concretely state:
 
-- for `test-first`: what failing check must exist, what counts as green, and where the check lives
+- for `test-first`: what failing check must exist, why it should fail, the exact
+  red command or procedure, what counts as green, the exact green command or
+  procedure, and where the check lives
 - for `observation-first`: what must be observed before and after, and how the before/after evidence is captured
 - for `none`: a one-line justification of why this iteration is verification-neutral
+
+## Red-Green Evidence Shape
+
+For `test-first`, the child output should normally include:
+
+- failing check name and path
+- red command or procedure
+- red result, including the relevant failure message or observation
+- confirmation that the red result failed for the expected reason
+- implementation summary
+- green command or procedure
+- green result
+- any broader suite or regression check run after the targeted green
+
+If the project cannot preserve full command output in the packet, the parent
+should route important output into evidence and cite it from the ticket.
 
 ## Relationship to acceptance and critique
 

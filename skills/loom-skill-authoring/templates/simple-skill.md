@@ -1,6 +1,6 @@
 ---
 name: my-skill
-description: "What it does, when to use it, and when not to."
+description: "Use when <specific trigger or situation>; <owner boundary if needed>."
 compatibility: Markdown-native Loom.
 metadata:
   skill_kind: custom

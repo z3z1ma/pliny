@@ -53,6 +53,7 @@ commands may invoke that workflow but do not own it.
 - risk summary
 - follow-up list
 - release note draft when useful
+- handoff option summary for merge, PR, keep, or abandon decisions when relevant
 
 ## Guardrail
 
@@ -78,7 +79,11 @@ Read immediately for shipping/package work:
 
 Then read conditionally:
 
-4. `skills/loom-critique/SKILL.md` when unresolved risk or review disposition
+4. `references/handoff-options.md` when a branch, worktree, PR, or external
+   handoff needs an explicit merge / PR / keep / abandon decision.
+5. `skills/loom-git/SKILL.md` when the handoff involves branch, worktree, diff,
+   merge, PR, cleanup, or abandon operations.
+6. `skills/loom-critique/SKILL.md` when unresolved risk or review disposition
    affects packaging.
-5. `skills/loom-wiki/SKILL.md` when accepted explanation or release notes need
+7. `skills/loom-wiki/SKILL.md` when accepted explanation or release notes need
    wiki-backed wording.

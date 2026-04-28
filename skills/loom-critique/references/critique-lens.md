@@ -111,6 +111,28 @@ Profiles are lenses, not permanent agents or new layers.
 - honest ticket, evidence, and wiki disposition
 - whether explanatory pages overstate certainty
 
+### `workflow-boundary`
+
+- whether the workflow routes through existing owner layers instead of creating a
+  hidden ledger
+- whether plans, packets, critique, ship summaries, or external systems are
+  accidentally owning ticket truth
+- whether stop conditions and loopbacks prevent forced execution through
+  ambiguity
+- whether parallel or delegated work has non-overlapping write scopes and parent
+  reconciliation
+
+### `operator-surface`
+
+- whether the project's user-facing instructions, Loom skills, templates,
+  examples, adapters, or support docs tell the same story
+- whether a change adds a required support surface outside the declared Loom
+  owner graph without an explicit owner-layer reason
+- whether harness-specific convenience is being mistaken for canonical project
+  truth or protocol behavior
+- whether skill descriptions and read order make activation discoverable without
+  duplicating workflow truth
+
 ## Profile Selection
 
 - low risk: usually `operator-clarity` or no required profile

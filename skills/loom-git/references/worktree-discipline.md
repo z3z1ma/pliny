@@ -68,6 +68,26 @@ git -C ../<repo>-<ticket-token>-<short-slug> status --short
 git -C ../<repo>-<ticket-token>-<short-slug> branch --show-current
 ```
 
+## Baseline Validation
+
+After creating a worktree for code changes, establish the cleanest honest
+baseline available before implementation starts.
+
+Use the project-known setup or validation command when it is already documented
+in the ticket, plan, README, package scripts, or local convention. If no command
+is known, record that instead of guessing a toolchain.
+
+Record one of:
+
+- baseline command passed, with the command and relevant output summary
+- baseline command failed, with failure summary and whether the ticket should
+  proceed, debug, or block
+- no baseline command known, with the source inspected
+
+Do not auto-install dependencies, edit ignore files, or mutate project setup just
+because a worktree exists. Those are separate changes that need owner scope and,
+when they affect source or records, ticket truth.
+
 If linked worktrees are unavailable, use a separate clone or harness sandbox as
 the isolation unit. Keep the same Loom discipline: explicit baseline, explicit
 branch or detached commit, explicit write scope, and explicit cleanup rules.
