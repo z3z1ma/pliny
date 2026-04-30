@@ -1,6 +1,6 @@
 ---
 name: loom-tickets
-description: "Maintain the sole live execution ledger and ticket-owned acceptance gate. Use when new work needs a bounded owner, when execution status, blockers, evidence, critique, wiki, or retrospective disposition changes, or when Ralph and other workflow passes must reconcile their consequences back into durable execution truth."
+description: "Maintain live execution records and ticket-owned acceptance decisions. Use when new work needs a bounded owner, when execution status, blockers, evidence, critique, wiki, or retrospective disposition changes, or when Ralph and other workflow passes must reconcile their consequences into ticket truth."
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   skill_kind: owner-layer
@@ -9,7 +9,7 @@ metadata:
 
 # loom-tickets
 
-Tickets are the sole live execution ledger.
+Tickets are where Loom records live execution state.
 
 That sentence is not metaphorical.
 If execution truth changed, the ticket should absorb it.

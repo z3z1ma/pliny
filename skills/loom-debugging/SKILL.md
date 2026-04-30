@@ -8,9 +8,8 @@ metadata:
 
 # loom-debugging
 
-Debugging is a workflow over existing Loom layers.
-
-It does not create a new canonical layer.
+Debugging routes reproduction, root-cause work, fixes, evidence, and prevention
+follow-through into the Loom records that own those facts.
 
 ## What This Workflow Coordinates
 

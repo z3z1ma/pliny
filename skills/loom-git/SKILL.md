@@ -1,6 +1,6 @@
 ---
 name: loom-git
-description: "Use Git as Loom's implementation isolation and history surface without letting it become a truth ledger. Use when discovering a repository's integration baseline, preparing branches or worktrees, coordinating parallel Ralph work, reviewing diffs, staging commits, merging, or recording Git provenance in packets and evidence."
+description: "Use Git for Loom implementation isolation, diff review, and provenance. Use when discovering a repository's integration baseline, preparing branches or worktrees, coordinating parallel Ralph work, reviewing diffs, staging commits, merging, or recording Git context in packets and evidence."
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   skill_kind: workflow
@@ -10,9 +10,9 @@ metadata:
 
 Git is Loom's implementation isolation and source-history surface.
 
-It is not Loom's execution ledger. Branches, commits, worktrees, remotes, patch
-stacks, and PRs can preserve implementation history and transport work, but they
-do not replace tickets, packets, evidence, critique, or wiki.
+Branches, commits, worktrees, remotes, patch stacks, and PRs preserve
+implementation history and transport work. Use Loom records for the objective,
+live state, evidence, review, and accepted explanation around that work.
 
 The first Git question is not "what common branch name should I use?" The first
 Git question is: what integration baseline owns this repository's next change?
@@ -62,7 +62,7 @@ input, scope fails closed.
 - the real issue is unclear ownership, fuzzy behavior, missing evidence, or an
   unready ticket
 - you are tempted to use a branch name, commit message, or PR description as the
-  canonical execution ledger
+  place where live work status is decided
 - the work is a tiny Loom record edit that does not need branch or worktree
   isolation
 

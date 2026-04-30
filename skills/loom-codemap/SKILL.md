@@ -1,6 +1,6 @@
 ---
 name: loom-codemap
-description: "Map a repository or module into Loom wiki, research, and evidence without creating a new truth layer. Use when orientation cost is high, packet compilation keeps rediscovering structure, or path-local context adapters need safe source records."
+description: "Map a repository or module into Loom wiki, research, and evidence. Use when orientation cost is high, packet compilation keeps rediscovering structure, or path-local context adapters need safe source records."
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   skill_kind: workflow
@@ -10,8 +10,8 @@ metadata:
 
 Codebase atlas work makes repository structure easier to recover.
 
-It does not create a new canonical layer. Accepted structure belongs in wiki,
-investigation belongs in research, and scan observations belong in evidence.
+It routes accepted structure into wiki, investigation into research, and scan
+observations into evidence.
 
 ## What This Workflow Coordinates
 

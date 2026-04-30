@@ -17,6 +17,9 @@ Use these questions to decide the next owner layer or workflow coordinator.
 
 ## Which workflow or support coordinator should drive the route?
 
+- high-level objective continuation through owner records, ticket tranches,
+  Ralph/local execution, evidence, critique, wiki, and reassessment ->
+  `loom-drive`
 - support context only -> `loom-memory`
 - shared grammar, naming, linking, status, or validation conventions -> `loom-records`
 - one bounded fresh-context implementation step -> `loom-ralph`, after the ticket

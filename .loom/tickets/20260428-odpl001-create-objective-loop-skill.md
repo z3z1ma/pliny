@@ -1,11 +1,11 @@
 ---
 id: ticket:odpl001
 kind: ticket
-status: ready
+status: complete_pending_acceptance
 change_class: protocol-authority
 risk_class: high
 created_at: 2026-04-28T00:00:00Z
-updated_at: 2026-04-28T00:00:00Z
+updated_at: 2026-04-28T21:55:53Z
 scope:
   kind: repository
   repositories:
@@ -17,6 +17,10 @@ links:
     - spec:objective-driven-parent-loop
   plans:
     - plan:objective-driven-parent-loop-skill
+  evidence:
+    - evidence:loom-drive-skill-validation
+  critique:
+    - critique:loom-drive-skill-review
 external_refs: {}
 depends_on: []
 ---
@@ -102,7 +106,7 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `spec:objective-driven-parent-loop` ACC-001..ACC-007 | None yet | None yet | open |
+| `spec:objective-driven-parent-loop` ACC-001..ACC-007 | `evidence:loom-drive-skill-validation` | `critique:loom-drive-skill-review` | supported |
 
 # Execution Notes
 
@@ -149,9 +153,10 @@ Expected output contract:
 
 # Evidence
 
-Expected: structural validation evidence after implementation, including diff
-review and targeted searches for forbidden runtime/daemon implications and route
-discoverability.
+Recorded:
+
+- `evidence:loom-drive-skill-validation` supports the structural implementation
+  claims for the first `loom-drive` skill surface and route discoverability.
 
 # Critique Disposition
 
@@ -172,9 +177,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:loom-drive-skill-review` FIND-001 and FIND-002 were high-severity and
+resolved before final verdict.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -205,3 +211,23 @@ Depends on `spec:objective-driven-parent-loop` and
 - 2026-04-28T00:00:00Z: Created ticket from operator clarification that the
   desired Gastown-like value is high-level objective continuation through Loom
   owner records and Ralph/subagents, without scripts or daemons.
+- 2026-04-28T20:29:48Z: Moved to `active` and compiled
+  `packet:ralph-ticket-odpl001-20260428T202948Z` for the first implementation
+  slice: create the `loom-drive` skill surface and targeted discovery links.
+- 2026-04-28T20:33:07Z: Ralph iteration returned `stop`. Parent inspected the
+  changed files, reran structural validation, recorded
+  `evidence:loom-drive-skill-validation`, consumed the packet, and moved the
+  ticket to `review_required` because mandatory critique is the next gate.
+- 2026-04-28T21:19:44Z: Per operator request, ran five step-change improvement
+  cycles with Oracle critique after each: drive essence/state machine, continuity
+  contract, objective criterion/Drive Continuity Snapshot, tranche decision
+  protocol, and checkpoint/resume with route federation and hard gates. A sixth
+  corrective pass resolved Oracle's high findings about gate repair deadlock and
+  checkpoint freshness. Recorded `critique:loom-drive-skill-review` with verdict
+  `pass_with_findings` and moved the ticket to `complete_pending_acceptance`.
+- 2026-04-28T21:55:53Z: Cleaned product-facing activation and explanatory wording
+  after operator feedback. Removed pointless design-debate negatives from
+  `loom-drive` docs and simplified adjacent skill descriptions/body guidance that
+  used ledger/new-layer/helper-script wording where plain user-facing wording was
+  clearer. Structural grep checks are recorded in
+  `evidence:loom-drive-skill-validation`.

@@ -1,6 +1,6 @@
 ---
 name: loom-retrospective
-description: "Run Loom's compounding pass across existing owner layers. Use when a non-trivial ticket or initiative is closing, critique surfaced stable lessons, the same question has been re-derived, or accepted learning should be promoted into wiki, research, spec, plan, initiative, constitution, evidence, or memory without creating a new ledger."
+description: "Run Loom's compounding pass across existing owner layers. Use when a non-trivial ticket or initiative is closing, critique surfaced stable lessons, the same question has been re-derived, or accepted learning should be promoted into wiki, research, spec, plan, initiative, constitution, evidence, or memory."
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   skill_kind: workflow
@@ -13,7 +13,7 @@ Retrospective is Loom's compounding workflow.
 It assimilates what was learned during a ticket, initiative, critique, spike,
 debugging pass, or recent work slice into the existing owner layers.
 
-It is not a new record kind and not a second execution ledger.
+It promotes learning into the records that already own that kind of knowledge.
 
 ## What This Workflow Coordinates
 
@@ -36,7 +36,7 @@ It is not a new record kind and not a second execution ledger.
 - critique surfaced lessons that should prevent repeated mistakes
 - a spike, debugging pass, or code map produced durable learning
 - the same question has been answered from transcript context more than once
-- accepted learning needs promotion without creating a new truth layer
+- accepted learning needs promotion into its owning layer
 
 ## Do Not Use This Skill When
 

@@ -6,14 +6,14 @@ A skill should own one coherent subsystem.
 
 Owner-layer skills should name the layer they own. Workflow, control-plane,
 inner-loop, authoring, support, and shared-grammar skills should say what they
-coordinate without pretending to be new truth layers.
+coordinate and which existing records receive durable output.
 
 ## 2. Strong description
 
 The description should make activation discoverable without loading the whole skill first.
 
 Descriptions should include the clearest "use when" trigger and, when relevant,
-the owner boundary that prevents the skill from becoming a shadow ledger.
+the owner boundary that tells the agent where durable output belongs.
 
 Prefer trigger-focused descriptions over workflow summaries. The description
 helps the harness or model decide whether to load the skill; the body should own

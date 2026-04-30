@@ -61,9 +61,9 @@ Shipping may summarize and package. Ticket-owned acceptance disposition owns clo
 
 ## Done Means
 
-- the package cites Loom records rather than transcript memory
+- the package cites Loom records rather than relying on conversation context
 - risks and unresolved follow-ups are visible
-- external summaries do not become a competing execution ledger
+- external summaries remain summaries; ticket acceptance still decides closure
 - the next route is explicit, usually ticket acceptance review or critique
 
 ## Read In This Order
