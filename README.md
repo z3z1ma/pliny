@@ -1,58 +1,190 @@
-# Loom
+# Agent Loom
 
-Loom is a Markdown-native knowledge management protocol for coding agents.
+Treat your coding-agent sessions like cattle, not pets.
 
 ![Loom banner](assets/banner.png)
 
-I built it because I wanted less agent tooling, not more.
+**Agent Loom makes the repo remember.**
 
-My coding-agent workflow had outgrown `PLAN.md`. One file kept turning into the partial spec, research log, task queue, evidence log, review notes, handoff summary, and feature description.
+A session should be restartable, replaceable, compactable, and safe to hand off. The important state should live in the project, not in one precious chat.
 
-The usual next step is to add more surfaces: a spec tool, an issue tool, a memory system, a review prompt, a planning plugin, a workflow package.
+Loom is a Markdown-native truth graph for agentic software work:
 
-Loom takes the other path.
+- every durable claim has one owning record
+- every fresh worker receives a bounded packet, not vibes
+- every task closes with evidence, critique, and promotion when needed
 
-It puts the agent-facing work record into one Markdown project graph inside the repo.
-
-It gives agents a vocabulary for placing work where it belongs, then uses that vocabulary in two directions:
-
-1. The outer loop routes work into the right project records.
-2. The inner loop compiles those records into bounded packets for clean workers.
-3. Retrospective promotes accepted learning back into the graph.
-
-The worker is disposable. The graph compounds.
-
-```text
-project state -> compiled packet -> bounded worker -> evidence and critique -> promoted learning -> better project state
-```
+**The worker is disposable. The graph compounds.**
 
 [Install Loom](INSTALL.md) · [Read the protocol](PROTOCOL.md) · [Architecture notes](ARCHITECTURE.md)
 
-## The claim
+---
 
-The pieces are familiar. Teams already use specs, plans, tickets, research notes, test output, review notes, wiki pages, Git branches, and release summaries. Agent workflows added prompts, memory files, context management, subagents, skills, local task stores, and clean execution loops.
+## The problem
 
-Loom's contribution is the composition.
+Most agent workflows eventually create a junk drawer.
 
-Every kind of work gets a place in the repo. The skills teach agents when to use each place, how records link, how work moves between records, and when the graph is consistent enough to close.
+`PLAN.md` becomes the spec, todo list, research log, failed-attempt record, review trail, status update, and handoff summary. Scratch files litter the repo. The active chat becomes a pet: overloaded with volatile decisions, painful to abandon, and weirdly valuable because the repo does not know what happened.
 
-Once the vocabulary exists, common workflows become routes through the same graph. Debugging, spiking, planning, reviewing, shipping, repair, retrospective, codebase mapping, wiki synthesis, and Ralph-style implementation no longer need separate hidden state.
+When the work stops, resumes, compacts, switches models, or hands off to another worker, the next agent has to infer what is still true.
 
-Loom is the project vocabulary long-running agent work compiles to.
+The model did not just forget.
 
-## Why this changes the work
+The project never knew.
 
-A bigger context window lets an agent carry more state.
+Loom fixes that by giving each kind of truth a home.
 
-Loom moves the state out of the window.
+---
 
-A fresh worker should not need the whole conversation. It should receive the relevant project records, a bounded goal, a write scope, stop conditions, and an output contract. After the worker returns, the parent reconciles what happened back into the graph.
+## The idea
 
-The child does one slice.
+The active session is the wrong place for canonical project memory.
 
-The parent decides what became true.
+A bigger context window lets an agent carry more state. Good compaction can preserve useful continuity. Loom is complementary: it moves durable state into repository records, so summaries can carry file paths, record IDs, and next actions while the full-fidelity truth stays in the repo.
 
-The project keeps the record.
+Once installed, Loom is meant to feel ambient. The skills teach the agent where durable information belongs, so ordinary coding work can flow into records without the user saying `use Loom` every turn.
+
+A fresh worker should not inherit a giant transcript or a folklore summary. It should inherit:
+
+- the relevant project records
+- the current ticket
+- the evidence so far
+- the open critique
+- the exact read and write scope
+- the stop conditions
+- the output contract
+
+That compiled handoff is a **packet**.
+
+The child does one bounded slice. The parent reconciles what happened. The repo keeps the memory.
+
+The session is disposable. The graph compounds.
+
+```text
+project state -> packet -> fresh worker -> evidence/critique -> reconciliation -> promoted learning -> better project state
+```
+
+---
+
+## Try the cattle-not-pets demo
+
+The fastest way to understand Loom is to stop protecting one precious agent session.
+
+1. Start a nontrivial coding-agent task.
+2. Let the work cross at least one ambiguity: a behavior question, failed attempt, review concern, research finding, partial implementation, or open risk.
+3. Let the installed Loom skills place durable truth into records: ticket, research, spec, evidence, critique, wiki, and packet as needed.
+4. Stop the session: close the chat, compact the context, switch models, switch harnesses, hand the work to another agent, or come back tomorrow.
+5. Start from a fresh session and ask for the next step:
+
+```text
+Continue the active work from the repo's project records. Do not rely on prior chat context.
+```
+
+You usually should not need to say the magic words. If a harness or cold session does not route automatically, a nudge is fine:
+
+```text
+Use loom-bootstrap, then continue from the project records.
+```
+
+Without durable records, the new session usually guesses or tries to reconstruct the missing story.
+
+With Loom, it should find the owner records, identify what is canonical, stay inside scope, and continue from repo state.
+
+Compaction is not the enemy. With Loom, compaction can carry high-value record paths and IDs while the records themselves preserve full-fidelity project truth.
+
+That is the product: sessions can die; the project keeps the plot.
+
+---
+
+## Install
+
+Loom installs as a skills package. The fastest path is to expose `skills/` to your coding harness.
+
+```bash
+git clone https://github.com/z3z1ma/agent-loom.git
+```
+
+First-class harness instructions are in [INSTALL.md](INSTALL.md):
+
+- Claude Code
+- OpenCode
+- Codex
+- Cursor
+- Gemini CLI
+- generic skills-directory install
+
+After install, work normally. In a skills-aware harness, Loom should feel much like Superpowers: the agent discovers the bootstrap and downstream skills when the work calls for them.
+
+Explicit prompts are escape hatches, not the main UX. They are still useful when you want to prod a cold session or force repair:
+
+```text
+Use loom-bootstrap, then continue from the project records.
+```
+
+```text
+Use loom-records to inspect the graph and repair any broken links before continuing.
+```
+
+---
+
+## When Loom pays rent
+
+Loom is overkill for a one-line edit.
+
+Use the source tree and Git when the work is tiny, local, and obvious.
+
+Loom starts paying for itself when work crosses sessions, changes behavior, needs research, involves review, carries risk, requires handoff, prepares future work, or leaves behind knowledge the next worker would otherwise rediscover.
+
+Reach for Loom when the cost of losing the plot is higher than the cost of keeping the graph honest.
+
+---
+
+## How Loom works
+
+Loom has two loops.
+
+The **outer loop** decides where truth belongs:
+
+```text
+research -> spec -> plan -> ticket -> evidence -> critique -> wiki -> memory
+```
+
+The **inner loop** compiles a packet for a fresh worker:
+
+```text
+goal + read scope + write scope + source fingerprint + verification posture + stop conditions + output contract
+```
+
+The parent reconciles the worker result back into the graph.
+
+No hidden database. No daemon. No SaaS. No special runtime required.
+
+Just Markdown records the agent can read, write, diff, and review.
+
+---
+
+## The core rule
+
+```text
+placement beats recency
+```
+
+The newest chat message does not win. The longest summary does not win. The right record owns the claim.
+
+For software work:
+
+- the source tree owns implementation reality
+- Git owns file history
+- specs own intended behavior
+- tickets own live execution state and acceptance
+- evidence owns observed validation
+- critique owns adversarial review and residual risk
+- wiki owns accepted reusable explanation
+- memory owns optional retrieval cues, preferences, and reminders
+
+Memory can help the agent recover context. It does not become shadow truth. The project must remain truthful if memory is absent or stale.
+
+---
 
 ## Project layers
 
@@ -69,50 +201,40 @@ Loom separates project state into canonical layers.
 | `evidence` | Observed artifacts, validation output, reproduction steps, logs, screenshots, scan results |
 | `critique` | Adversarial findings, review verdicts, residual risk |
 | `wiki` | Accepted explanation, architecture concepts, reusable workflow knowledge |
-| `packet` | Bounded child-worker contracts, not project state |
+| `packet` | Bounded child-worker contracts; not durable project state |
 | `memory` | Optional support recall: retrieval cues, preferences, entities, reminders, and hot context |
 
-The rule that keeps the graph coherent:
+The layers are ordinary Markdown records inside the repo. They are structured enough for agents to reason over and simple enough for humans to inspect.
 
-```text
-placement beats recency
-```
+---
 
-The newest message does not win. The longest summary does not win. The right record carries the work.
+## How agents route work
 
-For software work, the source tree is current implementation reality. Git records file history. Specs describe intended behavior. Tickets track live execution and acceptance. Evidence bridges implementation to claims. Critique judges whether the bridge is strong enough. Wiki holds explanation that has become safe to reuse.
+The agent starts by asking one question:
 
-Memory can help an agent recover context by pointing at useful cues and owner
-records. It does not become project state, and the project must remain truthful
-if memory is absent or stale.
-
-## How agents use the vocabulary
-
-The agent starts by asking where the work belongs.
+**What kind of truth is this?**
 
 | Situation | Loom route |
 | --- | --- |
 | Missing understanding | `research` |
-| Unclear behavior | `spec` |
+| Unclear intended behavior | `spec` |
 | Unclear sequencing | `plan` |
-| Live work | `ticket` |
-| Observed output | `evidence` |
-| Concern, review pressure, residual risk | `critique` |
-| Stable understanding | `wiki` |
-| Bounded implementation | `packet` |
-| Support recall, preferences, retrieval cues | `memory`, until it deserves promotion |
+| Live scoped work | `ticket` |
+| Observed output or validation | `evidence` |
+| Review pressure, concern, or residual risk | `critique` |
+| Stable accepted understanding | `wiki` |
+| Bounded implementation pass | `packet` |
+| Retrieval cue, preference, reminder, or hot context | `memory`, until it deserves promotion |
 
 A vague bug report becomes reproduction evidence, root-cause research, a tightened spec if behavior is ambiguous, a ticket for the fix, a packet for the implementation pass, green evidence, critique when risk warrants, and wiki promotion if the lesson should survive.
 
 No new workflow was invented. The agent used the vocabulary.
 
-## Two loops
+---
 
-Loom separates shaping work from doing work.
+## Outer loop: route work
 
-### Outer loop: route work
-
-The outer loop asks which project layer should change next.
+The outer loop shapes work before execution.
 
 ```text
 constitution -> initiative -> plan -> ticket
@@ -134,7 +256,9 @@ If a step cannot be completed honestly, route backward to the layer that can fix
 
 Do not advance on vibes.
 
-### Inner loop: run clean workers
+---
+
+## Inner loop: run clean workers
 
 The inner loop is Ralph-shaped:
 
@@ -147,13 +271,15 @@ one parent reconciliation
 
 A parent compiles a packet, delegates one fresh-context execution step, receives a bounded outcome, and reconciles the result back into the graph.
 
-The child handles one iteration. The packet defines the child contract. The ticket tracks live execution. The parent reconciles the result.
+The child handles one iteration. The packet defines the child contract. The ticket tracks live execution. The parent decides what became true.
 
 Critique and wiki may reuse packet discipline, but their domain skills handle review and synthesis. They are sibling routes, not implementation passes pretending to be Ralph.
 
+---
+
 ## Packets compile project state
 
-A packet is a compiled contract.
+A packet is a contract for a fresh worker.
 
 A parent builds it from the upstream graph: relevant constitution records, initiative context, research, spec, plan, ticket, evidence, critique, source fingerprint, execution context, write scope, verification posture, stop conditions, and output contract.
 
@@ -161,38 +287,54 @@ The worker gets less context by volume, but better context by shape.
 
 A strong packet states:
 
-* the ticket or project record being served
-* the bounded goal for this iteration
-* what the worker can read
-* what the worker can write
-* the source fingerprint
-* the Git branch or worktree context when files will change
-* the verification posture
-* stop conditions
-* the output contract
-* what the parent will do after return
+- the ticket or project record being served
+- the bounded goal for this iteration
+- what the worker may read
+- what the worker may write
+- the source fingerprint
+- the Git branch or worktree context when files will change
+- the verification posture
+- stop conditions
+- the output contract
+- what the parent will do after return
 
 Packets prevent context drift, hidden assumptions, uncontrolled changes, and scope creep.
 
-A packet is a contract. It is not the project record.
+A packet is not the project record. After the child returns, the parent reconciles the result into tickets, evidence, critique, research, specs, plans, wiki, constitution, initiatives, or memory as needed.
 
-After the child returns, the parent reconciles the result into tickets, evidence, critique, research, specs, plans, wiki, constitution, initiatives, or memory as needed.
+---
 
-## The transaction spine
+## Done is a property of the graph
 
-Non-trivial Loom work follows one spine:
+Work is not done when the code compiles.
+
+Work is done when the project is consistent.
+
+For software work, closure usually requires:
+
+- the relevant spec is satisfied, or ticket-local acceptance criteria are explicit
+- evidence supports the claim being made
+- critique is resolved, accepted, or recorded as residual risk
+- the ticket reflects the actual final state
+- durable learning has been promoted when it should survive the task
+
+A child worker saying "done" is not enough. A commit is not enough. A green test is not enough if the ticket still lies.
+
+**Done is a property of the graph.**
+
+---
+
+## Example: a bug fix through Loom
+
+A non-trivial bug fix usually follows this spine:
 
 ```text
 route -> shape -> ready -> execute -> reconcile -> verify -> accept -> promote -> close
 ```
 
-A transaction does not need every layer. It does need to preserve placement.
-
-Example bug fix:
-
 1. Capture reproduction evidence.
 2. Research the root cause if it is unknown.
-3. Update or create a spec if the intended behavior is fuzzy.
+3. Update or create a spec if intended behavior is fuzzy.
 4. Create or tighten the ticket.
 5. Compile a packet for one implementation pass.
 6. Run a fresh worker.
@@ -202,23 +344,9 @@ Example bug fix:
 10. Promote durable learning into research, wiki, spec, plan, initiative, constitution, evidence, or memory.
 11. Close when the graph is consistent.
 
-That is Loom.
+The same pattern works for features, spikes, reviews, refactors, migrations, codebase mapping, and release preparation.
 
-## Done is a property of the graph
-
-Work is not done when the code compiles. It is done when the project is consistent.
-
-For software work, closure usually requires:
-
-* the relevant spec is satisfied, or ticket-local acceptance criteria are explicit
-* evidence supports the claim being made
-* critique is resolved, accepted, or recorded as residual risk
-* the ticket reflects the actual final state
-* durable learning has been promoted when it should survive the task
-
-A child worker saying done is not enough. A commit is not enough. A green test is not enough if the ticket still lies.
-
-Done is a property of the graph.
+---
 
 ## Research is first-class
 
@@ -231,6 +359,8 @@ Research gives that work a durable place: questions, options, experiments, rejec
 A failed path can be valuable. A null result can be the most important thing the project learned that day.
 
 This is where Loom crosses from coding workflow into knowledge-work protocol.
+
+---
 
 ## Workflows emerge from the vocabulary
 
@@ -249,20 +379,14 @@ evidence -> root-cause research -> spec if needed -> ticket -> packet -> evidenc
 spike:
 research -> throwaway scope if needed -> evidence -> conclusions/null results -> downstream spec, plan, ticket, or wiki
 
-sketch:
-design question -> 2-3 variants -> evidence -> critique -> accepted spec or wiki updates
-
 code map:
 scan evidence -> research where structure is uncertain -> wiki atlas when accepted
 
 review:
 critique -> evidence -> ticket reconciliation -> acceptance or repair
 
-review response:
-critique finding -> verify against source/evidence -> resolve, accept risk, supersede, or create follow-up -> ticket disposition
-
 parallel execution:
-plan execution waves -> non-overlapping tickets/packets/worktrees -> child results -> parent integration evidence -> ticket reconciliation
+plan execution waves -> non-overlapping tickets/packets/worktrees -> child results -> parent integration evidence -> reconciliation
 
 git isolation:
 ticket/packet scope -> explicit baseline -> branch/worktree -> diff provenance -> handoff evidence
@@ -270,41 +394,47 @@ ticket/packet scope -> explicit baseline -> branch/worktree -> diff provenance -
 implementation:
 ticket -> packet -> worker -> evidence -> reconcile
 
-plan execution:
-plan -> bounded tickets -> Ralph/local edits -> evidence -> critique as needed -> acceptance
-
-branch finish:
-ticket/evidence/critique truth -> ship package -> merge, PR, keep, or abandon handoff -> ticket acceptance gate
-
 ship:
 ticket/evidence/critique/wiki disposition -> PR summary, release note, risk summary, follow-up list
 
-accept:
-ticket acceptance dossier -> evidence/critique/wiki disposition -> close or loop back
-
-repair:
-evidence -> critique -> ticket -> packet -> evidence -> accept
-
 retrospective:
 ticket or initiative lessons -> wiki, research, spec, plan, initiative, constitution, evidence, or memory
-
-wiki write/audit:
-accepted explanation -> wiki page or audit -> links, freshness, and maintenance disposition
 ```
 
 You do not invent a workflow every time. You route through the project graph.
 
-## Influences
+---
 
-Loom is influenced by Superpowers, GSD, Spec Kit, Beads, Ralph, ECC, and the broader field of agent-skills projects.
+## How Loom relates to adjacent tools
 
-Superpowers showed how much better coding agents get when they have explicit development skills. GSD showed how context engineering changes long-running work. Spec Kit showed that well-defined specs can drive implementation. Beads showed that local agent-facing tickets externalize context and make long-horizon work easier to manage. Ralph showed the value of clean context windows, bounded tasks, disk-backed state, commits, and restart loops. ECC put real effort into continuous learning and compound engineering.
+Loom is not trying to replace every agent workflow project.
 
-Loom makes the shared vocabulary explicit.
+It is the source-of-truth layer underneath long-running agent work.
 
-Brainstorming becomes research, spec, plan, and ticket shaping. Test-driven development becomes packet verification posture plus evidence and ticket acceptance. Review becomes critique. Finishing becomes ticket acceptance, ship packaging, and retrospective promotion. Ralph becomes packet, child worker, bounded mutation, and parent reconciliation.
+| Project | Primary contribution | How Loom differs |
+| --- | --- | --- |
+| Superpowers | Better agent habits and explicit development skills | Loom focuses on where durable truth lives after those habits run |
+| GSD | Context engineering and workflow acceleration | Loom focuses on project-state integrity, owner layers, and reconciliation |
+| Spec Kit | Specs as central implementation drivers | Loom treats specs as one owner layer among research, tickets, evidence, critique, and wiki |
+| Beads | Local agent-facing task graph | Loom includes tickets, but broadens the graph to behavior, research, validation, review, and durable knowledge |
+| Ralph | Fresh-context workers and restartable bounded loops | Loom turns that loop into packet, child worker, evidence, and parent reconciliation |
 
-You can run other tools beside Loom. For many projects, you may not need to. Loom's skills already teach the agent how to route the same underlying work through the repo.
+The short version:
+
+```text
+Superpowers: better agent habits
+Beads: task graph
+Spec Kit: executable specs
+GSD: workflow/context harness
+Ralph: clean worker loop
+Loom: repo-local truth ownership
+```
+
+You can run other tools beside Loom. Loom's job is to make sure the project knows what became true.
+
+Because Loom is delivered as skills, it should usually feel like an ambient operating vocabulary rather than a command line the user has to remember.
+
+---
 
 ## Markdown, on purpose
 
@@ -322,6 +452,8 @@ Harness adapters may preload bootstrap references where a harness supports it cl
 
 The protocol is the corpus.
 
+---
+
 ## What ships
 
 This repository ships the Loom skill package.
@@ -330,23 +462,25 @@ It is not a runtime, service, daemon, MCP server, product CLI, workflow engine, 
 
 Included:
 
-* `skills/`, the canonical Loom surface
-* `loom-bootstrap`, the mandatory entry skill
-* project-layer skills for constitution, initiatives, research, specs, plans, tickets, evidence, critique, wiki, and memory
-* workflow skills for workspace entry, records, Ralph, Git, debugging, spike, codemap, ship, retrospective, and skill authoring
-* templates and references for Markdown-native operation
-* harness manifests and adapters where useful
-* `PROTOCOL.md`, the stable protocol summary
-* `ARCHITECTURE.md`, the implementation and package architecture notes
-* internal examples and fixtures for maintainer review, not product-surface guidance
+- `skills/`, the canonical Loom surface
+- `loom-bootstrap`, the entry skill that anchors the rest of the package
+- project-layer skills for constitution, initiatives, research, specs, plans, tickets, evidence, critique, wiki, and memory
+- workflow skills for workspace entry, records, Ralph, Git, debugging, spike, codemap, ship, retrospective, and skill authoring
+- templates and references for Markdown-native operation
+- harness manifests and adapters where useful
+- `PROTOCOL.md`, the stable protocol summary
+- `ARCHITECTURE.md`, the implementation and package architecture notes
+- internal examples and fixtures for maintainer review, not product-surface guidance
 
 The product surface is the skill package. The skills are the protocol in operational form.
+
+---
 
 ## Skill map
 
 | Skill | Role |
 | --- | --- |
-| `loom-bootstrap` | Mandatory first-read doctrine and route into Loom |
+| `loom-bootstrap` | Entry doctrine and route into Loom; usually reached automatically through skills |
 | `loom-workspace` | Workspace entry, structure check, first routing decision |
 | `loom-records` | IDs, frontmatter, typed links, status, validation, repair |
 | `loom-constitution` | Project identity, constraints, decisions, roadmap direction |
@@ -367,6 +501,8 @@ The product surface is the skill package. The skills are the protocol in operati
 | `loom-ship` | PR, release, handoff, risk, and follow-up packaging |
 | `loom-retrospective` | Compounding pass that promotes accepted learning into project layers |
 | `loom-skill-authoring` | Maintaining Loom-compatible skills without breaking the protocol |
+
+---
 
 ## Repository layout
 
@@ -402,40 +538,9 @@ Inside a Loom-enabled project, the runtime tree looks roughly like this:
 └── memory/        # optional
 ```
 
-Use `loom-workspace`, `loom-constitution`, and `loom-tickets` for the first records.
+First records usually emerge through `loom-workspace`, `loom-constitution`, and `loom-tickets`.
 
-## Install
-
-Loom installs as a skills package. The fastest path is to expose `skills/` to your harness and use `loom-bootstrap` first.
-
-```bash
-git clone https://github.com/z3z1ma/agent-loom.git
-```
-
-First-class harness paths are in [INSTALL.md](INSTALL.md):
-
-* Claude Code
-* OpenCode
-* Codex
-* Cursor
-* Gemini CLI
-* generic skills-directory install
-
-After install, start with:
-
-```text
-Use the loom-bootstrap skill. Then route the work through the Loom skill that handles the next kind of work.
-```
-
-## What Loom can replace
-
-Loom can coexist with external issue trackers, planning tools, review systems, workflow packages, and agent command surfaces.
-
-It can also make many of them unnecessary for the agent-facing work record.
-
-The skills already prescribe project layers, routing rules, execution, acceptance, evidence, review, knowledge promotion, and handoff packaging. Once those terms exist inside the repo, the agent can compose the workflows directly.
-
-External systems can mirror Loom state. They should not be the only place the agent learns what is true.
+---
 
 ## Costs
 
@@ -443,9 +548,11 @@ Loom asks for discipline.
 
 Broken links matter. Stale records matter. Evidence that overclaims matters. A ticket that says the work is accepted when critique is unresolved is worse than no ticket at all.
 
-Loom also has a threshold. If the work is small, local, and obvious, use the source tree and Git. Do not create a graph-shaped shrine around a one-line edit.
+Loom also has a threshold. Do not create a graph-shaped shrine around a one-line edit.
 
-The graph pays for itself when work crosses sessions, changes behavior, needs review, involves research, carries risk, or leaves behind knowledge the next worker would otherwise rediscover.
+The graph pays for itself when work crosses sessions, changes behavior, needs review, involves research, carries risk, requires handoff, prepares future work, or leaves behind knowledge the next worker would otherwise rediscover.
+
+---
 
 ## The point
 
@@ -453,9 +560,11 @@ Loom keeps AI work from scattering across chat, plan files, tool state, and stal
 
 It gives agents a vocabulary for placing work where it belongs.
 
-It gives projects a memory that survives context windows, compaction, worker handoff, and time.
+It gives projects a memory that survives stopped sessions, context compaction, model switches, worker handoff, and time.
 
-The pieces already existed. Loom puts them in one place and gives each one a job.
+Compaction can preserve a pointer. Loom preserves the thing being pointed at.
+
+The pieces already existed. Loom gives each one a job.
 
 ```text
 the work stops drifting
