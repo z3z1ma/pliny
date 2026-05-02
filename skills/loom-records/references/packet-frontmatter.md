@@ -47,6 +47,7 @@ source_fingerprint:
   integration_ref: <ref, tag, commit, or unknown>
   integration_commit: <sha or unknown>
   git_status_summary: <clean|dirty|unknown>
+  # Provenance: owner records or artifacts used to compile this packet baseline.
   compiled_from:
     - <record ref>
 execution_context:
@@ -62,6 +63,7 @@ context_budget:
   max_source_files: <integer or unknown>
   max_excerpt_lines_per_file: <integer or unknown>
   avoid_full_file_reads: <true|false>
+# Context: source set the packet consumer should read or trust for this bounded task.
 sources: {}
 links: {}
 ---
@@ -90,6 +92,22 @@ links: {}
 These fields are required for every current packet family. They make the support
 artifact routable, replayable enough for review, and explicit about child write
 authority and parent reconciliation authority.
+
+## Provenance Versus Context Sources
+
+`source_fingerprint.compiled_from` and `sources` answer different questions.
+
+- `source_fingerprint.compiled_from` is provenance for packet compilation. It
+  names the owner records or artifacts the parent used to form the packet's
+  baseline and freshness contract.
+- `sources` is the context set for the packet consumer. It names records,
+  evidence, diffs, changed files, or references the child, reviewer, or
+  synthesizer should read or trust while completing the bounded task.
+
+The lists may overlap when the same record both shaped the packet and must be
+read by the consumer, but they do not need to be duplicate inventories. Prefer a
+short, truthful `compiled_from` list plus a task-specific `sources` mapping over
+performative repetition.
 
 ## Optional Shared And Family Fields
 
@@ -317,6 +335,7 @@ source_fingerprint:
   integration_ref: <ref, tag, commit, or unknown>
   integration_commit: <sha or unknown>
   git_status_summary: <clean|dirty|unknown>
+  # Provenance: owner records or artifacts used to compile this packet baseline.
   compiled_from:
     - ticket:<token>
 ```
@@ -369,8 +388,12 @@ necessary and should report the reason.
 
 ## Sources And Links
 
-Use `sources` for the source record set compiled into or referenced by the
-packet. A typed mapping is preferred when the family has known source categories.
+Use `sources` for the context source set the packet consumer should read or trust
+for the bounded task. A typed mapping is preferred when the family has known
+source categories.
+
+Do not use `sources` as a second provenance ledger. Put baseline provenance in
+`source_fingerprint.compiled_from`; put task-reading context here.
 
 Use `links` for typed graph navigation that should be searchable from the packet
 support artifact. Keep it lightweight; canonical owner records still own project

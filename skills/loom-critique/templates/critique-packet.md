@@ -41,6 +41,7 @@ source_fingerprint:
   integration_ref: <ref, tag, commit, or unknown>
   integration_commit: <sha or unknown>
   git_status_summary: <clean|dirty|unknown>
+  # Provenance: owner records or artifacts used to compile this review baseline.
   compiled_from:
     - <record ref>
 execution_context:
@@ -56,6 +57,7 @@ context_budget:
   max_source_files: 8
   max_excerpt_lines_per_file: 80
   avoid_full_file_reads: true
+# Context: source set the critique reviewer should read or trust for this bounded review.
 sources: {}
 links: {}
 ---
@@ -76,6 +78,11 @@ packets may retain the legacy-compatible `review_target` mapping documented in
 that reference.
 Critique owns this review packet's workflow; using packet grammar does not make
 the review Ralph-governed.
+
+Use `source_fingerprint.compiled_from` for packet compilation provenance and
+`sources` for review context such as governing records, evidence, diffs, prior
+packet output, or changed files. The lists may overlap, but critique packets do
+not need duplicate source inventories to satisfy shared packet grammar.
 
 `parent_merge_scope` must name the ticket, critique record, evidence record, or
 other owner-layer targets the parent expects to reconcile, or explicitly say

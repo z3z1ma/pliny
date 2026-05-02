@@ -31,6 +31,7 @@ source_fingerprint:
   integration_ref: <ref, tag, commit, or unknown>
   integration_commit: <sha or unknown>
   git_status_summary: <clean|dirty|unknown>
+  # Provenance: owner records or artifacts used to compile this synthesis baseline.
   compiled_from:
     - <record ref>
 execution_context:
@@ -46,6 +47,7 @@ context_budget:
   max_source_files: 8
   max_excerpt_lines_per_file: 80
   avoid_full_file_reads: true
+# Context: source set the wiki synthesizer should read or trust for this bounded synthesis.
 sources: {}
 links: {}
 ---
@@ -67,6 +69,11 @@ Which canonical records and evidence this packet should trust.
 Frontmatter follows `skills/loom-records/references/packet-frontmatter.md`.
 Wiki owns this synthesis packet's workflow; using packet grammar does not make
 the synthesis Ralph-governed.
+
+Use `source_fingerprint.compiled_from` for packet compilation provenance and
+`sources` for accepted truth sources the wiki synthesizer should read or trust.
+The lists may overlap, but wiki packets should not duplicate source inventories
+unless the same source is both provenance and synthesis context.
 
 Encode the target in packet IDs and filenames using
 `skills/loom-records/references/naming-and-ids.md`; for example,

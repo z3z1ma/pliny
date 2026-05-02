@@ -33,6 +33,7 @@ source_fingerprint:
   integration_ref: <ref, tag, commit, or unknown>
   integration_commit: <sha or unknown>
   git_status_summary: <clean|dirty|unknown>
+  # Provenance: owner records or artifacts used to compile this packet baseline.
   compiled_from:
     - ticket:<token>
 execution_context:
@@ -48,6 +49,7 @@ context_budget:
   max_source_files: 8
   max_excerpt_lines_per_file: 80
   avoid_full_file_reads: true
+# Context: source set the Ralph child should read or trust for this bounded iteration.
 sources:
   constitution:
     - constitution:main
@@ -70,6 +72,10 @@ What larger chain constrains the work.
 
 Frontmatter follows `skills/loom-records/references/packet-frontmatter.md`;
 Ralph-specific body obligations follow `skills/loom-ralph/references/packet-contract.md`.
+
+Use `source_fingerprint.compiled_from` for packet compilation provenance and
+`sources` for the context the Ralph child should read or trust. The two lists may
+overlap, but they do not need to duplicate each other.
 
 Name packets using `packet:ralph-ticket-<token>-<UTC compact timestamp>` and save
 them as `.loom/packets/ralph/<UTC compact timestamp>-ticket-<token>-iter-<NN>.md`.

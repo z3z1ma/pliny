@@ -1,11 +1,11 @@
 ---
 id: ticket:pktprov4
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-02T22:03:13Z
-updated_at: 2026-05-02T22:03:13Z
+updated_at: 2026-05-02T22:48:30Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,12 @@ links:
     - initiative:skills-corpus-template-grammar-safety-pass
   plan:
     - plan:skills-corpus-template-grammar-safety-pass
+  packet:
+    - packet:ralph-ticket-pktprov4-20260502T224150Z
+  evidence:
+    - evidence:packet-provenance-sources-validation
+  critique:
+    - critique:packet-provenance-sources-review
 external_refs: {}
 depends_on:
   - ticket:pktsupp1
@@ -64,8 +70,12 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-template-grammar-safety-pass#OBJ-004` | pending | pending | open |
-| `ticket:pktprov4#ACC-001` through `ticket:pktprov4#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-template-grammar-safety-pass#OBJ-004` | `evidence:packet-provenance-sources-validation` | `critique:packet-provenance-sources-review` | supported |
+| `ticket:pktprov4#ACC-001` | `evidence:packet-provenance-sources-validation` | `critique:packet-provenance-sources-review` | supported |
+| `ticket:pktprov4#ACC-002` | `evidence:packet-provenance-sources-validation` | `critique:packet-provenance-sources-review` | supported |
+| `ticket:pktprov4#ACC-003` | `evidence:packet-provenance-sources-validation` | `critique:packet-provenance-sources-review` | supported |
+| `ticket:pktprov4#ACC-004` | `evidence:packet-provenance-sources-validation` | `critique:packet-provenance-sources-review` | supported |
+| `ticket:pktprov4#ACC-005` | `critique:packet-provenance-sources-review` | oracle critique passed with no findings | supported |
 
 # Execution Notes
 
@@ -79,23 +89,22 @@ Depends on `ticket:pktsupp1`.
 
 # Next Move / Next Route
 
-Ralph implementation packet after dependencies close.
+Closed. Commit and push this ticket before continuing to `ticket:tkrout5`.
 
 # Route Readiness
 
-Route: ralph
+Route: acceptance_review
 
-Bounded iteration: packet provenance/source grammar alignment.
-Write boundary: targeted packet references/templates, this ticket, one evidence
-record, one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Acceptance review readiness:
+Evidence `evidence:packet-provenance-sources-validation` and oracle critique
+`critique:packet-provenance-sources-review` support closure with no findings.
 
 # Evidence
 
 Expected: before/after searches for `compiled_from`, `sources:`, packet templates,
 and `git diff --check`.
+
+Observed: `evidence:packet-provenance-sources-validation`.
 
 # Critique Disposition
 
@@ -113,9 +122,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:packet-provenance-sources-review` - no findings; mandatory oracle
+critique passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -123,18 +133,34 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Packet provenance/context split was promoted directly into
+  `skills/loom-records/references/packet-frontmatter.md` and the Ralph, critique,
+  and wiki packet templates.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the packet grammar product wording itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+touched packet grammar guidance.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-02T22:48:30Z
+Basis: Ralph packet `packet:ralph-ticket-pktprov4-20260502T224150Z`; evidence
+`evidence:packet-provenance-sources-validation`; oracle critique
+`critique:packet-provenance-sources-review` with no findings.
+Residual risks: validation is structural Markdown review only; evidence covers
+the targeted shared reference and three packet templates, not every historical
+packet surface.
 
 # Dependencies
 
@@ -143,3 +169,15 @@ Residual risks:
 # Journal
 
 - 2026-05-02T22:03:13Z: Created from council finding `NC-004`.
+- 2026-05-02T22:41:50Z: Compiled Ralph packet
+  `packet:ralph-ticket-pktprov4-20260502T224150Z` and moved ticket to `active`.
+- 2026-05-02T22:42:54Z: Ralph child clarified packet provenance/context grammar,
+  aligned Ralph/critique/wiki templates, recorded
+  `evidence:packet-provenance-sources-validation`, and moved ticket to
+  `review_required` for mandatory oracle critique.
+- 2026-05-02T22:45:58Z: Parent reconciled Ralph output, normalized claim matrix
+  statuses to canonical claim-coverage vocabulary, expanded evidence sections,
+  and marked the Ralph packet consumed.
+- 2026-05-02T22:48:30Z: Mandatory oracle critique
+  `critique:packet-provenance-sources-review` passed with no findings. Parent
+  recorded retrospective / promotion disposition and accepted closure.
