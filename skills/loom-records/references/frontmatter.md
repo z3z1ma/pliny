@@ -68,8 +68,9 @@ New packet records should use `child_write_scope` for the child mutation
 boundary. Older packet records may still contain `write_scope`; treat that as
 legacy packet compatibility unless the packet explicitly says otherwise. A
 support handoff outside `.loom/packets/`, such as a drive outer-loop handoff
-proposal, may use its own `write_scope` without becoming a packet family or a
-canonical truth owner.
+proposal, may use support-local fields such as `handoff_write_scope` for
+proposal-time permission without becoming a packet family or a canonical truth
+owner.
 
 Packet frontmatter is support-artifact grammar. It does not make packets
 canonical truth owners, and it does not make critique or wiki packets
@@ -124,6 +125,9 @@ Saved drive outer-loop handoffs use this support frontmatter under
 
 ```yaml
 support_kind: drive-outer-loop-handoff
+handoff_write_scope:
+  records: []
+  paths: []
 ```
 
 They are prompt-only by default and durable support artifacts only when

@@ -64,8 +64,9 @@ checkpoint from existing layers:
 - tickets own live execution state, next route, blockers, scoped coverage,
   evidence disposition, critique disposition, and acceptance decisions
 - packets own bounded child contracts; saved drive handoffs are support artifacts
-  that may carry child context, source snapshot, proposal-time write scope, stop
-  conditions, and output contract without owning canonical truth
+  that may carry child context, source snapshot, support-local
+  `handoff_write_scope`, stop conditions, and output contract without owning
+  canonical truth
 - evidence, critique, and wiki own observed support, adversarial verdicts, and
   accepted explanation
 
@@ -228,8 +229,9 @@ This is transport only:
   evidence sufficiency, critique verdicts, wiki truth, canonical truth, or packet
   lifecycle
 - the outer-loop handoff template is not a packet family and not a truth owner
-- any handoff `write_scope` is proposal-time permission for that support
+- any handoff `handoff_write_scope` is proposal-time permission for that support
   handoff, not Ralph `child_write_scope`
+- legacy packet `write_scope` remains packet compatibility only
 - do not create `.loom/support/` merely during bootstrap; create it only when a
   saved support artifact is intentionally materialized
 

@@ -113,9 +113,9 @@ child boundary; reserve `write_scope` references to explicit legacy compatibilit
 notes, not new packet grammar.
 
 Do not confuse this with bounded support handoffs outside Ralph. For example, a
-drive outer-loop handoff may use its own `write_scope` to describe proposal-time
-mutation permission, but that does not make the handoff a packet or give it
-canonical truth ownership.
+drive outer-loop handoff may use support-local `handoff_write_scope` to describe
+proposal-time mutation permission, but that does not make the handoff a packet or
+give it canonical truth ownership.
 
 ## Context Budget
 

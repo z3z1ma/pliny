@@ -1,11 +1,11 @@
 ---
 id: ticket:dwhand10
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-02T18:58:43Z
-updated_at: 2026-05-02T18:58:43Z
+updated_at: 2026-05-02T21:02:04Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,12 @@ links:
     - initiative:skills-corpus-council-precision-pass
   plan:
     - plan:skills-corpus-council-precision-pass
+  packet:
+    - packet:ralph-ticket-dwhand10-20260502T205513Z
+  evidence:
+    - evidence:drive-handoff-write-scope-validation
+  critique:
+    - critique:drive-handoff-write-scope-review
 external_refs: {}
 depends_on:
   - ticket:rtvocab1
@@ -38,8 +44,7 @@ child write boundary.
 
 # Scope
 
-- Rename drive handoff `write_scope` to a clearly support-local field such as
-  `handoff_write_scope` or `proposal_write_scope`.
+- Rename drive handoff `write_scope` to support-local `handoff_write_scope`.
 - Update drive handoff template, drive references, and records/frontmatter notes.
 - Preserve explicit statement that this field is not Ralph `child_write_scope`.
 
@@ -68,37 +73,47 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-council-precision-pass#OBJ-010` | pending | pending | open |
-| `ticket:dwhand10#ACC-001` through `ticket:dwhand10#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-council-precision-pass#OBJ-010` | `evidence:drive-handoff-write-scope-validation` | `critique:drive-handoff-write-scope-review` | supported |
+| `ticket:dwhand10#ACC-001` | `evidence:drive-handoff-write-scope-validation` | `critique:drive-handoff-write-scope-review` | supported |
+| `ticket:dwhand10#ACC-002` | `evidence:drive-handoff-write-scope-validation` | `critique:drive-handoff-write-scope-review` | supported |
+| `ticket:dwhand10#ACC-003` | `evidence:drive-handoff-write-scope-validation` | `critique:drive-handoff-write-scope-review` | supported |
+| `ticket:dwhand10#ACC-004` | `evidence:drive-handoff-write-scope-validation` | `critique:drive-handoff-write-scope-review` | supported |
+| `ticket:dwhand10#ACC-005` | `critique:drive-handoff-write-scope-review` | oracle critique passed with no findings | supported |
 
 # Execution Notes
 
 Likely touched surfaces include `skills/loom-drive/templates/outer-loop-handoff.md`,
 `skills/loom-drive/SKILL.md`, and `skills/loom-records/references/frontmatter.md`.
 
+Ralph iteration `packet:ralph-ticket-dwhand10-20260502T205513Z` is scoped to
+rename the drive handoff support-local field and update references that currently
+describe drive handoff `write_scope`.
+
+Ralph child output updated the drive outer-loop handoff field to
+`handoff_write_scope`, reconciled product references, and recorded structural
+validation in `evidence:drive-handoff-write-scope-validation`.
+
 # Blockers
 
-Depends on tickets `rtvocab1`, `supp0x2a`, and `authst4p`.
+None - tickets `rtvocab1`, `supp0x2a`, and `authst4p` are closed.
 
 # Next Move / Next Route
 
-Ralph implementation packet after dependencies close.
+Closed. Commit and push this ticket before continuing to `ticket:planwv11`.
 
 # Route Readiness
 
-Route: Ralph implementation packet
+Route: acceptance_review
 
-Bounded iteration: rename drive handoff write-scope field and reconcile docs.
-Write boundary: drive handoff surfaces, records/frontmatter support notes, this
-ticket, one evidence record, one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Acceptance review readiness:
+Evidence `evidence:drive-handoff-write-scope-validation` and oracle critique
+`critique:drive-handoff-write-scope-review` support closure with no findings.
 
 # Evidence
 
-Expected: targeted searches for `write_scope`, `handoff_write_scope`,
-`proposal_write_scope`, and `git diff --check`.
+Recorded: `evidence:drive-handoff-write-scope-validation` with before/after
+searches for `write_scope`, `handoff_write_scope`, `proposal_write_scope`,
+`child_write_scope`, drive handoff references, and `git diff --check`.
 
 # Critique Disposition
 
@@ -117,24 +132,48 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+Recorded in `critique:drive-handoff-write-scope-review`:
 
-Disposition status: pending
+- None - no findings.
+
+Disposition status: completed
 
 Deferral / not-required rationale:
 
-Not deferred.
+Not deferred. Mandatory oracle critique passed with no findings.
+
+# Retrospective / Promotion Disposition
+
+Disposition status: completed
+
+Promoted:
+
+- Drive outer-loop handoff support-local `handoff_write_scope` grammar was
+  promoted into `skills/loom-drive/templates/outer-loop-handoff.md`,
+  `skills/loom-drive/SKILL.md`, `skills/loom-records/references/frontmatter.md`,
+  and `skills/loom-ralph/references/packet-contract.md`.
+
+Deferred / not-required rationale:
+
+Not deferred. The durable lesson was promoted directly into the owner product
+surfaces listed above; no separate wiki page, research record, spec,
+constitution decision, or memory entry is needed.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation now lives in the
+drive, records, and Ralph product surfaces.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-02T21:02:04Z
+Basis: Ralph packet `packet:ralph-ticket-dwhand10-20260502T205513Z`; evidence
+`evidence:drive-handoff-write-scope-validation`; oracle critique
+`critique:drive-handoff-write-scope-review` with no findings.
+Residual risks: historical `.loom` records still mention the old drive-handoff
+`write_scope` collision as context; those records were intentionally not migrated
+by this ticket.
 
 # Dependencies
 
@@ -145,3 +184,11 @@ Residual risks:
 # Journal
 
 - 2026-05-02T18:58:43Z: Created from council finding `CR-010`.
+- 2026-05-02T20:55:13Z: Started Ralph iteration
+  `packet:ralph-ticket-dwhand10-20260502T205513Z` from baseline
+  `df5abc1e86ceb026e99d820a46e2aae82b062d43`.
+- 2026-05-02T20:56:18Z: Ralph child renamed the drive handoff field to
+  `handoff_write_scope`, recorded `evidence:drive-handoff-write-scope-validation`,
+  and moved the ticket to `review_required` for mandatory oracle critique.
+- 2026-05-02T21:02:04Z: Oracle critique passed with no findings. Recorded
+  acceptance and retrospective / promotion disposition; closed ticket.

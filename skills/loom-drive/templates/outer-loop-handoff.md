@@ -20,7 +20,7 @@ drive_checkpoint:
   anchor: <initiative id>
   active_tranche: <plan section or ticket ids>
   gate_status: "<TBD: choose clear or blocked before saving>"
-write_scope:
+handoff_write_scope:
   records:
     - "<TBD: proposal-time record write refs, or None - no writes>"
   paths:
@@ -44,9 +44,9 @@ support-local `id`, `kind`, `support_kind`, and `handoff_kind` fields above.
 This is a bounded support handoff proposal. It is not a packet family, does not
 use `packet_kind`, and does not own objective state, live ticket state,
 acceptance, evidence sufficiency, critique verdicts, wiki truth, canonical truth,
-or packet lifecycle. Its `write_scope` describes any proposal-time mutation
-permission the parent grants for this handoff; it is separate from Ralph packet
-`child_write_scope` and from legacy packet `write_scope` compatibility.
+or packet lifecycle. Its `handoff_write_scope` describes any proposal-time
+mutation permission the parent grants for this handoff; it is separate from Ralph
+packet `child_write_scope` and from legacy packet `write_scope` compatibility.
 
 The frontmatter `status` is support-local proposal status for this handoff only:
 `draft` means not yet reconciled, `reconciled` means the parent reviewed it and
@@ -89,7 +89,7 @@ Include:
 - optional objective gap summary, only when current owner records do not already
   make the next gap clear
 - conditional tranche detail, including included/excluded claims, likely tickets,
-  dependencies, write-scope conflict check, evidence/critique gates, and
+  dependencies, handoff write-scope conflict check, evidence/critique gates, and
   reassessment point when those facts are needed for a safe route decision
 - gaps or ambiguities that block safe continuation
 - proposed owner-record changes
