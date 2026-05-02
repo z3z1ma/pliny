@@ -12,7 +12,17 @@ Work is done only when all relevant conditions are true:
 - the ticket-owned acceptance decision, when needed, tells the truth
 - acceptance criteria are satisfied or explicitly revised
 - required evidence exists
-- required critique has happened or is explicitly deferred
+- required critique gate is satisfied by the policy that applies to this work:
+  - mandatory critique has completed before closure as a `final` critique record
+    with an explicit verdict; deferral, `not_required`, or a draft/stub review
+    does not satisfy a mandatory critique gate
+  - every open medium/high finding from a required critique has a ticket-owned
+    disposition of `resolved`, `accepted_risk`, `superseded`, or
+    `converted_to_follow_up`
+  - recommended critique has a recorded ticket-owned disposition before closure:
+    `completed`, `deferred`, or `not_required` with rationale
+  - optional critique does not block closure unless a ticket, spec, plan, or
+    human gate made it required for that work
 - wiki follow-through has happened or is explicitly deferred
 - references are reconciled
 - the result stayed within scope
@@ -124,10 +134,15 @@ Use these defaults unless the project says otherwise:
 - meaningful code changes usually deserve critique
 - accepted understanding that future agents will need should become wiki, not only ticket prose
 - if critique found unresolved open medium or high-severity issues, do not pretend the work is fully accepted
-- recommended critique needs a recorded ticket-owned disposition status before closure
-- mandatory critique blocks closure until open medium/high findings have
-  ticket-owned dispositions of `resolved`, `accepted_risk`, `superseded`, or
-  `converted_to_follow_up`
+- mandatory critique blocks closure until the required critique review is a
+  `final` critique record with an explicit verdict and every open medium/high
+  finding has a ticket-owned disposition of `resolved`, `accepted_risk`,
+  `superseded`, or `converted_to_follow_up`; mandatory critique cannot be
+  satisfied by deferral, `not_required`, or a draft/stub review
+- recommended critique needs a recorded ticket-owned disposition status before
+  closure: `completed`, `deferred`, or `not_required` with rationale
+- optional critique does not block closure unless a ticket, spec, plan, or human
+  gate made it required for that work
 - withdrawn findings require critique rationale and may be cited by the ticket
   for audit history, but are not unresolved findings for closure purposes
 
