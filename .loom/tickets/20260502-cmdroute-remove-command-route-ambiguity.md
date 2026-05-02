@@ -1,11 +1,11 @@
 ---
 id: ticket:cmdroute
 kind: ticket
-status: ready
+status: closed
 change_class: record-hygiene
 risk_class: medium
 created_at: 2026-05-02T18:58:43Z
-updated_at: 2026-05-02T18:58:43Z
+updated_at: 2026-05-02T21:37:28Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,12 @@ links:
     - initiative:skills-corpus-council-precision-pass
   plan:
     - plan:skills-corpus-council-precision-pass
+  packet:
+    - packet:ralph-ticket-cmdroute-20260502T213017Z
+  evidence:
+    - evidence:command-route-wording-validation
+  critique:
+    - critique:command-route-wording-review
 external_refs: {}
 depends_on:
   - ticket:rtvocab1
@@ -79,8 +85,12 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-council-precision-pass#OBJ-012` | pending | pending | open |
-| `ticket:cmdroute#ACC-001` through `ticket:cmdroute#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-council-precision-pass#OBJ-012` | `evidence:command-route-wording-validation` records before/after command-adaptor route wording searches and whitespace validation | `critique:command-route-wording-review` | supported |
+| `ticket:cmdroute#ACC-001` | `evidence:command-route-wording-validation` exact after search has no remaining optional-command route-peer matches | `critique:command-route-wording-review` | supported |
+| `ticket:cmdroute#ACC-002` | `evidence:command-route-wording-validation` broad after search shows remaining command/adaptor references are transport, invocation convenience, non-route guidance, or shell/non-runtime examples | `critique:command-route-wording-review` | supported |
+| `ticket:cmdroute#ACC-003` | `evidence:command-route-wording-validation` and edited wording use owner layer / workflow route language aligned with `skills/loom-records/references/route-vocabulary.md` | `critique:command-route-wording-review` | supported |
+| `ticket:cmdroute#ACC-004` | `evidence:command-route-wording-validation` records before/after searches and successful `git diff --check` | `critique:command-route-wording-review` | supported |
+| `ticket:cmdroute#ACC-005` | `critique:command-route-wording-review` | oracle critique passed with no findings | supported |
 
 # Execution Notes
 
@@ -89,27 +99,27 @@ guidance, and any references where optional commands appear as route peers.
 
 # Blockers
 
-Depends on all prior tickets in this plan.
+None current. Prior plan dependencies were satisfied before this ticket entered
+Ralph execution.
 
 # Next Move / Next Route
 
-Ralph implementation packet after dependencies close.
+Closed. Commit and push this ticket, then close the parent plan and initiative.
 
 # Route Readiness
 
-Route: Ralph implementation packet
+Route: acceptance_review
 
-Bounded iteration: final command/adaptor route-wording hygiene.
-Write boundary: targeted `skills/**` wording, this ticket, one evidence record,
-one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Acceptance review readiness:
+Evidence `evidence:command-route-wording-validation` and oracle critique
+`critique:command-route-wording-review` support closure with no findings.
 
 # Evidence
 
-Expected: searches for optional command/adaptor route wording and
-`git diff --check`.
+Recorded:
+
+- `evidence:command-route-wording-validation` — before/after searches for
+  optional command/adaptor route wording and successful `git diff --check`.
 
 # Critique Disposition
 
@@ -128,24 +138,49 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:command-route-wording-review` - no findings; mandatory oracle critique
+passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
-Not deferred.
+Not deferred. Mandatory oracle critique passed with no findings.
+
+# Retrospective / Promotion Disposition
+
+Disposition status: completed
+
+Promoted:
+
+- Command-route peer wording was normalized directly in
+  `skills/loom-workspace/references/status-snapshot.md`,
+  `skills/loom-wiki/references/wiki-write.md`, and
+  `skills/loom-wiki/references/wiki-audit.md`.
+- The route/command boundary remains grounded in
+  `skills/loom-records/references/route-vocabulary.md`; no new owner layer,
+  runtime, command wrapper, or helper requirement was introduced.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the product-surface wording itself plus
+the route vocabulary reference.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+route vocabulary reference and touched product guidance.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-02T21:37:28Z
+Basis: Ralph packet `packet:ralph-ticket-cmdroute-20260502T213017Z`; evidence
+`evidence:command-route-wording-validation`; oracle critique
+`critique:command-route-wording-review` with no findings.
+Residual risks: validation is structural text-search evidence and cannot prevent
+future phrasing drift by itself.
 
 # Dependencies
 
@@ -164,3 +199,11 @@ Residual risks:
 # Journal
 
 - 2026-05-02T18:58:43Z: Created from council finding `CR-012`.
+- 2026-05-02T21:30:17Z: Compiled Ralph packet
+  `packet:ralph-ticket-cmdroute-20260502T213017Z` and moved ticket to `active`.
+- 2026-05-02T21:32:25Z: Ralph iteration replaced route-peer command wording,
+  recorded `evidence:command-route-wording-validation`, and moved ticket to
+  `review_required` for mandatory oracle critique.
+- 2026-05-02T21:37:28Z: Mandatory oracle critique
+  `critique:command-route-wording-review` passed with no findings. Recorded
+  retrospective / promotion disposition and accepted closure.

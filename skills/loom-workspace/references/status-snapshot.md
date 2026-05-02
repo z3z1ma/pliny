@@ -21,7 +21,7 @@ acceptance, suspicious, or ready for the next bounded move.
    `complete_pending_acceptance`.
 4. For the target slice, note linked owners and support records.
 5. Surface contradictions and drift.
-6. Recommend the next owner layer, workflow, or optional command. When naming a
+6. Recommend the next owner layer or workflow route. When naming a
    route value, use the shared tokens from
    `skills/loom-records/references/route-vocabulary.md`.
 
@@ -134,4 +134,4 @@ git status --short
 - status snapshot
 - active, blocked, review, and acceptance queues
 - contradictions or stale state
-- best next owner layer, workflow, or optional command and why
+- best next owner layer or workflow route and why

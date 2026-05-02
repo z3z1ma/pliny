@@ -43,4 +43,4 @@ rg -n '<term>' .loom/{wiki,research,specs,plans,tickets,critique,evidence} --glo
 - pages scanned
 - findings table: page, classification, evidence, action
 - mechanical fixes applied
-- recommended next owner layer, workflow, or optional command per finding
+- recommended next owner layer or workflow route per finding

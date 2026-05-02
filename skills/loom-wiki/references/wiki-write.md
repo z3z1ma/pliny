@@ -40,7 +40,7 @@ have to re-derive the explanation from tickets, critique, research, or chat.
 - key claims promoted
 - accepted sources used
 - related pages or follow-up knowledge gaps
-- recommended next owner layer, workflow, or optional command
+- recommended next owner layer or workflow route
 
 ## Guardrails
 
