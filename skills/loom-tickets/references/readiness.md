@@ -35,10 +35,11 @@ this checklist passes.
 - the likely evidence path is visible
 - critique risk class matches frontmatter `risk_class`; required profiles are
   explicit when review is expected
-- the next route is explicit using the shared route vocabulary: `local_edit`,
-  `ralph`, `critique`, `wiki`, `retrospective`, `evidence`, `research`, `spec`,
-  `plan`, `ticket`, `acceptance_review`, `ask_user`, `workspace_status`,
-  `records_repair`, `continue`, or `stop`
+- the next route is explicit in `# Next Move / Next Route` or equivalent prose,
+  using the shared route vocabulary: `local_edit`, `ralph`, `critique`, `wiki`,
+  `retrospective`, `evidence`, `research`, `spec`, `plan`, `ticket`,
+  `acceptance_review`, `ask_user`, `workspace_status`, `records_repair`,
+  `continue`, or `stop`
 - the ticket is small enough to fit one bounded iteration or a short sequence of
   clearly staged iterations
 
@@ -47,8 +48,9 @@ Refine the ticket first.
 
 ## Route Readiness
 
-Use `# Route Readiness` or equivalent prose to make the next governed route
-specific without implying that every handoff is Ralph.
+Use `# Route Readiness` or equivalent prose to make the route named in `# Next
+Move / Next Route` specific without implying that every handoff is Ralph. Do not
+use it as a second route-token selector or duplicate the allowed-token list.
 
 Use `skills/loom-records/references/route-vocabulary.md` for route-token grammar;
 do not use ticket lifecycle statuses such as `ready`, `active`,

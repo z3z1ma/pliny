@@ -1,11 +1,11 @@
 ---
 id: ticket:tkrout5
 kind: ticket
-status: ready
+status: closed
 change_class: record-hygiene
 risk_class: medium
 created_at: 2026-05-02T22:03:13Z
-updated_at: 2026-05-02T22:03:13Z
+updated_at: 2026-05-02T22:55:23Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,12 @@ links:
     - initiative:skills-corpus-template-grammar-safety-pass
   plan:
     - plan:skills-corpus-template-grammar-safety-pass
+  packet:
+    - packet:ralph-ticket-tkrout5-20260502T224954Z
+  evidence:
+    - evidence:ticket-route-field-validation
+  critique:
+    - critique:ticket-route-field-ownership-review
 external_refs: {}
 depends_on: []
 ---
@@ -65,8 +71,12 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-template-grammar-safety-pass#OBJ-005` | pending | pending | open |
-| `ticket:tkrout5#ACC-001` through `ticket:tkrout5#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-template-grammar-safety-pass#OBJ-005` | `evidence:ticket-route-field-validation` | `critique:ticket-route-field-ownership-review` | supported |
+| `ticket:tkrout5#ACC-001` | `evidence:ticket-route-field-validation` | `critique:ticket-route-field-ownership-review` | supported |
+| `ticket:tkrout5#ACC-002` | `evidence:ticket-route-field-validation` | `critique:ticket-route-field-ownership-review` | supported |
+| `ticket:tkrout5#ACC-003` | `evidence:ticket-route-field-validation` | `critique:ticket-route-field-ownership-review` | supported |
+| `ticket:tkrout5#ACC-004` | `evidence:ticket-route-field-validation` | `critique:ticket-route-field-ownership-review` | supported |
+| `ticket:tkrout5#ACC-005` | `critique:ticket-route-field-ownership-review` | oracle critique passed with no findings | supported |
 
 # Execution Notes
 
@@ -79,23 +89,19 @@ None.
 
 # Next Move / Next Route
 
-Ralph implementation packet after prior plan-sequence tickets close.
+Closed. Commit and push this ticket before continuing to `ticket:accspec6`.
 
 # Route Readiness
 
-Route: ralph
-
-Bounded iteration: ticket route field ownership cleanup.
-Write boundary: targeted ticket template/reference wording, this ticket, one
-evidence record, one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Acceptance review readiness:
+Evidence `evidence:ticket-route-field-validation` and oracle critique
+`critique:ticket-route-field-ownership-review` support closure with no findings.
 
 # Evidence
 
-Expected: before/after searches for `Next Move / Next Route`, `Route Readiness`,
-`Route:`, and `git diff --check`.
+Recorded: `evidence:ticket-route-field-validation` covers before/after searches
+for `Next Move / Next Route`, `Route Readiness`, `Route:`, route-token lists,
+`next route`, and `git diff --check`.
 
 # Critique Disposition
 
@@ -113,9 +119,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:ticket-route-field-ownership-review` - no findings; mandatory oracle
+critique passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -123,18 +130,34 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Ticket route-token ownership was promoted directly into
+  `skills/loom-tickets/templates/ticket.md` and
+  `skills/loom-tickets/references/readiness.md`.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the ticket grammar product wording itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+touched ticket guidance.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-02T22:55:23Z
+Basis: Ralph packet `packet:ralph-ticket-tkrout5-20260502T224954Z`; evidence
+`evidence:ticket-route-field-validation`; oracle critique
+`critique:ticket-route-field-ownership-review` with no findings.
+Residual risks: validation is structural/manual. Evidence summarizes route-field
+search results rather than preserving full raw `rg` output; exact replay would
+require rerunning the recorded search.
 
 # Dependencies
 
@@ -143,3 +166,14 @@ Plan sequence follows `ticket:pktprov4`.
 # Journal
 
 - 2026-05-02T22:03:13Z: Created from council finding `NC-005`.
+- 2026-05-02T22:49:54Z: Compiled Ralph packet
+  `packet:ralph-ticket-tkrout5-20260502T224954Z` and moved ticket to `active`.
+- 2026-05-02T22:50:50Z: Ralph iteration updated ticket route-field guidance,
+  recorded `evidence:ticket-route-field-validation`, and moved ticket to
+  `review_required` for mandatory oracle critique.
+- 2026-05-02T22:53:18Z: Parent reconciled Ralph output, normalized claim matrix
+  statuses to canonical claim-coverage vocabulary, expanded evidence notes, and
+  marked the Ralph packet consumed.
+- 2026-05-02T22:55:23Z: Mandatory oracle critique
+  `critique:ticket-route-field-ownership-review` passed with no findings. Parent
+  recorded retrospective / promotion disposition and accepted closure.
