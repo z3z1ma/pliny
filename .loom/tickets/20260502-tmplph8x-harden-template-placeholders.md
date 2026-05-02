@@ -1,11 +1,11 @@
 ---
 id: ticket:tmplph8x
 kind: ticket
-status: ready
+status: closed
 change_class: record-hygiene
 risk_class: medium
 created_at: 2026-05-02T18:58:43Z
-updated_at: 2026-05-02T18:58:43Z
+updated_at: 2026-05-02T20:46:18Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,12 @@ links:
     - initiative:skills-corpus-council-precision-pass
   plan:
     - plan:skills-corpus-council-precision-pass
+  packet:
+    - packet:ralph-ticket-tmplph8x-20260502T203733Z
+  evidence:
+    - evidence:template-placeholder-validation
+  critique:
+    - critique:template-placeholder-safety-review
 external_refs: {}
 depends_on:
   - ticket:retrod3p
@@ -68,37 +74,43 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-council-precision-pass#OBJ-008` | pending | pending | open |
-| `ticket:tmplph8x#ACC-001` through `ticket:tmplph8x#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-council-precision-pass#OBJ-008` | `evidence:template-placeholder-validation` | `critique:template-placeholder-safety-review` | supported |
+| `ticket:tmplph8x#ACC-001` | `evidence:template-placeholder-validation` | `critique:template-placeholder-safety-review` | supported |
+| `ticket:tmplph8x#ACC-002` | `evidence:template-placeholder-validation` | `critique:template-placeholder-safety-review` | supported |
+| `ticket:tmplph8x#ACC-003` | `evidence:template-placeholder-validation` | `critique:template-placeholder-safety-review` | supported |
+| `ticket:tmplph8x#ACC-004` | `evidence:template-placeholder-validation` | `critique:template-placeholder-safety-review` | supported |
+| `ticket:tmplph8x#ACC-005` | `critique:template-placeholder-safety-review` | oracle critique passed with no findings | supported |
 
 # Execution Notes
 
 Likely touched surfaces are `skills/**/templates/*.md` only unless references need
 small supporting wording.
 
+Ralph iteration `packet:ralph-ticket-tmplph8x-20260502T203733Z` audited and
+hardened template placeholders without eliminating useful examples or adding
+runtime validation.
+
 # Blockers
 
-Depends on tickets `retrod3p`, `authst4p`, and `pktgram5`.
+None - tickets `retrod3p`, `authst4p`, and `pktgram5` are closed.
 
 # Next Move / Next Route
 
-Ralph implementation packet after dependencies close.
+Closed. Commit and push this ticket before continuing to `ticket:evshape9`.
 
 # Route Readiness
 
-Route: Ralph implementation packet
+Route: acceptance_review
 
-Bounded iteration: audit and harden template placeholders.
-Write boundary: `skills/**/templates/*.md`, this ticket, one evidence record, one
-critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, placeholder searches, evidence, ticket
-update, and critique recommendation.
+Acceptance review readiness:
+Evidence `evidence:template-placeholder-validation` and oracle critique
+`critique:template-placeholder-safety-review` support closure with no findings.
 
 # Evidence
 
-Expected: targeted searches for `<`, `|`, `ACC-001`, `TBD`, generic placeholder
-phrases, and `git diff --check`.
+Recorded: `evidence:template-placeholder-validation` with targeted before/after
+searches for `ACC-001`, pipe-style enum placeholders, empty write-scope arrays,
+angle-bracket placeholders, and `git diff --check`.
 
 # Critique Disposition
 
@@ -115,24 +127,53 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+Recorded in `critique:template-placeholder-safety-review`:
 
-Disposition status: pending
+- None - no findings.
+
+Disposition status: completed
 
 Deferral / not-required rationale:
 
-Not deferred.
+Not deferred. Mandatory oracle critique passed with no findings.
+
+# Retrospective / Promotion Disposition
+
+Disposition status: completed
+
+Promoted:
+
+- Placeholder-safety improvements were promoted directly into the copied
+  templates that own the unsafe defaults:
+  `skills/loom-critique/templates/critique-packet.md`,
+  `skills/loom-critique/templates/critique.md`,
+  `skills/loom-drive/templates/outer-loop-handoff.md`,
+  `skills/loom-ralph/templates/ralph-packet.md`,
+  `skills/loom-specs/templates/spec.md`,
+  `skills/loom-tickets/templates/ticket.md`, and
+  `skills/loom-wiki/templates/wiki-packet.md`.
+
+Deferred / not-required rationale:
+
+Not deferred. The durable lesson was promoted into the affected product
+templates; no separate wiki page, research record, spec, constitution decision,
+or memory entry is needed.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted guidance now lives in the
+template surfaces operators copy.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-02T20:46:18Z
+Basis: Ralph packet `packet:ralph-ticket-tmplph8x-20260502T203733Z`; evidence
+`evidence:template-placeholder-validation`; oracle critique
+`critique:template-placeholder-safety-review` with no findings.
+Residual risks: placeholder validation is structural and search-based; useful
+examples and compact metadata placeholders remain where they are visibly
+placeholder-shaped or instructional.
 
 # Dependencies
 
@@ -143,3 +184,11 @@ Residual risks:
 # Journal
 
 - 2026-05-02T18:58:43Z: Created from council finding `CR-008`.
+- 2026-05-02T20:37:33Z: Started Ralph iteration
+  `packet:ralph-ticket-tmplph8x-20260502T203733Z` from baseline
+  `dab8a56fed213d83770d7715d58445684c36cae1`.
+- 2026-05-02T20:40:40Z: Ralph child hardened high-risk template placeholders,
+  recorded `evidence:template-placeholder-validation`, and moved the ticket to
+  `review_required` for mandatory oracle critique.
+- 2026-05-02T20:46:18Z: Oracle critique passed with no findings. Recorded
+  acceptance and retrospective / promotion disposition; closed ticket.

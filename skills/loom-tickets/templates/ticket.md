@@ -2,8 +2,8 @@
 id: ticket:<token>
 kind: ticket
 status: proposed
-change_class: <record-hygiene|documentation-explanation|behavior-contract|code-behavior|protocol-authority|data-migration|security-sensitive|release-packaging>
-risk_class: <low|medium|high>
+change_class: "<TBD: choose one change class before saving>"
+risk_class: "<TBD: choose low, medium, or high before saving>"
 created_at: <UTC timestamp>
 updated_at: <UTC timestamp>
 scope:
@@ -44,10 +44,10 @@ here and cite the spec-owned acceptance IDs under `# Coverage`.
 
 If no spec owns the acceptance contract, this ticket may own ticket-local
 acceptance criteria. Write stable local IDs so evidence and critique can cite
-them, for example:
+them. Replace these example criteria before saving:
 
-- ACC-001: The bounded change produces the intended observable result.
-- ACC-002: Required evidence is linked before acceptance review.
+- ACC-001: <TBD: write the first ticket-local acceptance criterion>
+- ACC-002: <TBD: write the second ticket-local acceptance criterion, or remove>
 
 # Coverage
 
@@ -88,9 +88,11 @@ The next governed route token, using `skills/loom-records/references/route-vocab
 Name the next governed route and the information needed for that route. Use only
 the route sections that apply; remove or mark unrelated sections `N/A`.
 
-Route: ask_user | workspace_status | records_repair | research | spec | plan |
-ticket | local_edit | ralph | evidence | critique | wiki | retrospective |
-acceptance_review | continue | stop
+Route: <TBD: choose one route token before saving>
+
+Allowed route tokens: `ask_user`, `workspace_status`, `records_repair`,
+`research`, `spec`, `plan`, `ticket`, `local_edit`, `ralph`, `evidence`,
+`critique`, `wiki`, `retrospective`, `acceptance_review`, `continue`, or `stop`.
 
 Local edit readiness:
 Bounded edit:
@@ -126,14 +128,14 @@ What evidence exists or is expected.
 
 # Critique Disposition
 
-Risk class: low | medium | high
+Risk class: <TBD: repeat frontmatter risk_class>
 
 Must match frontmatter `risk_class`. The frontmatter field is the ticket's
 canonical risk classification; this section restates that risk only to explain
 the critique policy and acceptance disposition. If the two differ, reconcile the
 ticket before readiness, critique routing, or closure.
 
-Critique policy: optional | recommended | mandatory
+Critique policy: <TBD: choose optional, recommended, or mandatory>
 
 Policy rationale:
 
@@ -161,7 +163,7 @@ evidence, acceptance provenance, or linked follow-up tickets as appropriate.
 Withdrawn findings require critique rationale and may be cited for audit history
 without ticket-owned finding disposition.
 
-Disposition status: pending | blocking | completed | deferred | not_required
+Disposition status: <TBD: choose pending, blocking, completed, deferred, or not_required>
 
 Use `blocking` only when unresolved required critique currently blocks acceptance
 or dependent continuation. This status is a ticket-owned gate summary, not a
@@ -176,7 +178,7 @@ promotion routes. This section does not create a retrospective record kind or
 make retrospective replace acceptance; it tells acceptance review whether
 compounding work is resolved for this ticket.
 
-Disposition status: pending | blocking | completed | deferred | not_required
+Disposition status: <TBD: choose pending, blocking, completed, deferred, or not_required>
 
 - Use `pending` while implementation, critique, or acceptance review has not yet
   determined the retrospective need.

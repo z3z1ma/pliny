@@ -45,9 +45,9 @@ write `None - no findings` when no finding applies.
 
 ## FIND-<nnn>: Short finding title
 
-Severity: low | medium | high
-Confidence: low | medium | high
-State: open | withdrawn
+Severity: <TBD: choose low, medium, or high>
+Confidence: <TBD: choose low, medium, or high>
+State: <TBD: choose open or withdrawn>
 
 Observation:
 

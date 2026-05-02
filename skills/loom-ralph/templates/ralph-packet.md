@@ -5,12 +5,12 @@ packet_kind: ralph
 status: compiled
 target: ticket:<token>
 mode: execution
-change_class: <record-hygiene|documentation-explanation|behavior-contract|code-behavior|protocol-authority|data-migration|security-sensitive|release-packaging>
+change_class: "<TBD: choose one change class before saving>"
 # Optional when the parent wants packet-local risk carried explicitly:
-# risk_class: <low|medium|high>
-style: <reference-first|snapshot-first|hermetic>
-verification_posture: <test-first|observation-first|none>
-iteration: <positive integer>
+# risk_class: "<TBD: choose low, medium, or high before saving>"
+style: "<TBD: choose reference-first, snapshot-first, or hermetic before saving>"
+verification_posture: "<TBD: choose test-first, observation-first, or none before saving>"
+iteration: "<TBD: positive integer>"
 created_at: <UTC timestamp>
 updated_at: <UTC timestamp>
 scope:
@@ -18,12 +18,15 @@ scope:
   repositories:
     - repo:root
 child_write_scope:
-  records: []
-  paths: []
+  records:
+    - "<TBD: record refs the child may modify, or None - rationale>"
+  paths:
+    - "<TBD: paths or globs the child may modify, or None - rationale>"
 parent_merge_scope:
   records:
     - ticket:<token>
-  paths: []
+  paths:
+    - "<TBD: paths the parent must reconcile, or None - rationale>"
 source_fingerprint:
   git_commit: <sha or unknown>
   integration_remote: <remote name|none|unknown>

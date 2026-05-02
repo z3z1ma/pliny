@@ -19,10 +19,12 @@ source_snapshot:
 drive_checkpoint:
   anchor: <initiative id>
   active_tranche: <plan section or ticket ids>
-  gate_status: <clear|blocked>
+  gate_status: "<TBD: choose clear or blocked before saving>"
 write_scope:
-  records: []
-  paths: []
+  records:
+    - "<TBD: proposal-time record write refs, or None - no writes>"
+  paths:
+    - "<TBD: proposal-time paths, or None - no writes>"
 ---
 
 # Outer-Loop Synthesis Handoff

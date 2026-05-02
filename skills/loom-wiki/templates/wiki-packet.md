@@ -15,7 +15,8 @@ scope:
 child_write_scope:
   records:
     - wiki:<slug>
-  paths: []
+  paths:
+    - "<TBD: wiki page paths the child may modify, or None - rationale>"
 parent_merge_scope:
   records:
     - wiki:<slug>

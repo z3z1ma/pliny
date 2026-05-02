@@ -5,15 +5,16 @@ packet_kind: critique
 status: compiled
 target: ticket:<token>
 review_target:
-  kind: <record|code_change|pull_request|branch|commit|diff|external_summary|release_package|handoff_package>
+  kind: "<TBD: choose record, code_change, pull_request, branch, commit, diff, external_summary, release_package, or handoff_package>"
   summary: <one-line human-readable review target>
-  ref: <record ref | path | branch | commit | PR | package ID | none>
-  diff: <branch | commit range | PR | diff target | none>
-  paths: []
+  ref: "<TBD: record ref, path, branch, commit, PR, package ID, or none>"
+  diff: "<TBD: branch, commit range, PR, diff target, or none>"
+  paths:
+    - "<TBD: changed paths under review, or None - no path-specific target>"
 mode: review
-change_class: <record-hygiene|documentation-explanation|behavior-contract|code-behavior|protocol-authority|data-migration|security-sensitive|release-packaging>
+change_class: "<TBD: choose one change class before saving>"
 # Optional when the parent wants packet-local risk carried explicitly:
-# risk_class: <low|medium|high>
+# risk_class: "<TBD: choose low, medium, or high before saving>"
 style: reference-first
 created_at: <UTC timestamp>
 updated_at: <UTC timestamp>
@@ -22,8 +23,10 @@ scope:
   repositories:
     - repo:root
 child_write_scope:
-  records: []
-  paths: []
+  records:
+    - "<TBD: critique child write refs, or None - reviewer returns output only>"
+  paths:
+    - "<TBD: critique child write paths, or None - reviewer returns output only>"
 parent_merge_scope:
   records:
     - ticket:<token>

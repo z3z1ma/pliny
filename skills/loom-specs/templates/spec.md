@@ -32,7 +32,7 @@ What boundaries or limits shape the design.
 
 Concrete requirements the implementation must satisfy.
 
-- REQ-001: First stable requirement.
+- REQ-001: <TBD: write the first stable requirement before saving>
 
 # Scenarios
 
@@ -42,8 +42,7 @@ Representative usage and edge cases.
 
 What will count as acceptable behavior.
 
-- ACC-001: Given the relevant precondition, the expected outcome is observable
-  and supported by evidence.
+- ACC-001: <TBD: write the first acceptance criterion before saving>
 
 # Open Questions
 
