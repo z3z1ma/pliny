@@ -37,19 +37,43 @@ metrics, roadmap commitments, or ticket progress state.
 
 Why the order looks the way it does.
 
+# Claim / Acceptance Coverage
+
+Map upstream initiative objectives, spec claim IDs, and ticket-local acceptance
+criteria into downstream tickets. The plan routes claim coverage; tickets own live
+coverage state, evidence disposition, and acceptance decisions.
+
+| Source claim / acceptance ID | Downstream ticket | Coverage expectation | Evidence / critique route | Notes |
+| --- | --- | --- | --- | --- |
+| `<record>#<claim-or-ACC>` | `ticket:<token>` | What the ticket must cover | Expected evidence or critique | `None - reason` only when no claim-bearing source applies |
+
 # Execution Waves
 
 Use when multiple tickets can be sequenced or run independently from the plan.
 
+Do not require parallel execution by default. Before any sibling Ralph work runs
+in parallel, record the independence and write scope overlap check here. Real
+waves require a concrete non-overlap summary; write `None - reason` only when no
+parallel wave applies.
+
 Wave 1:
 
-List real ticket IDs, why they can run independently, and expected child write
-scope. If no wave applies, write `None - reason`.
+List real ticket IDs, why they can run independently, expected packet
+`child_write_scope` or likely write scope, dependency/contention checks, and the
+parent reconciliation route. If no wave applies, write `None - reason`.
 
 Wave 2:
 
-List real ticket IDs and dependencies on prior wave results. If no wave applies,
-write `None - reason`.
+List real ticket IDs, dependencies on prior wave results, any changed write scope
+overlap risk, and parent integration validation. If no wave applies, write
+`None - reason`.
+
+Wave readiness table:
+
+| Wave | Tickets | Independent because | Expected `child_write_scope` / write scope overlap check | Dependency / shared-state check | Parent reconciliation |
+| --- | --- | --- | --- | --- | --- |
+| `Wave 1` | `ticket:<token-a>`, `ticket:<token-b>` | No same-wave dependency | `ticket:<token-a>` writes `<path-a>`; `ticket:<token-b>` writes `<path-b>`; no overlapping `child_write_scope` paths | No generated file, lockfile, migration, or stateful contention | Ticket-owned update plus evidence/critique route |
+| No wave | `None - reason` | `None - reason` | `None - reason` | `None - reason` | Continue with sequential ticket route |
 
 # Risks
 
@@ -61,6 +85,8 @@ How the work under this plan should generally be evidenced or validated.
 
 # Plan Readiness Review
 
+Claim coverage:
+
 Spec / acceptance coverage:
 
 Placeholder scan:
@@ -68,6 +94,10 @@ Placeholder scan:
 Ticket-sized slices:
 
 Likely write scopes:
+
+Parallel / wave independence:
+
+Expected packet `child_write_scope` / write scope overlap check:
 
 Likely verification posture:
 
