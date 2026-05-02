@@ -70,10 +70,16 @@ workspaces.
 ## External References As Support Surfaces
 
 Use `external_refs:` for outside systems, external documents, releases, issues,
-pull requests, or package surfaces that help explain provenance or navigation.
-External refs are graph aids and support surfaces. They can request, mirror, or
-package Loom work, but they do not own live state, intended behavior, evidence
+pull requests, URLs, dashboards, generated context files, harness artifacts, or
+package surfaces that help explain provenance or navigation. External refs are
+graph aids and support surfaces. They can request, mirror, package, or navigate
+Loom work, but they do not own live state, intended behavior, evidence
 sufficiency, critique verdicts, or closure unless a constitution record says so.
+
+When an external surface changes, reconcile the Loom owner that owns the fact;
+then update the external mirror if useful. Do not treat issue tracker recency,
+PR text, dashboard state, generated context, or package metadata as newer truth
+than the relevant ticket, spec, evidence, critique, wiki, or constitution record.
 
 ## Anti-Patterns
 
@@ -84,4 +90,5 @@ Do not:
 - bury critique finding disposition only in prose
 - copy outside issue tracker state into `links:`
 - let `external_refs:` become a shadow ticket ledger
+- use PRs, dashboards, generated context, or release metadata as shadow closure
 - make `links:` a substitute for the acceptance dossier

@@ -24,6 +24,25 @@ Use a worktree when:
 You usually do not need a worktree for a tiny record edit, link fix, or local
 read-only inspection.
 
+## File-First Edit Safety
+
+Before writing in a shared or possibly stale checkout, re-read the target files
+you are about to change and inspect the current worktree state when repository
+changes matter. Preserve unrelated edits whether they came from the user,
+another agent, generated tooling, or an earlier ticket.
+
+Fail closed instead of guessing when:
+
+- the current file no longer matches the packet, ticket, or source snapshot you
+  are relying on
+- another edit overlaps your intended write scope
+- dirty or untracked files make ownership ambiguous
+- applying the change would require rewriting unrelated work
+
+Route stale or contradictory records through the layer that owns the fact. Do
+not treat the newest file, branch, PR text, generated context, or dashboard state
+as automatically authoritative.
+
 ## Placement
 
 Place worktrees outside the tracked repository root unless the project already

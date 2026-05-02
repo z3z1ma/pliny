@@ -15,6 +15,8 @@ creating a second source of truth.
 7. Dangling follow-up: critique findings or acceptance gaps with no ticket.
 8. Lifecycle drift: non-ticket statuses outside the shared lifecycle grammar.
 9. Coverage drift: claim IDs that no longer resolve to the intended source.
+10. Stale or contradictory records: two records, support surfaces, or working
+    notes disagree about the same fact.
 
 ## Repair Risk
 
@@ -51,6 +53,12 @@ rg -n 'REQ-[0-9]{3}|ACC-[0-9]{3}|CLAIM-[0-9]{3}' .loom --glob '*.md'
 - lifecycle ambiguity -> `loom-records`
 - coverage drift -> `loom-specs`, `loom-tickets`, or
   `skills/loom-tickets/references/acceptance-gate.md`
+- stale or contradictory records -> identify which layer owns the disputed fact,
+  update or route that owner, and simplify the non-owner
+
+Do not resolve drift by newest timestamp, most recent file edit, or external
+surface recency. Loom does not use latest-file-wins semantics. The owning layer
+for the disputed truth decides the repair path.
 
 ## Done Means
 

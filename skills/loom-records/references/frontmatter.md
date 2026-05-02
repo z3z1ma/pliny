@@ -52,7 +52,7 @@ proposal, may use its own `write_scope` without becoming a packet family or a
 canonical truth owner.
 
 Most canonical records may also carry optional `external_refs` when outside
-systems request, mirror, or package the work.
+systems request, mirror, package, or help navigate the work.
 
 ## Support-Layer Memory Exception
 
@@ -122,9 +122,10 @@ Typed links are not a substitute for prose, but they make the graph legible to s
 
 ## External References
 
-Use `external_refs` for outside systems. External systems can request, mirror,
-or package Loom work. They do not own Loom truth unless the constitution says
-so.
+Use `external_refs` for outside systems. Issue trackers, pull requests, URLs,
+dashboards, generated context files, harness artifacts, and package or release
+surfaces can request, mirror, package, or help navigate Loom work. They do not
+own Loom truth unless the constitution says so.
 
 Example:
 
@@ -146,4 +147,10 @@ Loom owner record needs to preserve it.
 
 External references are support surfaces. They may prove provenance or help a
 future operator find a mirrored request, issue, pull request, package, document,
-or board card, but they do not outrank canonical Loom records.
+generated context artifact, dashboard, harness artifact, release surface, or
+board card, but they do not outrank canonical Loom records.
+
+If an external reference disagrees with Loom, update or route the canonical owner
+record first, then mirror or correct the external surface as follow-through. Do
+not let external references own live state, intended behavior, evidence
+sufficiency, critique verdicts, or closure.

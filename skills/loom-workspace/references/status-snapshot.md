@@ -76,6 +76,28 @@ Do not create a separate resume ledger, hidden scratchpad, generated context fil
 requirement, or canonical memory dependency. If a future agent would need the
 fact for correctness, put it in the layer that owns that fact before compaction.
 
+## Scratchpad Avoidance
+
+Do not create generic `scratch.md`, `notes.md`, temporary junk-drawer files, or
+generated context files to carry truth that already has an owner layer. They are
+easy to miss on resume and quickly become shadow ledgers.
+
+Route scratchpad-like material to the smallest correct owner instead:
+
+- live state, blockers, progress, acceptance disposition, and next route -> ticket
+- observed command output, validation artifacts, screenshots, or reproduction logs -> evidence
+- adversarial findings, verdicts, residual risks, or required follow-up -> critique
+- synthesis, tradeoffs, rejected options, and null results -> research
+- accepted explanation or reusable workflow knowledge -> wiki
+- support-only reminders, retrieval cues, or pointers to owners -> memory
+- intended behavior -> spec
+- sequencing or rollout strategy -> plan
+- principles, constraints, and citable decisions -> constitution
+
+External trackers, pull requests, dashboards, harness artifacts, generated
+context files, and package or release surfaces may help navigate or mirror the
+work. They still do not replace the owner update needed for a truthful resume.
+
 ## Drift Signals
 
 - ticket says `review_required` but no critique path exists

@@ -1,11 +1,11 @@
 ---
 id: ticket:233cfdeb
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-02T08:46:28Z
-updated_at: 2026-05-02T09:28:53Z
+updated_at: 2026-05-02T10:40:45Z
 scope:
   kind: repository
   repositories:
@@ -19,6 +19,11 @@ links:
     - research:skills-corpus-council-review
   evidence:
     - evidence:skills-corpus-council-review
+    - evidence:scratchpad-external-concurrency-validation
+  critique:
+    - critique:scratchpad-external-concurrency-review
+  packet:
+    - packet:ralph-ticket-233cfdeb-20260502T102943Z
   plan:
     - plan:skills-corpus-protocol-sharpening
   supersedes:
@@ -91,8 +96,8 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-protocol-sharpening#OBJ-003` | implementation evidence pending | critique recommended | open |
-| `research:skills-corpus-council-review#CLAIM-007` | `evidence:skills-corpus-council-review` supports need; implementation evidence pending | critique recommended | supported_pending_review |
+| `initiative:skills-corpus-protocol-sharpening#OBJ-003` | `evidence:scratchpad-external-concurrency-validation` | `critique:scratchpad-external-concurrency-review` | supported |
+| `research:skills-corpus-council-review#CLAIM-007` | `evidence:skills-corpus-council-review`; `evidence:scratchpad-external-concurrency-validation` | `critique:scratchpad-external-concurrency-review` | supported |
 
 # Execution Notes
 
@@ -101,13 +106,11 @@ Keep examples concrete and owner-routed.
 
 # Blockers
 
-Do not start until shared semantic/external reference grammar and resume guidance
-have landed or been intentionally deferred.
+None. Dependencies `ticket:4e8ebe92` and `ticket:1a12d9ff` are closed.
 
 # Next Move / Next Route
 
-Ralph implementation packet or local edit for scratchpad, external reference, and
-concurrency guidance.
+Closed. Continue with the next sequenced plan ticket, `ticket:795fa0f4`.
 
 # Ralph Readiness
 
@@ -139,12 +142,13 @@ Expected output contract:
 
 # Evidence
 
-Expected:
+Recorded:
 
-- `git diff --check`
-- targeted grep checks for scratchpad, external references, re-read, concurrency,
-  stale records, and latest-file wording
-- manual check that guidance does not create a new ledger
+- `evidence:scratchpad-external-concurrency-validation`
+- `git diff --check` passed with no output.
+- Targeted searches confirmed scratchpad routing, external-reference lifecycle,
+  re-read and preserve-unrelated-change guidance, latest-file-wins rejection, and
+  the absence of a new required lock/daemon/helper/index workflow.
 
 # Critique Disposition
 
@@ -164,28 +168,34 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+All findings resolved in `critique:scratchpad-external-concurrency-review`.
 
-Disposition status: pending
+Disposition status: complete
 
 Deferral / not-required rationale:
 
-None yet.
+Not deferred. Oracle critique is recorded in
+`critique:scratchpad-external-concurrency-review`.
 
 # Wiki Disposition
 
-Pending. If scratchpad routing becomes a common operator problem, promote a short
-workflow explanation during retrospective.
+Deferred intentionally. The accepted guardrail guidance now lives in the owner
+skill surfaces. No separate wiki page is needed for this ticket; the final
+corpus-wide validation ticket may still choose broader wiki promotion.
 
 # Acceptance Decision
 
-Accepted by:
+Accepted by: OpenCode parent agent
 
-Accepted at:
+Accepted at: 2026-05-02T10:40:45Z
 
-Basis:
+Basis: Ralph packet `packet:ralph-ticket-233cfdeb-20260502T102943Z`, validation
+evidence `evidence:scratchpad-external-concurrency-validation`, and final oracle
+critique `critique:scratchpad-external-concurrency-review` with all findings
+resolved.
 
-Residual risks:
+Residual risks: Validation is structural/manual and does not prove behavior in a
+real concurrent editing incident.
 
 # Dependencies
 
@@ -196,3 +206,11 @@ Residual risks:
 
 - 2026-05-02T08:46:28Z: Split from cancelled broad ticket `ticket:3uv5l5fh` as
   the scratchpad, external reference, and concurrency guidance slice.
+- 2026-05-02T10:29:43Z: Started Ralph iteration
+  `packet:ralph-ticket-233cfdeb-20260502T102943Z` for scratchpad, external
+  reference, and concurrency guidance.
+- 2026-05-02T10:33:42Z: Moved to review after Ralph implementation and structural
+  validation.
+- 2026-05-02T10:40:45Z: Accepted and closed after oracle critique low findings
+  were resolved, evidence was refreshed, and retrospective disposition was
+  recorded.
