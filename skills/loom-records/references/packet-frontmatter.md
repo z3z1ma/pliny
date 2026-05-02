@@ -4,7 +4,8 @@ Packet frontmatter is shared record grammar for durable packet support artifacts
 
 This reference owns the common packet metadata shape used by Ralph, critique, and
 wiki packet templates. Workflow skills still own their workflow-specific body
-contracts, review lenses, synthesis rules, and reconciliation procedure.
+contracts, family-specific frontmatter additions, review lenses, synthesis rules,
+and reconciliation procedure.
 
 Packets remain support artifacts. They are bounded handoff contracts and working
 pads; they do not become canonical truth owners for intended behavior, live
@@ -17,13 +18,15 @@ skill records a narrower packet-family exception.
 
 ```yaml
 ---
-id: packet:<packet-kind>-<target>-<UTC compact timestamp>
+id: packet:<packet-kind>-<encoded-target>-<UTC compact timestamp>
 kind: packet
 packet_kind: <ralph|critique|wiki>
 status: compiled
 target: <record ref or page slug>
 mode: <execution|review|synthesis>
 style: <reference-first|snapshot-first|hermetic>
+# Optional or family-specific fields may appear here, such as:
+# change_class, risk_class, iteration, verification_posture, review_target
 created_at: <UTC timestamp>
 updated_at: <UTC timestamp>
 scope:
@@ -82,6 +85,36 @@ links: {}
 - `sources`
 - `links`
 
+These fields are required for every current packet family. They make the support
+artifact routable, replayable enough for review, and explicit about child write
+authority and parent reconciliation authority.
+
+## Optional Shared And Family Fields
+
+The common shape intentionally separates required shared fields from additions
+that belong to particular packet families:
+
+- `change_class` is required by current Ralph and critique templates because
+  implementation and review packets use it to choose evidence, verification, and
+  critique posture. Wiki packets omit it by default; add it only when the wiki
+  workflow intentionally needs to carry the source change class for synthesis.
+- `risk_class` is optional shared grammar. Add it when the parent wants a packet
+  to repeat or narrow the ticket risk for the bounded handoff. It does not
+  replace ticket-owned critique disposition or acceptance gates.
+- `iteration` is required for Ralph packets. It is a positive integer naming the
+  bounded implementation iteration, and Ralph filenames should mirror it as an
+  `iter-<NN>` suffix. Critique and wiki packets omit it unless their owning skill
+  later defines a family-local sequence field.
+- `verification_posture` is required for Ralph packets and omitted by critique
+  and wiki packets unless those owning workflows define their own equivalent.
+- `review_target` is critique-family grammar. Critique templates include it so a
+  reviewer can identify the code change, artifact, PR, branch, commit, or record
+  under review.
+
+Do not make a field required for all packet families merely because one workflow
+needs it. Shared packet grammar coordinates handoff support; workflow ownership
+still follows `packet_kind` and the route selected by the truth being changed.
+
 ## Packet Family Values
 
 Use `packet_kind` to route the packet to its owning workflow:
@@ -102,6 +135,37 @@ Use `mode` to declare the packet's immediate work posture:
 
 Future packet families may define additional `packet_kind` or `mode` values in
 their owning skills, but shared templates should not invent values casually.
+
+## Packet IDs And Filenames
+
+Packet IDs use this shape:
+
+```text
+packet:<packet-kind>-<encoded-target-or-change-slug>-<UTC compact timestamp>
+```
+
+Encode record references for IDs and filenames by replacing `:` with `-` and by
+using lowercase slug/token text. For example, `ticket:abc123xy` becomes
+`ticket-abc123xy`.
+
+For critique packets, the encoded portion should name the packet `target` when
+the review is anchored to a Loom record, or an explicitly chosen lowercase
+change slug when the packet target is not the clearest discovery handle. Do not
+derive packet IDs or filenames from the structured `review_target` field by
+default; `review_target` describes the artifact, diff, PR, branch, commit, or
+record under review inside the packet body contract.
+
+Current family filename patterns are:
+
+- Ralph: `.loom/packets/ralph/<UTC compact timestamp>-ticket-<token>-iter-<NN>.md`
+- Critique: `.loom/packets/critique/<UTC compact timestamp>-<encoded-target-or-change-slug>.md`
+- Wiki: `.loom/packets/wiki/<UTC compact timestamp>-<encoded-target>.md`
+
+Use the same compact UTC timestamp in the packet ID and filename. Ralph packet
+IDs do not need to repeat `iteration`; the frontmatter `iteration` field and the
+filename `iter-<NN>` suffix carry that sequence for human and agent discovery.
+See `skills/loom-records/references/naming-and-ids.md` for the wider naming
+table.
 
 ## Packet Status Values
 
@@ -144,8 +208,8 @@ Valid Ralph values are:
 - `observation-first`
 - `none`
 
-Ralph packets should include this field because Ralph uses it to set child
-evidence obligations for an implementation iteration.
+Ralph packets must include this field because Ralph uses it to set child evidence
+obligations for an implementation iteration.
 
 Critique and wiki packets should omit `verification_posture` unless their owning
 workflow later defines a packet-local equivalent. Critique quality comes from the
@@ -155,8 +219,10 @@ accepted sources, clear citations, and parent reconciliation into wiki pages.
 ## Change And Risk Fields
 
 Use `change_class` when the packet executes or reviews a change whose evidence,
-critique, or verification route depends on the mutation class. Ralph and critique
-packet templates include it by default.
+critique, or verification route depends on the mutation class. Current Ralph and
+critique packet templates include it as required family grammar. Wiki packet
+templates omit it by default because wiki packets synthesize accepted
+understanding rather than execute or review the change itself.
 
 Use values from `skills/loom-records/references/change-class.md`:
 
@@ -169,8 +235,10 @@ Use values from `skills/loom-records/references/change-class.md`:
 - `security-sensitive`
 - `release-packaging`
 
-`risk_class` may be added when the parent wants the packet to carry the ticket's
-risk posture explicitly. Risk does not replace the ticket's critique disposition.
+`risk_class` may be added to any packet family when the parent wants the packet
+to carry the ticket's risk posture explicitly. Risk does not replace the ticket's
+critique disposition, and critique policy still gates ticket closure through the
+ticket.
 
 ## Scope And Reconciliation Fields
 
@@ -218,8 +286,10 @@ source_fingerprint:
 ```
 
 Before launch, the parent should compare this baseline against governing records,
-the resolved integration ref, and child-write-scope files. If the packet is
-materially stale, supersede it rather than asking the consumer to guess.
+the resolved integration ref, and child-write-scope files. At execution time, the
+packet consumer should stop and report `blocked` or `escalate` if those surfaces
+appear materially changed in a way that makes the contract unsafe. If the packet
+is materially stale, supersede it rather than asking the consumer to guess.
 
 ## Execution Context
 
@@ -251,6 +321,11 @@ context_budget:
   max_excerpt_lines_per_file: <integer or unknown>
   avoid_full_file_reads: <true|false>
 ```
+
+Current templates default to `posture: normal`, `max_source_files: 8`,
+`max_excerpt_lines_per_file: 80`, and `avoid_full_file_reads: true`. Use `tight`
+for very narrow record or code slices and `expansive` only when the parent is
+intentionally granting broader source reading.
 
 The budget is guidance for bounded work, not a substitute for judgment. A packet
 consumer may exceed it only when the packet or discovered evidence makes that

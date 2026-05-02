@@ -25,6 +25,16 @@ conditions, evidence obligations, and parent reconciliation.
 - stop conditions
 - output contract
 
+Ralph-specific frontmatter must include `change_class`,
+`verification_posture`, and `iteration`. Optional `risk_class` may repeat or
+narrow ticket risk for the packet, but the ticket still owns critique disposition
+and acceptance gates.
+
+Use `packet:ralph-ticket-<token>-<UTC compact timestamp>` as the packet ID and
+save the file as
+`.loom/packets/ralph/<UTC compact timestamp>-ticket-<token>-iter-<NN>.md`, where
+`iter-<NN>` matches frontmatter `iteration`.
+
 ## Strong packet body
 
 A strong packet usually includes:
@@ -69,8 +79,10 @@ source_fingerprint:
 ```
 
 Before launch, the parent checks whether governing records, resolved integration
-refs, or write-scope files changed materially since the packet was compiled. If
-yes, supersede the packet and compile a fresh one.
+refs, or write-scope files changed materially since the packet was compiled. The
+child should stop and report `blocked` or `escalate` if those surfaces appear
+materially different at execution time and the packet did not explicitly account
+for the difference. If yes, supersede the packet and compile a fresh one.
 
 ## Write And Merge Scope
 
@@ -114,15 +126,17 @@ Recommended frontmatter:
 
 ```yaml
 context_budget:
-  posture: tight
+  posture: normal
   max_source_files: 8
   max_excerpt_lines_per_file: 80
   avoid_full_file_reads: true
 ```
 
-The budget is guidance, not a substitute for judgment. A child may exceed it
-only when the packet or discovered evidence makes that necessary, and should
-say so in its output.
+Current templates default to `normal` for bounded but realistic source reading.
+Use `tight` for very narrow slices and `expansive` only when the parent
+intentionally grants broader inspection. The budget is guidance, not a substitute
+for judgment. A child may exceed it only when the packet or discovered evidence
+makes that necessary, and should say so in its output.
 
 ## Execution Context
 

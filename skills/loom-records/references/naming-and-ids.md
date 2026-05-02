@@ -29,9 +29,9 @@ These ID families may be durable and citeable, but they remain non-owner support
 grammar. They do not own objective state, live ticket state, acceptance, evidence
 sufficiency, critique verdicts, wiki truth, canonical truth, or packet lifecycle.
 
-- `packet:ralph-<target>-<UTC compact timestamp>`
-- `packet:critique-<ticket-or-change>-<UTC compact timestamp>`
-- `packet:wiki-<target>-<UTC compact timestamp>`
+- `packet:ralph-<encoded-target>-<UTC compact timestamp>`
+- `packet:critique-<encoded-target-or-change-slug>-<UTC compact timestamp>`
+- `packet:wiki-<encoded-target>-<UTC compact timestamp>`
 - `workspace:main`
 - support-local `workspace:<slug>` such as `workspace:harness`
 - support-local `support:<domain>-<slug>`
@@ -52,9 +52,9 @@ when their owner boundary and path conventions are explicit.
 | `spec` | `spec:<slug>` | canonical owner record | `.loom/specs/<slug>.md` |
 | `plan` | `plan:<slug>` | canonical owner record | `.loom/plans/<slug>.md` |
 | `ticket` | `ticket:<token>` | canonical live execution ledger | `.loom/tickets/<YYYYMMDD>-<token>-<short-slug>.md` |
-| `packet` with `packet_kind: ralph` | `packet:ralph-<target>-<UTC compact timestamp>` | non-canonical bounded contract | `.loom/packets/ralph/<UTC compact timestamp>-ticket-<token>-iter-01.md` |
-| `packet` with `packet_kind: critique` | `packet:critique-<ticket-or-change>-<UTC compact timestamp>` | non-canonical bounded contract | `.loom/packets/critique/<UTC compact timestamp>-<target>.md` |
-| `packet` with `packet_kind: wiki` | `packet:wiki-<target>-<UTC compact timestamp>` | non-canonical bounded contract | `.loom/packets/wiki/<UTC compact timestamp>-<target>.md` |
+| `packet` with `packet_kind: ralph` | `packet:ralph-<encoded-target>-<UTC compact timestamp>` | non-canonical bounded contract | `.loom/packets/ralph/<UTC compact timestamp>-ticket-<token>-iter-<NN>.md` |
+| `packet` with `packet_kind: critique` | `packet:critique-<encoded-target-or-change-slug>-<UTC compact timestamp>` | non-canonical bounded contract | `.loom/packets/critique/<UTC compact timestamp>-<encoded-target-or-change-slug>.md` |
+| `packet` with `packet_kind: wiki` | `packet:wiki-<encoded-target>-<UTC compact timestamp>` | non-canonical bounded contract | `.loom/packets/wiki/<UTC compact timestamp>-<encoded-target>.md` |
 | `critique` | `critique:<slug>` | canonical owner record | `.loom/critique/<slug>.md` |
 | `wiki` | `wiki:<slug>` | canonical owner record | `.loom/wiki/<category>/<slug>.md` |
 | `evidence` | `evidence:<slug>` | canonical owner record | `.loom/evidence/<slug>.md` |
@@ -113,6 +113,25 @@ the route by the truth being changed: implementation goes through Ralph, review
 through critique, and accepted explanation through wiki. Packets remain bounded
 contracts for child work; they do not own project truth or live execution state.
 
+Encode packet targets by turning a typed record reference into filename-safe text:
+replace the colon with a hyphen and keep the slug or token lowercase. For
+example, `ticket:abc123xy` becomes `ticket-abc123xy`, and
+`wiki:operator-guide` becomes `wiki-operator-guide`. If the target is already a
+page slug or change slug, use that slug directly.
+
+Critique packet IDs and filenames should encode the packet `target` or an
+explicitly chosen lowercase change slug for discovery. That encoded name is not
+the same thing as the critique packet's structured `review_target` field:
+`review_target` records the artifact, diff, PR, branch, commit, or record under
+review, while the packet ID and filename provide a stable support-artifact
+handle.
+
+Use the same compact UTC timestamp in both packet ID and filename. Ralph packet
+filenames also carry `iter-<NN>` for the bounded implementation sequence; that
+number must match frontmatter `iteration`. Ralph packet IDs do not need an
+iteration suffix because the timestamp and target identify the support artifact,
+while `iteration` describes the child handoff sequence.
+
 ## Filename Guidance
 
 ### Stable semantic records
@@ -137,9 +156,12 @@ The ticket's canonical ID should be only the token:
 
 Use timestamp + subsystem + target:
 
-- `.loom/packets/ralph/<UTC compact timestamp>-ticket-<token>-iter-01.md`
-- `.loom/packets/critique/<UTC compact timestamp>-<target>.md`
-- `.loom/packets/wiki/<UTC compact timestamp>-<target>.md`
+- `.loom/packets/ralph/<UTC compact timestamp>-ticket-<token>-iter-<NN>.md`
+- `.loom/packets/critique/<UTC compact timestamp>-<encoded-target-or-change-slug>.md`
+- `.loom/packets/wiki/<UTC compact timestamp>-<encoded-target>.md`
+
+The corresponding ID uses subsystem first and timestamp last, such as
+`packet:ralph-ticket-<token>-<UTC compact timestamp>`.
 
 ### Decisions
 

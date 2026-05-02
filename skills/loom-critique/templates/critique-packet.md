@@ -1,5 +1,5 @@
 ---
-id: packet:critique-<ticket-or-change>-<UTC compact timestamp>
+id: packet:critique-<encoded-target-or-change-slug>-<UTC compact timestamp>
 kind: packet
 packet_kind: critique
 status: compiled
@@ -9,6 +9,8 @@ review_target:
   diff: <branch | commit | PR | diff target>
 mode: review
 change_class: <record-hygiene|documentation-explanation|behavior-contract|code-behavior|protocol-authority|data-migration|security-sensitive|release-packaging>
+# Optional when the parent wants packet-local risk carried explicitly:
+# risk_class: <low|medium|high>
 style: reference-first
 created_at: <UTC timestamp>
 updated_at: <UTC timestamp>
@@ -61,6 +63,19 @@ Frontmatter follows `skills/loom-records/references/packet-frontmatter.md`.
 Critique owns this review packet's workflow; using packet grammar does not make
 the review Ralph-governed.
 
+Encode the packet `target` in packet IDs and filenames using
+`skills/loom-records/references/naming-and-ids.md`; for example,
+`ticket:abc123xy` becomes `ticket-abc123xy` in
+`.loom/packets/critique/<UTC compact timestamp>-ticket-abc123xy.md`. When a
+specific reviewed change needs a clearer discovery handle than the record target,
+choose an explicit lowercase change slug and use it consistently in the packet ID
+and filename.
+
+Do not conflate this encoded packet name with the structured `review_target`
+frontmatter field. `review_target` names the artifact, diff, PR, branch, commit,
+or record under review; the packet ID and filename name the support packet for
+routing and discovery.
+
 # Review Lens
 
 What kinds of weakness or risk the reviewer should focus on.
@@ -71,7 +86,8 @@ Named critique profiles to apply:
 # Change Class
 
 Declared above as `change_class`. Use it to choose the evidence and critique
-profiles most relevant to this review.
+profiles most relevant to this review. If optional `risk_class` is present, use
+it as review context only; the ticket still owns critique disposition.
 
 # Evidence Expectations
 
@@ -109,6 +125,11 @@ The questions the reviewer must answer.
 # Stop Conditions
 
 When the reviewer should escalate rather than keep guessing.
+
+Stop or return `blocked` if the declared `review_target`, source fingerprint,
+governing records, diff under review, or child/reviewer write boundary appears
+materially stale or inconsistent with the packet. Ask the parent for a fresh
+critique packet instead of silently reviewing a different change.
 
 # Output Contract
 

@@ -1,14 +1,16 @@
 ---
-id: packet:ralph-<target>-<UTC compact timestamp>
+id: packet:ralph-ticket-<token>-<UTC compact timestamp>
 kind: packet
 packet_kind: ralph
 status: compiled
 target: ticket:<token>
 mode: execution
 change_class: <record-hygiene|documentation-explanation|behavior-contract|code-behavior|protocol-authority|data-migration|security-sensitive|release-packaging>
+# Optional when the parent wants packet-local risk carried explicitly:
+# risk_class: <low|medium|high>
 style: <reference-first|snapshot-first|hermetic>
 verification_posture: <test-first|observation-first|none>
-iteration: 1
+iteration: <positive integer>
 created_at: <UTC timestamp>
 updated_at: <UTC timestamp>
 scope:
@@ -66,6 +68,10 @@ What larger chain constrains the work.
 Frontmatter follows `skills/loom-records/references/packet-frontmatter.md`;
 Ralph-specific body obligations follow `skills/loom-ralph/references/packet-contract.md`.
 
+Name packets using `packet:ralph-ticket-<token>-<UTC compact timestamp>` and save
+them as `.loom/packets/ralph/<UTC compact timestamp>-ticket-<token>-iter-<NN>.md`.
+The filename `iter-<NN>` suffix must match frontmatter `iteration`.
+
 Name intended behavior separately from current implementation reality when this
 packet touches code.
 
@@ -82,7 +88,9 @@ Curated excerpts, summaries, or directions to the important source records.
 # Change Class
 
 Declared above as `change_class`. Explain how this class affects evidence,
-critique, and verification posture for this iteration.
+critique, and verification posture for this iteration. If optional `risk_class`
+is present, explain whether it repeats or narrows the ticket risk; the ticket
+still owns critique disposition and acceptance gates.
 
 # Verification Targets
 
@@ -118,8 +126,8 @@ are written in Markdown.
 
 When the child should stop, block, or escalate instead of widening scope.
 
-Stop if governing records or child-write-scope files appear materially newer
-than the source fingerprint.
+Stop if governing records or child-write-scope files appear materially newer or
+otherwise materially different from the source fingerprint.
 
 For Git-backed work, stop if the resolved integration ref or worktree state no
 longer matches the declared execution context closely enough to trust the packet.
