@@ -161,8 +161,11 @@ Promote something into the wiki when one or more of these are true:
 - another agent would benefit from reading the page before touching nearby work
 
 Retrospective is the default promotion gate for non-trivial completed work.
-Direct wiki work is allowed when the ticket is explicitly a wiki/explanation
-task or when the parent records why retrospective is unnecessary.
+The ticket should record the broader retrospective / promotion disposition for
+closure; wiki disposition records only the route-specific wiki outcome when wiki
+is one selected promotion route. Direct wiki work is allowed when the ticket is
+explicitly a wiki/explanation task or when the parent records why retrospective
+is unnecessary.
 
 ## Wiki Source Rule
 
@@ -179,11 +182,13 @@ Its sources should be inspectable.
 ## Relationship To Tickets
 
 Tickets remain the live execution ledger.
-Wiki does not replace them.
+Wiki does not replace them, and wiki disposition does not replace the broader
+ticket-owned retrospective / promotion disposition.
 
 The relationship is:
 
-- tickets say what is happening
+- tickets say what is happening and whether closure follow-through is completed,
+  deferred, not required, or blocking
 - critique says what is risky or weak
 - wiki says what is now understood and worth preserving
 
@@ -215,9 +220,9 @@ Good wiki maintenance makes the knowledge base compound instead of rot.
 
 ## Retrospective As The Compounding Trigger
 
-Wiki promotion is not supposed to be ambient. It is supposed to happen at a concrete moment: the **retrospective** pass.
+Promotion is not supposed to be ambient. For non-trivial closure it should happen at a concrete moment: the **retrospective** pass.
 
-A retrospective is a named workflow — not a new record kind and not a new directory. It assimilates what was learned during a ticket, initiative, or recent work slice into the existing owner layers:
+A retrospective is a named workflow — not a new record kind and not a new directory. It assimilates what was learned during a ticket, initiative, or recent work slice into the existing owner layers, then the owning ticket or initiative records what was promoted, deferred, not required, or still blocking:
 
 - accepted explanations and workflows → wiki
 - durable investigation results, rejected options, null results → research

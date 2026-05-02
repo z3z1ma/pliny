@@ -23,7 +23,7 @@ If execution truth changed, the ticket should absorb it.
 - change class and its evidence / critique implications
 - claim coverage
 - dependencies
-- evidence / critique / wiki disposition
+- evidence / critique / retrospective / promotion disposition
 - journal updates
 - acceptance gate behavior
 - acceptance and closure decisions
@@ -35,7 +35,8 @@ If execution truth changed, the ticket should absorb it.
 - blockers changed
 - evidence changed
 - critique changed what the ticket should say
-- wiki follow-through happened or was deferred
+- wiki or broader promotion follow-through happened, was deferred, or was not
+  required
 - a Ralph run needs to be reconciled
 - acceptance or closure needs to be decided through the ticket-owned gate
 
@@ -71,8 +72,9 @@ Use `links:` for softer relationships such as critique, wiki, or related work.
 ## Acceptance Boundary
 
 Tickets own the live acceptance dossier: scoped acceptance IDs, evidence
-disposition, critique disposition, wiki disposition, accepted risk, blockers,
-and closure state.
+disposition, critique disposition, retrospective / promotion disposition,
+route-specific wiki disposition when applicable, accepted risk, blockers, and
+closure state.
 
 Specs own reusable acceptance contracts. Tickets may own ticket-local acceptance
 criteria only when no separate spec exists and the criteria are scoped to that

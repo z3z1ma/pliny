@@ -108,7 +108,7 @@ Review target:
 Required profiles:
 Evidence to review:
 
-Wiki / retrospective readiness:
+Wiki / retrospective / promotion readiness:
 Explanation or lesson to promote:
 Owner records to source:
 
@@ -169,9 +169,37 @@ critique verdict.
 
 Deferral / not-required rationale:
 
+# Retrospective / Promotion Disposition
+
+Ticket-owned closure summary for durable learning and follow-through across all
+promotion routes. This section does not create a retrospective record kind or
+make retrospective replace acceptance; it tells acceptance review whether
+compounding work is resolved for this ticket.
+
+Disposition status: pending | blocking | completed | deferred | not_required
+
+- Use `pending` while implementation, critique, or acceptance review has not yet
+  determined the retrospective need.
+- Use `blocking` when closure would be unsafe because required promotion or
+  prevention follow-through is incomplete.
+- Use `completed` when durable lessons were promoted into their existing owner
+  layers, or the retrospective pass completed and found no open follow-through.
+- Use `deferred` when promotion or prevention is intentionally moved to linked
+  follow-up work before closure.
+- Use `not_required` when the ticket has no durable lesson to promote.
+
+Promoted:
+
+List owner-record updates, or write `None - reason`.
+
+Deferred / not-required rationale:
+
 # Wiki Disposition
 
-Whether accepted explanation should be promoted into the wiki.
+Route-specific wiki outcome when accepted explanation is one of the promotion
+routes. Write `N/A - no wiki promotion route` when the broader retrospective /
+promotion disposition routes learning elsewhere or finds no durable wiki-worthy
+explanation.
 
 # Acceptance Decision
 

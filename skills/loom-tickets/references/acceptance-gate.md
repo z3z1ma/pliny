@@ -16,7 +16,10 @@ implementation.
 - critique policy: `optional`, `recommended`, or `mandatory`, plus rationale and
   ticket-owned disposition status `pending`, `blocking`, `completed`, `deferred`,
   or `not_required`
-- wiki disposition
+- retrospective / promotion disposition: ticket-owned status `pending`,
+  `blocking`, `completed`, `deferred`, or `not_required`, plus promoted owner
+  records or rationale
+- wiki disposition when wiki is one of the promotion routes
 - recent Ralph packet outcomes
 - relevant plan or initiative context
 
@@ -43,7 +46,8 @@ Acceptance Dossier =
   + Evidence
   + Critique Policy
   + Critique Disposition
-  + Wiki Disposition
+  + Retrospective / Promotion Disposition
+  + Wiki Disposition when applicable
   + Journal
   + Acceptance Decision when required
 ```
@@ -73,7 +77,11 @@ Acceptance Dossier =
 - For withdrawn findings, does the critique record provide withdrawal rationale,
   with any ticket citation limited to audit history rather than closure blocking?
 - Are finding references qualified, for example `critique:example-review#FIND-001`?
-- Is wiki or retrospective follow-through complete or truthfully deferred?
+- Is retrospective / promotion disposition resolved for closure as `completed`,
+  `deferred`, or `not_required`, or does it remain `blocking` because required
+  promotion or prevention follow-through is incomplete?
+- If wiki is one promotion route, does `# Wiki Disposition` record the
+  route-specific outcome without replacing the broader promotion decision?
 - If human signoff or accepted-risk provenance is required, does
   `# Acceptance Decision` name who accepted, when, on what basis, and with what
   residual risks?
@@ -122,6 +130,8 @@ for the shared boundary vocabulary.
 - Do not close over unresolved required critique.
 - Do not close over missing mandatory critique.
 - Do not close over missing evidence for covered claims or acceptance criteria.
+- Do not close over `pending` or `blocking` retrospective / promotion
+  disposition.
 - Do not close over open medium/high critique findings unless the ticket records
   `resolved`, `accepted_risk`, `superseded`, or `converted_to_follow_up` with the
   needed evidence, acceptance provenance, or linked follow-up ticket.

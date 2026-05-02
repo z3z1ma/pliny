@@ -14,6 +14,9 @@ It promotes what was learned into the owner layers that should carry it.
   enough for that owner layer
 - if there is nothing durable to promote, say so; do not invent artifacts to
   look productive
+- for tickets, the standard closure home for this outcome is
+  `# Retrospective / Promotion Disposition`; wiki disposition is only the
+  route-specific result when wiki is one selected owner layer
 
 ## Routing Pointers
 
@@ -29,3 +32,8 @@ route by owner:
 - changed durable policy or principle -> `loom-constitution`
 - observed artifact, challenged observation, or validation artifact -> `loom-evidence`
 - support-only continuity, retrieval cue, preference, or reminder -> `loom-memory`
+
+After routing, update the ticket or initiative that owns the closing work to say
+what was promoted, deferred, blocking, or not required. Retrospective remains a
+workflow over existing owner layers; it does not create a retrospective-only
+ledger and it does not replace ticket acceptance.
