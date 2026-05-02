@@ -29,7 +29,7 @@ objective criteria: <OBJ-IDs and satisfied | partial | open | blocked>
 current tranche: <plan section / wave / ticket IDs>
 active tickets: <ticket IDs and live states>
 hard gates: <clear | blocked, with blocker links>
-last route exit: <route, output link, reconciliation target>
+last route result: <route, output link, reconciliation target>
 last child output: <packet/handoff/evidence/critique link if applicable>
 pending operator question: <exact question or none>
 next route: <ask_user | research | spec | plan | ticket | Ralph | evidence | critique | wiki | retrospective | acceptance | stop>
@@ -52,7 +52,7 @@ When entering a workspace to resume a drive:
 
 ```bash
 rg -n 'status: (active|blocked|review_required|complete_pending_acceptance)' .loom/tickets
-rg -n 'Drive Continuity Snapshot|drive anchor:|next route:|resume instruction:' .loom/initiatives .loom/plans .loom/tickets
+rg -n 'continuity snapshot|drive anchor:|next route:|resume instruction:' .loom/initiatives .loom/plans .loom/tickets
 rg -n 'loom-drive|objective-driven|OBJ-[0-9]{3}' .loom
 ```
 
@@ -125,5 +125,5 @@ can reconcile combined results before dependent continuation.
 ## Stop Rule
 
 If the checkpoint cannot be found, cannot be updated, or does not make the next
-route recoverable, stop driving. The correct next action is to repair the owner
+route recoverable, stop driving. The correct next route is to repair the owner
 records or ask the user, not to continue from transcript intuition.

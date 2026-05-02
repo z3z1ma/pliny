@@ -2,14 +2,16 @@
 
 This reference supports the `loom-drive` skill.
 
-The drive loop needs a bridge between objective state and execution. This
-protocol turns objective gaps into the next bounded tranche and then into the next
-route.
+The drive loop needs a bridge between objective state and execution. Most drives
+only need a clear checkpoint and next route. Use this fuller protocol when
+objective gaps, review state, or sequencing ambiguity make the next bounded
+tranche unsafe to choose from the current ticket chain alone.
 
-## Objective Gap Matrix
+## Optional Objective Gap Summary
 
-Before creating tickets, write or update a compact gap matrix in the initiative,
-plan, or ticket chain. Use the owner layer that owns the fact being stated.
+When objective gaps are not already obvious from the initiative, plan, or ticket
+chain, write or update a compact gap summary in the owner layer that owns the
+fact being stated.
 
 ```text
 claim: <OBJ-001 | ACC-001 | ticket-local criterion>
@@ -21,15 +23,17 @@ candidate route: <route>
 notes: <why this gap matters now>
 ```
 
-The matrix does not create a new layer. It is a reasoning shape inside the owner
+The summary does not create a new layer. It is a reasoning shape inside the owner
 records that already own objective status, plan strategy, and ticket coverage.
-If `accepted_risk` appears in a gap matrix, cite the ticket-owned acceptance
-decision or critique disposition that accepted the risk; the matrix itself does
+If `accepted_risk` appears in a gap summary, cite the ticket-owned acceptance
+decision or critique disposition that accepted the risk; the summary itself does
 not accept risk.
 
-## Tranche Contract
+## Optional Tranche Detail
 
-A tranche is ready only when the parent can state:
+Use this fuller tranche detail only when dependencies, write-scope conflicts,
+claim coverage, or critique/evidence gates need more than a single ready ticket
+or next-route sentence. When needed, the parent should state:
 
 - objective or acceptance claims included in this tranche
 - claims explicitly excluded until a later tranche
@@ -43,7 +47,8 @@ A tranche is ready only when the parent can state:
 
 Prefer one to three tickets for a normal tranche. More is allowed only when the
 plan proves the tickets are independent and the parent can still reconcile the
-combined result honestly.
+combined result honestly. If there is already one bounded ready ticket and no
+sequencing ambiguity, do not manufacture a gap summary or tranche detail.
 
 ## Route Decision Priority
 
@@ -68,7 +73,7 @@ ticket or operator explicitly records a different rationale.
 This table prevents implementation from becoming the default answer. Shaping and
 review routes are first-class continuation outcomes.
 
-## Route Entry And Exit Criteria
+## Route Entry And Result Criteria
 
 - Research enters with a question and exits with evidence-backed conclusions or
   explicit uncertainty.
@@ -82,7 +87,7 @@ review routes are first-class continuation outcomes.
 - Wiki or retrospective enters with accepted learning and exits with durable
   explanation or promotion decisions.
 
-Every route exit must name the owner records that changed and the next route or
+Every route result must name the owner records that changed and the next route or
 stop condition.
 
 ## Reconciliation Targets

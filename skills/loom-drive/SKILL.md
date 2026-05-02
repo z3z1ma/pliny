@@ -47,11 +47,11 @@ When this skill activates, the parent accepts a drive contract:
 The contract is suspended when the objective can no longer be advanced safely
 from the recorded truth.
 
-## Continuity Contract
+## Drive Continuity
 
 The loop remains recoverable across sessions only when the current drive state is
-recorded in owner artifacts. Before executing downstream work, establish a continuity
-contract across existing layers:
+recorded in owner artifacts. Before executing downstream work, establish a drive
+checkpoint from existing layers:
 
 - initiative owns the objective, measurable success criteria, delegated autonomy,
   budget/time limits, and objective-level stop conditions
@@ -69,11 +69,11 @@ contract across existing layers:
   accepted explanation
 
 If a fresh agent could not resume from those records, stop driving and repair the
-continuity contract before launching more work.
+checkpoint before launching more work.
 
-Use `references/continuity-contract.md` for the Drive Continuity Snapshot
-convention that pins objective status, current tranche, and next action to
-existing owner-record sections.
+Use `references/continuity-contract.md` for the continuity snapshot convention:
+objective status, current tranche, and next route are pinned to existing
+owner-record sections instead of to a new ledger.
 
 Use `references/checkpoint-resume-protocol.md` before stopping, compacting,
 launching child work, or handing control to another route. If the checkpoint
@@ -173,8 +173,9 @@ boundaries.
    unrecorded conversation context.
 4. **Plan the next tranche** — decompose only enough work to produce bounded,
    independently legible tickets for the next useful step. Use
-   `references/tranche-decision-protocol.md` to turn objective gaps into a
-   tranche contract and next-route decision.
+   `references/tranche-decision-protocol.md` when objective gaps or sequencing
+   ambiguity require an optional gap summary or fuller tranche detail before the
+   next-route decision is safe.
 5. **Create or refine tickets** — tickets own live execution state, blockers,
    next move, critique disposition, acceptance decisions, evidence disposition,
    and closure.
@@ -260,8 +261,8 @@ Read immediately when activating `loom-drive`:
 1. `references/drive-loop.md` for the parent-loop checklist and routing rules.
 2. `references/continuity-contract.md` for the owner-record fields that must
    carry resumable drive state.
-3. `references/tranche-decision-protocol.md` for objective gap analysis,
-   tranche contracts, route priority, and reconciliation targets.
+3. `references/tranche-decision-protocol.md` for conditional objective-gap
+   summaries, optional tranche detail, route priority, and reconciliation targets.
 4. `references/checkpoint-resume-protocol.md` for hard safety gates, route
    federation, checkpoint updates, and deterministic resume.
 5. `skills/loom-workspace/references/routing.md` if the next owner layer or

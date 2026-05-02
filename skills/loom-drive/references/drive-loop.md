@@ -106,9 +106,10 @@ into the owning ticket before relying on it.
 A tranche is the next small set of work that advances the objective while keeping
 review and recovery tractable.
 
-Use `tranche-decision-protocol.md` to choose the tranche. Do not choose from
-intuition alone when objective criteria, evidence gaps, or critique state can
-determine the route.
+Use `tranche-decision-protocol.md` when objective criteria, evidence gaps,
+critique state, dependency order, or write-scope conflicts make the next tranche
+unclear. If the owner chain already names one bounded ready ticket and the next
+route is safe, do not create extra gap or tranche paperwork.
 
 A good tranche:
 
@@ -118,9 +119,10 @@ A good tranche:
 - names expected evidence and critique posture
 - leaves the next reassessment point obvious
 
-A tranche is not ready until it names included objective/spec claims, excluded
-claims, dependency order, likely write scopes, evidence/critique gates, and the
-reassessment point.
+A fuller tranche detail is only needed when those facts are not already clear
+from the owner chain. When using one, name included objective/spec claims,
+excluded claims, dependency order, likely write scopes, evidence/critique gates,
+and the reassessment point.
 
 Do not decompose the whole objective merely to look complete. Decompose enough to
 make the next safe progress step durable.

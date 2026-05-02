@@ -66,8 +66,8 @@ lifecycle status, and they do not participate in packet transitions such as
 ## Bound Context
 
 - Objective / initiative:
-- Drive Continuity Snapshot:
-- Drive Checkpoint / resume anchor:
+- Continuity snapshot:
+- Drive checkpoint / resume anchor:
 - Research:
 - Spec:
 - Plan:
@@ -83,10 +83,11 @@ Include:
 
 - current objective and measurable success criteria
 - known constraints and non-goals
-- objective gap matrix
-- tranche contract, including included/excluded claims, likely tickets,
+- optional objective gap summary, only when current owner records do not already
+  make the next gap clear
+- conditional tranche detail, including included/excluded claims, likely tickets,
   dependencies, write-scope conflict check, evidence/critique gates, and
-  reassessment point
+  reassessment point when those facts are needed for a safe route decision
 - gaps or ambiguities that block safe continuation
 - proposed owner-record changes
 - proposed tickets or ticket refinements

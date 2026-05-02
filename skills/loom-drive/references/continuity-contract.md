@@ -1,4 +1,4 @@
-# Continuity Contract
+# Drive Continuity
 
 This reference supports the `loom-drive` skill.
 
@@ -6,7 +6,7 @@ The drive loop is only real when it is recoverable. The parent may use the
 conversation to think, but the current drive state must live in existing Loom
 owner records before the agent depends on it for continuation.
 
-## Required Owner Mapping
+## Owner Mapping
 
 Use this map before launching tickets or child work.
 
@@ -47,11 +47,11 @@ fields inspectable in prose:
 These do not require new frontmatter keys. The requirement is that a fresh agent
 can find the facts in the owner records and continue honestly.
 
-## Drive Continuity Snapshot
+## Continuity Snapshot
 
-Use a Drive Continuity Snapshot as a prose convention inside existing owner
-records. It is a way to place the right facts in the records that already own
-them.
+Use a continuity snapshot as a prose convention inside existing owner records. It
+is a way to place the right facts in the records that already own them, not a new
+record kind or ledger.
 
 Recommended locations:
 
@@ -73,8 +73,8 @@ current tranche: <plan milestone / wave / purpose>
 active tickets: <ticket IDs and states>
 evidence state: <claim IDs with evidence links or gaps>
 critique state: <required | pending | blocking | completed | deferred | not_required, citing ticket truth>
-next action: continue | ask_user | critique | wiki | research | spec | plan | ticket | stop
-next action owner: <which layer must change next>
+next route: continue | ask_user | critique | wiki | research | spec | plan | ticket | stop
+next route owner: <which layer must change next>
 reason: <why this follows from current owner truth>
 ```
 
@@ -108,9 +108,9 @@ criteria supported: <claims and evidence links>
 criteria still open: <claims or gaps>
 ticket critique disposition status: pending | blocking | completed | deferred | not_required
 finding dispositions: <qualified finding refs with resolved | accepted_risk | superseded | converted_to_follow_up, or none>
-next action: continue | ask_user | critique | wiki | research | spec | plan | ticket | stop
+next route: continue | ask_user | critique | wiki | research | spec | plan | ticket | stop
 next tranche: <ticket IDs or plan update, if known>
-reason: <why this next action follows from the records>
+reason: <why this next route follows from the records>
 ```
 
 Put the answer in the layer that owns it. For example, objective-level status
@@ -118,11 +118,11 @@ belongs in the initiative, live execution and acceptance state belong in the
 ticket, critique findings and verdicts belong in critique, and sequencing changes
 belong in the plan. Drive snapshots cite those owners; they do not own acceptance.
 
-If the next action is `continue`, the plan or ticket chain should name the next
-tranche. If the next action is `ask_user`, record the exact question and why the
+If the next route is `continue`, the plan or ticket chain should name the next
+tranche. If the next route is `ask_user`, record the exact question and why the
 agent cannot safely infer the answer.
 
-## Continuity Check Before Child Work
+## Checkpoint Before Child Work
 
 Before launching Ralph or an outer-loop synthesis subagent, verify:
 
@@ -144,4 +144,4 @@ Stop driving and repair continuity when:
 - success is judged by vibes instead of linked criteria and evidence
 - critique state is remembered but not linked from the ticket
 - a subagent output is treated as authoritative before parent reconciliation
-- a fresh session would lose the reason for the next action
+- a fresh session would lose the reason for the next route
