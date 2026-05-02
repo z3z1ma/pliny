@@ -37,8 +37,10 @@ child_write_scope:
   records: []
   paths: []
 parent_merge_scope:
-  records: []
-  paths: []
+  records:
+    - <record ref | None - rationale>
+  paths:
+    - <path | None - rationale>
 source_fingerprint:
   git_commit: <sha or unknown>
   integration_remote: <remote name|none|unknown>
@@ -258,8 +260,15 @@ child_write_scope:
 parent_merge_scope:
   records:
     - ticket:<token>
-  paths: []
+    # or: None - <rationale for no parent record reconciliation>
+  paths:
+    - .loom/tickets/<ticket-file>.md
+    # or: None - <rationale for no parent path reconciliation>
 ```
+
+Do not leave `parent_merge_scope` empty. If a packet genuinely expects no parent
+record or path reconciliation, make that explicit with `None - <rationale>` so a
+future operator can tell the omission is intentional rather than forgotten.
 
 The child scope is not blanket authority to change project truth. If the packet
 allows a child to update canonical records, the child must still stay within the

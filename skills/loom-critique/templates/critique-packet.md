@@ -22,8 +22,13 @@ child_write_scope:
   records: []
   paths: []
 parent_merge_scope:
-  records: []
-  paths: []
+  records:
+    - ticket:<token>
+    - critique:<slug>
+    # or: None - <rationale for no parent record reconciliation>
+  paths:
+    - .loom/critique/<slug>.md
+    # or: None - <rationale for no parent path reconciliation>
 source_fingerprint:
   git_commit: <sha or unknown>
   integration_remote: <remote name|none|unknown>
@@ -62,6 +67,11 @@ the review.
 Frontmatter follows `skills/loom-records/references/packet-frontmatter.md`.
 Critique owns this review packet's workflow; using packet grammar does not make
 the review Ralph-governed.
+
+`parent_merge_scope` must name the ticket, critique record, evidence record, or
+other owner-layer targets the parent expects to reconcile, or explicitly say
+`None - <rationale>` when no parent merge target exists. Do not leave it empty or
+as placeholder-only `records: []` / `paths: []`.
 
 Encode the packet `target` in packet IDs and filenames using
 `skills/loom-records/references/naming-and-ids.md`; for example,
@@ -143,6 +153,11 @@ Return:
 
 The parent creates or updates real critique and ticket records during
 reconciliation; do not leave placeholder IDs in `parent_merge_scope`.
+
+After parent reconciliation, the parent records `# Parent Merge Notes` and moves
+this packet's `status` away from non-terminal `compiled` to the truthful terminal
+packet status: `consumed`, `superseded`, or `abandoned`. That lifecycle discipline
+does not make this critique packet a Ralph implementation packet.
 
 # Working Notes
 

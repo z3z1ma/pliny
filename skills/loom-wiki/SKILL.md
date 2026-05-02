@@ -88,6 +88,14 @@ You can add more page types if the project genuinely needs them.
 - the page cites the records or evidence that ground it
 - the page links outward and inward where that helps navigation
 - future agents can reuse the page instead of re-deriving it
+- when packetized wiki work used a wiki packet, `# Parent Merge Notes` say how
+  the synthesis output was reconciled into owner layers or why it was rejected
+- owner-layer reconciliation is explicit: wiki owns accepted explanation, while
+  tickets, specs, critique, evidence, plans, and constitution keep the truths
+  their layers own
+- after parent reconciliation of a used wiki packet, packet `status` is moved
+  from `compiled` to the truthful terminal packet status: `consumed`,
+  `superseded`, or `abandoned`
 
 ## Read In This Order
 

@@ -134,7 +134,9 @@ claim.
 
 ## Packet Transitions
 
-Use packet statuses as operational state, not as archival decoration:
+Use packet statuses as operational state, not as archival decoration. This
+packet lifecycle applies to current Ralph, critique, and wiki packet families;
+`packet_kind` still decides which workflow owns the packet body and route.
 
 Packet terminal statuses are `consumed`, `superseded`, and `abandoned`.
 `compiled` is non-terminal and means the packet is ready for launch or pending

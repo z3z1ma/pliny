@@ -104,6 +104,14 @@ The reviewer should use the packet and the diff as the main review surface.
 - the major findings are explicit
 - code findings cite files or lines when practical
 - follow-up implications are explicit
+- when packetized critique used a critique packet, `# Parent Merge Notes` say how
+  the reviewer output was reconciled into owner layers or why it was rejected
+- owner-layer reconciliation is explicit: critique owns findings and verdicts,
+  tickets own live execution state and acceptance disposition, and evidence/wiki
+  receive only the truths their layers own
+- after parent reconciliation of a used critique packet, packet `status` is moved
+  from `compiled` to the truthful terminal packet status: `consumed`,
+  `superseded`, or `abandoned`
 
 ## Read In This Order
 

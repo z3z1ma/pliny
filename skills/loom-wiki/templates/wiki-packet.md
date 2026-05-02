@@ -17,8 +17,13 @@ child_write_scope:
     - wiki:<slug>
   paths: []
 parent_merge_scope:
-  records: []
-  paths: []
+  records:
+    - wiki:<slug>
+    - ticket:<token>
+    # or: None - <rationale for no parent record reconciliation>
+  paths:
+    - .loom/wiki/<slug>.md
+    # or: None - <rationale for no parent path reconciliation>
 source_fingerprint:
   git_commit: <sha or unknown>
   integration_remote: <remote name|none|unknown>
@@ -50,6 +55,9 @@ What understanding should be promoted or updated in the wiki.
 
 Name the originating ticket, critique, research, initiative, or other owner ref
 in `parent_merge_scope.records` when parent reconciliation is expected.
+`parent_merge_scope` must name parent reconciliation targets or explicitly say
+`None - <rationale>` when no parent merge target exists. Do not leave it empty or
+as placeholder-only `records: []` / `paths: []`.
 
 # Accepted Truth Sources
 
@@ -101,6 +109,11 @@ Return:
 - key claims promoted
 - sources used
 - remaining gaps or uncertainty
+
+After parent reconciliation, the parent records `# Parent Merge Notes` and moves
+this packet's `status` away from non-terminal `compiled` to the truthful terminal
+packet status: `consumed`, `superseded`, or `abandoned`. That lifecycle discipline
+does not make this wiki packet a Ralph implementation packet.
 
 # Working Notes
 
