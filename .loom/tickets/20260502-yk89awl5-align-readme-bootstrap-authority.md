@@ -1,11 +1,11 @@
 ---
 id: ticket:yk89awl5
 kind: ticket
-status: ready
+status: closed
 change_class: documentation-explanation
 risk_class: medium
 created_at: 2026-05-02T15:25:50Z
-updated_at: 2026-05-02T15:25:50Z
+updated_at: 2026-05-02T16:45:19Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,12 @@ links:
     - initiative:skills-corpus-perfection-council-followup
   plan:
     - plan:skills-corpus-perfection-council-followup
+  packet:
+    - packet:ralph-ticket-yk89awl5-20260502T163744Z
+  evidence:
+    - evidence:readme-bootstrap-authority-validation
+  critique:
+    - critique:readme-bootstrap-authority-review
 external_refs: {}
 depends_on:
   - ticket:3twzep5n
@@ -74,7 +80,7 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-perfection-council-followup#OBJ-004` | pending | pending | open |
+| `initiative:skills-corpus-perfection-council-followup#OBJ-004` | `evidence:readme-bootstrap-authority-validation` | `critique:readme-bootstrap-authority-review` | supported |
 
 # Execution Notes
 
@@ -83,12 +89,12 @@ Use current line numbers, not stale council line numbers, during implementation.
 
 # Blockers
 
-Depends on `ticket:3twzep5n`, `ticket:4ilnwsnl`, and `ticket:lqiw3hvp` so public
-framing inherits settled grammar.
+None. Dependencies `ticket:3twzep5n`, `ticket:4ilnwsnl`, and `ticket:lqiw3hvp`
+are closed.
 
 # Next Move / Next Route
 
-Ralph implementation packet after dependencies close.
+Closed. Commit and push this ticket before continuing to `ticket:u02z7o9j`.
 
 # Ralph Readiness
 
@@ -105,12 +111,11 @@ recommendation, and retrospective disposition.
 
 # Evidence
 
-Expected:
+Recorded:
 
-- `git diff --check`
-- targeted search for route table row and workflow-ledger wording
-- manual comparison against bootstrap `truth-and-authority` and Ralph packet
-  sibling doctrine
+- `evidence:readme-bootstrap-authority-validation` records `git diff --check`,
+  targeted README searches, and manual comparison against bootstrap and packet
+  sibling doctrine.
 
 # Critique Disposition
 
@@ -129,24 +134,31 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+None - oracle critique passed with no findings.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
-None. Critique is required by user instruction.
+Not deferred. Mandatory oracle critique passed with no findings.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+Retrospective disposition complete. Durable lessons were promoted directly into
+the public product surface: README route and workflow wording now inherit
+bootstrap authority and settled packet sibling grammar. No separate wiki page,
+research record, spec, constitution decision, or memory entry is needed for this
+ticket.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-02T16:45:19Z
+Basis: Ralph packet `packet:ralph-ticket-yk89awl5-20260502T163744Z`; evidence
+`evidence:readme-bootstrap-authority-validation`; oracle critique
+`critique:readme-bootstrap-authority-review` with no findings.
+Residual risks: validation and critique were structural/textual; future operator
+interpretation is not proven beyond README/bootstrap corpus consistency.
 
 # Dependencies
 
@@ -157,3 +169,11 @@ Residual risks:
 # Journal
 
 - 2026-05-02T15:25:50Z: Created from council finding `COUNCIL-FIND-003`.
+- 2026-05-02T16:37:44Z: Dependencies closed. Moved to active and compiled Ralph
+  packet `packet:ralph-ticket-yk89awl5-20260502T163744Z` from commit
+  `57f19fbf5eafede98d179978e14b736c0068bb69`.
+- 2026-05-02T16:40:06Z: README alignment implemented, structural evidence
+  recorded as `evidence:readme-bootstrap-authority-validation`, and ticket moved
+  to `review_required` for mandatory oracle critique.
+- 2026-05-02T16:45:19Z: Oracle critique passed with no findings. Recorded final
+  critique, retrospective disposition, and acceptance; closed ticket.

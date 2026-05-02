@@ -238,10 +238,10 @@ The agent starts by asking one question:
 | Observed output or validation | `evidence` |
 | Review pressure, concern, or residual risk | `critique` |
 | Stable accepted understanding | `wiki` |
-| Bounded implementation pass | `packet` |
+| Bounded implementation pass | Ralph with a Ralph packet |
 | Retrieval cue, preference, reminder, or hot context | `memory`, until it deserves promotion |
 
-A vague bug report becomes reproduction evidence, root-cause research, a tightened spec if behavior is ambiguous, a ticket for the fix, a packet for the implementation pass, green evidence, critique when risk warrants, and wiki promotion if the lesson should survive.
+A vague bug report becomes reproduction evidence, root-cause research, a tightened spec if behavior is ambiguous, a ticket for the fix, a Ralph packet for the implementation pass, green evidence, critique when risk warrants, and wiki promotion if the lesson should survive.
 
 No new workflow was invented. The agent used the vocabulary.
 
@@ -351,7 +351,7 @@ route -> shape -> ready -> execute -> reconcile -> verify -> accept -> promote -
 2. Research the root cause if it is unknown.
 3. Update or create a spec if intended behavior is fuzzy.
 4. Create or tighten the ticket.
-5. Compile a packet for one implementation pass.
+5. Compile a Ralph packet for one implementation pass.
 6. Run a fresh worker.
 7. Record red and green evidence.
 8. Route critique when risk warrants.
@@ -379,17 +379,17 @@ This is where Loom crosses from coding workflow into knowledge-work protocol.
 
 ## Workflows emerge from the vocabulary
 
-Workflow skills coordinate routes through project layers. They do not create new ledgers unless a new kind of work needs a durable place.
+Workflow skills coordinate routes through existing owner layers. They do not create ledgers or new owner layers.
 
 ```text
 brainstorm:
 workspace problem shaping -> research/spec as needed -> plan -> ticket
 
 test-first implementation:
-ticket -> packet with verification_posture:test-first -> red evidence -> green evidence -> ticket acceptance
+ticket -> Ralph packet with verification_posture:test-first -> red evidence -> green evidence -> ticket acceptance
 
 debug:
-evidence -> root-cause research -> spec if needed -> ticket -> packet -> evidence -> critique -> retrospective
+evidence -> root-cause research -> spec if needed -> ticket -> Ralph packet -> evidence -> critique -> retrospective
 
 spike:
 research -> throwaway scope if needed -> evidence -> conclusions/null results -> downstream spec, plan, ticket, or wiki
@@ -401,13 +401,13 @@ review:
 critique -> evidence -> ticket reconciliation -> acceptance or repair
 
 parallel execution:
-plan execution waves -> non-overlapping tickets/packets/worktrees -> child results -> parent integration evidence -> reconciliation
+plan execution waves -> non-overlapping tickets/Ralph packets/worktrees -> child results -> parent integration evidence -> reconciliation
 
 git isolation:
-ticket/packet scope -> explicit baseline -> branch/worktree -> diff provenance -> handoff evidence
+ticket/Ralph packet scope -> explicit baseline -> branch/worktree -> diff provenance -> handoff evidence
 
 implementation:
-ticket -> packet -> worker -> evidence -> reconcile
+ticket -> Ralph packet -> worker -> evidence -> reconcile
 
 ship:
 ticket/evidence/critique/wiki disposition -> PR summary, release note, risk summary, follow-up list
