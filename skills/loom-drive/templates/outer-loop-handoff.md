@@ -22,6 +22,17 @@ context while shaping an objective, tranche, or next route. It collects a
 proposal for parent review; accepted results still land in the owning Loom
 records.
 
+This is a bounded transient/support handoff proposal. It is not a packet family,
+does not use `packet_kind`, and does not own canonical truth or live execution
+state. Its `write_scope` describes any proposal-time mutation permission the
+parent grants for this handoff; it is separate from Ralph packet
+`child_write_scope` and from legacy packet `write_scope` compatibility.
+
+The frontmatter `status` is support-local proposal status for this handoff only.
+`draft` means the proposal is not yet reconciled by the parent. It is not
+canonical record truth, ticket execution state, or shared packet lifecycle status,
+and it does not participate in packet transitions such as `compiled -> consumed`.
+
 ## Parent Instructions
 
 - Read the linked objective chain and only the source files named below.

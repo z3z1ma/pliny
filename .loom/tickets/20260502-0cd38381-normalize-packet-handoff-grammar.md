@@ -1,11 +1,11 @@
 ---
 id: ticket:0cd38381
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: high
 created_at: 2026-05-02T08:46:28Z
-updated_at: 2026-05-02T09:28:53Z
+updated_at: 2026-05-02T09:54:27Z
 scope:
   kind: repository
   repositories:
@@ -19,6 +19,11 @@ links:
     - research:skills-corpus-council-review
   evidence:
     - evidence:skills-corpus-council-review
+    - evidence:packet-handoff-grammar-validation
+  critique:
+    - critique:packet-handoff-grammar-review
+  packet:
+    - packet:ralph-ticket-0cd38381-20260502T094123Z
   plan:
     - plan:skills-corpus-protocol-sharpening
   supersedes:
@@ -96,10 +101,10 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-protocol-sharpening#OBJ-002` | implementation evidence pending | mandatory critique pending | open |
-| `initiative:skills-corpus-protocol-sharpening#OBJ-004` | implementation evidence pending | mandatory critique pending | open |
-| `research:skills-corpus-council-review#CLAIM-005` | `evidence:skills-corpus-council-review` supports need; implementation evidence pending | mandatory critique pending | supported_pending_review |
-| `research:skills-corpus-council-review#CLAIM-008` | `evidence:skills-corpus-council-review` supports need; implementation evidence pending | mandatory critique pending | supported_pending_review |
+| `initiative:skills-corpus-protocol-sharpening#OBJ-002` | `evidence:packet-handoff-grammar-validation` | `critique:packet-handoff-grammar-review` | supported |
+| `initiative:skills-corpus-protocol-sharpening#OBJ-004` | `evidence:packet-handoff-grammar-validation` | `critique:packet-handoff-grammar-review` | supported |
+| `research:skills-corpus-council-review#CLAIM-005` | `evidence:skills-corpus-council-review`; `evidence:packet-handoff-grammar-validation` | `critique:packet-handoff-grammar-review` | supported |
+| `research:skills-corpus-council-review#CLAIM-008` | `evidence:skills-corpus-council-review`; `evidence:packet-handoff-grammar-validation` | `critique:packet-handoff-grammar-review` | supported |
 
 # Execution Notes
 
@@ -145,11 +150,13 @@ Expected output contract:
 
 # Evidence
 
-Expected:
+Recorded:
 
-- `git diff --check`
-- packet-family and write-scope grep checks across `skills/`
-- manual comparison against packet freshness and status lifecycle references
+- `evidence:packet-handoff-grammar-validation`
+- `git diff --check` passed with no output.
+- Targeted searches confirmed packet families, terminal statuses,
+  `child_write_scope`/`write_scope` classification, critique/wiki posture
+  expectations, rejected-child recovery, and drive handoff status classification.
 
 # Critique Disposition
 
@@ -170,28 +177,34 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+All findings resolved in `critique:packet-handoff-grammar-review`.
 
-Disposition status: pending
+Disposition status: complete
 
 Deferral / not-required rationale:
 
-None. Critique is mandatory.
+Not deferred. Mandatory critique is recorded in
+`critique:packet-handoff-grammar-review`.
 
 # Wiki Disposition
 
-Pending. If rejected-Ralph recovery becomes a reusable concept beyond skill
-instructions, consider wiki promotion during final retrospective.
+Deferred intentionally. Retrospective found no separate wiki page needed because
+the accepted guidance now lives in the owning Ralph, records, critique, wiki, and
+drive surfaces. Final integration review may still choose broader wiki promotion
+for the full sharpening pass.
 
 # Acceptance Decision
 
-Accepted by:
+Accepted by: OpenCode parent agent
 
-Accepted at:
+Accepted at: 2026-05-02T09:54:27Z
 
-Basis:
+Basis: Ralph packet `packet:ralph-ticket-0cd38381-20260502T094123Z`, validation
+evidence `evidence:packet-handoff-grammar-validation`, and final oracle critique
+`critique:packet-handoff-grammar-review` with all findings resolved.
 
-Residual risks:
+Residual risks: Markdown-only packet grammar still depends on operator discipline;
+final corpus-wide validation remains owned by `ticket:cdf664af`.
 
 # Dependencies
 
@@ -201,3 +214,8 @@ Residual risks:
 
 - 2026-05-02T08:46:28Z: Split from cancelled broad ticket `ticket:3uv5l5fh` as
   the packet and handoff grammar slice.
+- 2026-05-02T09:41:24Z: Started Ralph iteration
+  `packet:ralph-ticket-0cd38381-20260502T094123Z` for packet and handoff grammar.
+- 2026-05-02T09:54:27Z: Accepted and closed after Ralph implementation,
+  structural validation, oracle critique, resolved packet/handoff findings, and
+  retrospective disposition. No ticket-scoped follow-up remains.

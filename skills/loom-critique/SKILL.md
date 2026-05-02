@@ -29,6 +29,11 @@ This skill exists so review has the same durability and rigor as execution.
 Critique owns findings and verdicts. Tickets own live execution state,
 acceptance disposition, accepted risk, and closure.
 
+Critique packets use `kind: packet` with `packet_kind: critique` under
+`.loom/packets/critique/`. They are critique-owned review contracts, not Ralph
+implementation packets, and they do not use Ralph `verification_posture` unless
+this skill later defines a critique-specific field.
+
 ## Use This Skill When
 
 - code changes need review before acceptance

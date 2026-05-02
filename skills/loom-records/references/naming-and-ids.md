@@ -53,6 +53,22 @@ frontmatter exists, validators may see `kind: memory`, but that remains
 support-layer metadata rather than a canonical truth owner. See `frontmatter.md`
 for the memory frontmatter exception.
 
+## Packet Families And Route Ownership
+
+Packet records share `kind: packet` and are separated by `packet_kind` plus path:
+
+- `packet_kind: ralph` under `.loom/packets/ralph/` is the Ralph implementation
+  handoff family owned by `loom-ralph`.
+- `packet_kind: critique` under `.loom/packets/critique/` is the critique review
+  handoff family owned by `loom-critique`.
+- `packet_kind: wiki` under `.loom/packets/wiki/` is the wiki synthesis handoff
+  family owned by `loom-wiki`.
+
+This naming grammar does not make critique or wiki work Ralph-governed. Choose
+the route by the truth being changed: implementation goes through Ralph, review
+through critique, and accepted explanation through wiki. Packets remain bounded
+contracts for child work; they do not own project truth or live execution state.
+
 ## Filename Guidance
 
 ### Stable semantic records

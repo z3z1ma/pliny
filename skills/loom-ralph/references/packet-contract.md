@@ -89,7 +89,14 @@ commits canonical reconciliation unless the packet explicitly grants the child
 record-write authority.
 
 Legacy packets may use `write_scope`. Treat that as child write scope unless the
-packet says otherwise.
+packet says otherwise. New Ralph packets should use `child_write_scope` for the
+child boundary; reserve `write_scope` references to explicit legacy compatibility
+notes, not new packet grammar.
+
+Do not confuse this with bounded support handoffs outside Ralph. For example, a
+drive outer-loop handoff may use its own `write_scope` to describe proposal-time
+mutation permission, but that does not make the handoff a packet or give it
+canonical truth ownership.
 
 ## Context Budget
 
@@ -138,6 +145,9 @@ ref, push/review remote, branch, and worktree details in the packet body.
 
 Use packet statuses deliberately:
 
+Terminal packet statuses are `consumed`, `superseded`, and `abandoned`.
+`compiled` is launch-ready or pending parent action, not terminal.
+
 - `compiled -> consumed`: child output returned and parent merge notes were written
 - `compiled -> superseded`: governing records, source fingerprint, scope, or
   child write scope changed before launch
@@ -146,6 +156,14 @@ Use packet statuses deliberately:
   correction invalidates the result
 
 After reconciliation, parent must update packet status away from `compiled`.
+
+If a launched child result is unusable because it was rejected, corrupted,
+materially stale, or outside scope, do not mark the work successful. Update the
+packet status honestly, usually `consumed` when the child output was received and
+parent merge notes explain rejection, or `superseded` when a fresh packet replaces
+the unusable contract. Update ticket truth, preserve useful evidence or critique
+findings where applicable, and compile a new packet only after the owner records
+and write boundary are accurate.
 
 ## Verification Targets
 

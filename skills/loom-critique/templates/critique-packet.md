@@ -64,6 +64,13 @@ Named critique profiles to apply:
 Declared above as `change_class`. Use it to choose the evidence and critique
 profiles most relevant to this review.
 
+# Evidence Expectations
+
+Critique packets do not use Ralph `verification_posture`. Review quality comes
+from the critique lens, named profiles, actual diff/artifact inspection, evidence
+sufficiency checks, and explicit findings. Add no posture field unless
+`loom-critique` later defines one for critique-owned packets.
+
 # Source Snapshot
 
 Curated records, evidence, diffs, tests, or changed files that matter most.

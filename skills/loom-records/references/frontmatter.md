@@ -38,11 +38,18 @@ Replace every placeholder before saving a real record.
 Some kinds add more:
 
 - tickets add `depends_on`
-- packets add `target`, `mode`, `style`, `child_write_scope`,
+- packets add `packet_kind`, `target`, `mode`, `style`, `child_write_scope`,
   `parent_merge_scope`, `sources`, `source_fingerprint`,
   `execution_context`, and `context_budget`
 - wiki pages may add `page_type`
 - critique records may add `review_target`
+
+New packet records should use `child_write_scope` for the child mutation
+boundary. Older packet records may still contain `write_scope`; treat that as
+legacy packet compatibility unless the packet explicitly says otherwise. A
+support handoff outside `.loom/packets/`, such as a drive outer-loop handoff
+proposal, may use its own `write_scope` without becoming a packet family or a
+canonical truth owner.
 
 Most canonical records may also carry optional `external_refs` when outside
 systems request, mirror, or package the work.

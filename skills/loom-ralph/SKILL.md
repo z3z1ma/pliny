@@ -25,6 +25,10 @@ This skill is for the parent agent that is preparing, launching, and reconciling
 
 Ralph owns packetized implementation. Critique and wiki may reuse packet
 discipline, but their domain skills own critique packets and wiki packets.
+Ralph packets use `kind: packet`, `packet_kind: ralph`, and the
+`.loom/packets/ralph/` path. Critique packets use `packet_kind: critique` under
+`.loom/packets/critique/`; wiki packets use `packet_kind: wiki` under
+`.loom/packets/wiki/`.
 
 ## Use This Skill When
 
@@ -80,6 +84,10 @@ A strong packet should make all of these explicit:
 
 Packet style governs how much context is carried. Verification posture governs how the child evidences this iteration. The two are independent axes and both belong in the packet frontmatter.
 
+This `verification_posture` field is Ralph packet grammar. Critique and wiki
+packets rely on their domain-specific review or synthesis evidence expectations
+unless their owning skill later defines its own posture field.
+
 Postures:
 
 - `test-first` — the child must produce a failing check before any implementation change and drive it to green inside this iteration. This is Loom's native TDD shape.
@@ -99,7 +107,8 @@ behaves and usually need structural evidence plus critique.
 - a packet exists as a durable contract when the work is only packet compilation
 - launched work has returned child output when an iteration was run
 - the worker's outcome is classified honestly
-- packet status moved away from `compiled` after reconciliation
+- packet status moved away from non-terminal `compiled` after reconciliation;
+  terminal packet statuses are `consumed`, `superseded`, and `abandoned`
 - the ticket tells the truth afterward
 - the next route is explicit
 

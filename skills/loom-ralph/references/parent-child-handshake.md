@@ -35,6 +35,27 @@ The parent should ask:
 11. is another Ralph iteration next
 12. did the child reveal missing outer-loop work instead
 
+## Rejected Or Unusable Child Results
+
+If the child result is rejected, corrupted, stale against the packet source
+fingerprint, or overscoped beyond the declared child write scope, the parent must
+not smooth it into a success story.
+
+Parent recovery steps:
+
+1. classify the result honestly in the ticket and parent merge notes
+2. preserve any useful observations as evidence or critique only if they remain
+   inspectable and within their owning layer
+3. revert or ignore out-of-scope mutations before dependent work relies on them
+4. set the packet to a terminal status: usually `consumed` if output was received
+   and rejected in parent merge notes, or `superseded` if a fresh packet replaces
+   a stale or invalid contract
+5. return to ticket refinement, critique, or a fresh Ralph packet instead of
+   claiming the original iteration succeeded
+
+Use `abandoned` for a packet that will not be launched and has no successor, not
+for a launched child whose output merely failed review.
+
 ## A child does not close the loop alone
 
 The child's job is to complete the bounded step.

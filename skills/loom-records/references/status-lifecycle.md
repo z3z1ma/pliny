@@ -36,6 +36,9 @@ Use these sets unless the owning skill records a narrower one:
 - memory support files: lightweight local status is optional; when used, prefer
   retrieval-oriented values such as `active`, `stale`, `superseded`, or
   `retired`, and do not let memory status own canonical project truth
+- support handoff templates: any `status` field is template-local unless the
+  owning skill says otherwise; it does not create canonical truth, ticket state,
+  or packet lifecycle status
 
 ## Layer-Specific Meanings
 
@@ -87,6 +90,10 @@ claim.
 
 Use packet statuses as operational state, not as archival decoration:
 
+Packet terminal statuses are `consumed`, `superseded`, and `abandoned`.
+`compiled` is non-terminal and means the packet is ready for launch or pending
+parent action.
+
 - `compiled -> consumed`: child output returned and parent merge notes were
   written
 - `compiled -> superseded`: governing records, source fingerprint, scope, or
@@ -97,3 +104,7 @@ Use packet statuses as operational state, not as archival decoration:
   result
 
 After reconciliation, parent should update packet status away from `compiled`.
+When a launched child result is rejected, corrupted, stale, or overscoped, the
+packet still needs an honest terminal status plus parent merge notes; do not let
+the status imply acceptance unless the ticket and owning records actually accept
+the result.

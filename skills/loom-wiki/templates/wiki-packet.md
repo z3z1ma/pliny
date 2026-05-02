@@ -50,6 +50,11 @@ in `parent_merge_scope.records` when parent reconciliation is expected.
 
 Which canonical records and evidence this packet should trust.
 
+Wiki packets do not use Ralph `verification_posture`. Synthesis quality comes
+from accepted source records, cited evidence, clear gaps, and parent
+reconciliation into wiki pages. Add no posture field unless `loom-wiki` later
+defines one for wiki-owned packets.
+
 # Target Pages
 
 Which wiki pages should be created or updated.

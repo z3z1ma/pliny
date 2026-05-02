@@ -209,6 +209,10 @@ This is transport only:
 - canonical records retain truth ownership
 - tickets retain live execution ownership
 - parent reconciliation remains mandatory before dependent work launches
+- the outer-loop handoff template is a bounded transient/support proposal, not a
+  packet family and not a truth owner
+- any handoff `write_scope` is proposal-time permission for that support
+  handoff, not Ralph `child_write_scope`
 
 Use `templates/outer-loop-handoff.md` only when a bounded handoff would reduce
 context pressure or improve reviewability.

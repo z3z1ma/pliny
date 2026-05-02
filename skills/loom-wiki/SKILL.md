@@ -25,6 +25,11 @@ Use it when understanding should persist and compound.
 Wiki explains settled understanding. It does not own policy, intended behavior,
 live execution state, observed artifacts, or review verdicts.
 
+Wiki packets use `kind: packet` with `packet_kind: wiki` under
+`.loom/packets/wiki/`. They are wiki-owned synthesis contracts, not Ralph
+implementation packets, and they do not use Ralph `verification_posture` unless
+this skill later defines a wiki-specific field.
+
 ## What Makes Wiki Valuable
 
 A good wiki page saves future agents from re-deriving the same understanding from scratch.
