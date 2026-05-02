@@ -1,11 +1,11 @@
 ---
 id: ticket:critrec9
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-02T22:03:13Z
-updated_at: 2026-05-02T22:03:13Z
+updated_at: 2026-05-02T23:38:57Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,12 @@ links:
     - initiative:skills-corpus-template-grammar-safety-pass
   plan:
     - plan:skills-corpus-template-grammar-safety-pass
+  packet:
+    - packet:ralph-ticket-critrec9-20260502T232902Z
+  evidence:
+    - evidence:critique-recommendation-vocabulary-validation
+  critique:
+    - critique:critique-recommendation-vocabulary-review
 external_refs: {}
 depends_on:
   - ticket:critgate2
@@ -62,13 +68,22 @@ teaching non-canonical status values.
 Covers:
 
 - `initiative:skills-corpus-template-grammar-safety-pass#OBJ-009`
+- `ticket:critrec9#ACC-001`
+- `ticket:critrec9#ACC-002`
+- `ticket:critrec9#ACC-003`
+- `ticket:critrec9#ACC-004`
+- `ticket:critrec9#ACC-005`
 
 # Claim Matrix
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-template-grammar-safety-pass#OBJ-009` | pending | pending | open |
-| `ticket:critrec9#ACC-001` through `ticket:critrec9#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-template-grammar-safety-pass#OBJ-009` | `evidence:critique-recommendation-vocabulary-validation` | `critique:critique-recommendation-vocabulary-review` | supported |
+| `ticket:critrec9#ACC-001` | `evidence:critique-recommendation-vocabulary-validation` | `critique:critique-recommendation-vocabulary-review` | supported |
+| `ticket:critrec9#ACC-002` | `evidence:critique-recommendation-vocabulary-validation` | `critique:critique-recommendation-vocabulary-review` | supported |
+| `ticket:critrec9#ACC-003` | `evidence:critique-recommendation-vocabulary-validation` | `critique:critique-recommendation-vocabulary-review` | supported |
+| `ticket:critrec9#ACC-004` | `evidence:critique-recommendation-vocabulary-validation` | `critique:critique-recommendation-vocabulary-review` | supported |
+| `ticket:critrec9#ACC-005` | `critique:critique-recommendation-vocabulary-review` | oracle critique passed with no findings | supported |
 
 # Execution Notes
 
@@ -77,27 +92,27 @@ related critique finding/recommendation references.
 
 # Blockers
 
-Depends on `ticket:critgate2`.
+None - dependency `ticket:critgate2` is closed.
 
 # Next Move / Next Route
 
-Ralph implementation packet after dependencies close.
+Closed. Commit and push this ticket before continuing to `ticket:routewf10`.
 
 # Route Readiness
 
-Route: ralph
-
-Bounded iteration: critique recommendation vocabulary cleanup.
-Write boundary: targeted critique template/reference wording, this ticket, one
-evidence record, one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Acceptance review readiness:
+Evidence `evidence:critique-recommendation-vocabulary-validation` and oracle
+critique `critique:critique-recommendation-vocabulary-review` support closure
+with no findings.
 
 # Evidence
 
 Expected: before/after searches for `close-ready`, recommendation/status wording,
 route tokens in critique guidance, and `git diff --check`.
+
+Recorded: `evidence:critique-recommendation-vocabulary-validation` captures the
+before/after vocabulary searches and `git diff --check` for this Ralph
+iteration.
 
 # Critique Disposition
 
@@ -115,9 +130,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:critique-recommendation-vocabulary-review` - no findings; mandatory
+oracle critique passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -125,18 +141,34 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Critique recommendation vocabulary and ownership boundaries were promoted
+  directly into `skills/loom-critique/templates/critique.md` and
+  `skills/loom-critique/references/finding-format.md`.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the product guidance itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+touched critique template/reference guidance.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-02T23:38:57Z
+Basis: Ralph packet `packet:ralph-ticket-critrec9-20260502T232902Z`; evidence
+`evidence:critique-recommendation-vocabulary-validation`; oracle critique
+`critique:critique-recommendation-vocabulary-review` with no findings.
+Residual risks: validation is structural/manual. Historical `.loom/critique`
+records may still contain old recommendation prose, but they are outside this
+ticket's product-surface target.
 
 # Dependencies
 
@@ -145,3 +177,18 @@ Residual risks:
 # Journal
 
 - 2026-05-02T22:03:13Z: Created from council finding `NC-009`.
+- 2026-05-02T23:29:02Z: Confirmed dependency `ticket:critgate2` is closed,
+  compiled Ralph packet `packet:ralph-ticket-critrec9-20260502T232902Z`, and
+  moved ticket to `active`.
+- 2026-05-02T23:30:27Z: Ralph iteration normalized critique acceptance
+  recommendation labels, recorded validation evidence, and moved ticket to
+  `review_required` for mandatory oracle critique.
+- 2026-05-02T23:34:35Z: Parent reconciled Ralph packet
+  `packet:ralph-ticket-critrec9-20260502T232902Z`, normalized claim matrix
+  statuses to canonical claim-coverage vocabulary, and kept next route as
+  mandatory critique.
+- 2026-05-02T23:35:41Z: Parent expanded `# Coverage` with ticket-local
+  acceptance IDs for traceability before oracle critique.
+- 2026-05-02T23:38:57Z: Mandatory oracle critique
+  `critique:critique-recommendation-vocabulary-review` passed with no findings.
+  Parent recorded retrospective / promotion disposition and accepted closure.

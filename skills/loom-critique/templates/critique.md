@@ -88,7 +88,24 @@ What should happen before acceptance or closure.
 
 # Acceptance Recommendation
 
-Use a concrete recommendation: close-ready, complete pending acceptance,
-review required, active follow-up required, blocked, or accepted risk needed.
-This recommendation informs the ticket-owned acceptance decision; it does not
+Use one concrete non-canonical critique recommendation label:
+
+- `no-critique-blockers` — critique sees no required follow-up before the
+  ticket's acceptance gate makes its own decision.
+- `ticket-acceptance-review-needed` — the ticket's acceptance gate still needs
+  parent/operator review before any closure decision.
+- `follow-up-needed-before-acceptance` — follow-up is needed before ticket-owned
+  acceptance.
+- `blocker-disposition-needed` — critique observed a blocker or unresolved issue
+  the ticket must disposition.
+- `risk-disposition-needed` — critique observed a risk that needs ticket-owned
+  disposition, such as accepted risk or conversion to follow-up.
+- `evidence-insufficient` — the reviewed evidence is not enough to support the
+  acceptance claim.
+
+These labels are recommendation vocabulary only. They are not ticket states,
+route tokens, finding dispositions, or closure decisions. If a recommendation
+explicitly names a real ticket state or route token, quote it as the ticket-owned
+next action and state that critique does not apply it. This recommendation
+informs the ticket-owned acceptance decision; it does not mutate ticket state or
 close the ticket by itself.

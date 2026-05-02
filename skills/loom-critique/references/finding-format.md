@@ -36,6 +36,12 @@ Critique records produce findings, verdicts, residual risks, and follow-up
 recommendations. They do not close ticket work and do not accept their own
 findings on behalf of the ticket.
 
+Acceptance recommendation labels in critique records are non-canonical advice for
+the ticket's acceptance gate. They are not ticket lifecycle states, route tokens,
+or ticket-owned finding dispositions. When critique needs to mention an existing
+ticket state or route token, quote it as the ticket-owned next action and state
+that critique does not apply it.
+
 Use critique-owned finding state narrowly:
 
 - `open` — the finding is part of the review output and the ticket must consume
