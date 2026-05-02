@@ -1,11 +1,11 @@
 ---
 id: ticket:53cf2989
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-02T08:46:28Z
-updated_at: 2026-05-02T09:28:53Z
+updated_at: 2026-05-02T11:05:21Z
 scope:
   kind: repository
   repositories:
@@ -19,6 +19,11 @@ links:
     - research:skills-corpus-council-review
   evidence:
     - evidence:skills-corpus-council-review
+    - evidence:owner-surface-consolidation-validation
+  critique:
+    - critique:owner-surface-consolidation-review
+  packet:
+    - packet:ralph-ticket-53cf2989-20260502T105317Z
   plan:
     - plan:skills-corpus-protocol-sharpening
   supersedes:
@@ -91,8 +96,8 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-protocol-sharpening#OBJ-004` | implementation evidence pending | critique recommended | open |
-| `research:skills-corpus-council-review#CLAIM-008` | `evidence:skills-corpus-council-review` supports need; implementation evidence pending | critique recommended | supported_pending_review |
+| `initiative:skills-corpus-protocol-sharpening#OBJ-004` | `evidence:owner-surface-consolidation-validation` | `critique:owner-surface-consolidation-review` | supported |
+| `research:skills-corpus-council-review#CLAIM-008` | `evidence:skills-corpus-council-review`; `evidence:owner-surface-consolidation-validation` | `critique:owner-surface-consolidation-review` | supported |
 
 # Execution Notes
 
@@ -102,12 +107,11 @@ many files.
 
 # Blockers
 
-Do not start until `ticket:4e8ebe92` lands or is intentionally deferred, because
-metadata and record-owner wording may depend on shared grammar.
+None. Dependency `ticket:4e8ebe92` is closed.
 
 # Next Move / Next Route
 
-Ralph implementation packet or local edit for owner-surface consolidation.
+Closed. Continue with the next sequenced plan ticket, `ticket:cdf664af`.
 
 # Ralph Readiness
 
@@ -138,12 +142,14 @@ Expected output contract:
 
 # Evidence
 
-Expected:
+Recorded:
 
-- `git diff --check`
-- targeted grep checks for atlas, retrospective, spike, sketch, `skill_kind`, and
-  `compatibility`
-- manual comparison against owner-surface acceptance criteria
+- `evidence:owner-surface-consolidation-validation`
+- `git diff --check` passed with no output.
+- Targeted searches confirmed wiki-owned atlas shape with codemap pointer,
+  retrospective mechanics in `loom-retrospective` with records retaining shared
+  grammar, research/spike split, skill-authoring metadata conventions, and no
+  obvious stale duplicate full-shape sections in touched surfaces.
 
 # Critique Disposition
 
@@ -163,29 +169,35 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+All findings resolved in `critique:owner-surface-consolidation-review`.
 
-Disposition status: pending
+Disposition status: complete
 
 Deferral / not-required rationale:
 
-None yet.
+Not deferred. Oracle critique is recorded in
+`critique:owner-surface-consolidation-review`.
 
 # Wiki Disposition
 
-Pending. Consolidation itself should usually live in skills, but accepted atlas
-or retrospective concepts may already belong in wiki if they are reusable
-explanations.
+Deferred intentionally. The accepted consolidation guidance lives in the owner
+skill surfaces. No separate wiki page is needed for this ticket; the final
+corpus-wide validation ticket may still choose broader wiki promotion.
 
 # Acceptance Decision
 
-Accepted by:
+Accepted by: OpenCode parent agent
 
-Accepted at:
+Accepted at: 2026-05-02T11:05:21Z
 
-Basis:
+Basis: Ralph packet `packet:ralph-ticket-53cf2989-20260502T105317Z`, validation
+evidence `evidence:owner-surface-consolidation-validation`, and final oracle
+critique `critique:owner-surface-consolidation-review` with all findings
+resolved.
 
-Residual risks:
+Residual risks: Validation targeted the touched product surfaces and did not
+exhaustively audit every example fixture or unrelated skill; final corpus-wide
+validation remains owned by `ticket:cdf664af`.
 
 # Dependencies
 
@@ -195,3 +207,10 @@ Residual risks:
 
 - 2026-05-02T08:46:28Z: Split from cancelled broad ticket `ticket:3uv5l5fh` as
   the owner-surface consolidation slice.
+- 2026-05-02T10:53:18Z: Started Ralph iteration
+  `packet:ralph-ticket-53cf2989-20260502T105317Z` for owner-surface doctrine
+  consolidation.
+- 2026-05-02T10:58:16Z: Moved to review after Ralph implementation and structural
+  validation.
+- 2026-05-02T11:05:21Z: Accepted and closed after oracle critique findings were
+  resolved, evidence was refreshed, and retrospective disposition was recorded.

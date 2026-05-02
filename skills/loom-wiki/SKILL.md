@@ -18,6 +18,7 @@ Use it when understanding should persist and compound.
 - concept pages
 - workflow pages
 - reference pages
+- codebase atlas pages for accepted repository or module structure
 - inter-page linking
 - wiki packets for synthesis passes
 - page maintenance when accepted owner truth changes

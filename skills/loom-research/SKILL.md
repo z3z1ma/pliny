@@ -18,6 +18,8 @@ Use it when the work would benefit from not having to rediscover the same reason
 - investigations
 - option comparisons
 - experiments
+- spike and sketch conclusions as research variants when discovery should remain
+  citable
 - evidence synthesis
 - rejected options and null results worth preserving
 - deferred questions that are not yet ready for their own investigation
@@ -28,6 +30,9 @@ Use it when the work would benefit from not having to rediscover the same reason
 - the project lacks evidence for a decision
 - multiple options need comparison
 - an experiment result should remain citable
+- a spike or sketch produced conclusions, rejected variants, or null results
+  that should become reusable research; use `loom-spike` for procedural spike or
+  sketch workflow detail
 - a significant implementation discovery should survive beyond the ticket journal
 - a rejected option or null result would otherwise have to be rediscovered
 - open questions are accumulating and need a durable home before they are ready to be investigated

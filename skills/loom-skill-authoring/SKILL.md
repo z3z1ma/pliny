@@ -13,6 +13,7 @@ Use this skill to author Loom-compatible skills.
 ## What This Skill Owns
 
 - skill activation descriptions
+- skill frontmatter and metadata conventions
 - skill boundaries and overlap review
 - skill review and pressure-scenario validation
 - skill directory structure
@@ -24,6 +25,7 @@ Use this skill to author Loom-compatible skills.
 A good Loom skill:
 
 - has a clear activation description
+- uses frontmatter metadata consistently with the skill boundary
 - owns one subsystem or one coherent capability
 - tells the agent what it governs and what it does not
 - teaches a practical procedure
@@ -46,6 +48,8 @@ A good Loom skill:
 ## Done Means
 
 - the skill has a clear activation description
+- frontmatter names `name`, `description`, `compatibility`, and appropriate
+  `metadata` fields
 - the skill states what it owns and what it does not own
 - references and templates are placed only where they serve the skill boundary
 - the skill does not duplicate another owner or create a hidden runtime

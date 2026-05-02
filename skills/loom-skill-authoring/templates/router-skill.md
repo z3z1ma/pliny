@@ -1,9 +1,9 @@
 ---
 name: my-router-skill
 description: "Use when <specific family of work> needs routing among <nearby paths>."
-compatibility: Markdown-native Loom.
+compatibility: Markdown-native, script-free Loom protocol.
 metadata:
-  skill_kind: router
+  skill_kind: workflow-coordinator
 ---
 
 # my-router-skill

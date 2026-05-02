@@ -1,55 +1,31 @@
 # Retrospective
 
-Retrospective is the assimilation workflow for durable learning.
+Retrospective is the assimilation workflow for durable learning. The procedure
+is owned by `skills/loom-retrospective/SKILL.md`.
 
 It is not a new record kind and it does not create `.loom/retrospectives/`.
 It promotes what was learned into the owner layers that should carry it.
 
-## Loop
+## Shared Grammar
 
-`observe -> distill -> promote -> prevent`
+- retrospective is a workflow route, not a canonical layer
+- retrospective does not own a separate ledger or directory
+- retrospective updates existing owner records only when learning is accepted
+  enough for that owner layer
+- if there is nothing durable to promote, say so; do not invent artifacts to
+  look productive
 
-## Observe
+## Routing Pointers
 
-Gather concrete signals:
+Use `skills/loom-retrospective/SKILL.md` for the
+observe/distill/promote/prevent procedure. When a lesson is ready to preserve,
+route by owner:
 
-- ticket journals
-- packet outputs
-- critique findings
-- evidence records
-- changed specs, plans, research, wiki pages, or decisions
-- recurring questions the agent had to reconstruct
-
-## Distill
-
-Route learning by owner:
-
-- accepted explanation or workflow -> wiki
-- durable investigation result, rejected option, or null result -> research
-- clarified intended behavior -> spec
-- changed sequencing -> plan
-- changed strategic framing -> initiative
-- changed durable policy or principle -> constitution
-- observed artifact, challenged observation, or validation artifact -> evidence
-- support-only continuity, retrieval cues, preferences, or reminders -> memory
-
-## Promote
-
-Update exactly the owner records needed. Link originating tickets, evidence,
-critique, specs, plans, research, or wiki pages when helpful.
-
-## Prevent
-
-Every repeated mistake should be promoted into exactly one prevention artifact:
-
-- behavior ambiguity -> spec
-- missed test case or evidence gap -> evidence when an observed artifact exists, or
-  ticket/test expectation when the gap is future work
-- bad architectural choice -> constitution decision
-- recurring operator confusion -> wiki workflow or reference page
-- repeated implementation pitfall -> research null result or wiki troubleshooting
-- repeated project-local technique -> project-local skill
-- support-only reminder -> memory
-
-If there is nothing durable to promote, say so. Do not invent artifacts to look
-productive.
+- accepted explanation or workflow -> `loom-wiki`
+- durable investigation result, rejected option, or null result -> `loom-research`
+- clarified intended behavior -> `loom-specs`
+- changed sequencing -> `loom-plans`
+- changed strategic framing -> `loom-initiatives`
+- changed durable policy or principle -> `loom-constitution`
+- observed artifact, challenged observation, or validation artifact -> `loom-evidence`
+- support-only continuity, retrieval cue, preference, or reminder -> `loom-memory`

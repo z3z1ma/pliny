@@ -1,9 +1,9 @@
 ---
 name: my-skill
 description: "Use when <specific trigger or situation>; <owner boundary if needed>."
-compatibility: Markdown-native Loom.
+compatibility: Markdown-native, script-free Loom protocol.
 metadata:
-  skill_kind: custom
+  skill_kind: workflow
 ---
 
 # my-skill

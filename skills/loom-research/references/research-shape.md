@@ -31,8 +31,10 @@ Both variants should still preserve:
 - conclusions
 - downstream route
 
-Use the spike or sketch workflow when discovery needs more structure, but keep
-the canonical truth in research, evidence, specs, tickets, critique, and wiki.
+Use `skills/loom-spike/SKILL.md` for procedural spike or sketch workflow detail
+such as experiment matrices, variant framing, throwaway write-scope discipline,
+artifact capture, and downstream routing. Keep the canonical truth in research,
+evidence, specs, tickets, critique, and wiki.
 
 ## Writing standard
 

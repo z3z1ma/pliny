@@ -28,8 +28,9 @@ What the investigation covers and excludes.
 
 How the investigation was carried out.
 
-For spikes or sketches, include the experiment matrix, variants, throwaway
-write scope, and cleanup expectation.
+For spike or sketch variants, record the method and downstream route at the
+research level. Use `skills/loom-spike/SKILL.md` for experiment-matrix, variant,
+throwaway write-scope, and cleanup workflow details.
 
 # Sources
 

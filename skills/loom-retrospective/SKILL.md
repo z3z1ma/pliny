@@ -14,6 +14,8 @@ It assimilates what was learned during a ticket, initiative, critique, spike,
 debugging pass, or recent work slice into the existing owner layers.
 
 It promotes learning into the records that already own that kind of knowledge.
+This skill owns retrospective workflow mechanics; shared record grammar only
+reminds operators that retrospective is a workflow route, not a new record kind.
 
 ## What This Workflow Coordinates
 
@@ -59,6 +61,32 @@ It promotes learning into the records that already own that kind of knowledge.
 - missing evidence that still needs work -> ticket follow-up or test expectation
 - support-only recall, retrieval cues, preferences, or reminders -> `loom-memory`
 
+## Retrospective Loop
+
+Use the loop `observe -> distill -> promote -> prevent`.
+
+Observe concrete signals from ticket journals, packet outputs, critique findings,
+evidence records, changed owner records, and recurring questions that had to be
+reconstructed.
+
+Distill durable lessons separately from one-time execution detail, then promote
+each accepted lesson to the owner layer that can maintain it.
+
+Prevent repeated mistakes by choosing exactly one prevention artifact when
+practical:
+
+- behavior ambiguity -> spec
+- missed test case or evidence gap -> evidence when an observed artifact exists,
+  or a follow-up ticket/test expectation when the gap is future work
+- bad architectural choice -> constitution decision
+- recurring operator confusion -> wiki workflow or reference page
+- repeated implementation pitfall -> research null result or wiki troubleshooting
+- repeated project-local technique -> project-local skill
+- support-only reminder -> memory
+
+If there is nothing durable to promote, say so. Do not invent artifacts to look
+productive.
+
 ## Default Procedure
 
 1. read the ticket, initiative, critique, evidence, packet, or work slice being
@@ -85,8 +113,8 @@ It promotes learning into the records that already own that kind of knowledge.
 
 Read immediately for retrospective work:
 
-1. `skills/loom-records/references/retrospective.md` when deciding how to route
-   lessons without creating a new layer.
+1. `skills/loom-records/references/retrospective.md` when checking the shared
+   grammar that retrospective creates no new canonical record layer.
 2. `skills/loom-tickets/SKILL.md` when ticket acceptance, closure, or follow-up
    disposition needs updating.
 

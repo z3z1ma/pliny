@@ -47,17 +47,14 @@ observations into evidence.
 
 ## Atlas Page Shape
 
-Recommended sections:
+Atlas page shape is owned by `loom-wiki`.
 
-- Summary
-- Major Modules
-- Important Entry Points
-- Test Surface
-- Build / Validation Commands
-- Data / Persistence Boundaries
-- Risky Areas
-- Source Records
-- Last Verified
+When accepted repository or module structure should persist, write or update a
+wiki atlas page using `skills/loom-wiki/references/page-types.md` and
+`skills/loom-wiki/templates/atlas-page.md`. This codemap workflow owns the
+mapping route: scan structure, preserve observations in evidence when useful,
+route uncertainty or rejected interpretations to research, and promote accepted
+structure into the wiki-owned atlas shape.
 
 ## Context Adapter Rule
 
