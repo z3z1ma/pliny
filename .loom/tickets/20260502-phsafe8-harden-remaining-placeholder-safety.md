@@ -1,11 +1,11 @@
 ---
 id: ticket:phsafe8
 kind: ticket
-status: ready
+status: closed
 change_class: record-hygiene
 risk_class: medium
 created_at: 2026-05-02T22:03:13Z
-updated_at: 2026-05-02T22:03:13Z
+updated_at: 2026-05-02T23:27:33Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,12 @@ links:
     - initiative:skills-corpus-template-grammar-safety-pass
   plan:
     - plan:skills-corpus-template-grammar-safety-pass
+  packet:
+    - packet:ralph-ticket-phsafe8-20260502T232054Z
+  evidence:
+    - evidence:placeholder-safety-validation
+  critique:
+    - critique:placeholder-safety-review
 external_refs: {}
 depends_on:
   - ticket:accspec6
@@ -61,13 +67,22 @@ unsafe to save as project truth.
 Covers:
 
 - `initiative:skills-corpus-template-grammar-safety-pass#OBJ-008`
+- `ticket:phsafe8#ACC-001`
+- `ticket:phsafe8#ACC-002`
+- `ticket:phsafe8#ACC-003`
+- `ticket:phsafe8#ACC-004`
+- `ticket:phsafe8#ACC-005`
 
 # Claim Matrix
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-template-grammar-safety-pass#OBJ-008` | pending | pending | open |
-| `ticket:phsafe8#ACC-001` through `ticket:phsafe8#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-template-grammar-safety-pass#OBJ-008` | `evidence:placeholder-safety-validation` | `critique:placeholder-safety-review` | supported |
+| `ticket:phsafe8#ACC-001` | `evidence:placeholder-safety-validation` | `critique:placeholder-safety-review` | supported |
+| `ticket:phsafe8#ACC-002` | `evidence:placeholder-safety-validation` | `critique:placeholder-safety-review` | supported |
+| `ticket:phsafe8#ACC-003` | `evidence:placeholder-safety-validation` | `critique:placeholder-safety-review` | supported |
+| `ticket:phsafe8#ACC-004` | `evidence:placeholder-safety-validation` | `critique:placeholder-safety-review` | supported |
+| `ticket:phsafe8#ACC-005` | `critique:placeholder-safety-review` | oracle critique passed with no findings | supported |
 
 # Execution Notes
 
@@ -77,27 +92,23 @@ Likely touched surfaces include `skills/loom-wiki/templates/index.md`,
 
 # Blockers
 
-Depends on `ticket:accspec6` and `ticket:sibpkt7`.
+None - dependencies `ticket:accspec6` and `ticket:sibpkt7` are closed.
 
 # Next Move / Next Route
 
-Ralph implementation packet after dependencies close.
+Closed. Commit and push this ticket before continuing to `ticket:critrec9`.
 
 # Route Readiness
 
-Route: ralph
-
-Bounded iteration: remaining placeholder/accepted-status safety cleanup.
-Write boundary: targeted template/reference wording, this ticket, one evidence
-record, one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Acceptance review readiness:
+Evidence `evidence:placeholder-safety-validation` and oracle critique
+`critique:placeholder-safety-review` support closure with no findings.
 
 # Evidence
 
-Expected: before/after searches for `TBD`, `Replace with`, placeholder accepted
-statuses, and `git diff --check`.
+Recorded: `evidence:placeholder-safety-validation` captures before/after searches
+for `TBD`, `Replace with`, authoritative placeholder statuses, rationale for
+unchanged scanned matches, and `git diff --check`.
 
 # Critique Disposition
 
@@ -115,9 +126,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:placeholder-safety-review` - no findings; mandatory oracle critique
+passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -125,18 +137,34 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Placeholder/status safety wording was promoted directly into
+  `skills/loom-wiki/templates/index.md`,
+  `skills/loom-bootstrap/references/06-filesystem-and-tooling.md`, and
+  `skills/loom-initiatives/templates/initiative.md`.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the product guidance itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+touched template/reference guidance.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-02T23:27:33Z
+Basis: Ralph packet `packet:ralph-ticket-phsafe8-20260502T232054Z`; evidence
+`evidence:placeholder-safety-validation`; oracle critique
+`critique:placeholder-safety-review` with no findings.
+Residual risks: validation is structural/manual. Some templates still depend on
+operator discipline to replace prompts before saving, intentionally within scope.
 
 # Dependencies
 
@@ -146,3 +174,15 @@ Residual risks:
 # Journal
 
 - 2026-05-02T22:03:13Z: Created from council finding `NC-008`.
+- 2026-05-02T23:20:54Z: Confirmed dependencies `ticket:accspec6` and
+  `ticket:sibpkt7` are closed, compiled Ralph packet
+  `packet:ralph-ticket-phsafe8-20260502T232054Z`, and moved ticket to `active`.
+- 2026-05-02T23:22:58Z: Ralph child hardened the scoped placeholder/status
+  surfaces, recorded `evidence:placeholder-safety-validation`, and moved the
+  ticket to `review_required` for mandatory oracle critique.
+- 2026-05-02T23:24:37Z: Parent reconciled Ralph output, marked
+  `packet:ralph-ticket-phsafe8-20260502T232054Z` consumed, normalized claim
+  statuses, and confirmed the ticket is ready for mandatory oracle critique.
+- 2026-05-02T23:27:33Z: Mandatory oracle critique
+  `critique:placeholder-safety-review` passed with no findings. Parent recorded
+  retrospective / promotion disposition and accepted closure.

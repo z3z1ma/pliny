@@ -2,7 +2,7 @@
 id: wiki:index
 kind: wiki
 page_type: reference
-status: accepted
+status: draft
 created_at: <UTC timestamp>
 updated_at: <UTC timestamp>
 scope:
@@ -13,6 +13,7 @@ links: {}
 # Summary
 
 Top-level map of the Loom wiki.
+Replace placeholder lists before setting `status: accepted`.
 
 # Concepts
 

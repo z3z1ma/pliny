@@ -52,7 +52,7 @@ execution state, blockers, or closure decisions.
 How success should be judged. Use stable `OBJ-*` IDs when downstream work needs
 to cite objective criteria.
 
-- OBJ-001: Replace with one durable objective criterion.
+- OBJ-001: <TBD: write one durable objective criterion before saving>
 
 # Milestones
 

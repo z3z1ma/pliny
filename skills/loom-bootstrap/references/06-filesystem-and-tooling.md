@@ -62,6 +62,10 @@ cp skills/loom-tickets/templates/ticket.md ".loom/tickets/<YYYYMMDD>-<token>-<sh
 
 ### Emit a here-doc
 
+Replace every placeholder in the example before saving it. Research records do
+not use `draft` status; keep `status: active` only when the copied record has a
+real research question.
+
 ```bash
 cat > .loom/research/<slug>.md <<'EOF'
 ---
@@ -79,7 +83,7 @@ links: {}
 
 # Question
 
-TBD
+<TBD: write the research question before saving>
 EOF
 ```
 
