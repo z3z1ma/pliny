@@ -66,7 +66,7 @@ project state -> packet -> fresh worker -> evidence/critique -> reconciliation -
 
 ---
 
-## Try the cattle-not-pets demo
+## 🧪 Try the cattle-not-pets demo
 
 The fastest way to understand Loom is to stop protecting one precious agent session.
 
@@ -96,7 +96,7 @@ That is the product: sessions can die; the project keeps the plot.
 
 ---
 
-## Install
+## ⚙️ Install
 
 Loom installs as a skills package. The fastest path is to expose `skills/` to your coding harness.
 
@@ -139,7 +139,7 @@ Reach for Loom when the cost of losing the plot is higher than the cost of keepi
 
 ---
 
-## How Loom works
+## 🧭 How Loom works
 
 Loom has two loops.
 
@@ -186,7 +186,7 @@ Memory can help the agent recover context. It does not become shadow truth. The 
 
 ---
 
-## Project layers
+## 🗂️ Project layers
 
 Loom separates project state into canonical layers.
 
@@ -454,7 +454,7 @@ The protocol is the corpus.
 
 ---
 
-## What ships
+## 📦 What ships
 
 This repository ships the Loom skill package.
 
