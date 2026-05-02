@@ -72,6 +72,10 @@ Specs should give important requirements and acceptance units IDs:
 Tickets that advance an initiative objective or implement/verify a spec should
 name covered objective and acceptance IDs:
 
+First decide which acceptance owner applies. If a spec owns the reusable
+acceptance contract, cite the spec-owned IDs under `# Coverage` and do not create
+ticket-local `ACC-*` criteria for that contract:
+
 ```md
 # Coverage
 

@@ -39,8 +39,16 @@ What should not happen inside this ticket.
 
 What must be true for this ticket to be accepted.
 
-If a spec owns the acceptance contract, summarize only the ticket-scoped work
-here and cite the spec-owned acceptance IDs under `# Coverage`.
+Choose exactly one acceptance owner branch before saving. Remove the branch that
+does not apply.
+
+Spec-owned acceptance branch:
+
+Use this branch when a spec owns the reusable acceptance contract. Do not create
+ticket-local `ACC-*` criteria here. Summarize only the ticket-scoped work here
+and cite the spec-owned acceptance IDs under `# Coverage`.
+
+Ticket-local acceptance branch:
 
 If no spec owns the acceptance contract, this ticket may own ticket-local
 acceptance criteria. Write stable local IDs so evidence and critique can cite
