@@ -77,6 +77,10 @@ support artifact must not own objective state, live ticket state, acceptance,
 evidence sufficiency, critique verdicts, wiki truth, canonical truth, or packet
 lifecycle.
 
+`.loom/support/` is optional and lazy-materialized. Use it only for intentionally
+saved support artifacts, and do not treat the directory or its support-local IDs
+as a new canonical owner layer.
+
 Use the smallest explicit shape needed by the owning skill:
 
 - workspace harness profiles use `id: workspace:harness` and

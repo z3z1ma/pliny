@@ -45,6 +45,10 @@ Durable support surfaces help operation without owning project truth:
 - packets own bounded child-worker contracts
 - memory owns optional support recall, retrieval cues, preferences, entities,
   reminders, and hot context without owning project truth
+- optional, lazy-materialized `.loom/support/` artifacts, such as saved drive
+  handoffs, support recovery or handoff without owning objective state, live
+  ticket state, acceptance, evidence sufficiency, critique verdicts, wiki truth,
+  canonical truth, or packet lifecycle
 - workspace and harness records own scope or transport support only
 
 ## Loops

@@ -215,7 +215,8 @@ This is transport only:
 - the outer-loop handoff template is prompt-only by default; save it only when a
   durable support artifact is useful for reviewability, context recovery, or
   handoff audit
-- saved outer-loop handoffs live under
+- saved outer-loop handoffs live under the optional, lazy-materialized,
+  non-canonical support surface
   `.loom/support/drive-handoffs/<UTC compact timestamp>-<slug>.md` with
   `kind: support-artifact`, `support_kind: drive-outer-loop-handoff`, and
   `handoff_kind: outer-loop-synthesis`
@@ -226,6 +227,8 @@ This is transport only:
 - the outer-loop handoff template is not a packet family and not a truth owner
 - any handoff `write_scope` is proposal-time permission for that support
   handoff, not Ralph `child_write_scope`
+- do not create `.loom/support/` merely during bootstrap; create it only when a
+  saved support artifact is intentionally materialized
 
 Use `templates/outer-loop-handoff.md` only when a bounded handoff would reduce
 context pressure or improve reviewability.

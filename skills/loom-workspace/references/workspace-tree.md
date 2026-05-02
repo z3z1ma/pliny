@@ -1,6 +1,6 @@
 # Workspace Tree
 
-A Loom-enabled project normally uses this canonical tree:
+A Loom-enabled project normally uses this workspace tree:
 
 ```text
 .loom/
@@ -20,15 +20,30 @@ A Loom-enabled project normally uses this canonical tree:
 │   ├── critique/
 │   └── wiki/
 ├── evidence/
-└── memory/
-    ├── system/
-    └── user/
+├── memory/
+│   ├── system/
+│   └── user/
+└── support/              # optional, lazy-materialized support artifacts
+    └── drive-handoffs/   # optional saved drive handoffs
 ```
 
 The tree is lazily materialized. Git may not preserve empty directories, so a
-fresh checkout may omit owner paths that have no records yet. Bootstrap should
-create the standard tree when needed, and any directory that contains records
-should use the canonical path.
+fresh checkout may omit owner paths or support paths that have no records yet.
+Bootstrap should create the standard owner and packet/memory support tree when
+needed, and any directory that contains records should use the path assigned to
+that record or support kind.
+
+The canonical owner paths are `constitution`, `initiatives`, `research`,
+`specs`, `plans`, `tickets`, `critique`, `wiki`, and `evidence`. `packets`,
+`memory`, and optional `.loom/support/` paths are support surfaces. They help
+execution, recall, reviewability, or handoff audit, but they do not own objective
+state, live ticket state, acceptance, evidence sufficiency, critique verdicts,
+wiki truth, canonical truth, or packet lifecycle.
+
+Create `.loom/support/` only when a support artifact is intentionally saved, such
+as a drive handoff under `.loom/support/drive-handoffs/`. Do not create it merely
+to satisfy bootstrap, and do not treat its presence as a new canonical owner
+layer.
 
 ## Bootstrap Command
 
@@ -50,6 +65,9 @@ mkdir -p \
   .loom/memory/system \
   .loom/memory/user
 ```
+
+The bootstrap command intentionally omits `.loom/support/`: support artifacts are
+optional and should be materialized by the workflow that saves them.
 
 ## First Files Worth Creating
 

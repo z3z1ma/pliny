@@ -1,11 +1,11 @@
 ---
 id: ticket:supp0x2a
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: high
 created_at: 2026-05-02T18:58:43Z
-updated_at: 2026-05-02T18:58:43Z
+updated_at: 2026-05-02T19:32:39Z
 scope:
   kind: repository
   repositories:
@@ -15,6 +15,13 @@ links:
     - initiative:skills-corpus-council-precision-pass
   plan:
     - plan:skills-corpus-council-precision-pass
+  packet:
+    - packet:ralph-ticket-supp0x2a-20260502T191626Z
+    - packet:ralph-ticket-supp0x2a-20260502T192522Z
+  evidence:
+    - evidence:support-surface-validation
+  critique:
+    - critique:support-surface-review
 external_refs: {}
 depends_on:
   - ticket:rtvocab1
@@ -71,8 +78,12 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-council-precision-pass#OBJ-002` | pending | pending | open |
-| `ticket:supp0x2a#ACC-001` through `ticket:supp0x2a#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-council-precision-pass#OBJ-002` | `evidence:support-surface-validation` | `critique:support-surface-review` with findings resolved and re-check passed | supported |
+| `ticket:supp0x2a#ACC-001` | `evidence:support-surface-validation` | `critique:support-surface-review` | supported |
+| `ticket:supp0x2a#ACC-002` | `evidence:support-surface-validation` | `critique:support-surface-review` | supported |
+| `ticket:supp0x2a#ACC-003` | `evidence:support-surface-validation` | `critique:support-surface-review` | supported |
+| `ticket:supp0x2a#ACC-004` | `evidence:support-surface-validation` | `critique:support-surface-review` | supported |
+| `ticket:supp0x2a#ACC-005` | `critique:support-surface-review` | `critique:support-surface-review` re-check passed with no findings | supported |
 
 # Execution Notes
 
@@ -82,27 +93,29 @@ runtime tree if needed.
 
 # Blockers
 
-Depends on `ticket:rtvocab1`.
+None.
 
 # Next Move / Next Route
 
-Ralph implementation packet after dependency closes.
+Closed. Commit and push this ticket before continuing to `ticket:retrod3p`.
 
 # Route Readiness
 
-Route: Ralph implementation packet
+Route: acceptance_review
 
-Bounded iteration: align optional `.loom/support/` doctrine and discovery.
-Write boundary: support-surface documentation/templates, this ticket, one evidence
-record, one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, targeted support-path searches, evidence,
-ticket update, and critique recommendation.
+Acceptance review readiness:
+Evidence and critique disposition: `evidence:support-surface-validation` and
+`critique:support-surface-review` support acceptance with both oracle findings
+resolved and re-check passed.
+Residual risks: validation is structural/manual; README runtime tree remains
+concise while fuller framing lives in bootstrap/protocol/architecture/skills.
 
 # Evidence
 
-Expected: targeted `.loom/support`, `drive-handoffs`, and support ownership
-searches; workspace tree comparison; `git diff --check`.
+- `evidence:support-surface-validation`: records before/after `.loom/support`,
+  `drive-handoffs`, `support-artifact`, bootstrap, `PROTOCOL.md`,
+  `ARCHITECTURE.md`, and support ownership observations plus `git diff --check`
+  result.
 
 # Critique Disposition
 
@@ -120,24 +133,41 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+Recorded in `critique:support-surface-review`:
 
-Disposition status: pending
+- `critique:support-surface-review#ORACLE-SUPP0X2A-001` - resolved; first packet
+  is `consumed`, parent merge notes name the stale-lifecycle finding and repair
+  packet, and oracle re-check passed.
+- `critique:support-surface-review#ORACLE-SUPP0X2A-002` - resolved; bootstrap,
+  `PROTOCOL.md`, and `ARCHITECTURE.md` now name optional, lazy-materialized,
+  non-canonical `.loom/support/` framing, evidence was refreshed, and oracle
+  re-check passed.
+
+Disposition status: completed
 
 Deferral / not-required rationale:
 
-Not deferred.
+Not deferred. Mandatory oracle critique and re-check passed with no findings.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+Retrospective / promotion disposition complete. Durable support-surface learning
+was promoted directly into the owner product surfaces: bootstrap truth reference,
+`PROTOCOL.md`, `ARCHITECTURE.md`, README, workspace tree/status, drive handoff
+guidance, and record grammar references. No separate wiki page, research record,
+spec, constitution decision, or memory entry is needed for this ticket.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-02T19:32:39Z
+Basis: Ralph packets `packet:ralph-ticket-supp0x2a-20260502T191626Z` and
+`packet:ralph-ticket-supp0x2a-20260502T192522Z`; evidence
+`evidence:support-surface-validation`; oracle critique
+`critique:support-surface-review` with both findings resolved and re-check passing
+with no findings.
+Residual risks: validation is structural/manual; no automated schema or rendered
+document validation exists for this Markdown corpus.
 
 # Dependencies
 
@@ -146,3 +176,22 @@ Residual risks:
 # Journal
 
 - 2026-05-02T18:58:43Z: Created from council finding `CR-002`.
+- 2026-05-02T19:16:26Z: Started Ralph iteration
+  `packet:ralph-ticket-supp0x2a-20260502T191626Z` from baseline
+  `63f68637ae4ff7ae2e13c901a235ad362791fbcc` after dependency
+  `ticket:rtvocab1` closed.
+- 2026-05-02T19:20:06Z: Ralph iteration updated support-surface product
+  guidance, recorded `evidence:support-surface-validation`, and moved ticket to
+  `review_required` for mandatory oracle critique. Ticket remains open.
+- 2026-05-02T19:25:22Z: Oracle critique found two blocking medium findings:
+  stale Ralph packet lifecycle and missing bootstrap/PROTOCOL/ARCHITECTURE support
+  framing. Parent recorded `critique:support-surface-review`, consumed the first
+  packet, and compiled repair packet
+  `packet:ralph-ticket-supp0x2a-20260502T192522Z`.
+- 2026-05-02T19:26:53Z: Ralph repair iteration verified the first packet is
+  `consumed`, aligned bootstrap/`PROTOCOL.md`/`ARCHITECTURE.md` with optional
+  lazy-materialized non-canonical `.loom/support/`, refreshed
+  `evidence:support-surface-validation`, and returned the ticket to
+  `review_required` for oracle re-check. Ticket remains open.
+- 2026-05-02T19:32:39Z: Oracle re-check passed with no findings. Recorded
+  acceptance and retrospective disposition; closed ticket.

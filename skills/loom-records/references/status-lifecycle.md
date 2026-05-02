@@ -73,6 +73,10 @@ Use these sets unless the owning skill records a narrower one:
   ticket state, acceptance, evidence sufficiency, critique verdicts, wiki truth,
   canonical truth, or packet lifecycle status
 
+Support artifacts saved under optional `.loom/support/` paths are
+lazy-materialized support files. Their statuses are local to the artifact and do
+not make `.loom/support/` a canonical owner layer or packet lifecycle surface.
+
 ## Layer-Specific Meanings
 
 - `concluded` — research has reached evidence-bounded conclusions or recommendations.

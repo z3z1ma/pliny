@@ -118,7 +118,7 @@ Keep these categories separate:
 | Category | Examples | What It Owns |
 | --- | --- | --- |
 | owner layer | constitution, initiative, research, spec, plan, ticket, evidence, critique, wiki | project truth by type |
-| support surface | packet, memory, workspace/harness records | recovery, recall, retrieval cues, bounded handoff, or scope support without owning project truth |
+| support surface | packet, memory, optional `.loom/support/` artifacts, workspace/harness records | recovery, recall, retrieval cues, bounded handoff, or scope support without owning project truth |
 | execution route | local edit, Ralph, critique pass, wiki pass, retrospective, acceptance review | a way to move work through owner layers |
 | transport | slash command, subagent, headless CLI, manual handoff, harness adapter | invocation mechanics only |
 
@@ -187,8 +187,15 @@ truth owners:
 ```text
 packet
 memory
+support artifact
 workspace support records
 ```
+
+Saved support artifacts may live under optional, lazy-materialized
+`.loom/support/` paths such as `.loom/support/drive-handoffs/`. They support
+handoff and recovery; they do not own objective state, live ticket state,
+acceptance, evidence sufficiency, critique verdicts, wiki truth, canonical truth,
+or packet lifecycle.
 
 Workspace support records include records such as `.loom/workspace.md` and
 `.loom/harness.md` that document scope aliases, repository boundaries, or

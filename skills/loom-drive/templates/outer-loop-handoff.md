@@ -34,7 +34,8 @@ records.
 
 This handoff is prompt-only by default. Save it only when the parent wants a
 durable support artifact for reviewability, context recovery, or handoff audit.
-If saved, place it under
+If saved, place it under the optional, lazy-materialized, non-canonical support
+surface
 `.loom/support/drive-handoffs/<UTC compact timestamp>-<slug>.md` and keep the
 support-local `id`, `kind`, `support_kind`, and `handoff_kind` fields above.
 

@@ -152,8 +152,9 @@ constitution -> initiative -> plan -> ticket
 
 Research and specs strengthen that backbone when evidence or intended behavior is
 missing. Evidence, critique, and wiki are follow-through routes for observations,
-review, and accepted explanation. Packets and memory are support surfaces: packets
-carry bounded worker contracts, and memory holds optional recall without owning
+review, and accepted explanation. Packets, memory, and saved support artifacts are
+support surfaces: packets carry bounded worker contracts, memory holds optional
+recall, and support artifacts help handoff audit or recovery without owning
 project truth.
 
 The **inner loop** compiles a packet for a fresh worker:
@@ -218,6 +219,7 @@ Durable support surfaces help execution and recovery without owning project trut
 | --- | --- |
 | `packet` | Bounded child-worker contracts; durable support, not project truth |
 | `memory` | Optional support recall: retrieval cues, preferences, entities, reminders, and hot context |
+| `support` | Optional, lazy-materialized saved support artifacts such as drive handoffs; not canonical truth |
 
 The layers are ordinary Markdown records inside the repo. They are structured enough for agents to reason over and simple enough for humans to inspect.
 
@@ -555,9 +557,11 @@ Inside a Loom-enabled project, the runtime tree looks roughly like this:
 │   ├── critique/
 │   └── wiki/
 ├── evidence/
-└── memory/        # optional support recall
-    ├── system/
-    └── user/
+├── memory/        # optional support recall
+│   ├── system/
+│   └── user/
+└── support/       # optional saved support artifacts; non-canonical
+    └── drive-handoffs/
 ```
 
 First records usually emerge through `loom-workspace`, `loom-constitution`, and `loom-tickets`.

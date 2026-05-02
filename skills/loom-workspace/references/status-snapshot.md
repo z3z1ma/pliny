@@ -10,6 +10,7 @@ acceptance, suspicious, or ready for the next bounded move.
 - `constitution:main`
 - tickets grouped by status
 - linked plans, specs, research, critique, wiki, evidence, and packets
+- optional `.loom/support/` artifacts linked or cited by owner records
 - current git status when repository changes matter
 
 ## Procedure
@@ -43,7 +44,8 @@ files.
    already in flight.
 4. For each relevant ticket, read its upstream owner chain: initiative, research,
    spec, plan, and any cited packet or support records needed to understand the
-   next route.
+   next route. Saved `.loom/support/` artifacts are optional support context, not
+   canonical owners.
 5. Inspect evidence and critique only as needed to evaluate the ticket's current
    acceptance, review, blocker, or next-route disposition.
 6. Continue from the owning records. If chat history, transcript memory, memory
@@ -108,6 +110,9 @@ work. They still do not replace the owner update needed for a truthful resume.
 - non-ticket status is outside the lifecycle grammar
 - plan is tracking live execution state
 - wiki or memory is carrying owner truth
+- `.loom/support/` artifacts are carrying objective state, live ticket state,
+  acceptance, evidence sufficiency, critique verdicts, wiki truth, canonical
+  truth, or packet lifecycle
 - packet remains `compiled` after the child output has returned
 - next-route fields use ticket lifecycle statuses such as `review_required` or
   command/adapter names instead of route tokens
@@ -120,6 +125,7 @@ rg -n '^status: (active|blocked|review_required|complete_pending_acceptance)\b' 
 rg -n '^status:' .loom/{constitution,initiatives,research,specs,plans,critique,wiki,evidence,packets} --glob '*.md'
 rg -n 'OBJ-[0-9]{3}|REQ-[0-9]{3}|ACC-[0-9]{3}|CLAIM-[0-9]{3}' .loom --glob '*.md'
 find .loom/{tickets,critique,wiki,evidence} -type f -name '*.md' | sort
+find .loom/support -type f -name '*.md' 2>/dev/null | sort
 git status --short
 ```
 

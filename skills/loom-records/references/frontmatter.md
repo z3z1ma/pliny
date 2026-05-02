@@ -71,6 +71,10 @@ canonical owner layer and must not own objective state, live ticket state,
 acceptance, evidence sufficiency, critique verdicts, wiki truth, canonical truth,
 or packet lifecycle.
 
+`.loom/support/` is an optional, lazy-materialized support surface for saved
+support artifacts. Create it only when a workflow intentionally saves such an
+artifact; its presence never makes the support artifact canonical truth.
+
 When a support template includes frontmatter, keep these fields explicit enough
 for ordinary search tools:
 

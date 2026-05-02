@@ -111,6 +111,14 @@ The memory tree is durable but non-canonical:
 
 - `.loom/memory/`
 
+Optional saved support artifacts may live under a lazy-materialized support tree:
+
+- `.loom/support/`
+
+Create `.loom/support/` only when a support artifact is intentionally saved,
+such as a drive handoff under `.loom/support/drive-handoffs/`. Its presence does
+not create a canonical owner layer.
+
 External trackers, pull requests, chat transcripts, dashboards, generated
 context files, and path-local instruction files are also support surfaces unless
 the constitution explicitly says otherwise.
@@ -118,6 +126,9 @@ the constitution explicitly says otherwise.
 Packets help bounded work.
 Memory helps recall and continuity by pointing operators toward useful context;
 it does not make that context authoritative.
+Saved support artifacts help recovery, handoff, or local workflow transport;
+they do not own objective state, live ticket state, acceptance, evidence
+sufficiency, critique verdicts, wiki truth, canonical truth, or packet lifecycle.
 External systems help mirror or transport work.
 None of them outrank the canonical record owners.
 
