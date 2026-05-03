@@ -1,11 +1,11 @@
 ---
 id: ticket:srcmeta13
 kind: ticket
-status: ready
+status: closed
 change_class: documentation-explanation
 risk_class: low
 created_at: 2026-05-03T01:57:25Z
-updated_at: 2026-05-03T01:57:25Z
+updated_at: 2026-05-03T02:55:50Z
 scope:
   kind: repository
   repositories:
@@ -17,6 +17,12 @@ links:
     - plan:skills-corpus-residual-protocol-sharpening-pass
   research:
     - research:skills-corpus-residual-audit-synthesis
+  packet:
+    - packet:ralph-ticket-srcmeta13-20260503T025211Z
+  evidence:
+    - evidence:research-source-metadata-validation
+  critique:
+    - critique:research-source-metadata-review
 external_refs: {}
 depends_on: []
 ---
@@ -80,8 +86,8 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-016` | pending | pending | open |
-| `ticket:srcmeta13#ACC-001` through `ticket:srcmeta13#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-016` | `evidence:research-source-metadata-validation` | `critique:research-source-metadata-review` | supported |
+| `ticket:srcmeta13#ACC-001` through `ticket:srcmeta13#ACC-005` | `evidence:research-source-metadata-validation` | `critique:research-source-metadata-review` | supported |
 
 # Execution Notes
 
@@ -95,23 +101,22 @@ None.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to `ticket:driveref9`.
+
+Ralph packet `packet:ralph-ticket-srcmeta13-20260503T025211Z` was consumed in
+scope, evidence was recorded, oracle critique passed with no findings, and
+acceptance is complete.
 
 # Route Readiness
 
-Route: ralph
+Acceptance review readiness:
 
-Bounded iteration: research source provenance and freshness guidance.
-Write boundary: research source guidance, this ticket, one evidence record, one
-critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Evidence `evidence:research-source-metadata-validation` and oracle critique
+`critique:research-source-metadata-review` support closure with no findings.
 
 # Evidence
 
-Expected: before/after searches for `access date`, `freshness`, `source quality`,
-`recheck`, `invalidation`, and `git diff --check`.
+Recorded: `evidence:research-source-metadata-validation`.
 
 # Critique Disposition
 
@@ -130,9 +135,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:research-source-metadata-review` - no findings; mandatory oracle
+critique passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -140,18 +146,33 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Research source metadata and freshness guidance was promoted directly into
+  `skills/loom-research/references/source-handling.md`.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the product guidance itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+touched research source-handling reference.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T02:55:50Z
+Basis: Ralph packet `packet:ralph-ticket-srcmeta13-20260503T025211Z`; evidence
+`evidence:research-source-metadata-validation`; oracle critique
+`critique:research-source-metadata-review` with no findings.
+Residual risks: guidance is intentionally lightweight and judgment-based; it does
+not define a rigid citation schema. Correct use depends on operators recording
+source metadata honestly when external or current sources matter.
 
 # Dependencies
 
@@ -160,3 +181,13 @@ None.
 # Journal
 
 - 2026-05-03T01:57:25Z: Created from follow-up validation after `ticket:wssupp4`.
+- 2026-05-03T02:52:11Z: Marked active and compiled Ralph packet
+  `packet:ralph-ticket-srcmeta13-20260503T025211Z` for research source metadata
+  and freshness guidance.
+- 2026-05-03T02:53:57Z: Ralph iteration
+  `packet:ralph-ticket-srcmeta13-20260503T025211Z` completed in scope. Evidence
+  recorded in `evidence:research-source-metadata-validation`; next route is
+  mandatory oracle critique.
+- 2026-05-03T02:55:50Z: Mandatory oracle critique
+  `critique:research-source-metadata-review` passed with no findings. Parent
+  recorded retrospective / promotion disposition and accepted closure.
