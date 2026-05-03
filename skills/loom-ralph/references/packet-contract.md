@@ -132,7 +132,8 @@ child_write_scope:
 parent_merge_scope:
   records:
     - ticket:<token>
-  paths: []
+  paths:
+    - .loom/tickets/<ticket-file>.md
 ```
 
 Children can recommend ticket, evidence, critique, or wiki updates. Ralph child
@@ -140,6 +141,12 @@ canonical-record writes fail closed by default: use `None - child returns output
 only` unless the parent grants exact, narrow record refs. The parent commits
 canonical reconciliation unless the packet explicitly grants the child
 record-write authority.
+
+Do not treat empty `child_write_scope.records` or `child_write_scope.paths` as a
+launch-ready no-write declaration. Empty child write scope is ambiguous and
+launch-blocking until the parent clarifies the child boundary with exact record
+refs, paths, or globs, or explicit `None - <rationale>` entries for records and
+paths.
 
 Legacy packets may use `write_scope`. Treat that as child write scope unless the
 packet says otherwise. New Ralph packets should use `child_write_scope` for the

@@ -34,8 +34,10 @@ scope:
   repositories:
     - repo:root
 child_write_scope:
-  records: []
-  paths: []
+  records:
+    - <record ref | None - rationale>
+  paths:
+    - <path or glob | None - rationale>
 parent_merge_scope:
   records:
     - <record ref | None - rationale>
@@ -311,9 +313,17 @@ ticket.
 child_write_scope:
   records:
     - ticket:<token>
+    # or: None - <rationale for no child record writes>
   paths:
     - path/or/glob
+    # or: None - <rationale for no child path writes>
 ```
+
+Do not leave `child_write_scope.records` or `child_write_scope.paths` empty.
+Empty child write scope is ambiguous: it can mean no writes, forgotten scope, or
+unbounded authority. It is launch-blocking until the parent replaces it with exact
+record refs, paths, or globs the child may mutate, or with explicit
+`None - <rationale>` entries for records and paths.
 
 `parent_merge_scope` names what the parent expects to reconcile after the packet:
 

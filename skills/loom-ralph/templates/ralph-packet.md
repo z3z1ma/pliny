@@ -103,7 +103,10 @@ Before launch, the parent verifies:
   supersede this packet instead of launching if the contract is materially stale
 - non-overlapping child write scope: `child_write_scope` records and paths are
   exact, narrow, and do not conflict with any parallel packet; canonical-record
-  writes fail closed unless exact record refs are granted
+  writes fail closed unless exact record refs are granted; empty
+  `child_write_scope.records` or `child_write_scope.paths` is ambiguous and
+  launch-blocking until replaced with exact entries or explicit
+  `None - <rationale>` entries
 - parent merge scope: `parent_merge_scope` names the ticket and any evidence,
   critique, packet-status, or other paths the parent must reconcile after return
 - Git/execution context: branch, worktree, isolation, network posture, destructive
