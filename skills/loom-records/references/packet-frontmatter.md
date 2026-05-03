@@ -47,6 +47,7 @@ source_fingerprint:
   integration_ref: <ref, tag, commit, or unknown>
   integration_commit: <sha or unknown>
   git_status_summary: <clean|dirty|unknown>
+  git_status_detail: <short status detail or unknown - rationale>
   # Provenance: owner records or artifacts used to compile this packet baseline.
   compiled_from:
     - <record ref>
@@ -319,6 +320,9 @@ The child scope is not blanket authority to change project truth. If the packet
 allows a child to update canonical records, the child must still stay within the
 owning layer's semantics and the ticket's acceptance boundary. The parent owns
 final reconciliation unless the packet explicitly grants a narrower child update.
+For Ralph packets, canonical record writes should fail closed by default: use
+`None - child returns output only` unless the parent grants exact, narrow record
+refs for this iteration.
 
 Legacy packets may contain `write_scope`. Treat that as `child_write_scope` only
 for legacy compatibility when the packet does not say otherwise. New packet
@@ -335,16 +339,20 @@ source_fingerprint:
   integration_ref: <ref, tag, commit, or unknown>
   integration_commit: <sha or unknown>
   git_status_summary: <clean|dirty|unknown>
+  git_status_detail: <short status detail or unknown - rationale>
   # Provenance: owner records or artifacts used to compile this packet baseline.
   compiled_from:
     - ticket:<token>
 ```
 
-Before launch, the parent should compare this baseline against governing records,
-the resolved integration ref, and child-write-scope files. At execution time, the
-packet consumer should stop and report `blocked` or `escalate` if those surfaces
-appear materially changed in a way that makes the contract unsafe. If the packet
-is materially stale, supersede it rather than asking the consumer to guess.
+`git_status_summary` gives the coarse cleanliness state; `git_status_detail`
+should carry the short status details, or `unknown - <rationale>` when the parent
+cannot inspect them. Before launch, the parent should compare this baseline
+against governing records, the resolved integration ref, and child-write-scope
+files. At execution time, the packet consumer should stop and report `blocked` or
+`escalate` if those surfaces appear materially changed in a way that makes the
+contract unsafe. If the packet is materially stale, supersede it rather than
+asking the consumer to guess.
 
 ## Execution Context
 

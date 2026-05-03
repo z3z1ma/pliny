@@ -19,7 +19,7 @@ scope:
     - repo:root
 child_write_scope:
   records:
-    - "<TBD: record refs the child may modify, or None - rationale>"
+    - "None - child returns output only unless parent grants exact narrow record refs"
   paths:
     - "<TBD: paths or globs the child may modify, or None - rationale>"
 parent_merge_scope:
@@ -33,6 +33,7 @@ source_fingerprint:
   integration_ref: <ref, tag, commit, or unknown>
   integration_commit: <sha or unknown>
   git_status_summary: <clean|dirty|unknown>
+  git_status_detail: <short status detail or unknown - rationale>
   # Provenance: owner records or artifacts used to compile this packet baseline.
   compiled_from:
     - ticket:<token>
@@ -43,7 +44,7 @@ execution_context:
   isolation: none
   git_shared_metadata_mutations: forbidden
   destructive_commands: forbidden
-  network: unknown
+  network: "<TBD: choose allowed, forbidden, or unknown - rationale before saving>"
 context_budget:
   posture: normal
   max_source_files: 8

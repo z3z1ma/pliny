@@ -1,11 +1,11 @@
 ---
 id: ticket:pktmeta12
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-03T01:57:25Z
-updated_at: 2026-05-03T01:57:25Z
+updated_at: 2026-05-03T02:28:53Z
 scope:
   kind: repository
   repositories:
@@ -17,6 +17,12 @@ links:
     - plan:skills-corpus-residual-protocol-sharpening-pass
   research:
     - research:skills-corpus-residual-audit-synthesis
+  packet:
+    - packet:ralph-ticket-pktmeta12-20260503T022401Z
+  evidence:
+    - evidence:packet-metadata-defaults-validation
+  critique:
+    - critique:packet-metadata-defaults-review
 external_refs: {}
 depends_on: []
 ---
@@ -89,8 +95,8 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-015` | pending | pending | open |
-| `ticket:pktmeta12#ACC-001` through `ticket:pktmeta12#ACC-006` | pending | pending | open |
+| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-015` | `evidence:packet-metadata-defaults-validation` | `critique:packet-metadata-defaults-review` | supported |
+| `ticket:pktmeta12#ACC-001` through `ticket:pktmeta12#ACC-006` | `evidence:packet-metadata-defaults-validation` | `critique:packet-metadata-defaults-review` | supported |
 
 # Execution Notes
 
@@ -106,24 +112,17 @@ None.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to `ticket:ralphchk7`.
 
 # Route Readiness
 
-Route: ralph
-
-Bounded iteration: packet metadata defaults and child write authority.
-Write boundary: shared packet guidance/templates, Ralph packet contract, this
-ticket, one evidence record, one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Acceptance review readiness:
+Evidence `evidence:packet-metadata-defaults-validation` and oracle critique
+`critique:packet-metadata-defaults-review` support closure with no findings.
 
 # Evidence
 
-Expected: before/after searches for `git_status_summary`, source-state detail,
-`network: unknown`, `child_write_scope`, canonical-record write wording, and
-`git diff --check`.
+Recorded: `evidence:packet-metadata-defaults-validation`.
 
 # Critique Disposition
 
@@ -142,9 +141,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:packet-metadata-defaults-review` - no findings; mandatory oracle
+critique passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -152,18 +152,35 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Packet metadata defaults for source-status detail, network posture, and Ralph
+  child record-write authority were promoted directly into packet templates,
+  shared packet-frontmatter guidance, and Ralph packet contract guidance.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the product guidance itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+touched packet templates and references.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T02:28:53Z
+Basis: Ralph packet `packet:ralph-ticket-pktmeta12-20260503T022401Z`; evidence
+`evidence:packet-metadata-defaults-validation`; oracle critique
+`critique:packet-metadata-defaults-review` with no findings.
+Residual risks: validation is structural/manual; there is no automated
+protocol-template test suite. Existing historical packets were intentionally not
+migrated; future correctness still depends on packet authors replacing template
+placeholders honestly.
 
 # Dependencies
 
@@ -172,3 +189,10 @@ None.
 # Journal
 
 - 2026-05-03T01:57:25Z: Created from follow-up validation after `ticket:wssupp4`.
+- 2026-05-03T02:26:13Z: Ralph iteration
+  `packet:ralph-ticket-pktmeta12-20260503T022401Z` completed in scope. Evidence
+  recorded in `evidence:packet-metadata-defaults-validation`; next route is
+  mandatory oracle critique.
+- 2026-05-03T02:28:53Z: Mandatory oracle critique
+  `critique:packet-metadata-defaults-review` passed with no findings. Parent
+  recorded retrospective / promotion disposition and accepted closure.

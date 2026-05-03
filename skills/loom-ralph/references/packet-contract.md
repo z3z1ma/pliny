@@ -73,6 +73,7 @@ source_fingerprint:
   integration_ref: <ref, tag, commit, or unknown>
   integration_commit: <sha or unknown>
   git_status_summary: <clean|dirty|unknown>
+  git_status_detail: <short status detail or unknown - rationale>
   compiled_from:
     - ticket:<token>
     - spec:<slug>
@@ -93,7 +94,8 @@ separate child mutation authority from parent reconciliation authority:
 
 ```yaml
 child_write_scope:
-  records: []
+  records:
+    - "None - child returns output only unless parent grants exact narrow record refs"
   paths:
     - src/example/**
     - tests/example/**
@@ -103,8 +105,10 @@ parent_merge_scope:
   paths: []
 ```
 
-Children can recommend ticket, evidence, critique, or wiki updates. The parent
-commits canonical reconciliation unless the packet explicitly grants the child
+Children can recommend ticket, evidence, critique, or wiki updates. Ralph child
+canonical-record writes fail closed by default: use `None - child returns output
+only` unless the parent grants exact, narrow record refs. The parent commits
+canonical reconciliation unless the packet explicitly grants the child
 record-write authority.
 
 Legacy packets may use `write_scope`. Treat that as child write scope unless the
