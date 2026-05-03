@@ -1,11 +1,11 @@
 ---
 id: ticket:critfail3
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-03T00:56:36Z
-updated_at: 2026-05-03T00:56:36Z
+updated_at: 2026-05-03T01:39:16Z
 scope:
   kind: repository
   repositories:
@@ -17,6 +17,12 @@ links:
     - plan:skills-corpus-residual-protocol-sharpening-pass
   research:
     - research:skills-corpus-residual-audit-synthesis
+  packet:
+    - packet:ralph-ticket-critfail3-20260503T013234Z
+  evidence:
+    - evidence:mandatory-critique-template-validation
+  critique:
+    - critique:mandatory-critique-template-review
 external_refs: {}
 depends_on: []
 ---
@@ -76,8 +82,12 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-005` | pending | pending | open |
-| `ticket:critfail3#ACC-001` through `ticket:critfail3#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-005` | `evidence:mandatory-critique-template-validation` | `critique:mandatory-critique-template-review` | supported |
+| `ticket:critfail3#ACC-001` | `evidence:mandatory-critique-template-validation` | `critique:mandatory-critique-template-review` | supported |
+| `ticket:critfail3#ACC-002` | `evidence:mandatory-critique-template-validation` | `critique:mandatory-critique-template-review` | supported |
+| `ticket:critfail3#ACC-003` | `evidence:mandatory-critique-template-validation` | `critique:mandatory-critique-template-review` | supported |
+| `ticket:critfail3#ACC-004` | `evidence:mandatory-critique-template-validation` | `critique:mandatory-critique-template-review` | supported |
+| `ticket:critfail3#ACC-005` | `critique:mandatory-critique-template-review` | oracle critique passed with no findings | supported |
 
 # Execution Notes
 
@@ -90,23 +100,20 @@ None.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to `ticket:wssupp4`.
 
 # Route Readiness
 
-Route: ralph
-
-Bounded iteration: ticket template mandatory critique fail-closed note.
-Write boundary: ticket template/acceptance reference if needed, this ticket, one
-evidence record, one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Acceptance review readiness:
+Evidence `evidence:mandatory-critique-template-validation` and oracle critique
+`critique:mandatory-critique-template-review` support closure with no findings.
 
 # Evidence
 
-Expected: before/after searches for `Critique policy`, `mandatory`, `deferred`,
-`not_required`, `Disposition status`, and `git diff --check`.
+`evidence:mandatory-critique-template-validation` supports `ACC-001` through
+`ACC-004` with before/after searches for `Critique policy`, `mandatory`,
+`deferred`, `not_required`, `Disposition status`, `draft/stub`, open medium/high
+findings, ticket-owned dispositions, and `git diff --check`.
 
 # Critique Disposition
 
@@ -124,9 +131,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:mandatory-critique-template-review` - no findings; mandatory oracle
+critique passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -134,18 +142,32 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Mandatory critique fail-closed guidance was promoted directly into the ticket
+  template critique disposition section.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the product guidance itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+ticket template guidance.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T01:39:16Z
+Basis: Ralph packet `packet:ralph-ticket-critfail3-20260503T013234Z`; evidence
+`evidence:mandatory-critique-template-validation`; oracle critique
+`critique:mandatory-critique-template-review` with no findings.
+Residual risks: validation is structural/manual; there is no automated
+protocol-template test suite.
 
 # Dependencies
 
@@ -154,3 +176,16 @@ None.
 # Journal
 
 - 2026-05-03T00:56:36Z: Created from council finding `NC2-002`.
+- 2026-05-03T01:32:34Z: Moved to `active` and compiled
+  `packet:ralph-ticket-critfail3-20260503T013234Z` for ticket template mandatory
+  critique fail-closed guidance.
+- 2026-05-03T01:34:06Z: Added the mandatory critique fail-closed template note,
+  recorded `evidence:mandatory-critique-template-validation`, and moved to
+  `review_required` for mandatory oracle critique.
+- 2026-05-03T01:36:39Z: Parent reconciled Ralph output, marked
+  `packet:ralph-ticket-critfail3-20260503T013234Z` consumed, and normalized claim
+  matrix pending-review statuses to `supported_pending_review` before oracle
+  critique.
+- 2026-05-03T01:39:16Z: Mandatory oracle critique
+  `critique:mandatory-critique-template-review` passed with no findings. Parent
+  recorded retrospective / promotion disposition and accepted closure.

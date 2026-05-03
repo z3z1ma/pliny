@@ -216,6 +216,22 @@ Use `blocking` only when unresolved required critique currently blocks acceptanc
 or dependent continuation. This status is a ticket-owned gate summary, not a
 critique verdict.
 
+Mandatory critique fail-closed rule:
+
+- If critique policy is `mandatory`, keep this disposition `pending` until a
+  final, non-draft/stub required critique exists.
+- If mandatory critique exists but has unresolved blocking issues, use
+  `blocking`.
+- If open medium/high findings are missing ticket-owned dispositions, use
+  `blocking` until the ticket records `resolved`, `accepted_risk`, `superseded`,
+  or `converted_to_follow_up` with the needed evidence, acceptance provenance,
+  or linked follow-up ticket.
+- `deferred` and `not_required` are closure-compatible only for recommended or
+  optional critique with rationale; do not use them to satisfy mandatory
+  critique.
+- Critique owns finding state and verdict. The ticket owns how findings affect
+  closure.
+
 Deferral / not-required rationale:
 
 # Retrospective / Promotion Disposition
