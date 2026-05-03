@@ -51,6 +51,12 @@ coverage state, evidence disposition, and acceptance decisions.
 
 Use when multiple tickets can be sequenced or run independently from the plan.
 
+Save-ready rule: remove unused wave examples and placeholder rows before saving.
+Replace placeholders with real tickets, write scopes, and routes, or use a
+meaningful `None - reason` when a wave or coverage item genuinely does not
+apply; keep claim / acceptance coverage, evidence / critique route, readiness,
+exit, and completion gates intact.
+
 Do not require parallel execution by default. Before any sibling Ralph work runs
 in parallel, record the independence and write scope overlap check here. Real
 waves require a concrete non-overlap summary; write `None - reason` only when no

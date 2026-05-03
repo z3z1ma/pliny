@@ -1,11 +1,11 @@
 ---
 id: ticket:tplsave3
 kind: ticket
-status: ready
+status: closed
 change_class: template-safety
 risk_class: medium
 created_at: 2026-05-03T04:09:51Z
-updated_at: 2026-05-03T04:09:51Z
+updated_at: 2026-05-03T05:08:33Z
 scope:
   kind: repository
   repositories:
@@ -73,12 +73,12 @@ explicit enough to avoid Markdown junk drawers.
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-004` | pending | pending | open |
-| `ticket:tplsave3#ACC-001` | pending | pending | open |
-| `ticket:tplsave3#ACC-002` | pending | pending | open |
-| `ticket:tplsave3#ACC-003` | pending | pending | open |
-| `ticket:tplsave3#ACC-004` | pending | pending | open |
-| `ticket:tplsave3#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-004` | `evidence:template-save-ready-validation` | `critique:template-save-ready-review` | supported |
+| `ticket:tplsave3#ACC-001` | `evidence:template-save-ready-validation` | `critique:template-save-ready-review` | supported |
+| `ticket:tplsave3#ACC-002` | `evidence:template-save-ready-validation` | `critique:template-save-ready-review` | supported |
+| `ticket:tplsave3#ACC-003` | `evidence:template-save-ready-validation` | `critique:template-save-ready-review` | supported |
+| `ticket:tplsave3#ACC-004` | `evidence:template-save-ready-validation` | `critique:template-save-ready-review` | supported |
+| `ticket:tplsave3#ACC-005` | None - critique outcome is the acceptance instrument | `critique:template-save-ready-review` | supported |
 
 # Execution Notes
 
@@ -91,21 +91,21 @@ None.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to `ticket:pktfam04`.
+
+Ralph packet `packet:ralph-ticket-tplsave3-20260503T050338Z` was consumed in
+scope, evidence was recorded, mandatory critique passed with no findings, and
+acceptance is complete.
 
 # Route Readiness
 
-Ralph readiness:
-Bounded iteration: save-ready template pruning rules.
-Write boundary: ticket and plan templates plus directly related references only.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, placeholder observations, and critique
-recommendation.
+Acceptance review readiness:
+Evidence `evidence:template-save-ready-validation` and mandatory critique
+`critique:template-save-ready-review` support closure with no findings.
 
 # Evidence
 
-Expected: targeted checks for save-ready wording, unused branch removal guidance,
-placeholder mentions, closure gates, and `git diff --check`.
+Recorded: `evidence:template-save-ready-validation`.
 
 # Critique Disposition
 
@@ -123,9 +123,9 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:template-save-ready-review` - no findings; mandatory critique passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -133,18 +133,35 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Save-ready placeholder and unused-branch pruning guidance was promoted directly
+  into `skills/loom-tickets/templates/ticket.md`.
+- Wave/placeholder pruning guidance was promoted directly into
+  `skills/loom-plans/templates/plan.md`.
+
+Deferred / not-required rationale:
+
+No separate wiki, research, spec, constitution, or memory record is needed. The
+durable lesson is template-local authoring guidance.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+templates.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T05:08:33Z
+Basis: Ralph packet `packet:ralph-ticket-tplsave3-20260503T050338Z`; evidence
+`evidence:template-save-ready-validation`; mandatory critique
+`critique:template-save-ready-review` with no findings.
+Residual risks: Existing route-readiness guidance still permits marking unrelated
+route sections `N/A`; later template tightening may prefer removal-only wording,
+but critique found the current save-ready rule clear enough for this ticket.
 
 # Dependencies
 
@@ -153,3 +170,13 @@ Residual risks:
 # Journal
 
 - 2026-05-03T04:09:51Z: Created from council template right-sizing finding.
+- 2026-05-03T05:03:38Z: Started Ralph iteration
+  `packet:ralph-ticket-tplsave3-20260503T050338Z` from clean `main` at
+  `e5abe40`.
+- 2026-05-03T05:05:24Z: Ralph iteration
+  `packet:ralph-ticket-tplsave3-20260503T050338Z` completed in scope. Evidence
+  recorded in `evidence:template-save-ready-validation`; next route is mandatory
+  critique.
+- 2026-05-03T05:08:33Z: Mandatory critique
+  `critique:template-save-ready-review` passed with no findings. Parent recorded
+  retrospective / promotion disposition and accepted closure.

@@ -19,6 +19,11 @@ depends_on: []
 
 What this bounded work item is.
 
+Save-ready rule: replace every placeholder before saving. Remove the unused
+acceptance owner branch and unused route-readiness branches; do not remove
+evidence, critique, retrospective / promotion, acceptance, or closure gates just
+because they are pending.
+
 # Context
 
 Relevant upstream context and why this exists.
