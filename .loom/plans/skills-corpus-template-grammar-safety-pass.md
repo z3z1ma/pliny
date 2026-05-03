@@ -1,9 +1,9 @@
 ---
 id: plan:skills-corpus-template-grammar-safety-pass
 kind: plan
-status: active
+status: completed
 created_at: 2026-05-02T22:03:13Z
-updated_at: 2026-05-02T22:03:13Z
+updated_at: 2026-05-03T00:24:08Z
 scope:
   kind: repository
   repositories:
@@ -216,6 +216,25 @@ Stop / loopback conditions:
 
 # Completion Basis
 
-When `status: completed`, cite child tickets, evidence records, critique records,
-semantic commits, pushes, retrospective dispositions, and any follow-up tickets or
-accepted risks.
+Completed at: 2026-05-03T00:24:08Z.
+
+Basis:
+
+- All 11 child tickets are `closed`: `ticket:pktsupp1`, `ticket:critgate2`,
+  `ticket:drvgram3`, `ticket:pktprov4`, `ticket:tkrout5`, `ticket:accspec6`,
+  `ticket:sibpkt7`, `ticket:phsafe8`, `ticket:critrec9`, `ticket:routewf10`, and
+  `ticket:readme11`.
+- Each child ticket acceptance dossier links its evidence record, mandatory oracle
+  critique record, consumed Ralph packet, retrospective / promotion disposition,
+  and acceptance decision.
+- Pushed per-ticket commits: `52cc82e` (`ticket:pktsupp1`), `63d587f`
+  (`ticket:critgate2`), `c70983f` (`ticket:drvgram3`), `f0491f2`
+  (`ticket:pktprov4`), `26964ce` (`ticket:tkrout5`), `4dde3b7`
+  (`ticket:accspec6`), `4b85062` (`ticket:sibpkt7`), `cac7c7c`
+  (`ticket:phsafe8`), `3bfbe92` (`ticket:critrec9`), `2de8a2e`
+  (`ticket:routewf10`), and `f95ff6b` (`ticket:readme11`).
+- No accepted residual risk or follow-up tickets were recorded for this plan.
+- Exit criteria are satisfied: all tickets are closed with evidence, oracle
+  critique, retrospective disposition, semantic commit, and push; no runtime creep,
+  command-wrapper truth, hidden helper requirement, or new canonical owner layer
+  was introduced.

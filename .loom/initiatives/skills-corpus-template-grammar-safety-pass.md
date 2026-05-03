@@ -1,9 +1,9 @@
 ---
 id: initiative:skills-corpus-template-grammar-safety-pass
 kind: initiative
-status: active
+status: completed
 created_at: 2026-05-02T22:03:13Z
-updated_at: 2026-05-02T22:03:13Z
+updated_at: 2026-05-03T00:24:08Z
 scope:
   kind: repository
   repositories:
@@ -125,12 +125,26 @@ acceptance ownership, sibling packet anchors, and public package boundaries.
 
 # Status Summary
 
-Active. Council finding set `NC-001` through `NC-011` has been decomposed into 11
-Ralph-sized tickets. Execute sequentially with Ralph/fixer, oracle critique,
+Completed. Council finding set `NC-001` through `NC-011` was decomposed into 11
+Ralph-sized tickets and executed sequentially with Ralph/fixer, oracle critique,
 retrospective disposition, semantic commits, and pushes for each ticket.
 
 # Completion Basis
 
-When `status: completed`, cite child tickets, evidence, oracle critique records,
-retrospective dispositions, semantic commits, pushes, accepted residual risks, and
-any follow-up tickets.
+Completed at: 2026-05-03T00:24:08Z.
+
+Basis:
+
+- `plan:skills-corpus-template-grammar-safety-pass` is completed.
+- All success metrics `OBJ-001` through `OBJ-011` are supported by their closed
+  child ticket acceptance dossiers: `ticket:pktsupp1`, `ticket:critgate2`,
+  `ticket:drvgram3`, `ticket:pktprov4`, `ticket:tkrout5`, `ticket:accspec6`,
+  `ticket:sibpkt7`, `ticket:phsafe8`, `ticket:critrec9`, `ticket:routewf10`, and
+  `ticket:readme11`.
+- `OBJ-012` is supported by every child ticket closing with evidence, mandatory
+  oracle critique, retrospective disposition, semantic commit, and push.
+- Pushed commits for this initiative are `52cc82e`, `63d587f`, `c70983f`,
+  `f0491f2`, `26964ce`, `4dde3b7`, `4b85062`, `cac7c7c`, `3bfbe92`, `2de8a2e`,
+  and `f95ff6b`.
+- No accepted residual risks or follow-up tickets were recorded for this
+  initiative.
