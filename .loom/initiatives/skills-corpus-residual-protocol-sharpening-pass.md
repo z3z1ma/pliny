@@ -1,9 +1,9 @@
 ---
 id: initiative:skills-corpus-residual-protocol-sharpening-pass
 kind: initiative
-status: active
+status: completed
 created_at: 2026-05-03T00:56:36Z
-updated_at: 2026-05-03T01:57:25Z
+updated_at: 2026-05-03T03:28:59Z
 scope:
   kind: repository
   repositories:
@@ -155,11 +155,45 @@ boundary.
 
 # Status Summary
 
-Active. Execute tickets sequentially with Ralph/fixer, oracle critique,
-retrospective disposition, semantic commits, and pushes for each ticket.
+Completed. All thirteen planned child tickets closed sequentially with Ralph/fixer
+execution, evidence, oracle critique, retrospective disposition, semantic commits,
+and pushes.
 
 # Completion Basis
 
-When `status: completed`, cite child tickets, evidence, oracle critique records,
-retrospective dispositions, semantic commits, pushes, accepted residual risks, and
-any follow-up tickets.
+Completed at: 2026-05-03T03:28:59Z
+
+Plan: `plan:skills-corpus-residual-protocol-sharpening-pass` completed.
+
+Ticket closure basis:
+
+- `ticket:routebd1` closed route vocabulary and `ask_user` boundary work.
+- `ticket:promdisp2` closed retrospective / promotion disposition wording.
+- `ticket:critfail3` closed mandatory critique fail-closed template guidance.
+- `ticket:wssupp4` closed workspace/support lifecycle and query grammar.
+- `ticket:drivegt11` closed drive/README route and checkpoint gate grammar.
+- `ticket:claimmx5` closed claim matrix status guidance.
+- `ticket:wsalias6` closed workspace alias template dedupe.
+- `ticket:pktmeta12` closed packet metadata defaults and child write authority.
+- `ticket:ralphchk7` closed Ralph launch checklist and consumed-versus-accepted
+  wording.
+- `ticket:evfresh8` closed evidence freshness and challenge examples.
+- `ticket:srcmeta13` closed research source provenance and freshness guidance.
+- `ticket:driveref9` closed drive outer-loop transport reference extraction.
+- `ticket:minpol10` closed minor template/path polish.
+
+Success metric disposition:
+
+- `OBJ-001` through `OBJ-016` are satisfied by the closed child tickets and their
+  linked evidence, critique records, retrospective dispositions, semantic commits,
+  and pushes.
+- The final pushed ticket commit is `043efe2` (`chore: apply minor template
+  polish`).
+- No validator, schema engine, command router, CLI, daemon, database, MCP
+  dependency, hidden helper, or new canonical owner layer was introduced.
+
+Residual risks:
+
+- Completion relies on structural/manual validation appropriate to this
+  Markdown-only corpus. Ticket evidence records identify the exact searches,
+  diff checks, and manual inspections used for their claims.

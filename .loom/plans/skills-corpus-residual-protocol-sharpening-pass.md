@@ -1,9 +1,9 @@
 ---
 id: plan:skills-corpus-residual-protocol-sharpening-pass
 kind: plan
-status: active
+status: completed
 created_at: 2026-05-03T00:56:36Z
-updated_at: 2026-05-03T01:57:25Z
+updated_at: 2026-05-03T03:28:59Z
 scope:
   kind: repository
   repositories:
@@ -241,6 +241,25 @@ Stop / loopback conditions:
 
 # Completion Basis
 
-When `status: completed`, cite child tickets, evidence records, critique records,
-semantic commits, pushes, retrospective dispositions, and any follow-up tickets or
-accepted risks.
+Completed at: 2026-05-03T03:28:59Z
+
+Basis:
+
+- All thirteen child tickets are `closed`: `ticket:routebd1`, `ticket:promdisp2`,
+  `ticket:critfail3`, `ticket:wssupp4`, `ticket:drivegt11`, `ticket:claimmx5`,
+  `ticket:wsalias6`, `ticket:pktmeta12`, `ticket:ralphchk7`, `ticket:evfresh8`,
+  `ticket:srcmeta13`, `ticket:driveref9`, and `ticket:minpol10`.
+- Each child ticket records evidence, mandatory oracle critique disposition,
+  retrospective / promotion disposition, acceptance decision, and residual risk.
+- The per-ticket semantic commits were pushed through final ticket commit
+  `043efe2` (`chore: apply minor template polish`).
+- Exit criteria are satisfied: the ticket set closed with evidence and critique,
+  critique findings were resolved before closure, initiative success metrics have
+  ticket-backed completion basis, no runtime/command-wrapper/helper/schema owner
+  was introduced, and each final ticket commit was pushed.
+
+Residual risks:
+
+- Validation is structural/manual because this repository has no app runtime or
+  automated test suite; each ticket records the targeted checks used for its
+  claims.
