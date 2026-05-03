@@ -8,7 +8,7 @@ scope:
   kind: repository
   repositories:
     - repo:root
-review_target: <scalar record ref, path, PR, branch, commit, diff range, or target summary>
+review_target: "<scalar record ref, path, PR, branch, commit, diff range, or target summary>"
 links: {}
 external_refs: {}
 ---

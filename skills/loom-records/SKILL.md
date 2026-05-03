@@ -79,8 +79,8 @@ Prefer records that are:
 
 ## Native Creation Flow
 
-1. choose the owning skill
-2. copy the right template
+1. choose the owning skill for the record kind
+2. copy the appropriate template from that owner skill's `templates/` directory, when one exists
 3. fill in frontmatter truthfully
 4. fill in the required body sections
 5. add typed links for real relationships

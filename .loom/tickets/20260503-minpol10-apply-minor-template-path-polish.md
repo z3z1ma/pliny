@@ -1,11 +1,11 @@
 ---
 id: ticket:minpol10
 kind: ticket
-status: ready
+status: closed
 change_class: record-hygiene
 risk_class: low
 created_at: 2026-05-03T00:56:36Z
-updated_at: 2026-05-03T01:57:25Z
+updated_at: 2026-05-03T03:26:21Z
 scope:
   kind: repository
   repositories:
@@ -90,8 +90,13 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-012` | pending | pending | open |
-| `ticket:minpol10#ACC-001` through `ticket:minpol10#ACC-006` | pending | pending | open |
+| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-012` | `evidence:minor-template-path-polish-validation` | `critique:minor-template-path-polish-review` | supported |
+| `ticket:minpol10#ACC-001` | `evidence:minor-template-path-polish-validation` | `critique:minor-template-path-polish-review` | supported |
+| `ticket:minpol10#ACC-002` | `evidence:minor-template-path-polish-validation` | `critique:minor-template-path-polish-review` | supported |
+| `ticket:minpol10#ACC-003` | `evidence:minor-template-path-polish-validation` | `critique:minor-template-path-polish-review` | supported |
+| `ticket:minpol10#ACC-004` | `evidence:minor-template-path-polish-validation` | `critique:minor-template-path-polish-review` | supported |
+| `ticket:minpol10#ACC-005` | `evidence:minor-template-path-polish-validation` | `critique:minor-template-path-polish-review` | supported |
+| `ticket:minpol10#ACC-006` | None - critique outcome is the acceptance instrument | `critique:minor-template-path-polish-review` | supported |
 
 # Execution Notes
 
@@ -105,24 +110,23 @@ None.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket, then reassess plan and initiative closure.
+
+Ralph packet `packet:ralph-ticket-minpol10-20260503T031118Z` was consumed in
+scope, evidence was recorded, oracle critique passed after three ticket-record
+findings were resolved, and acceptance is complete.
 
 # Route Readiness
 
-Route: ralph
+Acceptance review readiness:
 
-Bounded iteration: minor template/path polish.
-Write boundary: the targeted minor polish files, this ticket, one evidence record,
-one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Evidence `evidence:minor-template-path-polish-validation` and oracle critique
+`critique:minor-template-path-polish-review` support closure with all findings
+resolved.
 
 # Evidence
 
-Expected: before/after searches for memory entity headings, template path wording,
-tracked records templates, plain `TBD`, drive read-order numbering, and
-critique `review_target`, and `git diff --check`.
+Recorded: `evidence:minor-template-path-polish-validation`.
 
 # Critique Disposition
 
@@ -140,9 +144,15 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+- `critique:minor-template-path-polish-review#MINPOL10-ORC-001` - resolved.
+  Parent split `ACC-006` out of evidence-supported coverage before final critique.
+- `critique:minor-template-path-polish-review#MINPOL10-ORC-002` - resolved.
+  Parent replaced stale Ralph route readiness with critique readiness.
+- `critique:minor-template-path-polish-review#MINPOL10-ORC-003` - resolved.
+  Parent replaced non-canonical bundled claim-matrix rows with per-claim rows and
+  canonical status vocabulary.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -150,18 +160,36 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Minor template/path polish was promoted directly into the owning product
+  surfaces: memory entity template headings, wiki atlas page-type guidance,
+  `loom-records` owner-template wording, and direct critique template scalar
+  `review_target` quoting.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the product guidance itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+updated skill/template guidance.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T03:26:21Z
+Basis: Ralph packet `packet:ralph-ticket-minpol10-20260503T031118Z`; evidence
+`evidence:minor-template-path-polish-validation`; oracle critique
+`critique:minor-template-path-polish-review` with three ticket-record findings
+resolved and no unresolved findings.
+Residual risks: validation is structural/manual, which is appropriate for this
+Markdown-only polish pass; future clarity depends on operators reading the updated
+templates and references.
 
 # Dependencies
 
@@ -171,3 +199,20 @@ None.
 
 - 2026-05-03T00:56:36Z: Created from council finding `NC2-007` and older audit
   action 10.
+- 2026-05-03T03:11:18Z: Started Ralph iteration
+  `packet:ralph-ticket-minpol10-20260503T031118Z` from clean `main` at
+  `8c93219`.
+- 2026-05-03T03:14:13Z: Ralph iteration
+  `packet:ralph-ticket-minpol10-20260503T031118Z` completed in scope. Evidence
+  recorded in `evidence:minor-template-path-polish-validation`; next route is
+  mandatory oracle critique.
+- 2026-05-03T03:18:43Z: Initial oracle critique found ticket-record drift in the
+  claim matrix and route-readiness section. Parent split `ACC-006` into its own
+  critique-pending row and replaced stale Ralph readiness with critique readiness.
+- 2026-05-03T03:22:33Z: Follow-up oracle critique confirmed the first two
+  findings were resolved and found non-canonical claim-matrix statuses. Parent
+  replaced bundled claim rows with per-claim rows using canonical claim coverage
+  status vocabulary.
+- 2026-05-03T03:26:21Z: Final oracle critique
+  `critique:minor-template-path-polish-review` passed with no unresolved findings.
+  Parent recorded retrospective / promotion disposition and accepted closure.

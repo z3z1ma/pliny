@@ -39,7 +39,7 @@ Use for accepted repository or module structure.
 Codebase atlas pages explain structure. They do not own behavior, policy, or
 live execution.
 
-Use `templates/atlas-page.md` when creating one.
+Use the skill-root-relative template path `templates/atlas-page.md` when creating one.
 
 Recommended sections:
 
