@@ -7,6 +7,11 @@ frontmatter fields and valid values. This reference owns Ralph-specific contract
 guidance: how an implementation packet frames a child iteration, stop
 conditions, evidence obligations, and parent reconciliation.
 
+Use `skills/loom-records/references/route-vocabulary.md` for route tokens and
+`skills/loom-records/references/status-lifecycle.md` for packet lifecycle status
+boundaries. Ralph child outcomes are packet output vocabulary, not route tokens
+or ticket states until the parent reconciles them.
+
 ## Minimum packet contents
 
 - exact target
@@ -219,6 +224,18 @@ parent merge notes explain rejection, or `superseded` when a fresh packet replac
 the unusable contract. Update ticket truth, preserve useful evidence or critique
 findings where applicable, and compile a new packet only after the owner records
 and write boundary are accurate.
+
+## Child Outcomes vs Routes
+
+A Ralph child should return one child outcome: `continue`, `stop`, `blocked`, or
+`escalate`. These words describe the bounded iteration result for the parent;
+they do not directly set `next route:` and they do not change ticket state.
+
+The parent reconciles the child outcome into ticket truth and then chooses the
+next governed route, such as `ticket`, `research`, `critique`,
+`acceptance_review`, `continue`, or `stop`. This is especially important for
+`continue` and `stop`, which are also route tokens when they appear in a route
+field.
 
 ## Verification Targets
 

@@ -1,5 +1,10 @@
 # Finding Format
 
+This reference owns critique finding format and critique-owned finding state.
+For route tokens, use `skills/loom-records/references/route-vocabulary.md`; for
+shared lifecycle and disposition boundary guidance, use
+`skills/loom-records/references/status-lifecycle.md`.
+
 Each meaningful finding should normally include:
 
 - a stable ID: `FIND-001`
@@ -61,6 +66,10 @@ Use ticket-owned finding dispositions only in the ticket's
 - `accepted_risk`
 - `superseded`
 - `converted_to_follow_up`
+
+These dispositions are ticket-owned closure-gate vocabulary. They are not
+critique finding states, ticket lifecycle states, route tokens, runtime enums,
+schemas, validators, or command-router values.
 
 ## Receiving Findings
 

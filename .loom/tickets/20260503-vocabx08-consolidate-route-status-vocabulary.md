@@ -1,11 +1,11 @@
 ---
 id: ticket:vocabx08
 kind: ticket
-status: ready
+status: closed
 change_class: records-grammar
 risk_class: medium
 created_at: 2026-05-03T04:09:51Z
-updated_at: 2026-05-03T04:09:51Z
+updated_at: 2026-05-03T05:01:50Z
 scope:
   kind: repository
   repositories:
@@ -73,12 +73,12 @@ vocabulary instead of spreading drift.
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-003` | pending | pending | open |
-| `ticket:vocabx08#ACC-001` | pending | pending | open |
-| `ticket:vocabx08#ACC-002` | pending | pending | open |
-| `ticket:vocabx08#ACC-003` | pending | pending | open |
-| `ticket:vocabx08#ACC-004` | pending | pending | open |
-| `ticket:vocabx08#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-003` | `evidence:route-status-vocabulary-validation` | `critique:route-status-vocabulary-review` | supported |
+| `ticket:vocabx08#ACC-001` | `evidence:route-status-vocabulary-validation` | `critique:route-status-vocabulary-review` | supported |
+| `ticket:vocabx08#ACC-002` | `evidence:route-status-vocabulary-validation` | `critique:route-status-vocabulary-review` | supported |
+| `ticket:vocabx08#ACC-003` | `evidence:route-status-vocabulary-validation` | `critique:route-status-vocabulary-review` | supported |
+| `ticket:vocabx08#ACC-004` | `evidence:route-status-vocabulary-validation` | `critique:route-status-vocabulary-review` | supported |
+| `ticket:vocabx08#ACC-005` | None - critique outcome is the acceptance instrument | `critique:route-status-vocabulary-review` | supported |
 
 # Execution Notes
 
@@ -92,21 +92,21 @@ None.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to `ticket:tplsave3`.
+
+Ralph packet `packet:ralph-ticket-vocabx08-20260503T045534Z` was consumed in
+scope, evidence was recorded, mandatory critique passed with no findings, and
+acceptance is complete.
 
 # Route Readiness
 
-Ralph readiness:
-Bounded iteration: route/status vocabulary consolidation.
-Write boundary: targeted records references and dependent route snippets only.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, vocabulary search observations, and
-critique recommendation.
+Acceptance review readiness:
+Evidence `evidence:route-status-vocabulary-validation` and mandatory critique
+`critique:route-status-vocabulary-review` support closure with no findings.
 
 # Evidence
 
-Expected: targeted searches for route tokens, child outcomes, finding states,
-finding dispositions, packet statuses, and `git diff --check`.
+Recorded: `evidence:route-status-vocabulary-validation`.
 
 # Critique Disposition
 
@@ -124,9 +124,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:route-status-vocabulary-review` - no findings; mandatory critique
+passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -134,18 +135,36 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Route/status vocabulary boundaries were promoted directly into
+  `skills/loom-records/references/route-vocabulary.md` and
+  `skills/loom-records/references/status-lifecycle.md`.
+- Dependent ticket, Ralph, and critique references now point to the canonical
+  vocabulary sources where ambiguity is likely.
+
+Deferred / not-required rationale:
+
+No separate wiki, research, spec, constitution, or memory record is needed. The
+durable lesson is shared record grammar and lives in the records skill
+references.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+records references.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T05:01:50Z
+Basis: Ralph packet `packet:ralph-ticket-vocabx08-20260503T045534Z`; evidence
+`evidence:route-status-vocabulary-validation`; mandatory critique
+`critique:route-status-vocabulary-review` with no findings.
+Residual risks: Low residual copy-drift risk remains in downstream templates and
+workflows until later tickets consume these canonical references.
 
 # Dependencies
 
@@ -154,3 +173,13 @@ Residual risks:
 # Journal
 
 - 2026-05-03T04:09:51Z: Created from council vocabulary consolidation finding.
+- 2026-05-03T04:55:34Z: Started Ralph iteration
+  `packet:ralph-ticket-vocabx08-20260503T045534Z` from clean `main` at
+  `bd06422`.
+- 2026-05-03T04:57:59Z: Ralph iteration
+  `packet:ralph-ticket-vocabx08-20260503T045534Z` completed in scope. Evidence
+  recorded in `evidence:route-status-vocabulary-validation`; next route is
+  mandatory critique.
+- 2026-05-03T05:01:50Z: Mandatory critique
+  `critique:route-status-vocabulary-review` passed with no findings. Parent
+  recorded retrospective / promotion disposition and accepted closure.

@@ -1,11 +1,14 @@
 # Status Lifecycle
 
-Statuses should make a record's age and authority legible without requiring a
-runtime.
+This reference is the canonical shared source for Loom lifecycle status and
+disposition vocabulary. Statuses should make a record's age and authority
+legible without requiring a runtime enum, schema, validator, or command router.
 
 Tickets keep their own execution state machine in
-`skills/loom-tickets/references/state-machine.md`. This reference covers the
-normal non-ticket record statuses.
+`skills/loom-tickets/references/state-machine.md`. Route tokens live in
+`skills/loom-records/references/route-vocabulary.md`. This reference covers the
+normal non-ticket record statuses plus boundary guidance for packet statuses,
+finding states, and ticket-owned dispositions.
 
 ## Universal Vocabulary
 
@@ -45,6 +48,9 @@ but not interchangeable.
 - **Ticket-owned acceptance decision** owns closure provenance and residual risk.
   A critique verdict, packet result, drive checkpoint, or support handoff may
   recommend a route, but it does not accept or close ticket work.
+
+These vocabulary sets are Markdown protocol grammar. Do not turn them into a
+required runtime enum, schema, validator, command router, or new owner layer.
 
 Drive and checkpoint snapshots may summarize critique and acceptance state only by
 citing the ticket and critique records that own it. They must not become a second

@@ -1,11 +1,16 @@
 # Route Vocabulary
 
-This reference owns the shared grammar for Loom route tokens used in checkpoint,
-resume, route-readiness, and handoff examples.
+This reference is the canonical shared grammar for Loom route tokens used in
+checkpoint, resume, route-readiness, and handoff examples.
 
 Route tokens are not a runtime enum, command router, or new owner layer. They are
 grep-friendly Markdown vocabulary for naming the next governed move in existing
 owner records.
+
+For lifecycle words that are not route tokens, use
+`skills/loom-records/references/status-lifecycle.md`. Ticket execution states
+are owned by `skills/loom-tickets/references/state-machine.md`, and Ralph child
+outcomes are owned by `skills/loom-ralph/references/packet-contract.md`.
 
 ## Token Grammar
 
@@ -40,8 +45,8 @@ skill name, command, or ticket status into a route token.
 | `retrospective` | assimilate accepted learning into the correct owner layers before closure |
 | `acceptance_review` | evaluate ticket-owned acceptance and closure readiness without implying closure |
 | `ship` | package already-truthful work for merge, release, PR, or handoff without owning closure |
-| `continue` | proceed to the next already-governed tranche or route named by owner records |
-| `stop` | stop because the objective is satisfied, blocked, unsafe, out of scope, over budget, or awaiting external action; recorded stop routes must include a stop reason or condition |
+| `continue` | route-token use only: proceed to the next already-governed tranche or route named by owner records; do not use this row to interpret a Ralph child outcome named `continue` |
+| `stop` | route-token use only: stop because the objective is satisfied, blocked, unsafe, out of scope, over budget, or awaiting external action; recorded stop routes must include a stop reason or condition; do not use this row to interpret a Ralph child outcome named `stop` |
 
 Workflow coordinator tokens exist only when the coordinator is itself the next
 governed move. Use `debugging`, `spike`, `codemap`, or `ship` when the next step
@@ -67,6 +72,10 @@ more than one category; the field and owner decide what the word means.
 | Support-memory surfaces | `memory`, `loom-memory`, retrieval cues, preferences, reminders, hot context | Memory is optional support recall, not canonical project truth. Do not use `memory` as a `next route:` token; route durable truth changes through the owner token that owns them. |
 | Commands and adapters | slash commands, harness commands, MCPs, package-specific wrappers | Commands may transport or prompt a route, but owner records and workflow skills still own Loom truth. |
 | Skill display names | Ralph, loom-drive, loom-critique | Use ordinary prose for skill names. In a route-value field, use the token (`ralph`, `debugging`, `spike`, `codemap`, `ship`, `continue`, `acceptance_review`, etc.) rather than title case, spaces, or hyphens. Do not add a token merely because a skill exists; route tokens name governed moves, not the skill inventory. |
+
+When the same word appears in multiple rows, the field decides the vocabulary. A
+Ralph packet `outcome: continue` is child output for parent reconciliation; a
+recorded `next route: continue` is a parent-owned route decision.
 
 ## `ask_user` Readiness
 
@@ -105,6 +114,9 @@ proposed next route: research
 
 next route: stop
 stop reason: OBJ-001 and OBJ-002 are satisfied, required evidence is linked, and no owner work remains.
+
+next route: continue
+continue reason: ticket:<token> already names the next governed tranche; this is not a Ralph child outcome.
 ```
 
 If multiple routes are plausible, choose the token for the truth that changes
