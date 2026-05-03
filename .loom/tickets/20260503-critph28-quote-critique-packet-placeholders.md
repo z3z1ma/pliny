@@ -1,11 +1,11 @@
 ---
 id: ticket:critph28
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-03T06:20:11Z
-updated_at: 2026-05-03T06:20:11Z
+updated_at: 2026-05-03T08:48:45Z
 scope:
   kind: repository
   repositories:
@@ -17,6 +17,8 @@ links:
     - plan:skills-corpus-context-integrity-hardening-pass
   research:
     - research:skills-corpus-third-pass-follow-up-validation
+  critique:
+    - critique:critique-packet-placeholder-safety-review
 external_refs: {}
 depends_on:
   - ticket:shipacc1
@@ -70,12 +72,12 @@ until filled.
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-029` | pending | pending | open |
-| `ticket:critph28#ACC-001` | pending | pending | open |
-| `ticket:critph28#ACC-002` | pending | pending | open |
-| `ticket:critph28#ACC-003` | pending | pending | open |
-| `ticket:critph28#ACC-004` | pending | pending | open |
-| `ticket:critph28#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-029` | `evidence:critique-packet-placeholder-validation` | `critique:critique-packet-placeholder-safety-review` | supported |
+| `ticket:critph28#ACC-001` | `evidence:critique-packet-placeholder-validation` | `critique:critique-packet-placeholder-safety-review` | supported |
+| `ticket:critph28#ACC-002` | `evidence:critique-packet-placeholder-validation` | `critique:critique-packet-placeholder-safety-review` | supported |
+| `ticket:critph28#ACC-003` | `evidence:critique-packet-placeholder-validation` | `critique:critique-packet-placeholder-safety-review` | supported |
+| `ticket:critph28#ACC-004` | `evidence:critique-packet-placeholder-validation` | `critique:critique-packet-placeholder-safety-review` | supported |
+| `ticket:critph28#ACC-005` | `evidence:critique-packet-placeholder-validation` | `critique:critique-packet-placeholder-safety-review` | supported |
 
 # Execution Notes
 
@@ -83,11 +85,16 @@ Likely touched file: `skills/loom-critique/templates/critique-packet.md`.
 
 # Blockers
 
-Blocked until `ticket:shipacc1` and packet metadata hardening tickets close.
+None - prerequisites `ticket:shipacc1` and `ticket:gitstat26` are closed and
+pushed.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to the next open ticket.
+
+Ralph packet `packet:ralph-ticket-critph28-20260503T084309Z` completed in scope,
+evidence was recorded, mandatory critique passed with no findings, and acceptance
+is complete.
 
 # Route Readiness
 
@@ -98,10 +105,18 @@ Likely verification posture: observation-first structural validation.
 Expected output contract: changed file, placeholder observations, and critique
 recommendation.
 
+Acceptance review readiness:
+Evidence `evidence:critique-packet-placeholder-validation` and mandatory critique
+`critique:critique-packet-placeholder-safety-review` support closure.
+
 # Evidence
 
 Expected: targeted searches for unquoted placeholders, `<TBD:`, critique packet
 frontmatter, and `git diff --check`.
+
+Recorded:
+
+- `evidence:critique-packet-placeholder-validation`
 
 # Critique Disposition
 
@@ -119,9 +134,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:critique-packet-placeholder-safety-review`: no findings; mandatory
+critique passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -129,18 +145,33 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Critique packet placeholder safety guidance was promoted into
+  `skills/loom-critique/templates/critique-packet.md`.
+
+Deferred / not-required rationale:
+
+No separate wiki, research, spec, constitution, or memory record is needed. The
+durable operator guidance belongs in the critique packet template itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted guidance lives in the
+critique packet template.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T08:48:45Z
+Basis: Ralph packet `packet:ralph-ticket-critph28-20260503T084309Z`; evidence
+`evidence:critique-packet-placeholder-validation`; mandatory critique
+`critique:critique-packet-placeholder-safety-review` with no findings.
+Residual risks: Copied packets still depend on operators replacing `<TBD: ...>`
+placeholders before use; accepted because this ticket explicitly avoids adding a
+parser-backed validator.
 
 # Dependencies
 
@@ -150,3 +181,11 @@ Residual risks:
 # Journal
 
 - 2026-05-03T06:20:11Z: Created from third-pass secondary polish finding.
+- 2026-05-03T08:43:09Z: Parent confirmed prerequisites are closed and pushed,
+  moved this ticket to active, and compiled Ralph iteration 1.
+- 2026-05-03T08:45:34Z: Ralph child returned `stop`; parent accepted the scoped
+  implementation output, recorded evidence, consumed the packet, and moved to
+  mandatory critique.
+- 2026-05-03T08:48:45Z: Mandatory critique
+  `critique:critique-packet-placeholder-safety-review` passed with no findings.
+  Parent recorded retrospective / promotion disposition and accepted closure.

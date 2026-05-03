@@ -1,12 +1,12 @@
 ---
-id: packet:critique-<encoded-target-or-change-slug>-<UTC compact timestamp>
+id: "packet:critique-<TBD: encoded-target-or-change-slug>-<TBD: UTC compact timestamp>"
 kind: packet
 packet_kind: critique
 status: compiled
 target: "<TBD: ticket:<token>, record ref, review target slug, diff handle, or external summary ID>"
 review_target:
   kind: "<TBD: choose record, code_change, pull_request, branch, commit, diff, external_summary, release_package, or handoff_package>"
-  summary: <one-line human-readable review target>
+  summary: "<TBD: one-line human-readable review target>"
   ref: "<TBD: record ref, path, branch, commit, PR, package ID, or none>"
   diff: "<TBD: branch, commit range, PR, diff target, or none>"
   paths:
@@ -16,8 +16,8 @@ change_class: "<TBD: choose one change class before saving>"
 # Optional when the parent wants packet-local risk carried explicitly:
 # risk_class: "<TBD: choose low, medium, or high before saving>"
 style: reference-first
-created_at: <UTC timestamp>
-updated_at: <UTC timestamp>
+created_at: "<TBD: UTC timestamp>"
+updated_at: "<TBD: UTC timestamp>"
 scope:
   kind: repository
   repositories:
@@ -29,29 +29,29 @@ child_write_scope:
     - "<TBD: critique child write paths, or None - reviewer returns output only>"
 parent_merge_scope:
   records:
-    - critique:<slug>
+    - "<TBD: critique:<slug> for the critique record the parent will create or update>"
     - "<TBD: ticket:<token> when a ticket owns execution, owner record ref, or None - no parent record reconciliation needed>"
     # or: None - <rationale for no additional parent record reconciliation>
   paths:
     - "<TBD: .loom/critique/<slug>.md, other owner path, or None - no parent path reconciliation needed>"
     # or: None - <rationale for no parent path reconciliation>
 source_fingerprint:
-  git_commit: <sha or unknown>
-  integration_remote: <remote name|none|unknown>
-  integration_ref: <ref, tag, commit, or unknown>
-  integration_commit: <sha or unknown>
-  git_status_summary: <clean|dirty_tracked|dirty_untracked|dirty_mixed|unknown>
-  git_status_detail: <short status detail or unknown - rationale>
+  git_commit: "<TBD: sha or unknown>"
+  integration_remote: "<TBD: remote name, none, or unknown>"
+  integration_ref: "<TBD: ref, tag, commit, or unknown>"
+  integration_commit: "<TBD: sha or unknown>"
+  git_status_summary: "<TBD: clean, dirty_tracked, dirty_untracked, dirty_mixed, or unknown>"
+  git_status_detail: "<TBD: short status detail, or unknown - rationale>"
   # Provenance: owner records or artifacts used to compile this review baseline.
   compiled_from:
-    - <record ref>
+    - "<TBD: record ref or artifact used to compile this review baseline>"
 execution_context:
-  branch: <name|unknown>
-  push_remote: <remote name|same_as_integration|none|unknown>
-  worktree: <path|none|unknown>
-  isolation: <none|branch|worktree|sandbox|unknown>
-  git_shared_metadata_mutations: <forbidden|allowed|unknown>
-  destructive_commands: <forbidden|allowed|unknown>
+  branch: "<TBD: branch name or unknown>"
+  push_remote: "<TBD: remote name, same_as_integration, none, or unknown>"
+  worktree: "<TBD: path, none, or unknown>"
+  isolation: "<TBD: none, branch, worktree, sandbox, or unknown>"
+  git_shared_metadata_mutations: "<TBD: forbidden, allowed, or unknown>"
+  destructive_commands: "<TBD: forbidden, allowed, or unknown>"
   network: "<TBD: choose allowed, forbidden, or unknown - rationale that makes launch safe before saving>"
 context_budget:
   posture: normal
