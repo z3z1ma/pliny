@@ -3,7 +3,7 @@ id: research:skills-corpus-residual-audit-synthesis
 kind: research
 status: concluded
 created_at: 2026-05-03T00:56:36Z
-updated_at: 2026-05-03T00:56:36Z
+updated_at: 2026-05-03T01:57:25Z
 scope:
   kind: repository
   repositories:
@@ -113,6 +113,46 @@ Resolved or not folded:
 - The older duplicate-numbering note for `loom-drive/SKILL.md` appears resolved in
   the current file.
 
+## Follow-up Validation After `ticket:wssupp4`
+
+Validated against current corpus state after pushed commit `dd6d01c`.
+
+Still relevant and added to the plan:
+
+- `skills/loom-drive/references/checkpoint-resume-protocol.md` still says
+  mandatory critique may be `not required with rationale`; this should fail
+  closed because mandatory critique cannot be satisfied by `not_required`. Added
+  `ticket:drivegt11`.
+- `README.md` uses `memory` in a route table while
+  `skills/loom-records/references/route-vocabulary.md` does not include a memory
+  route token, and `stop` route examples do not consistently require a stop
+  reason or condition. Added `ticket:drivegt11`.
+- Shared packet templates and packet-frontmatter guidance still use only coarse
+  `source_fingerprint.git_status_summary`, default packet template `network:
+  unknown`, and a Ralph `child_write_scope.records` placeholder that can invite
+  overbroad canonical-record writes unless the parent narrows it. Added
+  `ticket:pktmeta12`.
+- `skills/loom-research/references/source-handling.md` is still too thin for
+  external/current-source freshness, provenance, access date, source quality, and
+  recheck triggers. Added `ticket:srcmeta13`.
+
+Still relevant but covered by existing tickets:
+
+- Ralph launch checklist and `consumed` versus accepted-work wording remain in
+  `ticket:ralphchk7`.
+- Evidence freshness and challenge examples remain in `ticket:evfresh8`.
+- Memory entity heading levels remain in `ticket:minpol10`.
+- The direct critique template's unquoted scalar `review_target` placeholder is a
+  minor copyability hazard; folded into `ticket:minpol10` rather than creating a
+  separate ticket.
+
+Stale or already resolved:
+
+- The missing `kind: workspace` lifecycle claim was resolved by `ticket:wssupp4`.
+- The retrospective memory read-order claim is stale; current
+  `skills/loom-retrospective/SKILL.md` includes memory in promotion routing,
+  default procedure, done criteria, and conditional read order.
+
 # Rejected Options
 
 - Do not create a runtime/schema validation pass. The findings are Markdown
@@ -139,18 +179,22 @@ packet launch readiness, evidence freshness, and small copyability polish.
 # Recommendations
 
 Create `initiative:skills-corpus-residual-protocol-sharpening-pass` and
-`plan:skills-corpus-residual-protocol-sharpening-pass` with ten sequential tickets:
+`plan:skills-corpus-residual-protocol-sharpening-pass` with thirteen sequential
+tickets:
 
 1. route vocabulary, vocabulary-boundary, and `ask_user` decision grammar;
 2. retrospective / promotion disposition wording;
 3. mandatory critique fail-closed template guidance;
 4. workspace/support lifecycle and query grammar;
-5. claim matrix status guidance;
-6. workspace template alias dedupe;
-7. Ralph launch checklist and consumed-versus-accepted wording;
-8. evidence freshness and negative-evidence examples;
-9. drive outer-loop transport reference extraction;
-10. minor template/path polish.
+5. drive/README route and checkpoint gate grammar;
+6. claim matrix status guidance;
+7. workspace template alias dedupe;
+8. packet metadata defaults and child write authority;
+9. Ralph launch checklist and consumed-versus-accepted wording;
+10. evidence freshness and negative-evidence examples;
+11. research source provenance and freshness guidance;
+12. drive outer-loop transport reference extraction;
+13. minor template/path polish.
 
 # Open Questions
 

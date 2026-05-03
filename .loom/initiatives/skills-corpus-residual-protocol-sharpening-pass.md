@@ -3,7 +3,7 @@ id: initiative:skills-corpus-residual-protocol-sharpening-pass
 kind: initiative
 status: active
 created_at: 2026-05-03T00:56:36Z
-updated_at: 2026-05-03T00:56:36Z
+updated_at: 2026-05-03T01:57:25Z
 scope:
   kind: repository
   repositories:
@@ -18,10 +18,13 @@ links:
     - ticket:promdisp2
     - ticket:critfail3
     - ticket:wssupp4
+    - ticket:drivegt11
     - ticket:claimmx5
     - ticket:wsalias6
+    - ticket:pktmeta12
     - ticket:ralphchk7
     - ticket:evfresh8
+    - ticket:srcmeta13
     - ticket:driveref9
     - ticket:minpol10
 external_refs: {}
@@ -42,6 +45,10 @@ boundaries, promotion disposition wording, mandatory critique template gates,
 workspace/support grammar, packet launch readiness, evidence freshness, and minor
 copyability defects that can mislead a fresh agent.
 
+Follow-up validation after `ticket:wssupp4` found a few still-valid audit claims
+that are narrow enough to add to this same pass without changing its product
+boundary.
+
 # In Scope
 
 - Decide and document constitution/initiative route-token handling, child-outcome
@@ -50,10 +57,16 @@ copyability defects that can mislead a fresh agent.
   implied promotion route.
 - Make mandatory critique fail-closed locally in the ticket template.
 - Complete workspace/support lifecycle and query grammar.
+- Align drive/README route and checkpoint gate wording for memory, `stop`, and
+  mandatory critique disposition.
 - Add claim matrix status guidance where agents copy ticket templates.
 - Deduplicate workspace alias template truth.
+- Tighten shared packet metadata defaults for source state, network permission,
+  and child write authority.
 - Add Ralph launch checklist and clarify `consumed` does not mean accepted.
 - Strengthen evidence freshness metadata and challenge examples.
+- Add source provenance and freshness guidance for research using external or
+  current sources.
 - Move detailed drive outer-loop transport mechanics into a reference while
   preserving current behavior.
 - Apply small template/path polish that affects copyability or operator clarity.
@@ -96,13 +109,22 @@ copyability defects that can mislead a fresh agent.
   by the audit.
 - OBJ-013: Every child ticket is closed with evidence, oracle critique,
   retrospective disposition, semantic commit, and push.
+- OBJ-014: Drive checkpoint and README route examples consistently handle memory,
+  `stop` reasons, and mandatory critique gates without implying mandatory
+  critique can be satisfied by `not_required`.
+- OBJ-015: Packet templates and shared packet frontmatter make source-state
+  detail, network permission, and child write authority explicit enough to avoid
+  stale or overbroad packet launches.
+- OBJ-016: Research source-handling guidance asks for provenance, source quality,
+  access date, and freshness/recheck triggers when current or external sources
+  matter.
 
 # Milestones
 
-- Milestone 1: Owner records and ten bounded tickets exist.
+- Milestone 1: Owner records and thirteen bounded tickets exist.
 - Milestone 2: Route and promotion boundary tickets close.
-- Milestone 3: Ticket/workspace template safety tickets close.
-- Milestone 4: Ralph/evidence/drive mechanics tickets close.
+- Milestone 3: Drive gate and ticket/workspace template safety tickets close.
+- Milestone 4: Packet/Ralph/evidence/research freshness tickets close.
 - Milestone 5: Minor polish closes and the initiative is accepted.
 
 # Dependencies
@@ -127,8 +149,9 @@ copyability defects that can mislead a fresh agent.
 - Research: `research:skills-corpus-residual-audit-synthesis`
 - Plan: `plan:skills-corpus-residual-protocol-sharpening-pass`
 - Tickets: `ticket:routebd1`, `ticket:promdisp2`, `ticket:critfail3`,
-  `ticket:wssupp4`, `ticket:claimmx5`, `ticket:wsalias6`, `ticket:ralphchk7`,
-  `ticket:evfresh8`, `ticket:driveref9`, and `ticket:minpol10`
+  `ticket:wssupp4`, `ticket:drivegt11`, `ticket:claimmx5`, `ticket:wsalias6`,
+  `ticket:pktmeta12`, `ticket:ralphchk7`, `ticket:evfresh8`,
+  `ticket:srcmeta13`, `ticket:driveref9`, and `ticket:minpol10`
 
 # Status Summary
 

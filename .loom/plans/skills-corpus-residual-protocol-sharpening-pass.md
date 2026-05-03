@@ -3,7 +3,7 @@ id: plan:skills-corpus-residual-protocol-sharpening-pass
 kind: plan
 status: active
 created_at: 2026-05-03T00:56:36Z
-updated_at: 2026-05-03T00:56:36Z
+updated_at: 2026-05-03T01:57:25Z
 scope:
   kind: repository
   repositories:
@@ -18,10 +18,13 @@ links:
     - ticket:promdisp2
     - ticket:critfail3
     - ticket:wssupp4
+    - ticket:drivegt11
     - ticket:claimmx5
     - ticket:wsalias6
+    - ticket:pktmeta12
     - ticket:ralphchk7
     - ticket:evfresh8
+    - ticket:srcmeta13
     - ticket:driveref9
     - ticket:minpol10
 external_refs: {}
@@ -29,7 +32,7 @@ external_refs: {}
 
 # Purpose
 
-Sequence the residual protocol-sharpening findings into ten bounded tickets so
+Sequence the residual protocol-sharpening findings into thirteen bounded tickets so
 the next refinement loop remains recoverable from owner records instead of chat.
 
 # Strategy
@@ -40,8 +43,8 @@ Work from vocabulary and closure semantics toward templates and copyability:
    surfaces cite route tokens and `ask_user` behavior.
 2. Align retrospective / promotion wording and mandatory critique gates before
    acceptance templates are treated as stable.
-3. Repair workspace/support and claim matrix copy surfaces.
-4. Tighten Ralph and evidence template mechanics.
+3. Repair workspace/support, drive checkpoint gate, and claim matrix copy surfaces.
+4. Tighten packet, Ralph, evidence, and research source-freshness mechanics.
 5. Move drive transport detail into a reference and finish with minor polish.
 
 For each ticket:
@@ -64,19 +67,20 @@ closure, under-record freshness, duplicate scope truth, or miss a promotion rout
 
 # Workstreams
 
-- Vocabulary and routing: `ticket:routebd1`.
+- Vocabulary and routing: `ticket:routebd1` and `ticket:drivegt11`.
 - Closure and promotion gates: `ticket:promdisp2` and `ticket:critfail3`.
 - Workspace and ticket templates: `ticket:wssupp4`, `ticket:claimmx5`, and
   `ticket:wsalias6`.
-- Packet/evidence mechanics: `ticket:ralphchk7` and `ticket:evfresh8`.
+- Packet/evidence/research mechanics: `ticket:pktmeta12`, `ticket:ralphchk7`,
+  `ticket:evfresh8`, and `ticket:srcmeta13`.
 - Drive/polish: `ticket:driveref9` and `ticket:minpol10`.
 
 # Milestones
 
 - M1: Plan and tickets created.
 - M2: Route and promotion boundary tickets closed.
-- M3: Ticket/workspace template tickets closed.
-- M4: Ralph/evidence mechanics tickets closed.
+- M3: Drive gate and ticket/workspace template tickets closed.
+- M4: Packet/Ralph/evidence/research freshness mechanics tickets closed.
 - M5: Drive reference extraction and minor polish closed.
 
 # Sequencing
@@ -87,11 +91,16 @@ wording in later surfaces.
 `ticket:promdisp2` and `ticket:critfail3` follow because closure and critique gate
 language should be stable before template-specific cleanup.
 
-`ticket:wssupp4`, `ticket:claimmx5`, and `ticket:wsalias6` then repair workspace
-and ticket copy surfaces.
+`ticket:wssupp4` repairs workspace/support grammar. `ticket:drivegt11` follows to
+align follow-up route and checkpoint gate wording before later ticket and drive
+surfaces copy those examples.
 
-`ticket:ralphchk7` and `ticket:evfresh8` tighten packet and evidence mechanics
-after claim/status grammar is stable.
+`ticket:claimmx5` and `ticket:wsalias6` then repair ticket and workspace copy
+surfaces.
+
+`ticket:pktmeta12` tightens shared packet metadata before `ticket:ralphchk7` adds
+the Ralph launch checklist against the updated packet fields. `ticket:evfresh8`
+and `ticket:srcmeta13` then tighten evidence and research freshness mechanics.
 
 `ticket:driveref9` and `ticket:minpol10` finish with progressive disclosure and
 small copyability polish.
@@ -110,13 +119,16 @@ Wave 2:
 Wave 3:
 
 - `ticket:wssupp4`: workspace/support lifecycle and query grammar.
+- `ticket:drivegt11`: drive/README route and checkpoint gate grammar.
 - `ticket:claimmx5`: claim matrix status guidance.
 - `ticket:wsalias6`: workspace alias template dedupe.
 
 Wave 4:
 
+- `ticket:pktmeta12`: packet metadata defaults and child write authority.
 - `ticket:ralphchk7`: Ralph launch checklist.
 - `ticket:evfresh8`: evidence freshness and challenge examples.
+- `ticket:srcmeta13`: research source provenance and freshness guidance.
 
 Wave 5:
 
@@ -165,8 +177,8 @@ Placeholder scan:
 
 Ticket-sized slices:
 
-- Ten slices map to the combined council and older-audit findings without creating
-  a runtime or platform pass.
+- Thirteen slices map to the combined council, older-audit, and follow-up
+  validation findings without creating a runtime or platform pass.
 
 Likely write scopes:
 
@@ -179,12 +191,18 @@ Likely write scopes:
   ticket acceptance-gate reference.
 - `ticket:wssupp4`: status lifecycle, query/linking, naming/IDs, workspace tree,
   and workspace template lifecycle references.
+- `ticket:drivegt11`: README route table, route vocabulary, and drive checkpoint /
+  continuity / tranche route references.
 - `ticket:claimmx5`: ticket template and claim-coverage reference.
 - `ticket:wsalias6`: workspace template and workspace references.
+- `ticket:pktmeta12`: shared packet frontmatter, Ralph/critique/wiki packet
+  templates, and Ralph packet contract.
 - `ticket:ralphchk7`: Ralph packet template, Ralph packet contract, and shared
   packet frontmatter.
 - `ticket:evfresh8`: evidence template, evidence skill/reference guidance, and
   claim-coverage examples.
+- `ticket:srcmeta13`: research source-handling reference and, if needed, research
+  skill read-order wording.
 - `ticket:driveref9`: `skills/loom-drive/SKILL.md` and a new drive reference.
 - `ticket:minpol10`: memory entity template, wiki path reference wording,
   records skill wording, and any directly related placeholder warning surface.
@@ -212,7 +230,7 @@ Stop / loopback conditions:
 
 # Exit Criteria
 
-- All ten tickets are closed with evidence, oracle critique, and retrospective
+- All thirteen tickets are closed with evidence, oracle critique, and retrospective
   disposition.
 - All medium/high critique findings are resolved, accepted as risk with ticket
   provenance, superseded by evidence, or converted into linked follow-up tickets.

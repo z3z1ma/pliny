@@ -5,7 +5,7 @@ status: ready
 change_class: record-hygiene
 risk_class: low
 created_at: 2026-05-03T00:56:36Z
-updated_at: 2026-05-03T00:56:36Z
+updated_at: 2026-05-03T01:57:25Z
 scope:
   kind: repository
   repositories:
@@ -33,6 +33,10 @@ memory entity headings jump from H1 to H3, skill-root-relative template path
 wording can be clearer, and `loom-records` wording should not imply it owns a
 record template family when no tracked records templates exist.
 
+Follow-up validation also found the direct critique template's scalar
+`review_target` placeholder is unquoted, which is a small copyability hazard in a
+frontmatter field that intentionally stays scalar.
+
 # Why Now
 
 These are low-risk, but closing them keeps the corpus crisp after the higher-risk
@@ -45,6 +49,8 @@ grammar tickets are done.
   mislead readers.
 - Clarify `loom-records` wording if it implies records owns templates rather than
   shared grammar for using owner templates.
+- Quote or otherwise make the direct critique template's scalar `review_target`
+  placeholder copy-safe.
 - Verify the older plain `TBD` and drive duplicate-numbering findings remain
   resolved or record why no change is needed.
 
@@ -61,10 +67,12 @@ grammar tickets are done.
   corpus paths where the audit found ambiguity.
 - ACC-003: `loom-records` wording does not imply it owns a template family it does
   not ship.
-- ACC-004: Evidence records targeted polish searches, including checks for tracked
+- ACC-004: Direct critique template `review_target` frontmatter remains scalar but
+  is copy-safe.
+- ACC-005: Evidence records targeted polish searches, including checks for tracked
   records templates, plain copyable `TBD`, duplicate drive read-order numbering,
-  and `git diff --check`.
-- ACC-005: Oracle critique passes with no unresolved findings.
+  critique `review_target`, and `git diff --check`.
+- ACC-006: Oracle critique passes with no unresolved findings.
 
 # Coverage
 
@@ -76,18 +84,20 @@ Covers:
 - `ticket:minpol10#ACC-003`
 - `ticket:minpol10#ACC-004`
 - `ticket:minpol10#ACC-005`
+- `ticket:minpol10#ACC-006`
 
 # Claim Matrix
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
 | `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-012` | pending | pending | open |
-| `ticket:minpol10#ACC-001` through `ticket:minpol10#ACC-005` | pending | pending | open |
+| `ticket:minpol10#ACC-001` through `ticket:minpol10#ACC-006` | pending | pending | open |
 
 # Execution Notes
 
 Likely touched surfaces include `skills/loom-memory/templates/entities.md`,
-`skills/loom-wiki/references/page-types.md`, and `skills/loom-records/SKILL.md`.
+`skills/loom-wiki/references/page-types.md`, `skills/loom-records/SKILL.md`, and
+`skills/loom-critique/templates/critique.md`.
 
 # Blockers
 
@@ -112,7 +122,7 @@ recommendation.
 
 Expected: before/after searches for memory entity headings, template path wording,
 tracked records templates, plain `TBD`, drive read-order numbering, and
-`git diff --check`.
+critique `review_target`, and `git diff --check`.
 
 # Critique Disposition
 
