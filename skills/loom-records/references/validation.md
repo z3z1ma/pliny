@@ -15,6 +15,13 @@ Ask:
 - if the status is non-ticket, does it match `references/status-lifecycle.md`
 - if claims are named, do coverage/support/challenge references use stable IDs
 - do the filename and ID agree
+- do saved `.loom` records avoid unresolved template placeholders, example IDs,
+  and generic TODO/TBD tokens unless the record explicitly documents them as
+  observed source text
+
+Intentional placeholders in `skills/**/templates` are template source, not saved
+records. They are not failures of saved-record validation unless copied into a
+saved `.loom` record without explicit observed-source-text framing.
 
 ## Graph Validation
 
@@ -61,14 +68,26 @@ Do not accept these as evidence by themselves:
 ### Missing IDs
 
 ```bash
-rg --files-without-match '^id:' .loom --glob '{constitution,initiatives,research,specs,plans,tickets,critique,wiki,evidence,packets}/**/*.md'
+rg --files-without-match '^id:' .loom --glob '.loom/{constitution,initiatives,research,specs,plans,tickets,critique,wiki,evidence,packets}/**/*.md'
 ```
 
 ### Missing status
 
 ```bash
-rg --files-without-match '^status:' .loom --glob '{constitution,initiatives,research,specs,plans,tickets,critique,wiki,evidence,packets}/**/*.md'
+rg --files-without-match '^status:' .loom --glob '.loom/{constitution,initiatives,research,specs,plans,tickets,critique,wiki,evidence,packets}/**/*.md'
 ```
+
+### Saved-record placeholder leakage
+
+```bash
+rg -n '(<[^>[:cntrl:]]+>|\bTODO\b|\bTBD\b|[a-z]+:<[^>]+>|example:[a-z0-9-]+)' .loom --glob '.loom/{constitution,initiatives,research,specs,plans,tickets,critique,wiki,evidence,packets}/**/*.md'
+```
+
+Review every hit. A hit is a validation failure when it is an unresolved template
+placeholder, example ID, or generic TODO/TBD token that leaked into saved project
+truth. It is not a failure when the record explicitly documents the token as
+observed source text, such as a quoted scan result, fixture excerpt, or external
+example under review.
 
 ### Status vocabulary spot check
 
