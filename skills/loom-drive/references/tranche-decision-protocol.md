@@ -76,10 +76,13 @@ ticket or operator explicitly records a different rationale.
 | Accepted explanation should persist for future agents | `wiki` or `retrospective` |
 | Ticket-owned closure readiness needs evaluation | `acceptance_review` |
 | Already-truthful work needs merge, release, PR, or handoff packaging | `ship` |
+| A route result has been reconciled into owner records, and those records already name the next governed tranche or route | `continue`, as a route token only; not a Ralph child outcome |
 | Objective criteria are satisfied and no owner work remains | `stop`, with a recorded stop reason or condition |
 
 This table prevents implementation from becoming the default answer. Shaping and
-review routes are first-class continuation outcomes.
+review routes are first-class continuation outcomes. Do not use `continue` as a
+fallback when owner truth is missing; reconcile owner records first, then follow
+the route they already name.
 
 ## Route Entry And Result Criteria
 

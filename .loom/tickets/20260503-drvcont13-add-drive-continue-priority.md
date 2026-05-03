@@ -1,11 +1,11 @@
 ---
 id: ticket:drvcont13
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-03T06:20:11Z
-updated_at: 2026-05-03T06:20:11Z
+updated_at: 2026-05-03T06:48:49Z
 scope:
   kind: repository
   repositories:
@@ -68,12 +68,12 @@ owner record.
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-014` | pending | pending | open |
-| `ticket:drvcont13#ACC-001` | pending | pending | open |
-| `ticket:drvcont13#ACC-002` | pending | pending | open |
-| `ticket:drvcont13#ACC-003` | pending | pending | open |
-| `ticket:drvcont13#ACC-004` | pending | pending | open |
-| `ticket:drvcont13#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-014` | `evidence:drive-continue-priority-validation` | `critique:drive-continue-priority-review` | supported |
+| `ticket:drvcont13#ACC-001` | `evidence:drive-continue-priority-validation` | `critique:drive-continue-priority-review` | supported |
+| `ticket:drvcont13#ACC-002` | `evidence:drive-continue-priority-validation` | `critique:drive-continue-priority-review` | supported |
+| `ticket:drvcont13#ACC-003` | `evidence:drive-continue-priority-validation` | `critique:drive-continue-priority-review` | supported |
+| `ticket:drvcont13#ACC-004` | `evidence:drive-continue-priority-validation` | `critique:drive-continue-priority-review` | supported |
+| `ticket:drvcont13#ACC-005` | `evidence:drive-continue-priority-validation` | `critique:drive-continue-priority-review` | supported |
 
 # Execution Notes
 
@@ -81,25 +81,30 @@ Likely touched file: `skills/loom-drive/references/tranche-decision-protocol.md`
 
 # Blockers
 
-Blocked until `ticket:shipacc1` closes.
+None.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to `ticket:wikiret14`.
+
+Ralph packet `packet:ralph-ticket-drvcont13-20260503T064446Z` completed in scope,
+evidence was recorded, mandatory critique passed with no findings, and acceptance
+is complete.
 
 # Route Readiness
 
-Ralph readiness:
-Bounded iteration: add drive `continue` priority.
-Write boundary: drive tranche decision reference only.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed file, `continue` route observations, and
-critique recommendation.
+Acceptance review readiness:
+Evidence `evidence:drive-continue-priority-validation` and mandatory critique
+`critique:drive-continue-priority-review` support closure with no findings.
 
 # Evidence
 
-Expected: targeted searches for `continue`, route-priority row, Ralph child
-outcome distinction, and `git diff --check`.
+Recorded:
+
+- `evidence:drive-continue-priority-validation`
+
+The evidence records targeted searches for `continue`, route-priority row, Ralph
+child outcome distinction, owner-record reconciliation, and `git diff --check`.
 
 # Critique Disposition
 
@@ -116,9 +121,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:drive-continue-priority-review` - no findings; mandatory critique
+passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -126,18 +132,32 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Drive route-token `continue` priority was promoted into
+  `skills/loom-drive/references/tranche-decision-protocol.md`.
+
+Deferred / not-required rationale:
+
+No separate wiki, research, spec, constitution, or memory record is needed. The
+durable lesson is local to drive tranche decision guidance.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in drive
+tranche decision guidance.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T06:48:49Z
+Basis: Ralph packet `packet:ralph-ticket-drvcont13-20260503T064446Z`; evidence
+`evidence:drive-continue-priority-validation`; mandatory critique
+`critique:drive-continue-priority-review` with no findings.
+Residual risks: Documentation-only enforcement depends on future operators using
+`continue` only when owner records already name the next governed route.
 
 # Dependencies
 
@@ -146,3 +166,12 @@ Residual risks:
 # Journal
 
 - 2026-05-03T06:20:11Z: Created from third-pass audit finding 2.
+- 2026-05-03T06:44:47Z: Started Ralph iteration
+  `packet:ralph-ticket-drvcont13-20260503T064446Z` from clean `main` at
+  `12b39b2`.
+- 2026-05-03T06:46:32Z: Ralph iteration consumed. Product edit landed inside
+  packet write scope, `evidence:drive-continue-priority-validation` recorded,
+  and ticket moved to `review_required` for mandatory critique.
+- 2026-05-03T06:48:49Z: Mandatory critique
+  `critique:drive-continue-priority-review` passed with no findings. Parent
+  recorded retrospective / promotion disposition and accepted closure.
