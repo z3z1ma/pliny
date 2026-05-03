@@ -48,7 +48,23 @@ rg -n 'OBJ-[0-9]{3}|REQ-[0-9]{3}|ACC-[0-9]{3}|CLAIM-[0-9]{3}' .loom --glob '*.md
 
 - owner-layer conflict -> owning skill for that layer
 - status mismatch -> `loom-tickets` for tickets, owning skill for other records
-- orphan packet -> `loom-ralph` or mark the packet `superseded` / `abandoned`
+- orphan packet -> inspect `packet_kind` and the path family under
+  `.loom/packets/<family>/` before routing:
+  - `packet_kind: ralph` or `.loom/packets/ralph/` -> `loom-ralph` packet
+    lifecycle and stale packet recovery guidance; mark the packet support
+    artifact `superseded` or `abandoned` only when that is the truthful packet
+    lifecycle disposition
+  - `packet_kind: critique` or `.loom/packets/critique/` -> `loom-critique`
+    review-packet repair; do not route critique packets through Ralph merely
+    because they use packet grammar
+  - `packet_kind: wiki` or `.loom/packets/wiki/` -> `loom-wiki`
+    synthesis-packet repair; do not route wiki packets through Ralph merely
+    because they use packet grammar
+  - missing, unknown, or contradictory packet family metadata ->
+    `records_repair` / `loom-records` first, then route to the downstream
+    workflow only after the packet family is resolved
+  Orphan packet repair may repair packet support-artifact lifecycle state, but
+  it does not reopen, close, or otherwise own live ticket execution truth.
 - dangling critique follow-up -> `loom-tickets`
 - lifecycle ambiguity -> `loom-records`
 - coverage drift -> `loom-specs`, `loom-tickets`, or

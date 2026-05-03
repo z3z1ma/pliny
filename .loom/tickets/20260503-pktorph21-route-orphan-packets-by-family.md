@@ -1,11 +1,11 @@
 ---
 id: ticket:pktorph21
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-03T06:20:11Z
-updated_at: 2026-05-03T06:20:11Z
+updated_at: 2026-05-03T08:17:57Z
 scope:
   kind: repository
   repositories:
@@ -17,6 +17,8 @@ links:
     - plan:skills-corpus-context-integrity-hardening-pass
   research:
     - research:skills-corpus-third-pass-follow-up-validation
+  critique:
+    - critique:orphan-packet-family-routing-review
 external_refs: {}
 depends_on:
   - ticket:shipacc1
@@ -70,12 +72,12 @@ repaired through the wrong route.
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-022` | pending | pending | open |
-| `ticket:pktorph21#ACC-001` | pending | pending | open |
-| `ticket:pktorph21#ACC-002` | pending | pending | open |
-| `ticket:pktorph21#ACC-003` | pending | pending | open |
-| `ticket:pktorph21#ACC-004` | pending | pending | open |
-| `ticket:pktorph21#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-022` | `evidence:orphan-packet-family-routing-validation` | `critique:orphan-packet-family-routing-review` | supported |
+| `ticket:pktorph21#ACC-001` | `evidence:orphan-packet-family-routing-validation` | `critique:orphan-packet-family-routing-review` | supported |
+| `ticket:pktorph21#ACC-002` | `evidence:orphan-packet-family-routing-validation` | `critique:orphan-packet-family-routing-review` | supported |
+| `ticket:pktorph21#ACC-003` | `evidence:orphan-packet-family-routing-validation` | `critique:orphan-packet-family-routing-review` | supported |
+| `ticket:pktorph21#ACC-004` | `evidence:orphan-packet-family-routing-validation` | `critique:orphan-packet-family-routing-review` | supported |
+| `ticket:pktorph21#ACC-005` | `evidence:orphan-packet-family-routing-validation` | `critique:orphan-packet-family-routing-review` | supported |
 
 # Execution Notes
 
@@ -83,11 +85,15 @@ Likely touched file: `skills/loom-records/references/repair-and-drift.md`.
 
 # Blockers
 
-Blocked until `ticket:shipacc1` closes.
+None - prerequisite `ticket:shipacc1` is closed and pushed.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to `ticket:askpost22`.
+
+Ralph packet `packet:ralph-ticket-pktorph21-20260503T081332Z` completed in scope,
+evidence was recorded, mandatory critique passed with no findings, and acceptance
+is complete.
 
 # Route Readiness
 
@@ -98,10 +104,18 @@ Likely verification posture: observation-first structural validation.
 Expected output contract: changed file, packet family routing observations, and
 critique recommendation.
 
+Acceptance review readiness:
+Evidence `evidence:orphan-packet-family-routing-validation` and mandatory critique
+`critique:orphan-packet-family-routing-review` support closure.
+
 # Evidence
 
 Expected: targeted searches for orphan packet, packet_kind, ralph, critique, wiki,
 unknown family, records repair, and `git diff --check`.
+
+Recorded:
+
+- `evidence:orphan-packet-family-routing-validation`
 
 # Critique Disposition
 
@@ -119,9 +133,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:orphan-packet-family-routing-review`: no findings; mandatory critique
+passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -129,18 +144,33 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Orphan packet repair routing by packet family was promoted into records repair
+  and drift guidance.
+
+Deferred / not-required rationale:
+
+No separate wiki, research, spec, constitution, or memory record is needed. The
+durable lesson is local to repair-and-drift guidance.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in records
+repair-and-drift guidance.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T08:17:57Z
+Basis: Ralph packet `packet:ralph-ticket-pktorph21-20260503T081332Z`; evidence
+`evidence:orphan-packet-family-routing-validation`; mandatory critique
+`critique:orphan-packet-family-routing-review` with no findings.
+Residual risks: Future operators must still treat kind/path conflicts as
+contradictory metadata and route them to records repair first; the authored
+guidance supports that.
 
 # Dependencies
 
@@ -149,3 +179,11 @@ Residual risks:
 # Journal
 
 - 2026-05-03T06:20:11Z: Created from third-pass audit finding 10.
+- 2026-05-03T08:13:33Z: Parent confirmed prerequisites are closed and pushed,
+  moved this ticket to active, and compiled Ralph iteration 1.
+- 2026-05-03T08:15:26Z: Ralph child returned `stop`; parent accepted the scoped
+  implementation output, recorded evidence, consumed the packet, and moved to
+  mandatory critique.
+- 2026-05-03T08:17:57Z: Mandatory critique
+  `critique:orphan-packet-family-routing-review` passed with no findings. Parent
+  recorded retrospective / promotion disposition and accepted closure.
