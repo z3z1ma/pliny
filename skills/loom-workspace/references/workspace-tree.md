@@ -74,8 +74,10 @@ optional and should be materialized by the workflow that saves them.
 ## First Files Worth Creating
 
 - `.loom/constitution/constitution.md`
-- `.loom/workspace.md` if repository aliases or multi-worktree scope need to be explicit
-- `.loom/harness.md` if the project wants repeatable fresh-context launch profiles
+- `.loom/workspace.md` if repository aliases or multi-worktree scope need to be
+  explicit; this is workspace metadata, not canonical project truth
+- `.loom/harness.md` if the project wants repeatable fresh-context launch
+  profiles; this is harness support metadata, not a canonical owner
 - the first initiative / plan / ticket chain required by the work
 
 ## Why This Tree Matters

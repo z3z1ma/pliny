@@ -10,7 +10,8 @@ acceptance, suspicious, or ready for the next bounded move.
 - `constitution:main`
 - tickets grouped by status
 - linked plans, specs, research, critique, wiki, evidence, and packets
-- optional `.loom/support/` artifacts linked or cited by owner records
+- optional `.loom/workspace.md`, `.loom/harness.md`, and `.loom/support/`
+  artifacts linked or cited by owner records
 - current git status when repository changes matter
 
 ## Procedure
@@ -44,8 +45,8 @@ files.
    already in flight.
 4. For each relevant ticket, read its upstream owner chain: initiative, research,
    spec, plan, and any cited packet or support records needed to understand the
-   next route. Saved `.loom/support/` artifacts are optional support context, not
-   canonical owners.
+   next route. `.loom/workspace.md`, `.loom/harness.md`, and saved
+   `.loom/support/` artifacts are optional support context, not canonical owners.
 5. Inspect evidence and critique only as needed to evaluate the ticket's current
    acceptance, review, blocker, or next-route disposition.
 6. Continue from the owning records. If chat history, transcript memory, memory
@@ -124,6 +125,9 @@ rg -n '^status:' .loom/tickets --glob '*.md'
 rg -n '^status: (active|blocked|review_required|complete_pending_acceptance)\b' .loom/tickets --glob '*.md'
 rg -n '^status:' .loom/{constitution,initiatives,research,specs,plans,critique,wiki,evidence,packets} --glob '*.md'
 rg -n 'OBJ-[0-9]{3}|REQ-[0-9]{3}|ACC-[0-9]{3}|CLAIM-[0-9]{3}' .loom --glob '*.md'
+rg -n '^id: workspace:main|^kind: workspace$|^status:' .loom/workspace.md 2>/dev/null
+rg -n '^id: workspace:harness|^kind: workspace-support$|^status:' .loom/harness.md 2>/dev/null
+rg -n '^id: support:|^kind: support-artifact$|^support_kind:|^handoff_kind:|^status:' .loom/support --glob '*.md' 2>/dev/null
 find .loom/{tickets,critique,wiki,evidence} -type f -name '*.md' | sort
 find .loom/support -type f -name '*.md' 2>/dev/null | sort
 git status --short

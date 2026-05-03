@@ -65,6 +65,7 @@ Use these sets unless the owning skill records a narrower one:
 - packet: `compiled | consumed | superseded | abandoned`
 - evidence: `recorded | superseded | invalidated`
 - critique: `draft | final | superseded`
+- workspace metadata records with `kind: workspace`: `active | stale | superseded | retired`
 - workspace support records with `kind: workspace-support`:
   `active | superseded | retired`
 - saved drive outer-loop handoff support artifacts:
@@ -87,6 +88,15 @@ shape, route ownership, and merge responsibilities separate.
 Support artifacts saved under optional `.loom/support/` paths are
 lazy-materialized support files. Their statuses are local to the artifact and do
 not make `.loom/support/` a canonical owner layer or packet lifecycle surface.
+
+Workspace metadata records such as `.loom/workspace.md` may use `status: active`
+when the workspace aliases, repository scope notes, or local orientation metadata
+are current. Use `stale` when that metadata is known to be out of date but still
+useful, `superseded` when a named replacement exists, and `retired` when the
+workspace metadata file should no longer be used. The `kind: workspace` lifecycle
+describes metadata currency only; it does not own project identity, objective
+state, live ticket state, acceptance, evidence sufficiency, critique verdicts,
+wiki truth, canonical truth, or packet lifecycle.
 
 ## Layer-Specific Meanings
 
@@ -120,6 +130,10 @@ Prefer explicit transitions:
   longer support its claims
 - `draft -> final` when critique findings, verdict, evidence reviewed, residual
   risks, and acceptance recommendation are complete
+- workspace metadata: `active -> stale` when workspace aliases or scope notes are
+  no longer current, `active|stale -> superseded` when a named replacement takes
+  over, and `active|stale -> retired` when the metadata file should no longer be
+  used
 - support-local drive handoffs: `draft -> reconciled` after parent merge,
   `draft -> abandoned` when not used, or `draft|reconciled -> superseded` when a
   later handoff replaces the support artifact

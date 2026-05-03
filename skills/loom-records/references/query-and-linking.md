@@ -19,14 +19,35 @@ rg -n '^kind:' .loom skills/loom-*/templates skills/loom-*/references
 ### Discover supported ID/path shapes
 
 ```bash
-rg -n '^id: (constitution:main|decision:[0-9]{4}|roadmap:|initiative:|research:|spec:|plan:|ticket:|packet:(ralph|critique|wiki)-|critique:|wiki:|evidence:|workspace:main)' .loom
+rg -n '^id: (constitution:main|decision:[0-9]{4}|roadmap:|initiative:|research:|spec:|plan:|ticket:|packet:(ralph|critique|wiki)-|critique:|wiki:|evidence:|workspace:main|workspace:harness|support:[a-z0-9-]+)' .loom
 rg -n '^packet_kind: (ralph|critique|wiki)$' .loom/packets skills/loom-*/templates
-rg -n '\.loom/(constitution/(constitution\.md|decisions/|roadmap/)|initiatives/|research/|specs/|plans/|tickets/|critique/|wiki/|packets/(ralph|critique|wiki)/|evidence/|memory/)' .loom skills
+rg -n '\.loom/(constitution/(constitution\.md|decisions/|roadmap/)|initiatives/|research/|specs/|plans/|tickets/|critique/|wiki/|packets/(ralph|critique|wiki)/|evidence/|memory/|workspace\.md|harness\.md|support/)' .loom skills
 ```
 
 These are broad discovery queries for the currently supported corpus families,
 not a schema validator. Read `naming-and-ids.md` and the owning template before
 repairing a specific record.
+
+The discovery set intentionally includes canonical owner paths and support
+surfaces. `workspace:main`, `workspace:harness`, packet IDs, memory paths, and
+`support:<domain>-<slug>` handles help agents find workspace metadata, harness
+profiles, handoffs, and packets; they do not make those surfaces canonical
+project-truth owners.
+
+### Discover workspace and optional support metadata
+
+```bash
+rg -n '^id: workspace:main|^kind: workspace$|^status:' .loom/workspace.md 2>/dev/null
+rg -n '^id: workspace:harness|^kind: workspace-support$|^status:' .loom/harness.md 2>/dev/null
+rg -n '^id: support:|^kind: support-artifact$|^support_kind:|^handoff_kind:|^status:' .loom/support 2>/dev/null
+rg -n '^kind: support-artifact$|^support_kind:|^handoff_kind:' skills/loom-*/templates 2>/dev/null
+find .loom/support/drive-handoffs -type f -name '*.md' 2>/dev/null | sort
+```
+
+Use these as optional support-surface queries. A missing `.loom/workspace.md`,
+`.loom/harness.md`, `.loom/support/`, or `.loom/support/drive-handoffs/` directory
+is not by itself a validation failure: support artifacts are lazy-materialized
+when a workflow intentionally saves them.
 
 ### Find every reference to one record
 
