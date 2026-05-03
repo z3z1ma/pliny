@@ -18,7 +18,8 @@ claim: <OBJ-001 | ACC-001 | ticket-local criterion>
 state: open | partial | supported | challenged | blocked | accepted_risk | satisfied
 current support: <evidence / critique / ticket links>
 gap type: evidence | behavior | implementation | review | explanation | sequencing | decision
-next owner: constitution | initiative | research | spec | plan | ticket | evidence | critique | wiki | user
+next owner: constitution | initiative | research | spec | plan | ticket | evidence | critique | wiki
+operator decision: <decision needed, unsafe-inference reason, and owner record to update; only when candidate route is ask_user>
 candidate route: <route>
 notes: <why this gap matters now>
 ```
@@ -87,33 +88,55 @@ the route they already name.
 
 ## Route Entry And Result Criteria
 
-- Constitution enters with missing or changed project identity, principle,
+- `ask_user` enters when a material decision cannot be safely inferred from owner
+  records, delegated authority, or a low-risk reversible assumption. It exits with
+  either an operator answer plus the owner record to update, or a recorded blocker,
+  stop condition, or unsafe-inference reason.
+- `workspace_status` enters when workspace trust, structure, harness posture,
+  support metadata, or entry state is uncertain. It exits with repaired workspace
+  support metadata, a narrower downstream route, or a named blocker.
+- `records_repair` enters when the graph has broken links, stale owners,
+  contradictory status, placeholder leakage, invalid record shape, or other graph
+  drift. It exits with repaired owner records or a blocker that prevents dependent
+  work.
+- `constitution` enters with missing or changed project identity, principle,
   constraint, roadmap, or decision truth and exits with constitutional truth
   updated or explicitly deferred.
-- Initiative enters with strategic outcome, objective, success-metric, or
+- `initiative` enters with strategic outcome, objective, success-metric, or
   delegated-autonomy truth to create or refine and exits with the initiative
   updated or explicitly deferred.
-- Research enters with a question and exits with evidence-backed conclusions or
+- `research` enters with a question and exits with evidence-backed conclusions or
   explicit uncertainty.
-- Spec enters with ambiguous intended behavior and exits with acceptance criteria.
-- Plan enters with sequencing ambiguity and exits with tranche/ticket strategy.
-- Ticket enters with bounded live work and exits only through ticket-owned state.
-- Ralph enters with one Ralph-ready bounded implementation ticket and exits with
+- `spec` enters with ambiguous intended behavior and exits with acceptance criteria.
+- `plan` enters with sequencing ambiguity and exits with tranche/ticket strategy.
+- `ticket` enters with bounded live work and exits only through ticket-owned state.
+- `local_edit` enters with a ready ticket whose mutation is tiny, local, and safe
+  without a fresh child packet. It exits with source or record changes, evidence
+  as needed, and ticket reconciliation.
+- `ralph` enters with one Ralph-ready bounded implementation ticket and exits with
   parent reconciliation.
-- Debugging enters with failing behavior or incident evidence needs and exits with
+- `debugging` enters with failing behavior or incident evidence needs and exits with
   reproduction/root-cause/fix/prevention routing through existing owner layers.
-- Spike enters with a bounded experiment, prototype, or sketch question and exits
+- `spike` enters with a bounded experiment, prototype, or sketch question and exits
   with evidence, research conclusions or null results, and a downstream route.
-- Codemap enters with repository/module orientation need and exits with scan
+- `codemap` enters with repository/module orientation need and exits with scan
   evidence, research when uncertain, or accepted wiki atlas updates.
-- Evidence enters with an observation and exits with support/challenge links.
-- Critique enters with a review target and exits with findings, verdict, and
+- `evidence` enters with an observation and exits with support/challenge links.
+- `critique` enters with a review target and exits with findings, verdict, and
   required follow-up.
-- Wiki or retrospective enters with accepted learning and exits with durable
+- `wiki` or `retrospective` enters with accepted learning and exits with durable
   explanation or promotion decisions.
-- Ship enters with truthful ticket/evidence/critique/retrospective or promotion
+- `acceptance_review` enters with a ticket-owned acceptance dossier and exits with
+  accepted, blocked, follow-up, stop, or ship routing recorded on the ticket.
+- `ship` enters with truthful ticket/evidence/critique/retrospective or promotion
   disposition and exits with external handoff packaging plus the next
   ticket-owned route.
+- `continue` enters only when existing owner records already authorize the next
+  narrower route or tranche. It exits by following that owner-named route without
+  inventing new truth.
+- `stop` enters when objective work should pause or end. It exits with a stop
+  reason, owner record, remaining blockers or external triggers, and no closure
+  claim unless ticket-owned acceptance already supports closure.
 
 Every route result must name the owner records that changed and the next route.
 If the next route is `stop`, record the stop reason or condition.
@@ -134,18 +157,33 @@ After each route, reconcile before continuing:
 - plan change -> plan strategy/execution waves and ticket queue
 - ticket work -> ticket journal, coverage, evidence/critique disposition, next
   route
+- ask_user -> operator answer or blocker recorded in the owner record that needed
+  the decision
+- workspace_status -> `.loom/workspace.md`, `.loom/harness.md`, or workspace
+  support repair notes, then downstream route
+- records_repair -> repaired owner records, links, statuses, IDs, placeholders, or
+  blocker
+- local_edit -> ticket journal, changed paths, evidence if the ticket relies on
+  observed behavior, and critique when risk warrants
 - Ralph child output -> packet status, ticket truth, evidence/critique as needed
-- debugging result -> evidence/research/spec/ticket/Ralph/retrospective owners as
-  appropriate, plus ticket next route when live work is involved
+- debugging result -> evidence/research/spec/ticket/local_edit/Ralph/retrospective
+  owners as appropriate, plus ticket next route when live work is involved
 - spike result -> research conclusions/null results, evidence artifacts, and any
   downstream spec/plan/ticket/wiki route
 - codemap result -> evidence scans, research uncertainty when needed, and accepted
   wiki atlas/page updates
 - evidence -> evidence record and ticket claim matrix
 - critique -> critique record and ticket critique disposition
-- wiki/retrospective -> wiki/research/spec/plan/initiative/constitution/memory as
-  appropriate, plus ticket disposition
+- wiki/retrospective -> wiki/research/spec/plan/initiative/constitution/evidence
+  as owner truth requires, plus support-only memory cleanup or owner-record
+  pointers when useful, and ticket disposition
+- acceptance_review -> ticket acceptance decision, evidence disposition, critique
+  disposition, residual risk, and next route
 - ship result -> external handoff package plus ticket-owned acceptance or
   follow-up route; shipping does not close the ticket
+- continue -> no new owner truth by itself; follow the owner-named route or
+  tranche
+- stop -> ticket, initiative, or drive anchor stop reason, resume condition, and
+  any unresolved blocker or external action
 
 If the parent cannot name reconciliation targets, the route is not ready.

@@ -42,7 +42,9 @@ Follow:
    the root cause is not known
 3. update or create a spec if intended behavior is ambiguous
 4. create or tighten a ticket for the bounded fix
-5. compile a Ralph packet, normally with `verification_posture: test-first`
+5. choose `local_edit` for a tiny, local, safe fix, or compile a Ralph packet when
+   the fix needs fresh context, explicit child write scope, or packetized
+   isolation; Ralph packets normally use `verification_posture: test-first`
 6. preserve red and green evidence
 7. route to critique when risk warrants
 8. run retrospective if the lesson should prevent repeated mistakes
@@ -54,17 +56,18 @@ Follow:
 | reproduction steps | evidence |
 | root cause investigation | research |
 | intended behavior clarification | spec |
-| fix execution | ticket and Ralph |
+| fix execution | ticket plus `local_edit` or Ralph, according to route readiness |
 | regression evidence | evidence |
 | recurring evidence gap | ticket follow-up or test expectation via retrospective |
-| recurring lesson | wiki, research, spec, plan, initiative, constitution, evidence, or memory via retrospective |
+| recurring lesson | wiki, research, spec, plan, initiative, constitution, or evidence via retrospective; memory may keep support-only recall or owner-record pointers |
 
 ## Done Means
 
 - the failure was reproduced or the inability to reproduce is explicit
 - root cause is evidence-backed or still marked unknown
 - intended behavior is owned by a spec when needed
-- the fix is owned by a ticket and packet
+- the fix is owned by a ticket and either a reconciled local edit or packetized
+  child result, as appropriate
 - evidence exists for before and after behavior
 - prevention follow-through is explicit
 

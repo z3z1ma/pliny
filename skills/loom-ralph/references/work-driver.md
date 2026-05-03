@@ -42,7 +42,8 @@ It is not "just code." It is ticket-owned execution.
      only after the ticket and any required evidence or critique records tell the
      truth
 9. Decide the next route using
-   `skills/loom-records/references/route-vocabulary.md`:
+   `skills/loom-records/references/route-vocabulary.md` as the complete saved
+   route grammar. Common execution-side outcomes include:
    - `ralph` for another bounded implementation packet
    - `debugging`, `spike`, or `codemap` when diagnosis, discovery, or mapping
      should happen before more implementation
@@ -51,6 +52,10 @@ It is not "just code." It is ticket-owned execution.
    - `research`, `spec`, `plan`, or `ticket` for owner-layer refinement
    - `acceptance_review` for ticket-owned acceptance evaluation
    - `ship` for packaging already-truthful work without closing the ticket
+
+   This list is illustrative, not exhaustive. If the current state needs operator
+   input, workspace repair, records repair, evidence preservation, continuation,
+   or stop, choose that route instead of forcing another implementation route.
 
 ## Stop States
 

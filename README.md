@@ -340,7 +340,7 @@ A strong packet states:
 
 Packets prevent context drift, hidden assumptions, uncontrolled changes, and scope creep.
 
-A packet is not the project record. After the child returns, the parent reconciles the result into tickets, evidence, critique, research, specs, plans, wiki, constitution, initiatives, or memory as needed.
+A packet is not the project record. After the child returns, the parent reconciles the result into tickets, evidence, critique, research, specs, plans, wiki, constitution, or initiatives as needed; memory may retain support-only recall or pointers after owner truth is updated.
 
 ## Done is a property of the graph
 
@@ -398,7 +398,7 @@ route -> shape -> ready -> execute -> reconcile -> verify -> accept -> promote -
 7. Record red and green evidence.
 8. Route critique when risk warrants.
 9. Accept only when the ticket reflects reality.
-10. Promote durable learning into research, wiki, spec, plan, initiative, constitution, evidence, or memory.
+10. Promote durable learning into research, wiki, spec, plan, initiative, constitution, or evidence; leave support-only recall, reminders, preferences, or owner-record pointers in memory when useful.
 11. Close when the graph is consistent.
 
 The same pattern works for features, spikes, reviews, refactors, migrations, codebase mapping, and release preparation.
@@ -427,7 +427,7 @@ test-first implementation:
 ticket -> Ralph packet with verification_posture:test-first -> red evidence -> green evidence -> ticket acceptance
 
 debug:
-evidence -> root-cause research -> spec if needed -> ticket -> Ralph packet -> evidence -> critique -> retrospective
+evidence -> root-cause research -> spec if needed -> ticket -> local_edit or Ralph packet -> evidence -> critique -> retrospective
 
 spike:
 research -> throwaway scope if needed -> evidence -> conclusions/null results -> downstream spec, plan, ticket, or wiki
@@ -451,7 +451,7 @@ ship:
 ticket/evidence/critique/promotion disposition -> PR summary, release note, risk summary, follow-up list
 
 retrospective:
-ticket or initiative lessons -> wiki, research, spec, plan, initiative, constitution, evidence, or memory
+ticket or initiative lessons -> wiki, research, spec, plan, initiative, constitution, or evidence; memory cleanup may leave support-only recall or pointers
 ```
 
 You do not invent a workflow every time. You route through the project graph.

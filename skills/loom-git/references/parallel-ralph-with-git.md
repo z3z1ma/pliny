@@ -60,7 +60,8 @@ For multi-repo tickets:
 If one child must coordinate changes across multiple repositories, the packet
 should name all affected repo aliases and write scopes. If several children
 mutate several repositories in parallel, each child still needs a non-overlap
-evidence per repository.
+check per repository; preserve evidence of that check when acceptance,
+integration, or later review will rely on it.
 
 ## Packet Requirements
 

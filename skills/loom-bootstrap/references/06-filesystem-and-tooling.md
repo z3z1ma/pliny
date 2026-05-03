@@ -68,23 +68,44 @@ cp skills/loom-tickets/templates/ticket.md ".loom/tickets/<YYYYMMDD>-<token>-<sh
 
 ### Emit a here-doc
 
-Replace the slug before running, then clear every remaining placeholder before
-treating the saved file as truth. Research records do not use `draft` status;
+Set the slug and question before running, then validate the temporary file before
+moving it into `.loom/research/`. Research records do not use `draft` status;
 keep `status: active` only when the copied record has a real research question.
 
 ```bash
-slug="<replace-with-real-slug>"
-if [ "$slug" = "<replace-with-real-slug>" ]; then
-  printf 'Replace slug before writing the record.\n' >&2
-else
-  path=".loom/research/${slug}.md"
-  cat > "$path" <<EOF
+slug="${LOOM_RESEARCH_SLUG:-}"
+question="${LOOM_RESEARCH_QUESTION:-}"
+
+case "$slug" in
+  ""|*[!a-z0-9-]*)
+    printf 'Set LOOM_RESEARCH_SLUG to a lowercase slug before writing.\n' >&2
+    exit 1
+    ;;
+esac
+
+if [ -z "$question" ]; then
+  printf 'Set LOOM_RESEARCH_QUESTION before writing an active research record.\n' >&2
+  exit 1
+fi
+
+now="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+path=".loom/research/${slug}.md"
+
+if [ -e "$path" ]; then
+  printf 'Research record already exists; choose a new slug or reconcile the existing record first.\n' >&2
+  exit 1
+fi
+
+tmp="$(mktemp)"
+trap 'rm -f "$tmp"' EXIT
+
+if ! cat > "$tmp" <<EOF
 ---
 id: research:${slug}
 kind: research
 status: active
-created_at: <UTC timestamp>
-updated_at: <UTC timestamp>
+created_at: ${now}
+updated_at: ${now}
 scope:
   kind: repository
   repositories:
@@ -94,10 +115,20 @@ links: {}
 
 # Question
 
-<TBD: write the research question before saving>
+${question}
 EOF
-  rg -n '<[^>]+>|TBD' "$path"
+then
+  printf 'Failed to write temporary research record.\n' >&2
+  exit 1
 fi
+
+if rg -n '<[^>]+>|\bTBD\b|\bTODO\b' "$tmp"; then
+  printf 'Record still contains placeholders; repair before relying on it.\n' >&2
+  exit 1
+fi
+
+mv "$tmp" "$path" || exit 1
+trap - EXIT
 ```
 
 ### Use an inline snippet

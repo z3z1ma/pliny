@@ -148,29 +148,47 @@ rg -n '^# Supports Claims|^Supports:' .loom/evidence
 ### Find critique challenges
 
 ```bash
-rg -n '^Challenges:' .loom/critique
+rg -n '(^# .*Challenges|^Challenges:|^- .*challenges|#FIND-[0-9]+|\b(challenges|contradicts|unsupported|insufficient)\b)' .loom/critique
 ```
 
-### Find open critique findings
+Use this as a broad first pass, not an exhaustive proof that no critique
+challenges exist.
+
+### Find critique-owned open findings and verdict risk
 
 ```bash
-rg -n '^id: critique:|^status:|^target:|^verdict:|^severity:|^confidence:|^disposition:|\b(open|unresolved|requires_follow_up|needs_follow_up|blocked)\b' .loom/critique
+rg -n '^id: critique:|^status:|^review_target:|^target:|^verdict:|^severity:|^confidence:|^State: open|\bopen\b|\bunresolved\b' .loom/critique
 ```
 
-Use this to discover possible unresolved review work. The critique record owns
+### Find ticket-owned critique dispositions
+
+```bash
+rg -n 'resolved|accepted_risk|superseded|converted_to_follow_up|requires_follow_up|blocked' .loom/tickets
+```
+
+Use these to discover possible unresolved review work. The critique record owns
 findings and verdicts; the ticket owns whether each relevant finding blocks
 acceptance, is resolved, is accepted risk, is superseded, or becomes follow-up.
 
 ### Find unreplaced placeholders
 
+Saved project and support placeholder check:
+
 ```bash
-rg -n '<(TBD|TODO|token|slug|YYYYMMDD|UTC timestamp|path|id)>|\b(TBD|TODO|FIXME|XXX)\b' .loom skills
-rg -n '<[^>]*(slug|token|id|path|timestamp|summary|description)[^>]*>' .loom skills
+rg -n '(<[^>[:cntrl:]]+>|\bTODO\b|\bTBD\b|example:[a-z0-9-]+)' .loom
 ```
 
-Placeholder hits are risk signals, not automatic failures. Templates,
-references, and examples often contain intentional placeholders; active records
-and copied examples should not leave placeholders that pretend to be real truth.
+Skill-package authoring placeholder audit:
+
+```bash
+rg -n '(<[^>[:cntrl:]]+>|\bTODO\b|\bTBD\b|example:[a-z0-9-]+)' skills \
+  --glob '!**/templates/**'
+```
+
+Templates are expected to contain placeholders. Saved `.loom` records, workspace
+metadata, saved support artifacts, and copied examples should not leave
+placeholders that pretend to be real truth. Skill-package hits outside templates
+are review signals for authoring, not automatic failures.
 
 ## Linking Rules
 

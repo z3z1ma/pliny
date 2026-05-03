@@ -15,9 +15,9 @@ Ask:
 - if the status is non-ticket, does it match `references/status-lifecycle.md`
 - if claims are named, do coverage/support/challenge references use stable IDs
 - do the filename and ID agree
-- do saved `.loom` records avoid unresolved template placeholders, example IDs,
-  and generic TODO/TBD tokens unless the record explicitly documents them as
-  observed source text
+- do saved `.loom` records and saved workspace/support metadata avoid unresolved
+  template placeholders, example IDs, and generic TODO/TBD tokens unless the
+  record explicitly documents them as observed source text
 
 Intentional placeholders in `skills/**/templates` are template source, not saved
 records. They are not failures of saved-record validation unless copied into a
@@ -88,6 +88,18 @@ placeholder, example ID, or generic TODO/TBD token that leaked into saved projec
 truth. It is not a failure when the record explicitly documents the token as
 observed source text, such as a quoted scan result, fixture excerpt, or external
 example under review.
+
+### Saved support placeholder leakage
+
+```bash
+rg -n '(<[^>[:cntrl:]]+>|\bTODO\b|\bTBD\b|[a-z]+:<[^>]+>|example:[a-z0-9-]+)' \
+  .loom/workspace.md .loom/harness.md .loom/support 2>/dev/null
+```
+
+Support hits do not become canonical-truth failures, but unresolved placeholders
+in workspace metadata, harness metadata, or saved support artifacts are still
+routing and recovery failures until cleared or explicitly documented as observed
+text.
 
 ### Status vocabulary spot check
 

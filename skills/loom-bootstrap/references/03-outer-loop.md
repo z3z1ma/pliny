@@ -56,9 +56,10 @@ A ready ticket should make all of these legible:
 - what evidence the parent will expect
 - which next route applies; use
   `skills/loom-records/references/route-vocabulary.md` for canonical route
-  tokens such as `constitution`, `initiative`, `research`, `spec`, `plan`,
-  `ticket`, `local_edit`, `ralph`, `debugging`, `spike`, `codemap`, `critique`,
-  `wiki`, `retrospective`, `evidence`, `acceptance_review`, or `ship`
+  tokens. Common execution-side tokens include `local_edit`, `ralph`,
+  `debugging`, `spike`, `codemap`, `critique`, `wiki`, `retrospective`,
+  `evidence`, `acceptance_review`, or `ship`, but the route vocabulary is the
+  complete saved route grammar
 - when the next route is `ship`, the ticket still owns acceptance and closure;
   shipping packages or hands off already-truthful work
 
@@ -108,6 +109,10 @@ The outer loop should keep decomposing until the next step is bounded enough to 
 - one `critique` pass
 - one `wiki` pass
 - one owner-layer refinement or review route from the canonical route vocabulary
+
+If the current state needs operator input, workspace repair, records repair,
+evidence preservation, continuation, or stop, choose that route from the complete
+route vocabulary instead of forcing another implementation route.
 
 If the next step still feels like "do the whole feature", it is not decomposed enough.
 

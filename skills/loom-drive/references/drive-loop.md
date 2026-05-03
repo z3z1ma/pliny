@@ -44,8 +44,8 @@ intake -> objective-contract -> owner-shaping -> tranche-planning -> ticket-exec
 
 Before `ticket-execution`, run the hard preflight gates in
 `checkpoint-resume-protocol.md`. A failed gate may route to the owner repair path
-that clears it, but it blocks implementation execution, acceptance, and dependent
-continuation until repaired.
+that clears it, but it blocks implementation execution, acceptance, `ship`,
+external handoff/PR/release packaging, and dependent continuation until repaired.
 
 Do not skip directly from intake to execution for broad objectives. The graph must
 first contain enough objective truth to make continuation recoverable.

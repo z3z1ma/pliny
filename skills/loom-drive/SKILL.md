@@ -47,6 +47,11 @@ When this skill activates, the parent accepts a drive contract:
 - stop and ask when the next choice would invent product direction, accept
   material risk, or exceed scope, safety, time, or budget limits
 
+A drive may also route to `ask_user`, `workspace_status`, `records_repair`,
+`continue`, or `stop`; those are not owner layers, but they are legitimate saved
+route tokens when the graph cannot honestly advance through a narrower owner or
+workflow route.
+
 The contract is suspended when the objective can no longer be advanced safely
 from the recorded truth.
 
@@ -206,7 +211,8 @@ boundaries.
    and closure.
 6. **Run preflight gates** — distinguish repair/shaping routes from execution
    routes. Failed gates route to their owner repair path; they block `local_edit`,
-   `ralph`, `acceptance_review`, and dependent continuation until repaired.
+   `ralph`, `acceptance_review`, `ship`, external handoff/PR/release packaging,
+   and dependent continuation until repaired.
 7. **Execute or route bounded work** — use owner routes such as `constitution`,
    `initiative`, `research`, `spec`, `plan`, or `ticket` when truth must be shaped
    before implementation; use `local_edit` for tiny safe changes, `ralph` for

@@ -1,32 +1,32 @@
 ---
-id: support:drive-handoff-<UTC compact timestamp>-<slug>
+id: "support:drive-handoff-<TBD: UTC compact timestamp>-<TBD: slug>"
 kind: support-artifact
 support_kind: drive-outer-loop-handoff
 handoff_kind: outer-loop-synthesis
-parent_objective: <initiative/spec/plan/ticket id; unrecorded objective only during intake>
+parent_objective: "<TBD: initiative, spec, plan, or ticket id; unrecorded objective only during intake>"
 owner_workflow: loom-drive
-parent_responsible: <parent workflow or agent responsible for review and reconciliation>
+parent_responsible: "<TBD: parent workflow or agent responsible for review and reconciliation>"
 reconciliation_target:
   records:
-    - <canonical owner record id where accepted truth must land>
+    - "<TBD: canonical owner record id where accepted truth must land>"
   paths:
-    - <canonical owner path if needed, or None>
-stale_or_prune_condition: <when to mark reconciled, abandoned, superseded, or pruned after review>
+    - "<TBD: canonical owner path if needed, or None>"
+stale_or_prune_condition: "<TBD: when to mark reconciled, abandoned, superseded, or pruned after review>"
 status: draft
-created_at: <UTC timestamp>
-updated_at: <UTC timestamp>
+created_at: "<TBD: UTC timestamp>"
+updated_at: "<TBD: UTC timestamp>"
 scope:
   kind: repository
   repositories:
     - repo:root
 links: {}
 source_snapshot:
-  compiled_at: <UTC timestamp>
+  compiled_at: "<TBD: UTC timestamp>"
   compiled_from:
-    - <owner record id>
+    - "<TBD: owner record id>"
 drive_checkpoint:
-  anchor: <initiative id>
-  active_tranche: <plan section or ticket ids>
+  anchor: "<TBD: initiative id>"
+  active_tranche: "<TBD: plan section or ticket ids>"
   gate_status: "<TBD: choose clear or blocked before saving>"
 handoff_write_scope:
   records:

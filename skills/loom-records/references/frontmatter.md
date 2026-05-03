@@ -139,16 +139,18 @@ Saved drive outer-loop handoffs use this support frontmatter under
 ```yaml
 support_kind: drive-outer-loop-handoff
 owner_workflow: loom-drive
-parent_responsible: <parent workflow or agent responsible for review and reconciliation>
+parent_responsible: "<TBD: parent workflow or agent responsible for review and reconciliation>"
 reconciliation_target:
   records:
-    - <canonical owner record id>
+    - "<TBD: canonical owner record id>"
   paths:
-    - <canonical owner path if needed, or None>
-stale_or_prune_condition: <when to mark reconciled, abandoned, superseded, or pruned after review>
+    - "<TBD: canonical owner path if needed, or None>"
+stale_or_prune_condition: "<TBD: when to mark reconciled, abandoned, superseded, or pruned after review>"
 handoff_write_scope:
-  records: []
-  paths: []
+  records:
+    - "<TBD: proposal-time record write refs, or None - no writes>"
+  paths:
+    - "<TBD: proposal-time paths, or None - no writes>"
 ```
 
 They are prompt-only by default and durable support artifacts only when

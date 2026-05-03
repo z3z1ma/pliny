@@ -1,47 +1,47 @@
 ---
-id: packet:wiki-<encoded-target>-<UTC compact timestamp>
+id: "packet:wiki-<TBD: encoded target>-<TBD: UTC compact timestamp>"
 kind: packet
 packet_kind: wiki
 status: compiled
-target: "<TBD: wiki:<slug>, source record ref, ticket:<token>, or synthesis target slug>"
+target: "<TBD: wiki ref, source record ref, ticket ref, or synthesis target slug>"
 mode: synthesis
 style: reference-first
-created_at: <UTC timestamp>
-updated_at: <UTC timestamp>
+created_at: "<TBD: UTC timestamp>"
+updated_at: "<TBD: UTC timestamp>"
 scope:
   kind: repository
   repositories:
     - repo:root
 child_write_scope:
   records:
-    - wiki:<slug>
+    - "wiki:<TBD: slug>"
   paths:
     - "<TBD: wiki page paths the child may modify, or None - rationale>"
 parent_merge_scope:
   records:
-    - wiki:<slug>
-    - "<TBD: ticket:<token> when a ticket owns follow-through, originating owner ref, or None - no additional parent record reconciliation needed>"
+    - "wiki:<TBD: slug>"
+    - "<TBD: ticket ref when a ticket owns follow-through, originating owner ref, or None - no additional parent record reconciliation needed>"
     # or: None - <rationale for no parent record reconciliation>
   paths:
-    - "<TBD: .loom/wiki/<slug>.md, other owner path, or None - no parent path reconciliation needed>"
+    - "<TBD: wiki page path, other owner path, or None - no parent path reconciliation needed>"
     # or: None - <rationale for no parent path reconciliation>
 source_fingerprint:
-  git_commit: <sha or unknown>
-  integration_remote: <remote name|none|unknown>
-  integration_ref: <ref, tag, commit, or unknown>
-  integration_commit: <sha or unknown>
-  git_status_summary: <clean|dirty_tracked|dirty_untracked|dirty_mixed|unknown>
-  git_status_detail: <short status detail or unknown - rationale>
+  git_commit: "<TBD: sha or unknown with rationale>"
+  integration_remote: "<TBD: remote name, none, or unknown with rationale>"
+  integration_ref: "<TBD: ref, tag, commit, or unknown with rationale>"
+  integration_commit: "<TBD: sha or unknown with rationale>"
+  git_status_summary: "<TBD: clean, dirty_tracked, dirty_untracked, dirty_mixed, or unknown with rationale>"
+  git_status_detail: "<TBD: short status detail or unknown with rationale>"
   # Provenance: owner records or artifacts used to compile this synthesis baseline.
   compiled_from:
-    - <record ref>
+    - "<TBD: record ref>"
 execution_context:
-  branch: <name|unknown>
-  push_remote: <remote name|same_as_integration|none|unknown>
-  worktree: <path|none|unknown>
-  isolation: <none|branch|worktree|sandbox|unknown>
-  git_shared_metadata_mutations: <forbidden|allowed|unknown>
-  destructive_commands: <forbidden|allowed|unknown>
+  branch: "<TBD: branch name or unknown with rationale>"
+  push_remote: "<TBD: remote name, same_as_integration, none, or unknown with rationale>"
+  worktree: "<TBD: path, none, or unknown with rationale>"
+  isolation: "<TBD: none, branch, worktree, sandbox, or unknown with rationale>"
+  git_shared_metadata_mutations: "<TBD: forbidden, allowed, or unknown with rationale>"
+  destructive_commands: "<TBD: forbidden, allowed, or unknown with rationale>"
   network: "<TBD: choose allowed, forbidden, or unknown - rationale that makes launch safe before saving>"
 context_budget:
   posture: normal

@@ -1,9 +1,9 @@
 ---
-id: packet:ralph-ticket-<token>-<UTC compact timestamp>
+id: "packet:ralph-ticket-<TBD: ticket token>-<TBD: UTC compact timestamp>"
 kind: packet
 packet_kind: ralph
 status: compiled
-target: ticket:<token>
+target: "ticket:<TBD: token>"
 mode: execution
 change_class: "<TBD: choose one change class before saving>"
 # Optional when the parent wants packet-local risk carried explicitly:
@@ -11,8 +11,8 @@ change_class: "<TBD: choose one change class before saving>"
 style: "<TBD: choose reference-first, snapshot-first, or hermetic before saving>"
 verification_posture: "<TBD: choose test-first, observation-first, or none before saving>"
 iteration: "<TBD: positive integer>"
-created_at: <UTC timestamp>
-updated_at: <UTC timestamp>
+created_at: "<TBD: UTC timestamp>"
+updated_at: "<TBD: UTC timestamp>"
 scope:
   kind: repository
   repositories:
@@ -24,23 +24,23 @@ child_write_scope:
     - "<TBD: paths or globs the child may modify, or None - rationale>"
 parent_merge_scope:
   records:
-    - ticket:<token>
+    - "ticket:<TBD: token>"
   paths:
     - "<TBD: paths the parent must reconcile, or None - rationale>"
 source_fingerprint:
-  git_commit: <sha or unknown>
-  integration_remote: <remote name|none|unknown>
-  integration_ref: <ref, tag, commit, or unknown>
-  integration_commit: <sha or unknown>
-  git_status_summary: <clean|dirty_tracked|dirty_untracked|dirty_mixed|unknown>
-  git_status_detail: <short status detail or unknown - rationale>
+  git_commit: "<TBD: sha or unknown with rationale>"
+  integration_remote: "<TBD: remote name, none, or unknown with rationale>"
+  integration_ref: "<TBD: ref, tag, commit, or unknown with rationale>"
+  integration_commit: "<TBD: sha or unknown with rationale>"
+  git_status_summary: "<TBD: clean, dirty_tracked, dirty_untracked, dirty_mixed, or unknown with rationale>"
+  git_status_detail: "<TBD: short status detail or unknown with rationale>"
   # Provenance: owner records or artifacts used to compile this packet baseline.
   compiled_from:
-    - ticket:<token>
+    - "ticket:<TBD: token>"
 execution_context:
-  branch: <name|unknown>
-  push_remote: <remote name|same_as_integration|none|unknown>
-  worktree: <path|none|unknown>
+  branch: "<TBD: branch name or unknown with rationale>"
+  push_remote: "<TBD: remote name, same_as_integration, none, or unknown with rationale>"
+  worktree: "<TBD: path, none, or unknown with rationale>"
   isolation: none
   git_shared_metadata_mutations: forbidden
   destructive_commands: forbidden
@@ -59,7 +59,7 @@ sources:
   spec: []
   plan: []
   ticket:
-    - ticket:<token>
+    - "ticket:<TBD: token>"
 links: {}
 ---
 

@@ -16,6 +16,13 @@ handoff decision and package.
 
 Before presenting handoff options, check:
 
+- ship-owned packaging preconditions: ticket truth is current, evidence and
+  critique dispositions are sufficient for the handoff claim, scope and safety
+  limits are respected, Git/worktree state is known when files are being
+  packaged, and external summaries will mirror Loom truth
+- when `ship` is being invoked from `loom-drive`, the drive-owned hard preflight
+  gates in `skills/loom-drive/references/checkpoint-resume-protocol.md` are clear
+  before merge, PR, release, or external handoff packaging
 - ticket state, acceptance criteria, evidence, critique disposition,
   retrospective / promotion disposition, and route-specific wiki disposition when
   wiki was selected
@@ -51,6 +58,9 @@ For each option, say what Loom truth will remain after the action:
 
 Before merge or PR packaging:
 
+- confirm ship-owned preconditions are clear; when drive is the parent workflow,
+  also confirm drive hard preflight gates are clear or route to the owner repair
+  path first
 - cite ticket, evidence, critique, and follow-up records in the summary
 - include release-note, evidence/risk-summary, and follow-up-list material when
   useful for the external handoff

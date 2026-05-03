@@ -189,6 +189,7 @@ Expected limitations or recheck triggers:
 
 Acceptance review readiness:
 Evidence and critique disposition:
+Closure readiness question / acceptance dossier gap:
 Residual risks:
 
 Ship readiness:

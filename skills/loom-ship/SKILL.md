@@ -65,6 +65,13 @@ Shipping may summarize and package already-truthful ticket, evidence, critique,
 wiki, risk, and follow-up disposition. Ticket-owned acceptance disposition owns
 closure.
 
+Before packaging, confirm the ship-owned preconditions are true for the handoff:
+ticket truth is current, evidence and critique dispositions are sufficient for the
+handoff claim, scope and safety limits are respected, Git/worktree state is known
+when files are being packaged, and external summaries will mirror Loom truth. If
+`ship` is being invoked from `loom-drive`, satisfy drive's hard preflight gates in
+the drive-owned checkpoint before packaging.
+
 ## Done Means
 
 - the package cites Loom records rather than relying on conversation context

@@ -69,17 +69,18 @@ rg -n 'loom-drive|objective-driven|OBJ-[0-9]{3}' .loom
 
 ## Hard Preflight Gates
 
-These gates run before `local_edit`, `ralph`, `acceptance_review`, dependent continuation,
-or route federation.
+These gates run before `local_edit`, `ralph`, `acceptance_review`, `ship`, any
+external handoff/PR/release packaging, dependent continuation, or route
+federation.
 
 There are two outcomes:
 
 - **repair route required**: the failed gate routes to the owner layer that can
   repair it, such as `constitution`, `initiative`, `research`, `spec`, `plan`,
   `ticket` refinement, `evidence`, `critique`, `records_repair`, or `ask_user`
-- **execution blocked**: implementation, acceptance, and dependent continuation
-  must not proceed until the gate is repaired or the user explicitly accepts the
-  risk in the owning ticket
+- **execution blocked**: implementation, acceptance, shipping or external handoff
+  packaging, and dependent continuation must not proceed until the gate is
+  repaired or the user explicitly accepts the risk in the owning ticket
 
 Failed gates do not block their own repair routes. They do block pretending the
 repair already happened.
