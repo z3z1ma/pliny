@@ -107,8 +107,9 @@ review routes are first-class continuation outcomes.
   required follow-up.
 - Wiki or retrospective enters with accepted learning and exits with durable
   explanation or promotion decisions.
-- Ship enters with truthful ticket/evidence/critique/wiki disposition and exits
-  with external handoff packaging plus the next ticket-owned route.
+- Ship enters with truthful ticket/evidence/critique/retrospective or promotion
+  disposition and exits with external handoff packaging plus the next
+  ticket-owned route.
 
 Every route result must name the owner records that changed and the next route or
 stop condition.

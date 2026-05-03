@@ -113,7 +113,8 @@ Profiles are lenses, not permanent agents or new layers.
 
 - whether the next agent will know what to do
 - explicit stop conditions
-- honest ticket, evidence, and wiki disposition
+- honest ticket, evidence, critique, retrospective / promotion disposition, and
+  route-specific wiki disposition when applicable
 - whether explanatory pages overstate certainty
 
 ### `workflow-boundary`

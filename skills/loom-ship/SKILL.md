@@ -1,6 +1,6 @@
 ---
 name: loom-ship
-description: "Package already-truthful Loom work for merge, release, or handoff without closing tickets. Use when ticket, evidence, critique, and wiki disposition should become a PR summary, release note draft, risk summary, or follow-up list."
+description: "Package already-truthful Loom work for merge, release, or handoff without closing tickets. Use when ticket, evidence, critique, and promotion disposition should become a PR summary, release note draft, risk summary, or follow-up list."
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   skill_kind: workflow
@@ -25,7 +25,7 @@ commands may invoke that workflow but do not own it.
 ## Use This Skill When
 
 - implementation and evidence are already recorded
-- critique and wiki disposition need to be summarized
+- critique and retrospective / promotion disposition need to be summarized
 - work needs to be packaged for PR, release, review, or handoff
 - external systems need a mirror of Loom truth
 
@@ -42,7 +42,8 @@ commands may invoke that workflow but do not own it.
 - plan or initiative, when relevant
 - evidence
 - critique
-- wiki disposition
+- retrospective / promotion disposition, plus route-specific wiki disposition when
+  wiki was one selected promotion route
 - known follow-ups
 - external refs, when present
 

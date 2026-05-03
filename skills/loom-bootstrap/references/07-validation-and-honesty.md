@@ -23,7 +23,8 @@ Work is done only when all relevant conditions are true:
     `completed`, `deferred`, or `not_required` with rationale
   - optional critique does not block closure unless a ticket, spec, plan, or
     human gate made it required for that work
-- wiki follow-through has happened or is explicitly deferred
+- retrospective / promotion follow-through has happened, been explicitly deferred,
+  or been recorded as not required
 - references are reconciled
 - the result stayed within scope
 

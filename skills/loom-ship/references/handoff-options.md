@@ -13,8 +13,9 @@ handoff decision and package.
 
 Before presenting handoff options, check:
 
-- ticket state, acceptance criteria, evidence, critique disposition, and wiki or
-  retrospective disposition
+- ticket state, acceptance criteria, evidence, critique disposition,
+  retrospective / promotion disposition, and route-specific wiki disposition when
+  wiki was selected
 - current Git branch/worktree, changed files, untracked files, and relevant diff
 - verification evidence fresh enough for the handoff claim
 - unresolved medium/high critique findings or required follow-ups
@@ -38,7 +39,8 @@ For each option, say what Loom truth will remain after the action:
 - which ticket owns acceptance or remaining work
 - which evidence supports the handoff
 - which critique findings remain open, accepted, or resolved
-- whether wiki/retrospective follow-through is complete or deferred
+- whether retrospective / promotion follow-through is complete or deferred,
+  including route-specific wiki follow-through when wiki was selected
 
 ## Merge Or PR
 

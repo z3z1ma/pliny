@@ -11,7 +11,7 @@ It is not "just code." It is ticket-owned execution.
 - linked plan, spec, research, and initiative as needed
 - acceptance criteria and coverage targets
 - evidence expectations
-- critique and wiki disposition
+- critique and retrospective / promotion disposition
 
 ## Procedure
 

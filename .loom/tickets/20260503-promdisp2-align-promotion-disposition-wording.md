@@ -1,11 +1,11 @@
 ---
 id: ticket:promdisp2
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: medium
 created_at: 2026-05-03T00:56:36Z
-updated_at: 2026-05-03T00:56:36Z
+updated_at: 2026-05-03T01:31:03Z
 scope:
   kind: repository
   repositories:
@@ -17,6 +17,13 @@ links:
     - plan:skills-corpus-residual-protocol-sharpening-pass
   research:
     - research:skills-corpus-residual-audit-synthesis
+  packet:
+    - packet:ralph-ticket-promdisp2-20260503T011837Z
+    - packet:ralph-ticket-promdisp2-20260503T012242Z
+  evidence:
+    - evidence:promotion-disposition-wording-validation
+  critique:
+    - critique:promotion-disposition-wording-review
 external_refs: {}
 depends_on: []
 ---
@@ -78,8 +85,12 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-004` | pending | pending | open |
-| `ticket:promdisp2#ACC-001` through `ticket:promdisp2#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-004` | `evidence:promotion-disposition-wording-validation` | `critique:promotion-disposition-wording-review` | supported |
+| `ticket:promdisp2#ACC-001` | `evidence:promotion-disposition-wording-validation` | `critique:promotion-disposition-wording-review` | supported |
+| `ticket:promdisp2#ACC-002` | `evidence:promotion-disposition-wording-validation` | `critique:promotion-disposition-wording-review` | supported |
+| `ticket:promdisp2#ACC-003` | `evidence:promotion-disposition-wording-validation` | `critique:promotion-disposition-wording-review` | supported |
+| `ticket:promdisp2#ACC-004` | `evidence:promotion-disposition-wording-validation` | `critique:promotion-disposition-wording-review` | supported |
+| `ticket:promdisp2#ACC-005` | `critique:promotion-disposition-wording-review` | oracle critique passed with no findings | supported |
 
 # Execution Notes
 
@@ -88,27 +99,26 @@ work driver, ship/git guidance, and README workflow wording if still stale.
 
 # Blockers
 
-None.
+None. The iteration 1 scope blocker is resolved by replacement packet
+`packet:ralph-ticket-promdisp2-20260503T012242Z`, which includes
+`skills/loom-records/references/implementation-reality.md` in scope.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to `ticket:critfail3`.
 
 # Route Readiness
 
-Route: ralph
-
-Bounded iteration: promotion disposition wording cleanup.
-Write boundary: affected promotion/wiki closure wording surfaces, this ticket,
-one evidence record, one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Acceptance review readiness:
+Evidence `evidence:promotion-disposition-wording-validation` and oracle critique
+`critique:promotion-disposition-wording-review` support closure with no findings.
 
 # Evidence
 
-Expected: before/after searches for `wiki disposition`, `retrospective`,
-`promotion disposition`, closure wording, and `git diff --check`.
+Recorded: `evidence:promotion-disposition-wording-validation` captures
+before/after wording searches, route-specific wiki-disposition observations,
+preserved disposition outcomes, and `git diff --check` for this implementation
+iteration.
 
 # Critique Disposition
 
@@ -127,9 +137,10 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:promotion-disposition-wording-review` - no findings; mandatory oracle
+critique passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -137,18 +148,33 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Retrospective / promotion disposition wording was promoted directly into the
+  touched product/public guidance surfaces.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the product guidance itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+touched closure and handoff guidance.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T01:31:03Z
+Basis: Ralph packets `packet:ralph-ticket-promdisp2-20260503T011837Z` and
+`packet:ralph-ticket-promdisp2-20260503T012242Z`; evidence
+`evidence:promotion-disposition-wording-validation`; oracle critique
+`critique:promotion-disposition-wording-review` with no findings.
+Residual risks: validation is pattern/search based and historical `.loom` records
+may preserve older wording as audit history.
 
 # Dependencies
 
@@ -157,3 +183,27 @@ None.
 # Journal
 
 - 2026-05-03T00:56:36Z: Created from council finding `NC2-001`.
+- 2026-05-03T01:18:38Z: Moved to `active` and compiled
+  `packet:ralph-ticket-promdisp2-20260503T011837Z` for promotion disposition
+  wording cleanup.
+- 2026-05-03T01:21:05Z: Ralph child stopped before product edits because
+  before-state search found stale `wiki follow-through` wording in
+  `skills/loom-records/references/implementation-reality.md` outside the packet
+  child write scope; recorded
+  `evidence:promotion-disposition-wording-validation` and moved the ticket to
+  `blocked` for parent scope reconciliation.
+- 2026-05-03T01:22:42Z: Parent consumed the blocked first packet as valid scope
+  discovery and compiled replacement packet
+  `packet:ralph-ticket-promdisp2-20260503T012242Z` with
+  `skills/loom-records/references/implementation-reality.md` added to the write
+  scope.
+- 2026-05-03T01:24:53Z: Replacement Ralph iteration updated product wording,
+  refreshed evidence, and moved the ticket to `review_required` for mandatory
+  oracle critique with profiles `closure-honesty`, `workflow-boundary`, and
+  `operator-clarity`.
+- 2026-05-03T01:27:38Z: Parent reconciled replacement Ralph output, marked
+  `packet:ralph-ticket-promdisp2-20260503T012242Z` consumed, and confirmed
+  `git diff --check` passed before oracle critique.
+- 2026-05-03T01:31:03Z: Mandatory oracle critique
+  `critique:promotion-disposition-wording-review` passed with no findings. Parent
+  recorded retrospective / promotion disposition and accepted closure.

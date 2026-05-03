@@ -45,7 +45,7 @@ belongs.
 Use these terms precisely:
 
 - **acceptance contract**: spec-owned criteria, requirements, scenarios, and claim IDs
-- **acceptance disposition**: ticket-owned decision about scoped claims, evidence, critique, wiki follow-through, accepted risk, and closure
+- **acceptance disposition**: ticket-owned decision about scoped claims, evidence, critique, retrospective / promotion follow-through, accepted risk, and closure
 - **acceptance review**: workflow route that helps produce the ticket disposition
 
 Specs own reusable acceptance contracts and intended behavior. Tickets may own

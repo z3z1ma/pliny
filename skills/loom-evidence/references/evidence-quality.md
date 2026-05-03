@@ -98,9 +98,9 @@ sufficient for acceptance.
 Evidence feeds the ticket-owned acceptance dossier.
 
 The ticket decides whether evidence is sufficient, fresh enough, and paired with
-required critique and promotion disposition. Evidence records should provide
-observed support, observed challenges, freshness notes, and limitations so the
-ticket can fail closed honestly.
+required critique and retrospective / promotion disposition. Evidence records
+should provide observed support, observed challenges, freshness notes, and
+limitations so the ticket can fail closed honestly.
 
 Do not make evidence records close tickets, accept risks, withdraw findings,
 define intended behavior, or replace critique verdicts.

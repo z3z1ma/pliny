@@ -29,8 +29,9 @@ Default passes:
    Check edge cases, assumptions, auth/data/security, performance, migration,
    rollback, and operational hazards.
 4. Operator clarity and follow-through
-   Check ticket truth, evidence, critique disposition, wiki disposition, and
-   whether the next agent can continue cold.
+   Check ticket truth, evidence, critique disposition, retrospective / promotion
+   disposition, route-specific wiki disposition when applicable, and whether the
+   next agent can continue cold.
 
 Each pass may produce its own critique record, or one consolidated critique
 record with clearly separated pass sections.

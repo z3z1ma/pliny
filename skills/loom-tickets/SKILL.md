@@ -1,6 +1,6 @@
 ---
 name: loom-tickets
-description: "Maintain live execution records and ticket-owned acceptance decisions. Use when new work needs a bounded owner, when execution status, blockers, evidence, critique, wiki, or retrospective disposition changes, or when Ralph and other workflow passes must reconcile their consequences into ticket truth."
+description: "Maintain live execution records and ticket-owned acceptance decisions. Use when new work needs a bounded owner, when execution status, blockers, evidence, critique, route-specific wiki, or retrospective / promotion disposition changes, or when Ralph and other workflow passes must reconcile their consequences into ticket truth."
 compatibility: Markdown-native, script-free Loom protocol.
 metadata:
   skill_kind: owner-layer
@@ -35,8 +35,8 @@ If execution truth changed, the ticket should absorb it.
 - blockers changed
 - evidence changed
 - critique changed what the ticket should say
-- wiki or broader promotion follow-through happened, was deferred, or was not
-  required
+- route-specific wiki or broader retrospective / promotion follow-through
+  happened, was deferred, or was not required
 - a Ralph run needs to be reconciled
 - acceptance or closure needs to be decided through the ticket-owned gate
 

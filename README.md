@@ -412,7 +412,7 @@ implementation:
 ticket -> Ralph packet -> worker -> evidence -> reconcile
 
 ship:
-ticket/evidence/critique/wiki disposition -> PR summary, release note, risk summary, follow-up list
+ticket/evidence/critique/promotion disposition -> PR summary, release note, risk summary, follow-up list
 
 retrospective:
 ticket or initiative lessons -> wiki, research, spec, plan, initiative, constitution, evidence, or memory

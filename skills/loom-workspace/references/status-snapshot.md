@@ -64,8 +64,8 @@ Before ending a session, compacting context, or handing off after meaningful
 work, update the existing owners that make recovery truthful:
 
 - ticket: live status, blocker, progress, scoped acceptance disposition, critique
-  disposition, evidence disposition, wiki/retrospective disposition, and the next
-  route
+  disposition, evidence disposition, retrospective / promotion disposition,
+  route-specific wiki disposition when applicable, and the next route
 - evidence: observed outputs, validation artifacts, reproduction logs, or other
   artifacts that support or challenge claims
 - critique: adversarial findings, verdicts, severities, residual risks, and

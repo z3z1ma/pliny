@@ -23,7 +23,7 @@ Do not treat a spec as evidence that the code works.
 Do not treat the current code as evidence that the project intended that behavior.
 
 Do not treat a green test as a complete acceptance decision when required
-critique, evidence, or wiki follow-through remains open.
+critique, evidence, or retrospective / promotion follow-through remains open.
 
 ## Bridge Through Evidence
 

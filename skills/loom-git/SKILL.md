@@ -132,7 +132,8 @@ Git cannot answer by itself:
 - parallel workers have non-overlapping Loom write scopes and distinct Git
   isolation
 - diffs, commits, PRs, and cleanup do not create a shadow ledger outside Loom
-- ticket, evidence, critique, and wiki disposition remain truthful
+- ticket, evidence, critique, and retrospective / promotion disposition remain
+  truthful
 
 ## Read In This Order
 
