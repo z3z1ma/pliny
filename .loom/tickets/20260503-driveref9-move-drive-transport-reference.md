@@ -1,11 +1,11 @@
 ---
 id: ticket:driveref9
 kind: ticket
-status: ready
+status: closed
 change_class: documentation-explanation
 risk_class: medium
 created_at: 2026-05-03T00:56:36Z
-updated_at: 2026-05-03T00:56:36Z
+updated_at: 2026-05-03T03:06:40Z
 scope:
   kind: repository
   repositories:
@@ -17,6 +17,12 @@ links:
     - plan:skills-corpus-residual-protocol-sharpening-pass
   research:
     - research:skills-corpus-residual-audit-synthesis
+  packet:
+    - packet:ralph-ticket-driveref9-20260503T025733Z
+  evidence:
+    - evidence:drive-transport-reference-validation
+  critique:
+    - critique:drive-transport-reference-review
 external_refs: {}
 depends_on: []
 ---
@@ -77,8 +83,8 @@ Covers:
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-011` | pending | pending | open |
-| `ticket:driveref9#ACC-001` through `ticket:driveref9#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-residual-protocol-sharpening-pass#OBJ-011` | `evidence:drive-transport-reference-validation` | `critique:drive-transport-reference-review` | supported |
+| `ticket:driveref9#ACC-001` through `ticket:driveref9#ACC-005` | `evidence:drive-transport-reference-validation` | `critique:drive-transport-reference-review` | supported |
 
 # Execution Notes
 
@@ -91,23 +97,23 @@ None.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to `ticket:minpol10`.
+
+Ralph packet `packet:ralph-ticket-driveref9-20260503T025733Z` was consumed in
+scope, evidence was repaired and recorded, oracle critique passed after one
+evidence-coverage finding was resolved, and acceptance is complete.
 
 # Route Readiness
 
-Route: ralph
+Acceptance review readiness:
 
-Bounded iteration: drive optional transport reference extraction.
-Write boundary: drive skill/reference files, this ticket, one evidence record,
-one critique record, and one Ralph packet.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, evidence, ticket update, and critique
-recommendation.
+Evidence `evidence:drive-transport-reference-validation` and oracle critique
+`critique:drive-transport-reference-review` support closure with no unresolved
+findings.
 
 # Evidence
 
-Expected: before/after searches for optional outer-loop subagent transport,
-support artifact boundaries, read order, and `git diff --check`.
+Recorded: `evidence:drive-transport-reference-validation`.
 
 # Critique Disposition
 
@@ -126,9 +132,12 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:drive-transport-reference-review#DRVREF9-ORC-001` - resolved. Initial
+oracle critique found the whitespace check did not cover the new untracked
+reference; parent repaired evidence with intent-to-add plus a scoped `git diff
+--check`, and final oracle re-critique passed with no unresolved findings.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -136,18 +145,33 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Optional outer-loop subagent transport mechanics were promoted from the main
+  drive skill body into `skills/loom-drive/references/outer-loop-subagent-transport.md`.
+
+Deferred / not-required rationale:
+
+No separate wiki page, research record, spec, constitution decision, or memory
+entry is needed. The durable lesson is the product guidance itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+drive skill and new drive reference.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T03:06:40Z
+Basis: Ralph packet `packet:ralph-ticket-driveref9-20260503T025733Z`; evidence
+`evidence:drive-transport-reference-validation`; oracle critique
+`critique:drive-transport-reference-review` with initial finding resolved and no
+unresolved findings.
+Residual risks: extraction is documentation-only; future correctness depends on
+operators following the conditional reference and template read-order guidance.
 
 # Dependencies
 
@@ -156,3 +180,18 @@ None.
 # Journal
 
 - 2026-05-03T00:56:36Z: Created from older audit action 9.
+- 2026-05-03T02:57:34Z: Marked active and compiled Ralph packet
+  `packet:ralph-ticket-driveref9-20260503T025733Z` for drive optional transport
+  reference extraction.
+- 2026-05-03T03:00:29Z: Ralph iteration
+  `packet:ralph-ticket-driveref9-20260503T025733Z` completed in scope. Evidence
+  recorded in `evidence:drive-transport-reference-validation`; next route is
+  mandatory oracle critique.
+- 2026-05-03T03:04:20Z: Initial oracle critique found the whitespace evidence did
+  not cover the new untracked reference. Parent added the new reference as
+  intent-to-add and updated evidence with a path-limited `git diff --check` that
+  covers both changed drive files.
+- 2026-05-03T03:06:40Z: Mandatory oracle critique
+  `critique:drive-transport-reference-review` passed after resolving
+  `DRVREF9-ORC-001`. Parent recorded retrospective / promotion disposition and
+  accepted closure.

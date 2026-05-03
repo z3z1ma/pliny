@@ -225,34 +225,13 @@ A dedicated outer-loop subagent may be used for context management when the
 parent needs fresh synthesis of an objective chain, option set, tranche plan, or
 risk list.
 
-This is transport only:
+This is transport only: the subagent proposes owner-record changes, tickets,
+risks, and next routes; the parent reviews and reconciles the output before
+depending on it; canonical records and tickets retain truth ownership.
 
-- the subagent proposes owner-record changes, tickets, risks, and next routes
-- the parent reviews the output before applying it
-- canonical records retain truth ownership
-- tickets retain live execution ownership
-- parent reconciliation remains mandatory before dependent work launches
-- the outer-loop handoff template is prompt-only by default; save it only when a
-  durable support artifact is useful for reviewability, context recovery, or
-  handoff audit
-- saved outer-loop handoffs live under the optional, lazy-materialized,
-  non-canonical support surface
-  `.loom/support/drive-handoffs/<UTC compact timestamp>-<slug>.md` with
-  `kind: support-artifact`, `support_kind: drive-outer-loop-handoff`, and
-  `handoff_kind: outer-loop-synthesis`
-- saved handoff status is support-local: `draft`, `reconciled`, `abandoned`, or
-  `superseded`; it does not own objective state, live ticket state, acceptance,
-  evidence sufficiency, critique verdicts, wiki truth, canonical truth, or packet
-  lifecycle
-- the outer-loop handoff template is not a packet family and not a truth owner
-- any handoff `handoff_write_scope` is proposal-time permission for that support
-  handoff, not Ralph `child_write_scope`
-- legacy packet `write_scope` remains packet compatibility only
-- do not create `.loom/support/` merely during bootstrap; create it only when a
-  saved support artifact is intentionally materialized
-
-Use `templates/outer-loop-handoff.md` only when a bounded handoff would reduce
-context pressure or improve reviewability.
+Use `references/outer-loop-subagent-transport.md` when optional outer-loop
+subagent transport is relevant. Use `templates/outer-loop-handoff.md` only when a
+bounded handoff would reduce context pressure or improve reviewability.
 
 ## Stop Or Ask The User When
 
@@ -314,5 +293,7 @@ Then read conditionally:
 11. `skills/loom-evidence/SKILL.md`, `skills/loom-critique/SKILL.md`,
     `skills/loom-wiki/SKILL.md`, or `skills/loom-retrospective/SKILL.md` when
     observations, review, accepted explanation, or learning assimilation is next.
-12. `templates/outer-loop-handoff.md` only when launching an optional bounded
+12. `references/outer-loop-subagent-transport.md` when optional outer-loop
+    subagent transport is relevant.
+13. `templates/outer-loop-handoff.md` only when launching an optional bounded
     outer-loop synthesis subagent.
