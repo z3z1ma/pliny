@@ -9,7 +9,7 @@ find .loom -maxdepth 2 -type d | sort
 find .loom -type f -name '*.md' | sort | head -100
 ```
 
-## Canonical Presence Checks
+## Workspace Presence Checks
 
 ```bash
 test -f .loom/constitution/constitution.md
@@ -17,6 +17,9 @@ test -d .loom/tickets
 test -d .loom/packets/ralph
 test -d .loom/wiki
 ```
+
+These checks include canonical owner paths and support paths such as
+`.loom/packets/ralph`; they are not a canonical-only path list.
 
 If an empty canonical directory is absent in a Git checkout, treat that as a
 bootstrap gap rather than automatic corruption. If records exist in a retired
