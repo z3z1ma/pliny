@@ -41,7 +41,10 @@ Ralph packets use `kind: packet`, `packet_kind: ralph`, and the
 
 - the work is still under-scoped
 - the ticket is too vague
-- the next move is obviously research, spec, plan, or ticket refinement
+- the next move is obviously another route from the canonical route vocabulary,
+  such as `research`, `spec`, `plan`, `ticket` refinement, `debugging`,
+  `spike`, `codemap`, `ship`, or `acceptance_review`; Ralph is only for bounded
+  implementation packets
 - the next move is critique or wiki; use that domain skill first
 - the task is a tiny local edit that does not need a packet
 
@@ -60,7 +63,10 @@ Ralph packets use `kind: packet`, `packet_kind: ralph`, and the
 10. check whether sources or write-scope files changed materially before launch
 11. launch the fresh worker through the available harness transport
 12. inspect and reconcile the result back into the ticket
-13. route to Ralph again, critique, wiki, or outer-loop refinement
+13. route to the next canonical route, such as another `ralph` implementation
+    packet, `critique`, `wiki`, `research`, `spec`, `plan`, `ticket`,
+    `debugging`, `spike`, `codemap`, `ship`, or `acceptance_review`; `ship` is
+    packaging or handoff only and does not close the ticket
 
 ## Strong Ralph Discipline
 
@@ -133,6 +139,8 @@ Then read conditionally:
    worker, especially parallel Ralph.
 7. `skills/loom-critique/SKILL.md` or `skills/loom-wiki/SKILL.md` when the next
    packetized pass is review or synthesis rather than implementation.
-8. `references/harness-invocation.md` only when transport mechanics need to be
+8. `skills/loom-records/references/route-vocabulary.md` when writing or checking
+   `next route:` values after parent reconciliation.
+9. `references/harness-invocation.md` only when transport mechanics need to be
    documented or chosen.
-9. `templates/ralph-packet.md` only when creating the packet.
+10. `templates/ralph-packet.md` only when creating the packet.

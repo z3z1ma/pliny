@@ -124,8 +124,9 @@ Include:
 ## Output Contract
 
 - proposed next route: ask_user / workspace_status / records_repair / research /
-  spec / plan / ticket / local_edit / ralph / evidence / critique / wiki /
-  retrospective / acceptance_review / continue / stop
+  spec / plan / ticket / local_edit / ralph / debugging / spike / codemap /
+  evidence / critique / wiki / retrospective / acceptance_review / ship /
+  continue / stop
 - objective criterion IDs affected and proposed status changes
 - current tranche assessment and proposed next tranche
 - route decision priority applied and why

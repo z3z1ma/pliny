@@ -23,8 +23,14 @@ If the plan cannot yield slices like that, keep decomposing.
 Plans are not executed by checking off plan prose as the live ledger.
 
 Execute a plan by creating or advancing bounded tickets beneath it. A ticket then
-chooses the next route: local edit, Ralph packet, direct critique, evidence
-recording, wiki pass, retrospective pass, or acceptance review.
+chooses the next route with the shared route vocabulary: `local_edit` for a tiny
+in-context mutation, `ralph` for a bounded implementation packet, `debugging`
+for reproduce-first diagnosis, `spike` for bounded discovery, `codemap` for
+repository mapping, `evidence` for observation recording, `critique` for review,
+`wiki` or `retrospective` for accepted-learning promotion,
+`acceptance_review` for ticket-owned acceptance evaluation, or `ship` for
+already-truthful PR/merge/release/handoff packaging. Shipping does not close the
+ticket.
 
 If a plan step looks like a task checklist, translate it into ticket acceptance,
 packet task text, or evidence expectations before a worker starts. Do not let a

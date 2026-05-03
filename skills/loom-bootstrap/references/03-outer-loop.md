@@ -54,9 +54,13 @@ A ready ticket should make all of these legible:
 - what acceptance means
 - what artifacts constrain the work
 - what evidence the parent will expect
-- which next route applies: local edit, Ralph implementation packet, direct
-  critique, wiki/retrospective pass, evidence recording, research/spec/plan
-  refinement, or ticket acceptance review
+- which next route applies; use
+  `skills/loom-records/references/route-vocabulary.md` for canonical route
+  tokens such as `local_edit`, `ralph`, `debugging`, `spike`, `codemap`,
+  `critique`, `wiki`, `retrospective`, `evidence`, `research`, `spec`, `plan`,
+  `ticket`, `acceptance_review`, or `ship`
+- when the next route is `ship`, the ticket still owns acceptance and closure;
+  shipping packages or hands off already-truthful work
 
 If the ticket cannot do that, keep working in the outer loop.
 
@@ -97,10 +101,13 @@ Plans are execution strategy, not execution truth.
 
 The outer loop should keep decomposing until the next step is bounded enough to fit one of these shapes:
 
-- one local edit pass with no packet
-- one Ralph packet
-- one critique pass
-- one wiki pass
+- one `local_edit` pass with no packet
+- one `ralph` implementation packet
+- one workflow-coordinator pass such as `debugging`, `spike`, `codemap`, or
+  `ship`
+- one `critique` pass
+- one `wiki` pass
+- one owner-layer refinement or review route from the canonical route vocabulary
 
 If the next step still feels like "do the whole feature", it is not decomposed enough.
 
@@ -119,13 +126,13 @@ When Ralph returns with:
 
 the parent should route back outward instead of forcing execution through ambiguity.
 
-Typical loopback routes:
+Typical loopback routes, expressed with canonical route tokens where possible:
 
-- Ralph -> research
-- Ralph -> spec
-- Ralph -> plan
-- Ralph -> ticket refinement
-- Ralph -> constitution in rare architectural cases
+- `ralph` -> `research`
+- `ralph` -> `spec`
+- `ralph` -> `plan`
+- `ralph` -> `ticket` refinement
+- `ralph` -> constitution in rare architectural cases
 
 ## Consult Constitution Before Deciding
 

@@ -2,9 +2,12 @@
 
 A ticket is ready when the next governed route can proceed without chat history.
 
-Readiness is route-neutral. A ready ticket might route to `local_edit`, `ralph`,
-`critique`, `wiki`, `retrospective`, `evidence`, `research`, `spec`, `plan`, or
-`acceptance_review`.
+Readiness is route-neutral. A ready ticket might route to any canonical route
+token in `skills/loom-records/references/route-vocabulary.md`, including
+`ask_user`, `workspace_status`, `records_repair`, `research`, `spec`, `plan`,
+`ticket`, `local_edit`, `ralph`, `debugging`, `spike`, `codemap`, `evidence`,
+`critique`, `wiki`, `retrospective`, `acceptance_review`, `ship`, `continue`,
+or `stop`.
 
 Ralph-ready is stricter: the ticket must also make one bounded implementation
 iteration, write boundary, likely verification posture, and expected output
@@ -36,10 +39,10 @@ this checklist passes.
 - critique risk class matches frontmatter `risk_class`; required profiles are
   explicit when review is expected
 - the next route is explicit in `# Next Move / Next Route` or equivalent prose,
-  using the shared route vocabulary: `local_edit`, `ralph`, `critique`, `wiki`,
-  `retrospective`, `evidence`, `research`, `spec`, `plan`, `ticket`,
-  `acceptance_review`, `ask_user`, `workspace_status`, `records_repair`,
-  `continue`, or `stop`
+  using the shared route vocabulary: `local_edit`, `ralph`, `debugging`,
+  `spike`, `codemap`, `critique`, `wiki`, `retrospective`, `evidence`,
+  `research`, `spec`, `plan`, `ticket`, `acceptance_review`, `ship`,
+  `ask_user`, `workspace_status`, `records_repair`, `continue`, or `stop`
 - the ticket is small enough to fit one bounded iteration or a short sequence of
   clearly staged iterations
 
@@ -59,10 +62,16 @@ do not use ticket lifecycle statuses such as `ready`, `active`,
 - For `local_edit`, name the bounded edit and write boundary.
 - For Ralph, keep the stricter Ralph-ready fields: bounded iteration, write
   boundary, likely verification posture, and expected output contract.
-- For direct critique, name the review target, required profiles, and evidence to
+- For `debugging`, name the failing behavior, reproduction/evidence expectation,
+  and root-cause or fix handoff boundary.
+- For `spike` or `codemap`, name the research/evidence/wiki outputs the workflow
+  should produce and any throwaway write boundary.
+- For `critique`, name the review target, required profiles, and evidence to
   review.
 - For wiki or retrospective work, name the explanation or lesson to promote and
   the owner records it should source.
 - For evidence recording, name the claim references and observation procedure.
 - For `acceptance_review`, name the evidence, critique disposition, and
   residual risks that the gate must evaluate.
+- For `ship`, name the ticket/evidence/critique records to package and the
+  external handoff surface without treating shipping as closure.

@@ -29,10 +29,14 @@ route-token grammar in `skills/loom-records/references/route-vocabulary.md`.
 - one bounded fresh-context implementation step -> `loom-ralph`, after the ticket
   is Ralph-ready
 - implementation isolation, branch/worktree hygiene, or Git provenance -> `loom-git`
-- debugging or incident flow -> `loom-debugging`
-- bounded experiment, prototype, or sketch -> `loom-spike`
-- codebase/module atlas work -> `loom-codemap`
-- merge, release, PR, or handoff packaging -> `loom-ship`
+- debugging or incident flow -> route token `debugging`, coordinator
+  `loom-debugging`
+- bounded experiment, prototype, or sketch -> route token `spike`, coordinator
+  `loom-spike`
+- codebase/module atlas work -> route token `codemap`, coordinator
+  `loom-codemap`
+- merge, release, PR, or handoff packaging -> route token `ship`, coordinator
+  `loom-ship`
 - accepted learning assimilation before closure -> `loom-retrospective`
 - `acceptance_review` or closure disposition -> `loom-tickets`
 - graph repair, broken links, naming, or drift -> `loom-records`

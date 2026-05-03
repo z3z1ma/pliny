@@ -75,7 +75,7 @@ current tranche: <plan milestone / wave / purpose>
 active tickets: <ticket IDs and states>
 evidence state: <claim IDs with evidence links or gaps>
 critique state: <required | pending | blocking | completed | deferred | not_required, citing ticket truth>
-next route: ask_user | workspace_status | records_repair | research | spec | plan | ticket | local_edit | ralph | evidence | critique | wiki | retrospective | acceptance_review | continue | stop
+next route: ask_user | workspace_status | records_repair | research | spec | plan | ticket | local_edit | ralph | debugging | spike | codemap | evidence | critique | wiki | retrospective | acceptance_review | ship | continue | stop
 next route owner: <which layer must change next>
 reason: <why this follows from current owner truth>
 ```
@@ -123,7 +123,7 @@ criteria supported: <claims and evidence links>
 criteria still open: <claims or gaps>
 ticket critique disposition status: pending | blocking | completed | deferred | not_required
 finding dispositions: <qualified finding refs with resolved | accepted_risk | superseded | converted_to_follow_up, or none>
-next route: ask_user | workspace_status | records_repair | research | spec | plan | ticket | local_edit | ralph | evidence | critique | wiki | retrospective | acceptance_review | continue | stop
+next route: ask_user | workspace_status | records_repair | research | spec | plan | ticket | local_edit | ralph | debugging | spike | codemap | evidence | critique | wiki | retrospective | acceptance_review | ship | continue | stop
 next tranche: <ticket IDs or plan update, if known>
 reason: <why this next route follows from the records>
 ```

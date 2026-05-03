@@ -37,7 +37,9 @@ When this skill activates, the parent accepts a drive contract:
 - make the objective measurable enough to judge continuation
 - preserve all durable truth in the correct Loom owner layer
 - decompose only the next useful tranche, not the whole imagined future
-- execute only bounded work through local edits, Ralph, or domain workflows
+- execute only bounded work through the route named by the canonical route
+  vocabulary, such as `local_edit`, `ralph`, `debugging`, `spike`, `codemap`,
+  `critique`, `wiki`, `retrospective`, `acceptance_review`, or `ship`
 - reconcile every child result before depending on it
 - continue without waiting for unnecessary user prompts while work remains within
   delegated authority
@@ -88,7 +90,8 @@ launch, the checkpoint must already be current; "can update later" is not enough
 - focused objective-shaping questions before downstream execution
 - the repeated parent loop across existing Loom owner layers
 - tranche planning and ticket creation posture
-- delegation boundaries for Ralph, local edits, critique, wiki, research, and
+- delegation boundaries for route-token moves such as `ralph`, `local_edit`,
+  `debugging`, `spike`, `codemap`, `critique`, `wiki`, `research`, `ship`, and
   optional subagents
 - continuation, human-escalation, and stop-condition decisions
 
@@ -112,7 +115,8 @@ durable claims, route them into the layer that owns that kind of truth.
 - an existing initiative or plan should continue without the user manually
   prompting each next ticket
 - the next move requires moving between objective framing, planning, tickets,
-  Ralph execution, evidence, critique, wiki, and reassessment
+  Ralph execution, debugging, spike, codemap, evidence, critique, wiki, ship
+  handoff, and reassessment
 - context pressure suggests a bounded outer-loop synthesis handoff would make the
   parent more reliable
 
@@ -168,7 +172,10 @@ boundaries.
    objective clarity, and workspace trust exist to drive rather than merely plan
    or ask questions.
 1. **Shape the objective** — decide whether the request needs an initiative,
-   `research`, `spec`, `plan`, `ticket`, or `local_edit` route.
+   `research`, `spec`, `plan`, `ticket`, `local_edit`, or workflow-coordinator
+   route such as `debugging`, `spike`, `codemap`, or `ship`; use
+   `skills/loom-records/references/route-vocabulary.md` for the canonical route
+   list.
 2. **Record owner truth** — create or refine the initiative for outcome and
    metrics; add research, spec, or plan records only when those layers own missing
    evidence, behavior, or sequencing truth.
@@ -187,8 +194,11 @@ boundaries.
    routes. Failed gates route to their owner repair path; they block `local_edit`,
    `ralph`, `acceptance_review`, and dependent continuation until repaired.
 7. **Execute bounded work** — use `local_edit` for tiny safe changes, `ralph` for
-   fresh-context implementation, and domain skills for `critique`/`wiki`/`research`
-   packetization. Declare read/write scope and stop conditions before child work.
+   fresh-context implementation, and the appropriate domain workflow route for
+   `debugging`, `spike`, `codemap`, `critique`, `wiki`, `research`,
+   `retrospective`, `acceptance_review`, or `ship`. Declare read/write scope and
+   stop conditions before child work. `ship` packages or hands off already
+   truthful work; it does not own ticket closure.
 8. **Reconcile results** — inspect child output, update ticket truth, route
    observations into evidence, findings into critique, accepted explanation into
    wiki, and changed strategy or behavior into the owner layers.

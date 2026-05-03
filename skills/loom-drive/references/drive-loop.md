@@ -31,8 +31,9 @@ intake -> objective-contract -> owner-shaping -> tranche-planning -> ticket-exec
   `# Objective-Level Stop Conditions` when delegated drive work is in scope.
 - `owner-shaping`: create or refine initiative/research/spec/plan truth.
 - `tranche-planning`: slice only the next useful bounded work set.
-- `ticket-execution`: advance tickets through `local_edit`, `ralph`, `critique`,
-  `evidence`, `wiki`, or `acceptance_review` routes.
+- `ticket-execution`: advance tickets through `local_edit`, `ralph`,
+  `debugging`, `spike`, `codemap`, `evidence`, `critique`, `wiki`,
+  `retrospective`, `acceptance_review`, or `ship` routes.
 - `reconciliation`: update ticket truth and any owner records affected by the
   result.
 - `reassessment`: compare current state against the objective contract.
@@ -56,8 +57,9 @@ Ask what the user actually requested:
   criteria, then drive through this loop.
 - **Existing initiative continuation**: read the initiative/plan/ticket chain,
   identify the next unmet objective gap, and create or advance the next tranche.
-- **Single bounded task**: route directly to `ticket`, `local_edit`, or `ralph` instead of
-  using the full drive loop.
+- **Single bounded task**: route directly to `ticket`, `local_edit`, `ralph`,
+  `debugging`, `spike`, or `codemap` as appropriate instead of using the full
+  drive loop.
 - **Unknown evidence or behavior**: route to research or spec shaping before
   creating execution tickets.
 
@@ -139,8 +141,16 @@ For each ticket or follow-up:
   context
 - use Ralph when the implementation step benefits from fresh context or explicit
   write boundaries
+- use debugging when a failing behavior or incident needs reproduce-first routing
+  before the fix path is clear
+- use spike when a bounded experiment, prototype, or sketch should produce
+  research/evidence before commitment
+- use codemap when repository or module structure should be mapped into evidence,
+  research, or accepted atlas knowledge
 - use critique when review is required or risk warrants adversarial inspection
 - use wiki or retrospective when accepted understanding should persist
+- use ship when already-truthful work needs PR, merge, release, or handoff
+  packaging without closing the ticket
 - route back to research/spec/plan when execution reveals missing evidence,
   behavior, or sequencing truth
 

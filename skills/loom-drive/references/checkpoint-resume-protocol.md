@@ -32,7 +32,7 @@ hard gates: <clear | blocked, with blocker links>
 last route result: <route, output link, reconciliation target>
 last child output: <packet/handoff/evidence/critique link if applicable>
 pending operator question: <exact question or none>
-next route: <ask_user | workspace_status | records_repair | research | spec | plan | ticket | local_edit | ralph | evidence | critique | wiki | retrospective | acceptance_review | continue | stop>
+next route: <ask_user | workspace_status | records_repair | research | spec | plan | ticket | local_edit | ralph | debugging | spike | codemap | evidence | critique | wiki | retrospective | acceptance_review | ship | continue | stop>
 next route owner: <which owner skill/layer changes next>
 resume instruction: <one sentence a fresh parent can follow>
 updated_at: <timestamp>
@@ -105,7 +105,8 @@ the repair route for the failed gate.
 ## Route Federation Contract
 
 Route federation means the parent may launch or sequence multiple domain routes
-under one drive, such as `research`, `spec`, `plan`, `ralph`, `critique`, and `wiki`. It is
+under one drive, such as `research`, `spec`, `plan`, `ralph`, `debugging`,
+`spike`, `codemap`, `critique`, `wiki`, and `ship`. It is
 not parallelism by default. Repair routes may be federated only when their inputs
 and write scopes are independent.
 

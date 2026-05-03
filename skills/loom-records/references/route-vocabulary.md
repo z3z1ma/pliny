@@ -29,13 +29,25 @@ skill name, command, or ticket status into a route token.
 | `ticket` | create or update the live execution owner for bounded work |
 | `local_edit` | execute a tiny, safe, in-context mutation without a fresh child packet |
 | `ralph` | launch or reconcile one Ralph implementation packet for a bounded ticket slice |
+| `debugging` | run a reproduce-first debugging or incident workflow before the next fix or prevention route is clear |
+| `spike` | run a bounded spike, sketch, prototype, or experiment as a research-shaped workflow |
+| `codemap` | map repository or module structure into evidence, research, and accepted wiki atlas knowledge |
 | `evidence` | preserve observed artifacts, validation output, reproduction logs, or support/challenge links |
 | `critique` | run adversarial review and record findings, verdicts, and risks |
 | `wiki` | promote accepted explanation or reusable workflow knowledge |
 | `retrospective` | assimilate accepted learning into the correct owner layers before closure |
 | `acceptance_review` | evaluate ticket-owned acceptance and closure readiness without implying closure |
+| `ship` | package already-truthful work for merge, release, PR, or handoff without owning closure |
 | `continue` | proceed to the next already-governed tranche or route named by owner records |
 | `stop` | stop because the objective is satisfied, blocked, unsafe, out of scope, over budget, or awaiting external action |
+
+Workflow coordinator tokens exist only when the coordinator is itself the next
+governed move. Use `debugging`, `spike`, `codemap`, or `ship` when the next step
+is to run that first-class workflow. If the next truth change is already narrower,
+route through the owner token instead: for example, use `research` for a known
+investigation write, `evidence` for an observation record, `wiki` for an accepted
+atlas page, `ralph` for a bounded implementation packet, `critique` for review,
+or `acceptance_review` for ticket closure evaluation.
 
 ## Non-Routes
 
@@ -51,8 +63,10 @@ Keep these categories distinct from route tokens:
   package-specific invocation wrappers. Commands may transport a route, but the
   owner records and workflow skills still own Loom truth.
 - **Skill display names** such as Ralph or loom-drive when used as prose. In a
-  route-value field, use the token (`ralph`, `continue`, `acceptance_review`,
-  etc.) rather than title case, spaces, or hyphens.
+  route-value field, use the token (`ralph`, `debugging`, `spike`, `codemap`,
+  `ship`, `continue`, `acceptance_review`, etc.) rather than title case, spaces,
+  or hyphens. Do not add a token merely because a skill exists; route tokens name
+  governed moves, not the skill inventory.
 
 ## Examples
 

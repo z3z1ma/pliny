@@ -64,12 +64,16 @@ ticket or operator explicitly records a different rationale.
 | Intended behavior or acceptance is ambiguous | `spec` |
 | Sequencing, dependency order, or tranche boundary is ambiguous | `plan` |
 | No bounded live execution owner exists for the next mutation | `ticket` |
+| A failing behavior or incident needs reproduce-first diagnosis before a normal fix route is safe | `debugging` |
+| A bounded experiment, prototype, or sketch should inform commitment | `spike` |
+| Repository or module structure must be mapped before downstream work can proceed safely | `codemap` |
 | A ticket is ready and work is tiny, local, and safe | `local_edit` |
-| A ticket is Ralph-ready or needs fresh bounded context | `ralph` |
+| A ticket is Ralph-ready for one bounded implementation iteration that needs a fresh child packet or explicit write boundary | `ralph` |
 | Observed support or challenge needs durable preservation | `evidence` |
 | Risk, protocol authority, code behavior, or acceptance sufficiency needs review | `critique` |
 | Accepted explanation should persist for future agents | `wiki` or `retrospective` |
 | Ticket-owned closure readiness needs evaluation | `acceptance_review` |
+| Already-truthful work needs merge, release, PR, or handoff packaging | `ship` |
 | Objective criteria are satisfied and no owner work remains | `stop` |
 
 This table prevents implementation from becoming the default answer. Shaping and
@@ -82,12 +86,21 @@ review routes are first-class continuation outcomes.
 - Spec enters with ambiguous intended behavior and exits with acceptance criteria.
 - Plan enters with sequencing ambiguity and exits with tranche/ticket strategy.
 - Ticket enters with bounded live work and exits only through ticket-owned state.
-- Ralph enters with one Ralph-ready ticket and exits with parent reconciliation.
+- Ralph enters with one Ralph-ready bounded implementation ticket and exits with
+  parent reconciliation.
+- Debugging enters with failing behavior or incident evidence needs and exits with
+  reproduction/root-cause/fix/prevention routing through existing owner layers.
+- Spike enters with a bounded experiment, prototype, or sketch question and exits
+  with evidence, research conclusions or null results, and a downstream route.
+- Codemap enters with repository/module orientation need and exits with scan
+  evidence, research when uncertain, or accepted wiki atlas updates.
 - Evidence enters with an observation and exits with support/challenge links.
 - Critique enters with a review target and exits with findings, verdict, and
   required follow-up.
 - Wiki or retrospective enters with accepted learning and exits with durable
   explanation or promotion decisions.
+- Ship enters with truthful ticket/evidence/critique/wiki disposition and exits
+  with external handoff packaging plus the next ticket-owned route.
 
 Every route result must name the owner records that changed and the next route or
 stop condition.
@@ -105,9 +118,17 @@ After each route, reconcile before continuing:
 - ticket work -> ticket journal, coverage, evidence/critique disposition, next
   route
 - Ralph child output -> packet status, ticket truth, evidence/critique as needed
+- debugging result -> evidence/research/spec/ticket/Ralph/retrospective owners as
+  appropriate, plus ticket next route when live work is involved
+- spike result -> research conclusions/null results, evidence artifacts, and any
+  downstream spec/plan/ticket/wiki route
+- codemap result -> evidence scans, research uncertainty when needed, and accepted
+  wiki atlas/page updates
 - evidence -> evidence record and ticket claim matrix
 - critique -> critique record and ticket critique disposition
 - wiki/retrospective -> wiki/research/spec/plan/initiative/constitution/memory as
   appropriate, plus ticket disposition
+- ship result -> external handoff package plus ticket-owned acceptance or
+  follow-up route; shipping does not close the ticket
 
 If the parent cannot name reconciliation targets, the route is not ready.

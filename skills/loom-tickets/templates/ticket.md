@@ -90,8 +90,9 @@ Next route: <TBD: choose one route token before saving>
 
 Use `skills/loom-records/references/route-vocabulary.md`:
 `ask_user`, `workspace_status`, `records_repair`, `research`, `spec`, `plan`,
-`ticket`, `local_edit`, `ralph`, `evidence`, `critique`, `wiki`,
-`retrospective`, `acceptance_review`, `continue`, or `stop`.
+`ticket`, `local_edit`, `ralph`, `debugging`, `spike`, `codemap`, `evidence`,
+`critique`, `wiki`, `retrospective`, `acceptance_review`, `ship`, `continue`, or
+`stop`.
 
 # Route Readiness
 
@@ -115,6 +116,21 @@ Review target:
 Required profiles:
 Evidence to review:
 
+Debugging readiness:
+Failing behavior or incident:
+Reproduction / observation expectation:
+Root-cause, fix, or prevention handoff boundary:
+
+Spike readiness:
+Question or option to test:
+Throwaway write boundary:
+Expected research / evidence output:
+
+Codemap readiness:
+Repository or module area to map:
+Expected evidence / research / wiki atlas output:
+Downstream route this map should unblock:
+
 Wiki / retrospective / promotion readiness:
 Explanation or lesson to promote:
 Owner records to source:
@@ -128,6 +144,11 @@ Expected limitations or recheck triggers:
 Acceptance review readiness:
 Evidence and critique disposition:
 Residual risks:
+
+Ship readiness:
+Ticket / evidence / critique records to package:
+External handoff surface:
+Next ticket-owned route after packaging:
 
 # Evidence
 

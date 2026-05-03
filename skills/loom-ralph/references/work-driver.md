@@ -33,12 +33,16 @@ It is not "just code." It is ticket-owned execution.
    - record evidence
    - update ticket journal and status
    - update packet status away from `compiled`
-9. Decide the next route:
-   - another Ralph iteration
-   - critique
-   - wiki
-   - outer-loop refinement
-   - acceptance
+9. Decide the next route using
+   `skills/loom-records/references/route-vocabulary.md`:
+   - `ralph` for another bounded implementation packet
+   - `debugging`, `spike`, or `codemap` when diagnosis, discovery, or mapping
+     should happen before more implementation
+   - `critique` when review is next
+   - `wiki` or `retrospective` when accepted learning should be promoted
+   - `research`, `spec`, `plan`, or `ticket` for owner-layer refinement
+   - `acceptance_review` for ticket-owned acceptance evaluation
+   - `ship` for packaging already-truthful work without closing the ticket
 
 ## Stop States
 
