@@ -1,11 +1,11 @@
 ---
 id: ticket:bootinv1
 kind: ticket
-status: ready
+status: closed
 change_class: protocol-authority
 risk_class: high
 created_at: 2026-05-03T04:09:51Z
-updated_at: 2026-05-03T04:09:51Z
+updated_at: 2026-05-03T04:19:29Z
 scope:
   kind: repository
   repositories:
@@ -75,12 +75,12 @@ worldview needed for placement, owner truth, and recoverable sessions.
 
 | Claim | Evidence | Critique | Status |
 | --- | --- | --- | --- |
-| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-001` | pending | pending | open |
-| `ticket:bootinv1#ACC-001` | pending | pending | open |
-| `ticket:bootinv1#ACC-002` | pending | pending | open |
-| `ticket:bootinv1#ACC-003` | pending | pending | open |
-| `ticket:bootinv1#ACC-004` | pending | pending | open |
-| `ticket:bootinv1#ACC-005` | pending | pending | open |
+| `initiative:skills-corpus-context-integrity-hardening-pass#OBJ-001` | `evidence:bootstrap-invariant-validation` | `critique:bootstrap-invariant-review` | supported |
+| `ticket:bootinv1#ACC-001` | `evidence:bootstrap-invariant-validation` | `critique:bootstrap-invariant-review` | supported |
+| `ticket:bootinv1#ACC-002` | `evidence:bootstrap-invariant-validation` | `critique:bootstrap-invariant-review` | supported |
+| `ticket:bootinv1#ACC-003` | `evidence:bootstrap-invariant-validation` | `critique:bootstrap-invariant-review` | supported |
+| `ticket:bootinv1#ACC-004` | `evidence:bootstrap-invariant-validation` | `critique:bootstrap-invariant-review` | supported |
+| `ticket:bootinv1#ACC-005` | None - critique outcome is the acceptance instrument | `critique:bootstrap-invariant-review` | supported |
 
 # Execution Notes
 
@@ -92,22 +92,21 @@ None.
 
 # Next Move / Next Route
 
-Next route: ralph
+Closed. Commit and push this ticket before continuing to `ticket:trustbd2`.
+
+Ralph packet `packet:ralph-ticket-bootinv1-20260503T041454Z` was consumed in
+scope, evidence was recorded, mandatory critique passed with no findings, and
+acceptance is complete.
 
 # Route Readiness
 
-Ralph readiness:
-Bounded iteration: minimal bootstrap orientation.
-Write boundary: `skills/loom-bootstrap/references/01-core-identity.md`, this ticket,
-one Ralph packet, one evidence record, and one critique record.
-Likely verification posture: observation-first structural validation.
-Expected output contract: changed files, before/after wording observations, evidence,
-and critique recommendation.
+Acceptance review readiness:
+Evidence `evidence:bootstrap-invariant-validation` and mandatory critique
+`critique:bootstrap-invariant-review` support closure with no findings.
 
 # Evidence
 
-Expected: targeted searches for new bootstrap orientation, absence of internal
-framing/marketing language, boundary preservation, and `git diff --check`.
+Recorded: `evidence:bootstrap-invariant-validation`.
 
 # Critique Disposition
 
@@ -125,9 +124,9 @@ Required critique profiles:
 
 Findings:
 
-None - no critique yet.
+`critique:bootstrap-invariant-review` - no findings; mandatory critique passed.
 
-Disposition status: pending
+Disposition status: completed
 
 Deferral / not-required rationale:
 
@@ -135,18 +134,32 @@ Not deferred.
 
 # Retrospective / Promotion Disposition
 
-Pending after critique.
+Disposition status: completed
+
+Promoted:
+
+- Minimal first-contact orientation was promoted directly into
+  `skills/loom-bootstrap/references/01-core-identity.md`.
+
+Deferred / not-required rationale:
+
+No separate wiki, research, spec, constitution decision, or memory record is
+needed. The durable lesson is the bootstrap doctrine itself.
 
 # Wiki Disposition
 
-Pending retrospective decision after critique.
+N/A - no separate wiki promotion route. The accepted explanation lives in the
+bootstrap reference.
 
 # Acceptance Decision
 
-Accepted by:
-Accepted at:
-Basis:
-Residual risks:
+Accepted by: OpenCode parent agent
+Accepted at: 2026-05-03T04:19:29Z
+Basis: Ralph packet `packet:ralph-ticket-bootinv1-20260503T041454Z`; evidence
+`evidence:bootstrap-invariant-validation`; mandatory critique
+`critique:bootstrap-invariant-review` with no findings.
+Residual risks: The new invariant is slightly repetitive with later recovery
+wording, but critique accepted that as appropriate for first-contact doctrine.
 
 # Dependencies
 
@@ -156,3 +169,13 @@ None.
 
 - 2026-05-03T04:09:51Z: Created from council finding to promote core orientation
   into bootstrap, constrained by user warning to avoid internal framing.
+- 2026-05-03T04:14:54Z: Started Ralph iteration
+  `packet:ralph-ticket-bootinv1-20260503T041454Z` from clean `main` at
+  `1d8ad24`.
+- 2026-05-03T04:16:21Z: Ralph iteration
+  `packet:ralph-ticket-bootinv1-20260503T041454Z` completed in scope. Evidence
+  recorded in `evidence:bootstrap-invariant-validation`; next route is mandatory
+  critique.
+- 2026-05-03T04:19:29Z: Mandatory critique
+  `critique:bootstrap-invariant-review` passed with no findings. Parent recorded
+  retrospective / promotion disposition and accepted closure.

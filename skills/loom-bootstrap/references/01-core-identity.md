@@ -16,6 +16,12 @@ Ralph is the bounded handoff loop for execution.
 Every durable claim, behavior, evidence artifact, risk, and explanation should land in the
 artifact layer that owns that kind of truth.
 
+Operational invariant: durable filesystem records are the recovery graph.
+Truth is placed by owning layer, not by whichever message or file is newest.
+Context windows and workers are disposable, so a packet carries one bounded work
+contract, evidence records observations, critique records review, and
+reconciliation updates the ticket-owned live ledger.
+
 ## The Main Mental Model
 
 Think in three operating axes at once:
