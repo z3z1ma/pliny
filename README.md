@@ -6,9 +6,20 @@ Treat your coding-agent sessions like cattle, not pets.
 
 **Agent Loom makes the repo remember.**
 
-A session should be restartable, replaceable, compactable, and safe to hand off. The important state should live in the project, not in one precious chat.
+Loom is repo-local **context integrity** for long-running agentic software work.
 
-Loom is a Markdown-native truth graph for agentic software work:
+Coding agents do not act from "the whole project." They act from the context they can see or retrieve, the tools they can call, and the verification they can run. Long work degrades when project truth is trapped in chat, lossy summaries, stale plans, scratch files, or one precious session.
+
+Loom turns the stable mechanics of agentic coding into a Markdown-native truth graph:
+
+- agents need shaped, retrievable context
+- work needs bounded units and explicit contracts
+- durable state should outlive the active session
+- verification has to be externalized as evidence
+- fresh workers should be safe to start, stop, replace, and hand off
+- human and agent judgment should be preserved where future workers can inspect it
+
+The result is simple:
 
 - every durable claim has one owning record
 - every fresh worker receives a bounded packet, not vibes
@@ -26,7 +37,7 @@ Most agent workflows eventually create a junk drawer.
 
 `PLAN.md` becomes the spec, todo list, research log, failed-attempt record, review trail, status update, and handoff summary. Scratch files litter the repo. The active chat becomes a pet: overloaded with volatile decisions, painful to abandon, and weirdly valuable because the repo does not know what happened.
 
-When the work stops, resumes, compacts, switches models, or hands off to another worker, the next agent has to infer what is still true.
+When the work stops, resumes, compacts, switches models, switches harnesses, or hands off to another worker, the next agent has to infer what is still true.
 
 The model did not just forget.
 
@@ -41,6 +52,10 @@ Loom fixes that by giving each kind of truth a home.
 The active session is the wrong place for canonical project memory.
 
 A bigger context window lets an agent carry more state. Good compaction can preserve useful continuity. Loom is complementary: it moves durable state into repository records, so summaries can carry file paths, record IDs, and next actions while the full-fidelity truth stays in the repo.
+
+Treating sessions like cattle, not pets, is not the doctrine. It is the consequence.
+
+If the repo carries the important state, no single chat has to be preserved like a sacred object.
 
 Once installed, Loom is meant to feel ambient. The skills teach the agent where durable information belongs, so ordinary coding work can flow into records without the user saying `use Loom` every turn.
 
@@ -58,11 +73,33 @@ That compiled handoff is a **packet**.
 
 The child does one bounded slice. The parent reconciles what happened. The repo keeps the memory.
 
-The session is disposable. The graph compounds.
-
 ```text
 project state -> packet -> fresh worker -> evidence/critique -> reconciliation -> promoted learning -> better project state
 ```
+
+---
+
+## Why Loom is model-shaped
+
+Loom is not just an agent-memory system. Memory is retrieval. Loom is context integrity.
+
+Context integrity means the next worker can recover not only facts, but authority: what claim is canonical, what evidence supports it, what remains risky, what scope is allowed, and what still needs human or parent acceptance.
+
+Loom is designed around properties that keep showing up across coding agents, models, and harnesses:
+
+| Agentic principle | Loom expression |
+| --- | --- |
+| Agents act on visible or retrievable context | Project records make important state findable by file path, record ID, and typed links |
+| Context windows are finite and can be polluted | Loom uses owner records and packets so workers get less context by volume and better context by shape |
+| Compaction is useful but lossy | Compaction can preserve pointers while Loom preserves the full-fidelity records being pointed at |
+| Long work needs bounded chunks | Tickets and packets define goal, read scope, write scope, source fingerprint, verification posture, stop conditions, and output contract |
+| Fresh workers are a feature | Sessions can stop, resume, compact, switch models, switch harnesses, or hand off without losing the plot |
+| Verification is the real reward signal | Evidence records preserve observed output, reproduction steps, logs, screenshots, scans, and test results |
+| Human judgment moves upstream | Constitution, initiatives, specs, critique, and acceptance records preserve goals, constraints, tradeoffs, and decisions |
+
+This is why Loom should age well.
+
+It is not built around one model's current context size, one harness's command syntax, or one vendor's memory feature. It is built around the fact that agentic software work needs shaped context, bounded execution, externalized verification, and durable project truth.
 
 ---
 
@@ -88,7 +125,7 @@ Use loom-bootstrap, then continue from the project records.
 
 Without durable records, the new session usually guesses or tries to reconstruct the missing story.
 
-With Loom, it should find the owner records, identify what is canonical, stay inside scope, and continue from repo state.
+With Loom, it should find the owner records, identify what is canonical, stay inside scope, continue from repo state, and preserve what changed.
 
 Compaction is not the enemy. With Loom, compaction can carry high-value record paths and IDs while the records themselves preserve full-fidelity project truth.
 
@@ -115,7 +152,7 @@ First-class harness instructions are in [INSTALL.md](INSTALL.md):
 
 After install, work normally. In a skills-aware harness, Loom should feel much like Superpowers: the agent discovers the bootstrap and downstream skills when the work calls for them.
 
-Explicit prompts are escape hatches, not the main UX. They are still useful when you want to prod a cold session or force repair:
+Explicit prompts are escape hatches, not the main UX. They are still useful when you want to prod a cold session, force repair, or make the routing visible:
 
 ```text
 Use loom-bootstrap, then continue from the project records.
@@ -135,6 +172,12 @@ Use the source tree and Git when the work is tiny, local, and obvious.
 
 Loom starts paying for itself when work crosses sessions, changes behavior, needs research, involves review, carries risk, requires handoff, prepares future work, or leaves behind knowledge the next worker would otherwise rediscover.
 
+The principle is:
+
+```text
+minimum durable state, maximum recoverability
+```
+
 Reach for Loom when the cost of losing the plot is higher than the cost of keeping the graph honest.
 
 ---
@@ -150,12 +193,7 @@ Its backbone is:
 constitution -> initiative -> plan -> ticket
 ```
 
-Research and specs strengthen that backbone when evidence or intended behavior is
-missing. Evidence, critique, and wiki are follow-through routes for observations,
-review, and accepted explanation. Packets, memory, and saved support artifacts are
-support surfaces: packets carry bounded worker contracts, memory holds optional
-recall, and support artifacts help handoff audit or recovery without owning
-project truth.
+Research and specs strengthen that backbone when evidence or intended behavior is missing. Evidence, critique, and wiki are follow-through routes for observations, review, and accepted explanation. Packets, memory, and saved support artifacts are support surfaces: packets carry bounded worker contracts, memory holds optional recall, and support artifacts help handoff audit or recovery without owning project truth.
 
 The **inner loop** compiles a packet for a fresh worker:
 
@@ -196,8 +234,7 @@ Memory can help the agent recover context. It does not become shadow truth. The 
 
 ## 🗂️ Project layers
 
-Loom separates project state into canonical owner layers and durable support
-surfaces.
+Loom separates project state into canonical owner layers and durable support surfaces.
 
 Canonical owner layers own project truth:
 
@@ -341,6 +378,29 @@ A child worker saying "done" is not enough. A commit is not enough. A green test
 
 ---
 
+## Evidence and trust boundaries
+
+The model can predict that work is done. It cannot make done true.
+
+Loom makes verification explicit by separating claims from evidence and evidence from acceptance.
+
+A strong evidence record should preserve enough detail for a future worker to inspect or reproduce the claim:
+
+- command or procedure
+- environment when relevant
+- source fingerprint or commit
+- expected result
+- actual result
+- exact output excerpt or artifact path
+- screenshot, log, trace, scan, or test identity when useful
+- whether the evidence supports, challenges, or only partially supports the claim
+
+Loom also treats untrusted input as input, not truth.
+
+External docs, web pages, generated files, tool output, and model-written summaries can inform research, evidence, critique, and tickets. They do not promote themselves into canonical truth. Promotion requires placement, judgment, and reconciliation through the owning layer.
+
+---
+
 ## Example: a bug fix through Loom
 
 A non-trivial bug fix usually follows this spine:
@@ -444,7 +504,7 @@ Beads: task graph
 Spec Kit: executable specs
 GSD: workflow/context harness
 Ralph: clean worker loop
-Loom: repo-local truth ownership
+Loom: repo-local context integrity
 ```
 
 You can run other tools beside Loom. Loom's job is to make sure the project knows what became true.
@@ -475,10 +535,7 @@ The protocol is the corpus.
 
 This repository ships the Loom skill package.
 
-The package product surface is the top-level `skills/` corpus. Support docs,
-harness manifests/adapters, examples, packaging files, packets, memory, and saved
-support artifacts may explain, transport, validate, or recover Loom work; they do
-not own protocol truth.
+The package product surface is the top-level `skills/` corpus. Support docs, harness manifests/adapters, examples, packaging files, packets, memory, and saved support artifacts may explain, transport, validate, or recover Loom work; they do not own protocol truth.
 
 It is not a runtime, service, daemon, MCP server, product CLI, workflow engine, hidden database, or prompt dump.
 
@@ -584,15 +641,23 @@ Loom also has a threshold. Do not create a graph-shaped shrine around a one-line
 
 The graph pays for itself when work crosses sessions, changes behavior, needs review, involves research, carries risk, requires handoff, prepares future work, or leaves behind knowledge the next worker would otherwise rediscover.
 
+The failure mode to guard against is a second junk drawer.
+
+Loom only works when records stay small enough to inspect, linked enough to recover, and honest enough that a future worker can trust them.
+
 ---
 
 ## The point
 
-Loom keeps AI work from scattering across chat, plan files, tool state, and stale scratchpads.
+Loom is not a bigger prompt.
 
-It gives agents a vocabulary for placing work where it belongs.
+It is not a memory feature.
 
-It gives projects a memory that survives stopped sessions, context compaction, model switches, worker handoff, and time.
+It is not a way to keep one agent session alive forever.
+
+Loom is a repo-local context-integrity layer for agentic software work.
+
+It keeps AI work from scattering across chat, plan files, tool state, and stale scratchpads. It gives agents a vocabulary for placing work where it belongs. It gives projects a memory that survives stopped sessions, context compaction, model switches, worker handoff, and time.
 
 Compaction can preserve a pointer. Loom preserves the thing being pointed at.
 
