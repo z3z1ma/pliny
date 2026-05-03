@@ -1,6 +1,6 @@
 {
   "name": "open-loom",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "OpenCode plugin for the Loom Markdown-native AI work protocol.",
   "type": "module",
   "main": "./open-loom.mjs",
