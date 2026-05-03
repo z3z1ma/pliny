@@ -59,9 +59,10 @@ Drive and checkpoint snapshots may summarize critique and acceptance state only 
 citing the ticket and critique records that own it. They must not become a second
 acceptance ledger.
 
-## Layer-Specific Status Sets
+## Canonical Owner Record Statuses
 
-Use these sets unless the owning skill records a narrower one:
+Use these sets for canonical owner records unless the owning skill records a
+narrower one:
 
 - constitution: `active | superseded | retired`
 - decision: `active | superseded | retired`
@@ -70,11 +71,29 @@ Use these sets unless the owning skill records a narrower one:
 - research: `active | concluded | deferred_questions | superseded | retired`
 - spec: `draft | active | accepted | superseded | retired`
 - plan: `active | completed | superseded | retired`
-- wiki: `draft | accepted | stale | superseded | retired`
-- packet: `compiled | consumed | superseded | abandoned`
 - evidence: `recorded | superseded | invalidated`
 - critique: `draft | final | superseded`
-- workspace metadata records with `kind: workspace`: `active | stale | superseded | retired`
+- wiki: `draft | accepted | stale | superseded | retired`
+
+## Ticket Execution States
+
+Tickets are canonical owner records, but their `status` field is a live execution
+state rather than a general lifecycle status. Use the ticket state machine in
+`skills/loom-tickets/references/state-machine.md` for ticket statuses such as
+`proposed`, `ready`, `active`, `blocked`, `review_required`,
+`complete_pending_acceptance`, `closed`, and `cancelled`.
+
+Do not copy non-ticket lifecycle words into ticket `status` fields, and do not
+use ticket execution states as route tokens.
+
+## Support-Surface Statuses
+
+Support surfaces may carry local lifecycle status, but those statuses do not make
+the support surface a canonical truth owner.
+
+- packet: `compiled | consumed | superseded | abandoned`
+- workspace metadata records with `kind: workspace`:
+  `active | stale | superseded | retired`
 - workspace support records with `kind: workspace-support`:
   `active | superseded | retired`
 - saved drive outer-loop handoff support artifacts:
@@ -125,6 +144,8 @@ wiki truth, canonical truth, or packet lifecycle.
 
 Prefer explicit transitions:
 
+### Canonical Owner Transitions
+
 - `draft -> active` when a record becomes the current working source
 - `draft|active -> accepted` when downstream work can rely on it
 - `active -> completed` when an initiative, plan, or roadmap reached its
@@ -139,6 +160,9 @@ Prefer explicit transitions:
   longer support its claims
 - `draft -> final` when critique findings, verdict, evidence reviewed, residual
   risks, and acceptance recommendation are complete
+
+### Support-Surface Transitions
+
 - workspace metadata: `active -> stale` when workspace aliases or scope notes are
   no longer current, `active|stale -> superseded` when a named replacement takes
   over, and `active|stale -> retired` when the metadata file should no longer be
@@ -149,6 +173,9 @@ Prefer explicit transitions:
   after parent review when accepted content has been reconciled into the declared
   owner records and no support audit or recovery value remains; pruning is cleanup,
   not a lifecycle status and not evidence that owner truth was accepted.
+
+Packet transitions are listed separately below because packet records own their
+own support lifecycle.
 
 Do not use status as a progress log. Use the body, ticket journal, critique, or
 evidence for the details that justify the status.
