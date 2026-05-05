@@ -1,0 +1,58 @@
+README.md
+  ses_206c4d4ceffeEmtuMlOrQJne8y 32-44,46-65,67-115
+  human 45,66
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 82,
+          "added_lines": 82,
+          "deleted_lines": 0,
+          "hash": "ses_206c4d4ceffeEmtuMlOrQJne8y",
+          "lines": "32-44,46-65,67-115",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "45,66",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "README.md"
+    }
+  ],
+  "base_commit_sha": "72b0afda9cf511d1bb97b998a32058d994429d13",
+  "commit_sha": "72b0afda9cf511d1bb97b998a32058d994429d13",
+  "commit_type": "commit_amend",
+  "git_ai_version": "1.4.2",
+  "prompts": {
+    "human": {
+      "accepted_lines": 2,
+      "agent_id": null,
+      "human_author": null,
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 2,
+      "total_deletions": 0
+    },
+    "ses_206c4d4ceffeEmtuMlOrQJne8y": {
+      "accepted_lines": 82,
+      "agent_id": {
+        "id": "ses_206c4d4ceffeEmtuMlOrQJne8y",
+        "model": "openai/gpt-5.5",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 82,
+      "total_deletions": 0
+    }
+  },
+  "schema_version": "authorship/3.0.0"
+}
