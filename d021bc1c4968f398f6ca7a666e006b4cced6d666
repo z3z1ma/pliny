@@ -1,0 +1,283 @@
+.loom/initiatives/loom-install-experience.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,14,17,22,27,47,49-50
+.loom/research/core-workflow-plugin-split-feasibility.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 1-352
+.loom/specs/core-and-playbooks-package-contract.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 1-397
+.loom/constitution/decisions/decision-0005-skill-packaged-bootstrap-doctrine.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,12-13,24-28,33-36,59-62,83-86
+.loom/constitution/constitution.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,20-27,56-60,103,117-120,151-154,158-159,175-177,254-258
+.loom/specs/opencode-plugin-install-contract.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 4,6,23,29-31,40-48
+  human 49
+.loom/constitution/decisions/decision-0008-core-and-playbooks-package-roots.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 1-190
+.loom/constitution/decisions/decision-0006-skills-only-product-surface-native-adapters.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 4,6,14,21-27
+  human 28
+.loom/critique/20260507-core-playbooks-constitutional-decision-review.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 1-101
+.loom/tickets/20260507-hi5e7nbr-decouple-core-doctrine-from-playbooks.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 1-198
+.loom/constitution/decisions/decision-0007-positive-skill-surface-over-counterexample-calibration.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,14,23-26,73,84-88
+  human 27,89
+.loom/plans/20260507-split-core-and-playbooks-packages.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 1-646
+.loom/research/loom-install-distribution-methods.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,27,112-116
+  human 117
+.loom/critique/20260507-core-playbooks-package-contract-review.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 1-87
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 8,
+          "added_lines": 8,
+          "deleted_lines": 0,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,14,17,22,27,47,49-50",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/initiatives/loom-install-experience.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 352,
+          "added_lines": 352,
+          "deleted_lines": 8,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "1-352",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/research/core-workflow-plugin-split-feasibility.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 397,
+          "added_lines": 397,
+          "deleted_lines": 9,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "1-397",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/specs/core-and-playbooks-package-contract.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 20,
+          "added_lines": 20,
+          "deleted_lines": 0,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,12-13,24-28,33-36,59-62,83-86",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/constitution/decisions/decision-0005-skill-packaged-bootstrap-doctrine.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 33,
+          "added_lines": 33,
+          "deleted_lines": 0,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,20-27,56-60,103,117-120,151-154,158-159,175-177,254-258",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/constitution/constitution.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 15,
+          "added_lines": 16,
+          "deleted_lines": 0,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "4,6,23,29-31,40-48",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "49",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/specs/opencode-plugin-install-contract.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 190,
+          "added_lines": 190,
+          "deleted_lines": 4,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "1-190",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/constitution/decisions/decision-0008-core-and-playbooks-package-roots.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 10,
+          "added_lines": 11,
+          "deleted_lines": 0,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "4,6,14,21-27",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "28",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/constitution/decisions/decision-0006-skills-only-product-surface-native-adapters.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 101,
+          "added_lines": 101,
+          "deleted_lines": 2,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "1-101",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/critique/20260507-core-playbooks-constitutional-decision-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 198,
+          "added_lines": 198,
+          "deleted_lines": 4,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "1-198",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/tickets/20260507-hi5e7nbr-decouple-core-doctrine-from-playbooks.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 12,
+          "added_lines": 12,
+          "deleted_lines": 0,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,14,23-26,73,84-88",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "27,89",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/constitution/decisions/decision-0007-positive-skill-surface-over-counterexample-calibration.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 646,
+          "added_lines": 646,
+          "deleted_lines": 15,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "1-646",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/plans/20260507-split-core-and-playbooks-packages.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 7,
+          "added_lines": 8,
+          "deleted_lines": 0,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,27,112-116",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "117",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/research/loom-install-distribution-methods.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 87,
+          "added_lines": 87,
+          "deleted_lines": 8,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "1-87",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/critique/20260507-core-playbooks-package-contract-review.md"
+    }
+  ],
+  "base_commit_sha": "a091259d1acb26091fe79046d60ff76af96a34f0",
+  "branch": "main",
+  "commit_sha": "d021bc1c4968f398f6ca7a666e006b4cced6d666",
+  "commit_time": "2026-05-07T14:55:34-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.2",
+  "prompts": {
+    "human": {
+      "accepted_lines": 5,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 5,
+      "total_deletions": 0
+    },
+    "ses_1fbd4a47fffe3x579Wrego1K3t": {
+      "accepted_lines": 2076,
+      "agent_id": {
+        "id": "ses_1fbd4a47fffe3x579Wrego1K3t",
+        "model": "openai/gpt-5.5",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 2079,
+      "total_deletions": 50
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
