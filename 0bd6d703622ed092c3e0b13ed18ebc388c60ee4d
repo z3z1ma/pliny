@@ -1,0 +1,1060 @@
+skills/loom-codemap/SKILL.md
+  human 3,41-56,88-114
+skills/loom-skill-authoring/references/principles.md
+  human 15-17,24-32,37-48,80-100
+skills/loom-specs/references/spec-shape.md
+  human 7,9-12,17-18,21-78,87-93
+skills/loom-plans/references/slicing.md
+  human 13-14,18-19,25-46,54,66-75
+skills/loom-drive/references/continuity-contract.md
+  human 65
+skills/loom-skill-authoring/references/anti-patterns.md
+  human 16-17
+skills/loom-debugging/SKILL.md
+  human 3,38,40-42,44-47,50-52,61,66-90,96
+skills/loom-drive/templates/outer-loop-handoff.md
+  human 40-43,45-46,48,59,65-89
+skills/loom-critique/SKILL.md
+  human 3,80-85,124-151
+skills/loom-wiki/references/shared-language.md
+  human 1-75
+skills/loom-wiki/SKILL.md
+  human 3,21,45,55-56,75,90-112,141-143,145,147-149
+skills/loom-records/references/route-vocabulary.md
+  human 71-75,89
+skills/loom-initiatives/SKILL.md
+  human 3,64-87
+skills/loom-drive/SKILL.md
+  human 3,93,127,153-155,162-168,172-175,216,254-255,273-297
+skills/loom-records/references/status-lifecycle.md
+  human 47
+skills/loom-skill-authoring/templates/simple-skill.md
+  human 3,11-14,17-18,21-22,25-26,29-30,33-50,53-54,56-63
+skills/loom-plans/templates/plan.md
+  human 16,20,24,32,36,40-42,46,48,50,52-54,56,58-59,61-63,65,67-68,70-74,76,78-79,83,87-92
+skills/loom-research/references/research-shape.md
+  human 10-11,35-44,61-94
+skills/loom-retrospective/SKILL.md
+  human 3,73-78,98-126,135-138
+skills/loom-records/references/semantic-link-usage.md
+  human 13-14,19,21-22,55,66-68
+skills/loom-wiki/templates/wiki-packet.md
+  human 23,25,62,70-73,85-87,93-96,108-109
+skills/loom-specs/SKILL.md
+  human 3,51-52,54-57,61-87
+skills/loom-ralph/SKILL.md
+  human 3,49,85-86,113-137
+skills/loom-ralph/references/packet-contract.md
+  human 29-30,74-75,89-92,94,111-148,335-345
+skills/loom-skill-authoring/templates/router-skill.md
+  human 3,11-14,17-18,21-22,25-43,45-58,62-67,69-76
+skills/loom-records/references/retrospective.md
+  human 17-18
+skills/loom-evidence/templates/evidence.md
+  human 17-18,24-25,27,31-32,34,36,38-44,46-50,52,54-55,71,81,85-86,90-91
+skills/loom-bootstrap/SKILL.md
+  human 3
+skills/loom-plans/SKILL.md
+  human 3,61-89
+skills/loom-critique/references/critique-lens.md
+  human 81-110,135-142,148-180,212-222,228-234
+skills/loom-tickets/references/acceptance-gate.md
+  human 13,26-28,43-44,47,62-64,81-83
+skills/loom-records/references/validation.md
+  human 45-56,77
+skills/loom-tickets/references/readiness.md
+  human 29,31-32,42,45-50,66-68,78,80-84,86,92-97,102-103
+skills/loom-tickets/references/local-execution.md
+  human 1-98
+skills/loom-plans/references/plan-shape.md
+  human 13,44-46,59-82
+README.md
+  human 475-481,695-697,708,807,817
+  ses_206c4d4ceffeEmtuMlOrQJne8y 32-89,91-110,112-160,231,259,306,352,635
+  human 3,7,9,11,13,15,17-19,21-22,27-31,90,111,161-205,207,213-215,217,219,221-225,227-230,232-238,240-249,251,253-257,261-271,274,277-294,299-301,303,315,323-324,331,336-339,343-346,348-351,353-364,366,368-370,372,374,377,380,382,388,398,400,404-405,410,412,419,424,426-428,430,432,434,436,438,440,442,444-445,447-450,453-455,457,459,461-463,465,467-469,483,485,488-513,515,519-523,525,529,533,537-538,541-543,548-550,558,562-563,569,584-586,600-601,631,638-639,643-645,647-651,653-663,668-675,677-678,680,692,695,698,713,715,722-723,725,729,751-752,756-757,814-815,826-828,830,872-873,884-885,896-898,900,902,904,906,909-915,917-918
+skills/loom-critique/templates/critique-packet.md
+  human 32,34,36-40,45-50,71,75-77,83-85,87,91-92,98,101,105-110,114-115,121-126,128,140-141
+skills/loom-skill-authoring/references/skill-review.md
+  human 15-16,23-25,45-67,88-91
+skills/loom-workspace/SKILL.md
+  human 3,97-120,137-139,143,146,148-149,151-152
+skills/loom-debugging/references/systematic-debugging.md
+  human 8-23,39,63-66,68,71,74-76,85-105
+skills/loom-records/references/claim-coverage.md
+  human 73,76,80-82,84,93,97,99,101,106-110,117-120,199
+skills/loom-workspace/references/problem-shaping.md
+  human 20-27,29-33,48-50,52-53,58-78,98-105
+skills/loom-ship/SKILL.md
+  human 3,61-62,77-118
+skills/loom-ralph/templates/ralph-packet.md
+  human 66,70-72,74,76,78-84,86,88,90,92,94-96,98,100-101,103,105,107,109,111,113-116,124,126-128,134-137,142-150,162
+skills/loom-constitution/SKILL.md
+  human 3,81-104
+skills/loom-research/SKILL.md
+  human 3,56-81
+skills/loom-evidence/SKILL.md
+  human 3,96-120
+skills/loom-research/templates/research.md
+  human 21,29-30,34-44,46,48,50-52,56,60,64-65,69,73,77-78,82
+skills/loom-workspace/references/task-routing-catalog.md
+  human 1-72
+skills/loom-evidence/references/evidence-quality.md
+  human 23-38,75-78,145-199
+skills/loom-workspace/references/routing.md
+  human 3-5,35-37,75,77-80,83,87-88,90-92,94
+skills/loom-critique/references/finding-format.md
+  human 62,95-110
+skills/loom-records/SKILL.md
+  human 3,92-116
+skills/loom-drive/references/tranche-decision-protocol.md
+  human 72,103,106
+skills/loom-critique/references/review-pass-splitting.md
+  human 56-83,91-92
+skills/loom-memory/SKILL.md
+  human 3,127-150
+skills/loom-tickets/SKILL.md
+  human 3,61,66,83,113-137,169-172
+skills/loom-drive/references/checkpoint-resume-protocol.md
+  human 71
+skills/loom-bootstrap/references/03-outer-loop.md
+  human 101
+skills/loom-drive/references/drive-loop.md
+  human 35,62,79-84,87,89-94,154-179,182
+skills/loom-records/references/change-class.md
+  human 16-25,39-43,72-75,82-83
+skills/loom-specs/templates/spec.md
+  human 17,21-33,37-48,52-53,59,63,67-80,82-84,88-89
+skills/loom-git/SKILL.md
+  human 3,127-151
+skills/loom-spike/SKILL.md
+  human 3,40-51,57-62,69-70,76-80,98-101,106-132
+skills/loom-wiki/references/page-types.md
+  human 34-41
+skills/loom-tickets/templates/ticket.md
+  human 20,22-23,27-28,32,34,36,38,40,42-44,46,48,50,52,54,56,58-60,62,64,66,68,70,72-74,78,80,82,84,86,88-90,94,98,100-101,103,105,109-110,119-120,124
+skills/loom-skill-authoring/SKILL.md
+  human 3,27-28,33-35,54-55,59-61
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 44,
+          "added_lines": 44,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,41-56,88-114",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-codemap/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 45,
+          "added_lines": 45,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "15-17,24-32,37-48,80-100",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-skill-authoring/references/principles.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 72,
+          "added_lines": 72,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "7,9-12,17-18,21-78,87-93",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-specs/references/spec-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 37,
+          "added_lines": 37,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "13-14,18-19,25-46,54,66-75",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-plans/references/slicing.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "65",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-drive/references/continuity-contract.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "16-17",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-skill-authoring/references/anti-patterns.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 39,
+          "added_lines": 39,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,38,40-42,44-47,50-52,61,66-90,96",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-debugging/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 33,
+          "added_lines": 33,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "40-43,45-46,48,59,65-89",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-drive/templates/outer-loop-handoff.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 35,
+          "added_lines": 35,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,80-85,124-151",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-critique/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 75,
+          "added_lines": 75,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-75",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-wiki/references/shared-language.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 36,
+          "added_lines": 36,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,21,45,55-56,75,90-112,141-143,145,147-149",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-wiki/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 6,
+          "added_lines": 6,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "71-75,89",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/references/route-vocabulary.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 25,
+          "added_lines": 25,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,64-87",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-initiatives/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 45,
+          "added_lines": 45,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,93,127,153-155,162-168,172-175,216,254-255,273-297",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-drive/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "47",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/references/status-lifecycle.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 41,
+          "added_lines": 41,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,11-14,17-18,21-22,25-26,29-30,33-50,53-54,56-63",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-skill-authoring/templates/simple-skill.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 38,
+          "added_lines": 38,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "16,20,24,32,36,40-42,46,48,50,52-54,56,58-59,61-63,65,67-68,70-74,76,78-79,83,87-92",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-plans/templates/plan.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 46,
+          "added_lines": 46,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "10-11,35-44,61-94",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-research/references/research-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 40,
+          "added_lines": 40,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,73-78,98-126,135-138",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-retrospective/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 9,
+          "added_lines": 9,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "13-14,19,21-22,55,66-68",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/references/semantic-link-usage.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 16,
+          "added_lines": 16,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "23,25,62,70-73,85-87,93-96,108-109",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-wiki/templates/wiki-packet.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 34,
+          "added_lines": 34,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,51-52,54-57,61-87",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-specs/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 29,
+          "added_lines": 29,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,49,85-86,113-137",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-ralph/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 58,
+          "added_lines": 58,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "29-30,74-75,89-92,94,111-148,335-345",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-ralph/references/packet-contract.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 56,
+          "added_lines": 56,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,11-14,17-18,21-22,25-43,45-58,62-67,69-76",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-skill-authoring/templates/router-skill.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "17-18",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/references/retrospective.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 30,
+          "added_lines": 30,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "17-18,24-25,27,31-32,34,36,38-44,46-50,52,54-55,71,81,85-86,90-91",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-evidence/templates/evidence.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-bootstrap/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 30,
+          "added_lines": 30,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,61-89",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-plans/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 89,
+          "added_lines": 89,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "81-110,135-142,148-180,212-222,228-234",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-critique/references/critique-lens.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 13,
+          "added_lines": 13,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "13,26-28,43-44,47,62-64,81-83",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-tickets/references/acceptance-gate.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 13,
+          "added_lines": 13,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "45-56,77",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/references/validation.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 28,
+          "added_lines": 28,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "29,31-32,42,45-50,66-68,78,80-84,86,92-97,102-103",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-tickets/references/readiness.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 98,
+          "added_lines": 98,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-98",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-tickets/references/local-execution.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 28,
+          "added_lines": 28,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "13,44-46,59-82",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-plans/references/plan-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 13,
+          "added_lines": 13,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "475-481,695-697,708,807,817",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 132,
+          "added_lines": 0,
+          "deleted_lines": 0,
+          "hash": "ses_206c4d4ceffeEmtuMlOrQJne8y",
+          "lines": "32-89,91-110,112-160,231,259,306,352,635",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 334,
+          "added_lines": 0,
+          "deleted_lines": 1,
+          "hash": "human",
+          "lines": "3,7,9,11,13,15,17-19,21-22,27-31,90,111,161-205,207,213-215,217,219,221-225,227-230,232-238,240-249,251,253-257,261-271,274,277-294,299-301,303,315,323-324,331,336-339,343-346,348-351,353-364,366,368-370,372,374,377,380,382,388,398,400,404-405,410,412,419,424,426-428,430,432,434,436,438,440,442,444-445,447-450,453-455,457,459,461-463,465,467-469,483,485,488-513,515,519-523,525,529,533,537-538,541-543,548-550,558,562-563,569,584-586,600-601,631,638-639,643-645,647-651,653-663,668-675,677-678,680,692,695,698,713,715,722-723,725,729,751-752,756-757,814-815,826-828,830,872-873,884-885,896-898,900,902,904,906,909-915,917-918",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "README.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 42,
+          "added_lines": 42,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "32,34,36-40,45-50,71,75-77,83-85,87,91-92,98,101,105-110,114-115,121-126,128,140-141",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-critique/templates/critique-packet.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 32,
+          "added_lines": 32,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "15-16,23-25,45-67,88-91",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-skill-authoring/references/skill-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 34,
+          "added_lines": 34,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,97-120,137-139,143,146,148-149,151-152",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-workspace/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 47,
+          "added_lines": 47,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "8-23,39,63-66,68,71,74-76,85-105",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-debugging/references/systematic-debugging.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 20,
+          "added_lines": 20,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "73,76,80-82,84,93,97,99,101,106-110,117-120,199",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/references/claim-coverage.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 47,
+          "added_lines": 47,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "20-27,29-33,48-50,52-53,58-78,98-105",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-workspace/references/problem-shaping.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 45,
+          "added_lines": 45,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,61-62,77-118",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-ship/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 50,
+          "added_lines": 50,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "66,70-72,74,76,78-84,86,88,90,92,94-96,98,100-101,103,105,107,109,111,113-116,124,126-128,134-137,142-150,162",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-ralph/templates/ralph-packet.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 25,
+          "added_lines": 25,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,81-104",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-constitution/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 27,
+          "added_lines": 27,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,56-81",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-research/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 26,
+          "added_lines": 26,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,96-120",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-evidence/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 28,
+          "added_lines": 28,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "21,29-30,34-44,46,48,50-52,56,60,64-65,69,73,77-78,82",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-research/templates/research.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 72,
+          "added_lines": 72,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-72",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-workspace/references/task-routing-catalog.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 75,
+          "added_lines": 75,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "23-38,75-78,145-199",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-evidence/references/evidence-quality.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 18,
+          "added_lines": 18,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3-5,35-37,75,77-80,83,87-88,90-92,94",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-workspace/references/routing.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 17,
+          "added_lines": 17,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "62,95-110",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-critique/references/finding-format.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 26,
+          "added_lines": 26,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,92-116",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "72,103,106",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-drive/references/tranche-decision-protocol.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 30,
+          "added_lines": 30,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "56-83,91-92",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-critique/references/review-pass-splitting.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 25,
+          "added_lines": 25,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,127-150",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-memory/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 33,
+          "added_lines": 33,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,61,66,83,113-137,169-172",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-tickets/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "71",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-drive/references/checkpoint-resume-protocol.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "101",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-bootstrap/references/03-outer-loop.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 42,
+          "added_lines": 42,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "35,62,79-84,87,89-94,154-179,182",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-drive/references/drive-loop.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 21,
+          "added_lines": 21,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "16-25,39-43,72-75,82-83",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/references/change-class.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 49,
+          "added_lines": 49,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "17,21-33,37-48,52-53,59,63,67-80,82-84,88-89",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-specs/templates/spec.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 26,
+          "added_lines": 26,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,127-151",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-git/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 57,
+          "added_lines": 57,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,40-51,57-62,69-70,76-80,98-101,106-132",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-spike/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 8,
+          "added_lines": 8,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "34-41",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-wiki/references/page-types.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 49,
+          "added_lines": 49,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "20,22-23,27-28,32,34,36,38,40,42-44,46,48,50,52,54,56,58-60,62,64,66,68,70,72-74,78,80,82,84,86,88-90,94,98,100-101,103,105,109-110,119-120,124",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-tickets/templates/ticket.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 11,
+          "added_lines": 11,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,27-28,33-35,54-55,59-61",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-skill-authoring/SKILL.md"
+    }
+  ],
+  "base_commit_sha": "3388ca12fba859b4bab6096bdd508987414b2bb5",
+  "branch": "main",
+  "commit_sha": "0bd6d703622ed092c3e0b13ed18ebc388c60ee4d",
+  "commit_time": "2026-05-07T07:22:06-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.2",
+  "prompts": {
+    "human": {
+      "accepted_lines": 2195,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 2195,
+      "total_deletions": 0
+    },
+    "ses_206c4d4ceffeEmtuMlOrQJne8y": {
+      "accepted_lines": 132,
+      "agent_id": {
+        "id": "ses_206c4d4ceffeEmtuMlOrQJne8y",
+        "model": "openai/gpt-5.5",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 132,
+      "total_deletions": 5
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
