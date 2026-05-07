@@ -1,0 +1,583 @@
+.loom/tickets/20260507-peerpr07-assimilate-peer-skill-practices.md
+  ses_1ff66db8effeLjk6E3y9wqvYvv 1-22,27-104,106-116,118-121,123-153,155,167-168,174-192
+  human 23-26,105,117,122,154,156-166,169-173,193-196
+.loom/research/20260507-external-peer-skill-practices-synthesis.md
+  ses_1ff66db8effeLjk6E3y9wqvYvv 1-16,21-238
+  human 17-20,239-249
+.loom/research/20260507-skill-template-benchmark-synthesis.md
+  ses_1ff66db8effeLjk6E3y9wqvYvv 1-117
+  human 118-120
+.loom/tickets/20260507-tmplrs07-simplify-template-reasoning-surfaces.md
+  ses_1ff66db8effeLjk6E3y9wqvYvv 1-17,22-42,45-58,60,63-65,68,70-80,92-104,107,109-117,128,132,135-139,141,145,148-149,151-161,164-165,167-168,170,174-190
+  human 18-21,43-44,59,61-62,66-67,69,81-91,105-106,108,118-127,129-131,133-134,140,142-144,146-147,150,162-163,166,169,171-173,191-193
+.loom/critique/20260507-expanded-peer-skill-assimilation-review.md
+  human 1-153
+skills/loom-research/references/source-handling.md
+  human 31-50
+skills/loom-critique/references/review-pass-splitting.md
+  human 39-43
+.loom/critique/20260507-skill-activation-routing-review.md
+  human 1-144
+.loom/tickets/20260507-actvskill-broaden-skill-activation.md
+  human 1-195
+skills/loom-critique/references/critique-lens.md
+  human 38-51,89-90,96-97
+.loom/research/20260507-agentsys-command-practices-synthesis.md
+  human 1-373
+skills/loom-specs/references/spec-shape.md
+  human 12-13,81-111,120-121
+.loom/critique/20260507-skill-template-surface-review.md
+  human 1-186
+skills/loom-ralph/references/verification-posture.md
+  human 38-48
+skills/loom-plans/references/slicing.md
+  human 43-59
+skills/loom-retrospective/SKILL.md
+  human 92-94
+skills/loom-specs/templates/spec.md
+  human 45-73
+.loom/evidence/20260507-skill-activation-routing-validation.md
+  human 1-177
+.loom/evidence/20260507-skill-template-surface-validation.md
+  human 1-202
+skills/loom-debugging/references/systematic-debugging.md
+  human 35-40,87-92,130-134
+skills/loom-codemap/SKILL.md
+  human 44-51,54-58,100
+.loom/evidence/20260507-peer-skill-practices-validation.md
+  human 1-175
+.loom/research/20260507-peer-engineering-discipline-deep-dive.md
+  human 1-319
+.loom/research/20260507-external-skill-activation-deep-dive.md
+  human 1-133
+skills/loom-ship/SKILL.md
+  human 84-89,104
+.loom/tickets/20260507-agntsys7-assimilate-agentsys-command-practices.md
+  human 1-202
+skills/loom-workspace/references/problem-shaping.md
+  human 26-33,88-101,121-122
+.loom/evidence/20260507-expanded-peer-skill-assimilation-validation.md
+  human 1-184
+skills/loom-tickets/references/acceptance-gate.md
+  human 78-81
+.loom/tickets/20260507-engdisc7-deepen-engineering-discipline.md
+  human 1-242
+skills/loom-evidence/references/evidence-quality.md
+  human 39-53
+.loom/critique/20260507-peer-skill-practices-review.md
+  human 1-180
+.loom/critique/20260507-engineering-discipline-review.md
+  human 1-182
+.loom/evidence/20260507-engineering-discipline-validation.md
+  human 1-256
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 168,
+          "added_lines": 168,
+          "deleted_lines": 0,
+          "hash": "ses_1ff66db8effeLjk6E3y9wqvYvv",
+          "lines": "1-22,27-104,106-116,118-121,123-153,155,167-168,174-192",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 28,
+          "added_lines": 28,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "23-26,105,117,122,154,156-166,169-173,193-196",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/tickets/20260507-peerpr07-assimilate-peer-skill-practices.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 234,
+          "added_lines": 234,
+          "deleted_lines": 0,
+          "hash": "ses_1ff66db8effeLjk6E3y9wqvYvv",
+          "lines": "1-16,21-238",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 15,
+          "added_lines": 15,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "17-20,239-249",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/research/20260507-external-peer-skill-practices-synthesis.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 117,
+          "added_lines": 117,
+          "deleted_lines": 0,
+          "hash": "ses_1ff66db8effeLjk6E3y9wqvYvv",
+          "lines": "1-117",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "118-120",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/research/20260507-skill-template-benchmark-synthesis.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 135,
+          "added_lines": 135,
+          "deleted_lines": 0,
+          "hash": "ses_1ff66db8effeLjk6E3y9wqvYvv",
+          "lines": "1-17,22-42,45-58,60,63-65,68,70-80,92-104,107,109-117,128,132,135-139,141,145,148-149,151-161,164-165,167-168,170,174-190",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 58,
+          "added_lines": 58,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "18-21,43-44,59,61-62,66-67,69,81-91,105-106,108,118-127,129-131,133-134,140,142-144,146-147,150,162-163,166,169,171-173,191-193",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/tickets/20260507-tmplrs07-simplify-template-reasoning-surfaces.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 153,
+          "added_lines": 153,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-153",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/critique/20260507-expanded-peer-skill-assimilation-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 20,
+          "added_lines": 20,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "31-50",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-research/references/source-handling.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 5,
+          "added_lines": 5,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "39-43",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-critique/references/review-pass-splitting.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 144,
+          "added_lines": 144,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-144",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/critique/20260507-skill-activation-routing-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 195,
+          "added_lines": 195,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-195",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/tickets/20260507-actvskill-broaden-skill-activation.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 18,
+          "added_lines": 18,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "38-51,89-90,96-97",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-critique/references/critique-lens.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 373,
+          "added_lines": 373,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-373",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/research/20260507-agentsys-command-practices-synthesis.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 35,
+          "added_lines": 35,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "12-13,81-111,120-121",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-specs/references/spec-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 186,
+          "added_lines": 186,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-186",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/critique/20260507-skill-template-surface-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 11,
+          "added_lines": 11,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "38-48",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-ralph/references/verification-posture.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 17,
+          "added_lines": 17,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "43-59",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-plans/references/slicing.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "92-94",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-retrospective/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 29,
+          "added_lines": 29,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "45-73",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-specs/templates/spec.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 177,
+          "added_lines": 177,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-177",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/evidence/20260507-skill-activation-routing-validation.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 202,
+          "added_lines": 202,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-202",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/evidence/20260507-skill-template-surface-validation.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 17,
+          "added_lines": 17,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "35-40,87-92,130-134",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-debugging/references/systematic-debugging.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 14,
+          "added_lines": 14,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "44-51,54-58,100",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-codemap/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 175,
+          "added_lines": 175,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-175",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/evidence/20260507-peer-skill-practices-validation.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 319,
+          "added_lines": 319,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-319",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/research/20260507-peer-engineering-discipline-deep-dive.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 133,
+          "added_lines": 133,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-133",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/research/20260507-external-skill-activation-deep-dive.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 7,
+          "added_lines": 7,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "84-89,104",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-ship/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 202,
+          "added_lines": 202,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-202",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/tickets/20260507-agntsys7-assimilate-agentsys-command-practices.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 24,
+          "added_lines": 24,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "26-33,88-101,121-122",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-workspace/references/problem-shaping.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 184,
+          "added_lines": 184,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-184",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/evidence/20260507-expanded-peer-skill-assimilation-validation.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "78-81",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-tickets/references/acceptance-gate.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 242,
+          "added_lines": 242,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-242",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/tickets/20260507-engdisc7-deepen-engineering-discipline.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 15,
+          "added_lines": 15,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "39-53",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-evidence/references/evidence-quality.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 180,
+          "added_lines": 180,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-180",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/critique/20260507-peer-skill-practices-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 182,
+          "added_lines": 182,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-182",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/critique/20260507-engineering-discipline-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 256,
+          "added_lines": 256,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-256",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/evidence/20260507-engineering-discipline-validation.md"
+    }
+  ],
+  "base_commit_sha": "0bd6d703622ed092c3e0b13ed18ebc388c60ee4d",
+  "branch": "main",
+  "commit_sha": "d75d3a418936613dcfc8a7741953292589981d66",
+  "commit_time": "2026-05-07T07:52:20-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.2",
+  "prompts": {
+    "human": {
+      "accepted_lines": 3626,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 3626,
+      "total_deletions": 0
+    },
+    "ses_1ff66db8effeLjk6E3y9wqvYvv": {
+      "accepted_lines": 654,
+      "agent_id": {
+        "id": "ses_1ff66db8effeLjk6E3y9wqvYvv",
+        "model": "openai/gpt-5.5",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 654,
+      "total_deletions": 0
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
