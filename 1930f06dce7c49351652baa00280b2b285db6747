@@ -1,0 +1,286 @@
+skills/loom-bootstrap/SKILL.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 50-57,85-111
+skills/loom-tickets/references/acceptance-gate.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 116-117
+skills/loom-spike/SKILL.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 53-55,58-62,138-141,150-152,166-167
+skills/loom-debugging/SKILL.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 123-124
+skills/loom-records/references/packet-frontmatter.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 177,184-186,315-319
+  human 187
+skills/loom-wiki/templates/wiki-packet.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 31-32
+skills/loom-records/references/frontmatter.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 141
+skills/loom-ralph/templates/ralph-packet.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 35-36
+.loom/evidence/20260507-skill-corpus-fix-structural-checks.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 1-97
+skills/loom-critique/templates/critique-packet.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 32-33,41,129-130
+skills/loom-records/references/status-lifecycle.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 52-54,153-158
+.loom/critique/20260507-skill-corpus-fix-review.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 1-257
+.loom/tickets/20260507-pkt7z924-address-skill-corpus-review-findings.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 1-191
+skills/loom-skill-authoring/SKILL.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 52-76,105-109
+skills/loom-tickets/SKILL.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 133
+skills/loom-tickets/templates/ticket.md
+  ses_1fc54c944ffeCxpl02NpHhY6Lz 78
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 35,
+          "added_lines": 35,
+          "deleted_lines": 1,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "50-57,85-111",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-bootstrap/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "116-117",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-tickets/references/acceptance-gate.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 17,
+          "added_lines": 17,
+          "deleted_lines": 0,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "53-55,58-62,138-141,150-152,166-167",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-spike/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "123-124",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-debugging/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 9,
+          "added_lines": 9,
+          "deleted_lines": 0,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "177,184-186,315-319",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "187",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/references/packet-frontmatter.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "31-32",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-wiki/templates/wiki-packet.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "141",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/references/frontmatter.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "35-36",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-ralph/templates/ralph-packet.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 97,
+          "added_lines": 97,
+          "deleted_lines": 3,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "1-97",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/evidence/20260507-skill-corpus-fix-structural-checks.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 5,
+          "added_lines": 5,
+          "deleted_lines": 0,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "32-33,41,129-130",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-critique/templates/critique-packet.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 9,
+          "added_lines": 9,
+          "deleted_lines": 0,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "52-54,153-158",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-records/references/status-lifecycle.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 257,
+          "added_lines": 257,
+          "deleted_lines": 9,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "1-257",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/critique/20260507-skill-corpus-fix-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 191,
+          "added_lines": 191,
+          "deleted_lines": 6,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "1-191",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/tickets/20260507-pkt7z924-address-skill-corpus-review-findings.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 30,
+          "added_lines": 30,
+          "deleted_lines": 1,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "52-76,105-109",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-skill-authoring/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "133",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-tickets/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 4,
+          "hash": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+          "lines": "78",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "skills/loom-tickets/templates/ticket.md"
+    }
+  ],
+  "base_commit_sha": "f269d96adabadbd366f60f4c3fc43b2d2c86b384",
+  "branch": "main",
+  "commit_sha": "1930f06dce7c49351652baa00280b2b285db6747",
+  "commit_time": "2026-05-07T11:55:16-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.2",
+  "prompts": {
+    "human": {
+      "accepted_lines": 1,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 1,
+      "total_deletions": 0
+    },
+    "ses_1fc54c944ffeCxpl02NpHhY6Lz": {
+      "accepted_lines": 661,
+      "agent_id": {
+        "id": "ses_1fc54c944ffeCxpl02NpHhY6Lz",
+        "model": "openai/gpt-5.5",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 661,
+      "total_deletions": 24
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
