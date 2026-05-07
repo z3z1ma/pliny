@@ -3,6 +3,7 @@
 ## Core sections
 
 - Summary
+- Rigor Level
 - Problem
 - Problem Pressure Check
 - Desired Behavior
@@ -17,8 +18,31 @@
 - Scenarios
 - Acceptance
 - Evidence Plan
+- Amendment Notes when changing an existing spec
+- Contract Review
 - Assumptions / Decision Points
 - Open Questions
+
+## Progressive Rigor
+
+The template is broad so it can support high-risk contracts, but a saved spec
+should be only as detailed as the risk and coordination need justify.
+
+A **lite spec** is appropriate for local, low-risk behavior when a future ticket
+can act safely from concise requirements, concrete scenarios, acceptance IDs, and
+an evidence plan. It may write `None - reason` for options, boundary tiers,
+interface contract, examples, or amendment notes when those sections add no real
+clarity.
+
+A **full spec** is appropriate when the behavior crosses public APIs, command
+surfaces, shared module contracts, migrations, security/privacy boundaries,
+compatibility promises, multiple repositories, product/UX quality bars, or several
+downstream tickets. Full specs should spell out interfaces, errors,
+deprecations, edge cases, non-goals, evidence expectations, and decision points.
+
+Do not confuse rigor with length. A spec is strong when it prevents downstream
+guessing and makes evidence/review possible, not when it fills every section with
+ambient prose.
 
 ## Quality Bar
 
@@ -28,6 +52,53 @@ would make the result materially better than the current or baseline state.
 For UI, UX, product, workflow, or operator-facing behavior, include observable
 quality probes such as primary user task clarity, discoverability, affordance
 quality, density, before/after comparison, or examples and non-examples.
+
+## Requirement And Scenario Grammar
+
+Requirements are the durable behavior claims. Scenarios are concrete probes that
+make those claims testable, reviewable, and hard to hand-wave.
+
+Requirement guidance:
+
+- use stable local IDs such as `REQ-001` when the requirement may be cited later
+- state one behavior, invariant, interface guarantee, error semantic, or quality
+  constraint per requirement
+- prefer normative verbs for hard contracts: `MUST` or `SHALL` for required
+  behavior, `SHOULD` only when a named exception may be acceptable
+- name the actor or surface, trigger or condition, observable outcome, and any
+  important limit
+- keep implementation mechanics out unless the interface or command shape is the
+  behavior contract itself
+
+Scenario guidance:
+
+- give scenarios stable local IDs such as `SCN-001` when evidence or critique may
+  need to cite them directly
+- link each scenario to the requirement and acceptance IDs it exercises
+- use GIVEN, WHEN, THEN, and AND steps when that structure clarifies state,
+  trigger, and outcome
+- include the smallest happy path plus material edge, failure, permission,
+  compatibility, empty-state, and idempotency cases
+- remove or sharpen scenarios that cannot plausibly be tested, observed, or
+  explicitly validated
+
+Acceptance guidance:
+
+- use stable `ACC-*` IDs for acceptance units downstream tickets may cite
+- write acceptance as the pass/fail contract, not as an implementation task
+- map acceptance to requirements and scenarios when the relationship is not
+  obvious
+
+## Spec Ownership And Boundaries
+
+Before creating or reshaping a spec, decide which behavior surface owns the
+contract. The right boundary is usually a durable capability, workflow, API,
+domain concept, user task, or operator surface that can evolve independently.
+
+Avoid omnibus specs that gather unrelated behaviors only because one ticket will
+touch them. Also avoid one-spec-per-implementation-step fragmentation. Split when
+terms, acceptance, consumers, evidence, or compatibility can change independently;
+merge when separating them would make future tickets chase artificial boundaries.
 
 ## Options Considered And Not Doing
 
@@ -117,6 +188,30 @@ architecture, acceptance, risk, or scope. Low-risk reversible assumptions may be
 recorded as accepted. Material or irreversible assumptions should block execution
 until the user or the owning record resolves them.
 
+## Amendment Discipline
+
+When updating an existing behavior contract, classify the mutation before editing:
+
+- **Added behavior**: introduce a new `REQ-*`, `SCN-*`, or `ACC-*` when the
+  contract grows without changing an existing claim
+- **Modified behavior**: update the full affected requirement, its scenarios,
+  acceptance units, evidence plan, and decision points together
+- **Removed behavior**: state what is no longer intended, why, and whether a
+  successor, migration path, compatibility promise, or deprecation boundary exists
+- **Renamed behavior**: preserve semantics while reconciling terminology,
+  headings, IDs, and inbound references
+- **Superseded behavior**: mark the old ID as superseded and point to the new ID
+  when a claim splits, narrows, or changes enough that reuse would mislead
+
+Do not silently rewrite cited IDs. Search for inbound references before renaming,
+removing, or superseding stable IDs. Downstream tickets, packets, evidence,
+critique, wiki, and plans may depend on those references for recovery.
+
+If the amendment would change the problem, beneficiary, strategic objective, or
+execution route more than the behavior contract itself, route that truth to the
+initiative, plan, ticket, research, or constitution layer instead of expanding the
+spec beyond its owner boundary.
+
 ## Boundary Tiers
 
 Use boundary tiers when the spec constrains what agents, builders, or users may do
@@ -144,6 +239,22 @@ downstream work depends on it:
 - compatibility expectations, deprecation path, and additive vs breaking changes
 - examples and non-examples that make misuse visible
 
+## Contract Review
+
+Before downstream tickets rely on a spec, review the contract through three
+lenses:
+
+- **Completeness**: material desired behavior, edge states, non-goals,
+  constraints, acceptance IDs, and evidence expectations are covered or explicitly
+  out of scope
+- **Correctness**: requirements reflect intended behavior and owner-record truth,
+  not merely the current implementation or an attractive solution shape
+- **Coherence**: requirements, scenarios, acceptance, interface details, and
+  decision points do not contradict one another and use stable terminology
+
+This review is a spec-quality pass. It does not replace ticket acceptance,
+evidence sufficiency, or critique verdicts.
+
 ## Anti-patterns
 
 Avoid:
@@ -152,8 +263,14 @@ Avoid:
 - strategic roadmap language
 - research dumps with no contract
 - hand-wavy acceptance language
+- behavior-bearing requirements with no scenarios
+- scenarios that cannot be tested, observed, or explicitly validated
+- requirements that mix several behaviors under one ID because splitting feels
+  inconvenient
 - public or shared interfaces with missing error, validation, compatibility, or
   deprecation semantics
+- stable IDs reused for different behavior after downstream records may have cited
+  the old meaning
 - solution attachment accepted as intended behavior before the problem is checked
 - spec creation that records a pressure-check table but skips the active grilling
   loop needed to resolve fuzzy terms, contract conflicts, or concrete scenarios

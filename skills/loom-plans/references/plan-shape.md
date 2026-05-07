@@ -32,10 +32,10 @@ If the plan cannot name ticket-ready units yet, keep applying the planning
 procedure or route back to spec/research/initiative before creating broad execution
 tickets.
 
-## ExecPlan Adaptation For Loom
+## Self-Orienting Plan Discipline
 
-OpenAI-style ExecPlans optimize for a single self-contained document a stateless
-agent can execute from start to finish. Loom keeps that novice-orientation and
+Some planning styles optimize for a single self-contained document a stateless
+agent can execute from start to finish. Loom keeps the useful orientation and
 observable-proof bar, but routes live truth through owner layers instead of making
 the plan a second ledger.
 
@@ -66,6 +66,11 @@ A good Loom plan is therefore self-orienting but not hermetic. It should tell a
 fresh agent enough to navigate the owner graph and draft or refine the next ticket
 without transcript context. It should not copy every source record or become a live
 progress log.
+
+If plan prose starts looking like a checkbox workflow, translate executable
+detail into ticket acceptance or packet task text before a worker starts. The plan
+may name proof targets for tickets and packets to validate; it does not become the
+execution contract, evidence owner, or acceptance dossier.
 
 ## Execution Units / Ticket Slices
 

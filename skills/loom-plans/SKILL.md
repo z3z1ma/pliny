@@ -15,9 +15,9 @@ They tease high-level work into detailed units of execution that can become
 tickets. Sequencing, rollout, milestones, and waves organize those units; they do
 not replace ticket truth.
 
-Loom plans inherit the useful parts of executable planning discipline: a fresh
+Loom plans inherit the useful parts of self-orienting execution strategy: a fresh
 agent should understand the purpose, context, route, proof strategy, dependencies,
-and recovery posture. Loom does not copy the full ExecPlan ledger shape into plans:
+and recovery posture. Loom does not turn plans into all-in-one execution ledgers:
 tickets own live progress, evidence owns observations, research owns discoveries,
 and retrospective/wiki/spec/constitution own promoted lessons.
 
@@ -121,9 +121,10 @@ A strong plan answers:
 | --- | --- |
 | "I'll figure out the order while implementing." | Hidden sequencing becomes rework. Plans exist when order, dependency, or parallelism matters. |
 | "The plan is mostly a list of phases." | A useful plan decomposes work into ticket-ready execution units with outcomes, scope, evidence, and loopbacks. |
-| "Progress belongs in the plan because ExecPlans have progress." | In Loom, tickets own live progress. Plans own route and decomposition; they point to tickets for current state. |
+| "Progress belongs in the plan because another planning style tracks it there." | In Loom, tickets own live progress. Plans own route and decomposition; they point to tickets for current state. |
 | "A complete plan should decompose everything." | Decompose enough to make the next safe tranche clear; do not manufacture roadmap theater. |
 | "Parallel work is faster." | Parallel tickets are safe only when dependencies and write scopes do not conflict. |
+| "The plan checklist can be the execution contract." | Ticket acceptance and packet task text own executable detail; plans name proof targets for tickets and packets to validate. |
 
 ## Red Flags
 

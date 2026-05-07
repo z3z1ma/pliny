@@ -16,6 +16,14 @@ external_refs: {}
 
 What this spec defines and who should use it.
 
+# Rigor Level
+
+Choose the lightest useful shape: `lite` for local, low-risk behavior, or `full`
+when public/shared interfaces, security/privacy, migrations, compatibility,
+multiple tickets, or high ambiguity require more detail.
+
+Rationale:
+
 # Problem
 
 What ambiguity, user need, or quality gap requires a behavior contract.
@@ -83,13 +91,27 @@ rules that shape acceptable solutions.
 
 # Requirements
 
-Concrete requirements downstream work must satisfy.
+Concrete behavior requirements downstream work must satisfy. Use stable IDs when
+tickets, packets, evidence, critique, or wiki may cite the requirement. Keep each
+requirement focused on one behavior, invariant, interface guarantee, error
+semantic, or quality constraint.
 
-- REQ-001: <TBD: stable requirement before saving>
+- REQ-001: <MUST/SHALL/SHOULD + actor/surface + condition + observable outcome>
 
 # Scenarios
 
-Representative usage, edge cases, and failure paths.
+Representative usage, edge cases, and failure paths. Each behavior-bearing
+requirement should have at least one scenario that can be tested, observed, or
+explicitly validated.
+
+## SCN-001: <scenario name>
+
+Exercises: REQ-001, ACC-001
+
+GIVEN <initial observable state>
+WHEN <trigger or action>
+THEN <observable outcome>
+AND <additional outcome or invariant when useful>
 
 # Acceptance
 
@@ -98,10 +120,37 @@ tickets, evidence, and critique to cite.
 
 - ACC-001: <TBD: stable acceptance criterion before saving>
 
+Coverage:
+
+| Acceptance ID | Requirements | Scenarios | Evidence target |
+| --- | --- | --- | --- |
+| ACC-001 | REQ-001 | SCN-001 | <test, observation, screenshot, trace, or manual check> |
+
 # Evidence Plan
 
 What evidence would prove the behavior and quality bar. Name tests, observations,
 before/after artifacts, screenshots, smoke checks, or manual checks as applicable.
+
+| Claim / acceptance ID | Evidence type | Expected artifact | Limits / notes |
+| --- | --- | --- | --- |
+| ACC-001 | <test, observation, screenshot, trace, manual check> | <path, command, evidence record, or TBD> | <limits or None> |
+
+# Amendment Notes
+
+Use when changing an existing spec. Otherwise write `None - new spec`.
+
+| Change type | Affected IDs | Disposition / successor | Reference reconciliation needed |
+| --- | --- | --- | --- |
+| <added, modified, removed, renamed, or superseded> | <REQ/SCN/ACC IDs> | <reason, successor, compatibility, or removal boundary> | <yes/no and target search> |
+
+# Contract Review
+
+- Completeness: <material behavior, edge states, non-goals, constraints,
+  acceptance IDs, and evidence expectations covered or explicitly out of scope>
+- Correctness: <requirements reflect intended behavior and owner-record truth, not
+  only current implementation or a preferred solution shape>
+- Coherence: <requirements, scenarios, acceptance, interface details, and decision
+  points use stable terms and do not contradict one another>
 
 # Assumptions / Decision Points
 
