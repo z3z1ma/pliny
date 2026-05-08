@@ -95,12 +95,14 @@ Ask these before choosing a design:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "I can refactor first and document the architecture later." | Architecture mutations need intended seams, evidence, and ticket scope before downstream code depends on them. |
-| "The new abstraction looks cleaner." | Clean is not enough; prove locality, test leverage, compatibility, and deletion path. |
-| "A codemap already found the problem, so implementation is obvious." | Codemap explains current structure. Architecture work chooses a mutation path and must compare options when the seam is not obvious. |
-| "All callers are internal, so compatibility does not matter." | Internal consumers can still rely on undocumented behavior; inspect callers before narrowing contracts. |
+- **Rationalization:** "I can refactor first and document the architecture later."
+  **Reality:** Architecture mutations need intended seams, evidence, and ticket scope before downstream code depends on them.
+- **Rationalization:** "The new abstraction looks cleaner."
+  **Reality:** Clean is not enough; prove locality, test leverage, compatibility, and deletion path.
+- **Rationalization:** "A codemap already found the problem, so implementation is obvious."
+  **Reality:** Codemap explains current structure. Architecture work chooses a mutation path and must compare options when the seam is not obvious.
+- **Rationalization:** "All callers are internal, so compatibility does not matter."
+  **Reality:** Internal consumers can still rely on undocumented behavior; inspect callers before narrowing contracts.
 
 ## Red Flags
 

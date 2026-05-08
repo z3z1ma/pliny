@@ -90,12 +90,18 @@ summary is useful, put its durable claims in the owner record that owns them.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The user already gave the solution, so skip discovery." | A requested solution can hide an untested problem, wrong beneficiary, or over-wide first slice. |
-| "Brainstorming can stay in chat." | Rejected options, assumptions, and non-goals become important once downstream tickets depend on them. |
-| "A polished one-pager is the source of truth." | Loom owner records own strategy, evidence, behavior, plans, and execution state. |
-| "Ask for approval after every phase." | Ask when a material decision needs user judgment; continue under recorded delegated authority when safe. |
+- Rationalization: "The user already gave the solution, so skip discovery."
+  Reality: A requested solution can hide an untested problem, wrong beneficiary,
+  or over-wide first slice.
+- Rationalization: "Brainstorming can stay in chat."
+  Reality: Rejected options, assumptions, and non-goals become important once
+  downstream tickets depend on them.
+- Rationalization: "A polished one-pager is the source of truth."
+  Reality: Loom owner records own strategy, evidence, behavior, plans, and
+  execution state.
+- Rationalization: "Ask for approval after every phase."
+  Reality: Ask when a material decision needs user judgment; continue under
+  recorded delegated authority when safe.
 
 ## Red Flags
 

@@ -78,12 +78,14 @@ enough; do not invent a hidden skill-test harness.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The skill reads well, so it is done." | Skill edits change future operator behavior; validation must check activation, boundaries, references, templates, and proportional evidence. |
-| "This rule can live in the new skill only." | Always-on doctrine belongs in using-Loom; owner truth belongs in owner records. Skills coordinate behavior without hiding core policy. |
-| "A broad description means the skill owns all related truth." | Broad activation improves discovery. Durable truth still routes to the owning Loom layer. |
-| "The pressure scenario is obvious, so I do not need to write it down." | Behavior-changing skill edits need a concrete check against the rationalization they are meant to prevent. |
+- **Rationalization:** "The skill reads well, so it is done."
+  **Reality:** Skill edits change future operator behavior; validation must check activation, boundaries, references, templates, and proportional evidence.
+- **Rationalization:** "This rule can live in the new skill only."
+  **Reality:** Always-on doctrine belongs in using-Loom; owner truth belongs in owner records. Skills coordinate behavior without hiding core policy.
+- **Rationalization:** "A broad description means the skill owns all related truth."
+  **Reality:** Broad activation improves discovery. Durable truth still routes to the owning Loom layer.
+- **Rationalization:** "The pressure scenario is obvious, so I do not need to write it down."
+  **Reality:** Behavior-changing skill edits need a concrete check against the rationalization they are meant to prevent.
 
 ## Red Flags
 

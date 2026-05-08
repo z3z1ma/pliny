@@ -64,14 +64,18 @@ to the owner layer instead of smuggling it into implementation.
 
 ## Conflict Routing
 
-| Conflict | Owner route |
-| --- | --- |
-| docs recommend different intended behavior | spec update or ticket-local acceptance revision |
-| docs expose migration risk | research plus plan/migration ticket |
-| docs contradict architecture decision | constitution decision review or architecture playbook |
-| local code uses deprecated pattern | ticket, migration, or simplification depending on scope |
-| compatibility target cannot support modern API | research/spec/plan with explicit tradeoff |
-| security docs reveal unsafe current pattern | security playbook, ticket, critique, evidence |
+- **Conflict:** docs recommend different intended behavior
+  **Owner route:** spec update or ticket-local acceptance revision
+- **Conflict:** docs expose migration risk
+  **Owner route:** research plus plan/migration ticket
+- **Conflict:** docs contradict architecture decision
+  **Owner route:** constitution decision review or architecture playbook
+- **Conflict:** local code uses deprecated pattern
+  **Owner route:** ticket, migration, or simplification depending on scope
+- **Conflict:** compatibility target cannot support modern API
+  **Owner route:** research/spec/plan with explicit tradeoff
+- **Conflict:** security docs reveal unsafe current pattern
+  **Owner route:** security playbook, ticket, critique, evidence
 
 ## Unverified Patterns
 

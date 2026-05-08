@@ -63,12 +63,14 @@ A strong initiative answers:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "A cluster of related tickets is automatically an initiative." | Initiatives exist when a durable strategic outcome and success criteria need an owner. |
-| "Success can be judged later." | If downstream tickets need coordination, success criteria should be explicit now. |
-| "The initiative can track progress." | Initiatives frame outcomes. Tickets track live execution and plans sequence work. |
-| "Milestones are just roadmap items." | Initiative milestones are outcome checkpoints, not constitutional roadmap commitments. |
+- Rationalization: "A cluster of related tickets is automatically an initiative."
+  - Reality: Initiatives exist when a durable strategic outcome and success criteria need an owner.
+- Rationalization: "Success can be judged later."
+  - Reality: If downstream tickets need coordination, success criteria should be explicit now.
+- Rationalization: "The initiative can track progress."
+  - Reality: Initiatives frame outcomes. Tickets track live execution and plans sequence work.
+- Rationalization: "Milestones are just roadmap items."
+  - Reality: Initiative milestones are outcome checkpoints, not constitutional roadmap commitments.
 
 ## Red Flags
 

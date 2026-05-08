@@ -89,8 +89,11 @@ Record:
 
 Use a variant or experiment matrix when comparing options:
 
-| Variant / hypothesis | Artifact or probe | Strength | Weakness | Decision |
-| --- | --- | --- | --- | --- |
+- Variant / hypothesis:
+  Artifact or probe:
+  Strength:
+  Weakness:
+  Decision:
 
 ## Sketch Flow
 
@@ -130,14 +133,24 @@ and route accepted behavior or explanation to spec or wiki.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "I can just implement the first plausible idea." | Spikes exist when the first plausible idea may be wrong; compare enough variants or hypotheses to learn. |
-| "This prototype is useful, so we should keep it." | The answer is worth keeping. Throwaway scaffolding should be deleted, absorbed deliberately, or clearly contained. |
-| "Persistence makes the prototype more realistic." | Persistence is usually the thing being tested; otherwise it creates cleanup risk and accidental dependency. |
-| "Three UI variants that share the same layout are enough." | Sketch variants must disagree structurally or they will not reveal product direction. |
-| "No evidence is needed because it was exploratory." | Exploration produces observations, rejected options, null results, and downstream recommendations worth preserving. |
-| "The prototype command worked once, so feasibility is proven." | A spike proves only the named hypothesis under the observed source, version, and environment limits. |
+- Rationalization: "I can just implement the first plausible idea."
+  Reality: Spikes exist when the first plausible idea may be wrong; compare enough
+  variants or hypotheses to learn.
+- Rationalization: "This prototype is useful, so we should keep it."
+  Reality: The answer is worth keeping. Throwaway scaffolding should be deleted,
+  absorbed deliberately, or clearly contained.
+- Rationalization: "Persistence makes the prototype more realistic."
+  Reality: Persistence is usually the thing being tested; otherwise it creates
+  cleanup risk and accidental dependency.
+- Rationalization: "Three UI variants that share the same layout are enough."
+  Reality: Sketch variants must disagree structurally or they will not reveal
+  product direction.
+- Rationalization: "No evidence is needed because it was exploratory."
+  Reality: Exploration produces observations, rejected options, null results, and
+  downstream recommendations worth preserving.
+- Rationalization: "The prototype command worked once, so feasibility is proven."
+  Reality: A spike proves only the named hypothesis under the observed source,
+  version, and environment limits.
 
 ## Red Flags
 

@@ -89,12 +89,14 @@ assumed success.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "CI is green, so this is accepted." | CI is evidence. Ticket acceptance and critique disposition still decide closure. |
-| "CI is slow, so skip it." | Measure and optimize the pipeline; skipping gates hides risk. |
-| "The flake passed on rerun." | Flakiness is a signal to classify and fix or record, not proof the issue vanished. |
-| "Test secrets are harmless in YAML." | Secrets belong in secret stores, not code or Loom evidence. |
+- **Rationalization:** "CI is green, so this is accepted."
+  **Reality:** CI is evidence. Ticket acceptance and critique disposition still decide closure.
+- **Rationalization:** "CI is slow, so skip it."
+  **Reality:** Measure and optimize the pipeline; skipping gates hides risk.
+- **Rationalization:** "The flake passed on rerun."
+  **Reality:** Flakiness is a signal to classify and fix or record, not proof the issue vanished.
+- **Rationalization:** "Test secrets are harmless in YAML."
+  **Reality:** Secrets belong in secret stores, not code or Loom evidence.
 
 ## Red Flags
 

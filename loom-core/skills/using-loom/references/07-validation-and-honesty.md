@@ -2,73 +2,45 @@
 
 This is an ordered reference for the `using-loom` skill.
 
-Loom is only useful if its records are truthful and its completion claims mean something.
+Loom is useful only when records are truthful and completion claims mean something.
 
-## What "Done" Means
+## Done Means The Graph Tells The Truth
 
 Work is done only when all relevant conditions are true:
 
-- the owning ticket tells the truth
-- the ticket-owned acceptance decision, when needed, tells the truth
+- the owning ticket and ticket-owned acceptance decision tell the truth
 - acceptance criteria are satisfied or explicitly revised
-- required evidence exists
-- required critique gate is satisfied by the policy that applies to this work:
-  - mandatory critique has completed before closure as a `final` critique record
-    with an explicit verdict; deferral, `not_required`, or a draft/stub review
-    does not satisfy a mandatory critique gate
-  - every open medium/high finding from a required critique has a ticket-owned
-    disposition of `resolved`, `accepted_risk`, `superseded`, or
-    `converted_to_follow_up`
-  - recommended critique has a recorded ticket-owned disposition before closure:
-    `completed`, `deferred`, or `not_required` with rationale
-  - optional critique does not block closure unless a ticket, spec, plan, or
-    human gate made it required for that work
-- retrospective / promotion follow-through has happened, been explicitly deferred,
-  or been recorded as not required
+- required evidence exists and is fresh enough for the exact claim
+- required critique gates are satisfied
+- retrospective / promotion follow-through happened, was deferred, or is recorded
+  as not required
 - references are reconciled
 - the result stayed within scope
 
-A child assertion is not enough.
-A green feeling is not enough.
+A child assertion, command success, commit, PR, or green feeling is not enough.
 
 ## Minimum Validation
 
-Before claiming a bounded step landed, perform the smallest validation that makes the claim honest.
+Before claiming a bounded step landed, perform the smallest validation that makes
+the claim honest: structure, link/reference, and scope checks; behavioral tests or
+observed outputs; manual inspection; acceptance comparison; or change-class
+evidence.
 
-That usually includes some mix of:
+Freshness matters. If evidence is not from the current source state, say when it
+was gathered, what changed since, and why it remains valid; otherwise rerun the
+check before claiming completion, fixed, passing, or ready to merge.
 
-- record structure checks
-- link/reference checks
-- scope checks
-- behavioral tests or observed outputs
-- manual inspection of changed files
-- comparison against acceptance criteria
-- change-class-specific evidence expectations
+## Structural Checks
 
-Completion, fixed, passing, or ready-to-merge claims require fresh enough
-evidence for the exact claim. If the supporting observation is not from the
-current source state, say when it was gathered, what changed since then, and why
-it is still valid — or rerun the check before claiming success.
-
-## Structural Checklist
-
-A record is structurally credible when:
-
-- the frontmatter exists
-- the `id`, `kind`, `status`, `created_at`, and `updated_at` fields exist
-- the body has the expected major sections for that kind
-- links point at valid targets or are explicitly marked stale/superseded
-- filenames and IDs agree with the naming convention
-
-Ticket states are live execution states. Non-ticket `status` fields are lifecycle
-states; use `skills/loom-records/references/status-lifecycle.md` for their shared
-grammar and layer-specific transitions.
+A record is structurally credible when it has frontmatter; `id`, `kind`,
+`status`, `created_at`, and `updated_at`; expected major sections; valid links or
+explicit stale/superseded markers; and filename/ID agreement. Ticket states are
+live execution states; non-ticket `status` fields are lifecycle states. Use
+`skills/loom-records/references/status-lifecycle.md` for shared grammar.
 
 ## Ticket Closure Discipline
 
-Use ticket states deliberately.
-
-Normal transitions are:
+Use ticket states deliberately:
 
 ```text
 proposed -> ready | cancelled
@@ -80,102 +52,54 @@ complete_pending_acceptance -> closed | active | review_required | cancelled
 closed/cancelled -> terminal unless explicitly reopened by ticket update
 ```
 
-### `proposed`
+Meanings: `proposed` lacks earned readiness; `ready` is clear enough to begin;
+`active` is in progress; `blocked` has a real blocker; `review_required` means
+critique or acceptance review is next; `complete_pending_acceptance` means work
+and evidence are substantially complete but final acceptance or follow-through
+remains; `closed` means the graph tells a complete truthful story; `cancelled`
+records that work should not proceed and why.
 
-The ticket exists, but readiness has not been earned.
-
-### `ready`
-
-The ticket is clear enough to begin.
-
-### `active`
-
-Execution is in progress.
-
-### `blocked`
-
-A real blocker is preventing progress.
-
-### `review_required`
-
-The implementation step landed but critique or acceptance review is clearly next.
-
-### `complete_pending_acceptance`
-
-The work and evidence are substantially complete, but final acceptance or follow-through remains.
-
-### `closed`
-
-The graph tells a complete and truthful story.
-
-### `cancelled`
-
-The work should not proceed, and the cancellation reason is recorded.
-
-Do not jump to `closed` just because a child returned `stop`.
+Do not jump to `closed` because a child returned `stop`.
 
 ## Reference Reconciliation
 
-When removing, renaming, or superseding anything:
-
-1. search for its canonical ID
-2. search for its path if paths are referenced
-3. reconcile the references
-4. perform the rename or removal
-5. run a final spot-check
-
-Broken graph edges are not harmless.
-They make future agents slower and less trustworthy.
+When removing, renaming, or superseding anything, search for its canonical ID,
+search for path references, reconcile those references, perform the mutation, and
+run a final spot-check. Broken graph edges make future recovery slower and less
+trustworthy.
 
 ## Critique And Wiki Gates
 
 Use these defaults unless the project says otherwise:
 
-- meaningful workflow or behavior changes usually deserve critique
-- meaningful code changes usually deserve critique
-- accepted understanding that future agents will need should become wiki, not only ticket prose
-- if critique found unresolved open medium or high-severity issues, do not pretend the work is fully accepted
-- mandatory critique blocks closure until the required critique review is a
-  `final` critique record with an explicit verdict and every open medium/high
-  finding has a ticket-owned disposition of `resolved`, `accepted_risk`,
-  `superseded`, or `converted_to_follow_up`; mandatory critique cannot be
-  satisfied by deferral, `not_required`, or a draft/stub review
-- recommended critique needs a recorded ticket-owned disposition status before
-  closure: `completed`, `deferred`, or `not_required` with rationale
+- meaningful workflow, behavior, or code changes usually deserve critique
+- accepted understanding future agents need should become wiki, not only ticket
+  prose
+- unresolved open medium/high critique findings prevent full acceptance until the
+  ticket owns a disposition
+- mandatory critique blocks closure until there is a `final` critique record with
+  an explicit verdict, and every open medium/high finding is ticket-dispositioned
+  as `resolved`, `accepted_risk`, `superseded`, or `converted_to_follow_up`; a
+  draft, stub, deferral, or `not_required` cannot satisfy a mandatory gate
+- recommended critique needs a ticket-owned disposition before closure:
+  `completed`, `deferred`, or `not_required` with rationale
 - optional critique does not block closure unless a ticket, spec, plan, or human
-  gate made it required for that work
-- withdrawn findings require critique rationale and may be cited by the ticket
-  for audit history, but are not unresolved findings for closure purposes
+  gate made it required
+- withdrawn findings require critique-owned rationale, may be cited for audit,
+  and do not block closure merely by severity
 
 ## Honesty Rules
 
-Always:
+Always distinguish evidence from inference, accepted truth from proposed truth,
+current blockers from future possibilities, and inspected facts from assumptions.
+Name residual risks instead of burying them.
 
-- distinguish evidence from inference
-- distinguish accepted truth from proposed truth
-- distinguish current blockers from future possibilities
-- distinguish what you inspected from what you assumed
-- name residual risks instead of burying them
+Never claim completion because something probably works, imply critique happened
+when it did not, let wiki overstate certainty, let memory become a second ticket
+system, or hide scope expansion inside local optimization.
 
-Never:
+## If Validation Is Incomplete
 
-- claim completion because "it probably works"
-- imply a critique happened when it did not
-- let the wiki quietly overstate certainty
-- let memory become a second ticket system
-- hide a scope expansion inside a local optimization
-
-## If You Cannot Fully Validate
-
-Then say so clearly and leave the graph truthful.
-
-The right response is:
-
-- record what was validated
-- record what was not validated
-- record the remaining risk
-- leave the ticket in the right state
-- create follow-up work if needed
-
-Honesty is not failure.
-False completion is failure.
+Say so and leave the graph truthful: record what was validated, what was not, the
+remaining risk, the right ticket state, and any needed follow-up. Honesty is not
+failure; false completion is failure.

@@ -85,12 +85,14 @@ when official sources are available.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "I know this API." | APIs and best practices change. Detect versions and verify before establishing a pattern. |
-| "The docs are too much overhead." | A wrong source-memory pattern can become a project-wide template. |
-| "The official docs conflict with local code, so docs win." | Docs explain external behavior; project specs and current code still constrain project truth. |
-| "I can cite a blog." | Blogs are secondary unless no official source exists and the limitation is recorded. |
+- **Rationalization:** "I know this API."
+  **Reality:** APIs and best practices change. Detect versions and verify before establishing a pattern.
+- **Rationalization:** "The docs are too much overhead."
+  **Reality:** A wrong source-memory pattern can become a project-wide template.
+- **Rationalization:** "The official docs conflict with local code, so docs win."
+  **Reality:** Docs explain external behavior; project specs and current code still constrain project truth.
+- **Rationalization:** "I can cite a blog."
+  **Reality:** Blogs are secondary unless no official source exists and the limitation is recorded.
 
 ## Red Flags
 

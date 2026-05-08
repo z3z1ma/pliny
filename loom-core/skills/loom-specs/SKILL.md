@@ -60,14 +60,20 @@ the public/shared interface itself is the behavior being specified.
 
 Use the lightest spec that still makes downstream work testable and reviewable.
 
-For routine, local, low-risk behavior, a lite spec may be enough: problem,
-desired behavior, focused requirements, representative scenarios, acceptance IDs,
-and an evidence plan.
+For routine, local, low-risk behavior, `templates/spec-lite.md` may be enough:
+problem, desired behavior, focused requirements, representative scenarios,
+acceptance IDs, and an evidence plan.
 
-Increase rigor when ambiguity or cost is higher: public APIs, command surfaces,
-cross-repository behavior, migrations, security/privacy boundaries,
-compatibility/deprecation paths, user-facing UX/product quality, parallel-worker
-contracts, or behavior likely to be reused by several tickets.
+Use `templates/spec.md` as the full copy target, or escalate from lite to full
+before downstream work depends on the spec, when any of these are present:
+
+- high risk
+- public/shared surface
+- multi-ticket scope
+- reusable acceptance
+- migration/security/privacy boundary
+- material ambiguity
+- mandatory critique
 
 Lite never means vague. Full never means verbose theater. The spec should contain
 the contract a future ticket, packet, evidence record, or critique pass actually
@@ -166,13 +172,20 @@ A strong spec answers:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The requirement is obvious." | Obvious requirements still hide assumptions. Specs exist to surface them before delivery. |
-| "The quality bar is subjective, so skip it." | Subjective does not mean unverifiable. Name observable probes, examples, non-examples, or before/after evidence. |
-| "The ticket can define this later." | Tickets scope live work. Reusable intended behavior belongs in a spec before downstream work relies on it. |
-| "A lite spec can skip scenarios." | Lite means small, not vague. Each behavior-bearing requirement still needs a concrete way to observe or test it. |
-| "Implementation details make the spec clearer." | Delivery mechanics usually belong in plans, tickets, packets, or code. Specs own observable behavior and shared contracts. |
+- **"The requirement is obvious."** Reality: obvious requirements still hide
+  assumptions. Specs exist to surface them before delivery.
+- **"The quality bar is subjective, so skip it."** Reality: subjective does not
+  mean unverifiable. Name observable probes, examples, non-examples, or
+  before/after evidence.
+- **"The ticket can define this later."** Reality: tickets scope live work.
+  Reusable intended behavior belongs in a spec before downstream work relies on
+  it.
+- **"A lite spec can skip scenarios."** Reality: lite means small, not vague.
+  Each behavior-bearing requirement still needs a concrete way to observe or
+  test it.
+- **"Implementation details make the spec clearer."** Reality: delivery
+  mechanics usually belong in plans, tickets, packets, or code. Specs own
+  observable behavior and shared contracts.
 
 ## Red Flags
 
@@ -214,5 +227,5 @@ Read immediately for normal spec creation or review:
 
 1. `references/spec-shape.md` when deciding what belongs in requirements,
    scenarios, constraints, and acceptance.
-2. `templates/spec.md` only when creating or substantially reshaping a spec
-   record.
+2. `templates/spec-lite.md` or `templates/spec.md` only when creating or
+   substantially reshaping a spec record; keep `spec.md` as the full copy target.

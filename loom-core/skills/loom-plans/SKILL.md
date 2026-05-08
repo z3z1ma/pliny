@@ -117,14 +117,20 @@ A strong plan answers:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "I'll figure out the order while implementing." | Hidden sequencing becomes rework. Plans exist when order, dependency, or parallelism matters. |
-| "The plan is mostly a list of phases." | A useful plan decomposes work into ticket-ready execution units with outcomes, scope, evidence, and loopbacks. |
-| "Progress belongs in the plan because another planning style tracks it there." | In Loom, tickets own live progress. Plans own route and decomposition; they point to tickets for current state. |
-| "A complete plan should decompose everything." | Decompose enough to make the next safe tranche clear; do not manufacture roadmap theater. |
-| "Parallel work is faster." | Parallel tickets are safe only when dependencies and write scopes do not conflict. |
-| "The plan checklist can be the execution contract." | Ticket acceptance and packet task text own executable detail; plans name proof targets for tickets and packets to validate. |
+- **"I'll figure out the order while implementing."** Reality: hidden sequencing
+  becomes rework. Plans exist when order, dependency, or parallelism matters.
+- **"The plan is mostly a list of phases."** Reality: a useful plan decomposes work
+  into ticket-ready execution units with outcomes, scope, evidence, and loopbacks.
+- **"Progress belongs in the plan because another planning style tracks it there."**
+  Reality: in Loom, tickets own live progress. Plans own route and decomposition;
+  they point to tickets for current state.
+- **"A complete plan should decompose everything."** Reality: decompose enough to
+  make the next safe tranche clear; do not manufacture roadmap theater.
+- **"Parallel work is faster."** Reality: parallel tickets are safe only when
+  dependencies and write scopes do not conflict.
+- **"The plan checklist can be the execution contract."** Reality: ticket acceptance
+  and packet task text own executable detail; plans name proof targets for tickets
+  and packets to validate.
 
 ## Red Flags
 

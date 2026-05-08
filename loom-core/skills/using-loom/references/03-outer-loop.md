@@ -2,51 +2,44 @@
 
 This is an ordered reference for the `using-loom` skill.
 
-The outer loop is Loom's scoping and framing engine.
-
-Its job is to make the work small enough, clear enough, and honest enough that the inner loop can execute without guessing.
+The outer loop is Loom's scoping and framing engine. It makes work small enough,
+clear enough, and honest enough that execution does not require guessing.
 
 ## The Outer Loop Questions
 
-Before you compile a packet, start coding, or choose a downstream route, answer these questions:
+Before compiling a packet, coding, or choosing a route, answer what durable
+problem exists, which layer owns it, what larger frame constrains it, what
+evidence or behavior is missing, whether planning is needed, and what the next
+bounded ticket-sized step is.
 
-1. what durable problem or opportunity exists
-2. what layer currently owns it
-3. what larger strategic frame constrains it
-4. what evidence is missing
-5. what behavior is still fuzzy
-6. whether this is small enough for a ticket or complex enough to need planning
-7. what is the next bounded ticket-sized step
+If those cannot be answered, stay in the outer loop.
 
-If you cannot answer those, you are not ready for the inner loop yet.
+## Routing Progression
 
-## Backbone Progression
-
-The default progression is:
+Default backbone:
 
 `constitution -> initiative -> plan -> ticket`
 
-Use it like this:
+Route by changing truth:
 
-- update **constitution** when principles, identity, or hard constraints changed
-- create or refine an **initiative** when the outcome is strategic and cross-cutting
-- create **research** when the work needs investigation before committing
-- create a **spec** when intended behavior is unclear or acceptance is fuzzy
-- create a **plan** when complex change needs high-level planning before tickets
-- create a **ticket** when one bounded execution owner is needed
+- **constitution**: principles, identity, hard constraints, citable decisions
+- **initiative**: strategic outcome framing or cross-cutting ownership
+- **research**: evidence, tradeoffs, rejected options, investigations, conclusions
+- **spec**: intended behavior, reusable acceptance, scenarios, requirements
+- **plan**: high-level decomposition, sequencing, dependencies, rollout,
+  milestones, execution waves
+- **ticket**: one bounded live execution owner
 
-Not every task needs every layer.
-But every non-trivial task should be explainable against this model.
+Not every task needs every layer, but nontrivial work should fit this model.
 
 ## Ticket Readiness Standard
 
-A ticket is ready only when it makes the next governed move obvious enough that a fresh worker or reviewer does not need transcript context to begin.
+A ticket is ready only when a fresh worker or reviewer can identify the next
+governed move without transcript context. Ralph-ready is stricter: it also names
+one bounded implementation iteration, write boundary, likely verification
+posture, and expected output contract.
 
-Ralph-ready is a stricter subset of ticket-ready: the ticket must also name one
-bounded implementation iteration, write boundary, likely verification posture,
-and expected output contract.
-
-A ready ticket should make all of these legible:
+A ready ticket makes these legible:
 
 - why this work matters now
 - what is in scope
@@ -54,55 +47,26 @@ A ready ticket should make all of these legible:
 - what acceptance means
 - what artifacts constrain the work
 - what evidence the parent will expect
-- which blockers, evidence gaps, critique gaps, acceptance gaps, or journal facts
-  a fresh agent should inspect before continuing
+- blockers, evidence gaps, critique gaps, acceptance gaps, or journal facts a
+  fresh agent should inspect
 - whether packaging or handoff is needed, without treating shipping as ticket
   closure
 
 If the ticket cannot do that, keep working in the outer loop.
 
-## When To Add Research
+## Research, Spec, And Plan Triggers
 
-Add or update research when:
-
-- you are making decisions from weak evidence
-- multiple options exist and the tradeoffs matter
-- you are about to encode assumptions into a spec or plan
-- an implementation discovery should remain citable
-
-A research record should end the need to rediscover the same reasoning later.
-
-## When To Add A Spec
-
-Add or update a spec when:
-
-- the intended behavior is under-specified
-- acceptance criteria are vague
-- different plausible implementations would lead to materially different outcomes
-- critique or wiki will need one stable behavior source later
-
-Specs turn "I think we mean X" into "the project currently intends X".
-
-## When To Add A Plan
-
-Add or update a plan when:
-
-- the change is complex enough that jumping straight to tickets would force the
-  agent to guess the shape of the work
-- one ticket is not enough
-- the order of work matters
-- rollout strategy matters
-- there are dependencies or phases that future tickets should inherit
-
-Plans are for planning. They own the high-level shape of complex change:
-decomposition, sequencing, dependencies, phases, rollout, milestones, execution
-waves, and strategy that future tickets should inherit. Once the plan is clear,
-create tickets that go into the bounded execution detail for each planned slice.
-Plans are not live execution ledgers.
+Use **research** for weak evidence, material tradeoffs, assumptions that would
+enter a spec/plan, or citable discoveries. Use a **spec** for underspecified
+behavior, vague acceptance, divergent plausible implementations, or stable
+behavior sources needed by critique/wiki. Use a **plan** when the work is too
+complex for one ticket, order or rollout matters, dependencies exist, or future
+tickets need waves/milestones. Research ends rediscovery; specs state intended
+behavior; plans own high-level shape, not execution minutiae.
 
 ## Decomposition Rule
 
-The outer loop should keep decomposing until the next step is bounded enough to fit one of these shapes:
+Keep decomposing until the next step fits one shape:
 
 - one tiny local execution step with no packet
 - one `ralph` implementation packet
@@ -116,24 +80,14 @@ If the current state needs operator input, workspace repair, records repair,
 evidence preservation, continuation, or stop, handle that need directly in the
 owner layer instead of forcing another implementation pass.
 
-If the next step still feels like "do the whole feature", it is not decomposed enough.
+If the next step still feels like "do the whole feature," it is not decomposed
+enough.
 
 ## Loopback From Ralph
 
-The inner loop is allowed to discover that the outer loop was incomplete.
-
-When Ralph returns with:
-
-- ambiguous behavior
-- missing evidence
-- missing strategy
-- missing constraints
-- ticket too wide
-- scope unexpectedly larger than expected
-
-the parent should go back outward instead of forcing execution through ambiguity.
-
-Typical loopbacks:
+If Ralph returns ambiguous behavior, missing evidence/strategy/constraints, a
+too-wide ticket, or unexpected scope growth, go outward instead of forcing
+execution through ambiguity. Common loopbacks:
 
 - Ralph -> research when evidence or tradeoffs are missing
 - Ralph -> spec when intended behavior is ambiguous
@@ -144,24 +98,21 @@ Typical loopbacks:
 
 ## Consult Constitution Before Deciding
 
-Before making a non-trivial architectural or policy choice, check whether the constitution subsystem already speaks to it.
+Before a nontrivial architectural or policy choice, check whether constitution,
+decision, or roadmap records already speak to it. They are precedent, not
+history.
 
-Constitution, decision records, and roadmap records are precedent, not history. Re-deriving a choice the project already made wastes work and risks contradicting accepted policy.
-
-Practical checks at the start of outer-loop work:
+Typical checks:
 
 - `rg -n '^id:' .loom/constitution` to list the current constitutional surface
 - `find .loom/constitution/decisions -name '*.md' | sort` to scan prior decisions
 - `rg -n '<topic>' .loom/constitution` to see whether this topic already has policy
 
-If prior constitutional truth applies, inherit it. If the new work contradicts it, treat that as a loopback into the constitution subsystem — either amend the policy explicitly or change the work, not silently both.
+If constitutional truth applies, inherit it. If the work contradicts it, amend
+policy explicitly or change the work, not silently both.
 
 ## Strategic Restraint
 
-The outer loop should clarify the work without over-architecting it.
-
-Do not create records just to satisfy bureaucracy.
-Create them because a future agent would genuinely need them.
-
-The right question is not "can I make another artifact?"
-The right question is "what artifact would reduce ambiguity, improve safety, or preserve understanding here?"
+Clarify without over-architecting. Do not create records for ceremony. Create
+them when a future agent would genuinely need them to reduce ambiguity, improve
+safety, preserve understanding, or choose the next bounded move.

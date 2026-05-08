@@ -41,30 +41,82 @@ truth. Support-local IDs also do not own packet lifecycle surfaces.
 
 ## Current Supported Kinds, IDs, And Paths
 
-This table describes the record and support kinds currently supported by this
+This catalog describes the record and support kinds currently supported by this
 corpus. It is not a closed global vocabulary: project-local skills may add kinds
 when their owner boundary and path conventions are explicit.
 
-| `kind:` | ID shape | Authority boundary | Typical path |
-| --- | --- | --- | --- |
-| `constitution` | `constitution:main` | canonical owner record | `.loom/constitution/constitution.md` |
-| `decision` | `decision:0001` | canonical owner record | `.loom/constitution/decisions/decision-0001-<slug>.md` |
-| `roadmap` | `roadmap:<slug>` | canonical owner record | `.loom/constitution/roadmap/<slug>.md` |
-| `initiative` | `initiative:<slug>` | canonical owner record | `.loom/initiatives/<YYYYMMDD>-<slug>.md` |
-| `research` | `research:<slug>` | canonical owner record | `.loom/research/<slug>.md` |
-| `spec` | `spec:<slug>` | canonical owner record | `.loom/specs/<slug>.md` |
-| `plan` | `plan:<slug>` | canonical owner record | `.loom/plans/<YYYYMMDD>-<slug>.md` |
-| `ticket` | `ticket:<token>` | canonical live execution ledger | `.loom/tickets/<YYYYMMDD>-<token>-<short-slug>.md` |
-| `packet` with `packet_kind: ralph` | `packet:ralph-<encoded-target>-<UTC compact timestamp>` | non-canonical bounded contract | `.loom/packets/ralph/<UTC compact timestamp>-ticket-<token>-iter-<NN>.md` |
-| `packet` with `packet_kind: critique` | `packet:critique-<encoded-target-or-change-slug>-<UTC compact timestamp>` | non-canonical bounded contract | `.loom/packets/critique/<UTC compact timestamp>-<encoded-target-or-change-slug>.md` |
-| `packet` with `packet_kind: wiki` | `packet:wiki-<encoded-target>-<UTC compact timestamp>` | non-canonical bounded contract | `.loom/packets/wiki/<UTC compact timestamp>-<encoded-target>.md` |
-| `critique` | `critique:<slug>` | canonical owner record | `.loom/critique/<YYYYMMDD>-<slug>.md` |
-| `wiki` | `wiki:<slug>` | canonical owner record | `.loom/wiki/<category>/<slug>.md` |
-| `evidence` | `evidence:<slug>` | canonical owner record | `.loom/evidence/<YYYYMMDD>-<slug>.md` |
-| `workspace` | `workspace:main` | stable workspace metadata, not canonical project truth | `.loom/workspace.md` |
-| `workspace-support` | support-local `workspace:<slug>` such as `workspace:harness` | support-local transport metadata | project-local workspace support path such as `.loom/harness.md` |
-| `support-artifact` | optional support-local `support:<domain>-<slug>` | support-local workflow metadata | `.loom/support/<domain>/<slug>.md` |
-| optional `memory` support metadata | usually no canonical ID | support-only recall metadata | `.loom/memory/<domain>/<memory-file>.md` |
+- `constitution`
+  - ID shape: `constitution:main`
+  - Authority boundary: canonical owner record
+  - Typical path: `.loom/constitution/constitution.md`
+- `decision`
+  - ID shape: `decision:0001`
+  - Authority boundary: canonical owner record
+  - Typical path: `.loom/constitution/decisions/decision-0001-<slug>.md`
+- `roadmap`
+  - ID shape: `roadmap:<slug>`
+  - Authority boundary: canonical owner record
+  - Typical path: `.loom/constitution/roadmap/<slug>.md`
+- `initiative`
+  - ID shape: `initiative:<slug>`
+  - Authority boundary: canonical owner record
+  - Typical path: `.loom/initiatives/<YYYYMMDD>-<slug>.md`
+- `research`
+  - ID shape: `research:<slug>`
+  - Authority boundary: canonical owner record
+  - Typical path: `.loom/research/<slug>.md`
+- `spec`
+  - ID shape: `spec:<slug>`
+  - Authority boundary: canonical owner record
+  - Typical path: `.loom/specs/<slug>.md`
+- `plan`
+  - ID shape: `plan:<slug>`
+  - Authority boundary: canonical owner record
+  - Typical path: `.loom/plans/<YYYYMMDD>-<slug>.md`
+- `ticket`
+  - ID shape: `ticket:<token>`
+  - Authority boundary: canonical live execution ledger
+  - Typical path: `.loom/tickets/<YYYYMMDD>-<token>-<short-slug>.md`
+- `packet` with `packet_kind: ralph`
+  - ID shape: `packet:ralph-<encoded-target>-<UTC compact timestamp>`
+  - Authority boundary: non-canonical bounded contract
+  - Typical path: `.loom/packets/ralph/<UTC compact timestamp>-ticket-<token>-iter-<NN>.md`
+- `packet` with `packet_kind: critique`
+  - ID shape: `packet:critique-<encoded-target-or-change-slug>-<UTC compact timestamp>`
+  - Authority boundary: non-canonical bounded contract
+  - Typical path: `.loom/packets/critique/<UTC compact timestamp>-<encoded-target-or-change-slug>.md`
+- `packet` with `packet_kind: wiki`
+  - ID shape: `packet:wiki-<encoded-target>-<UTC compact timestamp>`
+  - Authority boundary: non-canonical bounded contract
+  - Typical path: `.loom/packets/wiki/<UTC compact timestamp>-<encoded-target>.md`
+- `critique`
+  - ID shape: `critique:<slug>`
+  - Authority boundary: canonical owner record
+  - Typical path: `.loom/critique/<YYYYMMDD>-<slug>.md`
+- `wiki`
+  - ID shape: `wiki:<slug>`
+  - Authority boundary: canonical owner record
+  - Typical path: `.loom/wiki/<category>/<slug>.md`
+- `evidence`
+  - ID shape: `evidence:<slug>`
+  - Authority boundary: canonical owner record
+  - Typical path: `.loom/evidence/<YYYYMMDD>-<slug>.md`
+- `workspace`
+  - ID shape: `workspace:main`
+  - Authority boundary: stable workspace metadata, not canonical project truth
+  - Typical path: `.loom/workspace.md`
+- `workspace-support`
+  - ID shape: support-local `workspace:<slug>` such as `workspace:harness`
+  - Authority boundary: support-local transport metadata
+  - Typical path: project-local workspace support path such as `.loom/harness.md`
+- `support-artifact`
+  - ID shape: optional support-local `support:<domain>-<slug>`
+  - Authority boundary: support-local workflow metadata
+  - Typical path: `.loom/support/<domain>/<slug>.md`
+- Optional `memory` support metadata
+  - ID shape: usually no canonical ID
+  - Authority boundary: support-only recall metadata
+  - Typical path: `.loom/memory/<domain>/<memory-file>.md`
 
 Memory support files are intentionally listed as support files rather than
 canonical records. They usually have no YAML frontmatter. When optional memory

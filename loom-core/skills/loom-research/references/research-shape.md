@@ -35,8 +35,11 @@ Both variants should still preserve:
 A useful variant matrix is compact and decision-oriented:
 
 ```md
-| Variant / hypothesis | Artifact or probe | Strength | Weakness | Decision |
-| --- | --- | --- | --- | --- |
+- Variant / hypothesis: <name>
+  - Artifact or probe: <path, screenshot, command, or observation>
+  - Strength: <evidence-backed strength>
+  - Weakness: <risk or limit>
+  - Decision: <chosen, rejected, needs follow-up>
 ```
 
 The matrix should compare meaningfully different options. Three variants that

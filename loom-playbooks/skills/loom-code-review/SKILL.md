@@ -89,12 +89,14 @@ from core: `resolved`, `accepted_risk`, `superseded`, or
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "Tests pass, so review can be quick." | Tests do not cover architecture, security, readability, performance, or evidence sufficiency. |
-| "It's AI-generated but looks plausible." | AI code needs more scrutiny because it can be confidently wrong. |
-| "Reviewer feedback is an order." | Feedback is a claim to evaluate against codebase truth, scope, and owner records. |
-| "We can clean it up later." | Deferred cleanup needs ticket disposition; otherwise it usually disappears. |
+- **Rationalization:** "Tests pass, so review can be quick."
+  **Reality:** Tests do not cover architecture, security, readability, performance, or evidence sufficiency.
+- **Rationalization:** "It's AI-generated but looks plausible."
+  **Reality:** AI code needs more scrutiny because it can be confidently wrong.
+- **Rationalization:** "Reviewer feedback is an order."
+  **Reality:** Feedback is a claim to evaluate against codebase truth, scope, and owner records.
+- **Rationalization:** "We can clean it up later."
+  **Reality:** Deferred cleanup needs ticket disposition; otherwise it usually disappears.
 
 ## Red Flags
 

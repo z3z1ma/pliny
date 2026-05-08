@@ -81,6 +81,29 @@ Good evidence is:
 - linked to tickets, specs, packets, critiques, or wiki pages when useful
 - recheckable enough that a future agent can judge its current value
 
+## Template Choice
+
+Use `templates/evidence-lite.md` for a compact observation when the record can
+truthfully name the observed source state, procedure, actual result, artifacts,
+supported or challenged claims, limits, and related records without the full
+worksheet.
+
+Use `templates/evidence.md` as the full copy target, or escalate from lite to full
+before acceptance or critique depends on the evidence, when any of these are
+present:
+
+- high risk
+- public/shared surface
+- multi-ticket scope
+- reusable acceptance
+- migration/security/privacy boundary
+- material ambiguity
+- mandatory critique
+
+Lite evidence still separates observation from interpretation. It must not omit
+limitations, freshness/recheck triggers, or sensitivity handling merely because
+the artifact is small.
+
 ## Naming
 
 Create new evidence records as `.loom/evidence/<YYYYMMDD>-<slug>.md`.
@@ -112,12 +135,14 @@ artifacts need explicit rationale and sanitization.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The command passed, so the ticket is accepted." | Passing output supports claims. The ticket owns acceptance. |
-| "A screenshot proves the UI is good." | A screenshot is a visual artifact. It needs scoped interpretation and may still need product-UX or visual-design critique. |
-| "The log is too long, so I'll summarize it from memory." | Preserve enough raw output, path, excerpt, or procedure detail for a future agent to judge the observation. |
-| "Evidence from yesterday is close enough." | Freshness depends on the current source, records, dependencies, environment, and claim. Name recheck triggers. |
+- Rationalization: "The command passed, so the ticket is accepted."
+  - Reality: Passing output supports claims. The ticket owns acceptance.
+- Rationalization: "A screenshot proves the UI is good."
+  - Reality: A screenshot is a visual artifact. It needs scoped interpretation and may still need product-UX or visual-design critique.
+- Rationalization: "The log is too long, so I'll summarize it from memory."
+  - Reality: Preserve enough raw output, path, excerpt, or procedure detail for a future agent to judge the observation.
+- Rationalization: "Evidence from yesterday is close enough."
+  - Reality: Freshness depends on the current source, records, dependencies, environment, and claim. Name recheck triggers.
 
 ## Red Flags
 
@@ -151,7 +176,8 @@ artifacts need explicit rationale and sanitization.
 
 Read immediately for evidence work:
 
-1. `templates/evidence.md` when creating an evidence record.
+1. `templates/evidence-lite.md` or `templates/evidence.md` when creating an
+   evidence record; keep `evidence.md` as the full copy target.
 2. `references/evidence-quality.md` when deciding how strong, fresh, limited, or
    reusable the evidence needs to be.
 3. `skills/loom-records/references/claim-coverage.md` when evidence supports or

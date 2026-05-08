@@ -58,9 +58,11 @@ the primary understanding and must stand on its own when this path is absent.
 
 Use when comparing options, prototypes, sketches, or hypotheses; otherwise write `N/A`.
 
-| Variant / hypothesis | Artifact or probe | Strength | Weakness | Decision |
-| --- | --- | --- | --- | --- |
-| <TBD> | <path, screenshot, command, or observation> | <evidence-backed strength> | <risk or limit> | <chosen, rejected, needs follow-up> |
+- Variant / hypothesis: <TBD>
+  - Artifact or probe: <path, screenshot, command, or observation>
+  - Strength: <evidence-backed strength>
+  - Weakness: <risk or limit>
+  - Decision: <chosen, rejected, needs follow-up>
 
 # Evidence Synthesis
 

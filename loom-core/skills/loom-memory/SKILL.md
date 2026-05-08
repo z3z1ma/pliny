@@ -126,12 +126,14 @@ and wiki remains accepted explanation.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "I need to remember this ticket state." | Ticket state belongs in tickets; memory may point to it only if useful. |
-| "This action item is too small for a ticket." | Real scoped Loom work needs a ticket or owner record, not a memory TODO. |
-| "A secret is safe in memory because it is local." | Memory is not a secret store. Keep sensitive values out of Loom artifacts. |
-| "Memory is easier than updating the owner record." | Convenience is a signal to promote or fix the owner layer, not bypass it. |
+- Rationalization: "I need to remember this ticket state."
+  - Reality: Ticket state belongs in tickets; memory may point to it only if useful.
+- Rationalization: "This action item is too small for a ticket."
+  - Reality: Real scoped Loom work needs a ticket or owner record, not a memory TODO.
+- Rationalization: "A secret is safe in memory because it is local."
+  - Reality: Memory is not a secret store. Keep sensitive values out of Loom artifacts.
+- Rationalization: "Memory is easier than updating the owner record."
+  - Reality: Convenience is a signal to promote or fix the owner layer, not bypass it.
 
 ## Red Flags
 

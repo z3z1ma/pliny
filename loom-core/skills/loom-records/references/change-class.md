@@ -30,21 +30,52 @@ guessing from vibes.
 
 ## Default Routing
 
-| Change class | Default evidence | Default critique |
-| --- | --- | --- |
-| `record-hygiene` | structural check | optional |
-| `documentation-explanation` | source comparison | `operator-clarity` when meaningful |
-| `behavior-contract` | spec diff and acceptance review | `operator-clarity` |
-| `code-behavior` | test-first or observation-first evidence | `code-change`, `test-coverage` |
-| `code-structure` | behavior-preservation checks and diff review | `code-structure`, plus `code-change` when behavior risk is plausible |
-| `validation-instrumentation` | red/green check or before/after proof that validation catches the intended signal | `test-coverage` |
-| `dependency-tooling` | install/build/lint/typecheck/test/tool output and compatibility notes | `dependency-tooling`, plus `security` when dependency risk matters |
-| `performance-sensitive` | baseline and after measurements or explicit measurement limits | `performance` |
-| `ui-product` | before/after visual, interaction, accessibility, or product-task evidence | `product-ux`, `visual-design`, `accessibility` as applicable |
-| `protocol-authority` | structural checks, examples, and reference reconciliation | `protocol-change`, `operator-clarity` |
-| `data-migration` | before/after and rollback or idempotency evidence | `data-migration` |
-| `security-sensitive` | threat-focused evidence | `security` |
-| `release-packaging` | package output compared to owner records | `operator-clarity` |
+- `record-hygiene`
+  - Default evidence: structural check
+  - Default critique: optional
+- `documentation-explanation`
+  - Default evidence: source comparison
+  - Default critique: `operator-clarity` when meaningful
+- `behavior-contract`
+  - Default evidence: spec diff and acceptance review
+  - Default critique: `operator-clarity`
+- `code-behavior`
+  - Default evidence: test-first or observation-first evidence
+  - Default critique: `code-change`, `test-coverage`
+- `code-structure`
+  - Default evidence: behavior-preservation checks and diff review
+  - Default critique: `code-structure`, plus `code-change` when behavior risk is
+    plausible
+- `validation-instrumentation`
+  - Default evidence: red/green check or before/after proof that validation
+    catches the intended signal
+  - Default critique: `test-coverage`
+- `dependency-tooling`
+  - Default evidence: install/build/lint/typecheck/test/tool output and
+    compatibility notes
+  - Default critique: `dependency-tooling`, plus `security` when dependency risk
+    matters
+- `performance-sensitive`
+  - Default evidence: baseline and after measurements or explicit measurement
+    limits
+  - Default critique: `performance`
+- `ui-product`
+  - Default evidence: before/after visual, interaction, accessibility, or
+    product-task evidence
+  - Default critique: `product-ux`, `visual-design`, `accessibility` as
+    applicable
+- `protocol-authority`
+  - Default evidence: structural checks, examples, and reference reconciliation
+  - Default critique: `protocol-change`, `operator-clarity`
+- `data-migration`
+  - Default evidence: before/after and rollback or idempotency evidence
+  - Default critique: `data-migration`
+- `security-sensitive`
+  - Default evidence: threat-focused evidence
+  - Default critique: `security`
+- `release-packaging`
+  - Default evidence: package output compared to owner records
+  - Default critique: `operator-clarity`
 
 ## Template Use
 

@@ -66,12 +66,14 @@ A strong research note answers:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "I already know the answer." | Research exists when evidence or tradeoffs matter; record the evidence so future agents do not rediscover it. |
-| "Rejected options are not worth writing down." | Rejections prevent future churn when another agent is tempted by the same path. |
-| "Generated support analysis is authoritative." | Generated output is source material. Research owns synthesis and limits, not imported authority. |
-| "Open questions mean the research failed." | Honest open questions are useful when they are routed or deferred explicitly. |
+- Rationalization: "I already know the answer."
+  - Reality: Research exists when evidence or tradeoffs matter; record the evidence so future agents do not rediscover it.
+- Rationalization: "Rejected options are not worth writing down."
+  - Reality: Rejections prevent future churn when another agent is tempted by the same path.
+- Rationalization: "Generated support analysis is authoritative."
+  - Reality: Generated output is source material. Research owns synthesis and limits, not imported authority.
+- Rationalization: "Open questions mean the research failed."
+  - Reality: Honest open questions are useful when they are routed or deferred explicitly.
 
 ## Red Flags
 

@@ -83,12 +83,14 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "We can deprecate first and build the replacement later." | Consumers need a credible replacement path or an explicit no-replacement decision. |
-| "No one probably uses the old path." | Removal needs usage inventory or an explicit evidence limit, not probability. |
-| "The feature flag makes this safe indefinitely." | Flags need owner, expiry or cleanup trigger, and verification for relevant states. |
-| "Cleanup can be a follow-up note in the PR." | Cleanup that affects closure or future work needs ticket-owned disposition or follow-up tickets. |
+- **Rationalization:** "We can deprecate first and build the replacement later."
+  **Reality:** Consumers need a credible replacement path or an explicit no-replacement decision.
+- **Rationalization:** "No one probably uses the old path."
+  **Reality:** Removal needs usage inventory or an explicit evidence limit, not probability.
+- **Rationalization:** "The feature flag makes this safe indefinitely."
+  **Reality:** Flags need owner, expiry or cleanup trigger, and verification for relevant states.
+- **Rationalization:** "Cleanup can be a follow-up note in the PR."
+  **Reality:** Cleanup that affects closure or future work needs ticket-owned disposition or follow-up tickets.
 
 ## Red Flags
 

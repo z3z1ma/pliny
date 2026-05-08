@@ -53,16 +53,18 @@ state being claimed, not repetitive output with no new information.
 
 ## Evidence Expectations
 
-| Change shape | Minimum local evidence |
-| --- | --- |
-| record hygiene | targeted search or diff review |
-| documentation explanation | source comparison and link check when applicable |
-| behavior or UI change | test-first or before/after observation where practical |
-| refactor / code structure | tests or checks proving behavior preservation, plus diff review |
-| validation instrumentation | failing/passing or before/after check proving the validation works |
-| dependency/tooling | install/build/test/tool output and compatibility notes |
-| performance-sensitive | baseline and after measurement, or explicit reason measurement is deferred |
-| protocol-authority | structural checks plus mandatory critique unless policy says otherwise |
+- **record hygiene**: targeted search or diff review.
+- **documentation explanation**: source comparison and link check when applicable.
+- **behavior or UI change**: test-first or before/after observation where practical.
+- **refactor / code structure**: tests or checks proving behavior preservation, plus
+  diff review.
+- **validation instrumentation**: failing/passing or before/after check proving the
+  validation works.
+- **dependency/tooling**: install/build/test/tool output and compatibility notes.
+- **performance-sensitive**: baseline and after measurement, or explicit reason
+  measurement is deferred.
+- **protocol-authority**: structural checks plus mandatory critique unless policy
+  says otherwise.
 
 When the local change depends on framework, library, platform, or external API
 behavior, identify the version or source state before editing and cite the

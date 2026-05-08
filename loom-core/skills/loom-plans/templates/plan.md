@@ -94,9 +94,11 @@ Map upstream initiative objectives, spec acceptance IDs, and ticket-local criter
 into downstream tickets. Tickets own live coverage state, evidence disposition,
 and acceptance decisions.
 
-| Source claim / acceptance ID | Downstream ticket | Coverage expectation | Evidence / critique expectation | Notes |
-| --- | --- | --- | --- | --- |
-| <TBD or None - reason> | <ticket:<token> or proposed> | <what must be covered> | <expected evidence/review> | <notes> |
+- <TBD or None - reason>:
+  - Downstream ticket: <ticket:<token> or proposed>
+  - Coverage expectation: <what must be covered>
+  - Evidence / critique expectation: <expected evidence/review>
+  - Notes: <notes>
 
 # Validation And Acceptance Strategy
 
@@ -122,9 +124,11 @@ routes, and where a fresh agent should look to recover current live state.
 Optional. Use only when same-wave tickets can run independently or when sequential
 waves need explicit dependency boundaries.
 
-| Wave | Tickets | Independent because | Write-scope / shared-state check | Parent reconciliation |
-| --- | --- | --- | --- | --- |
-| <TBD or None - no wave needed> | <tickets> | <non-overlap rationale> | <contention check> | <merge/validation path> |
+- <TBD or None - no wave needed>:
+  - Tickets: <tickets>
+  - Independent because: <non-overlap rationale>
+  - Write-scope / shared-state check: <contention check>
+  - Parent reconciliation: <merge/validation path>
 
 # Risks And Loopbacks
 

@@ -51,22 +51,39 @@ constitution records that own them.
 
 These are reasoning cues, not values to save in a field:
 
-| If the missing or changing truth is... | Use or update... |
-| --- | --- |
-| project identity, durable principles, hard constraints, roadmap direction, or citable decisions | `loom-constitution` |
-| objective framing, success metrics, delegated autonomy, or cross-ticket outcome ownership | `loom-initiatives` |
-| evidence synthesis, tradeoffs, rejected paths, options, or null results | `loom-research` |
-| intended behavior, requirements, scenarios, or reusable acceptance criteria | `loom-specs` |
-| complex-change planning, decomposition, sequencing, dependency order, tranche strategy, or rollout | `loom-plans` |
-| live bounded execution state, blockers, scoped acceptance, critique/evidence disposition, or closure | `loom-tickets` |
-| one bounded implementation handoff needing explicit read/write scope and fresh context | `loom-ralph` packet |
-| observed outputs, validation artifacts, logs, screenshots, scans, or reproduction evidence | `loom-evidence` |
-| adversarial review, findings, verdicts, risk, or acceptance sufficiency review | `loom-critique` |
-| accepted explanation, workflow knowledge, architecture notes, or troubleshooting knowledge | `loom-wiki` |
-| accepted learning needs promotion or prevention before closure | `loom-retrospective` |
-| already-truthful work needs PR, release, merge, or handoff packaging | optional `loom-ship` or equivalent shipping workflow |
-| workspace structure, repository scope, owner-chain trust, or cold-start recovery is unclear | `loom-workspace` |
-| support-only retrieval cues, preferences, reminders, entities, or hot context | `loom-memory` support recall |
+- If the missing or changing truth is project identity, durable principles, hard
+  constraints, roadmap direction, or citable decisions, use or update
+  `loom-constitution`.
+- If the missing or changing truth is objective framing, success metrics,
+  delegated autonomy, or cross-ticket outcome ownership, use or update
+  `loom-initiatives`.
+- If the missing or changing truth is evidence synthesis, tradeoffs, rejected
+  paths, options, or null results, use or update `loom-research`.
+- If the missing or changing truth is intended behavior, requirements, scenarios,
+  or reusable acceptance criteria, use or update `loom-specs`.
+- If the missing or changing truth is complex-change planning, decomposition,
+  sequencing, dependency order, tranche strategy, or rollout, use or update
+  `loom-plans`.
+- If the missing or changing truth is live bounded execution state, blockers,
+  scoped acceptance, critique/evidence disposition, or closure, use or update
+  `loom-tickets`.
+- If the missing or changing truth is one bounded implementation handoff needing
+  explicit read/write scope and fresh context, use a `loom-ralph` packet.
+- If the missing or changing truth is observed outputs, validation artifacts,
+  logs, screenshots, scans, or reproduction evidence, use or update
+  `loom-evidence`.
+- If the missing or changing truth is adversarial review, findings, verdicts,
+  risk, or acceptance sufficiency review, use or update `loom-critique`.
+- If the missing or changing truth is accepted explanation, workflow knowledge,
+  architecture notes, or troubleshooting knowledge, use or update `loom-wiki`.
+- If the missing or changing truth is accepted learning that needs promotion or
+  prevention before closure, use `loom-retrospective`.
+- If already-truthful work needs PR, release, merge, or handoff packaging, use
+  optional `loom-ship` or an equivalent shipping workflow.
+- If workspace structure, repository scope, owner-chain trust, or cold-start
+  recovery is unclear, use or update `loom-workspace`.
+- If the content is support-only retrieval cues, preferences, reminders,
+  entities, or hot context, use `loom-memory` support recall.
 
 When the user asks in ordinary coding-task language such as bug, feature,
 refactor, tests, dependency, performance, UI, API, release, or done/acceptance
@@ -80,16 +97,42 @@ field just to make the choice look deterministic.
 
 Keep these categories distinct:
 
-| Category | Examples | Boundary rule |
-| --- | --- | --- |
-| Ticket execution states | `proposed`, `ready`, `active`, `blocked`, `review_required`, `complete_pending_acceptance`, `closed`, `cancelled` | Describe live ticket state. They are not workflow instructions. |
-| Record lifecycle statuses | `draft`, `active`, `accepted`, `recorded`, `superseded`, `abandoned` | Describe record lifecycle or support-surface state. They are not next-action commands. |
-| Ralph child outcomes | `continue`, `stop`, `blocked`, `escalate` | Child output for parent reconciliation inside the packet loop. It becomes ticket truth only after parent reconciliation. |
-| Critique-owned finding states | `open`, `withdrawn` | Live inside critique records and describe whether critique still stands behind a finding. |
-| Ticket-owned finding dispositions | `resolved`, `accepted_risk`, `superseded`, `converted_to_follow_up` | Live in the ticket's review/follow-through section for qualified findings. They do not name a next workflow. |
-| Support-memory surfaces | `memory`, `loom-memory`, retrieval cues, preferences, reminders, hot context | Support recall only. If the content becomes project truth, move it to the owner layer. |
-| Git support coordination | branch, worktree, baseline, diff provenance | Support behavior for isolation and provenance. Git does not own Loom truth or workflow ownership. |
-| Commands and adapters | slash commands, harness commands, MCPs, package wrappers | Invocation conveniences. They may transport work, but owner records and skills still own truth. |
+- Ticket execution states
+  - Examples: `proposed`, `ready`, `active`, `blocked`, `review_required`,
+    `complete_pending_acceptance`, `closed`, `cancelled`
+  - Boundary rule: Describe live ticket state. They are not workflow
+    instructions.
+- Record lifecycle statuses
+  - Examples: `draft`, `active`, `accepted`, `recorded`, `superseded`,
+    `abandoned`
+  - Boundary rule: Describe record lifecycle or support-surface state. They are
+    not next-action commands.
+- Ralph child outcomes
+  - Examples: `continue`, `stop`, `blocked`, `escalate`
+  - Boundary rule: Child output for parent reconciliation inside the packet loop.
+    It becomes ticket truth only after parent reconciliation.
+- Critique-owned finding states
+  - Examples: `open`, `withdrawn`
+  - Boundary rule: Live inside critique records and describe whether critique
+    still stands behind a finding.
+- Ticket-owned finding dispositions
+  - Examples: `resolved`, `accepted_risk`, `superseded`,
+    `converted_to_follow_up`
+  - Boundary rule: Live in the ticket's review/follow-through section for
+    qualified findings. They do not name a next workflow.
+- Support-memory surfaces
+  - Examples: `memory`, `loom-memory`, retrieval cues, preferences, reminders,
+    hot context
+  - Boundary rule: Support recall only. If the content becomes project truth,
+    move it to the owner layer.
+- Git support coordination
+  - Examples: branch, worktree, baseline, diff provenance
+  - Boundary rule: Support behavior for isolation and provenance. Git does not
+    own Loom truth or workflow ownership.
+- Commands and adapters
+  - Examples: slash commands, harness commands, MCPs, package wrappers
+  - Boundary rule: Invocation conveniences. They may transport work, but owner
+    records and skills still own truth.
 
 When the same word appears in multiple contexts, the field and owner decide the
 meaning. A Ralph child `outcome: continue` is packet output. A ticket

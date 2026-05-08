@@ -100,13 +100,16 @@ productive.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The ticket is done, so there is nothing to promote." | Closure is exactly when durable lessons should be checked. |
-| "Every useful note should become wiki." | Promote accepted reusable explanation to wiki; route evidence, behavior, sequencing, policy, or memory elsewhere. |
-| "Memory is enough for this lesson." | Memory can point to owner truth. It should not be the only home for project truth. |
-| "Retrospective can close the ticket." | Retrospective records follow-through. Ticket acceptance still decides closure. |
-| "A transcript pattern is enough evidence for a new workflow." | Transcript patterns are support signals; promote only the durable lesson, and route it to the owner layer that can maintain it. |
+- Rationalization: "The ticket is done, so there is nothing to promote."
+  - Reality: Closure is exactly when durable lessons should be checked.
+- Rationalization: "Every useful note should become wiki."
+  - Reality: Promote accepted reusable explanation to wiki; route evidence, behavior, sequencing, policy, or memory elsewhere.
+- Rationalization: "Memory is enough for this lesson."
+  - Reality: Memory can point to owner truth. It should not be the only home for project truth.
+- Rationalization: "Retrospective can close the ticket."
+  - Reality: Retrospective records follow-through. Ticket acceptance still decides closure.
+- Rationalization: "A transcript pattern is enough evidence for a new workflow."
+  - Reality: Transcript patterns are support signals; promote only the durable lesson, and route it to the owner layer that can maintain it.
 
 ## Red Flags
 

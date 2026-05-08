@@ -82,12 +82,14 @@ the value itself.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "This is just a small auth tweak." | Auth, authorization, sessions, and permissions are security-sensitive even when the diff is small. |
-| "The scanner says low severity, so no ticket detail is needed." | Reachability, runtime exposure, fix availability, and accepted risk still need ticket-owned disposition. |
-| "I need to paste the token to prove the issue." | Loom records may capture the fact of exposure, not the secret value. |
-| "Security review can happen after merge." | Security-sensitive work needs critique disposition before closure unless the ticket explicitly accepts the risk. |
+- **Rationalization:** "This is just a small auth tweak."
+  **Reality:** Auth, authorization, sessions, and permissions are security-sensitive even when the diff is small.
+- **Rationalization:** "The scanner says low severity, so no ticket detail is needed."
+  **Reality:** Reachability, runtime exposure, fix availability, and accepted risk still need ticket-owned disposition.
+- **Rationalization:** "I need to paste the token to prove the issue."
+  **Reality:** Loom records may capture the fact of exposure, not the secret value.
+- **Rationalization:** "Security review can happen after merge."
+  **Reality:** Security-sensitive work needs critique disposition before closure unless the ticket explicitly accepts the risk.
 
 ## Red Flags
 

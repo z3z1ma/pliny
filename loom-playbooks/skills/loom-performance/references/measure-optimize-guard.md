@@ -23,14 +23,19 @@ when stakes justify it.
 
 ## Symptom To Measurement
 
-| Symptom | First measurements |
-| --- | --- |
-| slow first load | LCP, TTFB, network waterfall, bundle size, image/font size |
-| input lag | INP, long tasks, render profiling, event handlers |
-| layout jump | CLS, layout shift attribution, image/font dimensions |
-| slow endpoint | p95 latency, query log, trace spans, external call timing |
-| memory growth | heap snapshots, object retention, cache growth |
-| CI slow | job duration, dependency install, test shard timing, cache hits |
+- Symptom: slow first load
+  First measurements: LCP, TTFB, network waterfall, bundle size, image/font size.
+- Symptom: input lag
+  First measurements: INP, long tasks, render profiling, event handlers.
+- Symptom: layout jump
+  First measurements: CLS, layout shift attribution, image/font dimensions.
+- Symptom: slow endpoint
+  First measurements: p95 latency, query log, trace spans, external call timing.
+- Symptom: memory growth
+  First measurements: heap snapshots, object retention, cache growth.
+- Symptom: CI slow
+  First measurements: job duration, dependency install, test shard timing,
+  cache hits.
 
 ## Common Bottlenecks
 

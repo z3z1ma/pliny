@@ -49,9 +49,8 @@ Do:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "<shortcut that skips the routing decision>" | <why it creates hidden work or wrong ownership> |
+- **Rationalization:** "<shortcut that skips the routing decision>"
+  **Reality:** <why it creates hidden work or wrong ownership>
 
 ## Red Flags
 

@@ -250,8 +250,12 @@ Before any sibling Ralph execution, record a compact wave check in the plan,
 ticket journal, or packet working notes; scratch notes are temporary before
 launch only:
 
-| Wave | Tickets | Independence basis | `child_write_scope` / write scope overlap check | Shared-state check | Parent reconciliation |
-| --- | --- | --- | --- | --- | --- |
+- Wave:
+  - Tickets:
+  - Independence basis:
+  - `child_write_scope` / write scope overlap check:
+  - Shared-state check:
+  - Parent reconciliation:
 
 For Git-backed parallel Ralph, cross-check Ralph parent-child handshake guidance
 and, when installed, optional `loom-git` parallel-Ralph guidance. Ralph packet

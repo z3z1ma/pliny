@@ -80,12 +80,16 @@ Do not import generic budgets as product truth without spec or ticket acceptance
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "This optimization is obvious." | Without baseline data, you may optimize the wrong thing and add complexity. |
-| "It feels faster locally." | Local subjective speed is not representative evidence. |
-| "The framework handles performance." | Frameworks do not fix fetch-all endpoints, N+1 queries, huge images, or oversized bundles. |
-| "We can measure after." | Measurement after cannot prove improvement without a baseline. |
+- Rationalization: "This optimization is obvious."
+  Reality: Without baseline data, you may optimize the wrong thing and add
+  complexity.
+- Rationalization: "It feels faster locally."
+  Reality: Local subjective speed is not representative evidence.
+- Rationalization: "The framework handles performance."
+  Reality: Frameworks do not fix fetch-all endpoints, N+1 queries, huge images,
+  or oversized bundles.
+- Rationalization: "We can measure after."
+  Reality: Measurement after cannot prove improvement without a baseline.
 
 ## Red Flags
 

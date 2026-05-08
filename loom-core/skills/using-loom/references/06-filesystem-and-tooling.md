@@ -2,39 +2,25 @@
 
 This is an ordered reference for the `using-loom` skill.
 
-Loom assumes the filesystem is already a rich interface.
+Loom assumes the filesystem is the graph. A Loom workspace should be legible
+through files and tools, not dependent on a hidden runtime.
 
-A well-shaped Loom workspace should be queryable with ordinary tools.
+## Tool Posture
 
-## Default Tool Posture
+Prefer ordinary tools first: `rg` for graph queries, `find` or `fd` for discovery,
+`git` for ownership and history, shell primitives for file work, rollup tools
+such as `sort`/`uniq`/`xargs`, `sed`/`awk`/`perl` for small transformations, and
+`wc`/`stat`/`date`/`mktemp` for operational checks.
 
-Prefer plain tools first:
+The protocol does not prescribe one command style. Pipelines using `awk`, `sed`,
+`cat`, `xargs`, `sort`, `jq`, `yq`, `git`, and similar utilities are first-class
+Loom behavior when clearest. Use inline Python when shell composition would be
+harder to read. Harness helpers are fine for focused reads or precise edits, but
+do not replace the general toolbox.
 
-- `rg` for graph queries and heading/status scans
-- `find` or `fd` for discovery
-- `git` for ownership, diff, and history
-- `cat`, `tee`, `cp`, `mv`, `mkdir`, and related shell primitives for direct file work
-- `sort`, `uniq`, `comm`, `cut`, `paste`, `xargs` for rollups
-- `sed`, `awk`, or `perl` for lightweight transformations
-- `wc`, `stat`, `date`, `mktemp` for operational checks
+## Query The Graph Directly
 
-The protocol does not prescribe one implementation path.
-
-Do not narrow "plain tools" to only search primitives such as `rg` and `find`.
-Ordinary shell composition is first-class Loom behavior.
-Pipelines that combine `awk`, `sed`, `cat`, `xargs`, `sort`, `comm`, `jq`,
-`yq`, `git`, and similar utilities are often the clearest and most powerful
-way to inspect, validate, and reshape the graph.
-
-Use `jq` or `yq` when they are present and clearly helpful.
-Use inline Python when the shell would become harder to read than the logic justifies.
-Harness-native helpers are still acceptable when they are genuinely the better
-ergonomic fit, especially for reading one specific file or applying one precise
-single-file edit, but they do not replace the general shell toolbox.
-
-## The Filesystem Is The Graph
-
-A Loom workspace is designed so that these operations are meaningful:
+These should be meaningful operations:
 
 ```bash
 rg -n '^id:' .loom
@@ -43,74 +29,39 @@ find .loom/tickets -name '*.md'
 git log --oneline .loom/wiki
 ```
 
-The agent should not wait for a specialized query runtime before it can understand the graph.
-Specialized helpers may exist, but the graph should still yield to ordinary
-command composition.
+Specialized helpers may exist, but agents must not wait for them. Richer recipes
+may live in `skills/loom-records/references/query-and-linking.md`; they are
+discovery aids, not mandatory dependencies or proof by themselves.
 
-For a larger catalog of ordinary-tool recipes for tickets, packets, claims,
-evidence, critique, stale records, and placeholder scans, use
-`skills/loom-records/references/query-and-linking.md`. Those recipes are
-discovery aids, not mandatory runtime dependencies or validation proof by
-themselves.
+## Create Records From Owning Templates
 
-## Creating Files
+When creating a record, start from the relevant skill's `templates/` directory and
+use the safest available method: harness file tools, shell, editor actions, or a
+small one-off script if proportional. In a split checkout templates may live under
+`loom-core/skills/.../templates/`; in an installed root, under
+`skills/.../templates/`.
 
-When you need to create a record, start from the template owned by the relevant
-skill and choose the safest file-creation method available in the current harness.
-The protocol cares that the saved record is truthful, named correctly,
-placeholder-free, and linked into the right owner layer. It does not require one
-canonical command shape.
+Before treating the file as truth, clear placeholders, set real frontmatter,
+follow naming and ID rules, link the right owner layer, and run the smallest
+honest structural check.
 
-### Use the owning template
-
-Templates live under the owning skill's `templates/` directory. In this split
-source checkout, core ticket templates live under the core package root; in a
-package-root install they may appear under that root's `skills/` directory:
-
-```text
-loom-core/skills/loom-tickets/templates/ticket.md
-skills/loom-tickets/templates/ticket.md
-```
-
-Use the template as the contract for required fields and sections. How you create
-the file is an implementation choice: harness-native file tools, shell commands,
-editor operations, or a small one-off script are all acceptable when they are
-safe, inspectable, and proportional to the task.
-
-Before treating the saved file as truth, clear template placeholders, set real
-frontmatter values, follow the naming and ID rules, and run the smallest honest
-structural check for the claim being made.
-
-## Ticket Token Generation
-
-A portable shell pattern for ticket tokens is:
+Ticket tokens should be portable and appear in both the ID and filename:
 
 ```bash
 token="$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom | head -c 8)"
 stamp="$(date -u +%Y%m%d)"
 ```
 
-Use the token in the canonical ticket ID and in the filename.
+## Inspect Frontmatter, Links, And Scope
 
-## Frontmatter Queries
-
-When you want structured data from one Loom record without introducing a custom
-parser, prefer extracting the first YAML frontmatter block with a fence-aware
-`awk` filter and piping it into `yq`.
+For one record's YAML frontmatter, use transparent extraction rather than a Loom
+parser when possible:
 
 ```bash
 awk 'BEGIN{found=0} /^---$/{found++; next} found==1' .loom/... | yq ...
 ```
 
-That pattern is the encouraged native-tool baseline for single-record
-frontmatter inspection because it stays transparent, composes with ordinary
-Unix pipelines, and does not require Loom-specific helper code.
-
-## Link Queries
-
-The standard way to answer "what points at this?" is text search.
-
-Examples:
+Typed references are plain text, so backlink checks are text search:
 
 ```bash
 rg -n 'spec:<slug>' .loom
@@ -118,66 +69,29 @@ rg -n 'wiki:<slug>' .loom
 rg -n 'evidence:<slug>' .loom
 ```
 
-Typed references are intentionally plain text so ordinary search is enough.
-
-## Scope Resolution
-
-Use native repository inspection before trusting nested paths:
+Before trusting nested paths, resolve repository ownership with native Git checks:
 
 ```bash
 git rev-parse --show-toplevel
 git -C path/to/target rev-parse --show-toplevel
 ```
 
-Fail closed if ownership is ambiguous.
+Fail closed when scope or ownership is ambiguous.
 
-## Harness Invocation
+## Handoffs And Command Surfaces
 
-Loom does not require a specific transport for fresh-context work.
+Loom requires no specific fresh-context transport. A harness subagent, headless
+CLI, manual handoff, or mechanism documented in `.loom/harness.md` is acceptable
+when the packet contract is preserved.
 
-Any of these are acceptable if the packet contract is preserved:
-
-- a harness-native subagent system
-- a headless CLI invocation
-- a manual handoff into a new context window
-- another reproducible mechanism documented in `.loom/harness.md`
-
-The protocol cares about the contract, not the transport.
-
-## Command Surface Canonicality
-
-Slash commands, prompt wrappers, and harness adapters are invocation
-conveniences.
-
-Deleting a command surface should not delete a Loom capability. Durable behavior
-belongs in using-Loom doctrine, skills, references, templates, and canonical
-records.
-
-Commands may invoke acceptance, review, shipping, retrospective, or Ralph
-workflows. They do not own those workflows' truth, and they never own ticket
+Slash commands, prompt wrappers, and adapters are conveniences. Deleting one must
+not delete a Loom capability; durable behavior belongs in using-Loom doctrine,
+skills, references, templates, and canonical records. Commands may invoke
+acceptance, review, shipping, retrospective, or Ralph, but never own ticket
 closure, critique verdicts, evidence sufficiency, or accepted wiki explanation.
-
-## When Shell Gets Awkward
-
-Use inline Python for things like:
-
-- extracting or aggregating frontmatter from many files
-- bulk broken-reference audits
-- non-trivial filename rewrites
-- cross-file index regeneration
-
-That is not a violation of Loom.
-The violation would be making the protocol dependent on a shipped helper runtime instead of the agent's judgment.
 
 ## Anti-Patterns
 
-Do not:
-
-- build a hidden second system when simple file operations would do
-- force one command style on every harness
-- assume the presence of tools you have not checked
-- collapse the toolbox to a few favored helpers when ordinary shell
-  composition would be clearer or more composable
-- let convenience wrappers replace understanding of the artifact graph
-
-The best Loom operator is comfortable reading and writing the corpus directly.
+Do not build a hidden second system, force one command style on every harness,
+assume unchecked tools exist, collapse the toolbox to a few favored helpers, or
+let convenience wrappers replace understanding of the artifact graph.

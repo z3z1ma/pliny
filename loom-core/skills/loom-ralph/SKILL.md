@@ -113,12 +113,14 @@ behaves and usually need structural evidence plus critique.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The packet is detailed, so the ticket can be vague." | Ralph starts from a Ralph-ready ticket. Packets cannot outrank or repair ticket truth by themselves. |
-| "The child can decide the missing product direction." | Material assumptions belong in owner records or user decisions before launch. |
-| "Verification posture `none` is fine because this is Markdown." | Protocol, acceptance, routing, and operator guidance changes can alter behavior and usually need evidence plus critique. |
-| "The child returned `stop`, so the ticket is done." | Child outcome vocabulary is not ticket closure. The parent reconciles evidence, critique, and acceptance first. |
+- **"The packet is detailed, so the ticket can be vague."**
+  - Reality: Ralph starts from a Ralph-ready ticket. Packets cannot outrank or repair ticket truth by themselves.
+- **"The child can decide the missing product direction."**
+  - Reality: Material assumptions belong in owner records or user decisions before launch.
+- **"Verification posture `none` is fine because this is Markdown."**
+  - Reality: Protocol, acceptance, routing, and operator guidance changes can alter behavior and usually need evidence plus critique.
+- **"The child returned `stop`, so the ticket is done."**
+  - Reality: Child outcome vocabulary is not ticket closure. The parent reconciles evidence, critique, and acceptance first.
 
 ## Red Flags
 

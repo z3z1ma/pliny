@@ -99,23 +99,56 @@ research note for uncertainty.
 
 Do not hunt for vague smells. Use observable signals.
 
-| Area | Signal | Typical simplification |
-| --- | --- | --- |
-| Deep nesting | Three or more nested levels make control flow hard to scan | Use guard clauses, early returns, or named predicates |
-| Long function | Function mixes validation, IO, transformation, rendering, and side effects | Split by responsibility with names that match domain concepts |
-| Nested ternaries | Reader must parse a decision tree inline | Use if/else, switch, lookup table, or named helper |
-| Boolean flags | Calls look like `doThing(true, false)` | Use options object, enum, or separate named functions |
-| Repeated conditionals | Same condition appears in several places | Extract a well-named predicate if it is a real concept |
-| Generic names | `data`, `result`, `temp`, `item`, `val` hide meaning | Rename to the domain content, such as `validationErrors` |
-| Abbreviations | `usr`, `cfg`, `btn`, `evt` slow comprehension | Use full words except universal forms like `id`, `url`, `api` |
-| Misleading names | `getUser` also mutates state or logs analytics | Rename or split so names match effects |
-| What-comments | Comment narrates obvious code | Delete the comment or make code clearer |
-| Why-comments | Comment records intent, constraint, or failure mode | Keep or move to owner records if durable |
-| Duplicated logic | Same behavior appears in multiple places | Extract only when the shared concept is real |
-| Dead code | Unused imports, unreachable branches, commented blocks | Remove after confirming no references or consumers |
-| Pass-through wrapper | Wrapper adds no validation, naming, policy, or seam | Inline and call the underlying function directly |
-| Over-engineered pattern | Factory for one implementation, strategy with one strategy | Replace with direct code unless a real extension seam exists |
-| Redundant type assertion | Type is already inferred or checked at the boundary | Remove if behavior and type safety remain clear |
+- Area: Deep nesting
+  Signal: Three or more nested levels make control flow hard to scan.
+  Typical simplification: Use guard clauses, early returns, or named predicates.
+- Area: Long function
+  Signal: Function mixes validation, IO, transformation, rendering, and side
+  effects.
+  Typical simplification: Split by responsibility with names that match domain
+  concepts.
+- Area: Nested ternaries
+  Signal: Reader must parse a decision tree inline.
+  Typical simplification: Use if/else, switch, lookup table, or named helper.
+- Area: Boolean flags
+  Signal: Calls look like `doThing(true, false)`.
+  Typical simplification: Use options object, enum, or separate named functions.
+- Area: Repeated conditionals
+  Signal: Same condition appears in several places.
+  Typical simplification: Extract a well-named predicate if it is a real concept.
+- Area: Generic names
+  Signal: `data`, `result`, `temp`, `item`, `val` hide meaning.
+  Typical simplification: Rename to the domain content, such as
+  `validationErrors`.
+- Area: Abbreviations
+  Signal: `usr`, `cfg`, `btn`, `evt` slow comprehension.
+  Typical simplification: Use full words except universal forms like `id`, `url`,
+  `api`.
+- Area: Misleading names
+  Signal: `getUser` also mutates state or logs analytics.
+  Typical simplification: Rename or split so names match effects.
+- Area: What-comments
+  Signal: Comment narrates obvious code.
+  Typical simplification: Delete the comment or make code clearer.
+- Area: Why-comments
+  Signal: Comment records intent, constraint, or failure mode.
+  Typical simplification: Keep or move to owner records if durable.
+- Area: Duplicated logic
+  Signal: Same behavior appears in multiple places.
+  Typical simplification: Extract only when the shared concept is real.
+- Area: Dead code
+  Signal: Unused imports, unreachable branches, commented blocks.
+  Typical simplification: Remove after confirming no references or consumers.
+- Area: Pass-through wrapper
+  Signal: Wrapper adds no validation, naming, policy, or seam.
+  Typical simplification: Inline and call the underlying function directly.
+- Area: Over-engineered pattern
+  Signal: Factory for one implementation, strategy with one strategy.
+  Typical simplification: Replace with direct code unless a real extension seam
+  exists.
+- Area: Redundant type assertion
+  Signal: Type is already inferred or checked at the boundary.
+  Typical simplification: Remove if behavior and type safety remain clear.
 
 ### Step 3: Apply One Change At A Time
 

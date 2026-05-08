@@ -93,12 +93,14 @@ If any condition fails, run sequentially or return to planning.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "More agents means faster." | More agents without independent scopes create merge conflicts and inconsistent truth. |
-| "The worker can read the plan." | Workers need a bounded task with curated context and stop conditions. |
-| "The child said done, so move on." | Parent must verify output, evidence, scope, and ticket reconciliation. |
-| "Spec review and code review are the same." | First check whether the right thing was built, then whether it was built well. |
+- **Rationalization:** "More agents means faster."
+  **Reality:** More agents without independent scopes create merge conflicts and inconsistent truth.
+- **Rationalization:** "The worker can read the plan."
+  **Reality:** Workers need a bounded task with curated context and stop conditions.
+- **Rationalization:** "The child said done, so move on."
+  **Reality:** Parent must verify output, evidence, scope, and ticket reconciliation.
+- **Rationalization:** "Spec review and code review are the same."
+  **Reality:** First check whether the right thing was built, then whether it was built well.
 
 ## Red Flags
 

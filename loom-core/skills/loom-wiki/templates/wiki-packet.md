@@ -65,9 +65,11 @@ What accepted understanding should be promoted or updated in the wiki.
 
 Which canonical records and evidence this packet should trust.
 
-| Source | Owner status | Acceptance/evidence basis | Freshness check | Limits |
-| --- | --- | --- | --- | --- |
-| <TBD> | <kind-valid lifecycle status such as active, accepted, completed, concluded, recorded, final, or closed> | <evidence or acceptance basis> | <timestamp/commit/check> | <limit> |
+- Source: <TBD>
+  - Owner status: <kind-valid lifecycle status such as active, accepted, completed, concluded, recorded, final, or closed>
+  - Acceptance/evidence basis: <evidence or acceptance basis>
+  - Freshness check: <timestamp/commit/check>
+  - Limits: <limit>
 
 Do not promote unsettled research, unresolved critique, stale evidence, or draft
 specs into accepted explanation unless the packet names the gap and stops or routes repair.

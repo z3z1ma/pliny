@@ -80,12 +80,14 @@ Useful starting queries:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "This feels important, so it belongs in the constitution." | Constitution owns durable policy and constraints, not every important fact. |
-| "The decision is obvious, so rejected options are unnecessary." | Rejected options are what make decision records useful precedent. |
-| "A roadmap can track project progress." | Roadmaps express durable direction; initiatives, plans, and tickets own execution detail. |
-| "A wiki page can serve as policy." | Wiki explains accepted understanding. Constitution owns policy authority. |
+- Rationalization: "This feels important, so it belongs in the constitution."
+  - Reality: Constitution owns durable policy and constraints, not every important fact.
+- Rationalization: "The decision is obvious, so rejected options are unnecessary."
+  - Reality: Rejected options are what make decision records useful precedent.
+- Rationalization: "A roadmap can track project progress."
+  - Reality: Roadmaps express durable direction; initiatives, plans, and tickets own execution detail.
+- Rationalization: "A wiki page can serve as policy."
+  - Reality: Wiki explains accepted understanding. Constitution owns policy authority.
 
 ## Red Flags
 

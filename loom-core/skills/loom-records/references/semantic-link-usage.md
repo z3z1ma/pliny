@@ -7,25 +7,30 @@ Use the most specific section available before falling back to generic links.
 
 ## Where Relationships Belong
 
-| Relationship | Use |
-| --- | --- |
-| hard execution prerequisite | `depends_on` |
-| ticket implements or verifies spec acceptance | `# Acceptance` |
-| ticket acceptance view over claims | optional `# Claim Matrix` |
-| packet iteration target claims | `# Verification Targets` |
-| evidence supports a claim | `# Supports Claims` |
-| evidence weakens or falsifies a claim | `# Challenges Claims` |
-| critique challenges a claim | finding `Challenges:` |
-| ticket-owned finding disposition / ticket-owned critique disposition | `# Review And Follow-Through` |
-| superseded record | record lifecycle `status: superseded` plus successor in `links:` or body prose |
-| superseded claim or criterion ID | owning record prose, optional claim matrix, or acceptance state naming the successor ID |
-| accepted risk | ticket `# Claim Matrix`, ticket acceptance notes, review/follow-through notes, or acceptance decision |
-| follow-up ticket | ticket body follow-up section plus `links:` to the related owner records |
-| related ticket with no dependency | `links:` typed adjacency, not `depends_on` |
-| promotion from memory/research/ticket into wiki/spec/etc. | body prose naming source and target, plus `links:` when navigation matters |
-| outside mirrors or requests | `external_refs` |
-| source records for accepted explanation | wiki source sections and `links:` |
-| ordinary navigation adjacency | `links:` |
+- Hard execution prerequisite: use `depends_on`.
+- Ticket implements or verifies spec acceptance: use `# Acceptance`.
+- Ticket acceptance view over claims: use optional `# Claim Matrix`.
+- Packet iteration target claims: use `# Verification Targets`.
+- Evidence supports a claim: use `# Supports Claims`.
+- Evidence weakens or falsifies a claim: use `# Challenges Claims`.
+- Critique challenges a claim: use finding `Challenges:`.
+- Ticket-owned finding disposition / ticket-owned critique disposition: use
+  `# Review And Follow-Through`.
+- Superseded record: use record lifecycle `status: superseded` plus successor in
+  `links:` or body prose.
+- Superseded claim or criterion ID: use owning record prose, optional claim
+  matrix, or acceptance state naming the successor ID.
+- Accepted risk: use ticket `# Claim Matrix`, ticket acceptance notes,
+  review/follow-through notes, or acceptance decision.
+- Follow-up ticket: use ticket body follow-up section plus `links:` to the
+  related owner records.
+- Related ticket with no dependency: use `links:` typed adjacency, not
+  `depends_on`.
+- Promotion from memory/research/ticket into wiki/spec/etc.: use body prose
+  naming source and target, plus `links:` when navigation matters.
+- Outside mirrors or requests: use `external_refs`.
+- Source records for accepted explanation: use wiki source sections and `links:`.
+- Ordinary navigation adjacency: use `links:`.
 
 ## Generic Links
 

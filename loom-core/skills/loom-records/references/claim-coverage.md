@@ -122,11 +122,18 @@ new truth owner and it is not required for small tickets.
 ```md
 # Claim Matrix
 
-| Claim | Evidence | Critique | Status |
-| --- | --- | --- | --- |
-| initiative:<slug>#OBJ-001 | evidence:<slug> | critique:<slug>#FIND-002 resolved | supported_pending_review |
-| spec:<slug>#ACC-001 | evidence:<slug> | critique:<slug>#FIND-001 resolved | supported |
-| ticket:<token>#ACC-001 | evidence:<slug> | pending | supported_pending_review |
+- Claim: initiative:<slug>#OBJ-001
+  - Evidence: evidence:<slug>
+  - Critique: critique:<slug>#FIND-002 resolved
+  - Status: supported_pending_review
+- Claim: spec:<slug>#ACC-001
+  - Evidence: evidence:<slug>
+  - Critique: critique:<slug>#FIND-001 resolved
+  - Status: supported
+- Claim: ticket:<token>#ACC-001
+  - Evidence: evidence:<slug>
+  - Critique: pending
+  - Status: supported_pending_review
 ```
 
 Use this status vocabulary:

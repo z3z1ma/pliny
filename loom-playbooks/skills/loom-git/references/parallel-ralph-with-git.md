@@ -30,19 +30,39 @@ Before launching a parallel wave, the parent must verify:
 
 If any point is ambiguous, run the work sequentially or return to planning.
 
-## Parent Setup Table
+## Parent Setup Checklist
 
-For a parallel wave, write down a table before launch. Scratch parent notes are
-acceptable while designing the wave, but once children are launched the setup
-must live in the plan, ticket journal, or packet working notes.
+For a parallel wave, write down a setup checklist before launch. Scratch parent
+notes are acceptable while designing the wave, but once children are launched the
+setup must live in the plan, ticket journal, or packet working notes.
 
-Recommended columns:
+Recommended fields:
 
-| Child | Ticket | Repo | Integration remote | Integration ref | Integration commit | Push/review remote | Branch | Worktree | Child write scope |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 1 | ticket:<token> | repo:web | `<remote-or-none>` | `<integration-ref>` | `<sha>` | `<remote-or-none>` | loom/<token>/web-ui | ../web-<token>-ui | apps/web/** |
+- Child
+- Ticket
+- Repo
+- Integration remote
+- Integration ref
+- Integration commit
+- Push/review remote
+- Branch
+- Worktree
+- Child write scope
 
-This table is not a new ledger. It is a launch checklist that makes collisions
+Example entry:
+
+- Child: 1
+- Ticket: ticket:<token>
+- Repo: repo:web
+- Integration remote: `<remote-or-none>`
+- Integration ref: `<integration-ref>`
+- Integration commit: `<sha>`
+- Push/review remote: `<remote-or-none>`
+- Branch: loom/<token>/web-ui
+- Worktree: ../web-<token>-ui
+- Child write scope: apps/web/**
+
+This checklist is not a new ledger. It is a launch aid that makes collisions
 visible before they happen.
 
 ## Multi-Repository Work

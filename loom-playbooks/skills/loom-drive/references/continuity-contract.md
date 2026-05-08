@@ -10,21 +10,29 @@ owner records before the agent depends on it for continuation.
 
 Use this map before launching tickets or child work.
 
-| Drive fact | Owner |
-| --- | --- |
-| durable identity, principles, hard constraints, roadmap direction, citable decisions | constitution |
-| objective, why it matters, success metrics | initiative |
-| `# Delegated Authority / Autonomy Boundaries` and `# Objective-Level Stop Conditions` for delegated drive work | initiative |
-| evidence gaps, options, rejected approaches, conclusions | research |
-| intended product behavior, reusable acceptance IDs | spec |
-| complex-change planning, decomposition, tranche strategy, sequencing, dependencies, rollout, execution waves | plan |
-| live state, blockers, scoped coverage, journaled progress | ticket |
-| evidence disposition, critique disposition, acceptance decision | ticket |
-| bounded child context, source snapshot, read/write scope, output contract | packet or bounded handoff |
-| observed support or challenge artifacts | evidence |
-| adversarial findings, severity, verdict, residual risk | critique |
-| accepted reusable explanation | wiki |
-| support-only recall, retrieval cues, preferences, reminders, or hot context that does not own project truth | support coordinator `loom-memory`; not project truth |
+- **Durable identity, principles, hard constraints, roadmap direction, or citable
+  decisions** — owned by constitution.
+- **Objective, why it matters, or success metrics** — owned by initiative.
+- **`# Delegated Authority / Autonomy Boundaries` and `# Objective-Level Stop
+  Conditions` for delegated drive work** — owned by initiative.
+- **Evidence gaps, options, rejected approaches, or conclusions** — owned by
+  research.
+- **Intended product behavior or reusable acceptance IDs** — owned by spec.
+- **Complex-change planning, decomposition, tranche strategy, sequencing,
+  dependencies, rollout, or execution waves** — owned by plan.
+- **Live state, blockers, scoped coverage, or journaled progress** — owned by
+  ticket.
+- **Evidence disposition, critique disposition, or acceptance decision** — owned
+  by ticket.
+- **Bounded child context, source snapshot, read/write scope, or output contract**
+  — owned by packet or bounded handoff.
+- **Observed support or challenge artifacts** — owned by evidence.
+- **Adversarial findings, severity, verdict, or residual risk** — owned by
+  critique.
+- **Accepted reusable explanation** — owned by wiki.
+- **Support-only recall, retrieval cues, preferences, reminders, or hot context
+  that does not own project truth** — owned by support coordinator `loom-memory`,
+  not project truth.
 
 If no existing record owns a drive fact, either create the correct owner record or
 ask the user when the missing fact is an operator decision the agent cannot safely
@@ -58,14 +66,19 @@ record kind or ledger.
 
 Recommended locations:
 
-| Owner record | Put the snapshot here |
-| --- | --- |
-| initiative | `# Status Summary`, plus criterion IDs under `# Success Metrics` |
-| plan | `# Strategy`, `# Execution Units / Ticket Slices`, and `# Execution Waves` when waves are needed |
-| ticket | `# Acceptance`, optional `# Claim Matrix`, `# Current State`, `# Evidence`, `# Review And Follow-Through`, `# Acceptance Decision`, and `# Journal` |
-| packet or handoff | frontmatter/source snapshot plus output contract and parent merge notes |
-| evidence | `# Supports Claims` and `# Challenges Claims` |
-| critique | findings, verdict, residual risks, and challenged claims |
+- **Initiative** — put the snapshot in `# Status Summary`, plus criterion IDs
+  under `# Success Metrics`.
+- **Plan** — put the snapshot in `# Strategy`, `# Execution Units / Ticket
+  Slices`, and `# Execution Waves` when waves are needed.
+- **Ticket** — put the snapshot in `# Acceptance`, optional `# Claim Matrix`,
+  `# Current State`, `# Evidence`, `# Review And Follow-Through`,
+  `# Acceptance Decision`, and `# Journal`.
+- **Packet or handoff** — put the snapshot in frontmatter/source snapshot plus
+  output contract and parent merge notes.
+- **Evidence** — put the snapshot in `# Supports Claims` and `# Challenges
+  Claims`.
+- **Critique** — put the snapshot in findings, verdict, residual risks, and
+  challenged claims.
 
 The snapshot should answer exactly enough for a fresh parent to resume without
 making the initiative own live ticket execution:

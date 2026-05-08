@@ -91,12 +91,18 @@ Prefer records that are:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The record is well formatted, so it is true." | Structure enables inspection. Owner truth and evidence decide correctness. |
-| "The search output proves the graph is valid." | Queries are discovery aids. Validation still requires judgment against owner rules. |
-| "External refs in frontmatter make the external source authoritative." | External refs are provenance and navigation, not imported authority. |
-| "I can repair links after the rename." | Reference reconciliation is part of the mutation, not optional cleanup. |
+- Rationalization: "The record is well formatted, so it is true."
+  Reality: Structure enables inspection. Owner truth and evidence decide
+  correctness.
+- Rationalization: "The search output proves the graph is valid."
+  Reality: Queries are discovery aids. Validation still requires judgment against
+  owner rules.
+- Rationalization: "External refs in frontmatter make the external source
+  authoritative."
+  Reality: External refs are provenance and navigation, not imported authority.
+- Rationalization: "I can repair links after the rename."
+  Reality: Reference reconciliation is part of the mutation, not optional
+  cleanup.
 
 ## Red Flags
 

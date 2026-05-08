@@ -42,12 +42,18 @@ earning its keep.
 
 Classify dependencies before choosing a seam:
 
-| Category | Description | Testing strategy |
-| --- | --- | --- |
-| In-process | Pure computation or in-memory state, no IO | Deepen directly and test through the new interface |
-| Local-substitutable | Dependency has a local test stand-in, such as in-memory filesystem or local database | Test deep module with the stand-in; do not expose the seam unnecessarily |
-| Remote but owned | Internal service across network boundary | Define a port at the seam; production adapter uses transport, tests use local adapter |
-| True external | Third-party service you do not control | Inject a port; tests use mocks or contract fixtures |
+- **In-process**
+  - Description: pure computation or in-memory state, no IO.
+  - Testing strategy: deepen directly and test through the new interface.
+- **Local-substitutable**
+  - Description: dependency has a local test stand-in, such as in-memory filesystem or local database.
+  - Testing strategy: test deep module with the stand-in; do not expose the seam unnecessarily.
+- **Remote but owned**
+  - Description: internal service across network boundary.
+  - Testing strategy: define a port at the seam; production adapter uses transport, tests use local adapter.
+- **True external**
+  - Description: third-party service you do not control.
+  - Testing strategy: inject a port; tests use mocks or contract fixtures.
 
 Seam discipline:
 

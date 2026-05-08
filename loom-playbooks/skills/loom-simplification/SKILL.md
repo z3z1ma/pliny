@@ -88,12 +88,18 @@ Good simplification usually makes at least one of these better:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "This is just cleanup, so tests are optional." | Behavior-preserving work still needs evidence that behavior stayed the same or an explicit evidence limit. |
-| "I do not understand this code, so it is overcomplicated." | First understand callers, responsibilities, and edge cases; confusion is not proof of needless complexity. |
-| "A new helper will make it cleaner." | Helpers add concepts. Prefer deletion, inlining, and local clarity unless reuse or a seam is real. |
-| "I might as well fix this nearby behavior." | Feature work belongs in a separate spec/ticket or explicit scope expansion. |
+- Rationalization: "This is just cleanup, so tests are optional."
+  Reality: Behavior-preserving work still needs evidence that behavior stayed the
+  same or an explicit evidence limit.
+- Rationalization: "I do not understand this code, so it is overcomplicated."
+  Reality: First understand callers, responsibilities, and edge cases; confusion
+  is not proof of needless complexity.
+- Rationalization: "A new helper will make it cleaner."
+  Reality: Helpers add concepts. Prefer deletion, inlining, and local clarity
+  unless reuse or a seam is real.
+- Rationalization: "I might as well fix this nearby behavior."
+  Reality: Feature work belongs in a separate spec/ticket or explicit scope
+  expansion.
 
 ## Red Flags
 

@@ -115,16 +115,23 @@ ship only mirrors the disposition into PR, release, or handoff wording.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The PR description can explain what is true." | PRs mirror Loom truth. They do not own acceptance, evidence, or risk. |
-| "Shipping means the work is done." | Shipping packages already-truthful work; ticket acceptance owns closure. |
-| "Known follow-ups can stay in the handoff." | Follow-ups that affect closure or future work need ticket-owned disposition or new tickets. |
-| "A clean diff is enough to package." | The package also needs current evidence, critique disposition, and residual risk. |
-| "Launch notes can be written from memory." | Launch and rollback packages must mirror recorded evidence, risks, and owner dispositions. |
-| "A feature flag means cleanup can wait indefinitely." | Flags need owner, expiry or cleanup trigger, and follow-up disposition. Otherwise they become zombie code. |
-| "The pipeline is green, so the release is accepted." | CI is evidence. Ticket acceptance still owns closure and residual risk. |
-| "Migration cleanup can be mentioned in release notes." | Migration follow-through needs owner-layer disposition or linked tickets. |
+- **"The PR description can explain what is true."** Reality: PRs mirror Loom
+  truth. They do not own acceptance, evidence, or risk.
+- **"Shipping means the work is done."** Reality: Shipping packages
+  already-truthful work; ticket acceptance owns closure.
+- **"Known follow-ups can stay in the handoff."** Reality: Follow-ups that affect
+  closure or future work need ticket-owned disposition or new tickets.
+- **"A clean diff is enough to package."** Reality: The package also needs current
+  evidence, critique disposition, and residual risk.
+- **"Launch notes can be written from memory."** Reality: Launch and rollback
+  packages must mirror recorded evidence, risks, and owner dispositions.
+- **"A feature flag means cleanup can wait indefinitely."** Reality: Flags need
+  owner, expiry or cleanup trigger, and follow-up disposition. Otherwise they
+  become zombie code.
+- **"The pipeline is green, so the release is accepted."** Reality: CI is
+  evidence. Ticket acceptance still owns closure and residual risk.
+- **"Migration cleanup can be mentioned in release notes."** Reality: Migration
+  follow-through needs owner-layer disposition or linked tickets.
 
 ## Red Flags
 

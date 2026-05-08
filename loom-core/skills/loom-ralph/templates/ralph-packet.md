@@ -91,9 +91,10 @@ Curated excerpts, summaries, or directions to the source records and files the c
 
 # Assumptions / Decision Triggers
 
-| Assumption or question | Reversible? | Blocks child work? | Disposition |
-| --- | --- | --- | --- |
-| <TBD or None - no material assumptions> | <yes/no> | <yes/no> | <accepted, ask parent/user, or route to owner> |
+- Assumption or question: `<TBD or None - no material assumptions>`
+  - Reversible: `<yes/no>`
+  - Blocks child work: `<yes/no>`
+  - Disposition: `<accepted, ask parent/user, or route to owner>`
 
 # Change Class
 

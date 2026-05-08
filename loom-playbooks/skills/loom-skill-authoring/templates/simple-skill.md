@@ -36,9 +36,8 @@ One or two sentences: what this skill does and why following it changes agent be
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "<excuse an agent will use to skip the discipline>" | <why that excuse is wrong> |
+- **Rationalization:** "<excuse an agent will use to skip the discipline>"
+  **Reality:** <why that excuse is wrong>
 
 ## Red Flags
 

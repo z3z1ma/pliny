@@ -55,32 +55,50 @@ sequencing ambiguity, do not manufacture a gap summary or tranche detail.
 Choose the next action by the first missing truth or safety constraint that
 matters:
 
-| If this is true... | Then... |
-| --- | --- |
-| Product direction, autonomy, risk, budget, or success meaning is materially unclear | ask the user and record the decision needed in the owner record that will change |
-| Workspace structure or owner-chain trust is unclear | inspect or repair workspace support before downstream work |
-| Owner records are broken, stale, contradictory, or placeholder-contaminated | repair the graph before dependent work |
-| Project identity, principle, hard constraint, roadmap, or citable decision must change | update constitution truth |
-| Strategic outcome framing, success metrics, or delegated autonomy boundaries must change | update initiative truth |
-| Evidence is missing for a decision or option | update research or evidence, depending on whether synthesis or observation is missing |
-| Intended behavior or acceptance is ambiguous | update spec truth before implementation |
-| High-level execution shape, sequencing, dependency order, or tranche boundary is ambiguous | update plan truth |
-| No bounded live execution owner exists for the next mutation | create or refine a ticket |
-| A failing behavior or incident needs reproduce-first diagnosis | use debugging before a normal fix |
-| A bounded experiment, prototype, or sketch should inform commitment | run a spike and preserve evidence/research output |
-| Repository or module structure must be mapped before downstream work can proceed safely | run codemap and preserve evidence/research/wiki output |
-| A ticket is ready and work is tiny, local, and safe | use local execution and reconcile the ticket |
-| A ticket needs fresh-context implementation with explicit write scope | compile a Ralph packet |
-| Observed support or challenge needs durable preservation | create evidence |
-| Risk, protocol authority, code behavior, or acceptance sufficiency needs review | run critique |
-| Accepted reusable explanation should persist | update wiki |
-| Accepted learning should compound before closure | run retrospective over the relevant owner layers |
-| Ticket closure readiness needs evaluation | update the ticket acceptance decision |
-| Already-truthful work needs merge, release, PR, or handoff packaging | use ship without treating packaging as closure |
-| Objective criteria are satisfied and no owner work remains | close or complete the owning tickets/initiative truthfully |
+- If product direction, autonomy, risk, budget, or success meaning is materially
+  unclear, ask the user and record the decision needed in the owner record that
+  will change.
+- If workspace structure or owner-chain trust is unclear, inspect or repair
+  workspace support before downstream work.
+- If owner records are broken, stale, contradictory, or placeholder-contaminated,
+  repair the graph before dependent work.
+- If project identity, principle, hard constraint, roadmap, or citable decision
+  must change, update constitution truth.
+- If strategic outcome framing, success metrics, or delegated autonomy boundaries
+  must change, update initiative truth.
+- If evidence is missing for a decision or option, update research or evidence,
+  depending on whether synthesis or observation is missing.
+- If intended behavior or acceptance is ambiguous, update spec truth before
+  implementation.
+- If high-level execution shape, sequencing, dependency order, or tranche boundary
+  is ambiguous, update plan truth.
+- If no bounded live execution owner exists for the next mutation, create or
+  refine a ticket.
+- If a failing behavior or incident needs reproduce-first diagnosis, use debugging
+  before a normal fix.
+- If a bounded experiment, prototype, or sketch should inform commitment, run a
+  spike and preserve evidence/research output.
+- If repository or module structure must be mapped before downstream work can
+  proceed safely, run codemap and preserve evidence/research/wiki output.
+- If a ticket is ready and work is tiny, local, and safe, use local execution and
+  reconcile the ticket.
+- If a ticket needs fresh-context implementation with explicit write scope,
+  compile a Ralph packet.
+- If observed support or challenge needs durable preservation, create evidence.
+- If risk, protocol authority, code behavior, or acceptance sufficiency needs
+  review, run critique.
+- If accepted reusable explanation should persist, update wiki.
+- If accepted learning should compound before closure, run retrospective over the
+  relevant owner layers.
+- If ticket closure readiness needs evaluation, update the ticket acceptance
+  decision.
+- If already-truthful work needs merge, release, PR, or handoff packaging, use
+  ship without treating packaging as closure.
+- If objective criteria are satisfied and no owner work remains, close or complete
+  the owning tickets/initiative truthfully.
 
-This table is a reasoning aid, not a token list to copy into records. Do not add a
-saved workflow field to record the result.
+This decision list is a reasoning aid, not a token list to copy into records. Do
+not add a saved workflow field to record the result.
 
 ## Reconciliation Targets
 

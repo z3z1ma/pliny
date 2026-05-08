@@ -292,13 +292,19 @@ inside delegated authority.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The user said continue, so I can decide the product direction." | Delegated autonomy advances recorded objectives. It does not invent materially new direction. |
-| "A drive summary can be the live ledger." | Drive coordinates. Tickets own live execution state and acceptance. |
-| "A big objective needs a big plan before action." | Decompose only enough to make the next safe tranche clear. |
-| "The subagent output looks complete, so I can depend on it." | Child or support output must be reconciled into owner records before it becomes usable truth. |
-| "Drive can handle every workflow directly." | Drive coordinates objectives; specialized playbooks own recurring route discipline when their trigger fits. |
+- **"The user said continue, so I can decide the product direction."** Reality:
+  Delegated autonomy advances recorded objectives. It does not invent materially
+  new direction.
+- **"A drive summary can be the live ledger."** Reality: Drive coordinates.
+  Tickets own live execution state and acceptance.
+- **"A big objective needs a big plan before action."** Reality: Decompose only
+  enough to make the next safe tranche clear.
+- **"The subagent output looks complete, so I can depend on it."** Reality: Child
+  or support output must be reconciled into owner records before it becomes usable
+  truth.
+- **"Drive can handle every workflow directly."** Reality: Drive coordinates
+  objectives; specialized playbooks own recurring route discipline when their
+  trigger fits.
 
 ## Red Flags
 

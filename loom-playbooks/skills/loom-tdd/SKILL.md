@@ -87,13 +87,16 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "I'll write tests after the code works." | That is test-after. TDD requires RED before GREEN when this workflow applies. |
-| "The test passes on first run, so good." | A test that never failed may not prove the intended behavior. Verify RED or state the limit. |
-| "Manual testing is enough." | Manual observation can be evidence, but it does not create a reusable regression guard. |
-| "Mocks make this easy." | Over-mocking can test your mock setup while production behavior is broken. |
-| "The fix is tiny, so no repro test." | Tiny bug fixes still need a guard when recurrence matters. |
+- **Rationalization:** "I'll write tests after the code works."
+  **Reality:** That is test-after. TDD requires RED before GREEN when this workflow applies.
+- **Rationalization:** "The test passes on first run, so good."
+  **Reality:** A test that never failed may not prove the intended behavior. Verify RED or state the limit.
+- **Rationalization:** "Manual testing is enough."
+  **Reality:** Manual observation can be evidence, but it does not create a reusable regression guard.
+- **Rationalization:** "Mocks make this easy."
+  **Reality:** Over-mocking can test your mock setup while production behavior is broken.
+- **Rationalization:** "The fix is tiny, so no repro test."
+  **Reality:** Tiny bug fixes still need a guard when recurrence matters.
 
 ## Red Flags
 

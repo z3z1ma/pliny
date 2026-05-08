@@ -88,9 +88,28 @@ feed that dossier. They do not close work by themselves.
 
 ## Native Creation Pattern
 
-A common shell flow copies the ticket template from the installed Loom skill
-package path for the current harness. In this split source checkout, use the core
-package root; in a package-root install, the path may begin with `skills/`:
+A common shell flow copies a ticket template from the installed Loom skill package
+path for the current harness. In this split source checkout, use the core package
+root; in a package-root install, the path may begin with `skills/`.
+
+Use `templates/ticket-lite.md` for a small local ticket when the lightweight
+ledger is enough. Use `templates/ticket.md` as the full copy target when the work
+needs the complete acceptance, review, and follow-through worksheet.
+
+Full-template use, or escalation from lite to full before downstream work depends
+on the ticket, is required when any of these are present:
+
+- high risk
+- public/shared surface
+- multi-ticket scope
+- reusable acceptance
+- migration/security/privacy boundary
+- material ambiguity
+- mandatory critique
+
+When none of those triggers apply, the lite template is acceptable only if it can
+still name scope, acceptance, evidence posture, live status/next move, blockers,
+and journal facts truthfully.
 
 ```bash
 token="$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom | head -c 8)"
@@ -105,21 +124,29 @@ case "$slug" in
 esac
 
 path=".loom/tickets/${stamp}-${token}-${slug}.md"
-cp loom-core/skills/loom-tickets/templates/ticket.md "$path"
+template="${LOOM_TICKET_TEMPLATE:-ticket.md}"
+cp "loom-core/skills/loom-tickets/templates/${template}" "$path"
 # package-root install alternative:
-# cp skills/loom-tickets/templates/ticket.md "$path"
+# cp "skills/loom-tickets/templates/${template}" "$path"
 ```
 
+Set `LOOM_TICKET_TEMPLATE=ticket-lite.md` only after choosing the lite shape.
 Then replace the placeholders in the copied file.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The child said done, so I can close the ticket." | Child output is input. Ticket-owned acceptance, evidence, critique, follow-through, and residual risk decide closure. |
-| "This ticket is small, so evidence can stay in chat." | Small tickets can use small evidence, but acceptance claims still need inspectable support or an explicit `not_required` rationale. |
-| "I'll keep a claim matrix for every ticket because it is safer." | Claim matrices are useful when coverage is complex. For simple tickets they add noise; inline acceptance and evidence links are clearer. |
-| "The plan or packet says what happens next." | Plans sequence and packets bound child work. Tickets own live execution state and acceptance disposition. |
+- **"The child said done, so I can close the ticket."** Reality: child output is
+  input. Ticket-owned acceptance, evidence, critique, follow-through, and residual
+  risk decide closure.
+- **"This ticket is small, so evidence can stay in chat."** Reality: small tickets
+  can use small evidence, but acceptance claims still need inspectable support or
+  an explicit `not_required` rationale.
+- **"I'll keep a claim matrix for every ticket because it is safer."** Reality:
+  claim matrices are useful when coverage is complex. For simple tickets they add
+  noise; inline acceptance and evidence links are clearer.
+- **"The plan or packet says what happens next."** Reality: plans sequence and
+  packets bound child work. Tickets own live execution state and acceptance
+  disposition.
 
 ## Red Flags
 
@@ -171,4 +198,5 @@ Then read conditionally:
 7. `references/local-execution.md` when one bounded code, test, docs, config,
    refactor, migration, or cleanup change can be executed without a Ralph packet.
 8. `references/acceptance-gate.md` when deciding whether closure is honest.
-9. `templates/ticket.md` only when creating a ticket.
+9. `templates/ticket-lite.md` or `templates/ticket.md` only when creating a
+   ticket; keep `ticket.md` as the full copy target.

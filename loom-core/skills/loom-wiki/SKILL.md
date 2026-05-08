@@ -89,11 +89,12 @@ You can add more page types if the project genuinely needs them.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "This explanation is well written, so it can be trusted." | Wiki pages are trusted because they are grounded in accepted owner truth, evidence, and critique outcomes. |
-| "The wiki can say what should happen next." | Tickets own live execution and plans own complex-change strategy. Wiki explains accepted understanding. |
-| "We should promote every useful note." | Promote repeated, reusable, or accepted understanding. Do not turn wiki into transcript residue. |
+- Rationalization: "This explanation is well written, so it can be trusted."
+  - Reality: Wiki pages are trusted because they are grounded in accepted owner truth, evidence, and critique outcomes.
+- Rationalization: "The wiki can say what should happen next."
+  - Reality: Tickets own live execution and plans own complex-change strategy. Wiki explains accepted understanding.
+- Rationalization: "We should promote every useful note."
+  - Reality: Promote repeated, reusable, or accepted understanding. Do not turn wiki into transcript residue.
 
 ## Red Flags
 

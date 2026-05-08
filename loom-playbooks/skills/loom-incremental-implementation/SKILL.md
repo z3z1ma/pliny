@@ -83,12 +83,14 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "It is faster to build everything first and test at the end." | Bugs compound across slices and become harder to localize. |
-| "This nearby cleanup is small." | Nearby cleanup widens review and evidence scope. Record it or create a separate ticket. |
-| "A flag means incomplete work is harmless." | Flags need owner, expiry/cleanup trigger, and verification of relevant states. |
-| "I'll split commits later." | Split before review and evidence, not after a tangled diff exists. |
+- **Rationalization:** "It is faster to build everything first and test at the end."
+  **Reality:** Bugs compound across slices and become harder to localize.
+- **Rationalization:** "This nearby cleanup is small."
+  **Reality:** Nearby cleanup widens review and evidence scope. Record it or create a separate ticket.
+- **Rationalization:** "A flag means incomplete work is harmless."
+  **Reality:** Flags need owner, expiry/cleanup trigger, and verification of relevant states.
+- **Rationalization:** "I'll split commits later."
+  **Reality:** Split before review and evidence, not after a tangled diff exists.
 
 ## Red Flags
 

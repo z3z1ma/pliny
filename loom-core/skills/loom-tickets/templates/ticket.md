@@ -39,9 +39,10 @@ Out:
 
 Assumptions / decision triggers:
 
-| Assumption or question | Reversible? | Blocks execution? | Disposition |
-| --- | --- | --- | --- |
-| <TBD or None - no material assumptions> | <yes/no> | <yes/no> | <accepted, ask user, route to owner, or reason> |
+- <TBD or None - no material assumptions>:
+  - Reversible: <yes/no>
+  - Blocks execution: <yes/no>
+  - Disposition: <accepted, ask user, route to owner, or reason>
 
 # Acceptance
 

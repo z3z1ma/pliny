@@ -30,15 +30,24 @@ What ambiguity, user need, or quality gap requires a behavior contract.
 
 # Problem Pressure Check
 
-Use only the rows that matter; write `None - reason` when the pressure check is not applicable.
+Use only the lenses that matter; write `None - reason` when the pressure check is
+not applicable.
 
-| Lens | Current answer | Disposition |
-| --- | --- | --- |
-| Evidence / baseline | <TBD or None - reason> | <accepted, blocks, research, or owner route> |
-| Specific beneficiary or surface | <TBD or None - reason> | <accepted, blocks, research, or owner route> |
-| Current workaround / counterfactual | <TBD or None - reason> | <accepted, blocks, research, or owner route> |
-| Smallest valuable shape / solution attachment | <TBD or None - reason> | <accepted, blocks, research, or owner route> |
-| Durability risk | <TBD or None - reason> | <accepted, blocks, research, or owner route> |
+- Evidence / baseline:
+  - Current answer: <TBD or None - reason>
+  - Disposition: <accepted, blocks, research, or owner route>
+- Specific beneficiary or surface:
+  - Current answer: <TBD or None - reason>
+  - Disposition: <accepted, blocks, research, or owner route>
+- Current workaround / counterfactual:
+  - Current answer: <TBD or None - reason>
+  - Disposition: <accepted, blocks, research, or owner route>
+- Smallest valuable shape / solution attachment:
+  - Current answer: <TBD or None - reason>
+  - Disposition: <accepted, blocks, research, or owner route>
+- Durability risk:
+  - Current answer: <TBD or None - reason>
+  - Disposition: <accepted, blocks, research, or owner route>
 
 # Desired Behavior
 
@@ -122,26 +131,29 @@ tickets, evidence, and critique to cite.
 
 Coverage:
 
-| Acceptance ID | Requirements | Scenarios | Evidence target |
-| --- | --- | --- | --- |
-| ACC-001 | REQ-001 | SCN-001 | <test, observation, screenshot, trace, or manual check> |
+- ACC-001:
+  - Requirements: REQ-001
+  - Scenarios: SCN-001
+  - Evidence target: <test, observation, screenshot, trace, or manual check>
 
 # Evidence Plan
 
 What evidence would prove the behavior and quality bar. Name tests, observations,
 before/after artifacts, screenshots, smoke checks, or manual checks as applicable.
 
-| Claim / acceptance ID | Evidence type | Expected artifact | Limits / notes |
-| --- | --- | --- | --- |
-| ACC-001 | <test, observation, screenshot, trace, manual check> | <path, command, evidence record, or TBD> | <limits or None> |
+- ACC-001:
+  - Evidence type: <test, observation, screenshot, trace, manual check>
+  - Expected artifact: <path, command, evidence record, or TBD>
+  - Limits / notes: <limits or None>
 
 # Amendment Notes
 
 Use when changing an existing spec. Otherwise write `None - new spec`.
 
-| Change type | Affected IDs | Disposition / successor | Reference reconciliation needed |
-| --- | --- | --- | --- |
-| <added, modified, removed, renamed, or superseded> | <REQ/SCN/ACC IDs> | <reason, successor, compatibility, or removal boundary> | <yes/no and target search> |
+- <added, modified, removed, renamed, or superseded>:
+  - Affected IDs: <REQ/SCN/ACC IDs>
+  - Disposition / successor: <reason, successor, compatibility, or removal boundary>
+  - Reference reconciliation needed: <yes/no and target search>
 
 # Contract Review
 
@@ -157,9 +169,10 @@ Use when changing an existing spec. Otherwise write `None - new spec`.
 Questions or assumptions whose answer would materially change behavior, UX,
 architecture, acceptance, or risk.
 
-| Assumption or question | Reversible? | Blocks downstream work? | Disposition |
-| --- | --- | --- | --- |
-| <TBD or None - no material assumptions> | <yes/no> | <yes/no> | <accepted, ask user, research, or spec follow-up> |
+- <TBD or None - no material assumptions>:
+  - Reversible: <yes/no>
+  - Blocks downstream work: <yes/no>
+  - Disposition: <accepted, ask user, research, or spec follow-up>
 
 # Open Questions
 

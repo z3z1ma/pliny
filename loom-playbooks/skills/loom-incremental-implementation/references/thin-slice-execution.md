@@ -125,13 +125,21 @@ If the answer changes the owner truth, route to that owner before continuing.
 
 ## Anti-Patterns
 
-| Anti-pattern | Result | Correction |
-| --- | --- | --- |
-| horizontal-only layers | integration surprises late | add vertical proof early |
-| large unverified batches | root cause hard to find | verify after each slice |
-| mixed refactor and feature | review cannot see behavior change | split into separate tickets/slices |
-| flag with no cleanup | zombie paths | add owner and deletion trigger |
-| repeated command without edits | no new information | run after relevant changes only |
+- **horizontal-only layers**
+  - Result: integration surprises late.
+  - Correction: add vertical proof early.
+- **large unverified batches**
+  - Result: root cause hard to find.
+  - Correction: verify after each slice.
+- **mixed refactor and feature**
+  - Result: review cannot see behavior change.
+  - Correction: split into separate tickets/slices.
+- **flag with no cleanup**
+  - Result: zombie paths.
+  - Correction: add owner and deletion trigger.
+- **repeated command without edits**
+  - Result: no new information.
+  - Correction: run after relevant changes only.
 
 ## Loom Routing
 

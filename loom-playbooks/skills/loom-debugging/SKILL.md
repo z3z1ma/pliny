@@ -68,28 +68,30 @@ Follow:
 
 ## Artifact Routing
 
-| Debug output | Owner |
-| --- | --- |
-| reproduction steps | evidence |
-| root cause investigation | research |
-| intended behavior clarification | spec |
-| fix execution | ticket plus local execution or Ralph packet, according to ticket facts and write-scope needs |
-| regression evidence | evidence |
-| performance baseline and after measurement | evidence |
-| CI/build output, flaky-test reproduction, or dependency/cache signal | evidence, then research when cause remains uncertain |
-| recurring evidence gap | ticket follow-up or test expectation via retrospective |
-| recurring lesson | wiki, research, spec, plan, initiative, constitution, or evidence via retrospective; memory may keep support-only recall or owner-record pointers |
+- **reproduction steps** — owner: evidence.
+- **root cause investigation** — owner: research.
+- **intended behavior clarification** — owner: spec.
+- **fix execution** — owner: ticket plus local execution or Ralph packet, according to ticket facts and write-scope needs.
+- **regression evidence** — owner: evidence.
+- **performance baseline and after measurement** — owner: evidence.
+- **CI/build output, flaky-test reproduction, or dependency/cache signal** — owner: evidence, then research when cause remains uncertain.
+- **recurring evidence gap** — owner: ticket follow-up or test expectation via retrospective.
+- **recurring lesson** — owner: wiki, research, spec, plan, initiative, constitution, or evidence via retrospective; memory may keep support-only recall or owner-record pointers.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The fix is obvious." | Obvious fixes still need a feedback loop and evidence that the original failure no longer reproduces. |
-| "I cannot reproduce it, but this change might help." | If reproduction is unstable, improve observation or ask for artifacts; do not claim a root-cause fix. |
-| "Logging everything will reveal the issue." | Instrument predictions from hypotheses; broad logs create noise and cleanup debt. |
-| "A green nearby test proves the bug is fixed." | Regression evidence must exercise the real failure pattern or explicitly state the seam is missing. |
-| "It feels faster now." | Performance fixes need before/after measurement or an explicit reason measurement is not available. |
-| "CI failed, so source must be wrong." | CI output is evidence to classify; environment, cache, dependency, and flake causes must be considered. |
+- **Rationalization:** "The fix is obvious."
+  **Reality:** Obvious fixes still need a feedback loop and evidence that the original failure no longer reproduces.
+- **Rationalization:** "I cannot reproduce it, but this change might help."
+  **Reality:** If reproduction is unstable, improve observation or ask for artifacts; do not claim a root-cause fix.
+- **Rationalization:** "Logging everything will reveal the issue."
+  **Reality:** Instrument predictions from hypotheses; broad logs create noise and cleanup debt.
+- **Rationalization:** "A green nearby test proves the bug is fixed."
+  **Reality:** Regression evidence must exercise the real failure pattern or explicitly state the seam is missing.
+- **Rationalization:** "It feels faster now."
+  **Reality:** Performance fixes need before/after measurement or an explicit reason measurement is not available.
+- **Rationalization:** "CI failed, so source must be wrong."
+  **Reality:** CI output is evidence to classify; environment, cache, dependency, and flake causes must be considered.
 
 ## Red Flags
 

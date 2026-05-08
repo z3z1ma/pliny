@@ -14,28 +14,66 @@ truth that makes the next action recoverable.
 
 ## Common Coding Prompts
 
-| User request shape | First owner question | Usual Loom route |
-| --- | --- | --- |
-| "Fix this bug", failing test, broken build, regression, flaky behavior, incident, unexpected error | Is the failure reproduced and is root cause known? | optional `loom-debugging` or equivalent investigation -> evidence -> `loom-tickets` -> local execution or `loom-ralph` |
-| Add feature, change product behavior, alter UX flow, change API behavior | Is intended behavior or acceptance fuzzy? | `loom-specs` if fuzzy -> `loom-tickets` -> local execution or `loom-ralph` |
-| Refactor, cleanup, simplify, reduce complexity without behavior change | Is behavior preservation clear and bounded? | `loom-tickets` with `code-structure` -> evidence for preservation -> critique when nontrivial |
-| Add or change tests, fixtures, smoke checks, browser checks, CI validation | Is this validating existing acceptance or defining new expectations? | `loom-tickets` with `validation-instrumentation`; update `loom-specs` if expectations become behavior contract |
-| Dependency upgrade, package manager change, build/lint/typecheck/tooling config | Is compatibility or migration risk unknown? | `loom-research` when unknown -> `loom-tickets` with `dependency-tooling` -> evidence and critique |
-| Performance problem, slow path, bundle size, Core Web Vitals, high traffic concern | Is there a baseline measurement? | `loom-evidence` baseline -> `loom-research` or optional `loom-spike` or equivalent exploration workflow -> ticket -> after evidence -> performance critique |
-| Security, auth, permissions, secrets, untrusted input, data exposure | Is policy or intended trust boundary unclear? | `loom-specs` or `loom-constitution` if policy-bearing -> ticket -> evidence -> security critique |
-| UI page, component, styling, responsive layout, accessibility, visual polish | Is primary user task and quality bar clear? | `loom-specs` if fuzzy -> optional `loom-spike` or equivalent exploration workflow for variants when needed -> ticket -> visual/product evidence -> critique |
-| API, module boundary, public interface, contract between systems | Is the interface contract stable enough? | `loom-specs` and possibly `loom-research` -> plan/ticket -> critique for interface risk |
-| Architecture improvement, module deepening, codebase more testable, tangled dependency | Is this investigation, decision, or execution? | optional `loom-codemap` or equivalent atlas workflow, or `loom-research` -> `loom-specs` or `loom-constitution` for decisions -> plan/ticket |
-| Database schema, storage, data migration, import/export, persistence safety | Does order, rollback, or idempotency matter? | `loom-plans` when planning/decomposition matters -> ticket with `data-migration` -> before/after evidence -> critique |
-| Documentation, ADR, troubleshooting note, domain terminology, shared language | Is this policy, behavior, investigation, or accepted explanation? | `loom-constitution`, `loom-specs`, `loom-research`, or `loom-wiki` by owner truth |
-| "Grill me", stress-test this idea/plan, refine idea, ideate, challenge assumptions | Is the output a behavior contract, investigation, planning decision, or accepted explanation? | `loom-workspace` problem shaping -> `loom-research`, `loom-specs`, `loom-plans`, or `loom-wiki` by owner truth |
-| Prototype this, try a few designs, sanity-check a state model, let me play with it | What question should the throwaway artifact answer? | optional `loom-spike` or equivalent exploration workflow -> evidence/research -> spec/wiki/ticket route after conclusion |
-| Use TDD, test-first, red/green/refactor, add regression coverage | Which acceptance or bug claim should the failing check prove? | ticket/Ralph/local execution with `test-first` posture -> evidence red/green -> critique when warranted |
-| Review comments, fix feedback, reviewer says, apply suggestions | Are the findings understood and valid for this ticket/codebase? | `loom-critique` finding disposition -> ticket-owned disposition -> local execution/Ralph if fixes are needed |
-| "Where is X?", unfamiliar code, understand this module, map architecture | Is durable orientation useful for future agents? | optional `loom-codemap` or equivalent atlas workflow -> evidence/research -> wiki atlas when accepted |
-| PR description, changelog, release note, launch, rollback, monitoring, handoff, merge package | Are tickets/evidence/critique already truthful? | optional `loom-ship` or equivalent shipping workflow; route back to tickets/evidence/critique if not truthful |
-| "Is this done?", "close it", "ready to merge?", acceptance or residual risk check | Does ticket-owned acceptance support closure? | `loom-tickets` acceptance gate; optional `loom-ship` only after truth is current |
-| User asks to keep going on a broad outcome | Is there delegated objective, success criteria, and stop conditions? | optional `loom-drive` or equivalent objective driver -> owner layers -> tickets/Ralph/evidence/critique |
+- User request shape: "Fix this bug", failing test, broken build, regression, flaky behavior, incident, unexpected error
+  - First owner question: Is the failure reproduced and is root cause known?
+  - Usual Loom route: optional `loom-debugging` or equivalent investigation -> evidence -> `loom-tickets` -> local execution or `loom-ralph`
+- User request shape: Add feature, change product behavior, alter UX flow, change API behavior
+  - First owner question: Is intended behavior or acceptance fuzzy?
+  - Usual Loom route: `loom-specs` if fuzzy -> `loom-tickets` -> local execution or `loom-ralph`
+- User request shape: Refactor, cleanup, simplify, reduce complexity without behavior change
+  - First owner question: Is behavior preservation clear and bounded?
+  - Usual Loom route: `loom-tickets` with `code-structure` -> evidence for preservation -> critique when nontrivial
+- User request shape: Add or change tests, fixtures, smoke checks, browser checks, CI validation
+  - First owner question: Is this validating existing acceptance or defining new expectations?
+  - Usual Loom route: `loom-tickets` with `validation-instrumentation`; update `loom-specs` if expectations become behavior contract
+- User request shape: Dependency upgrade, package manager change, build/lint/typecheck/tooling config
+  - First owner question: Is compatibility or migration risk unknown?
+  - Usual Loom route: `loom-research` when unknown -> `loom-tickets` with `dependency-tooling` -> evidence and critique
+- User request shape: Performance problem, slow path, bundle size, Core Web Vitals, high traffic concern
+  - First owner question: Is there a baseline measurement?
+  - Usual Loom route: `loom-evidence` baseline -> `loom-research` or optional `loom-spike` or equivalent exploration workflow -> ticket -> after evidence -> performance critique
+- User request shape: Security, auth, permissions, secrets, untrusted input, data exposure
+  - First owner question: Is policy or intended trust boundary unclear?
+  - Usual Loom route: `loom-specs` or `loom-constitution` if policy-bearing -> ticket -> evidence -> security critique
+- User request shape: UI page, component, styling, responsive layout, accessibility, visual polish
+  - First owner question: Is primary user task and quality bar clear?
+  - Usual Loom route: `loom-specs` if fuzzy -> optional `loom-spike` or equivalent exploration workflow for variants when needed -> ticket -> visual/product evidence -> critique
+- User request shape: API, module boundary, public interface, contract between systems
+  - First owner question: Is the interface contract stable enough?
+  - Usual Loom route: `loom-specs` and possibly `loom-research` -> plan/ticket -> critique for interface risk
+- User request shape: Architecture improvement, module deepening, codebase more testable, tangled dependency
+  - First owner question: Is this investigation, decision, or execution?
+  - Usual Loom route: optional `loom-codemap` or equivalent atlas workflow, or `loom-research` -> `loom-specs` or `loom-constitution` for decisions -> plan/ticket
+- User request shape: Database schema, storage, data migration, import/export, persistence safety
+  - First owner question: Does order, rollback, or idempotency matter?
+  - Usual Loom route: `loom-plans` when planning/decomposition matters -> ticket with `data-migration` -> before/after evidence -> critique
+- User request shape: Documentation, ADR, troubleshooting note, domain terminology, shared language
+  - First owner question: Is this policy, behavior, investigation, or accepted explanation?
+  - Usual Loom route: `loom-constitution`, `loom-specs`, `loom-research`, or `loom-wiki` by owner truth
+- User request shape: "Grill me", stress-test this idea/plan, refine idea, ideate, challenge assumptions
+  - First owner question: Is the output a behavior contract, investigation, planning decision, or accepted explanation?
+  - Usual Loom route: `loom-workspace` problem shaping -> `loom-research`, `loom-specs`, `loom-plans`, or `loom-wiki` by owner truth
+- User request shape: Prototype this, try a few designs, sanity-check a state model, let me play with it
+  - First owner question: What question should the throwaway artifact answer?
+  - Usual Loom route: optional `loom-spike` or equivalent exploration workflow -> evidence/research -> spec/wiki/ticket route after conclusion
+- User request shape: Use TDD, test-first, red/green/refactor, add regression coverage
+  - First owner question: Which acceptance or bug claim should the failing check prove?
+  - Usual Loom route: ticket/Ralph/local execution with `test-first` posture -> evidence red/green -> critique when warranted
+- User request shape: Review comments, fix feedback, reviewer says, apply suggestions
+  - First owner question: Are the findings understood and valid for this ticket/codebase?
+  - Usual Loom route: `loom-critique` finding disposition -> ticket-owned disposition -> local execution/Ralph if fixes are needed
+- User request shape: "Where is X?", unfamiliar code, understand this module, map architecture
+  - First owner question: Is durable orientation useful for future agents?
+  - Usual Loom route: optional `loom-codemap` or equivalent atlas workflow -> evidence/research -> wiki atlas when accepted
+- User request shape: PR description, changelog, release note, launch, rollback, monitoring, handoff, merge package
+  - First owner question: Are tickets/evidence/critique already truthful?
+  - Usual Loom route: optional `loom-ship` or equivalent shipping workflow; route back to tickets/evidence/critique if not truthful
+- User request shape: "Is this done?", "close it", "ready to merge?", acceptance or residual risk check
+  - First owner question: Does ticket-owned acceptance support closure?
+  - Usual Loom route: `loom-tickets` acceptance gate; optional `loom-ship` only after truth is current
+- User request shape: User asks to keep going on a broad outcome
+  - First owner question: Is there delegated objective, success criteria, and stop conditions?
+  - Usual Loom route: optional `loom-drive` or equivalent objective driver -> owner layers -> tickets/Ralph/evidence/critique
 
 ## Ambiguity Gates
 

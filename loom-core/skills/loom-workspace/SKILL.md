@@ -97,12 +97,14 @@ Prefer direct inspection before inventing a helper abstraction:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "The current directory is obviously the workspace root." | Nested repos, examples, and fixtures can contain their own Loom trees. Verify scope. |
-| "Chat history is enough to resume." | Recovery must come from owner records, not transcript memory. |
-| "`.loom/` exists, so the workspace is trustworthy." | The tree can be partial, stale, or scoped to a fixture. Inspect structure and constitution. |
-| "I know the next skill without reading records." | Route from owner truth when the workspace is not freshly known. |
+- **"The current directory is obviously the workspace root."**
+  - Reality: Nested repos, examples, and fixtures can contain their own Loom trees. Verify scope.
+- **"Chat history is enough to resume."**
+  - Reality: Recovery must come from owner records, not transcript memory.
+- **"`.loom/` exists, so the workspace is trustworthy."**
+  - Reality: The tree can be partial, stale, or scoped to a fixture. Inspect structure and constitution.
+- **"I know the next skill without reading records."**
+  - Reality: Route from owner truth when the workspace is not freshly known.
 
 ## Red Flags
 

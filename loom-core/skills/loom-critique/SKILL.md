@@ -123,13 +123,16 @@ The reviewer should use the packet and the diff as the main review surface.
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "LGTM is enough." | Durable critique needs target, evidence reviewed, verdict, residual risks, and findings or an explicit no-findings statement. |
-| "Tests passed, so critique should pass." | Tests are evidence. Critique reviews evidence sufficiency, scope, design, risks, and owner-layer truth. |
-| "Visual/product quality is taste." | Taste still has inspectable signals: primary task clarity, hierarchy, affordance, density, and before/after evidence. |
-| "The ticket can disposition findings later." | Critique owns findings and verdict now; tickets consume dispositions before closure. |
-| "External or subagent feedback is automatically right." | Review feedback is a claim to verify against project reality, specs, evidence, and code before implementing or rejecting it. |
+- Rationalization: "LGTM is enough."
+  - Reality: Durable critique needs target, evidence reviewed, verdict, residual risks, and findings or an explicit no-findings statement.
+- Rationalization: "Tests passed, so critique should pass."
+  - Reality: Tests are evidence. Critique reviews evidence sufficiency, scope, design, risks, and owner-layer truth.
+- Rationalization: "Visual/product quality is taste."
+  - Reality: Taste still has inspectable signals: primary task clarity, hierarchy, affordance, density, and before/after evidence.
+- Rationalization: "The ticket can disposition findings later."
+  - Reality: Critique owns findings and verdict now; tickets consume dispositions before closure.
+- Rationalization: "External or subagent feedback is automatically right."
+  - Reality: Review feedback is a claim to verify against project reality, specs, evidence, and code before implementing or rejecting it.
 
 ## Red Flags
 

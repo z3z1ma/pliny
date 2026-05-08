@@ -114,16 +114,30 @@ Read:
 
 ## Common Rationalizations
 
-| Rationalization | Reality |
-| --- | --- |
-| "A file tree dump is a code map." | A useful atlas explains structure, boundaries, and retrieval paths, with evidence when needed. |
-| "I can infer architecture from names." | First collect manifests, tests, docs, source roots, and current code paths; then synthesize. |
-| "I know this framework pattern from memory." | Detect project versions and inspect official docs or project examples when correctness depends on current framework behavior. |
-| "Uncertain interpretation can go straight into wiki." | Uncertainty belongs in research until accepted. Wiki explains settled structure. |
-| "Path-local instructions can teach local truth." | Path adapters may point to Loom owners; they do not own independent truth. |
-| "Structure is obvious, so no evidence is needed." | If the map will be reused, preserve enough scan/source context to know when it must be rechecked. |
-| "Official docs always beat local code." | Docs explain external behavior; local code and owner records still define project implementation reality and intended behavior. |
-| "More files make a better context pack." | Context packs should include the smallest relevant source set plus conflicts and owner records, not a transcript dump. |
+- Rationalization: "A file tree dump is a code map."
+  Reality: A useful atlas explains structure, boundaries, and retrieval paths,
+  with evidence when needed.
+- Rationalization: "I can infer architecture from names."
+  Reality: First collect manifests, tests, docs, source roots, and current code
+  paths; then synthesize.
+- Rationalization: "I know this framework pattern from memory."
+  Reality: Detect project versions and inspect official docs or project examples
+  when correctness depends on current framework behavior.
+- Rationalization: "Uncertain interpretation can go straight into wiki."
+  Reality: Uncertainty belongs in research until accepted. Wiki explains settled
+  structure.
+- Rationalization: "Path-local instructions can teach local truth."
+  Reality: Path adapters may point to Loom owners; they do not own independent
+  truth.
+- Rationalization: "Structure is obvious, so no evidence is needed."
+  Reality: If the map will be reused, preserve enough scan/source context to know
+  when it must be rechecked.
+- Rationalization: "Official docs always beat local code."
+  Reality: Docs explain external behavior; local code and owner records still
+  define project implementation reality and intended behavior.
+- Rationalization: "More files make a better context pack."
+  Reality: Context packs should include the smallest relevant source set plus
+  conflicts and owner records, not a transcript dump.
 
 ## Red Flags
 

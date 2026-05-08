@@ -42,18 +42,26 @@ unsafe, it is not memory.
 
 ## What Belongs Elsewhere
 
-| Fact type | Owner |
-| --- | --- |
-| durable identity, principles, hard constraints, accepted decisions | constitution |
-| strategic outcome, success metric, delegated objective | initiative |
-| investigation result, tradeoff, rejected option, evidence synthesis | research |
-| intended behavior, requirement, acceptance criterion | spec |
-| sequencing, rollout strategy, dependency order | plan |
-| live state, blocker, next move, acceptance disposition, closure | ticket |
-| observed artifact, validation output, reproduction, screenshot, log | evidence |
-| adversarial finding, verdict, severity, required follow-up | critique |
-| accepted explanation, workflow knowledge, troubleshooting pattern | wiki |
-| bounded child read/write/stop/output contract | packet |
+- Fact type: durable identity, principles, hard constraints, accepted decisions
+  - Owner: constitution
+- Fact type: strategic outcome, success metric, delegated objective
+  - Owner: initiative
+- Fact type: investigation result, tradeoff, rejected option, evidence synthesis
+  - Owner: research
+- Fact type: intended behavior, requirement, acceptance criterion
+  - Owner: spec
+- Fact type: sequencing, rollout strategy, dependency order
+  - Owner: plan
+- Fact type: live state, blocker, next move, acceptance disposition, closure
+  - Owner: ticket
+- Fact type: observed artifact, validation output, reproduction, screenshot, log
+  - Owner: evidence
+- Fact type: adversarial finding, verdict, severity, required follow-up
+  - Owner: critique
+- Fact type: accepted explanation, workflow knowledge, troubleshooting pattern
+  - Owner: wiki
+- Fact type: bounded child read/write/stop/output contract
+  - Owner: packet
 
 Memory may link to any of these, but the owner record wins when there is a
 disagreement.

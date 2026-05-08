@@ -36,13 +36,21 @@ until the failure mode is understood.
 
 ## Choosing The Test Seam
 
-| Behavior shape | Preferred seam | Notes |
-| --- | --- | --- |
-| pure transformation or validation | unit | fast, deterministic, few dependencies |
-| database, filesystem, API, queue, or process boundary | integration | use real boundary or faithful fake when practical |
-| critical browser flow | browser or E2E | combine automated check with runtime evidence when visual state matters |
-| performance budget | benchmark or measurement harness | require before/after numbers, not only pass/fail |
-| security validation | focused tests plus security critique | tests do not replace threat review |
+- **pure transformation or validation**
+  - Preferred seam: unit.
+  - Notes: fast, deterministic, few dependencies.
+- **database, filesystem, API, queue, or process boundary**
+  - Preferred seam: integration.
+  - Notes: use real boundary or faithful fake when practical.
+- **critical browser flow**
+  - Preferred seam: browser or E2E.
+  - Notes: combine automated check with runtime evidence when visual state matters.
+- **performance budget**
+  - Preferred seam: benchmark or measurement harness.
+  - Notes: require before/after numbers, not only pass/fail.
+- **security validation**
+  - Preferred seam: focused tests plus security critique.
+  - Notes: tests do not replace threat review.
 
 Do not choose the easiest seam if it cannot fail for the user-visible behavior.
 
@@ -130,13 +138,21 @@ against later changes.
 
 ## Anti-Patterns
 
-| Anti-pattern | Why it fails | Better route |
-| --- | --- | --- |
-| testing implementation details | refactors break tests without behavior change | assert behavior at the public or seam-level interface |
-| snapshot abuse | reviewers stop reading large snapshots | assert key semantic output or preserve screenshot evidence for visual review |
-| arbitrary sleeps | timing changes create flakes | use condition-based waiting or event signals |
-| skipped failing test | hides real behavior gap | fix, quarantine with ticket-owned rationale, or block closure |
-| test-after as TDD | code shaped the test | record as verification-only, not RED/GREEN proof |
+- **testing implementation details**
+  - Why it fails: refactors break tests without behavior change.
+  - Better route: assert behavior at the public or seam-level interface.
+- **snapshot abuse**
+  - Why it fails: reviewers stop reading large snapshots.
+  - Better route: assert key semantic output or preserve screenshot evidence for visual review.
+- **arbitrary sleeps**
+  - Why it fails: timing changes create flakes.
+  - Better route: use condition-based waiting or event signals.
+- **skipped failing test**
+  - Why it fails: hides real behavior gap.
+  - Better route: fix, quarantine with ticket-owned rationale, or block closure.
+- **test-after as TDD**
+  - Why it fails: code shaped the test.
+  - Better route: record as verification-only, not RED/GREEN proof.
 
 ## Loom Routing
 

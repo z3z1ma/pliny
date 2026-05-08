@@ -13,15 +13,27 @@ agent-generated interface.
 
 Avoid common agent defaults:
 
-| AI default | Problem | Better direction |
-| --- | --- | --- |
-| purple or indigo everywhere | visually generic and often off-brand | use project color tokens |
-| excessive gradients | visual noise and weak design-system fit | flat or subtle treatment that matches the system |
-| maximum rounding everywhere | ignores hierarchy of radii | use the project's radius scale |
-| generic hero/card grids | template-driven, not content-driven | layout from primary task and information priority |
-| fake or short content | hides overflow and density problems | use realistic content |
-| oversized equal padding | destroys hierarchy and wastes space | use spacing scale and density choices deliberately |
-| heavy shadows | competes with content and may hurt performance | use shadows only when the system calls for them |
+- AI default: purple or indigo everywhere
+  Problem: visually generic and often off-brand.
+  Better direction: use project color tokens.
+- AI default: excessive gradients
+  Problem: visual noise and weak design-system fit.
+  Better direction: flat or subtle treatment that matches the system.
+- AI default: maximum rounding everywhere
+  Problem: ignores hierarchy of radii.
+  Better direction: use the project's radius scale.
+- AI default: generic hero/card grids
+  Problem: template-driven, not content-driven.
+  Better direction: layout from primary task and information priority.
+- AI default: fake or short content
+  Problem: hides overflow and density problems.
+  Better direction: use realistic content.
+- AI default: oversized equal padding
+  Problem: destroys hierarchy and wastes space.
+  Better direction: use spacing scale and density choices deliberately.
+- AI default: heavy shadows
+  Problem: competes with content and may hurt performance.
+  Better direction: use shadows only when the system calls for them.
 
 ## Component Architecture Checks
 

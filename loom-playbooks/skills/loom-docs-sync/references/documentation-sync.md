@@ -4,16 +4,17 @@ Use this reference when documentation surfaces need to mirror Loom owner truth.
 
 ## Routing Matrix
 
-| Documentation need | Loom owner to check first |
-| --- | --- |
-| durable principle, policy, expensive architecture choice, ADR-like precedent | constitution decision |
-| intended behavior or API contract | spec |
-| accepted architecture/workflow/troubleshooting explanation | wiki |
-| investigation, alternatives, rejected options | research |
-| live docs task, blocker, follow-up, closure | ticket |
-| observed command output or screenshot | evidence |
-| release note, changelog draft, PR summary | ship package mirroring owner records |
-| support-only retrieval cue | memory |
+- **Durable principle, policy, expensive architecture choice, or ADR-like
+  precedent** — check the constitution decision first.
+- **Intended behavior or API contract** — check the spec first.
+- **Accepted architecture, workflow, or troubleshooting explanation** — check the
+  wiki first.
+- **Investigation, alternatives, or rejected options** — check research first.
+- **Live docs task, blocker, follow-up, or closure** — check the ticket first.
+- **Observed command output or screenshot** — check evidence first.
+- **Release note, changelog draft, or PR summary** — check the ship package that
+  mirrors owner records first.
+- **Support-only retrieval cue** — check memory first.
 
 Docs outside `.loom` can mirror or present owner truth, but they do not silently
 own it unless the constitution says so.
