@@ -1,0 +1,369 @@
+loom-playbooks/package.json
+  ses_1fbd4a47fffe3x579Wrego1K3t 4,15
+  ses_1fb684e08ffe4BNbgGz8ituwyb 2
+.loom/critique/20260507-opencode-split-package-review.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,28-29,31,58-59,65-67
+loom-core/.codex-plugin/plugin.json
+  ses_1fb775e7affeWr3NnAo5llzIqy 17
+.loom/plans/20260507-split-core-and-playbooks-packages.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,95-96,337,542-543
+.loom/evidence/20260507-opencode-split-package-check.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,24-25,28-30,64,66-67,197-198,217-220,271-274
+  human 61,192-193,212-215,266-268
+.loom/specs/core-and-playbooks-package-contract.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,185-187,242-244,313-314,373-376,410,435,437,446-447
+  human 409
+.loom/tickets/20260507-xtt24452-split-opencode-packages.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 8,37-38,53,57,162,210,215-217
+.agents/plugins/marketplace.json
+  ses_1fb775e7affeWr3NnAo5llzIqy 10-13
+  human 24-25,27
+.loom/specs/opencode-plugin-install-contract.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,46-48
+.loom/tickets/20260507-7h8u6oxp-rebuild-harness-package-surfaces.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 8,82-83,157-158
+  human 156
+INSTALL.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 83,86,89,91-96,100-103,107,111-114,121-122,125-126,128-130
+  human 90
+.loom/evidence/20260507-harness-package-surface-skeleton-check.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,238-239
+loom-core/package.json
+  ses_1fb684e08ffe4BNbgGz8ituwyb 2
+.loom/research/core-workflow-plugin-split-feasibility.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,230,341
+.loom/constitution/decisions/decision-0008-core-and-playbooks-package-roots.md
+  ses_1fbd4a47fffe3x579Wrego1K3t 6,148-149
+loom-core/hooks/hooks.json
+  human 1-52
+loom-core/claude-hooks/hooks.json
+  human 1-52
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 1,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "4,15",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 40,
+          "hash": "ses_1fb684e08ffe4BNbgGz8ituwyb",
+          "lines": "2",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/package.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 9,
+          "added_lines": 9,
+          "deleted_lines": 6,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,28-29,31,58-59,65-67",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/critique/20260507-opencode-split-package-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 16,
+          "hash": "ses_1fb775e7affeWr3NnAo5llzIqy",
+          "lines": "17",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/.codex-plugin/plugin.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 6,
+          "added_lines": 6,
+          "deleted_lines": 4,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,95-96,337,542-543",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/plans/20260507-split-core-and-playbooks-packages.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 19,
+          "added_lines": 19,
+          "deleted_lines": 14,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,24-25,28-30,64,66-67,197-198,217-220,271-274",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 0,
+          "added_lines": 0,
+          "deleted_lines": 10,
+          "hash": "human",
+          "lines": "61,192-193,212-215,266-268",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/evidence/20260507-opencode-split-package-check.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 18,
+          "added_lines": 18,
+          "deleted_lines": 13,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,185-187,242-244,313-314,373-376,410,435,437,446-447",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 0,
+          "added_lines": 0,
+          "deleted_lines": 1,
+          "hash": "human",
+          "lines": "409",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/specs/core-and-playbooks-package-contract.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 10,
+          "added_lines": 10,
+          "deleted_lines": 7,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "8,37-38,53,57,162,210,215-217",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/tickets/20260507-xtt24452-split-opencode-packages.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 64,
+          "hash": "ses_1fb775e7affeWr3NnAo5llzIqy",
+          "lines": "10-13",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 1,
+          "hash": "human",
+          "lines": "24-25,27",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".agents/plugins/marketplace.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 2,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,46-48",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/specs/opencode-plugin-install-contract.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 5,
+          "added_lines": 5,
+          "deleted_lines": 3,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "8,82-83,157-158",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 0,
+          "added_lines": 0,
+          "deleted_lines": 1,
+          "hash": "human",
+          "lines": "156",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/tickets/20260507-7h8u6oxp-rebuild-harness-package-surfaces.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 25,
+          "added_lines": 25,
+          "deleted_lines": 18,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "83,86,89,91-96,100-103,107,111-114,121-122,125-126,128-130",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "90",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "INSTALL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 2,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,238-239",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/evidence/20260507-harness-package-surface-skeleton-check.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 40,
+          "hash": "ses_1fb684e08ffe4BNbgGz8ituwyb",
+          "lines": "2",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/package.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 2,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,230,341",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/research/core-workflow-plugin-split-feasibility.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 8,
+          "hash": "ses_1fbd4a47fffe3x579Wrego1K3t",
+          "lines": "6,148-149",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/constitution/decisions/decision-0008-core-and-playbooks-package-roots.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 52,
+          "added_lines": 52,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-52",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/hooks/hooks.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 0,
+          "added_lines": 0,
+          "deleted_lines": 52,
+          "hash": "human",
+          "lines": "1-52",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/claude-hooks/hooks.json"
+    }
+  ],
+  "base_commit_sha": "babdccdcef459f2ff10b85b149e5d864fbd8dbcb",
+  "commit_sha": "babdccdcef459f2ff10b85b149e5d864fbd8dbcb",
+  "commit_type": "commit_amend",
+  "git_ai_version": "1.4.2",
+  "prompts": {
+    "human": {
+      "accepted_lines": 56,
+      "agent_id": null,
+      "human_author": null,
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 56,
+      "total_deletions": 65
+    },
+    "ses_1fb684e08ffe4BNbgGz8ituwyb": {
+      "accepted_lines": 2,
+      "agent_id": {
+        "id": "ses_1fb684e08ffe4BNbgGz8ituwyb",
+        "model": "openai/gpt-5.5",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 2,
+      "total_deletions": 80
+    },
+    "ses_1fb775e7affeWr3NnAo5llzIqy": {
+      "accepted_lines": 5,
+      "agent_id": {
+        "id": "ses_1fb775e7affeWr3NnAo5llzIqy",
+        "model": "openai/gpt-5.5",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 5,
+      "total_deletions": 80
+    },
+    "ses_1fbd4a47fffe3x579Wrego1K3t": {
+      "accepted_lines": 107,
+      "agent_id": {
+        "id": "ses_1fbd4a47fffe3x579Wrego1K3t",
+        "model": "openai/gpt-5.5",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 107,
+      "total_deletions": 80
+    }
+  },
+  "schema_version": "authorship/3.0.0"
+}
