@@ -70,7 +70,8 @@ Produce the durable output in owner records:
 - spec: intended behavior, requirements, scenarios, acceptance
 - plan: decomposition, sequencing, dependencies, rollout
 - ticket: bounded execution when behavior and scope are clear enough
-- spike: experiment, sketch, prototype, or feasibility probe
+- evidence/research: experiment, sketch, prototype, or feasibility probe results;
+  use `loom-spike` as the workflow route when a bounded experiment is the next step
 - wiki: accepted explanation after truth settles
 
 A compact discovery summary is useful only if its claims land in the right owner

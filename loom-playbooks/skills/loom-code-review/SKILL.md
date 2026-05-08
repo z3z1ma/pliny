@@ -69,15 +69,23 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
    valid fixes one at a time with verification.
 9. Use `loom-ship` only after review disposition and evidence are truthful.
 
-## Finding Labels
+## Finding Severity And Disposition
 
-Use clear action semantics:
+Use core critique severity in saved critique findings: `low`, `medium`, or
+`high`. Put action semantics in the finding title, impact, or required follow-up;
+do not replace core severity with peer labels such as `Critical`, `Important`,
+`Suggestion`, `Nit`, or `FYI`.
 
-- Critical: blocks acceptance; security/data loss/broken behavior/high blast radius
-- Important: should be fixed before closure or explicitly accepted/deferred
-- Suggestion: useful but optional; ticket may defer or ignore with rationale
-- Nit: style or small clarity issue; optional unless project policy says otherwise
-- FYI: context only; no action required
+- `high`: likely blocks acceptance unless the ticket records `resolved`,
+  `accepted_risk`, `superseded`, or `converted_to_follow_up` disposition.
+- `medium`: material risk or quality gap that needs ticket-owned disposition
+  before closure.
+- `low`: useful concern or polish issue; record it when it should persist, but it
+  does not block closure by default.
+
+For open medium/high findings, use only the ticket-owned finding dispositions
+from core: `resolved`, `accepted_risk`, `superseded`, or
+`converted_to_follow_up`.
 
 ## Common Rationalizations
 
@@ -111,7 +119,8 @@ Use clear action semantics:
 
 - critique and ticket records tell the truth about review outcome
 - evidence supports or limits the acceptance claim
-- required findings are resolved, accepted, superseded, or converted to follow-up
+- required findings are `resolved`, `accepted_risk`, `superseded`, or
+  `converted_to_follow_up`
 - optional feedback is not treated as hidden mandatory scope
 - shipping summaries can mirror owner truth without inventing it
 
@@ -120,7 +129,8 @@ Use clear action semantics:
 Read immediately for code review:
 
 1. `references/review-and-feedback-loop.md` for five-axis review, review packet
-   context, severity labels, external feedback handling, and dependency review.
+   context, core severity/disposition usage, external feedback handling, and
+   dependency review.
 2. the core `loom-critique` skill for durable findings and verdicts.
 3. the core `loom-tickets` skill for finding disposition and closure gate.
 4. the core `loom-evidence` skill for verification story checks.

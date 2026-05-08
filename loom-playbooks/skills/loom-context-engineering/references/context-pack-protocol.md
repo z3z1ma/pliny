@@ -23,7 +23,7 @@ It is not a transcript dump.
 2. active skill and packet, if any
 3. active ticket and acceptance IDs
 4. governing spec, plan, initiative, research, decision, evidence, critique
-5. accepted wiki/codemap explanation
+5. accepted wiki explanation, including atlas pages
 6. target source, tests, interfaces, schemas, configs
 7. nearby examples of the pattern to follow
 8. external official docs or source-grounding notes
@@ -79,8 +79,8 @@ worker cannot reliably access the source or when replayability matters. Use
 hermetic packets only when portability or trust boundaries matter more than pack
 size.
 
-If the pack grows too large, split the task or create a codemap/wiki/research
-artifact first.
+If the pack grows too large, split the task or run a codemap workflow that routes
+durable output to evidence, research, or wiki before delegating.
 
 ## Handoff Shape
 

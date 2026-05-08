@@ -26,7 +26,7 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 - worker partitioning from plans and tickets
 - fresh-context prompts or Ralph packet selection
 - parallelization safety checks
-- child status handling and parent reconciliation
+- child outcome/status handling and parent reconciliation
 - staged review: spec compliance, code quality, evidence, critique
 - conflict integration across workers
 
@@ -68,8 +68,9 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
    scope, verification, stop conditions, and output contract.
 6. Do not make workers read a broad plan and infer their task. Extract the specific
    task and relevant context for them.
-7. Handle child statuses deliberately: done, done with concerns, needs context,
-   blocked, or escalates.
+7. Handle child outcomes deliberately. For Ralph packets use core outcomes:
+   `continue`, `stop`, `blocked`, or `escalate`. For non-Ralph harness workers,
+   map transport-specific labels back to owner truth before reconciliation.
 8. Review child output for spec compliance before code quality. Then verify evidence
    and diff/write-scope compliance.
 9. Integrate sequentially when outputs return. Run combined verification before

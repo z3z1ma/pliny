@@ -25,9 +25,9 @@ notes: <why this gap matters now>
 
 The summary does not create a new layer. It is a reasoning shape inside the owner
 records that already own objective status, plan strategy, and ticket coverage. If
-`accepted_risk` appears in a gap summary, cite the ticket-owned acceptance decision
-or critique disposition that accepted the risk; the summary itself does not accept
-risk.
+`accepted_risk` appears in a gap summary, cite the ticket-owned acceptance
+decision or ticket-owned finding disposition that accepted the risk; the summary
+itself does not accept risk.
 
 ## Optional Tranche Detail
 

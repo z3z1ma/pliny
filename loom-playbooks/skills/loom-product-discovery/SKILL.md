@@ -25,7 +25,7 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 - divergent option generation
 - convergent option selection
 - assumptions, non-goals, and open-question routing
-- handoff into initiatives, research, specs, plans, tickets, spikes, or wiki
+- handoff into initiatives, research, specs, plans, tickets, spike workflows, or wiki
 
 ## What This Workflow Does Not Own
 
@@ -66,21 +66,24 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 6. Choose the smallest valuable shape or record why no option is ready.
 7. Route durable output to owner layers: initiative for durable objective,
    research for options and assumptions, spec for intended behavior, plan for
-   sequencing, ticket for bounded execution, spike for experiment, and wiki only
-   for accepted explanation.
+   sequencing, ticket for bounded execution, evidence/research for experiment
+   results, and wiki only for accepted explanation. Use `loom-spike` as the
+   workflow when the next step is an experiment; do not treat it as an owner layer.
 8. Record a not-doing list and open questions in the owner record that downstream
    work will read.
 
 ## Output Shapes
 
-Choose the lightest owner output that makes downstream work safe:
+Choose the lightest owner output or workflow route that makes downstream work safe:
 
 - initiative when the idea becomes a durable outcome with success metrics
 - research when options, rejected paths, or assumptions need citable synthesis
 - spec when intended behavior or acceptance is now clear enough to contract
 - plan when the chosen direction needs multiple ordered execution units
 - ticket when the next step is already bounded and ticket-local acceptance is enough
-- spike when the next honest step is a prototype, sketch, or feasibility probe
+- spike workflow when the next honest step is a prototype, sketch, or feasibility
+  probe, with durable results routed to research, evidence, spec, plan, ticket, or
+  wiki as appropriate
 
 Do not create a standalone PRD or idea directory as Loom truth. If a one-page
 summary is useful, put its durable claims in the owner record that owns them.

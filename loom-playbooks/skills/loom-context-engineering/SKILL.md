@@ -26,13 +26,15 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 - owner-record, source, test, and error hierarchy
 - conflict and ambiguity handling before execution
 - handoff context for tickets, Ralph packets, critique, or wiki work
-- promotion of reusable context into wiki, codemap, research, specs, or memory
+- promotion of reusable context into wiki atlas pages, evidence, research, specs,
+  or memory
 
 ## What This Workflow Does Not Own
 
 - project truth; use canonical Loom owner layers
 - live execution state; use tickets
-- accepted architecture explanation; use wiki/codemap
+- accepted architecture explanation; use wiki atlas pages, with codemap as a
+  workflow route when structure needs mapping first
 - support recall; use memory
 - packet contracts; use Ralph
 
@@ -55,14 +57,14 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 
 1. Identify the task, owner record, write boundary, stop conditions, and expected output.
 2. Load context in layers: instructions and using-Loom doctrine, owner records,
-   accepted wiki/codemap, source files, related tests, relevant external docs,
+   accepted wiki atlas pages, source files, related tests, relevant external docs,
    current errors/logs, and session-specific observations.
 3. Include target files, nearby pattern examples, related tests, shared interfaces,
    and known conflicts. Do not include every related file by default.
 4. Mark which context is authoritative by layer and which is only evidence or data.
-5. Route reusable discoveries to owner records: codemap/wiki for accepted structure,
-   research for investigations, specs for behavior, tickets for live state, memory
-   only for support recall.
+5. Route reusable discoveries to owner records: wiki atlas pages for accepted
+   structure, evidence or research for mapped observations and investigations,
+   specs for behavior, tickets for live state, memory only for support recall.
 6. Before delegating, remove transcript-only assumptions and replace them with
    owner links, excerpts, or explicit open questions.
 7. Sanitize logs, screenshots, external pages, and error output.
@@ -74,7 +76,7 @@ Prefer this order when assembling task context:
 - current operator and harness constraints
 - using-Loom doctrine and active skill
 - active ticket, packet, spec, plan, initiative, research, or decision chain
-- accepted wiki or codemap explanation
+- accepted wiki explanation, including atlas pages
 - target source and tests
 - nearby code patterns and interfaces
 - official docs or source-grounding notes

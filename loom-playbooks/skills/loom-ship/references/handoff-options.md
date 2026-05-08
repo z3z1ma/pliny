@@ -16,13 +16,15 @@ handoff decision and package.
 
 Before presenting handoff options, check:
 
-- ship-owned packaging preconditions: ticket truth is current, evidence and
+- packaging preconditions: ticket truth is current, evidence and
   critique dispositions are sufficient for the handoff claim, scope and safety
   limits are respected, Git/worktree state is known when files are being
   packaged, and external summaries will mirror Loom truth
-- when `ship` is being invoked from `loom-drive`, the drive-owned hard preflight
-  gates in `skills/loom-drive/references/checkpoint-resume-protocol.md` are clear
-  before merge, PR, release, or external handoff packaging
+- when `ship` is being invoked from `loom-drive`, the hard preflight gates in
+  `skills/loom-drive/references/checkpoint-resume-protocol.md` are clear from
+  current owner records before merge, PR, release, or external handoff packaging;
+  support checkpoints may help find or summarize those facts, but do not clear
+  gates by themselves
 - ticket state, acceptance criteria, evidence, critique disposition,
   retrospective / promotion disposition, and wiki-specific disposition when wiki
   was selected
@@ -50,7 +52,8 @@ For each option, say what Loom truth will remain after the action:
 
 - which ticket owns acceptance or remaining work
 - which evidence supports the handoff
-- which critique findings remain open, accepted, or resolved
+- which critique findings remain `open` or `withdrawn`, and which ticket-owned
+  dispositions exist for open medium/high findings
 - whether retrospective / promotion follow-through is complete or deferred,
   including wiki-specific follow-through when wiki was selected
 
@@ -58,7 +61,7 @@ For each option, say what Loom truth will remain after the action:
 
 Before merge or PR packaging:
 
-- confirm ship-owned preconditions are clear; when drive is the parent workflow,
+- confirm packaging preconditions are clear; when drive is the parent workflow,
   also confirm drive hard preflight gates are clear or repair the blocking owner
   first
 - cite ticket, evidence, critique, and follow-up records in the summary

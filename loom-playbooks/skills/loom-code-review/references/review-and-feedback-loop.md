@@ -84,12 +84,17 @@ the evidence/intent is clear.
 Good finding:
 
 ```text
-Severity: Important
+Severity: medium
 Location: src/path/file.ts:42
 Claim: This bypasses the spec's authorization requirement for archived projects.
 Evidence: route checks project membership but not archive visibility.
 Required action: enforce `canViewArchivedProject` or revise spec acceptance.
 ```
+
+Use core critique severity values in saved critique findings: `low`, `medium`, or
+`high`. If a human review system uses labels such as `blocker`, `nit`, or
+`suggestion`, map them into core severity and ticket-owned disposition before
+closure.
 
 Avoid vague findings such as `this feels risky` without evidence or route.
 

@@ -1,9 +1,10 @@
 # Interface And Seam Design
 
 Use this reference when architecture work needs the concrete interface discipline
-behind `loom-architecture`. Current structure still belongs to code and codemap;
-intended behavior belongs to specs; execution belongs to plans, tickets, and
-packets.
+behind `loom-architecture`. Current structure is observed in source; durable maps
+route through codemap to evidence, research, or wiki. Intended behavior belongs to
+specs, live execution belongs to tickets, plans sequence complex change, and
+packets bound child work.
 
 ## Vocabulary
 

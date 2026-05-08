@@ -112,7 +112,7 @@ Before risky deploys, know:
 - who or what monitors after rollback
 - communication or handoff needs
 
-If rollback is impossible, record the accepted risk before release.
+If rollback is impossible, record ticket-owned accepted risk before release.
 
 ## Monitoring Signals
 

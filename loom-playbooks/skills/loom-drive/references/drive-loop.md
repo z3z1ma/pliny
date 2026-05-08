@@ -179,8 +179,11 @@ Translate each gate into Loom owners instead of copying a command runtime:
   owning closure
 
 Do not require every gate for every ticket. Do require an explicit disposition when
-a gate is skipped on non-trivial or high-risk work: `not_required` with rationale,
-`deferred` with rationale, `converted_to_follow_up`, or `blocking`.
+a gate is skipped or left incomplete on non-trivial or high-risk work, using the
+vocabulary owned by that gate: critique disposition status, evidence disposition
+status, promotion disposition, or ticket-owned finding disposition. Do not use
+`converted_to_follow_up` as a generic gate status; it is only a ticket-owned
+finding disposition for a qualified critique finding.
 
 For each ticket or follow-up:
 
@@ -220,8 +223,9 @@ After each ticket or tranche, the parent checks:
 
 - Which objective criterion IDs are satisfied, partially satisfied, or still open?
 - Which objective/spec/ticket claims have evidence?
-- Is critique required, `pending`, `blocking`, `completed`, `deferred` with
-  rationale, or `not_required` according to ticket-owned disposition status?
+- What critique policy applies, and is the ticket-owned critique disposition
+  `pending`, `blocking`, `completed`, `deferred` with rationale, or
+  `not_required` with rationale?
 - Did implementation discover new research, spec, plan, or constitution truth?
 - Is the next ticket tranche obvious and within delegated authority?
 - Would continuing exceed budget, scope, safety, or context limits?

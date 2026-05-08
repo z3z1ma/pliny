@@ -235,9 +235,10 @@ instead of letting drive become an omnibus engineering manual.
    source grounding, context engineering, code review, CI/CD, documentation,
    architecture, product discovery, UI/browser, security, performance, migration,
    simplification, agent orchestration, critique, wiki, retrospective, acceptance
-   review, or ship when their skills own the work. Declare read/write scope and
-   stop conditions before child work. `ship` packages or hands off already truthful
-   work; it does not own ticket closure.
+   review, or ship when their specialized route fits. Durable truth still routes
+   to core owner layers. Declare read/write scope and stop conditions before child
+   work. `ship` packages or hands off already truthful work; it does not own ticket
+   closure.
 8. **Reconcile results** — inspect child output, update ticket truth, route
    observations into evidence, findings into critique, accepted explanation into
    wiki, and changed strategy or behavior into the owner layers.
@@ -276,7 +277,7 @@ bounded handoff would reduce context pressure or improve reviewability.
 - scope would widen beyond the current initiative, plan, ticket, or write boundary
 - required evidence is missing or contradicted
 - open or unresolved medium/high critique findings lack ticket-owned dispositions
-  such as resolved, accepted risk, superseded, or linked follow-up work
+  of `resolved`, `accepted_risk`, `superseded`, or `converted_to_follow_up`
 - a ticket is blocked, write scopes overlap unsafely, or parallel work could
   corrupt shared state
 - budget, time, safety, privacy, or risk limits are reached

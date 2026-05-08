@@ -164,7 +164,7 @@ Git cannot answer by itself:
 - [ ] Dirty state and unrelated changes are visible before mutation, handoff, or packaging.
 - [ ] Packet Git provenance is recorded when packetized implementation uses Git.
 - [ ] Diff stays inside ticket or packet write scope.
-- [ ] Branch finish or abandon choice mirrors ticket, evidence, critique, and ship truth.
+- [ ] Branch finish or abandon choice mirrors ticket, evidence, critique truth, and any ship package wording derived from those records.
 - [ ] Review feedback is classified before it changes scope or acceptance.
 - [ ] Git summaries do not replace ticket, evidence, critique, or wiki truth.
 

@@ -55,8 +55,8 @@ Do not touch code just because it is nearby:
 - adjacent bugs not in scope
 - modernization outside the ticket boundary
 
-Record noticed issues in the ticket journal, accepted-risk note, or follow-up
-ticket when they matter.
+Record noticed issues in the ticket journal, ticket-owned accepted-risk rationale,
+or follow-up ticket when they matter.
 
 ## Safe Defaults
 

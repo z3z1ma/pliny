@@ -88,7 +88,7 @@ Good synchronized documentation:
 | "The code is self-documenting." | Code shows what. Docs often need to explain setup, public contracts, examples, and why accepted constraints matter. |
 | "We can write docs after release." | Docs, migration notes, and setup changes are part of acceptance when future use depends on them. |
 | "This ADR can live in docs." | In Loom, durable decisions belong to constitution. Docs may mirror or link them. |
-| "A TODO comment is enough." | Future work needs ticket disposition or an explicit accepted risk. |
+| "A TODO comment is enough." | Future work needs ticket disposition or ticket-owned accepted-risk rationale. |
 
 ## Red Flags
 

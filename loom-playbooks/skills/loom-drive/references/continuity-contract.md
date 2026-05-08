@@ -76,7 +76,7 @@ objective criteria: <OBJ-IDs with satisfied | partially_satisfied | open | block
 current tranche: <plan milestone / wave / purpose>
 active tickets: <ticket IDs and states>
 evidence state: <claim IDs with evidence links or gaps>
-critique state: <required | pending | blocking | completed | deferred | not_required, citing ticket truth>
+critique policy/disposition: <mandatory|recommended|optional plus pending|blocking|completed|deferred|not_required, citing ticket truth>
 open blockers or gaps: <owner records and claim IDs>
 handoff note: <optional prose when stopping or handing off; omit when records are already clear>
 ```

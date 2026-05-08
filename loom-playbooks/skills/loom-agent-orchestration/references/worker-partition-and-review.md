@@ -45,15 +45,20 @@ Give each worker:
 
 Avoid asking workers to infer their part from a whole plan. Extract the task.
 
-## Status Handling
+## Outcome Handling
 
-Use these statuses or map harness-specific output to them:
+For Ralph packets, use core child outcomes:
 
-- done: work completed with evidence and no concerns
-- done_with_concerns: work completed but risks or doubts remain
-- needs_context: worker lacks information; parent should provide it or revise packet
-- blocked: concrete blocker prevents progress
-- escalate: task should return to spec, plan, architecture, security, critique, or user decision
+- `continue`: meaningful progress happened and another bounded iteration is likely next
+- `stop`: the bounded task is complete and another iteration may not be needed
+- `blocked`: a concrete blocker prevents progress
+- `escalate`: the task should return to spec, plan, architecture, security,
+  critique, or user decision
+
+For non-Ralph harness workers, labels such as `done`, `done_with_concerns`, or
+`needs_context` are transport summaries only. Map them into core owner truth:
+ticket status, blockers, evidence, critique findings, or a revised packet/handoff
+before depending on them.
 
 Never ignore concerns just because files changed.
 

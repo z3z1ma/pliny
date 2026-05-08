@@ -55,8 +55,10 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 
 ## Default Procedure
 
-1. Identify the behavior claim and its owner: spec acceptance ID, ticket-local
-   criterion, bug report, or current implementation contract.
+1. Identify the behavior claim and its owner: spec acceptance ID or ticket-local
+   criterion. If the starting point is a bug report or current implementation,
+   translate it into an owner-backed claim and evidence baseline before acceptance
+   depends on it.
 2. Pick the smallest meaningful proof seam: unit for pure logic, integration for
    boundaries, browser/UI for visible behavior, end-to-end only for critical flows.
 3. RED: write the check before the implementation, run it, and confirm it fails
