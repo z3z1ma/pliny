@@ -1,0 +1,13 @@
+---
+{
+  "attestations": [],
+  "base_commit_sha": "6c1c30ae1fafcaa4a02c446397e998f1b10c5685",
+  "branch": "main",
+  "commit_sha": "7cb65c63c90fe53da1c29a10ad51f33aeb290fb2",
+  "commit_time": "2026-05-07T23:13:16-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.2",
+  "prompts": {},
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
