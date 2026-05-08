@@ -1,0 +1,433 @@
+loom-playbooks/skills/loom-context-engineering/SKILL.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 29-30,36-37,60,65-67,79
+  human 35,58,63-64,77
+loom-playbooks/skills/loom-drive/references/continuity-contract.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 79
+loom-playbooks/skills/loom-git/SKILL.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 167
+.loom/tickets/20260508-pbalign8-align-playbooks-with-core.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 1-203
+.loom/evidence/20260508-playbook-core-alignment-check.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 1-188
+loom-playbooks/skills/loom-ship/references/handoff-options.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 19,23-27,55-56,64
+.loom/critique/20260508-playbook-core-alignment-review.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 1-129
+loom-playbooks/skills/loom-code-review/SKILL.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 72,74-77,79-88,122-123,132-133
+  human 78,114
+loom-playbooks/skills/loom-ship/SKILL.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 79,83-85
+loom-playbooks/skills/loom-code-review/references/review-and-feedback-loop.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 87,94-97
+  human 98
+loom-playbooks/skills/loom-ci-cd/references/automation-gates-and-rollouts.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 115
+loom-playbooks/skills/loom-context-engineering/references/context-pack-protocol.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 26,82-83
+loom-playbooks/skills/loom-drive/references/drive-loop.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 182-186,226-228
+loom-playbooks/skills/loom-source-grounding/SKILL.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 50-51
+loom-playbooks/skills/loom-product-discovery/SKILL.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 28,69-71,77,84-86
+  human 76,83
+loom-playbooks/skills/loom-tdd/SKILL.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 58-61
+loom-playbooks/skills/loom-architecture/references/interface-and-seam-design.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 4-7
+loom-playbooks/skills/loom-agent-orchestration/references/worker-partition-and-review.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 48,50,52-61
+loom-playbooks/skills/loom-drive/references/tranche-decision-protocol.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 28-30
+loom-playbooks/skills/loom-incremental-implementation/references/thin-slice-execution.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 58-59
+loom-playbooks/skills/loom-agent-orchestration/SKILL.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 29,71-73
+loom-playbooks/skills/loom-docs-sync/SKILL.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 91
+loom-playbooks/skills/loom-drive/SKILL.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 238-241,280
+loom-playbooks/skills/loom-product-discovery/references/discovery-loop.md
+  ses_1fa2df51bffe5qeUw5mXzvs2s6 73-74
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 9,
+          "added_lines": 9,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "29-30,36-37,60,65-67,79",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 0,
+          "added_lines": 0,
+          "deleted_lines": 5,
+          "hash": "human",
+          "lines": "35,58,63-64,77",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-context-engineering/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "79",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-drive/references/continuity-contract.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "167",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-git/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 203,
+          "added_lines": 203,
+          "deleted_lines": 21,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "1-203",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/tickets/20260508-pbalign8-align-playbooks-with-core.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 188,
+          "added_lines": 188,
+          "deleted_lines": 20,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "1-188",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/evidence/20260508-playbook-core-alignment-check.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 9,
+          "added_lines": 9,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "19,23-27,55-56,64",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-ship/references/handoff-options.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 129,
+          "added_lines": 129,
+          "deleted_lines": 13,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "1-129",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".loom/critique/20260508-playbook-core-alignment-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 19,
+          "added_lines": 21,
+          "deleted_lines": 2,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "72,74-77,79-88,122-123,132-133",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 0,
+          "added_lines": 0,
+          "deleted_lines": 2,
+          "hash": "human",
+          "lines": "78,114",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-code-review/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "79,83-85",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-ship/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 5,
+          "added_lines": 6,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "87,94-97",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "98",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-code-review/references/review-and-feedback-loop.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "115",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-ci-cd/references/automation-gates-and-rollouts.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "26,82-83",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-context-engineering/references/context-pack-protocol.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 8,
+          "added_lines": 8,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "182-186,226-228",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-drive/references/drive-loop.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "50-51",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-source-grounding/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 8,
+          "added_lines": 8,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "28,69-71,77,84-86",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 0,
+          "added_lines": 0,
+          "deleted_lines": 2,
+          "hash": "human",
+          "lines": "76,83",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-product-discovery/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "58-61",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-tdd/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "4-7",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-architecture/references/interface-and-seam-design.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 12,
+          "added_lines": 12,
+          "deleted_lines": 1,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "48,50,52-61",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-agent-orchestration/references/worker-partition-and-review.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "28-30",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-drive/references/tranche-decision-protocol.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "58-59",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-incremental-implementation/references/thin-slice-execution.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "29,71-73",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-agent-orchestration/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "91",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-docs-sync/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 5,
+          "added_lines": 5,
+          "deleted_lines": 0,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "238-241,280",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-drive/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 11,
+          "hash": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+          "lines": "73-74",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-product-discovery/references/discovery-loop.md"
+    }
+  ],
+  "base_commit_sha": "035fecd81e6b09249b61bf71ef6cff2426e41ef2",
+  "branch": "main",
+  "commit_sha": "6c1c30ae1fafcaa4a02c446397e998f1b10c5685",
+  "commit_time": "2026-05-07T22:28:47-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.2",
+  "prompts": {
+    "human": {
+      "accepted_lines": 1,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 1,
+      "total_deletions": 9
+    },
+    "ses_1fa2df51bffe5qeUw5mXzvs2s6": {
+      "accepted_lines": 627,
+      "agent_id": {
+        "id": "ses_1fa2df51bffe5qeUw5mXzvs2s6",
+        "model": "openai/gpt-5.5",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "messages": [],
+      "overriden_lines": 0,
+      "total_additions": 630,
+      "total_deletions": 68
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
