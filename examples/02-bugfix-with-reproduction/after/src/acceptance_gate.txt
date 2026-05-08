@@ -1,2 +1,0 @@
-close_ticket_when_work_done=true
-check_unresolved_critique=true
