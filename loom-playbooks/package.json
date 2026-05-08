@@ -1,21 +1,21 @@
 {
   "name": "@z3z1ma/open-loom-playbooks",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "OpenCode playbook package for optional Loom workflow skills; requires @z3z1ma/open-loom-core.",
   "type": "module",
-  "main": "./open-loom-playbooks.mjs",
+  "main": "./loom-playbooks.mjs",
   "exports": {
-    ".": "./open-loom-playbooks.mjs",
-    "./open-loom-playbooks": "./open-loom-playbooks.mjs"
+    ".": "./loom-playbooks.mjs",
+    "./loom-playbooks": "./loom-playbooks.mjs"
   },
   "engines": {
     "opencode": ">=1.14.22 <2"
   },
   "peerDependencies": {
-    "@z3z1ma/open-loom-core": "^0.1.10"
+    "@z3z1ma/open-loom-core": "^0.1.12"
   },
   "files": [
-    "open-loom-playbooks.mjs",
+    "loom-playbooks.mjs",
     "skills/"
   ],
   "keywords": [
@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/z3z1ma/agent-loom#readme",
   "scripts": {
-    "smoke": "node open-loom-playbooks.mjs --smoke",
+    "smoke": "node loom-playbooks.mjs --smoke",
     "pack:check": "npm run smoke && npm pack --dry-run"
   }
 }

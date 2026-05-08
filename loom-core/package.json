@@ -1,18 +1,18 @@
 {
   "name": "@z3z1ma/open-loom-core",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "OpenCode core package for the Loom Markdown-native AI work protocol.",
   "type": "module",
-  "main": "./open-loom-core.mjs",
+  "main": "./loom-core.mjs",
   "exports": {
-    ".": "./open-loom-core.mjs",
-    "./open-loom-core": "./open-loom-core.mjs"
+    ".": "./loom-core.mjs",
+    "./loom-core": "./loom-core.mjs"
   },
   "engines": {
     "opencode": ">=1.14.22 <2"
   },
   "files": [
-    "open-loom-core.mjs",
+    "loom-core.mjs",
     "skills/"
   ],
   "keywords": [
@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/z3z1ma/agent-loom#readme",
   "scripts": {
-    "smoke": "node open-loom-core.mjs --smoke",
+    "smoke": "node loom-core.mjs --smoke",
     "pack:check": "npm run smoke && npm pack --dry-run"
   }
 }
