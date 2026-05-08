@@ -3,7 +3,7 @@ id: plan:split-core-and-playbooks-packages
 kind: plan
 status: active
 created_at: 2026-05-07T21:31:17Z
-updated_at: 2026-05-07T23:49:27Z
+updated_at: 2026-05-08T01:46:00Z
 scope:
   kind: repository
   repositories:
@@ -20,11 +20,13 @@ links:
     - ticket:xtt24452
     - ticket:sbzmrvqv
     - ticket:mbkqbkgq
+    - ticket:plybk508
   research:
     - research:core-workflow-plugin-split-feasibility
     - research:gemini-extension-subdirectory-feasibility
     - research:loom-install-distribution-methods
     - research:codex-plugin-distribution-surfaces
+    - research:peer-playbook-integration-candidates
   decision:
     - decision:0004
     - decision:0005
@@ -125,6 +127,21 @@ Playbook skill membership:
 - `loom-codemap`
 - `loom-ship`
 - `loom-skill-authoring`
+- `loom-architecture`
+- `loom-product-discovery`
+- `loom-ui-browser`
+- `loom-security`
+- `loom-migration`
+- `loom-simplification`
+- `loom-incremental-implementation`
+- `loom-tdd`
+- `loom-source-grounding`
+- `loom-context-engineering`
+- `loom-code-review`
+- `loom-ci-cd`
+- `loom-performance`
+- `loom-docs-sync`
+- `loom-agent-orchestration`
 
 # Strategy
 

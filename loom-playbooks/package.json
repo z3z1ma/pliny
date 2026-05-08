@@ -1,6 +1,6 @@
 {
   "name": "@z3z1ma/open-loom-playbooks",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "OpenCode playbook package for optional Loom workflow skills; requires @z3z1ma/open-loom-core.",
   "type": "module",
   "main": "./open-loom-playbooks.mjs",

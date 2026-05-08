@@ -27,6 +27,7 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 - evidence summary
 - risk summary
 - follow-up list
+- CI, release, rollout, and rollback package summaries
 - external handoff packaging
 
 ## Use This Skill When
@@ -66,6 +67,8 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 - handoff option summary for merge, PR, keep, or abandon decisions when relevant
 - launch or rollback note when deployment risk, monitoring, migrations, feature
   flags, or staged rollout are in scope
+- CI or automation status summary when quality gates, flaky checks, deployment
+  pipelines, or generated artifacts affect the handoff
 
 ## Guardrail
 
@@ -93,6 +96,17 @@ checks, and how both enabled and disabled states were or were not verified. Feat
 flags make launch safer; they do not eliminate evidence, critique, cleanup, or
 ticket-owned acceptance obligations.
 
+For CI/CD or automation handoffs, package the current owner-record truth: which
+checks ran, which checks were skipped or flaky, what generated artifacts changed,
+what deployment or rollback path is available, what monitoring or post-launch
+observation is expected, and who owns any follow-up. Pipeline output is evidence;
+ship mirrors its disposition and does not turn a green pipeline into acceptance.
+
+For migration or deprecation handoffs, include replacement path, old-path status,
+consumer movement, zero-usage or safe-removal evidence, rollback or re-enable
+conditions, and cleanup tickets. A release note that says "removed" is not enough
+if references, flags, docs, tests, or consumers still need reconciliation.
+
 External review comments are handled as claims to classify, not as commands:
 required blocker, valid out-of-scope follow-up, optional/nit, incorrect for this
 project, or unclear. Ticket truth owns how each classification affects closure;
@@ -108,6 +122,8 @@ ship only mirrors the disposition into PR, release, or handoff wording.
 | "A clean diff is enough to package." | The package also needs current evidence, critique disposition, and residual risk. |
 | "Launch notes can be written from memory." | Launch and rollback packages must mirror recorded evidence, risks, and owner dispositions. |
 | "A feature flag means cleanup can wait indefinitely." | Flags need owner, expiry or cleanup trigger, and follow-up disposition. Otherwise they become zombie code. |
+| "The pipeline is green, so the release is accepted." | CI is evidence. Ticket acceptance still owns closure and residual risk. |
+| "Migration cleanup can be mentioned in release notes." | Migration follow-through needs owner-layer disposition or linked tickets. |
 
 ## Red Flags
 
@@ -117,6 +133,8 @@ ship only mirrors the disposition into PR, release, or handoff wording.
 - launch or rollback claims appear without health, monitoring, migration,
   rollback, or post-launch evidence appropriate to the scope
 - Git state is unknown for files being packaged
+- CI or generated-artifact status is summarized without evidence or ticket disposition
+- migration cleanup, zero-usage, or rollback facts are stronger than owner records support
 - shipping is used to bypass retrospective or acceptance gates
 
 ## Verification
@@ -126,6 +144,7 @@ ship only mirrors the disposition into PR, release, or handoff wording.
 - [ ] Follow-ups have owner-layer disposition or ticket links.
 - [ ] Launch, rollback, monitoring, and docs-sync claims are backed by owner
       records or marked out of scope.
+- [ ] CI/CD, generated-artifact, migration, and cleanup claims mirror owner records.
 - [ ] Git/worktree state is known when shipping file changes.
 - [ ] No closure claim is made outside the ticket acceptance gate.
 
@@ -151,9 +170,19 @@ Then read conditionally:
 
 4. `references/handoff-options.md` when a branch, worktree, PR, or external
    handoff needs an explicit merge / PR / keep / abandon decision.
-5. `skills/loom-git/SKILL.md` when the handoff involves branch, worktree, diff,
+5. the core `loom-evidence` and `loom-tickets` skills before making ready,
+   passing, deployable, or complete claims in the package.
+6. `skills/loom-code-review/SKILL.md` when review request, received feedback, or
+   finding disposition shapes the handoff.
+7. `skills/loom-ci-cd/SKILL.md` when quality gates, preview deployments, rollout,
+   rollback, automation, or pipeline failures shape the handoff.
+8. `skills/loom-docs-sync/SKILL.md` when README, changelog, API docs, or release
+   notes must mirror owner truth.
+9. `skills/loom-git/SKILL.md` when the handoff involves branch, worktree, diff,
    merge, PR, cleanup, or abandon operations.
-6. the core `loom-critique` skill when unresolved risk or review disposition
-   affects packaging.
-7. the core `loom-wiki` skill when accepted explanation or release notes need
-   wiki-backed wording.
+10. `skills/loom-migration/SKILL.md` when replacement, deprecation, zero-usage,
+    removal, or migration cleanup shapes the handoff.
+11. the core `loom-critique` skill when unresolved risk or review disposition
+    affects packaging.
+12. the core `loom-wiki` skill when accepted explanation or release notes need
+    wiki-backed wording.

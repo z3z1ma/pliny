@@ -121,7 +121,10 @@ durable claims, route them into the layer that owns that kind of truth.
   prompting each next ticket
 - the work requires moving between objective framing, planning, tickets,
   Ralph execution, debugging, spike, codemap, evidence, critique, wiki, ship
-  handoff, and reassessment
+  handoff, spec refinement, implementation slicing, TDD, evidence validation,
+  source grounding, context engineering, code review, CI/CD, documentation,
+  architecture, product discovery, UI/browser, security, performance, migration,
+  simplification, agent orchestration, and reassessment
 - context pressure suggests a bounded outer-loop synthesis handoff would make the
   parent more reliable
 
@@ -192,6 +195,11 @@ Once those are clear enough, proceed through Loom records without asking for
 approval before every ticket. Stop and ask again only at explicit escalation
 boundaries.
 
+If the request is still a raw idea, desired feature, or vague product direction
+after the pressure check, route to `loom-product-discovery` before drive creates a
+tranche. If the request is clearly a specialized workflow, route to that playbook
+instead of letting drive become an omnibus engineering manual.
+
 ## Default Drive Loop
 
 0. **Accept or refuse the drive contract** — decide whether enough authority,
@@ -221,11 +229,15 @@ boundaries.
    and dependent continuation until repaired.
 7. **Execute bounded work** — use the owner skill when truth must be shaped before
    implementation; use local execution for tiny safe changes, Ralph for fresh-context
-   implementation packets, and domain workflows such as debugging, spike,
-   codemap, critique, wiki, retrospective, acceptance review, or ship when their
-   skills own the work. Declare read/write scope and stop conditions before child
-   work. `ship` packages or hands off already truthful work; it does not own
-   ticket closure.
+   implementation packets, and domain workflows such as debugging, spike, codemap,
+   spec refinement, plan/ticket shaping, incremental implementation, TDD,
+   evidence validation,
+   source grounding, context engineering, code review, CI/CD, documentation,
+   architecture, product discovery, UI/browser, security, performance, migration,
+   simplification, agent orchestration, critique, wiki, retrospective, acceptance
+   review, or ship when their skills own the work. Declare read/write scope and
+   stop conditions before child work. `ship` packages or hands off already truthful
+   work; it does not own ticket closure.
 8. **Reconcile results** — inspect child output, update ticket truth, route
    observations into evidence, findings into critique, accepted explanation into
    wiki, and changed strategy or behavior into the owner layers.
@@ -285,6 +297,7 @@ inside delegated authority.
 | "A drive summary can be the live ledger." | Drive coordinates. Tickets own live execution state and acceptance. |
 | "A big objective needs a big plan before action." | Decompose only enough to make the next safe tranche clear. |
 | "The subagent output looks complete, so I can depend on it." | Child or support output must be reconciled into owner records before it becomes usable truth. |
+| "Drive can handle every workflow directly." | Drive coordinates objectives; specialized playbooks own recurring route discipline when their trigger fits. |
 
 ## Red Flags
 
@@ -293,6 +306,10 @@ inside delegated authority.
 - several tickets are launched without dependency or write-scope checks
 - drive keeps asking for approval on obvious in-scope moves, or keeps moving after explicit stop conditions
 - support handoffs summarize owner truth but owner records remain stale
+- drive keeps product discovery, spec, planning, implementation, testing, review,
+  CI/CD, documentation, architecture, migration, security, performance, UI, or
+  simplification decisions in chat instead of routing to the specialized playbook
+  and owner records
 
 ## Verification
 
@@ -342,7 +359,14 @@ Then read conditionally:
 11. the core `loom-evidence`, `loom-critique`, `loom-wiki`, or
     `loom-retrospective` skills when observations, review, accepted explanation,
     or learning assimilation is next.
-12. `references/outer-loop-subagent-transport.md` when optional outer-loop
+12. optional playbooks such as `loom-product-discovery`,
+    `loom-incremental-implementation`, `loom-tdd`, `loom-source-grounding`,
+    `loom-context-engineering`, `loom-code-review`, `loom-ci-cd`,
+    `loom-docs-sync`, `loom-architecture`, `loom-ui-browser`, `loom-security`,
+    `loom-performance`, `loom-migration`, `loom-simplification`, or
+    `loom-agent-orchestration` when their specialized trigger fits better than
+    generic objective driving.
+13. `references/outer-loop-subagent-transport.md` when optional outer-loop
     subagent transport is relevant.
-13. `templates/outer-loop-handoff.md` only when launching an optional bounded
+14. `templates/outer-loop-handoff.md` only when launching an optional bounded
     outer-loop synthesis subagent.

@@ -23,6 +23,8 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 - spike experiment framing
 - sketch variant framing
 - throwaway write-scope discipline
+- product and UI variant discipline before commitment
+- feasibility, performance, integration, and migration probe boundaries
 - evidence and null-result capture
 - downstream routing after discovery
 
@@ -111,6 +113,17 @@ UI/product variants should be structurally different: different layout,
 information hierarchy, interaction model, or primary affordance. Variants that
 only change color, copy, or spacing are tweaks, not sketch exploration.
 
+Ask one visual or product question at a time when a choice would change the next
+variant or downstream spec. Use realistic content when fake content would hide
+layout, density, edge-case, or copy problems. Do not advance from sketch to
+implementation until the accepted behavior or remaining uncertainty is routed to
+spec, research, plan, ticket, or wiki.
+
+Technical experiments should name the source version, dependency version, official
+docs or project example inspected when correctness depends on it, and the exact
+signal that would confirm or falsify the hypothesis. A performance spike needs a
+baseline and a measurement method before optimization ideas are compared.
+
 If a harness or local tool helps produce visual artifacts, treat that tool as
 transport. It does not become a Loom layer. Preserve durable outputs in evidence
 and route accepted behavior or explanation to spec or wiki.
@@ -124,6 +137,7 @@ and route accepted behavior or explanation to spec or wiki.
 | "Persistence makes the prototype more realistic." | Persistence is usually the thing being tested; otherwise it creates cleanup risk and accidental dependency. |
 | "Three UI variants that share the same layout are enough." | Sketch variants must disagree structurally or they will not reveal product direction. |
 | "No evidence is needed because it was exploratory." | Exploration produces observations, rejected options, null results, and downstream recommendations worth preserving. |
+| "The prototype command worked once, so feasibility is proven." | A spike proves only the named hypothesis under the observed source, version, and environment limits. |
 
 ## Red Flags
 
@@ -131,6 +145,7 @@ and route accepted behavior or explanation to spec or wiki.
 - throwaway code writes production data or becomes a hidden dependency
 - prototype has no clear question, run path, visible state, or cleanup expectation
 - variants differ only cosmetically
+- technical experiment lacks source/version or measurement context
 - conclusions live only in chat or screenshots with no research/evidence link
 - cleanup or downstream route is unspecified
 
@@ -139,6 +154,7 @@ and route accepted behavior or explanation to spec or wiki.
 - [ ] Question and chosen branch are explicit.
 - [ ] Variant/experiment matrix records strengths, weaknesses, and decisions when options were compared.
 - [ ] Evidence preserves artifacts or observations.
+- [ ] Technical experiments name source/version context and the signal tested.
 - [ ] Accepted behavior routes to spec; accepted explanation routes to wiki.
 - [ ] Throwaway code is deleted, absorbed, or explicitly contained.
 - [ ] Spikes that write throwaway code, source-tree changes, generated prototype

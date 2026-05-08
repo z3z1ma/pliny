@@ -3,7 +3,7 @@ id: spec:core-and-playbooks-package-contract
 kind: spec
 status: active
 created_at: 2026-05-07T21:41:42Z
-updated_at: 2026-05-07T23:49:27Z
+updated_at: 2026-05-08T01:46:00Z
 scope:
   kind: repository
   repositories:
@@ -17,6 +17,7 @@ links:
     - research:core-workflow-plugin-split-feasibility
     - research:gemini-extension-subdirectory-feasibility
     - research:loom-install-distribution-methods
+    - research:peer-playbook-integration-candidates
   decision:
     - decision:0008
     - decision:0006
@@ -30,6 +31,7 @@ links:
     - ticket:xtt24452
     - ticket:sbzmrvqv
     - ticket:mbkqbkgq
+    - ticket:plybk508
   critique:
     - critique:core-playbooks-package-contract-review
 external_refs:
@@ -222,8 +224,16 @@ Non-examples:
   plans, tickets, evidence, critique, and wiki.
 - REQ-004: `loom-playbooks/skills` MUST contain only optional playbook skills:
   `loom-drive`, `loom-git`, `loom-debugging`, `loom-spike`, `loom-codemap`,
-  `loom-ship`, and `loom-skill-authoring`, unless a later constitutional or spec
-  amendment changes membership.
+  `loom-ship`, `loom-skill-authoring`, `loom-architecture`,
+  `loom-product-discovery`, `loom-ui-browser`, `loom-security`,
+  `loom-migration`, `loom-simplification`, `loom-incremental-implementation`,
+  `loom-tdd`, `loom-source-grounding`, `loom-context-engineering`,
+  `loom-code-review`, `loom-ci-cd`, `loom-performance`, `loom-docs-sync`, and
+  `loom-agent-orchestration`, unless a later constitutional or spec amendment
+  changes membership. Optional playbooks MUST provide genuine workflow
+  composition or specialist discipline on top of core owner layers; playbooks
+  that merely duplicate core owner-layer skills or mandatory using-Loom doctrine
+  are not allowed.
 - REQ-005: `loom-playbooks` MUST require `loom-core` and MUST NOT duplicate core
   doctrine, canonical owner-layer skills, record grammar, `using-loom`, Ralph, or
   retrospective.
@@ -417,6 +427,9 @@ Coverage:
 
 - 2026-05-07T23:20:14Z: Added `decision:0009` Gemini-only root core shim
   exception, `REQ-016`, `SCN-009`, and `ACC-009`.
+- 2026-05-08T01:16:04Z: Amended `REQ-004` to add the optional peer-inspired
+  playbooks accepted by `research:peer-playbook-integration-candidates` under
+  `ticket:plybk508`.
 
 # Contract Review
 
@@ -424,7 +437,8 @@ Coverage:
   retirement with the Gemini shim exception, harness catalog boundaries, OpenCode
   naming, Codex/Gemini evidence gates, docs, and reference reconciliation.
 - Correctness: reflects `decision:0008`, `decision:0009`, the split feasibility
-  research, and the active split plan rather than the current unsplit source tree.
+  research, `research:peer-playbook-integration-candidates`, and the active split
+  plan rather than the current unsplit source tree.
 - Coherence: uses `core`, `playbooks`, `package roots`, and `product surface` as
   stable terms; distinguishes package metadata from semantic ownership.
 

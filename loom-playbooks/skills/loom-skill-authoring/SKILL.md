@@ -25,6 +25,7 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 - skill directory structure
 - reference/template placement
 - anti-pattern review for hidden runtimes or vague ownership
+- skill-routing and pressure-scenario adaptation from peer skill systems
 
 ## What Good Loom Skills Do
 
@@ -41,6 +42,26 @@ A good Loom skill:
 - ends with evidence-backed verification, not a vibe check
 - provides references for nuanced judgment
 - provides templates when artifact creation is part of the workflow
+
+## Pressure-Scenario Validation
+
+When a skill change affects routing, verification, critique, acceptance, closure,
+or operator discipline, test the behavior with at least one realistic pressure
+scenario when proportional.
+
+Use the smallest honest loop:
+
+1. RED: name the prompt-shaped temptation the old or missing guidance would likely
+   mishandle, such as "skip formalities", "the fix is obvious", "the screenshot
+   looks fine", or "the child said done".
+2. GREEN: edit the smallest skill surface that makes the correct Loom route,
+   owner record, or refusal obvious.
+3. REFACTOR: remove duplicate prose, hidden runtime assumptions, over-broad
+   activation, or new owner ambiguity introduced by the fix.
+
+Preserve the scenario in evidence or critique when the ticket needs durable
+support. For small wording edits, a written scenario plus structural review may be
+enough; do not invent a hidden skill-test harness.
 
 ## Use This Skill When
 
@@ -62,6 +83,7 @@ A good Loom skill:
 | "The skill reads well, so it is done." | Skill edits change future operator behavior; validation must check activation, boundaries, references, templates, and proportional evidence. |
 | "This rule can live in the new skill only." | Always-on doctrine belongs in using-Loom; owner truth belongs in owner records. Skills coordinate behavior without hiding core policy. |
 | "A broad description means the skill owns all related truth." | Broad activation improves discovery. Durable truth still routes to the owning Loom layer. |
+| "The pressure scenario is obvious, so I do not need to write it down." | Behavior-changing skill edits need a concrete check against the rationalization they are meant to prevent. |
 
 ## Red Flags
 
@@ -70,6 +92,7 @@ A good Loom skill:
 - required references are a bare index instead of immediate versus conditional reads
 - templates introduce placeholder IDs, vague completion claims, or hidden runtime assumptions
 - verification is only the author's confidence that the prose sounds right
+- behavior-changing guidance lacks a pressure scenario, critique, or evidence posture proportional to risk
 
 ## Verification
 
@@ -79,6 +102,7 @@ A good Loom skill:
 - [ ] References are immediate or conditional for a stated reason.
 - [ ] Templates exist only for artifact shapes the skill owns.
 - [ ] Behavior-changing edits have structural checks, pressure scenarios, critique, or evidence proportional to risk.
+- [ ] Pressure scenarios target real shortcut prompts and do not require hidden runtime machinery.
 
 ## Done Means
 
@@ -100,16 +124,18 @@ Read immediately for skill authoring:
 1. `references/principles.md` when deciding whether a skill should exist and
    what it should own.
 2. `references/structure.md` when laying out files, references, and templates.
+3. `references/skill-routing-and-pressure-testing.md` when adapting peer skills,
+   designing activation boundaries, or testing skills against rationalizations.
 
 Then read conditionally:
 
-3. `references/anti-patterns.md` when checking overlap, hidden runtime
+4. `references/anti-patterns.md` when checking overlap, hidden runtime
    dependency, or vague activation.
-4. `references/skill-review.md` when a skill changes operator behavior,
+5. `references/skill-review.md` when a skill changes operator behavior,
    discipline, routing, or protocol authority and needs pressure-testing or
    critique before acceptance.
-5. `templates/simple-skill.md` when creating an owner-layer, workflow, support,
+6. `templates/simple-skill.md` when creating an owner-layer, workflow, support,
    shared-grammar, inner-loop, control-plane, entry-doctrine, or authoring skill with a
    single coherent boundary.
-6. `templates/router-skill.md` when creating a workflow coordinator that routes
+7. `templates/router-skill.md` when creating a workflow coordinator that routes
    among multiple owner layers without owning a new truth layer.

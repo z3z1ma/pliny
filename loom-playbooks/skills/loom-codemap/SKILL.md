@@ -24,6 +24,8 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 - codebase map workflow
 - module atlas workflow
 - safe path-scoped context adapter guidance
+- source/version and documentation conflict surfacing
+- edit-oriented context packing for future tickets or packets
 - routing scan results into wiki, research, and evidence
 
 ## Use This Skill When
@@ -67,6 +69,19 @@ Do not synthesize from a file-tree glance alone when the map will guide future
 execution. Deterministic collection keeps the atlas from becoming a confident but
 stale story about the wrong files.
 
+## Source Conflict Rule
+
+When a map or context pack depends on framework, library, platform, external API,
+or generated behavior, identify the relevant version or source state before
+synthesis. Prefer current project code and accepted owner records for project
+truth; use official docs or source examples for external behavior. If docs,
+current code, generated files, and owner records disagree, route the conflict to
+research, spec, ticket, or critique instead of choosing silently.
+
+For packet or ticket preparation, a useful context pack is not every related file.
+It is the smallest set that lets a fresh worker see the target files, nearby
+pattern, relevant tests, shared interfaces, owner records, and known conflicts.
+
 ## Atlas Page Shape
 
 Atlas page shape is owned by `loom-wiki`.
@@ -107,6 +122,8 @@ Read:
 | "Uncertain interpretation can go straight into wiki." | Uncertainty belongs in research until accepted. Wiki explains settled structure. |
 | "Path-local instructions can teach local truth." | Path adapters may point to Loom owners; they do not own independent truth. |
 | "Structure is obvious, so no evidence is needed." | If the map will be reused, preserve enough scan/source context to know when it must be rechecked. |
+| "Official docs always beat local code." | Docs explain external behavior; local code and owner records still define project implementation reality and intended behavior. |
+| "More files make a better context pack." | Context packs should include the smallest relevant source set plus conflicts and owner records, not a transcript dump. |
 
 ## Red Flags
 
@@ -117,12 +134,16 @@ Read:
 - generated adapter gives imperative instructions beyond owner-record pointers
 - map ignores repository boundaries or nested workspaces
 - repeated packet compilation still rediscovers paths after the codemap pass
+- source, docs, generated files, or owner records conflict without a routed disposition
+- context pack omits the nearby pattern, tests, or shared interface that would prevent guessing
 
 ## Verification
 
 - [ ] Repository scope and map boundary are explicit.
 - [ ] Accepted structure is in wiki; uncertainty and rejected interpretations are in research.
 - [ ] Scan observations or file lists are evidence when the map depends on them.
+- [ ] Source/version conflicts are routed instead of silently resolved.
+- [ ] Edit-oriented context packs include target files, nearby patterns, tests, interfaces, and owner records.
 - [ ] Path-local adapters, if created, point to owner records and do not own truth.
 
 ## Done Means
@@ -144,7 +165,11 @@ Then read conditionally:
 
 2. the core `loom-research` skill when scan results include uncertainty,
    rejected interpretations, or null results.
-3. the core `loom-evidence` skill when scan commands or observed structure should
+3. `skills/loom-source-grounding/SKILL.md` when external docs, dependency versions,
+   or framework/source behavior constrain the map.
+4. `skills/loom-context-engineering/SKILL.md` when the codemap result should become
+   a task-specific context pack or handoff.
+5. the core `loom-evidence` skill when scan commands or observed structure should
    be preserved as evidence.
-4. the core `loom-wiki` skill when accepted structure should become a reusable
+6. the core `loom-wiki` skill when accepted structure should become a reusable
    atlas or module page.

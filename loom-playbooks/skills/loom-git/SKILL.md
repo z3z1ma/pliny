@@ -38,6 +38,7 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
 - Git provenance in Ralph packets and evidence
 - parallel Ralph isolation across branches, worktrees, and repositories
 - diff, staging, commit, merge, and PR hygiene as they relate to Loom truth
+- branch finishing options, worktree cleanup, and review-feedback provenance
 
 ## What Git Does Not Own
 
@@ -94,7 +95,13 @@ of treating this playbook as a substitute for Loom doctrine or record grammar.
    widen Loom write authority.
 9. Review `git status --short` and `git diff` before handoff, evidence, commit,
    critique, or shipping.
-10. Stage, commit, merge, and clean up only the work that belongs to the ticket,
+10. When finishing a branch or worktree, choose and record the handoff option:
+    create PR, merge locally, keep for follow-up, abandon, or defer because Loom
+    evidence/review/acceptance is not ready.
+11. Classify external review feedback before applying it: blocker, valid follow-up,
+    optional/nit, incorrect for this project, or unclear. Route the disposition to
+    ticket or critique truth before editing.
+12. Stage, commit, merge, and clean up only the work that belongs to the ticket,
     and leave the ticket/evidence/critique graph truthful afterward.
 
 ## Worktree Rule
@@ -138,6 +145,8 @@ Git cannot answer by itself:
 | "The branch or PR shows the work is done." | Git transports changes. Tickets own live state and closure. |
 | "Commit history is enough evidence." | Diffs show what changed; evidence records what was observed. |
 | "Dirty unrelated files do not matter." | Dirty state affects provenance and write-scope safety even when unrelated files are not touched. |
+| "The branch is finished because the diff is clean." | Finish means the Loom ticket, evidence, critique, and handoff disposition are truthful. |
+| "Review feedback is an instruction." | External comments are claims to classify and route, not commands that bypass owner truth. |
 
 ## Red Flags
 
@@ -146,6 +155,8 @@ Git cannot answer by itself:
 - PR or commit message claims acceptance without ticket evidence
 - child write scope and Git diff do not match
 - parallel workers share a checkout or overlapping write scope
+- branch or worktree is abandoned without recording whether ticket work remains
+- review feedback is implemented without ticket or critique disposition
 
 ## Verification
 
@@ -153,6 +164,8 @@ Git cannot answer by itself:
 - [ ] Dirty state and unrelated changes are visible before mutation, handoff, or packaging.
 - [ ] Packet Git provenance is recorded when packetized implementation uses Git.
 - [ ] Diff stays inside ticket or packet write scope.
+- [ ] Branch finish or abandon choice mirrors ticket, evidence, critique, and ship truth.
+- [ ] Review feedback is classified before it changes scope or acceptance.
 - [ ] Git summaries do not replace ticket, evidence, critique, or wiki truth.
 
 ## Done Means
