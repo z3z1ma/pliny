@@ -1,0 +1,254 @@
+loom-core/skills/loom-knowledge/references/knowledge-shape.md
+  human 17
+loom-core/skills/using-loom/SKILL.md
+  human 67
+  human 25-26,29,31-32,43-47,74,78-81,85,94-95
+loom-core/skills/using-loom/references/how-loom-thinks.md
+  human 23,87-88
+loom-core/skills/loom-knowledge/references/maintaining-knowledge.md
+  human 47
+loom-core/skills/loom-specs/references/spec-shape.md
+  human 1-145
+loom-core/skills/using-loom/references/shaping-with-humans.md
+  human 80
+loom-core/skills/loom-specs/templates/spec.md
+  human 1-112
+loom-core/README.md
+  human 36,50
+  human 3,5-6,12,16-17,20-22,24-26,28,30,33-36,38-40,42,47-56,58-59,61-62,66-67,76-77,83,85-86,88-90
+loom-core/skills/loom-retrospective/references/promotion-and-prevention.md
+  human 44
+  human 1-90
+loom-core/skills/loom-retrospective/SKILL.md
+  human 76-77,99
+  human 1-133
+loom-core/skills/loom-knowledge/references/retrieval-and-loading.md
+  human 66
+loom-core/skills/loom-research/references/research-shape.md
+  human 46
+loom-core/skills/loom-specs/SKILL.md
+  human 1-198
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "17",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-knowledge/references/knowledge-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "67",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 18,
+          "added_lines": 0,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "25-26,29,31-32,43-47,74,78-81,85,94-95",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/using-loom/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "23,87-88",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/using-loom/references/how-loom-thinks.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "47",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-knowledge/references/maintaining-knowledge.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 145,
+          "added_lines": 145,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-145",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-specs/references/spec-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "80",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/using-loom/references/shaping-with-humans.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 112,
+          "added_lines": 112,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-112",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-specs/templates/spec.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "36,50",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 45,
+          "added_lines": 0,
+          "deleted_lines": 1,
+          "hash": "human",
+          "lines": "3,5-6,12,16-17,20-22,24-26,28,30,33-36,38-40,42,47-56,58-59,61-62,66-67,76-77,83,85-86,88-90",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/README.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "44",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 89,
+          "added_lines": 0,
+          "deleted_lines": 1,
+          "hash": "human",
+          "lines": "1-90",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-retrospective/references/promotion-and-prevention.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "76-77,99",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 130,
+          "added_lines": 0,
+          "deleted_lines": 3,
+          "hash": "human",
+          "lines": "1-133",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-retrospective/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "66",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-knowledge/references/retrieval-and-loading.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "46",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-research/references/research-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 198,
+          "added_lines": 198,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-198",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-specs/SKILL.md"
+    }
+  ],
+  "base_commit_sha": "d5c1ebea238652cc1d3f09cf83fef73110d90b2a",
+  "branch": "loom-humanization",
+  "commit_sha": "7fd01ec1923004a6684d79f708677e46743cd2e3",
+  "commit_time": "2026-05-10T14:10:03-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.3",
+  "prompts": {
+    "human": {
+      "accepted_lines": 470,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "overriden_lines": 0,
+      "total_additions": 470,
+      "total_deletions": 0
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
