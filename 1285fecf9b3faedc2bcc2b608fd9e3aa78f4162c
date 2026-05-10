@@ -1,0 +1,119 @@
+loom-core/skills/loom-audit/SKILL.md
+  human 3,10-12,14-19,26,29,35,41-43,49-50,59-61,63-64,70,74,79-81,108-110,130-133,144,162
+  human 1-156
+loom-core/skills/loom-audit/references/audit-lenses.md
+  human 35-36,58-60,78-79,95
+  human 1-95
+loom-core/skills/loom-audit/references/findings-and-verdicts.md
+  human 35-37,41,76,79,81-89
+  human 1-82
+loom-core/skills/loom-audit/references/audit-shape.md
+  human 6,17,30,42,45-65,81-84,98-100,109-110,118-121,129
+  human 1-114
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 37,
+          "added_lines": 37,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,10-12,14-19,26,29,35,41-43,49-50,59-61,63-64,70,74,79-81,108-110,130-133,144,162",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 128,
+          "added_lines": 0,
+          "deleted_lines": 28,
+          "hash": "human",
+          "lines": "1-156",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-audit/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 8,
+          "added_lines": 8,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "35-36,58-60,78-79,95",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 87,
+          "added_lines": 0,
+          "deleted_lines": 8,
+          "hash": "human",
+          "lines": "1-95",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-audit/references/audit-lenses.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 15,
+          "added_lines": 15,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "35-37,41,76,79,81-89",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 74,
+          "added_lines": 0,
+          "deleted_lines": 8,
+          "hash": "human",
+          "lines": "1-82",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-audit/references/findings-and-verdicts.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 39,
+          "added_lines": 39,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "6,17,30,42,45-65,81-84,98-100,109-110,118-121,129",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 96,
+          "added_lines": 0,
+          "deleted_lines": 18,
+          "hash": "human",
+          "lines": "1-114",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-audit/references/audit-shape.md"
+    }
+  ],
+  "base_commit_sha": "dc07fd003c802a2111b0086a9a5d7b14ca0a29df",
+  "branch": "loom-humanization",
+  "commit_sha": "1285fecf9b3faedc2bcc2b608fd9e3aa78f4162c",
+  "commit_time": "2026-05-10T01:11:39-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.3",
+  "prompts": {
+    "human": {
+      "accepted_lines": 99,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "overriden_lines": 0,
+      "total_additions": 99,
+      "total_deletions": 0
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
