@@ -1,0 +1,95 @@
+loom-core/skills/loom-research/references/research-shape.md
+  human 5-10,14,23-24,38,49,104,138-139,164,185
+  human 1-211
+loom-core/skills/loom-research/SKILL.md
+  human 3,30,34-37,48,54,57-59,65-67,80,89-91,103-105
+  human 1-161
+loom-core/skills/loom-research/references/source-handling.md
+  human 7-8,27-28,40,67-68
+  human 1-109
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 16,
+          "added_lines": 16,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "5-10,14,23-24,38,49,104,138-139,164,185",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 201,
+          "added_lines": 0,
+          "deleted_lines": 10,
+          "hash": "human",
+          "lines": "1-211",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-research/references/research-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 21,
+          "added_lines": 21,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,30,34-37,48,54,57-59,65-67,80,89-91,103-105",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 145,
+          "added_lines": 0,
+          "deleted_lines": 16,
+          "hash": "human",
+          "lines": "1-161",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-research/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 7,
+          "added_lines": 7,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "7-8,27-28,40,67-68",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 101,
+          "added_lines": 0,
+          "deleted_lines": 8,
+          "hash": "human",
+          "lines": "1-109",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-research/references/source-handling.md"
+    }
+  ],
+  "base_commit_sha": "f1a4143faca88b9f4ee80a197d496ecd1817c336",
+  "branch": "loom-humanization",
+  "commit_sha": "515131bfd39728c70a375e94b5e6daed9ac698dd",
+  "commit_time": "2026-05-10T00:27:50-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.3",
+  "prompts": {
+    "human": {
+      "accepted_lines": 44,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "overriden_lines": 0,
+      "total_additions": 44,
+      "total_deletions": 0
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
