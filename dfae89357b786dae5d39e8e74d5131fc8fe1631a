@@ -1,0 +1,95 @@
+loom-core/skills/loom-plans/references/slicing-work.md
+  human 1-70
+loom-core/skills/loom-plans/SKILL.md
+  human 1-166
+loom-core/skills/loom-plans/templates/plan.md
+  human 1-64
+loom-core/skills/loom-plans/references/plan-shape.md
+  human 1-102
+loom-core/skills/loom-plans/references/creating-plans.md
+  human 1-82
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 70,
+          "added_lines": 70,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-70",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-plans/references/slicing-work.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 166,
+          "added_lines": 166,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-166",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-plans/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 64,
+          "added_lines": 64,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-64",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-plans/templates/plan.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 102,
+          "added_lines": 102,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-102",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-plans/references/plan-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 82,
+          "added_lines": 82,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-82",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-plans/references/creating-plans.md"
+    }
+  ],
+  "base_commit_sha": "dfae89357b786dae5d39e8e74d5131fc8fe1631a",
+  "commit_sha": "dfae89357b786dae5d39e8e74d5131fc8fe1631a",
+  "commit_type": "commit_amend",
+  "git_ai_version": "1.4.3",
+  "prompts": {
+    "human": {
+      "accepted_lines": 484,
+      "agent_id": null,
+      "human_author": null,
+      "overriden_lines": 0,
+      "total_additions": 484,
+      "total_deletions": 0
+    }
+  },
+  "schema_version": "authorship/3.0.0"
+}
