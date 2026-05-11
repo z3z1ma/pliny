@@ -1,0 +1,143 @@
+loom-playbooks/README.md
+  human 66-70,79-82,110-115
+loom-playbooks/skills/loom-intake-triage/SKILL.md
+  human 1-181
+loom-playbooks/skills/loom-prototype-and-spike/SKILL.md
+  human 1-140
+loom-playbooks/skills/loom-architecture-deepening/SKILL.md
+  human 1-151
+loom-playbooks/skills/loom-test-driven-development/SKILL.md
+  human 101-114
+loom-playbooks/skills/loom-domain-language-and-decisions/SKILL.md
+  human 1-148
+loom-playbooks/skills/loom-codebase-atlas/SKILL.md
+  human 1-127
+loom-playbooks/skills/loom-debugging-and-error-recovery/SKILL.md
+  human 34,44-68,144-147,154,164-176,223-226,238-241,262,266
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 15,
+          "added_lines": 15,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "66-70,79-82,110-115",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/README.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 181,
+          "added_lines": 181,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-181",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-intake-triage/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 140,
+          "added_lines": 140,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-140",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-prototype-and-spike/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 151,
+          "added_lines": 151,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-151",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-architecture-deepening/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 14,
+          "added_lines": 14,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "101-114",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-test-driven-development/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 148,
+          "added_lines": 148,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-148",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-domain-language-and-decisions/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 127,
+          "added_lines": 127,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-127",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-codebase-atlas/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 54,
+          "added_lines": 54,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "34,44-68,144-147,154,164-176,223-226,238-241,262,266",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/skills/loom-debugging-and-error-recovery/SKILL.md"
+    }
+  ],
+  "base_commit_sha": "d730cb2d0945ee1c934fb63327b4dfd8c13c4fb0",
+  "branch": "loom-humanization",
+  "commit_sha": "3c3cca6756e6b0e8e868acd4c2ceb2cc8382b405",
+  "commit_time": "2026-05-10T17:52:57-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.3",
+  "prompts": {
+    "human": {
+      "accepted_lines": 830,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "overriden_lines": 0,
+      "total_additions": 830,
+      "total_deletions": 0
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
