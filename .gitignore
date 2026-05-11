@@ -1,6 +1,8 @@
 /.loom/memory/user
-/.loom/evidence/artifacts/
-/.loom/research/artifacts/
+/.loom/evidence/artifacts/*
+!/.loom/evidence/artifacts/.gitkeep
+/.loom/research/artifacts/*
+!/.loom/research/artifacts/.gitkeep
 /.venv/
 /uv.lock
 /.npmrc

@@ -1,152 +1,46 @@
 # AGENTS.md
 
-## What This Repo Is
+## Repo Shape
 
-This repository develops a distributable Markdown-native Loom bundle.
+- This repo ships a Markdown skill corpus, not an app runtime. Do not add daemon, database, dashboard, CLI, or helper-script assumptions unless explicitly changing architecture.
+- Product behavior lives in `loom-core/skills/` and `loom-playbooks/skills/`; package entrypoints, manifests, hooks, and extensions only expose those trees.
+- `loom-core/` is required and owns `using-loom`, Core record skills, templates, and references.
+- `loom-playbooks/` is optional, requires Core, and must not duplicate or preload `using-loom` doctrine.
+- Root `skills` is a symlink to `loom-core/skills` for the repo-root Gemini extension shim; treat `loom-core/skills/` as the real Core package surface.
+- Package skill content must be self-contained for installed workspaces: use generic `.loom/...` runtime paths, not source-repo-only paths or dogfood assumptions.
 
-The protocol core is `loom-core/skills/`, especially the mandatory
-`loom-core/skills/using-loom` entry skill and its ordered references.
+## Dogfooding
 
-There is no app runtime, build pipeline, or test suite. The durable product asset
-is the skills corpus itself: skills, using-Loom doctrine references, templates,
-and references.
+- `.loom/` is this repo's dogfood workspace state for future Agent Loom development; it is not part of the shipped product surface.
+- Use `.loom/` records to coordinate work on this repo, but keep exported behavior in `loom-core/skills/`, `loom-playbooks/skills/`, package entrypoints, manifests, hooks, and docs.
+- Raw evidence and research artifacts under `.loom/*/artifacts/` stay ignored except scaffold `.gitkeep` files.
 
-Loom should be treated as a control plane for AI knowledge work: a
-source-of-truth type system plus a transaction protocol for bounded
-fresh-context mutations. Do not reduce it to "docs for agents" or expand it
-into a required runtime.
+## Entrypoints And Adapters
 
-## Agent Boundary
+- OpenCode entrypoints are `loom-core/loom-core.mjs` and `loom-playbooks/loom-playbooks.mjs`.
+- Core OpenCode config registers the ordered `using-loom` files through `config.instructions` and exposes `loom-core/skills` through `config.skills.paths`.
+- Playbooks OpenCode config only exposes `loom-playbooks/skills`; `doesNotPreloadCoreDoctrine: true` is intentional in its smoke output.
+- Adapter catalogs live at `.claude-plugin/marketplace.json`, `.cursor-plugin/marketplace.json`, and `.agents/plugins/marketplace.json`.
+- Per-package native manifests live under `loom-*/.claude-plugin/`, `loom-*/.codex-plugin/`, and `loom-*/.cursor-plugin/`; Core preload hooks live in `loom-core/hooks/`.
+- The root `gemini-extension.json` is a Gemini-only Core shim; full Gemini local installs link `loom-core` and `loom-playbooks` separately.
+- NPM `files` currently pack only `README.md`, `package.json`, the package `.mjs`, and `skills/`; native adapter manifests and hooks are Git-install surfaces unless packaging changes.
 
-The agent is the primary operator in a Loom workspace.
+## Commands
 
-The core package ships no Python helper scripts. Record creation, packet
-authoring, validation, and graph inspection are taught as visible protocol
-behaviors using Markdown guidance, templates, and ordinary file tools.
+- No install step is needed for current checks; there is no lockfile or external package dependency.
+- There is no repo test, lint, typecheck, formatter, codegen config, or CI workflow; current verification is smoke, pack, and Markdown diff checks.
+- Core smoke: `npm --prefix loom-core run smoke`.
+- Playbooks smoke: `npm --prefix loom-playbooks run smoke`.
+- Core package check: `npm --prefix loom-core run pack:check`.
+- Playbooks package check: `npm --prefix loom-playbooks run pack:check`.
+- Avoid root `npm run smoke:*` and `npm run pack:check` until `package.json` is fixed; they currently point at missing `loom-*/open-loom-*.mjs` files.
+- For Markdown-only edits, run `git diff --check`.
+- After Claude plugin manifest changes, run `claude plugin validate "$PWD/loom-core"` and `claude plugin validate "$PWD/loom-playbooks"`.
+- After Gemini manifest or bootstrap changes, run `gemini extensions validate "$PWD"`, `gemini extensions validate "$PWD/loom-core"`, and `gemini extensions validate "$PWD/loom-playbooks"`.
 
-Ad hoc local automation is acceptable when it is clearly helpful, but it stays
-derivative. It must not become the real source of Loom behavior or a hidden
-second ontology.
+## Editing Checks
 
-Harnesses, external issue trackers, generated context files, dashboards, and MCPs
-may transport or mirror Loom work. They must not own Loom truth unless a future
-constitutional record explicitly changes that boundary.
-
-## Repo Structure
-
-### Product surface
-
-The product surface is the package skill corpus:
-
-- `loom-core/skills/using-loom/` -- mandatory first-use using-Loom doctrine and
-  ordered references
-- `loom-core/skills/` -- canonical Core skill directories with `SKILL.md`,
-  references, and templates
-- `loom-playbooks/skills/` -- optional workflow playbooks that require Core
-
-**Isolation rule**: content inside package `skills/` trees must stay
-self-contained, use generic `.loom/...` runtime paths, and avoid
-source-repo-only assumptions.
-
-### Internal Review Fixtures
-
-- `examples/` -- internal golden protocol fixtures and traces used to visualize
-  workflow routes and review drift. They are not loaded into normal installed
-  agent context, not a product surface, and not a truth owner.
-- `optional-utilities/` -- local utility skills excluded from the default
-  protocol install.
-
-### Dogfooding artifacts
-
-This repo uses its own product. `.opencode/` is a consumption surface for the
-bundle. `.loom/` contains Loom records created while using the product on this
-repo.
-
-Neither `.opencode/` nor `.loom/` is the source of truth for how the product is
-designed. Use `loom-core/skills/`, especially `loom-core/skills/using-loom`, and
-`loom-playbooks/skills/` for that.
-
-## Verification
-
-There is no automated test suite.
-
-Verification is structural and manual. Use the smallest honest checks that fit
-the claim being made, such as:
-
-- diff review
-- targeted `rg` queries for links, IDs, or status fields
-- manual comparison against the owning template or skill reference
-- spot-checks of canonical path, scope, and cross-record consistency
-
-## Markdown And Record Guidelines
-
-- Loom records use grepable body labels such as `ID:`, `Type:`, `Status:`,
-  `Created:`, and `Updated:`
-- required sections, statuses, and naming guidance live in the owning skill's
-  templates and references
-- `SKILL.md` frontmatter must include `name` and `description`
-- this repository does not ship a top-level command-wrapper product surface
-
-## Editing Guidance
-
-- prefer the smallest correct change
-- keep using-Loom doctrine and package `skills/` trees aligned when a change
-  crosses their boundaries
-- when changing using-Loom references or a skill, check related templates and
-  references; check `examples/` only for internal fixture consistency
-- do not add hidden runtimes, helper-dependent instructions, or monolithic CLI
-  assumptions
-- express new workflows as movement through existing Core record surfaces before
-  adding new artifact kinds
-- keep traceability grep-friendly with stable IDs, typed links, explicit
-  coverage, evidence, and audit references
-- path-local instruction files may point to Loom records, but they must not define
-  independent project truth
-
-### Cross-surface review checklist
-
-If a change touches multiple surfaces, verify:
-
-- `loom-core/skills/using-loom/references/` doctrine wording
-- `PROTOCOL.md`, `README.md`, and `ARCHITECTURE.md` when package framing changes
-- `loom-core/skills/*/SKILL.md` instructions
-- `loom-core/skills/*/references/` docs
-- `loom-core/skills/*/templates/` artifacts
-- `loom-playbooks/skills/*/SKILL.md` instructions
-- `examples/` fixtures when behavior or workflow routing changes, for internal
-  review consistency only
-- dogfood `.loom/` records when they are relevant project truth for this repo,
-  not as product-surface teaching fixtures
-
-## Key Architecture Facts
-
-- using-Loom doctrine is mandatory before work, either through `using-loom` or
-  an adapter preloading the same ordered references
-- the Core surface model is Loom's source-of-truth type system
-- Ralph is Loom's bounded implementation handoff loop
-- skills own behavior through `SKILL.md`, references, and templates rather than
-  shipped scripts or command wrappers
-- tickets are the sole live execution ledger
-- packets are bounded execution contracts
-- knowledge is the persistent explanation and reusable-understanding surface
-- evidence stores observed artifacts without becoming project-truth ownership
-- native harness adapters may preload using-Loom references, but `skills/` remains
-  the product surface within each package
-
-## Current Product Direction
-
-The next phase is protocol sharpening rather than platform expansion. Prioritize:
-
-- product-surface consistency across README, install docs, architecture notes,
-  AGENTS guidance, using-Loom doctrine, skills, and templates
-- shared non-ticket status lifecycle grammar in the owning Core skill references
-- claim-level coverage across specs, tickets, packets, evidence, and audit
-- packet freshness and context-budget guidance
-- named audit risk profiles
-- codebase atlas, debug, spike, sketch, execution-wave, external-reference,
-  ship, retrospective-prevention, and internal golden-example workflows as routes
-  through the existing Core record graph
-
-Do not borrow external-system complexity as protocol core. A new workflow is a
-good Loom workflow when it makes ownership, evidence, review, and recovery more
-regular without creating a second ledger.
+- `SKILL.md` frontmatter needs `name` and `description`; Loom record templates use grepable body labels such as `ID:`, `Type:`, `Status:`, `Created:`, and `Updated:`.
+- When changing `using-loom` doctrine, keep the ordered references and every preload surface aligned: `loom-core/loom-core.mjs`, `loom-core/hooks/*`, and `loom-core/gemini-bootstrap.md`.
+- When changing a Core surface, check the owning `SKILL.md`, `references/`, `templates/`, and docs that restate the model: `README.md`, `PROTOCOL.md`, `ARCHITECTURE.md`, and package READMEs.
+- Keep new workflow guidance as movement through existing Core surfaces; do not create a second truth ledger in adapter files, generated context, or helper scripts.
