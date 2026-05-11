@@ -1,0 +1,53 @@
+loom-core/README.md
+  human 3,5-8,10,12,14,16-17,19-22,24,26,28,30,34-35,37-38,40-41,43-45,47-52,55-56,59,62,65-66,68,70,76-80,82-84,88-90,93
+loom-playbooks/README.md
+  human 3,5-8,10,12,14,16,18-20,22,24-30,32,34,36,38-43,45-71,73-74,76,78,80-84,86,88,90,95-99,104-106,110,112-113
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 53,
+          "added_lines": 53,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,5-8,10,12,14,16-17,19-22,24,26,28,30,34-35,37-38,40-41,43-45,47-52,55-56,59,62,65-66,68,70,76-80,82-84,88-90,93",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/README.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 79,
+          "added_lines": 79,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,5-8,10,12,14,16,18-20,22,24-30,32,34,36,38-43,45-71,73-74,76,78,80-84,86,88,90,95-99,104-106,110,112-113",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/README.md"
+    }
+  ],
+  "base_commit_sha": "97e1133f699f4d6503b208c48fe1f5717736e46c",
+  "branch": "main",
+  "commit_sha": "da9cf2ac25a12bb4f2810feab552f6d4fdb3297b",
+  "commit_time": "2026-05-10T19:25:03-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.3",
+  "prompts": {
+    "human": {
+      "accepted_lines": 132,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "overriden_lines": 0,
+      "total_additions": 132,
+      "total_deletions": 0
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
