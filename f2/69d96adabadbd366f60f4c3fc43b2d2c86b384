@@ -1,23 +1,22 @@
-.loom/tickets/20260507-peerpr07-assimilate-peer-skill-practices.md
-  ses_1ff66db8effeLjk6E3y9wqvYvv 1-22,27-104,106-116,118-121,123-153,155,167-168,174-192
 .loom/research/20260507-skill-template-benchmark-synthesis.md
   ses_1ff66db8effeLjk6E3y9wqvYvv 1-117
 .loom/research/20260507-external-peer-skill-practices-synthesis.md
   ses_1ff66db8effeLjk6E3y9wqvYvv 1-16,21-238
+.loom/tickets/20260507-peerpr07-assimilate-peer-skill-practices.md
+  ses_1ff66db8effeLjk6E3y9wqvYvv 1-22,27-104,106-116,118-121,123-153,155,167-168,174-192
 .loom/tickets/20260507-tmplrs07-simplify-template-reasoning-surfaces.md
   ses_1ff66db8effeLjk6E3y9wqvYvv 1-17,22-42,45-58,60,63-65,68,70-80,92-104,107,109-117,128,132,135-139,141,145,148-149,151-161,164-165,167-168,170,174-190
 ---
 {
   "schema_version": "authorship/3.0.0",
-  "git_ai_version": "1.4.2",
+  "git_ai_version": "1.4.3",
   "base_commit_sha": "f269d96adabadbd366f60f4c3fc43b2d2c86b384",
   "commit_sha": "",
-  "commit_type": "rebase_interactive",
+  "commit_type": "rebase",
   "prompts": {
     "human": {
       "agent_id": null,
       "human_author": "z3z1ma <butler.alex2010@gmail.com>",
-      "messages": [],
       "total_additions": 2512,
       "total_deletions": 0,
       "accepted_lines": 0,
@@ -30,7 +29,6 @@
         "model": "openai/gpt-5.5"
       },
       "human_author": "z3z1ma <butler.alex2010@gmail.com>",
-      "messages": [],
       "total_additions": 654,
       "total_deletions": 0,
       "accepted_lines": 654,
