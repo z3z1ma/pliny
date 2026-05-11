@@ -1,99 +1,73 @@
 # Installing Loom
 
-Loom installs as a skills package.
+Install Core first. Add Playbooks if you want workflow routes.
 
-The canonical surface is `skills/`. Native harness adapters may add metadata, manifests, or preload hooks around `skills/`, but they do not add a second Loom ontology and they do not replace the skills.
+| Package | Required | Provides |
+| --- | --- | --- |
+| `loom-core` | yes | `using-loom`, Core record skills, templates, references, optional preload hooks |
+| `loom-playbooks` | no | workflow routes for debugging, TDD, review, migration, UI work, shipping, and similar tasks |
 
-## Install model
+Every install method exposes the same Markdown skills. Native manifests and hooks
+only help the harness find or preload them.
 
-The intended install pattern:
+## One Rule
 
-1. Install or expose `skills/` as the Loom package.
-2. Keep skill names and descriptions from `skills/*/SKILL.md` visible to the harness.
-3. Use `using-loom` first unless the same ordered doctrine is already loaded by an adapter.
-4. Hydrate the task-specific skill when that skill owns the next truth change.
-5. Let the model read templates and references from that skill as needed.
+Before Loom work, the agent needs `using-loom` and its ordered references. Some
+adapters preload them. If your harness does not, ask for them:
 
-`using-loom` is mandatory. It is the entry skill that loads Loom's ordered doctrine and routes the agent into the right owner skill.
-
-When a harness has an `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, user rules, or a similar instruction surface, point it at the skill rather than copying doctrine:
-
-```md
-Loom is active in this workspace. Before any work, use the `using-loom` skill unless Loom's ordered using-Loom doctrine is already loaded in the current context. After using-loom, route work through the Loom skill that owns the next truth change.
+```text
+Use using-loom. Then route this work through the smallest Loom surface that makes it recoverable.
 ```
 
-That instruction is a pointer, not a new source of truth.
+Do not copy the doctrine into another project file. Point the harness at Core.
 
-## Generic install
+## Generic Local Setup
 
-Loom has zero runtime dependencies at the protocol layer. Clone or download the repository and expose `skills/` wherever your harness expects skills.
+Clone the repo:
 
 ```bash
 git clone https://github.com/z3z1ma/agent-loom.git
 ```
 
-Then configure your harness to see:
+Expose Core to your harness:
 
 ```text
-/path/to/agent-loom/skills
+/absolute/path/to/agent-loom/loom-core
+/absolute/path/to/agent-loom/loom-core/skills
 ```
 
-Start every Loom session with:
+Expose Playbooks only if you want them:
 
 ```text
-Use the using-loom skill. Then route the work through the Loom skill that owns the next truth change.
+/absolute/path/to/agent-loom/loom-playbooks
+/absolute/path/to/agent-loom/loom-playbooks/skills
 ```
 
-## Claude Code
+If your harness has `AGENTS.md`, user rules, or a similar instruction file, keep
+the pointer short:
 
-Remote install:
-
-```bash
-claude plugin marketplace add z3z1ma/agent-loom
-claude plugin install loom@agent-loom --scope user
+```md
+Loom is active here. Use `using-loom` before Loom work unless Core has already
+preloaded the same doctrine. Route durable facts through Loom Core records.
+Playbooks are optional routes over Core.
 ```
-
-Local development:
-
-```bash
-claude --plugin-dir /absolute/path/to/agent-loom
-```
-
-Local marketplace testing:
-
-```bash
-claude plugin marketplace add /absolute/path/to/agent-loom
-claude plugin install loom@agent-loom --scope project
-```
-
-Validate the local plugin structure:
-
-```bash
-claude plugin validate /absolute/path/to/agent-loom
-```
-
-The repository includes a Claude Code plugin manifest at `.claude-plugin/plugin.json` and a local marketplace catalog at `.claude-plugin/marketplace.json`.
-
-The plugin exposes canonical `skills/` directly from the repository root and declares `claude-hooks/hooks.json` as its Claude hook config. Loom uses that hook surface to emit the ordered `using-loom` references as same-session `SessionStart` hook stdout.
-
-The hook preload is a convenience. The canonical surface remains `skills/`, especially `skills/using-loom`.
 
 ## OpenCode
 
-Core-only install:
+Install Core globally:
 
 ```bash
 opencode plugin @z3z1ma/open-loom-core --global
 ```
 
-Full install:
+Install Core plus Playbooks:
 
 ```bash
 opencode plugin @z3z1ma/open-loom-core --global
 opencode plugin @z3z1ma/open-loom-playbooks --global
 ```
 
-Equivalent package plugin entry for full install:
+Project config can name the packages directly:
 
 ```json
 {
@@ -104,73 +78,108 @@ Equivalent package plugin entry for full install:
 }
 ```
 
-For a cloned repository, point OpenCode at the local package plugin files:
+For a local clone, point at the package entrypoints:
 
 ```json
 {
   "plugin": [
-    "file:///absolute/path/to/agent-loom/loom-core/open-loom-core.mjs",
-    "file:///absolute/path/to/agent-loom/loom-playbooks/open-loom-playbooks.mjs"
+    "file:///absolute/path/to/agent-loom/loom-core/loom-core.mjs",
+    "file:///absolute/path/to/agent-loom/loom-playbooks/loom-playbooks.mjs"
   ]
 }
 ```
 
-For a local structural check that does not require a model request:
+`@z3z1ma/open-loom-core` registers Core skills and preloads the ordered
+`using-loom` files through `config.instructions`. `@z3z1ma/open-loom-playbooks`
+adds optional playbook skills and expects Core to supply doctrine.
+
+OpenCode package engines currently require `>=1.14.22 <2`.
+
+## Claude Code
+
+Remote marketplace install:
 
 ```bash
-node loom-core/open-loom-core.mjs --smoke
-node loom-playbooks/open-loom-playbooks.mjs --smoke
+claude plugin marketplace add z3z1ma/agent-loom
+claude plugin install loom-core@agent-loom --scope user
+claude plugin install loom-playbooks@agent-loom --scope user
 ```
 
-This repository publishes OpenCode packages as `@z3z1ma/open-loom-core` and
-`@z3z1ma/open-loom-playbooks`. Both require OpenCode `>=1.14.22 <2`.
+Install `loom-core` before `loom-playbooks`.
 
-`@z3z1ma/open-loom-core` registers core skills and adds ordered `using-loom`
-references to `config.instructions`. `@z3z1ma/open-loom-playbooks` registers only
-optional playbook skills and requires core.
+Local development from a clone:
+
+```bash
+claude --plugin-dir /absolute/path/to/agent-loom/loom-core
+claude --plugin-dir /absolute/path/to/agent-loom/loom-playbooks
+```
+
+Local marketplace testing:
+
+```bash
+claude plugin marketplace add /absolute/path/to/agent-loom
+claude plugin install loom-core@agent-loom --scope project
+claude plugin install loom-playbooks@agent-loom --scope project
+```
+
+Validate package roots after manifest changes:
+
+```bash
+claude plugin validate /absolute/path/to/agent-loom/loom-core
+claude plugin validate /absolute/path/to/agent-loom/loom-playbooks
+```
+
+Claude reads skills from each package's `skills/` directory. If hook preload is
+unavailable in your environment, start with `using-loom`.
 
 ## Codex
 
-Marketplace registration:
+Register the marketplace catalog:
 
 ```bash
 codex plugin marketplace add z3z1ma/agent-loom
 ```
 
-Codex currently requires opening `/plugins` after marketplace registration to install or enable `loom`.
+The Codex catalog lives at `.agents/plugins/marketplace.json`. Package manifests
+live at:
 
-This repository includes a Codex plugin manifest at `.codex-plugin/plugin.json` and a marketplace catalog at `.agents/plugins/marketplace.json`. The plugin exposes canonical `skills/` directly from the repository root and is shaped for a Git-backed remote marketplace entry.
+```text
+loom-core/.codex-plugin/plugin.json
+loom-playbooks/.codex-plugin/plugin.json
+```
 
-Current evidence still needs installed plugin skill-discovery validation for `using-loom`, so this is not yet a broadly accepted Codex release path. The repository `.codex/` hook fixture proves optional trusted project preload of using-Loom references. It is not the product install path.
+Core declares `loom-core/hooks/hooks.json` for `using-loom` preload where Codex
+supports plugin hooks. Validate preload behavior in the target Codex environment.
+If it is unavailable, ask for `using-loom` before Loom work.
 
 ## Cursor
 
-Until `agent-loom` is listed in Cursor Marketplace, install from the Git repository as a local native Cursor plugin:
+Until `agent-loom` is listed in Cursor Marketplace, install from the Git repo as a
+local plugin source:
 
 ```bash
 mkdir -p ~/.cursor/plugins/local
 git clone https://github.com/z3z1ma/agent-loom.git ~/.cursor/plugins/local/agent-loom
 ```
 
-Restart Cursor or run Developer: Reload Window after cloning.
+Restart Cursor or run `Developer: Reload Window`.
 
-Once the Marketplace listing exists, install from Cursor Agent chat with:
+The Cursor catalog lives at `.cursor-plugin/marketplace.json`. Package manifests
+live at:
 
 ```text
-/add-plugin agent-loom
+loom-core/.cursor-plugin/plugin.json
+loom-playbooks/.cursor-plugin/plugin.json
 ```
 
-This repository includes a Cursor plugin manifest at `.cursor-plugin/plugin.json`. The manifest follows Cursor's native plugin format and exposes canonical `skills/` with:
-
-```json
-{
-  "skills": "./skills/"
-}
-```
+Enable Core before Playbooks. Core points at `loom-core/hooks/hooks-cursor.json`
+for `using-loom` preload where Cursor supports hooks. If native plugin discovery
+or hooks are unavailable, expose the two `skills/` directories and start with
+`using-loom`.
 
 ## Gemini CLI
 
-Preferred full install: clone the repository and link both package roots:
+Full local install from a clone:
 
 ```bash
 git clone https://github.com/z3z1ma/agent-loom
@@ -185,21 +194,17 @@ Core-only install from a clone:
 gemini extensions link /absolute/path/to/agent-loom/loom-core
 ```
 
-Repository-root install is also supported as a Gemini-specific core-only shim:
+The repository root also has a Gemini-only Core shim:
 
 ```bash
 gemini extensions install https://github.com/z3z1ma/agent-loom
 ```
 
-The root install exists because Gemini tooling and crawlers look for
-`gemini-extension.json` at the repository root. It installs Loom core only; it does
-not install `loom-playbooks` and does not prove that Gemini can install extension
-roots from repository subdirectories.
+The root shim installs Core only because Gemini tooling looks for
+`gemini-extension.json` at the repo root. Link `loom-playbooks` separately if you
+want playbooks.
 
-Choose either the root core shortcut or the `loom-core` package-root link for core,
-not both. They use the same Gemini extension name, `loom-core`.
-
-Validate the local extension structures:
+Validate extension structures after manifest changes:
 
 ```bash
 gemini extensions validate /absolute/path/to/agent-loom
@@ -207,50 +212,57 @@ gemini extensions validate /absolute/path/to/agent-loom/loom-core
 gemini extensions validate /absolute/path/to/agent-loom/loom-playbooks
 ```
 
-This repository includes Gemini CLI extension manifests at `gemini-extension.json`,
-`loom-core/gemini-extension.json`, and `loom-playbooks/gemini-extension.json`.
+Gemini loads `loom-core/gemini-bootstrap.md`, which imports `using-loom` and the
+ordered references with native context import syntax.
 
-The repository-root manifest is a core-only shim. It uses `contextFileName` to load
-`gemini-bootstrap.md`, which imports the ordered
-`loom-core/skills/using-loom/references/*.md` files with Gemini's native context
-import syntax. The package-root core extension uses
-`loom-core/gemini-bootstrap.md` for the same static using-Loom preload.
+## Bootstrap Files
 
-The context preload is a convenience. The canonical core surface is
-`loom-core/skills`, especially `loom-core/skills/using-loom`. Optional workflow
-playbooks live under `loom-playbooks/skills` and require core.
+Core loads these files in order:
 
-## Bootstrap references
+1. `loom-core/skills/using-loom/SKILL.md`
+2. `loom-core/skills/using-loom/references/how-loom-thinks.md`
+3. `loom-core/skills/using-loom/references/directory-structure.md`
+4. `loom-core/skills/using-loom/references/shaping-with-humans.md`
+5. `loom-core/skills/using-loom/references/delegating-to-workers.md`
+6. `loom-core/skills/using-loom/references/proving-the-work.md`
+7. `loom-core/skills/using-loom/references/staying-safe.md`
 
-`using-loom` reads these references in order:
+If an adapter preloads those files, the agent can route into Loom work. If it does
+not, use `using-loom` explicitly.
 
-1. `loom-core/skills/using-loom/references/01-core-identity.md`
-2. `loom-core/skills/using-loom/references/02-truth-and-authority.md`
-3. `loom-core/skills/using-loom/references/03-outer-loop.md`
-4. `loom-core/skills/using-loom/references/04-ralph-inner-loop.md`
-5. `loom-core/skills/using-loom/references/05-critique-and-wiki.md`
-6. `loom-core/skills/using-loom/references/06-filesystem-and-tooling.md`
-7. `loom-core/skills/using-loom/references/07-validation-and-honesty.md`
-8. `loom-core/skills/using-loom/references/08-trust-boundaries.md`
+## First Prompts
 
-If a native adapter preloads those references, the agent can proceed directly into Loom routing. Otherwise, use `using-loom` before work starts.
-
-## First workspace prompt
-
-After installing Loom in a project, start with a small initialization request:
+Start a workspace:
 
 ```text
-Use using-loom. Then inspect this repository with loom-workspace and create the minimum Loom records needed to track the current work honestly.
+Use using-loom. Inspect this repository and create only the Loom records needed so current state is clear.
 ```
 
-For a specific project goal:
+Start a task:
 
 ```text
-Use using-loom. I want to work on: <goal>. Route through the Loom owner layer that should change first, and do not create extra records unless the graph needs them.
+Use using-loom. I want to work on: <goal>. Shape the next move with me if needed, then route durable facts through Core records.
 ```
 
-For implementation work that already has a ticket:
+Delegate a bounded implementation pass:
 
 ```text
-Use using-loom and loom-tickets. Compile a Ralph packet for the next bounded implementation step. Include the upstream records the worker needs, the write scope, stop conditions, and the output contract.
+Use using-loom and loom-ralph. Compile one Ralph packet with mission, context, read scope, write scope, stop conditions, verification posture, and output contract.
+```
+
+## Verify Package Changes
+
+Run package checks from a local clone:
+
+```bash
+npm --prefix loom-core run smoke
+npm --prefix loom-playbooks run smoke
+npm --prefix loom-core run pack:check
+npm --prefix loom-playbooks run pack:check
+```
+
+For Markdown-only edits, also run:
+
+```bash
+git diff --check
 ```
