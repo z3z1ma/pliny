@@ -96,6 +96,40 @@ You get the fix and the trace.
 Retrospective is a promotion pass over those surfaces. It has no directory of its
 own.
 
+```mermaid
+flowchart TB
+  A["agent does software work"] --> B{"what durable work product is needed?"}
+
+  B -->|principle, constraint, precedent| C["constitution"]
+  B -->|uncertainty, tradeoff, experiment| R["research"]
+  B -->|intended behavior, scenario, interface| S["spec"]
+  B -->|complex change, decomposition, sequence| P["plan"]
+  B -->|live scoped work, acceptance| T["ticket"]
+  B -->|observed output, test, log, screenshot| E["evidence"]
+  B -->|fresh-context review, residual risk| Q["audit"]
+  B -->|accepted reusable explanation| K["knowledge"]
+  B -->|bounded worker contract| PKT["packet"]
+
+  C --> G["repo-local Loom graph"]
+  R --> G
+  S --> G
+  P --> G
+  T --> G
+  E --> G
+  Q --> G
+  K --> G
+  PKT --> G
+
+  G --> PKT
+  PKT --> W["worker run"]
+  W --> E
+  W --> T
+  E --> T
+  T --> Q
+  Q --> T
+  T --> G
+```
+
 ## When It Helps
 
 Use Loom when the work should be recoverable:
