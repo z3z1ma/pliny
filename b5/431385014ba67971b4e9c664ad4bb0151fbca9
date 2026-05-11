@@ -1,0 +1,42 @@
+README.md
+  ses_1eaf80d33ffeU770IYMualyUgV 99-132
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 34,
+          "added_lines": 34,
+          "deleted_lines": 0,
+          "hash": "ses_1eaf80d33ffeU770IYMualyUgV",
+          "lines": "99-132",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "README.md"
+    }
+  ],
+  "base_commit_sha": "4fbdb5a246d924d3b3e513d8cb7fca16114afab3",
+  "branch": "main",
+  "commit_sha": "b5431385014ba67971b4e9c664ad4bb0151fbca9",
+  "commit_time": "2026-05-10T20:51:24-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.3",
+  "prompts": {
+    "ses_1eaf80d33ffeU770IYMualyUgV": {
+      "accepted_lines": 34,
+      "agent_id": {
+        "id": "ses_1eaf80d33ffeU770IYMualyUgV",
+        "model": "openai/gpt-5.5",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "overriden_lines": 0,
+      "total_additions": 34,
+      "total_deletions": 0
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
