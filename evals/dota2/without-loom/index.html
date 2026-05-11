@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A fantasy strategy map for exploring the OpenDota hero meta and recent professional matches."
+    />
+    <title>Ancient Meta Atlas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to the war room</a>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <div class="screen-frame">
+      <header class="hero-shell">
+        <nav class="topbar" aria-label="Primary navigation">
+          <a class="brand" href="#top" aria-label="Ancient Meta Atlas home">
+            <span class="brand-mark" aria-hidden="true">A</span>
+            <span>
+              <strong>Ancient Meta Atlas</strong>
+              <small>OpenDota war room</small>
+            </span>
+          </a>
+          <div class="nav-links">
+            <a href="#map">Campaign Map</a>
+            <a href="#heroes">Hero Meta</a>
+            <a href="#matches">Battle Ledger</a>
+          </div>
+          <div class="status-rune" id="data-status" aria-live="polite">Opening gates...</div>
+        </nav>
+
+        <section class="hero" id="top">
+          <div class="hero-copy">
+            <p class="eyebrow">Live strategy scrying via OpenDota</p>
+            <h1>Read the meta like a campaign map.</h1>
+            <p>
+              A game-like command table for scouting dominant heroes, draft archetypes, and recent pro battles without leaving the tavern.
+            </p>
+            <div class="hero-actions" aria-label="Page sections">
+              <a class="button primary" href="#heroes">Enter Hero Codex</a>
+              <a class="button ghost" href="#matches">Inspect Recent Games</a>
+            </div>
+          </div>
+
+          <div class="war-table" aria-label="Current meta summary">
+            <div class="orbital-ring" aria-hidden="true"></div>
+            <div class="table-center">
+              <span class="rune-label">Patch Pulse</span>
+              <strong id="pulse-hero">Summoning...</strong>
+              <small id="pulse-copy">Gathering hero statistics from the ancients.</small>
+            </div>
+            <div class="table-stat top-left">
+              <span id="stat-heroes">--</span>
+              <small>heroes tracked</small>
+            </div>
+            <div class="table-stat top-right">
+              <span id="stat-matches">--</span>
+              <small>recent pro battles</small>
+            </div>
+            <div class="table-stat bottom-left">
+              <span id="stat-radiant">--</span>
+              <small>Radiant win rate</small>
+            </div>
+            <div class="table-stat bottom-right">
+              <span id="stat-duration">--</span>
+              <small>avg duration</small>
+            </div>
+          </div>
+        </section>
+      </header>
+
+      <main id="main">
+        <section class="panel campaign" id="map" aria-labelledby="map-title">
+          <div class="section-heading">
+            <p class="eyebrow">Campaign Map</p>
+            <h2 id="map-title">Three ways to scout the battlefield</h2>
+            <p>Move from macro signals to hero picks to live match context, like clicking buildings in an old strategy campaign.</p>
+          </div>
+
+          <div class="map-grid">
+            <div class="map-board" aria-label="Interactive campaign path">
+              <div class="map-path" aria-hidden="true"></div>
+              <button class="map-node active" data-scroll-target="heroes" style="--x: 18%; --y: 30%">
+                <span>Hero Tavern</span>
+                <small>Pick rates and win rates</small>
+              </button>
+              <button class="map-node" data-scroll-target="draft" style="--x: 57%; --y: 18%">
+                <span>Draft Forge</span>
+                <small>Archetype lenses</small>
+              </button>
+              <button class="map-node" data-scroll-target="matches" style="--x: 70%; --y: 66%">
+                <span>Battle Ledger</span>
+                <small>Fresh pro games</small>
+              </button>
+            </div>
+
+            <aside class="commander-card">
+              <p class="eyebrow">Commander Briefing</p>
+              <h3 id="briefing-title">Awaiting scouts</h3>
+              <p id="briefing-copy">The courier is collecting hero stats and match records.</p>
+              <div class="signal-list" id="signal-list" aria-label="Meta signals"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="panel heroes" id="heroes" aria-labelledby="heroes-title">
+          <div class="section-heading split">
+            <div>
+              <p class="eyebrow">Hero Codex</p>
+              <h2 id="heroes-title">Who owns the tavern tonight?</h2>
+              <p>Filter the live hero pool by role, attribute, or name. Rankings blend pro presence with win-rate pressure.</p>
+            </div>
+            <label class="search-box">
+              <span>Search hero</span>
+              <input id="hero-search" type="search" placeholder="Type a name, role, or attack type" autocomplete="off" />
+            </label>
+          </div>
+
+          <div class="filter-row" id="role-filters" aria-label="Role filters"></div>
+          <div class="filter-row compact" id="attr-filters" aria-label="Attribute filters"></div>
+
+          <div class="meta-columns">
+            <article class="scroll-card">
+              <div class="scroll-header">
+                <p class="eyebrow">Contested Picks</p>
+                <h3>Most drafted by pros</h3>
+              </div>
+              <div id="contested-list" class="rank-list"></div>
+            </article>
+            <article class="scroll-card">
+              <div class="scroll-header">
+                <p class="eyebrow">Win Omens</p>
+                <h3>Highest current pressure</h3>
+              </div>
+              <div id="winrate-list" class="rank-list"></div>
+            </article>
+          </div>
+
+          <div class="hero-grid" id="hero-grid" aria-live="polite"></div>
+        </section>
+
+        <section class="panel draft" id="draft" aria-labelledby="draft-title">
+          <div class="section-heading split">
+            <div>
+              <p class="eyebrow">Draft Forge</p>
+              <h2 id="draft-title">Choose a battle plan</h2>
+              <p>Each lens pulls heroes that match a strategic fantasy and then orders them by current meta signal.</p>
+            </div>
+            <div class="lens-tabs" id="lens-tabs" aria-label="Draft lenses"></div>
+          </div>
+          <div class="forge-board">
+            <div>
+              <p class="eyebrow" id="lens-kicker">Tempo lens</p>
+              <h3 id="lens-title">Hit before the enemy techs up.</h3>
+              <p id="lens-copy">Fast cores and mobile nukers with enough presence to force early objectives.</p>
+            </div>
+            <div class="lens-picks" id="lens-picks" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="panel matches" id="matches" aria-labelledby="matches-title">
+          <div class="section-heading split">
+            <div>
+              <p class="eyebrow">Battle Ledger</p>
+              <h2 id="matches-title">Recent pro games</h2>
+              <p>Scores, winners, leagues, and tempo readouts from the OpenDota pro match feed.</p>
+            </div>
+            <a class="button ghost small" href="https://docs.opendota.com/" target="_blank" rel="noreferrer">OpenDota Docs</a>
+          </div>
+
+          <div class="ledger-layout">
+            <div class="match-list" id="match-list" aria-label="Recent matches"></div>
+            <aside class="match-detail" id="match-detail" aria-live="polite"></aside>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>Built with the public OpenDota API.</span>
+        <span>No Warcraft or Dota assets are bundled; hero art loads from the OpenDota/Steam CDN when available.</span>
+      </footer>
+    </div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
