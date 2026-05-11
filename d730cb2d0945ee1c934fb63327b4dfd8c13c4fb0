@@ -1,0 +1,248 @@
+ARCHITECTURE.md
+  human 5-7,9,11,13-16,18-20,22-25,27-28,30,32,34-42,44,46,48,50-52,54-56,58,60,65,67,70,72,74-75,77,80-81,83-84,87-88,92-94,96,98-100,102,104,106,108,110-114,116,120-121,123-124,126,128-130,140,148-150,153-154
+.claude-plugin/marketplace.json
+  human 8,15,39
+loom-playbooks/.cursor-plugin/plugin.json
+  human 5
+loom-playbooks/package.json
+  human 3,15
+.cursor-plugin/marketplace.json
+  human 8,15,39
+loom-playbooks/.claude-plugin/plugin.json
+  human 3
+loom-core/.claude-plugin/plugin.json
+  human 3
+loom-playbooks/gemini-extension.json
+  human 3
+loom-playbooks/.codex-plugin/plugin.json
+  human 3
+loom-core/gemini-extension.json
+  human 3
+package.json
+  human 3
+loom-core/package.json
+  human 3
+loom-core/.cursor-plugin/plugin.json
+  human 5
+loom-core/.codex-plugin/plugin.json
+  human 3
+gemini-extension.json
+  human 3
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 84,
+          "added_lines": 84,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "5-7,9,11,13-16,18-20,22-25,27-28,30,32,34-42,44,46,48,50-52,54-56,58,60,65,67,70,72,74-75,77,80-81,83-84,87-88,92-94,96,98-100,102,104,106,108,110-114,116,120-121,123-124,126,128-130,140,148-150,153-154",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "ARCHITECTURE.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "8,15,39",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".claude-plugin/marketplace.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "5",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/.cursor-plugin/plugin.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3,15",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/package.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "8,15,39",
+          "overridden_lines": 0
+        }
+      ],
+      "file": ".cursor-plugin/marketplace.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/.claude-plugin/plugin.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/.claude-plugin/plugin.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/gemini-extension.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-playbooks/.codex-plugin/plugin.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/gemini-extension.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "package.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/package.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "5",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/.cursor-plugin/plugin.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/.codex-plugin/plugin.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "gemini-extension.json"
+    }
+  ],
+  "base_commit_sha": "f8371a284642ad04203ec99b7066f41689521a12",
+  "branch": "loom-humanization",
+  "commit_sha": "d730cb2d0945ee1c934fb63327b4dfd8c13c4fb0",
+  "commit_time": "2026-05-10T17:45:28-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.3",
+  "prompts": {
+    "human": {
+      "accepted_lines": 103,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "overriden_lines": 0,
+      "total_additions": 103,
+      "total_deletions": 0
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
