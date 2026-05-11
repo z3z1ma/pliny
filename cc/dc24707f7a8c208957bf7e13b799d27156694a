@@ -1,0 +1,432 @@
+loom-core/skills/loom-tickets/SKILL.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 74-79,206-208,240-241
+loom-core/skills/loom-constitution/references/principle-fragments.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 17,24-26,33-36
+loom-core/skills/loom-knowledge/references/retrieval-and-loading.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 41-47
+loom-core/skills/loom-knowledge/references/knowledge-shape.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 97
+loom-core/skills/using-loom/references/directory-structure.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 41-42,44-45
+loom-core/skills/loom-plans/references/plan-shape.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 173-175
+loom-core/skills/using-loom/references/delegating-to-workers.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 62-65,110-112
+loom-core/skills/loom-audit/SKILL.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 94-99
+loom-core/skills/loom-tickets/references/ticket-shape.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 93-94,188-189
+loom-core/skills/loom-constitution/references/roadmap-records.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 16,23-25,34
+loom-core/skills/loom-plans/SKILL.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 66-69,149-151
+loom-core/skills/loom-knowledge/SKILL.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 65-66,81-86,121
+loom-core/skills/loom-constitution/references/core-constitution.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 17,24-25,32-35
+loom-core/skills/loom-retrospective/SKILL.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 41-43,65-66,133-134
+loom-core/skills/loom-constitution/templates/decision.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 5
+loom-core/skills/loom-tickets/references/acting-on-tickets.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 145-147
+loom-core/skills/loom-specs/SKILL.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 83-88
+loom-core/skills/loom-evidence/SKILL.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 66-70
+loom-core/skills/loom-ralph/templates/packet.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 116-119
+loom-core/skills/loom-retrospective/references/promotion-and-prevention.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 58-62
+loom-core/skills/loom-ralph/references/running-packets.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 42-45,58-63
+loom-core/skills/loom-ralph/SKILL.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 93-99,156-157,203-206
+loom-core/skills/loom-constitution/templates/principle-fragment.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 5
+loom-core/skills/loom-constitution/templates/roadmap.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 5
+loom-core/skills/loom-constitution/references/decision-records.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 17,24-25,34
+loom-core/skills/loom-research/SKILL.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 76-80
+loom-core/skills/loom-constitution/SKILL.md
+  ses_1e8669ce8ffeOuz1lMALWpmsPc 20-23,32-33,39,49-52,82-83,100-102
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 11,
+          "added_lines": 11,
+          "deleted_lines": 8,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "74-79,206-208,240-241",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-tickets/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 8,
+          "added_lines": 8,
+          "deleted_lines": 6,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "17,24-26,33-36",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/references/principle-fragments.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 7,
+          "added_lines": 7,
+          "deleted_lines": 5,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "41-47",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-knowledge/references/retrieval-and-loading.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "97",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-knowledge/references/knowledge-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 3,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "41-42,44-45",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/using-loom/references/directory-structure.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 2,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "173-175",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-plans/references/plan-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 7,
+          "added_lines": 7,
+          "deleted_lines": 5,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "62-65,110-112",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/using-loom/references/delegating-to-workers.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 6,
+          "added_lines": 6,
+          "deleted_lines": 4,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "94-99",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-audit/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 3,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "93-94,188-189",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-tickets/references/ticket-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 5,
+          "added_lines": 5,
+          "deleted_lines": 3,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "16,23-25,34",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/references/roadmap-records.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 7,
+          "added_lines": 7,
+          "deleted_lines": 5,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "66-69,149-151",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-plans/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 9,
+          "added_lines": 9,
+          "deleted_lines": 6,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "65-66,81-86,121",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-knowledge/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 7,
+          "added_lines": 7,
+          "deleted_lines": 5,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "17,24-25,32-35",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/references/core-constitution.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 7,
+          "added_lines": 7,
+          "deleted_lines": 5,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "41-43,65-66,133-134",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-retrospective/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "5",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/templates/decision.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 2,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "145-147",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-tickets/references/acting-on-tickets.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 6,
+          "added_lines": 6,
+          "deleted_lines": 4,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "83-88",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-specs/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 5,
+          "added_lines": 5,
+          "deleted_lines": 3,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "66-70",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-evidence/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 3,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "116-119",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-ralph/templates/packet.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 5,
+          "added_lines": 5,
+          "deleted_lines": 3,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "58-62",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-retrospective/references/promotion-and-prevention.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 10,
+          "added_lines": 10,
+          "deleted_lines": 7,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "42-45,58-63",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-ralph/references/running-packets.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 13,
+          "added_lines": 13,
+          "deleted_lines": 9,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "93-99,156-157,203-206",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-ralph/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "5",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/templates/principle-fragment.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "5",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/templates/roadmap.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 3,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "17,24-25,34",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/references/decision-records.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 5,
+          "added_lines": 5,
+          "deleted_lines": 3,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "76-80",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-research/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 16,
+          "added_lines": 16,
+          "deleted_lines": 23,
+          "hash": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+          "lines": "20-23,32-33,39,49-52,82-83,100-102",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/SKILL.md"
+    }
+  ],
+  "base_commit_sha": "1a10a565c06df611b2ef289462922f86ac3c07f6",
+  "branch": "main",
+  "commit_sha": "ccdc24707f7a8c208957bf7e13b799d27156694a",
+  "commit_time": "2026-05-11T08:32:21-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.4",
+  "prompts": {
+    "ses_1e8669ce8ffeOuz1lMALWpmsPc": {
+      "accepted_lines": 160,
+      "agent_id": {
+        "id": "ses_1e8669ce8ffeOuz1lMALWpmsPc",
+        "model": "openai/gpt-5.5-fast",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "overriden_lines": 0,
+      "total_additions": 160,
+      "total_deletions": 120
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
