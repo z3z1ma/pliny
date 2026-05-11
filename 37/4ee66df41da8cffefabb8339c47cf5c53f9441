@@ -1,0 +1,299 @@
+loom-core/skills/loom-audit/templates/audit.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 3
+loom-core/skills/using-loom/references/how-loom-thinks.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 80-81,115-116
+loom-core/skills/loom-research/templates/research.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 3
+PROTOCOL.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 115
+loom-core/skills/loom-knowledge/references/retrieval-and-loading.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 69
+loom-core/skills/loom-constitution/templates/principle-fragment.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 9,11-12,16,20,24-25,29-30,34-36
+loom-core/skills/loom-constitution/templates/decision.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 9,11-12,16-17,21,25,29-30,34-35,39,41
+loom-core/skills/loom-tickets/templates/ticket.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 3,14
+loom-core/skills/loom-evidence/templates/dossier.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 3
+loom-core/skills/using-loom/references/shaping-with-humans.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 96
+loom-core/README.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 11-13
+loom-core/skills/loom-constitution/templates/constitution.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 9,11-12,16-17,21-22,26-27,31,35,37
+loom-core/skills/loom-ralph/templates/packet.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 3
+loom-core/skills/loom-evidence/SKILL.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 116-117
+  human 118
+loom-core/skills/loom-evidence/templates/observation.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 3
+loom-core/skills/loom-constitution/templates/roadmap.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 9,11-12,16,20-21,25-26,30-31,35-36,40,42
+loom-core/skills/loom-plans/templates/plan.md
+  ses_1e8543381ffeL0fxTMav61Dzuw 3,35,49
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-audit/templates/audit.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 4,
+          "added_lines": 4,
+          "deleted_lines": 3,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "80-81,115-116",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/using-loom/references/how-loom-thinks.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-research/templates/research.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "115",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "PROTOCOL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "69",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-knowledge/references/retrieval-and-loading.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 12,
+          "added_lines": 12,
+          "deleted_lines": 11,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "9,11-12,16,20,24-25,29-30,34-36",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/templates/principle-fragment.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 13,
+          "added_lines": 13,
+          "deleted_lines": 11,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "9,11-12,16-17,21,25,29-30,34-35,39,41",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/templates/decision.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 1,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "3,14",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-tickets/templates/ticket.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-evidence/templates/dossier.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "96",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/using-loom/references/shaping-with-humans.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 2,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "11-13",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/README.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 12,
+          "added_lines": 12,
+          "deleted_lines": 11,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "9,11-12,16-17,21-22,26-27,31,35,37",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/templates/constitution.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-ralph/templates/packet.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 4,
+          "deleted_lines": 3,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "116-117",
+          "overridden_lines": 0
+        },
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "118",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-evidence/SKILL.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1,
+          "added_lines": 1,
+          "deleted_lines": 0,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "3",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-evidence/templates/observation.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 14,
+          "added_lines": 14,
+          "deleted_lines": 12,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "9,11-12,16,20-21,25-26,30-31,35-36,40,42",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-constitution/templates/roadmap.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 3,
+          "added_lines": 3,
+          "deleted_lines": 15,
+          "hash": "ses_1e8543381ffeL0fxTMav61Dzuw",
+          "lines": "3,35,49",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "loom-core/skills/loom-plans/templates/plan.md"
+    }
+  ],
+  "base_commit_sha": "ccdc24707f7a8c208957bf7e13b799d27156694a",
+  "branch": "main",
+  "commit_sha": "374ee66df41da8cffefabb8339c47cf5c53f9441",
+  "commit_time": "2026-05-11T09:29:14-07:00",
+  "commit_type": "direct_commit",
+  "git_ai_version": "1.4.4",
+  "prompts": {
+    "human": {
+      "accepted_lines": 1,
+      "agent_id": null,
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "overriden_lines": 0,
+      "total_additions": 1,
+      "total_deletions": 0
+    },
+    "ses_1e8543381ffeL0fxTMav61Dzuw": {
+      "accepted_lines": 73,
+      "agent_id": {
+        "id": "ses_1e8543381ffeL0fxTMav61Dzuw",
+        "model": "openai/gpt-5.5-fast",
+        "tool": "opencode"
+      },
+      "human_author": "z3z1ma <butler.alex2010@gmail.com>",
+      "overriden_lines": 0,
+      "total_additions": 75,
+      "total_deletions": 69
+    }
+  },
+  "repo": "https://github.com/z3z1ma/agent-loom.git",
+  "schema_version": "authorship/3.0.0"
+}
