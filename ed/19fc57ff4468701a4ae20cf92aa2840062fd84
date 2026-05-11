@@ -1,0 +1,605 @@
+evals/dota2/with-loom/.loom/plans/20260510-rts-meta-explorer.md
+  human 1-115
+evals/dota2/with-loom/.loom/evidence/20260510-campaign-stack-foundation-checks.md
+  human 1-57
+evals/dota2/with-loom/.loom/tickets/20260510-match-battle-reports.md
+  human 1-67
+evals/dota2/without-loom/index.html
+  human 1-190
+evals/dota2/with-loom/src/styles.css
+  human 1-993
+evals/dota2/with-loom/.loom/evidence/20260510-rts-meta-mvp-checks.md
+  human 1-60
+evals/dota2/without-loom/README.md
+  human 1-17
+evals/dota2/with-loom/.loom/tickets/20260510-hero-picker-overlap-fix.md
+  human 1-52
+evals/dota2/without-loom/package.json
+  human 1-10
+evals/dota2/with-loom/.loom/tickets/20260510-campaign-map-shell.md
+  human 1-66
+evals/dota2/with-loom/src/main.jsx
+  human 1-695
+evals/dota2/with-loom/.loom/audit/20260510-rts-meta-mvp.md
+  human 1-70
+evals/dota2/with-loom/.loom/specs/opendota-rts-meta-explorer.md
+  human 1-100
+evals/dota2/with-loom/.loom/tickets/20260510-campaign-map-deep-analytics.md
+  human 1-82
+evals/dota2/with-loom/package-lock.json
+  human 1-904
+evals/dota2/with-loom/vite.config.js
+  human 1-6
+evals/dota2/with-loom/.loom/evidence/20260510-hero-picker-overlap-fix.md
+  human 1-48
+evals/dota2/with-loom/.loom/tickets/20260510-hero-deep-territories.md
+  human 1-68
+evals/dota2/with-loom/.loom/evidence/20260510-hero-deep-territories-checks.md
+  human 1-56
+evals/dota2/with-loom/src/api.js
+  human 1-40
+evals/dota2/with-loom/.loom/tickets/20260510-campaign-stack-foundation.md
+  human 1-69
+evals/dota2/with-loom/.loom/tickets/20260510-static-rts-meta-explorer.md
+  human 1-83
+evals/dota2/with-loom/.loom/evidence/20260510-campaign-production-verification.md
+  human 1-68
+evals/dota2/with-loom/.loom/tickets/20260510-rts-meta-verification.md
+  human 1-69
+evals/dota2/with-loom/index.html
+  human 1-16
+evals/dota2/with-loom/.loom/tickets/20260510-campaign-production-verification.md
+  human 1-71
+evals/dota2/with-loom/.loom/research/20260510-opendota-api-shape.md
+  human 1-94
+evals/dota2/with-loom/.loom/tickets/20260510-campaign-summary-data-foundation.md
+  human 1-69
+evals/dota2/with-loom/src/analytics.js
+  human 1-269
+evals/dota2/with-loom/.loom/research/20260510-opendota-deep-analytics.md
+  human 1-87
+evals/dota2/with-loom/package.json
+  human 1-22
+evals/dota2/with-loom/.loom/evidence/20260510-campaign-map-shell-checks.md
+  human 1-55
+evals/dota2/without-loom/styles.css
+  human 1-1262
+evals/dota2/with-loom/.gitignore
+  human 1-2
+evals/dota2/with-loom/README.md
+  human 1-42
+evals/dota2/without-loom/app.js
+  human 1-609
+evals/dota2/with-loom/.loom/evidence/20260510-summary-data-foundation-checks.md
+  human 1-56
+evals/dota2/with-loom/.loom/evidence/20260510-match-battle-reports-checks.md
+  human 1-56
+evals/dota2/with-loom/.loom/audit/20260510-campaign-production-audit.md
+  human 1-60
+---
+{
+  "attestations": [
+    {
+      "entries": [
+        {
+          "accepted_lines": 115,
+          "added_lines": 115,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-115",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/plans/20260510-rts-meta-explorer.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 57,
+          "added_lines": 57,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-57",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/evidence/20260510-campaign-stack-foundation-checks.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 67,
+          "added_lines": 67,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-67",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/tickets/20260510-match-battle-reports.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 190,
+          "added_lines": 190,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-190",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/without-loom/index.html"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 993,
+          "added_lines": 993,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-993",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/src/styles.css"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 60,
+          "added_lines": 60,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-60",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/evidence/20260510-rts-meta-mvp-checks.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 17,
+          "added_lines": 17,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-17",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/without-loom/README.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 52,
+          "added_lines": 52,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-52",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/tickets/20260510-hero-picker-overlap-fix.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 10,
+          "added_lines": 10,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-10",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/without-loom/package.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 66,
+          "added_lines": 66,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-66",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/tickets/20260510-campaign-map-shell.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 695,
+          "added_lines": 695,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-695",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/src/main.jsx"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 70,
+          "added_lines": 70,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-70",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/audit/20260510-rts-meta-mvp.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 100,
+          "added_lines": 100,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-100",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/specs/opendota-rts-meta-explorer.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 82,
+          "added_lines": 82,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-82",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/tickets/20260510-campaign-map-deep-analytics.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 904,
+          "added_lines": 904,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-904",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/package-lock.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 6,
+          "added_lines": 6,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-6",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/vite.config.js"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 48,
+          "added_lines": 48,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-48",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/evidence/20260510-hero-picker-overlap-fix.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 68,
+          "added_lines": 68,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-68",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/tickets/20260510-hero-deep-territories.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 56,
+          "added_lines": 56,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-56",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/evidence/20260510-hero-deep-territories-checks.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 40,
+          "added_lines": 40,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-40",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/src/api.js"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 69,
+          "added_lines": 69,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-69",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/tickets/20260510-campaign-stack-foundation.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 83,
+          "added_lines": 83,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-83",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/tickets/20260510-static-rts-meta-explorer.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 68,
+          "added_lines": 68,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-68",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/evidence/20260510-campaign-production-verification.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 69,
+          "added_lines": 69,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-69",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/tickets/20260510-rts-meta-verification.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 16,
+          "added_lines": 16,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-16",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/index.html"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 71,
+          "added_lines": 71,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-71",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/tickets/20260510-campaign-production-verification.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 94,
+          "added_lines": 94,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-94",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/research/20260510-opendota-api-shape.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 69,
+          "added_lines": 69,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-69",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/tickets/20260510-campaign-summary-data-foundation.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 269,
+          "added_lines": 269,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-269",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/src/analytics.js"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 87,
+          "added_lines": 87,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-87",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/research/20260510-opendota-deep-analytics.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 22,
+          "added_lines": 22,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-22",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/package.json"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 55,
+          "added_lines": 55,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-55",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/evidence/20260510-campaign-map-shell-checks.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 1262,
+          "added_lines": 1262,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-1262",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/without-loom/styles.css"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 2,
+          "added_lines": 2,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-2",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.gitignore"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 42,
+          "added_lines": 42,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-42",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/README.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 609,
+          "added_lines": 609,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-609",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/without-loom/app.js"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 56,
+          "added_lines": 56,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-56",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/evidence/20260510-summary-data-foundation-checks.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 56,
+          "added_lines": 56,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-56",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/evidence/20260510-match-battle-reports-checks.md"
+    },
+    {
+      "entries": [
+        {
+          "accepted_lines": 60,
+          "added_lines": 60,
+          "deleted_lines": 0,
+          "hash": "human",
+          "lines": "1-60",
+          "overridden_lines": 0
+        }
+      ],
+      "file": "evals/dota2/with-loom/.loom/audit/20260510-campaign-production-audit.md"
+    }
+  ],
+  "base_commit_sha": "ed19fc57ff4468701a4ae20cf92aa2840062fd84",
+  "commit_sha": "ed19fc57ff4468701a4ae20cf92aa2840062fd84",
+  "commit_type": "commit_amend",
+  "git_ai_version": "1.4.3",
+  "prompts": {
+    "human": {
+      "accepted_lines": 6755,
+      "agent_id": null,
+      "human_author": null,
+      "overriden_lines": 0,
+      "total_additions": 6755,
+      "total_deletions": 0
+    }
+  },
+  "schema_version": "authorship/3.0.0"
+}
