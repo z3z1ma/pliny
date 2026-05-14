@@ -25,12 +25,16 @@ skill's requirements.
 Prototype code is not production work unless a later ticket deliberately absorbs
 it.
 
+A prototype is not a substitute for shaping the direction. Use it only after the
+question is specific enough to answer without deciding the whole product,
+system shape, data model, state model, or design direction by accident.
+
 ## Use This Playbook When
 
 Use this playbook when:
 
 - the operator asks to prototype, spike, sanity-check, or try options
-- a state machine or data model is hard to reason about on paper
+- a state machine, data model, or information model is hard to reason about on paper
 - UI direction needs visible alternatives before implementation
 - interface shape is uncertain and examples would clarify it
 - an integration assumption needs fast proof before planning
@@ -59,6 +63,9 @@ Good prototype questions are specific:
 
 If the question is broad or vague, route to `loom-idea-refine`,
 `loom-domain-language-and-decisions`, or `loom-research` first.
+
+Do not build a prototype to avoid asking the operator what problem, boundary, data
+model, state model, or design decision the prototype is supposed to clarify.
 
 ## Branch
 

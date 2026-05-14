@@ -81,8 +81,11 @@ Strategy explains the route.
 
 Include:
 
+- what belongs in the plan and what is deliberately left out
 - why this decomposition makes sense
 - why this order makes sense
+- which system-shape, data-modeling, state-modeling, abstraction, or coherence
+  choices shape the route
 - what risks shape the route
 - what can run independently
 - what must be sequential
@@ -101,6 +104,8 @@ Each unit should make clear:
 - the child ticket ID
 - the outcome the ticket should produce
 - the likely scope boundary
+- the design, system-shape, data, or state constraint the ticket must preserve when
+  it matters
 - the order or dependency reason
 - validation, evidence, and audit expectations
 - loopback or stop conditions

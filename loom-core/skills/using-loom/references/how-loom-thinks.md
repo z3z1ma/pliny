@@ -7,6 +7,24 @@ recoverable records.
 Loom works when the agent treats the `.loom` directory as the durable shape of the
 work, not as notes beside the work.
 
+## Ambiguity Is A Routing Signal
+
+The first responsibility is to shape the front-loaded engineering judgment before
+execution. If the operator's ask is broad, aspirational, quality-driven, missing
+constraints, unclear about evidence, or vague about design direction, stay in the
+outer loop and identify which truth is missing.
+
+Low-record execution is acceptable only for tiny, obvious, low-risk work whose
+outcome, boundary, evidence posture, important non-goals, and system-shape,
+data-model, or state-relationship implications are already concrete. For anything
+else, shape with the operator and route the clarified truth into the surface that
+owns it before creating tickets, packets, or patches.
+
+Outer-loop shaping should expose the choices that determine whether the work will
+hold together: what belongs in the direction, what should be excluded, which seams
+and data relationships should carry the behavior, and what would make the result
+coherent instead of merely implemented.
+
 ## Truth Lives In The Right Surface
 
 Do not let the newest artifact, loudest artifact, or current chat message win by

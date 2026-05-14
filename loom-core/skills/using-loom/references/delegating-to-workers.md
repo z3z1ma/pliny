@@ -31,7 +31,8 @@ defined read and write areas, expected evidence or review output, and recognizab
 stop conditions.
 
 Do not delegate work that still needs operator shaping, high-authority judgment,
-ambiguous product intent, unresolved policy, or broad architectural direction.
+ambiguous product intent, unresolved policy, broad architectural direction,
+unsettled data-model or state-modeling choices, or design-coherence decisions.
 Shape that work first.
 
 ## Packet Contract

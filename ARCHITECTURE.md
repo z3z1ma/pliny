@@ -116,6 +116,11 @@ The outer loop shapes work with the operator. The agent inspects first, asks onl
 material questions, and routes durable truth to the surface that owns it. Work
 stays in this loop while intent, scope, evidence, risk, or authority is unclear.
 
+That gate is mandatory. A fuzzy ask must not become a ticket, packet, or patch
+until the missing outcome, boundary, constraints, evidence posture, non-goals,
+system-shape, data-model or state implications, and design-coherence questions are
+shaped with the operator or the owning Loom surface.
+
 Record skills own Loom surfaces and their procedures. Workflow-specific skills
 run inside this architecture: they add guidance after Loom routing has identified
 the owning surface and whether the work is shaped enough to execute. When a

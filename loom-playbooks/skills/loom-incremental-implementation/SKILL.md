@@ -1,6 +1,6 @@
 ---
 name: loom-incremental-implementation
-description: "Use when non-trivial ticket or plan execution needs bounded implementation slices, sequencing, multiple-file/record changes, feature flags, refactor/behavior separation, worker handoff, evidence, and continuation state."
+description: "Use when non-trivial ticket or plan execution needs bounded implementation slices, sequencing, multiple-file/record changes, feature flags, refactor/behavior separation, worker handoff, evidence, and continuation state; not for unshaped asks with unresolved scope, system-shape, data-model, state, or coherence choices."
 ---
 
 # loom-incremental-implementation
@@ -24,6 +24,13 @@ skill's requirements.
 
 This workflow does not replace ticket scope, packet scope, evidence, or audit.
 Execute only ticket-ready slices, and run those slices through Ralph packets.
+
+Do not use this playbook to turn a fuzzy ask into implementation. If the current
+input is not an active ticket or a concrete plan execution unit, stop and return to
+outer-loop shaping, `loom-idea-refine`, `loom-specs`, `loom-plans`, or
+`loom-tickets` before changing files. Implementation begins only after scope,
+system-shape, data-model, state, evidence, and coherence choices are concrete enough for
+the slice.
 
 ## Use This Playbook When
 

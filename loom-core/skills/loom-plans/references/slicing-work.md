@@ -7,8 +7,8 @@ Use this question repeatedly:
 > What is the next smallest ticket-ready slice that makes meaningful progress
 > without widening scope?
 
-A slice is ticket-ready when it has an outcome, boundary, evidence target, and
-stop condition.
+A slice is ticket-ready when it has an outcome, boundary, evidence target, stop
+condition, and settled or linked design constraints.
 
 Each slice should also have one closure claim. If the slice needs separate claims
 for setup, data behavior, UI structure, deep behavior, migration, review, or final
@@ -24,6 +24,8 @@ A good execution unit is:
 - grounded in a source record, code path, interface, migration, or clear operator
   goal
 - explicit about the likely scope boundary
+- explicit about the system-shape, data-model, state, abstraction, or coherence
+  constraint it preserves or changes when that matters
 - clear about the order reason or dependency
 - clear about validation and evidence expectations
 - able to stop cleanly if a behavior, evidence, policy, or sequencing question
@@ -97,8 +99,9 @@ These are usually not ticket-ready:
 - update docs
 - wire everything together
 
-They become ticket-ready when they name an outcome, boundary, evidence target, and
-stop condition.
+They become ticket-ready when they name an outcome, boundary, evidence target,
+stop condition, and the design constraints needed to execute without inventing
+direction.
 
 ## Slice Integrity
 
@@ -119,7 +122,10 @@ records, it is not ready.
 Before creating or running a child ticket, answer:
 
 - What single closure claim will this ticket make?
+- What should this slice leave out?
 - What files, records, or surfaces form its likely write boundary?
+- What system-shape, data-model, state, abstraction, or coherence constraint must
+  it preserve or change?
 - What evidence can verify this slice without completing later slices?
 - What stop condition returns to shaping, research, specs, or the operator?
 - What later ticket can consume this result without relying on chat history?

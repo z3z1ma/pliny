@@ -1,6 +1,6 @@
 ---
 name: loom-idea-refine
-description: "Use when an operator's rough product, engineering, workflow, research, or opportunity idea lacks clear problem, audience, constraints, success criteria, direction, or next Loom record move."
+description: "Use when an operator's rough product, engineering, workflow, research, or opportunity idea lacks clear problem, audience, scope decisions, system-shape, data-model or state implications, success criteria, design coherence, direction, or next Loom record move."
 ---
 
 # loom-idea-refine
@@ -25,6 +25,11 @@ skill's requirements.
 
 This playbook stays in the outer loop. It produces a routed next move: research,
 spec, plan, ticket, knowledge, constitution, or an explicit no-go.
+
+When the operator's ask is not concrete enough for execution, prefer this route
+over implementation. Its job is to reveal the scope, system-shape, data-model,
+state, evidence, and coherence choices that would otherwise be hidden inside
+an implementation guess.
 
 This playbook creates no separate idea ledger.
 
@@ -58,6 +63,9 @@ Clarify:
 - who or what the idea is for
 - the job, pain, quality gap, or workflow friction it addresses
 - what success would look like
+- which outcomes belong and which nearby outcomes are excluded
+- what system shape, data model, state model, or abstraction the idea implies
+- what would make the design coherent or inconsistent
 - what constraints are real now
 - what has already been tried or rejected
 - what would make the idea not worth doing
@@ -89,7 +97,9 @@ inventing options.
 Compare promising directions on:
 
 - user or operator value
+- design coherence and fit with the existing system
 - implementation feasibility
+- system-shape, data-model, and state implications
 - differentiation from the current workaround
 - risk and reversibility
 - dependency on unresolved behavior, policy, source facts, or evidence
@@ -109,6 +119,8 @@ Produce a short decision summary:
 - recommended direction
 - rejected directions and why they were not chosen
 - smallest useful version
+- scope decisions
+- system-shape, data-model, state, and coherence implications
 - assumptions to validate
 - not doing
 - open questions

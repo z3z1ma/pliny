@@ -10,8 +10,11 @@ Specs own intended behavior.
 A spec says what a system, workflow, interface, product surface, command, data
 shape, permission boundary, error state, or record shape should do.
 
-It turns fuzzy intent into requirements and scenarios that downstream tickets,
-packets, evidence, and audit can cite.
+It turns fuzzy intent into requirements, scenarios, boundaries, and quality bars
+that downstream tickets, packets, evidence, and audit can cite. Specs are one of
+the main places to preserve outer-loop design judgment when behavior, state shape,
+data shape, interface boundaries, or design coherence would otherwise be inferred
+during implementation.
 
 The current spec set, meaning specs with `Status: active` or `Status: accepted`,
 should define the current product surface well enough that a future agent could
@@ -29,6 +32,8 @@ Use this skill when:
 - intended behavior is fuzzy, disputed, reusable, shared, or easy to misstate
 - interface, API, workflow, UX, permission, error, compatibility, or invariant
   behavior needs a durable contract
+- product direction, state shape, data shape, abstraction boundary, or design
+  coherence needs a stable behavior-level source before execution
 - a ticket, plan, audit, packet, or worker would otherwise redefine what correct
   means
 - operator answers need to become behavior truth before execution
@@ -53,6 +58,8 @@ If creating or reshaping a spec:
   when materially different product surfaces would otherwise share one spec
 - shape fuzzy behavior until requirements, scenarios, boundaries, and open
   questions are clear enough for downstream work
+- use examples, non-examples, data shapes, and interface boundaries to prevent
+  downstream agents from inventing design direction
 - use `templates/spec.md`
 - write the smallest citable spec
 

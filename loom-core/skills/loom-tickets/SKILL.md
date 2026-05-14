@@ -18,6 +18,11 @@ after those packets return.
 A ticket is not a vague issue, planning document, research note, scratchpad,
 transcript summary, or parking lot.
 
+Do not use a ticket to hide unresolved outer-loop judgment. Scope-selection,
+exclusions, system-shape, data-model or state implications, design coherence, and
+evidence posture must be settled enough, or owned by linked records, before a
+ticket becomes executable.
+
 ## Use This Skill When
 
 Use this skill when the task involves:
@@ -35,8 +40,9 @@ Use this skill when the task involves:
 Do not create a ticket to force premature execution.
 
 If the work is mainly behavior discovery, sequencing, tradeoff analysis, durable
-policy, architectural judgment, ambiguous intent, or reusable knowledge, route it
-to the appropriate surface first.
+policy, architectural judgment, data-model or state-modeling choice, coherence
+question, ambiguous intent, or reusable knowledge, route it to the appropriate
+surface first.
 
 ## Dispatch
 
@@ -47,6 +53,8 @@ If creating or shaping a ticket:
 - inspect relevant records and source before asking the operator to repeat facts
 - create the ticket only when value, executable boundary, scope, context, and
   acceptance are clear enough to act
+- ensure scope, system-shape, data-model, state, coherence, and evidence choices
+  are either settled in the ticket or linked to owning records
 - use the single-closure-claim check: one ticket should produce one bounded result
   with one coherent evidence and closure story
 - include enough instruction and record links that the first Ralph packet can be
@@ -157,6 +165,8 @@ Every ticket must preserve these invariants:
   chat history
 * truthful `Status:`
 * explicit scope boundary
+* settled or linked scope, system-shape, data-model, state-modeling, and coherence
+  choices relevant to execution
 * concrete `ACC-*` acceptance criteria
 * current state that reflects reality now
 * material progress recorded in the journal

@@ -36,6 +36,11 @@ material questions, and routes durable truth into the surface that owns it. Work
 stays there while intent, scope, risk, evidence, authority, or the ticket boundary
 is unclear.
 
+This is a mandatory gate. Unless the ask is already concrete about outcome,
+boundary, constraints, evidence, non-goals, system-shape, data-model or state
+implications, and design coherence, the agent must shape the problem with the
+human or the owning Loom surface before creating execution work.
+
 Record skills own Loom surfaces and their procedures. Workflow-specific skills
 add task-shaped pressure after Loom routing has decided whether the next move is
 shaping, research, spec, plan, ticket, evidence, audit, knowledge, or packetized

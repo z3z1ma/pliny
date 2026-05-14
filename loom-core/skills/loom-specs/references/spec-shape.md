@@ -23,6 +23,8 @@ A useful spec says:
 - what problem, ambiguity, or shared contract requires a spec
 - what the desired behavior is
 - what is out of scope
+- what domain model, data shape, state shape, interface boundary, or abstraction
+  should guide downstream work when relevant
 - which requirements must hold
 - which scenarios exercise those requirements
 - what evidence could show the behavior works
@@ -219,12 +221,15 @@ record itself.
 
 ## Shaping Behavior
 
-Before writing or accepting a spec, shape the behavior until four things are true:
+Before writing or accepting a spec, shape the behavior until these things are true:
 
 - behavior question: the spec names the behavior, interface, invariant, workflow,
   or record shape being defined
 - bounded scope: the spec can say what is covered, what is excluded, and where the
   contract stops
+- design model: important domain model, data shape, state shape, interface
+  boundary, or abstraction choices are explicit enough not to be invented
+  downstream
 - coherent slice: materially different product surfaces have been split or
   explicitly kept out of scope
 - observable scenarios: the behavior can be probed through concrete scenarios,
@@ -244,13 +249,15 @@ When operator input is needed:
   one path
 - challenge vague or overloaded terms before they become requirements
 - test proposed wording against concrete scenarios
-- surface assumptions whose answer would change behavior, UX, architecture,
+- surface assumptions whose answer would change behavior, UX, system shape,
   evidence expectations, risk, or scope
 
 Good shaping questions include:
 
 - What smallest valuable behavior should exist?
 - What is explicitly not being done?
+- What domain model, data shape, state shape, or interface boundary should guide the work?
+- What would make this design incoherent even if the scenarios pass?
 - What current behavior, workaround, failure, or baseline matters?
 - Which actor, workflow, API, command, record, or interface is affected?
 - Which success, edge, failure, permission, empty-state, compatibility, or

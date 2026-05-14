@@ -14,8 +14,12 @@ Execution starts from those tickets, not from an unsliced plan summary.
 
 ## Shaping Standard
 
-Before writing the plan, shape the work until four things are true:
+Before writing the plan, shape the work until these things are true:
 
+- strategic direction: what belongs in the change, what stays out, and why this is
+  the right route are clear enough to preserve
+- design coherence: system seams, data relationships, state relationships, and
+  abstraction choices are resolved or owned by linked records
 - decomposition need: the work genuinely exceeds one bounded ticket
 - execution route: the route through the work is understandable and justified
 - ticket set: the child tickets can be created now
@@ -40,6 +44,8 @@ Create a plan when all of these are true:
 - the work genuinely exceeds one bounded ticket
 - intended behavior is clear enough or owned by a spec
 - major tradeoffs or feasibility questions are resolved or owned by research
+- system-shape, data-modeling, state-modeling, and abstraction choices that affect
+  decomposition are resolved or owned by linked records
 - durable policy, precedent, or architectural judgment is resolved or owned by
   constitution
 - the route through the work is understandable
@@ -66,7 +72,10 @@ Then shape the route until these are clear:
 
 - why the work needs a plan instead of one ticket
 - what outcome the plan is driving toward
+- what is intentionally left out of this plan
 - what records constrain the work
+- what system-shape, data-model, state, abstraction, or coherence constraints shape
+  the route
 - what decomposition makes sense
 - what order matters and why
 - what can run independently
@@ -131,15 +140,17 @@ Use this sequence as the default path, not as a form:
 2. Inspect governing records and relevant source reality.
 3. Shape the work until decomposition need, execution route, ticket set, and proof
    posture are clear.
-4. Decide why this needs a plan rather than one ticket.
-5. Write the strategy in prose.
-6. Slice the work into ticket-ready execution units.
-7. Create the child tickets.
-8. Put each child ticket ID under the corresponding execution unit.
-9. Add the plan to each child ticket's `## Related Records`.
-10. Define milestones that group meaningful execution outcomes.
-11. Name validation, evidence, audit, risk, and loopback posture.
-12. Save the plan using `templates/plan.md`.
+4. Name scope-selection decisions and system-shape, data-model, state,
+   abstraction, or coherence constraints.
+5. Decide why this needs a plan rather than one ticket.
+6. Write the strategy in prose.
+7. Slice the work into ticket-ready execution units.
+8. Create the child tickets.
+9. Put each child ticket ID under the corresponding execution unit.
+10. Add the plan to each child ticket's `## Related Records`.
+11. Define milestones that group meaningful execution outcomes.
+12. Name validation, evidence, audit, risk, and loopback posture.
+13. Save the plan using `templates/plan.md`.
 
 If a child ticket cannot be written yet, the execution unit is not ticket-ready.
 Keep shaping or route the missing truth to the appropriate surface.
@@ -155,7 +166,10 @@ child ticket can close honestly on its own evidence.
 Good plan-shaping questions include:
 
 - Why is this more than one ticket?
+- What belongs in this plan, and what should be left out?
 - What is the smallest useful sequence of child tickets?
+- Which system seam, data model, state relationship, or abstraction decision shapes the route?
+- What would make the decomposition internally inconsistent?
 - Which slice should produce the first observable value?
 - Which slice should prove the riskiest assumption?
 - Which shared contract or interface must be settled before parallel work begins?

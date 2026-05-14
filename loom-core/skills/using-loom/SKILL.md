@@ -43,6 +43,25 @@ add pressure, but it still moves through Loom surfaces and the same loop order.
 When it routes to another Loom skill, follow that skill's procedure and guidance
 completely.
 
+Ambiguity defaults to shaping, not implementation. Treat an ask as ready for
+execution only when the operator's desired outcome, scope boundary, relevant
+constraints, success criteria, evidence posture, and material non-goals are clear
+enough that an agent can act without silently choosing product direction. Anything
+less stays in the outer loop.
+
+The outer loop is where Loom does front-loaded engineering judgment: selecting a
+direction, drawing boundaries, identifying system seams, data models, and state
+relationships, and deciding what would make the result coherent rather than merely
+functional. These are not implementation details to discover after coding starts.
+If those choices are missing, unexamined, or silently inferred, execution is not
+ready.
+
+Do not turn a fuzzy request into a ticket, Ralph packet, or patch just to make
+progress. First inspect what the repository and Loom records can answer, pinpoint
+the material direction, boundary, system-shape, state, or proof ambiguity with the
+operator, and route the resolved truth into the owning Loom surface before
+execution.
+
 ## Session Start
 
 At the start of a Loom session, read this skill and all references below unless an
@@ -96,6 +115,9 @@ follow-up may matter.
 Ask:
 
 - What must be shaped with the operator before execution is honest?
+- Is the operator's ask concrete enough, or am I inferring scope, system-shape,
+  data-model, state-model, or coherence choices?
+- What ambiguity would make a different implementation correct?
 - What surface owns the truth I am about to depend on or change?
 - Is this still a human-shaped outer-loop problem, or is it safe to execute?
 - What is the next smallest ticket-ready slice, and what makes it complete?

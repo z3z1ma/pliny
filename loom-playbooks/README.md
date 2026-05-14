@@ -25,8 +25,10 @@ When a workflow-specific skill routes results through another Loom skill, follow
 the target skill's procedure and guidance completely. The route is a required
 handoff, not a shortcut around the target skill.
 
-Vague work stays in outer-loop shaping until the next Loom surface is clear;
-complex work becomes ticket-ready slices; delegated worker runs use Ralph packets.
+Vague work stays in outer-loop shaping until the next Loom surface is clear. A
+playbook must not turn ambiguity into an implementation shortcut; it should expose
+the missing scope, system-shape, data-model, state, evidence, and coherence choices.
+Complex work becomes ticket-ready slices; delegated worker runs use Ralph packets.
 
 Use workflow-specific skills when general Loom routing is too thin for the work.
 Examples:

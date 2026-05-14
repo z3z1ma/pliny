@@ -10,6 +10,9 @@ API and interface design is a spec-first playbook for shared contracts.
 It defines the contract before implementation, checks compatibility and error
 semantics, and routes execution through tickets, evidence, and audit.
 
+If consumers, data shape, compatibility promise, permission boundary, or domain
+model are unclear, stay in design shaping before implementation.
+
 ## Loom Routing
 
 Common routes use these Loom skills for durable records or follow-up workflow:
@@ -47,6 +50,7 @@ Identify the consumers:
 
 - users, callers, clients, components, services, workers, agents, or future records
 - existing consumers and their current assumptions
+- domain model and state relationships the interface should expose or hide
 - compatibility expectations
 - unsupported consumers and non-goals
 

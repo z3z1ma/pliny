@@ -24,8 +24,9 @@ completely. This playbook adds workflow pressure; it does not shorten the target
 skill's requirements.
 
 Keep broad product or design intent in outer-loop shaping until the
-operator-facing direction, quality bar, evidence posture, and ticket boundary are
-clear enough to route.
+operator-facing direction, scope and exclusion choices, information hierarchy,
+state boundaries, quality bar, evidence posture, and ticket boundary are clear
+enough to route.
 
 ## Use This Playbook When
 
@@ -52,6 +53,8 @@ intent -> contract -> slice -> build -> observe -> review -> preserve
 Clarify:
 
 - user task or operator workflow
+- what the UI should include and intentionally leave out
+- information hierarchy, domain model, and primary objects
 - primary state and secondary states
 - success, empty, loading, error, disabled, permission, and offline states
 - desktop and mobile behavior
@@ -64,6 +67,9 @@ When the request is still a rough product idea, use `loom-idea-refine` or
 outer-loop shaping before writing the UI contract. Design adjectives become useful
 only when they resolve into direction, examples or non-examples, constraints, and
 evidence.
+
+Do not let a vague visual or product direction become UI implementation until the
+design's domain model and state boundaries are explicit enough to review.
 
 Route durable intended behavior to `loom-specs` when it affects more than one
 ticket or future work.

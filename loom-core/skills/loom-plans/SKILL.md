@@ -14,6 +14,12 @@ expectations.
 A plan is not a progress log, ticket substitute, research note, spec, or parking
 lot for unresolved thought.
 
+A plan does not authorize execution from an unshaped idea. It preserves the
+strategy after the direction-setting choices are clear enough: what belongs in the
+change, what is left out, how system-shape, data-model, or state-modeling
+decisions affect the route, and how the design stays coherent across child
+tickets.
+
 ## Use This Skill When
 
 Use this skill when:
@@ -28,8 +34,9 @@ Use this skill when:
 
 Use one ticket when one bounded ticket is enough.
 
-When intended behavior, tradeoffs, feasibility, or durable policy are still too
-unclear, route those questions to specs, research, or constitution first.
+When intended behavior, tradeoffs, feasibility, data-model or state-modeling shape,
+design coherence, or durable policy are still too unclear, route those questions to
+specs, research, or constitution first.
 
 ## Dispatch
 
@@ -123,6 +130,9 @@ Creating a plan is outer-loop work.
 Before saving a plan, shape the work until the route, slices, ticket set,
 milestones, validation posture, evidence expectations, audit expectations, and
 loopback conditions are clear enough to drive execution.
+
+The plan should also state scope-selection decisions, system-shape, data-model or
+state constraints, and coherence risks that make the decomposition make sense.
 
 A saved plan should be usable from the plan and its linked records without relying
 on chat history.

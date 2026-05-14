@@ -1,7 +1,43 @@
 # Shaping With Humans
 
 Before execution, the agent and operator shape the work until the next move is
-small, clear, bounded, and honest.
+small, clear, bounded, and honest. This outer loop is the core premise of Loom,
+not a prelude to skip when implementation looks available.
+
+Unless the operator's ask is concrete enough to act without hidden design choices,
+the required first goal is to pinpoint ambiguity with the human. Do not skip this
+because a patch or ticket looks easy to infer.
+
+## Concrete Ask Gate
+
+A fuzzy ask is not an implementation brief. Do not collapse broad, aspirational,
+or under-specified requests into execution before the shaping work is done.
+
+Treat a request as concrete only when these are already clear enough to act on
+without choosing direction silently:
+
+- operator or user outcome
+- target surface, code area, workflow, or artifact
+- scope boundary and important non-goals
+- source, product, policy, or system constraints
+- system-shape, data model, state, data-flow, or abstraction implications
+- quality bar, success criteria, and non-examples
+- evidence posture or observable proof path
+- ticket, plan, spec, research, or other next Loom surface
+
+If any of those are missing and would materially change what gets built, the next
+move is mandatory shaping:
+
+- inspect source and Loom records before asking what they already answer
+- name the specific ambiguity or hidden choice
+- ask one material question or offer two or three materially different options
+- recommend a path when the tradeoff is clear
+- preserve the resolved truth in the surface that owns it
+
+Concrete enough does not mean the operator supplied every implementation detail.
+It means the remaining choices are local execution choices inside an accepted
+direction, not hidden direction, system-shape, data-model, state, or coherence
+decisions.
 
 ## Outer Loop Posture
 
@@ -25,13 +61,27 @@ Broad requests are normal outer-loop inputs. Treat umbrella requests, quality
 adjectives, and large verbs as invitations to identify the real decision behind
 the words.
 
+The objective is not to collect enough text to justify immediate implementation.
+The objective is to locate the product, behavior, system-shape, workflow,
+evidence, or scope ambiguity that would make an implementation guess unsafe.
+
+Shape the hard parts explicitly:
+
+- which outcomes belong in this direction
+- which adjacent outcomes are deliberately excluded
+- which system seams, data model, or state relationships the work implies
+- how the pieces should fit together as one design
+- what would make the design incoherent even if the code runs
+- which surface should own each resulting decision before execution depends on it
+
 Before writing durable artifacts or executing from them, shape the decision points
 that affect the work:
 
 - the user or operator outcome
 - the quality bar and non-examples
 - the meaningful non-goals
-- the source, product, policy, or architecture constraints
+- the source, product, policy, or system constraints
+- the domain model, data relationships, state relationships, and abstraction boundaries
 - the evidence that would make success believable
 - the ticket boundary or plan decomposition that would make execution bounded
 
@@ -50,6 +100,9 @@ Name the tradeoff. Recommend a path.
 
 Good pressure questions sound like:
 
+- What should this become, and what should it explicitly not become?
+- What system seam, data model, state relationship, or abstraction should this reinforce?
+- What would make the design internally inconsistent?
 - What would make this successful?
 - What should not change?
 - Is this a local fix or a precedent?
@@ -65,15 +118,21 @@ Do not walk the operator through a form unless the operator asks for one.
 Stay in the outer loop when any of these are unclear:
 
 - purpose or success criteria
+- user, audience, or operator outcome
 - intended behavior
+- quality bar or non-examples
 - policy, constraint, or precedent
+- system shape, data model, state model, or abstraction boundary
+- design coherence
 - evidence baseline
 - sequencing or rollout
 - risk or audit need
 - ticket-sized boundary
 - operator authority for a consequential choice
+- what `better`, `done`, `simple`, or similar shorthand excludes
 
-Do not jump from a fuzzy request to the first plausible implementation.
+Do not jump from a fuzzy request to implementation before the direction-setting
+choices are shaped.
 
 If the work cannot yet be handed to a future agent with clear scope, constraints,
 evidence expectations, and stop conditions, it is still outer-loop work.

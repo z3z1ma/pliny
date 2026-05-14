@@ -27,7 +27,7 @@ skill's requirements.
 
 Use this playbook when:
 
-- replacing a system, API, library, data model, workflow, or feature
+- replacing a system, API, library, data shape, workflow, or feature
 - sunsetting a feature or old path
 - consolidating duplicate implementations
 - removing dead or zombie code

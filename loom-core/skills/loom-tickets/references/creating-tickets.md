@@ -7,10 +7,13 @@ an agent can start without inventing scope.
 
 ## Shaping Standard
 
-Before writing the ticket, prove three things:
+Before writing the ticket, prove these things:
 
 - executable boundary: the work is small and concrete enough to execute without
   inventing scope
+- shaped direction: scope-selection choices, exclusions, system-shape, data-model
+  or state implications, and coherence constraints are settled enough or owned by
+  linked records
 - engineering value: the ticket produces a real engineering outcome, not activity
   or process compliance
 - acceptance clarity: `ACC-*` criteria are specific enough that evidence can
@@ -20,6 +23,11 @@ Before writing the ticket, prove three things:
 
 If any of those are missing, keep shaping. Ask the operator, inspect the codebase,
 or route to research, specs, plans, or constitution before creating the ticket.
+
+Do not create an executable ticket from a fuzzy ask. If the outcome, boundary,
+evidence, non-goals, system-shape, data-model or state implications, and design
+direction are not concrete enough, keep shaping or route the missing truth to the
+owning surface before creating executable work.
 
 ## Single Closure Claim
 
@@ -38,6 +46,10 @@ verification in the same work unit.
 
 Use the ticket only after the result, boundary, evidence, and audit lens all belong
 to the same closure story.
+
+If the closure story depends on unresolved product direction, system shape,
+data-modeling, state-modeling, or design coherence, the ticket is not ready. Route those
+questions to specs, research, plans, or constitution first.
 
 ## Create A Ticket Only When
 
@@ -80,6 +92,10 @@ Ground the ticket before writing it.
 - Name the likely write boundary, validation target, risk, and escalation triggers.
 - Challenge fuzzy verbs like improve, clean up, support, handle, align, simplify,
   refactor, finish, and polish until they imply concrete change and evidence.
+- Challenge fuzzy product shorthands like v1, basic, simple, better, and done until
+  they identify the outcome, boundary, evidence, non-goals, and design direction.
+- Name the system seam, data model, state relationship, or abstraction boundary the
+  ticket must preserve, change, or explicitly avoid changing.
 - Ask one material question at a time when operator input is needed.
 - Offer a recommended answer when the choice has a clear engineering tradeoff.
 - Preserve only answers that change execution.
@@ -92,22 +108,26 @@ Use this sequence:
 2. Inspect existing records and source that constrain the work.
 3. Define the smallest useful executable slice.
 4. State what is explicitly out of scope.
-5. Identify likely write boundaries.
-6. Define acceptance criteria with `ACC-*` IDs.
-7. Name evidence needed for each important closure claim.
-8. Name the audit target or lens expected before closure.
-9. Name the first likely Ralph packet boundary.
-10. Assign risk with a reason.
-11. Add related records only when an acting agent should read them.
-12. Create the ticket using `templates/ticket.md`.
+5. Name relevant system-shape, data-model, state, abstraction, or coherence constraints.
+6. Identify likely write boundaries.
+7. Define acceptance criteria with `ACC-*` IDs.
+8. Name evidence needed for each important closure claim.
+9. Name the audit target or lens expected before closure.
+10. Name the first likely Ralph packet boundary.
+11. Assign risk with a reason.
+12. Add related records only when an acting agent should read them.
+13. Create the ticket using `templates/ticket.md`.
 
 ## Creation Questions
 
 Good ticket-shaping questions include:
 
 - What code-facing or artifact-facing change will exist when this is done?
+- What should this ticket intentionally leave out?
 - What is the smallest useful slice?
 - What is explicitly out of scope?
+- Which system seam, data model, state relationship, or abstraction boundary constrains this slice?
+- What coherence question would change the ticket if answered differently?
 - What existing record constrains this work?
 - What source, test, or artifact path is likely involved?
 - What first Ralph packet would execute or review this ticket?

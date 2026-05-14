@@ -11,6 +11,10 @@ The operating loop is: shape with the human, route durable truth, slice into
 bounded tickets, execute ticket slices through Ralph packets, preserve evidence,
 audit claims, and reconcile records.
 
+If the ask is not concrete enough for execution, Core keeps the agent in shaping
+instead of letting it infer tickets, packets, or patches from hidden product or
+system-shape choices.
+
 If a harness installs only one Loom package, install this one.
 
 [Agent Loom](../README.md) / [Protocol](../PROTOCOL.md) / [Install](../INSTALL.md) / [Playbooks](../loom-playbooks/README.md)

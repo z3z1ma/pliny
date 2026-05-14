@@ -13,9 +13,13 @@ Agent Loom gives that work a repo-local shape. It turns a coding session into
 Markdown records: specs, tickets, research, evidence, audit, knowledge, and
 bounded worker packets.
 
-The loop is deliberate: shape vague work with the human, slice complex work into
-ticket-ready units, hand bounded worker runs through Ralph packets, and claim only
-what evidence and audit support.
+The loop is deliberate: shape vague work with the human before building, slice
+complex work into ticket-ready units, hand bounded worker runs through Ralph
+packets, and claim only what evidence and audit support.
+
+Unless the ask is already concrete enough for execution, Loom's first job is
+outer-loop judgment: select direction, draw boundaries, expose system seams and
+state relationships, and preserve what makes the design coherent.
 
 **The session is disposable. The work products compound.**
 

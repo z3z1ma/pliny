@@ -112,8 +112,15 @@ Good scope names:
 * likely files, records, directories, commands, or interfaces involved
 * assumptions the acting agent may rely on
 * non-goals that would otherwise invite scope creep
+* system-shape, data-modeling, state-modeling, abstraction, or coherence
+  constraints that bound the change
 
 If the scope cannot be bounded, the ticket is not ready.
+
+If the ticket would require the acting agent to decide what the design is, what to
+leave out, which data model or state model should exist, or which abstraction
+should carry the work, the ticket is not ready. Shape that truth first or link the
+owning record.
 
 If the first Ralph packet boundary cannot be identified from the ticket and linked
 records, the ticket is not ready.
