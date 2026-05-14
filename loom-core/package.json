@@ -12,6 +12,8 @@
     "opencode": ">=1.14.22 <2"
   },
   "files": [
+    "agents/",
+    "codex/",
     "loom-core.mjs",
     "skills/"
   ],

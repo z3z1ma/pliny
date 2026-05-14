@@ -28,6 +28,9 @@
     "defaultPrompt": [
       "Use using-loom before any Loom work.",
       "Use Loom Core to create and maintain canonical Loom records.",
+      "Optional Loom Weaver support for Codex uses a custom agent TOML installed under ~/.codex/agents/loom-weaver.toml.",
+      "After installing that TOML, ask Codex in natural language to use the loom-weaver custom agent for pre-implementation shaping.",
+      "Codex plugins do not currently document @<agent> custom-agent invocation or plugin-shipped profiles.",
       "Treat Codex preload behavior as requiring separate runtime validation."
     ]
   }

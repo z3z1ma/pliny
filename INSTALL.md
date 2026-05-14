@@ -24,6 +24,22 @@ Activation is part of the doctrine: when Loom may apply, the agent should check
 the relevant Loom skill before responding, asking clarifying questions, inspecting,
 editing, creating tickets, or launching Ralph.
 
+## Loom Weaver
+
+Core also ships `loom-weaver`, an optional explicit shaping persona. Use it when
+you want a Loom-oriented partner to challenge an idea, present options with a
+recommendation, and create or update `.loom/` records before implementation.
+Loom Weaver writes only under `.loom/`; use an implementation agent or Ralph
+packet for source edits.
+
+| Harness | Invocation |
+| --- | --- |
+| OpenCode | Switch to the `loom-weaver` primary agent with the agent switcher. If using it as a subagent, invoke `@loom-weaver` where OpenCode subagent mentions are available. |
+| Claude Code | Use `/agents` to confirm the installed plugin-scoped name. For a main session, use `claude --agent loom-core:loom-weaver` when that is the listed name; for one-shot use, invoke the listed Loom Weaver agent with Claude's agent mention/typeahead. |
+| Codex | Install and enable the Core plugin, then install the optional custom agent TOML into `~/.codex/agents/loom-weaver.toml`. Ask in natural language such as `Use the loom-weaver custom agent to shape this before implementation`. Codex docs do not document `@<agent>` custom-agent invocation. |
+| Cursor | Invoke the Core plugin subagent as `/loom-weaver` or ask Cursor to use the Loom Weaver subagent in natural language. Do not use `@loom-weaver` as a custom-agent claim; Cursor documents `@` for rules/context, not subagent invocation. |
+| Gemini CLI | Core bundles `agents/loom-weaver.md`; invoke `@loom-weaver <task>` to force the subagent. This is a delegated subagent call, not a primary-agent prompt switch. |
+
 ## Generic Local Setup
 
 Clone the repo:
@@ -156,6 +172,25 @@ loom-playbooks/.codex-plugin/plugin.json
 Core declares `loom-core/hooks/hooks.json` for `using-loom` preload where Codex
 supports plugin hooks. Validate preload behavior in the target Codex environment.
 If it is unavailable, ask for `using-loom` before Loom work.
+
+Install the optional Loom Weaver Codex custom agent:
+
+```bash
+mkdir -p ~/.codex/agents
+curl -fsSL https://raw.githubusercontent.com/z3z1ma/agent-loom/main/loom-core/codex/agents/loom-weaver.toml -o ~/.codex/agents/loom-weaver.toml
+```
+
+For a local clone, copy the same file instead:
+
+```bash
+mkdir -p ~/.codex/agents
+cp /absolute/path/to/agent-loom/loom-core/codex/agents/loom-weaver.toml ~/.codex/agents/loom-weaver.toml
+```
+
+After installing the file, start a new Codex session and ask Codex to use the
+`loom-weaver` custom agent in natural language. Use `/agent` in the CLI to inspect
+or switch active spawned agent threads. This is custom-agent installation, not a
+plugin-shipped profile and not `@<agent>` invocation.
 
 ## Cursor
 

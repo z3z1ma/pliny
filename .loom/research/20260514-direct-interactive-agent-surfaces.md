@@ -8,7 +8,7 @@ Updated: 2026-05-14
 
 ## Summary
 
-Agent Loom's supported harnesses do not use one common "agent" abstraction. OpenCode and Claude Code have the strongest directly interactable system-prompt-switching surfaces; Gemini can replace the main system prompt through `GEMINI_SYSTEM_MD` but does not expose a first-class named primary-agent catalog; Cursor and Codex mainly expose custom agents as subagents that the primary agent invokes, with direct main-agent behavior better handled through rules/profiles/instruction files.
+Agent Loom's supported harnesses do not use one common "agent" abstraction. OpenCode and Claude Code have the strongest directly interactable system-prompt-switching surfaces; Gemini can replace the main system prompt through `GEMINI_SYSTEM_MD` but does not expose a first-class named primary-agent catalog; Cursor mainly exposes custom agents as subagents plus rules for main-Agent behavior; Codex custom agents are documented as TOML files under `~/.codex/agents/` or `.codex/agents/`, while Codex plugins do not currently package custom agents or profiles.
 
 ## Question
 
@@ -32,7 +32,7 @@ Excluded:
 - OpenCode official docs, `https://opencode.ai/docs/agents/#primary-agents`, accessed 2026-05-14.
 - Claude Code official docs, `https://docs.anthropic.com/en/docs/claude-code/sub-agents`, `https://docs.anthropic.com/en/docs/claude-code/plugins`, and `https://docs.anthropic.com/en/docs/claude-code/plugins-reference`, accessed 2026-05-14.
 - Cursor official docs, `https://cursor.com/docs/subagents`, `https://cursor.com/docs/rules`, `https://cursor.com/docs/plugins`, and `https://cursor.com/docs/agent/overview`, accessed 2026-05-14. The `cursor.com` pages were retrieved through a reader proxy after direct `docs.cursor.com` fetches returned only the dynamic documentation shell.
-- Codex official docs, `https://developers.openai.com/codex/subagents`, `https://developers.openai.com/codex/concepts/subagents`, `https://developers.openai.com/codex/config-reference`, `https://developers.openai.com/codex/config-advanced`, `https://developers.openai.com/codex/cli/reference`, `https://developers.openai.com/codex/plugins`, and `https://developers.openai.com/codex/plugins/build`, accessed 2026-05-14.
+- Codex official docs, `https://developers.openai.com/codex/subagents`, `https://developers.openai.com/codex/concepts/subagents`, `https://developers.openai.com/codex/config-reference`, `https://developers.openai.com/codex/config-advanced`, `https://developers.openai.com/codex/cli/reference`, `https://developers.openai.com/codex/plugins`, and `https://developers.openai.com/codex/plugins/build`, accessed 2026-05-14 and rechecked 2026-05-14 after the Codex custom-agent install decision.
 - Gemini CLI official repository docs, `https://raw.githubusercontent.com/google-gemini/gemini-cli/main/docs/core/subagents.md`, `docs/core/remote-agents.md`, `docs/cli/skills.md`, `docs/cli/system-prompt.md`, `docs/cli/gemini-md.md`, `docs/extensions/index.md`, and `docs/reference/configuration.md`, accessed 2026-05-14.
 - Existing Loom research: `research:20260513-superpowers-skill-activation` for prior adapter/bootstrap context.
 
@@ -106,6 +106,7 @@ Codex custom agents are currently subagent role definitions, while direct main-s
 - For direct system-prompt/persona switching, Codex's better fit is a profile that sets `developer_instructions` or `model_instructions_file`, invoked with `codex --profile <name>`. Profiles are documented as experimental and not supported in the Codex IDE extension.
 - Codex plugins currently bundle skills, apps, MCP servers, and hooks. The plugin docs say more capabilities are coming; they do not currently document plugin-shipped custom agents.
 - Codex does not document an `@<agent-name>` custom-agent invocation path. Users ask Codex to spawn named agents in natural language, and `/agent` switches among already-active agent threads. Codex plugin docs do describe `@` invocation for plugins or bundled skills, not custom agents.
+- The operator rejected the bundled-skill route for Loom Weaver. The supported Codex route is to ship a ready custom-agent TOML file and document installing it under `~/.codex/agents/loom-weaver.toml`, for example by curling the raw GitHub file. Plugin docs still do not document a manifest field for plugin-shipped profiles, `agents/`, or `.codex/agents` files, so this remains an explicit custom-agent install step rather than plugin-automatic installation.
 
 ### Gemini CLI
 
@@ -128,7 +129,7 @@ Gemini CLI has local and remote subagents, plus a separate full system-prompt ov
 | OpenCode | Strong | `mode: primary` custom agent | Need to keep skill registration/bootstrap separate from the primary-agent prompt. |
 | Claude Code | Strong | Plugin or standalone agent plus `claude --agent` or `agent` setting | The object is still called a subagent, and default activation through plugin `settings.json` is consequential. |
 | Cursor | Weak to medium | Rules or `AGENTS.md` for main Agent behavior; subagent only for explicit delegated specialists | Custom agents are subagents invoked by the parent Agent, not primary personas. |
-| Codex | Weak to medium | `--profile` plus `developer_instructions` or `model_instructions_file` for main session; custom agent TOML only for subagents | Profiles are not the same as the custom-agent catalog and are not IDE-supported. |
+| Codex | Weak to medium | Manual custom-agent TOML install under `~/.codex/agents/` followed by natural-language agent use; `--profile` remains a separate user configuration mechanism | Current plugin docs do not package profiles or custom agents, so custom-agent installation is explicit rather than plugin-automatic. |
 | Gemini CLI | Medium | `GEMINI_SYSTEM_MD` for direct main prompt; `.gemini/agents` only for subagents | System override is not a named first-class agent picker and replaces core prompt wholesale. |
 
 | Harness | Explicit one-shot agent invocation | Notes |
@@ -139,14 +140,14 @@ Gemini CLI has local and remote subagents, plus a separate full system-prompt ov
 | Cursor | No documented `@<agent>` subagent syntax; yes via `/name` | `@` is documented for rules/context. Subagents are explicitly invoked with slash syntax or natural language. |
 | Codex | No documented `@<agent>` custom-agent syntax | Natural-language spawning and `/agent` thread switching are documented. `@` applies to plugins/skills, not custom agents. |
 
-For Agent Loom, "agent equals system-prompt switch" favors OpenCode primary agents and Claude Code main-session agents first. Gemini can satisfy the prompt-switch requirement through `GEMINI_SYSTEM_MD` but would likely need a wrapper or explicit operator command. Cursor and Codex should not be treated as first-class direct-agent surfaces unless we accept rules/profiles as the equivalent of an agent.
+For Agent Loom, "agent equals system-prompt switch" favors OpenCode primary agents and Claude Code main-session agents first. Gemini can satisfy the prompt-switch requirement through `GEMINI_SYSTEM_MD` but would likely need a wrapper or explicit operator command. Cursor and Codex should not be treated as first-class direct-agent surfaces unless we accept rules or skills as the equivalent of an agent for those harnesses.
 
 ## Rejected Paths And Null Results
 
 - Treating all harness "agent" directories as equivalent is rejected. OpenCode primary agents and Claude Code `--agent` main sessions are user-interactive primary contexts; Cursor, Codex, and Gemini agent directories are primarily delegated subagents.
 - Treating explicit subagent invocation as direct interaction is rejected for the user's stated preference. `/name`, `@name`, or natural-language subagent invocation still usually routes through a parent agent that creates the actual task prompt.
 - Treating explicit subagent invocation as equivalent to primary-agent switching remains rejected. However, if product requirements accept one-shot explicit invocation, OpenCode, Claude Code, and Gemini satisfy that with `@` syntax, Cursor satisfies it with `/name`, and Codex satisfies it only through natural-language spawning/thread management rather than `@`.
-- Treating skills as agents is rejected. Skills can change behavior on demand but are not named main assistants.
+- Treating skills as primary agents is rejected. Skills can change behavior on demand but are not named main assistants. For Codex specifically, Loom Weaver should remain a custom agent TOML rather than a Core skill.
 - Treating project rules, `AGENTS.md`, or `GEMINI.md` as agents is only partially valid. They can change the primary model's instructions, but they are not selectable named personas in most harnesses.
 
 ## Conclusions
@@ -154,23 +155,23 @@ For Agent Loom, "agent equals system-prompt switch" favors OpenCode primary agen
 - OpenCode should be the reference implementation for first-class direct agents: define a `primary` agent with a dedicated prompt, while continuing to register Loom skills separately.
 - Claude Code can provide a comparable direct experience by shipping an agent definition and documenting `claude --agent <plugin-scoped-name>` or, more aggressively, shipping plugin `settings.json` with `agent` to activate it by default.
 - Cursor should use rules or `AGENTS.md` for direct main-Agent instruction changes. Cursor custom agents can be packaged and explicitly invoked with `/name`, but they remain subagents and are not ideal for the stricter direct-primary-agent product goal.
-- Codex should use profiles or instruction-file overrides for direct main-session persona switching. Its custom-agent TOML files are useful for spawned subagents, but there is no documented `@<agent>` invocation path.
+- Codex should use a ready `loom-weaver.toml` custom-agent definition installed under `~/.codex/agents/`. Profiles or instruction-file overrides remain the direct main-session persona mechanism, but current plugin docs do not package them, so they should not be presented as the default Loom Weaver path.
 - Gemini CLI should use `GEMINI_SYSTEM_MD` when a true main-agent prompt replacement is required. Extension-packaged subagents are available but proxy-mediated.
 
 ## Recommendations
 
 - If Agent Loom adds an "agent" product surface, define the canonical content once as a prompt fragment and adapt it per harness rather than forcing every harness to use a subagent directory.
 - Prioritize OpenCode `mode: primary` and Claude Code plugin `agents/` plus `--agent` documentation as the high-confidence direct-agent paths.
-- If one-shot explicit invocation is acceptable, document OpenCode `@<subagent>`, Claude `@agent-<name>`, Gemini `@<name>`, Cursor `/name`, and Codex natural-language spawn prompts separately rather than claiming all harnesses support the same `@` pattern.
+- If one-shot explicit invocation is acceptable, document OpenCode `@<subagent>`, Claude `@agent-<name>`, Gemini `@<name>`, Cursor `/name`, and Codex natural-language plugin or skill use separately rather than claiming all harnesses support the same `@` pattern.
 - For Cursor, package both a rule for direct Agent behavior and an optional subagent only if a delegated verifier/reviewer persona is useful; document `/name`, not `@name`, as the explicit subagent path.
-- For Codex, expose a documented `profile` recipe for direct persona switching and keep custom agent TOML as a separate, explicitly subagent-oriented distribution path; do not rely on `@<agent>` because current docs only show `@` for plugins/skills.
+- For Codex, ship a ready `loom-core/codex/agents/loom-weaver.toml` and document installing it with `mkdir -p ~/.codex/agents` plus `curl` from GitHub raw content or local copy. Do not claim plugin-provided `--profile` support unless Codex adds documented plugin-shipped profiles; do not rely on `@<agent>` because current docs only show `@` for plugins/skills.
 - For Gemini, document `GEMINI_SYSTEM_MD` as the direct persona switch and keep extension subagents for delegated specialist work.
 - Before implementation, create a spec or ticket that decides whether "agent" in Agent Loom means only first-class named primary sessions or also includes profile/rule/system-prompt override equivalents.
 
 ## Open Questions
 
 - Should Agent Loom ship direct-agent surfaces that can become default automatically, or only optional named agents that users explicitly select?
-- Should Cursor and Codex be considered supported for an "agent" feature if the closest direct mechanism is rules/profiles rather than native primary agents?
+- Should Cursor and Codex be considered supported for an "agent" feature if the closest direct mechanism is rules or explicit custom-agent installation rather than native primary agents?
 - Should Gemini's full system-prompt override be avoided because it replaces core CLI prompt behavior, or is that acceptable for an explicit Loom persona mode?
 
 ## Related Records

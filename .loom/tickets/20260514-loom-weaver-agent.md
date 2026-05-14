@@ -2,7 +2,7 @@
 
 ID: ticket:20260514-loom-weaver-agent
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-14
 Updated: 2026-05-14
 Risk: high - adds a new model-visible agent persona and cross-harness adapter surfaces with a strict write-boundary requirement.
@@ -18,6 +18,12 @@ Single closure claim: Agent Loom ships a Loom Weaver agent/persona whose behavio
 
 - `spec:loom-weaver-agent` - owns the Loom Weaver behavior contract, write boundary, routing requirements, scenarios, and quality bar.
 - `research:20260514-direct-interactive-agent-surfaces` - source-backed comparison of OpenCode, Claude Code, Gemini CLI, Cursor, and Codex agent invocation surfaces.
+- `evidence:20260514-loom-weaver-implementation-validation` - source inspection, Codex source-doc recheck, Core smoke/pack output, Claude/Gemini validation, and diff check for this implementation slice.
+- `evidence:20260514-loom-weaver-codex-agent-followup-validation` - fresh validation after replacing the Codex bundled-skill route with custom-agent TOML installation.
+- `audit:20260514-loom-weaver-agent-audit` - first audit record with `FIND-001`, now fixed in follow-up changes.
+- `packet:20260514T230546Z-loom-weaver-codex-agent-followup` - follow-up implementation packet for operator-requested Codex custom-agent route and audit finding fix.
+- `packet:20260514T232038Z-loom-weaver-final-audit` - final Ralph audit packet for closure review.
+- `audit:20260514-loom-weaver-agent-final-audit` - final audit record with `clear` verdict and no material findings.
 - `AGENTS.md` - contributor constraints for product-surface leakage, package shape, adapter entrypoints, and validation commands.
 - `INSTALL.md` - current install matrix that may need human-facing invocation notes after agent surfaces are added.
 
@@ -25,9 +31,9 @@ Single closure claim: Agent Loom ships a Loom Weaver agent/persona whose behavio
 
 May change:
 
-- Core package files needed to define and ship the Loom Weaver prompt or agent definitions, likely under a new `loom-core/agents/`, `loom-core/prompts/`, or equivalent package-owned directory.
+- Core package files needed to define and ship the Loom Weaver prompt or agent definitions, likely under `loom-core/agents/`, `loom-core/codex/agents/`, `loom-core/prompts/`, or equivalent package-owned directory.
 - OpenCode Core entrypoint `loom-core/loom-core.mjs` if needed to register a `loom-weaver` agent with both user-switchable primary-agent behavior and explicit invocation behavior.
-- Core native adapter manifests and extension files when they can expose agent, rule, profile, or subagent surfaces: `loom-core/.claude-plugin/plugin.json`, `loom-core/.cursor-plugin/plugin.json`, `loom-core/.codex-plugin/plugin.json`, `loom-core/gemini-extension.json`, and related package-local files.
+- Core native adapter manifests and extension files when they can expose agent, skill, rule, profile, or subagent surfaces: `loom-core/.claude-plugin/plugin.json`, `loom-core/.cursor-plugin/plugin.json`, `loom-core/.codex-plugin/plugin.json`, `loom-core/gemini-extension.json`, and related package-local files.
 - Core package metadata such as `loom-core/package.json` when new shippable prompt or agent files must be included in package artifacts.
 - Human-facing docs that explain how to invoke Loom Weaver per harness, including `INSTALL.md`, package READMEs, or root docs that already describe install/use flows.
 - This ticket, `spec:loom-weaver-agent`, new evidence records, and any audit or Ralph packet records needed for implementation and review.
@@ -55,7 +61,7 @@ Likely harness-specific direction from the research:
 - Claude Code: expose a plugin or standalone agent named `loom-weaver` that supports `@agent-<name>` / typeahead one-shot invocation and `claude --agent <plugin-scoped-name>` main-session use.
 - Gemini CLI: expose an extension subagent or prompt surface that supports `@loom-weaver` one-shot invocation; document `GEMINI_SYSTEM_MD` only if providing a main-session override recipe.
 - Cursor: expose the closest supported direct invocation as `/loom-weaver` custom subagent and/or rule-backed main-Agent guidance; document slash syntax, not `@` syntax.
-- Codex: expose a profile/instruction-file recipe for direct persona switching and, only if useful, a custom agent TOML for natural-language spawned subagents; do not rely on `@<agent>`.
+- Codex: ship a ready custom-agent TOML and document installing it under `~/.codex/agents/loom-weaver.toml` with a `curl` or local copy command; do not expose Loom Weaver as a Core skill, do not claim plugin-provided `--profile` support unless current docs add plugin profiles, and do not rely on `@<agent>`.
 
 First likely Ralph packet:
 
@@ -83,9 +89,9 @@ First likely Ralph packet:
   - Evidence: source inspection of Cursor plugin/rule/agent files plus `git diff --check`; if plugin manifest changes are made, inspect the manifest against Cursor docs/source-backed research.
   - Audit: review should challenge whether `/loom-weaver`, rules, and optional subagent behavior are described honestly.
 
-- ACC-006: Codex support uses documented Codex semantics and does not claim `@<agent>` custom-agent invocation.
-  - Evidence: source inspection of Codex plugin docs/config/profile/agent artifacts and any relevant pack/check output; docs must name natural-language spawning, `/agent` thread switching, or profile use as applicable.
-  - Audit: review should challenge whether Codex support is overstated because current plugin docs do not document plugin-shipped custom agents.
+- ACC-006: Codex support uses documented Codex custom-agent semantics, ships a ready TOML definition, documents installation under `~/.codex/agents/`, and does not claim `@<agent>` custom-agent invocation.
+  - Evidence: source inspection of Codex docs, `loom-core/codex/agents/loom-weaver.toml`, install docs, and any relevant pack/check output; docs must name natural-language custom-agent use and `/agent` thread management as applicable.
+  - Audit: review should challenge whether Codex support is overstated because current plugin docs do not document plugin-shipped custom agents or profiles.
 
 - ACC-007: Human-facing docs explain how to invoke Loom Weaver per supported harness without turning docs into a second source of model behavior.
   - Evidence: source inspection of updated docs and grep showing model-critical behavior remains in shipped agent/prompt surfaces, not only in README/INSTALL prose.
@@ -101,11 +107,21 @@ First likely Ralph packet:
 
 ## Current State
 
-Open and ready to start. The behavior contract now lives in `spec:loom-weaver-agent`, and the harness capability research lives in `research:20260514-direct-interactive-agent-surfaces`. The first implementation packet should verify exact adapter file shapes from current harness docs/source before editing, then add the smallest complete Core Loom Weaver surface with evidence and review.
+Closed. Agent Loom now ships optional explicit Loom Weaver surfaces with a canonical prompt in `loom-core/agents/loom-weaver.md`, OpenCode agent registration, Claude/Cursor/Gemini plugin or extension exposure, and Codex custom-agent TOML support in `loom-core/codex/agents/loom-weaver.toml` with documented install under `~/.codex/agents/`.
 
-No implementation evidence exists yet. Closure requires source inspection, package/manifest validation appropriate to touched files, and a fresh audit/review pass.
+Acceptance is supported by `evidence:20260514-loom-weaver-codex-agent-followup-validation` and final audit `audit:20260514-loom-weaver-agent-final-audit`. Core smoke, Core pack dry-run, Claude plugin validation, Gemini extension validation, and `git diff --check` passed after the follow-up patch; the final Ralph audit reran the relevant validation and returned `clear` with no material findings. Cursor runtime validation was not available. Live runtime invocation was not tested in OpenCode, Claude Code, Codex, Cursor, or Gemini, and that remains an explicit residual risk rather than part of the closure claim.
 
 ## Journal
 
 - 2026-05-14: Created ticket from operator request to add a Loom Weaver agent that writes only under `.loom/`, shapes context with users, challenges weak ideas, presents options with recommendations, and creates the appropriate Loom records. Linked `spec:loom-weaver-agent` and `research:20260514-direct-interactive-agent-surfaces` as the behavior and harness constraints.
 - 2026-05-14: Resolved Loom Weaver spec decisions with operator selections: explicit-only default posture, partial Codex support, and Cursor slash invocation accepted with honest syntax documentation.
+- 2026-05-14: Set status to active and compiled `packet:20260514T223622Z-loom-weaver-agent-implementation` for the bounded implementation slice.
+- 2026-05-14: Operator clarified Codex must not require manual profile copying. Updated Codex direction toward plugin-native bundled skill/natural-language support because current Codex plugin docs do not document plugin-shipped profiles or custom agents.
+- 2026-05-14: Implemented synchronized Loom Weaver agent and skill surfaces, removed the manual Codex profile recipe, updated Codex toward bundled skill/natural-language plugin support, and recorded validation evidence in `evidence:20260514-loom-weaver-implementation-validation`.
+- 2026-05-14: Moved ticket to review. Audit/review remains required before closure.
+- 2026-05-14: Audit packet `packet:20260514T230124Z-loom-weaver-agent-audit` returned `changes-needed` with `FIND-001`: `AGENTS.md` dogfooding guidance omitted `loom-core/agents/` as a model-visible behavior surface.
+- 2026-05-14: Operator revised Codex direction: do not make Loom Weaver a Core skill; instead document installing a custom-agent TOML under `~/.codex/agents/` via GitHub raw `curl` or local copy. Reopened ticket to active follow-up implementation.
+- 2026-05-14: Follow-up implementation removed the Loom Weaver Core skill, added `loom-core/codex/agents/loom-weaver.toml`, updated Codex install docs, fixed audit `FIND-001` by including `loom-core/codex/agents/` in model-visible product-surface guidance, and recorded fresh validation evidence.
+- 2026-05-14: Moved ticket back to review for a fresh final audit pass.
+- 2026-05-14: Final Ralph audit `packet:20260514T232038Z-loom-weaver-final-audit` returned `clear` with no material findings, confirmed prior `FIND-001` resolved, and recorded `audit:20260514-loom-weaver-agent-final-audit`.
+- 2026-05-14: Closed ticket with residual risk called out: no live runtime invocation was tested, Cursor lacks local validation, Codex write boundary is prompt-level, and Gemini support remains delegated subagent behavior.

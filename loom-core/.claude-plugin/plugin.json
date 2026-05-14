@@ -13,5 +13,6 @@
     "agent-skills",
     "markdown"
   ],
-  "skills": "./skills/"
+  "skills": "./skills/",
+  "agents": ["./agents/loom-weaver.md"]
 }

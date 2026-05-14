@@ -93,6 +93,7 @@ function surfaceOptions(options = {}) {
     rootDir: resolve(String(options.rootDir || PACKAGE_ROOT)),
     usingLoom: options.usingLoom !== false,
     skills: options.skills !== false,
+    agents: options.agents !== false,
   };
 }
 
@@ -135,6 +136,40 @@ export function readSkillFiles(options = {}) {
     });
 }
 
+export function readAgentFiles(options = {}) {
+  const { rootDir } = surfaceOptions(options);
+  const agentRoot = join(rootDir, "agents");
+  return markdownFilesIn(agentRoot).map((path) => {
+    const md = readMarkdownDocument(path);
+    return {
+      path: posixPath(relative(rootDir, path)),
+      name: md.data.name || basename(path, ".md"),
+      description: md.data.description || "",
+      content: md.content,
+    };
+  });
+}
+
+export function readLoomWeaverAgent(options = {}) {
+  return readAgentFiles(options).find((agent) => agent.name === "loom-weaver") || null;
+}
+
+export function readCodexLoomWeaverAgent(options = {}) {
+  const { rootDir } = surfaceOptions(options);
+  const agentPath = join(rootDir, "codex", "agents", "loom-weaver.toml");
+  if (!fileExists(agentPath)) return null;
+  const text = readFileSync(agentPath, "utf8").trimEnd();
+  const developerInstructionsMatch = text.match(/developer_instructions\s*=\s*"""([\s\S]*)"""\s*$/);
+  const developerInstructions = developerInstructionsMatch
+    ? developerInstructionsMatch[1].replace(/^\r?\n/, "").trimEnd()
+    : "";
+  return {
+    path: posixPath(relative(rootDir, agentPath)),
+    text,
+    developerInstructions,
+  };
+}
+
 export function configureOpenCode(config, options = {}) {
   const surfaces = surfaceOptions(options);
 
@@ -144,6 +179,31 @@ export function configureOpenCode(config, options = {}) {
       config.skills ??= {};
       config.skills.paths ??= [];
       pushUnique(config.skills.paths, skillRoot);
+    }
+  }
+
+  if (surfaces.agents) {
+    const loomWeaver = readLoomWeaverAgent(surfaces);
+    if (loomWeaver) {
+      config.agent ??= {};
+      config.agent["loom-weaver"] ??= {
+        description: loomWeaver.description,
+        mode: "all",
+        prompt: loomWeaver.content,
+        permission: {
+          read: "allow",
+          glob: "allow",
+          grep: "allow",
+          edit: {
+            "*": "deny",
+            ".loom/**": "allow",
+          },
+          bash: "ask",
+          task: "deny",
+          skill: "allow",
+          question: "allow",
+        },
+      };
     }
   }
 
@@ -221,6 +281,9 @@ export function inspectLoomCoreBundle(options = {}) {
   const surfaces = surfaceOptions(options);
   const usingLoomReferences = readOrderedUsingLoomFiles(surfaces);
   const skills = readSkillFiles(surfaces);
+  const agents = readAgentFiles(surfaces);
+  const loomWeaverAgent = readLoomWeaverAgent(surfaces);
+  const codexLoomWeaverAgent = readCodexLoomWeaverAgent(surfaces);
   const activation = inspectActivationDiscipline(surfaces);
   const bootstrap = getUsingLoomBootstrapContent(surfaces);
 
@@ -239,6 +302,24 @@ export function inspectLoomCoreBundle(options = {}) {
       result: "registered through config.skills.paths",
       path: directoryExists(join(surfaces.rootDir, "skills")) ? join(surfaces.rootDir, "skills") : undefined,
       items: skills,
+    },
+    agents: {
+      result: "registered with OpenCode config.agent when available",
+      path: directoryExists(join(surfaces.rootDir, "agents")) ? join(surfaces.rootDir, "agents") : undefined,
+      items: agents.map((agent) => ({
+        path: agent.path,
+        name: agent.name,
+        description: agent.description,
+      })),
+    },
+    loomWeaver: {
+      agentPath: loomWeaverAgent?.path,
+      codexAgentPath: codexLoomWeaverAgent?.path,
+      codexAgentHasDeveloperInstructions: Boolean(codexLoomWeaverAgent?.text.includes("developer_instructions")),
+      codexAgentHasWriteBoundary: Boolean(codexLoomWeaverAgent?.text.includes("Write only inside `.loom/`")),
+      codexAgentPromptMatchesAgent: Boolean(
+        loomWeaverAgent && codexLoomWeaverAgent?.developerInstructions === loomWeaverAgent.content,
+      ),
     },
   };
 }
@@ -264,6 +345,8 @@ export default {
 if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes("--smoke")) {
   const inspection = inspectLoomCoreBundle();
   const config = configureOpenCode({});
+  const loomWeaverConfig = config.agent?.["loom-weaver"];
+  const codexLoomWeaverAgent = readCodexLoomWeaverAgent();
   const beforeSkillPathCount = config.skills?.paths?.length ?? 0;
   configureOpenCode(config);
   const plugin = await server({}, {});
@@ -274,7 +357,16 @@ if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes(
   const bootstrapPartCount = output.messages[0].parts.filter(
     (part) => part.type === "text" && part.text.includes(BOOTSTRAP_MARKER),
   ).length;
-  const ok = inspection.activation.ok && inspection.bootstrap.hasContent && bootstrapPartCount === 1;
+  const ok = inspection.activation.ok
+    && inspection.bootstrap.hasContent
+    && bootstrapPartCount === 1
+    && inspection.agents.items.some((agent) => agent.name === "loom-weaver")
+    && codexLoomWeaverAgent?.text.includes('name = "loom-weaver"')
+    && inspection.loomWeaver.codexAgentHasDeveloperInstructions
+    && inspection.loomWeaver.codexAgentHasWriteBoundary
+    && inspection.loomWeaver.codexAgentPromptMatchesAgent
+    && loomWeaverConfig?.mode === "all"
+    && Boolean(loomWeaverConfig?.prompt?.includes("Write only inside `.loom/`"));
 
   console.log(JSON.stringify({
     ok,
@@ -290,10 +382,21 @@ if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes(
     skillCount: inspection.skills.items.length,
     skillPath: config.skills?.paths?.[0],
     skillPathsAreDeduped: (config.skills?.paths?.length ?? 0) === beforeSkillPathCount,
+    agentCount: inspection.agents.items.length,
+    agentNames: inspection.agents.items.map((agent) => agent.name),
+    loomWeaverAgentPath: inspection.agents.items.find((agent) => agent.name === "loom-weaver")?.path,
+    codexLoomWeaverAgentPath: inspection.loomWeaver.codexAgentPath,
+    codexLoomWeaverHasDeveloperInstructions: inspection.loomWeaver.codexAgentHasDeveloperInstructions,
+    codexLoomWeaverHasWriteBoundary: inspection.loomWeaver.codexAgentHasWriteBoundary,
+    codexLoomWeaverPromptMatchesAgent: inspection.loomWeaver.codexAgentPromptMatchesAgent,
+    loomWeaverOpenCodeMode: loomWeaverConfig?.mode,
+    loomWeaverPromptHasWriteBoundary: Boolean(loomWeaverConfig?.prompt?.includes("Write only inside `.loom/`")),
+    loomWeaverEditPermission: loomWeaverConfig?.permission?.edit,
     usingLoomResult: inspection.usingLoom.result,
     bootstrapResult: inspection.bootstrap.result,
     activationChecks: inspection.activation,
     skillsResult: inspection.skills.result,
+    agentsResult: inspection.agents.result,
   }, null, 2));
   if (!ok) process.exitCode = 1;
 }

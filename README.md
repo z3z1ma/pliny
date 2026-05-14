@@ -179,11 +179,16 @@ Use using-loom. Route this task through the smallest Loom surface that makes the
 
 Some adapters preload `using-loom`. If they do, continue straight into the work.
 
+Core also ships Loom Weaver as an optional explicit shaping persona. Use it when
+you want pre-implementation Loom shaping, options, recommendations, and `.loom/`
+records without source edits. See [INSTALL.md](INSTALL.md) for harness-specific
+invocation syntax.
+
 ## What Ships
 
 | Package | Role |
 | --- | --- |
-| `loom-core/` | mandatory `using-loom` doctrine, record skills, templates, references, and adapter surfaces |
+| `loom-core/` | mandatory `using-loom` doctrine, record skills, templates, references, optional Loom Weaver, and adapter surfaces |
 | `loom-playbooks/` | optional workflow-specific skills that route through Loom surfaces |
 
 The required package carries the operating doctrine and record skills. Optional
@@ -203,6 +208,7 @@ it with ordinary tools.
 |-- PROTOCOL.md
 |-- ARCHITECTURE.md
 |-- loom-core/
+|   |-- agents/
 |   |-- skills/
 |   |-- hooks/
 |   |-- loom-core.mjs
@@ -216,8 +222,8 @@ it with ordinary tools.
 ```
 
 `evals/` holds internal review fixtures. `.loom/` holds dogfood records for
-this repo. The product surface remains `loom-core/skills` and
-`loom-playbooks/skills`.
+this repo. The product surface remains `loom-core/skills`, `loom-core/agents`,
+`loom-core/codex/agents`, and `loom-playbooks/skills`.
 
 ## The Short Version
 
