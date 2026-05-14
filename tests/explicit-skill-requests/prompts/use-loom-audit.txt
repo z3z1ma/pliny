@@ -1,0 +1,1 @@
+Use loom-audit. Tell me what a Ralph-backed audit should challenge before .loom/tickets/auth-cleanup.md closes.

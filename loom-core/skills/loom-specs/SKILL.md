@@ -1,6 +1,6 @@
 ---
 name: loom-specs
-description: "Manages Loom specs: creates, shapes, updates, supersedes, and retires durable intended-behavior contracts under .loom/specs. Use when behavior, interfaces, invariants, requirements, or scenarios need a stable source before tickets, packets, evidence, or audit rely on them."
+description: "Use when behavior, interfaces, invariants, requirements, scenarios, or intended outcomes need a stable source before tickets, packets, evidence, or audit rely on them."
 ---
 
 # loom-specs

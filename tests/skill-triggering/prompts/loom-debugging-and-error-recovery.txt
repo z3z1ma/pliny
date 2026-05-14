@@ -1,0 +1,1 @@
+The checkout tests started failing with TypeError: Cannot read property 'id' of undefined. Figure it out and fix it.

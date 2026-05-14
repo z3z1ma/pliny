@@ -1,6 +1,6 @@
 ---
 name: loom-research
-description: "Manages Loom research: creates, updates, finds, completes, supersedes, and summarizes durable investigations, source synthesis, option comparisons, rejected paths, null results, and evidence-backed conclusions. Use when investigation, source synthesis, option comparison, rejected paths, null results, or evidence-backed conclusions should remain available to future Loom work."
+description: "Use when investigation, source synthesis, option comparison, rejected paths, null results, tradeoffs, or evidence-backed conclusions should remain available to future Loom work."
 ---
 
 # loom-research

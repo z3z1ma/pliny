@@ -7,6 +7,11 @@ goal, keep live work in tickets, prove claims with evidence, challenge important
 claims with Ralph-backed audit, hand bounded work to packets, and preserve useful
 lessons in knowledge.
 
+Core also teaches activation discipline. `using-loom` is the first-action loop that
+makes the agent check the relevant Loom surface or skill before responding,
+clarifying, inspecting, editing, creating tickets, or launching Ralph when Loom may
+apply.
+
 The operating loop is: shape with the human, route durable truth, slice into
 bounded tickets, execute ticket slices through Ralph packets, preserve evidence,
 audit claims, and reconcile records.
@@ -25,6 +30,7 @@ Core gives agents the operating doctrine and the record surfaces that make Loom
 work recoverable.
 
 - `using-loom` loads the posture every Loom session needs
+- activation checks keep skill and surface routing from becoming an afterthought
 - record skills tell the agent which surface owns each kind of truth
 - templates give records enough shape for continuation, proof, review, and handoff
 - references teach the protocol without requiring a hidden runtime

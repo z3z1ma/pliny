@@ -79,19 +79,26 @@ Load order:
 
 1. `loom-core/skills/using-loom/SKILL.md`
 2. `loom-core/skills/using-loom/references/how-loom-thinks.md`
-3. `loom-core/skills/using-loom/references/directory-structure.md`
-4. `loom-core/skills/using-loom/references/shaping-with-humans.md`
-5. `loom-core/skills/using-loom/references/delegating-to-workers.md`
-6. `loom-core/skills/using-loom/references/proving-the-work.md`
-7. `loom-core/skills/using-loom/references/staying-safe.md`
+3. `loom-core/skills/using-loom/references/activation-discipline.md`
+4. `loom-core/skills/using-loom/references/directory-structure.md`
+5. `loom-core/skills/using-loom/references/shaping-with-humans.md`
+6. `loom-core/skills/using-loom/references/delegating-to-workers.md`
+7. `loom-core/skills/using-loom/references/proving-the-work.md`
+8. `loom-core/skills/using-loom/references/staying-safe.md`
 
-OpenCode registers those files through `config.instructions` and exposes
-`loom-core/skills` through `config.skills.paths`. Claude, Codex, Cursor, and
-Gemini use their native manifest, hook, or static context surfaces where those are
-available.
+OpenCode exposes `loom-core/skills` through `config.skills.paths` and injects the
+stripped `using-loom` doctrine plus ordered references into the first user message
+with `experimental.chat.messages.transform`. Claude, Codex, Cursor, and Gemini use
+their native manifest, hook, or static context surfaces where those are available.
 
 Preload is convenience. If preload is absent, the agent loads `using-loom` from
 Core.
+
+Preload alone is not the behavior. `using-loom` contains the first-action routing
+loop that tells the agent to check likely Loom surfaces and skills before answering,
+asking clarifying questions, inspecting files, editing, creating tickets, or
+launching Ralph when Loom may apply. Static smoke checks guard that activation
+doctrine and trigger-oriented skill descriptions remain present.
 
 ## Record Grammar
 

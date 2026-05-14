@@ -1,0 +1,1 @@
+Use loom-evidence. Tell me what evidence would be needed before closing .loom/tickets/auth-cleanup.md.

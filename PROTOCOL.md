@@ -18,14 +18,21 @@ Load order:
 
 1. `skills/using-loom/SKILL.md`
 2. `skills/using-loom/references/how-loom-thinks.md`
-3. `skills/using-loom/references/directory-structure.md`
-4. `skills/using-loom/references/shaping-with-humans.md`
-5. `skills/using-loom/references/delegating-to-workers.md`
-6. `skills/using-loom/references/proving-the-work.md`
-7. `skills/using-loom/references/staying-safe.md`
+3. `skills/using-loom/references/activation-discipline.md`
+4. `skills/using-loom/references/directory-structure.md`
+5. `skills/using-loom/references/shaping-with-humans.md`
+6. `skills/using-loom/references/delegating-to-workers.md`
+7. `skills/using-loom/references/proving-the-work.md`
+8. `skills/using-loom/references/staying-safe.md`
 
 Adapters may preload those files. Preload is transport. The source doctrine stays
 in Core.
+
+Activation is part of the protocol, not just installation. When any material
+chance exists that a Loom surface or skill applies, the agent checks and invokes
+that skill before responding, asking clarifying questions, inspecting files,
+editing, creating tickets, or launching Ralph. Tiny obvious work can stay light
+only after this routing shows no durable Loom surface is needed.
 
 ## Operating Model
 
@@ -46,6 +53,9 @@ add task-shaped pressure after Loom routing has decided whether the next move is
 shaping, research, spec, plan, ticket, evidence, audit, knowledge, or packetized
 handoff. When a workflow-specific skill routes to another Loom skill, follow the
 target skill's procedure and guidance completely.
+
+Skill descriptions are the activation surface. They should name triggering
+conditions, not summarize enough workflow that the model can skip the skill body.
 
 The inner loop executes bounded work. Tickets carry live state. Ralph packets are
 the execution contract for ticket slices and worker runs. Evidence records

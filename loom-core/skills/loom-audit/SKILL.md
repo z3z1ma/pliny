@@ -1,6 +1,6 @@
 ---
 name: loom-audit
-description: "Manages Loom audits: prepares Ralph review packets, records returned adversarial judgments, and finds, summarizes, and consumes audit findings, verdicts, risks, acceptance, and follow-through. Use when claims, code changes, Loom records, evidence, risks, acceptance, or follow-through need Ralph-backed adversarial review before they can be trusted."
+description: "Use when claims, code changes, Loom records, evidence, risks, acceptance, or follow-through need Ralph-backed adversarial review before they can be trusted."
 ---
 
 # loom-audit

@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "root=\"${CLAUDE_PLUGIN_ROOT:-${PLUGIN_ROOT:-}}\"; base=\"$root/skills/using-loom\"; printf '<mandatory-instructions>\\n' && cat \"$base/SKILL.md\" \"$base/references/how-loom-thinks.md\" \"$base/references/directory-structure.md\" \"$base/references/shaping-with-humans.md\" \"$base/references/delegating-to-workers.md\" \"$base/references/proving-the-work.md\" \"$base/references/staying-safe.md\" && printf '\\n</mandatory-instructions>\\n'",
+            "command": "root=\"${CLAUDE_PLUGIN_ROOT:-${PLUGIN_ROOT:-}}\"; base=\"$root/skills/using-loom\"; printf '<mandatory-instructions>\\n' && cat \"$base/SKILL.md\" \"$base/references/how-loom-thinks.md\" \"$base/references/activation-discipline.md\" \"$base/references/directory-structure.md\" \"$base/references/shaping-with-humans.md\" \"$base/references/delegating-to-workers.md\" \"$base/references/proving-the-work.md\" \"$base/references/staying-safe.md\" && printf '\\n</mandatory-instructions>\\n'",
             "timeout": 10
           }
         ]

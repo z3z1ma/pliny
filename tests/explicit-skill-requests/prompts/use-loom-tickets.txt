@@ -1,0 +1,1 @@
+Use loom-tickets. Review .loom/tickets/auth-cleanup.md and tell me the next safe action. Do not edit files.

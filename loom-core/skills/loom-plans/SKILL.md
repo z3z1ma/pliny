@@ -1,6 +1,6 @@
 ---
 name: loom-plans
-description: "Manages Loom plans: creates, shapes, updates, reviews, completes, blocks, and cancels operator-shaped strategy for complex work spanning multiple ticket-ready execution units. Use when high-level work must be decomposed into multiple ticket-ready execution units, or when sequencing, dependencies, rollout, milestones, or recovery strategy matter."
+description: "Use when high-level work must be decomposed into multiple ticket-ready execution units, or when sequencing, dependencies, rollout, milestones, recovery strategy, or multi-ticket coordination matters."
 ---
 
 # loom-plans

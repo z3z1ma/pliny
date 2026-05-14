@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 
 const PACKAGE_ROOT = dirname(fileURLToPath(import.meta.url));
 const PLUGIN_ID = "open-loom-playbooks";
+const TRIGGER_DESCRIPTION_PREFIXES = ["Use when", "Use before", "Use after"];
 
 function posixPath(path) {
   return path.split("\\").join("/");
@@ -82,9 +83,23 @@ export function configureOpenCode(config, options = {}) {
   return config;
 }
 
+export function inspectActivationDiscipline(options = {}) {
+  const skills = readSkillFiles(options);
+  const triggerDescriptionFailures = skills
+    .filter((skill) => !TRIGGER_DESCRIPTION_PREFIXES.some((prefix) => skill.description.startsWith(prefix)))
+    .map((skill) => ({ name: skill.name, description: skill.description }));
+
+  return {
+    ok: triggerDescriptionFailures.length === 0,
+    triggerDescriptionPrefixes: TRIGGER_DESCRIPTION_PREFIXES,
+    triggerDescriptionFailures,
+  };
+}
+
 export function inspectLoomPlaybooksBundle(options = {}) {
   const surfaces = surfaceOptions(options);
   const skills = readSkillFiles(surfaces);
+  const activation = inspectActivationDiscipline(surfaces);
 
   return {
     usingLoom: {
@@ -96,6 +111,7 @@ export function inspectLoomPlaybooksBundle(options = {}) {
       path: directoryExists(join(surfaces.rootDir, "skills")) ? join(surfaces.rootDir, "skills") : undefined,
       items: skills,
     },
+    activation,
   };
 }
 
@@ -119,9 +135,10 @@ if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes(
   const config = configureOpenCode({});
   const beforeSkillPathCount = config.skills?.paths?.length ?? 0;
   configureOpenCode(config);
+  const ok = inspection.activation.ok;
 
   console.log(JSON.stringify({
-    ok: true,
+    ok,
     pluginId: PLUGIN_ID,
     usingLoomReferenceCount: inspection.usingLoom.files.length,
     instructionCount: config.instructions?.length ?? 0,
@@ -130,6 +147,8 @@ if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes(
     skillPath: config.skills?.paths?.[0],
     skillPathsAreDeduped: (config.skills?.paths?.length ?? 0) === beforeSkillPathCount,
     usingLoomResult: inspection.usingLoom.result,
+    activationChecks: inspection.activation,
     skillsResult: inspection.skills.result,
   }, null, 2));
+  if (!ok) process.exitCode = 1;
 }

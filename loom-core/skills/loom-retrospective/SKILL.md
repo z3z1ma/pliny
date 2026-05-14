@@ -1,6 +1,6 @@
 ---
 name: loom-retrospective
-description: "Runs Loom retrospective promotion and prevention: reviews significant completed or reviewed work, distills durable lessons, routes them into existing Loom surfaces, and records follow-through where future agents will find it."
+description: "Use after significant completed or reviewed work when durable lessons, prevention notes, follow-up routing, or reusable knowledge should survive the session."
 ---
 
 # loom-retrospective

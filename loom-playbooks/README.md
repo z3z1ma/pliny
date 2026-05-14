@@ -83,7 +83,8 @@ Hardening and release:
 - `loom-shipping-and-launch`
 
 The skill descriptions are the activation surface. Keep them visible to the
-harness.
+harness, and keep them trigger-oriented so the model loads the skill body instead
+of treating the description as enough procedure.
 
 ## How They Stay Loom
 

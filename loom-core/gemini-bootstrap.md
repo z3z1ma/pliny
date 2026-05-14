@@ -6,6 +6,8 @@ using-loom skill and references injected below
 
 @./skills/using-loom/references/how-loom-thinks.md
 
+@./skills/using-loom/references/activation-discipline.md
+
 @./skills/using-loom/references/directory-structure.md
 
 @./skills/using-loom/references/shaping-with-humans.md

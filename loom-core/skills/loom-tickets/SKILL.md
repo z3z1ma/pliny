@@ -1,6 +1,6 @@
 ---
 name: loom-tickets
-description: "Manages Loom tickets: creates, scopes, prepares Ralph execution, updates, blocks, reviews, closes, and cancels self-contained bounded work units under .loom/tickets. Use whenever the user mentions tickets, scoping changes, implementing work, continuation from prior work, or closing/reviewing a scoped work item."
+description: "Use whenever the user mentions tickets, scoped implementation work, continuation from prior work, acceptance changes, review state, closure, cancellation, or a bounded work item that needs live execution state."
 ---
 
 # loom-tickets

@@ -1,6 +1,6 @@
 ---
 name: loom-ralph
-description: "Manages Loom Ralph packets: creates, launches, follows, updates, consumes, supersedes, and abandons bounded worker packets under .loom/packets. Use when Loom work needs a packetized subagent or harness run built from records, files, evidence, claims, or other bounded context."
+description: "Use when Loom work needs a Ralph packet for a bounded subagent, harness run, implementation slice, review pass, or worker handoff built from records, files, evidence, claims, or other bounded context."
 ---
 
 # loom-ralph

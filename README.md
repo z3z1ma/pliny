@@ -17,6 +17,11 @@ The loop is deliberate: shape vague work with the human before building, slice
 complex work into ticket-ready units, hand bounded worker runs through Ralph
 packets, and claim only what evidence and audit support.
 
+Activation is deliberate too. `using-loom` is not just a file to preload; it is the
+first-action doctrine that makes the agent check the owning Loom surface or skill
+before answering, inspecting, editing, creating tickets, or launching workers when
+there is any material chance Loom applies.
+
 Unless the ask is already concrete enough for execution, Loom's first job is
 outer-loop judgment: select direction, draw boundaries, expose system seams and
 state relationships, and preserve what makes the design coherent.
@@ -69,6 +74,7 @@ itself when work has ambiguity, risk, handoff, review pressure, or future value.
 
 Loom forces useful friction at the exact points where agents usually blur things:
 
+- `using-loom` makes skill and surface routing the first action, not an afterthought
 - specs keep intended behavior out of implementation guesses
 - tickets keep live execution state and acceptance in one place
 - evidence keeps observations separate from model claims

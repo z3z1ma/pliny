@@ -10,7 +10,9 @@
     "smoke:packages": "npm run smoke:core && npm run smoke:playbooks",
     "pack:check:core": "npm --prefix loom-core run pack:check",
     "pack:check:playbooks": "npm --prefix loom-playbooks run pack:check",
-    "pack:check": "npm run pack:check:core && npm run pack:check:playbooks"
+    "pack:check": "npm run pack:check:core && npm run pack:check:playbooks",
+    "test:skill-triggering": "bash tests/skill-triggering/run-all.sh",
+    "test:explicit-skill-requests": "bash tests/explicit-skill-requests/run-all.sh"
   },
   "keywords": [
     "opencode",

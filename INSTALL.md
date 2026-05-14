@@ -20,6 +20,9 @@ Use using-loom. Then route this work through the smallest Loom surface that make
 ```
 
 Do not copy the doctrine into another project file. Point the harness at Core.
+Activation is part of the doctrine: when Loom may apply, the agent should check
+the relevant Loom skill before responding, asking clarifying questions, inspecting,
+editing, creating tickets, or launching Ralph.
 
 ## Generic Local Setup
 
@@ -89,8 +92,9 @@ For a local clone, point at the package entrypoints:
 }
 ```
 
-`@z3z1ma/open-loom-core` registers record skills and preloads the ordered
-`using-loom` files through `config.instructions`. `@z3z1ma/open-loom-playbooks`
+`@z3z1ma/open-loom-core` registers record skills through `config.skills.paths` and
+injects stripped `using-loom` doctrine plus ordered references into the first user
+message with `experimental.chat.messages.transform`. `@z3z1ma/open-loom-playbooks`
 adds optional workflow-specific skills and expects the operating doctrine to be
 available.
 
@@ -222,11 +226,12 @@ Core loads these files in order:
 
 1. `loom-core/skills/using-loom/SKILL.md`
 2. `loom-core/skills/using-loom/references/how-loom-thinks.md`
-3. `loom-core/skills/using-loom/references/directory-structure.md`
-4. `loom-core/skills/using-loom/references/shaping-with-humans.md`
-5. `loom-core/skills/using-loom/references/delegating-to-workers.md`
-6. `loom-core/skills/using-loom/references/proving-the-work.md`
-7. `loom-core/skills/using-loom/references/staying-safe.md`
+3. `loom-core/skills/using-loom/references/activation-discipline.md`
+4. `loom-core/skills/using-loom/references/directory-structure.md`
+5. `loom-core/skills/using-loom/references/shaping-with-humans.md`
+6. `loom-core/skills/using-loom/references/delegating-to-workers.md`
+7. `loom-core/skills/using-loom/references/proving-the-work.md`
+8. `loom-core/skills/using-loom/references/staying-safe.md`
 
 If an adapter preloads those files, the agent can route into Loom work. If it does
 not, use `using-loom` explicitly.

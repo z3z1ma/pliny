@@ -1,9 +1,20 @@
 ---
 name: using-loom
-description: "Always activate at session start in Loom workspaces before any other work, unless an adapter has already preloaded this doctrine and references."
+description: "Always activate at session start in Loom workspaces before any response or action, unless an adapter has already preloaded this doctrine and references."
 ---
 
 # using-loom
+
+<EXTREMELY-IMPORTANT>
+If you think there is even a 1% chance a skill might apply, you ABSOLUTELY MUST
+invoke the skill.
+
+IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+
+This is not optional. This is not a style preference. This is how Loom prevents
+silent scope invention, retroactive tickets, unbounded worker prompts, unsupported
+closure claims, and lost recovery context.
+</EXTREMELY-IMPORTANT>
 
 Loom is a human-agent control plane for AI-driven software engineering.
 
@@ -28,6 +39,12 @@ audit, and reusable knowledge that future agents need.
 Loom routing comes first. Use workflow-specific skills only after this doctrine
 has established whether the work is still outer-loop shaping or ready for bounded
 execution.
+
+Activation is part of routing. If there is any material chance a Loom skill or
+surface applies to the operator's message, invoke the relevant skill before
+responding, asking clarifying questions, code exploration, quick checks, editing,
+creating tickets, or launching Ralph. The skill may confirm that a lighter path is
+enough; skipping the check because the work feels obvious is not allowed.
 
 The default sequence is:
 
@@ -71,17 +88,20 @@ spend context twice when the doctrine is already present.
 Read in this order:
 
 1. `references/how-loom-thinks.md`
-2. `references/directory-structure.md`
-3. `references/shaping-with-humans.md`
-4. `references/delegating-to-workers.md`
-5. `references/proving-the-work.md`
-6. `references/staying-safe.md`
+2. `references/activation-discipline.md`
+3. `references/directory-structure.md`
+4. `references/shaping-with-humans.md`
+5. `references/delegating-to-workers.md`
+6. `references/proving-the-work.md`
+7. `references/staying-safe.md`
 
 After that, load active `Type: Knowledge Preference` records from
 `.loom/knowledge/` when that directory exists. Retrieve other knowledge only when
 the task, path, tool, error, ticket, or domain makes it relevant.
 
-Then use the relevant Loom skill for the surface you are touching.
+Then use the relevant Loom skill for the surface you are touching. If multiple
+skills may apply, prefer the owning record skill first, then any workflow playbook
+that adds task-shaped pressure.
 
 ## Loom Surfaces
 
@@ -127,6 +147,22 @@ Ask:
 
 Tiny, obvious, low-risk work can stay light. Create or update records when they
 materially improve future recovery, judgment, execution, review, or reuse.
+
+Red flags that mean stop and route through the relevant skill instead of acting
+from habit:
+
+| Rationalization | Loom reality |
+| --- | --- |
+| "this is simple" | Simple work still needs the right skill check when a Loom surface might own the next move. |
+| "this is just a small change" | Small work can stay light only after the right surface is obvious and risk is low. |
+| "I need more context first" | Skill invocation comes before clarifying questions, code exploration, or quick checks. |
+| "I need to inspect first" | If inspection is part of a likely Loom workflow, invoke that workflow skill first. |
+| "I'll create the ticket after" | Ticket-worthy work needs the ticket before execution, not as a retroactive wrapper. |
+| "I'll ask the worker directly" | Worker handoff needs a Ralph packet before launch. |
+| "evidence can wait" | Evidence posture is part of honest execution, not cleanup. |
+| "audit is overkill" | Risk decides audit posture; convenience does not. |
+| "I remember the skill" | Skill text evolves. Load the current relevant skill. |
+| "I'll just do this one thing first" | One un-routed action is enough to lose the graph. Check the skill first. |
 
 ## Done Means
 

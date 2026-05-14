@@ -6,6 +6,8 @@
 - Product behavior lives in `loom-core/skills/` and `loom-playbooks/skills/`; package entrypoints, manifests, hooks, and extensions only expose those trees.
 - Model-visible Loom doctrine lives only in the shipped skill directories: `loom-core/skills/` and `loom-playbooks/skills/`. `README.md`, `PROTOCOL.md`, `ARCHITECTURE.md`, package READMEs, manifests, and adapter docs are not in the consuming model's context window unless a harness explicitly injects them, which Loom must not assume.
 - Do not rely on README or protocol prose to teach model behavior. If models need to follow a rule, encode it in the relevant skill `SKILL.md`, `references/`, or `templates/` under the package skill directories; keep docs as human-facing restatements only.
+- Treat product-surface leakage as one of this repo's worst failure modes. Shipped skill content must not explain Agent Loom's packaging, adapter mechanics, smoke checks, repository workflow, dogfood state, skill-authoring preferences, or self-justifications. That material belongs in docs, AGENTS.md, `.loom/` records, tests, or package code, not in model-visible product doctrine.
+- Do not confuse instructions for Loom contributors with instructions for Loom consumers. `loom-core/skills/` and `loom-playbooks/skills/` are distributed product surfaces; write them as runtime behavior for an installed workspace, not commentary about how this repo develops, validates, packages, or exposes that behavior.
 - `loom-core/` is required and owns `using-loom`, Core record skills, templates, and references.
 - `loom-playbooks/` is optional, requires Core, and must not duplicate or preload `using-loom` doctrine.
 - Root `skills` is a symlink to `loom-core/skills` for the repo-root Gemini extension shim; treat `loom-core/skills/` as the real Core package surface.
@@ -20,7 +22,7 @@
 ## Entrypoints And Adapters
 
 - OpenCode entrypoints are `loom-core/loom-core.mjs` and `loom-playbooks/loom-playbooks.mjs`.
-- Core OpenCode config registers the ordered `using-loom` files through `config.instructions` and exposes `loom-core/skills` through `config.skills.paths`.
+- Core OpenCode config exposes `loom-core/skills` through `config.skills.paths` and injects stripped `using-loom` doctrine plus ordered references into the first user message through `experimental.chat.messages.transform`.
 - Playbooks OpenCode config only exposes `loom-playbooks/skills`; `doesNotPreloadCoreDoctrine: true` is intentional in its smoke output.
 - Adapter catalogs live at `.claude-plugin/marketplace.json`, `.cursor-plugin/marketplace.json`, and `.agents/plugins/marketplace.json`.
 - Per-package native manifests live under `loom-*/.claude-plugin/`, `loom-*/.codex-plugin/`, and `loom-*/.cursor-plugin/`; Core preload hooks live in `loom-core/hooks/`.
@@ -44,4 +46,5 @@
 - `SKILL.md` frontmatter needs `name` and `description`; Loom record templates use grepable body labels such as `ID:`, `Type:`, `Status:`, `Created:`, and `Updated:`.
 - When changing `using-loom` doctrine, keep the ordered references and every preload surface aligned: `loom-core/loom-core.mjs`, `loom-core/hooks/*`, and `loom-core/gemini-bootstrap.md`.
 - When changing a Core surface, check the owning `SKILL.md`, `references/`, `templates/`, and docs that restate the model: `README.md`, `PROTOCOL.md`, `ARCHITECTURE.md`, and package READMEs.
+- Before shipping changes under `loom-core/skills/` or `loom-playbooks/skills/`, scan for leaked contributor-facing concepts such as package smoke, adapter mechanics, test harness details, repo paths, dogfood assumptions, skill-description policy, npm packaging, or why Loom is built this way. Remove or move that material unless it is directly needed by a consuming agent at runtime.
 - Keep new workflow guidance as movement through existing Core surfaces; do not create a second truth ledger in adapter files, generated context, or helper scripts.

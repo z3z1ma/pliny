@@ -1,6 +1,6 @@
 ---
 name: loom-knowledge
-description: "Manages Loom knowledge: creates, updates, finds, loads, prunes, and summarizes reusable preferences, procedures, concepts, references, troubleshooting notes, atlases, entities, and other current knowledge records. Use when reusable understanding or task-relevant recall should remain available beyond the current session."
+description: "Use when reusable understanding, preferences, procedures, concepts, references, troubleshooting notes, atlases, entities, or task-relevant recall should remain available beyond the current session."
 ---
 
 # loom-knowledge

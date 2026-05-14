@@ -1,6 +1,6 @@
 ---
 name: loom-evidence
-description: "Manages Loom evidence: creates, updates, finds, and summarizes durable observations, validation outputs, reproductions, logs, screenshots, scans, command results, and artifact pointers that support or challenge claims. Use when observations, validation outputs, reproductions, logs, screenshots, scans, command results, or artifact pointers should remain available for review or closure claims."
+description: "Use when observations, validation outputs, reproductions, logs, screenshots, scans, command results, or artifact pointers should remain available for review or closure claims."
 ---
 
 # loom-evidence
