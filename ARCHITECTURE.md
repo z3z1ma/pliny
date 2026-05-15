@@ -15,15 +15,16 @@ The product surface lives in two package roots:
 
 | Package | Job |
 | --- | --- |
-| `loom-core/` | mandatory `using-loom` doctrine and record skills |
+| `loom-core/` | mandatory `using-loom` doctrine, record skills, and optional named agents |
 | `loom-playbooks/` | optional workflow-specific skills that assume the required package is installed |
 
-Inside each package, `skills/` is the source of behavior. The package root may add
-transport files for OpenCode, Claude Code, Codex, Cursor, or Gemini CLI.
+Inside each package, `skills/` and intentionally shipped agent prompt surfaces are
+the source of behavior. The package root may add transport files for OpenCode,
+Claude Code, Codex, Cursor, or Gemini CLI.
 
-Content inside package `skills/` must stay self-contained. Use generic `.loom/...`
-runtime paths. Do not teach source-repo-only assumptions from this repository as
-Loom doctrine.
+Content inside package `skills/` and agent prompt surfaces must stay self-contained.
+Use generic `.loom/...` runtime paths. Do not teach source-repo-only assumptions
+from this repository as Loom doctrine.
 
 ## Runtime State
 
@@ -178,8 +179,8 @@ This repo has support material that is not product doctrine:
 - `.loom/` contains dogfood records for this repo
 - `.opencode/` is a local consumption surface
 
-Use those for review or dogfooding. Keep product behavior in `loom-core/skills`
-and `loom-playbooks/skills`.
+Use those for review or dogfooding. Keep product behavior in `loom-core/skills`,
+`loom-core/agents`, `loom-core/codex/agents`, and `loom-playbooks/skills`.
 
 ## Design Checks
 

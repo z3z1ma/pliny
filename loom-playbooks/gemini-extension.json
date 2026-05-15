@@ -1,5 +1,5 @@
 {
   "name": "loom-playbooks",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Optional Loom workflow playbook skills for Gemini CLI; depends on loom-core for using-loom bootstrap context and does not duplicate it."
 }

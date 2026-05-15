@@ -150,13 +150,21 @@ export function readAgentFiles(options = {}) {
   });
 }
 
-export function readLoomWeaverAgent(options = {}) {
-  return readAgentFiles(options).find((agent) => agent.name === "loom-weaver") || null;
+export function readLoomAgent(name, options = {}) {
+  return readAgentFiles(options).find((agent) => agent.name === name) || null;
 }
 
-export function readCodexLoomWeaverAgent(options = {}) {
+export function readLoomWeaverAgent(options = {}) {
+  return readLoomAgent("loom-weaver", options);
+}
+
+export function readLoomDriverAgent(options = {}) {
+  return readLoomAgent("loom-driver", options);
+}
+
+export function readCodexLoomAgent(name, options = {}) {
   const { rootDir } = surfaceOptions(options);
-  const agentPath = join(rootDir, "codex", "agents", "loom-weaver.toml");
+  const agentPath = join(rootDir, "codex", "agents", `${name}.toml`);
   if (!fileExists(agentPath)) return null;
   const text = readFileSync(agentPath, "utf8").trimEnd();
   const developerInstructionsMatch = text.match(/developer_instructions\s*=\s*"""([\s\S]*)"""\s*$/);
@@ -168,6 +176,57 @@ export function readCodexLoomWeaverAgent(options = {}) {
     text,
     developerInstructions,
   };
+}
+
+export function readCodexLoomWeaverAgent(options = {}) {
+  return readCodexLoomAgent("loom-weaver", options);
+}
+
+export function readCodexLoomDriverAgent(options = {}) {
+  return readCodexLoomAgent("loom-driver", options);
+}
+
+function openCodeAgentPermission(agentName) {
+  if (agentName === "loom-weaver") {
+    return {
+      read: "allow",
+      glob: "allow",
+      grep: "allow",
+      edit: {
+        "*": "deny",
+        ".loom/**": "allow",
+      },
+      bash: "ask",
+      task: "deny",
+      skill: "allow",
+      question: "allow",
+    };
+  }
+
+  if (agentName === "loom-driver") {
+    return {
+      read: "allow",
+      glob: "allow",
+      grep: "allow",
+      edit: {
+        "*": "deny",
+        ".loom/constitution/**": "deny",
+        ".loom/specs/**": "deny",
+        ".loom/plans/**": "deny",
+        ".loom/research/**": "deny",
+        ".loom/tickets/**": "allow",
+        ".loom/packets/ralph/**": "allow",
+        ".loom/evidence/**": "allow",
+        ".loom/audit/**": "allow",
+      },
+      bash: "ask",
+      task: "allow",
+      skill: "allow",
+      question: "allow",
+    };
+  }
+
+  return null;
 }
 
 export function configureOpenCode(config, options = {}) {
@@ -183,26 +242,15 @@ export function configureOpenCode(config, options = {}) {
   }
 
   if (surfaces.agents) {
-    const loomWeaver = readLoomWeaverAgent(surfaces);
-    if (loomWeaver) {
+    for (const agent of readAgentFiles(surfaces)) {
+      const permission = openCodeAgentPermission(agent.name);
+      if (!permission) continue;
       config.agent ??= {};
-      config.agent["loom-weaver"] ??= {
-        description: loomWeaver.description,
+      config.agent[agent.name] ??= {
+        description: agent.description,
         mode: "all",
-        prompt: loomWeaver.content,
-        permission: {
-          read: "allow",
-          glob: "allow",
-          grep: "allow",
-          edit: {
-            "*": "deny",
-            ".loom/**": "allow",
-          },
-          bash: "ask",
-          task: "deny",
-          skill: "allow",
-          question: "allow",
-        },
+        prompt: agent.content,
+        permission,
       };
     }
   }
@@ -284,6 +332,8 @@ export function inspectLoomCoreBundle(options = {}) {
   const agents = readAgentFiles(surfaces);
   const loomWeaverAgent = readLoomWeaverAgent(surfaces);
   const codexLoomWeaverAgent = readCodexLoomWeaverAgent(surfaces);
+  const loomDriverAgent = readLoomDriverAgent(surfaces);
+  const codexLoomDriverAgent = readCodexLoomDriverAgent(surfaces);
   const activation = inspectActivationDiscipline(surfaces);
   const bootstrap = getUsingLoomBootstrapContent(surfaces);
 
@@ -321,6 +371,15 @@ export function inspectLoomCoreBundle(options = {}) {
         loomWeaverAgent && codexLoomWeaverAgent?.developerInstructions === loomWeaverAgent.content,
       ),
     },
+    loomDriver: {
+      agentPath: loomDriverAgent?.path,
+      codexAgentPath: codexLoomDriverAgent?.path,
+      codexAgentHasDeveloperInstructions: Boolean(codexLoomDriverAgent?.text.includes("developer_instructions")),
+      codexAgentHasDirectionRecordBoundary: Boolean(codexLoomDriverAgent?.text.includes("direction-setting")),
+      codexAgentPromptMatchesAgent: Boolean(
+        loomDriverAgent && codexLoomDriverAgent?.developerInstructions === loomDriverAgent.content,
+      ),
+    },
   };
 }
 
@@ -346,7 +405,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes(
   const inspection = inspectLoomCoreBundle();
   const config = configureOpenCode({});
   const loomWeaverConfig = config.agent?.["loom-weaver"];
+  const loomDriverConfig = config.agent?.["loom-driver"];
   const codexLoomWeaverAgent = readCodexLoomWeaverAgent();
+  const codexLoomDriverAgent = readCodexLoomDriverAgent();
   const beforeSkillPathCount = config.skills?.paths?.length ?? 0;
   configureOpenCode(config);
   const plugin = await server({}, {});
@@ -361,12 +422,25 @@ if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes(
     && inspection.bootstrap.hasContent
     && bootstrapPartCount === 1
     && inspection.agents.items.some((agent) => agent.name === "loom-weaver")
+    && inspection.agents.items.some((agent) => agent.name === "loom-driver")
     && codexLoomWeaverAgent?.text.includes('name = "loom-weaver"')
+    && codexLoomDriverAgent?.text.includes('name = "loom-driver"')
     && inspection.loomWeaver.codexAgentHasDeveloperInstructions
     && inspection.loomWeaver.codexAgentHasWriteBoundary
     && inspection.loomWeaver.codexAgentPromptMatchesAgent
+    && inspection.loomDriver.codexAgentHasDeveloperInstructions
+    && inspection.loomDriver.codexAgentHasDirectionRecordBoundary
+    && inspection.loomDriver.codexAgentPromptMatchesAgent
     && loomWeaverConfig?.mode === "all"
-    && Boolean(loomWeaverConfig?.prompt?.includes("Write only inside `.loom/`"));
+    && loomDriverConfig?.mode === "all"
+    && Boolean(loomWeaverConfig?.prompt?.includes("Write only inside `.loom/`"))
+    && Boolean(loomDriverConfig?.prompt?.includes("direction-setting"))
+    && loomDriverConfig?.permission?.edit?.["*"] === "deny"
+    && loomDriverConfig?.permission?.edit?.[".loom/tickets/**"] === "allow"
+    && loomDriverConfig?.permission?.edit?.[".loom/packets/ralph/**"] === "allow"
+    && loomDriverConfig?.permission?.edit?.[".loom/evidence/**"] === "allow"
+    && loomDriverConfig?.permission?.edit?.[".loom/audit/**"] === "allow"
+    && loomDriverConfig?.permission?.task === "allow";
 
   console.log(JSON.stringify({
     ok,
@@ -385,13 +459,22 @@ if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes(
     agentCount: inspection.agents.items.length,
     agentNames: inspection.agents.items.map((agent) => agent.name),
     loomWeaverAgentPath: inspection.agents.items.find((agent) => agent.name === "loom-weaver")?.path,
+    loomDriverAgentPath: inspection.agents.items.find((agent) => agent.name === "loom-driver")?.path,
     codexLoomWeaverAgentPath: inspection.loomWeaver.codexAgentPath,
+    codexLoomDriverAgentPath: inspection.loomDriver.codexAgentPath,
     codexLoomWeaverHasDeveloperInstructions: inspection.loomWeaver.codexAgentHasDeveloperInstructions,
     codexLoomWeaverHasWriteBoundary: inspection.loomWeaver.codexAgentHasWriteBoundary,
     codexLoomWeaverPromptMatchesAgent: inspection.loomWeaver.codexAgentPromptMatchesAgent,
+    codexLoomDriverHasDeveloperInstructions: inspection.loomDriver.codexAgentHasDeveloperInstructions,
+    codexLoomDriverHasDirectionRecordBoundary: inspection.loomDriver.codexAgentHasDirectionRecordBoundary,
+    codexLoomDriverPromptMatchesAgent: inspection.loomDriver.codexAgentPromptMatchesAgent,
     loomWeaverOpenCodeMode: loomWeaverConfig?.mode,
+    loomDriverOpenCodeMode: loomDriverConfig?.mode,
     loomWeaverPromptHasWriteBoundary: Boolean(loomWeaverConfig?.prompt?.includes("Write only inside `.loom/`")),
+    loomDriverPromptHasDirectionRecordBoundary: Boolean(loomDriverConfig?.prompt?.includes("direction-setting")),
     loomWeaverEditPermission: loomWeaverConfig?.permission?.edit,
+    loomDriverEditPermission: loomDriverConfig?.permission?.edit,
+    loomDriverTaskPermission: loomDriverConfig?.permission?.task,
     usingLoomResult: inspection.usingLoom.result,
     bootstrapResult: inspection.bootstrap.result,
     activationChecks: inspection.activation,

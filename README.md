@@ -179,16 +179,18 @@ Use using-loom. Route this task through the smallest Loom surface that makes the
 
 Some adapters preload `using-loom`. If they do, continue straight into the work.
 
-Core also ships Loom Weaver as an optional explicit shaping persona. Use it when
-you want pre-implementation Loom shaping, options, recommendations, and `.loom/`
-records without source edits. See [INSTALL.md](INSTALL.md) for harness-specific
-invocation syntax.
+Core also ships optional named agents. Use Loom Weaver for pre-implementation
+shaping, options, recommendations, and `.loom/` records without source edits. Use
+Loom Driver for packetized inner-loop coordination, worker runs, evidence, audit
+routing, and ticket reconciliation after work is shaped. These agents are not required,
+the skills are usually sufficient; but they offer stronger behavior conformance. See
+[INSTALL.md](INSTALL.md) for harness-specific invocation syntax.
 
 ## What Ships
 
 | Package | Role |
 | --- | --- |
-| `loom-core/` | mandatory `using-loom` doctrine, record skills, templates, references, optional Loom Weaver, and adapter surfaces |
+| `loom-core/` | mandatory `using-loom` doctrine, record skills, templates, references, optional named agents, and adapter surfaces |
 | `loom-playbooks/` | optional workflow-specific skills that route through Loom surfaces |
 
 The required package carries the operating doctrine and record skills. Optional

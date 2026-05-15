@@ -34,8 +34,9 @@ work recoverable.
 - record skills tell the agent which surface owns each kind of truth
 - templates give records enough shape for continuation, proof, review, and handoff
 - references teach the protocol without requiring a hidden runtime
-- Loom Weaver provides optional explicit shaping persona surfaces for
-  pre-implementation work that writes only under `.loom/`
+- Loom Weaver provides an optional explicit outer-loop shaping persona
+- Loom Driver provides an optional explicit inner-loop coordination persona for
+  packets, worker runs, evidence, audit routing, and ticket reconciliation
 
 The harness is transport. The protocol is this package's `skills/` corpus.
 
@@ -102,8 +103,8 @@ live in [INSTALL.md](../INSTALL.md).
 ## Boundary
 
 This package carries Loom bootstrap doctrine, canonical record behavior, and the
-optional Loom Weaver shaping prompt surfaces. It ships as Markdown and TOML
-surfaces, with no daemon, database, dashboard, product CLI, or MCP server.
+optional Loom Weaver and Loom Driver prompt surfaces. It ships as Markdown and
+TOML surfaces, with no daemon, database, dashboard, product CLI, or MCP server.
 
 Optional workflow routes live in [Loom Playbooks](../loom-playbooks/README.md).
 Those routes use Loom records instead of adding another durable truth layer.

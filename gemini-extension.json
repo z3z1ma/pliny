@@ -1,6 +1,6 @@
 {
   "name": "agent-loom",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Core Loom skills for Gemini CLI. This repository-root extension is a Gemini-only core shim; clone and link loom-core plus loom-playbooks for the full Loom install.",
   "contextFileName": "loom-core/gemini-bootstrap.md"
 }
