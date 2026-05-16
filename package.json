@@ -1,6 +1,6 @@
 {
   "name": "agent-loom-workspace",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "private": true,
   "description": "Repository workspace for the Loom Markdown-native AI work protocol packages.",
   "type": "module",

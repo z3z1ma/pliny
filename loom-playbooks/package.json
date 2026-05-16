@@ -1,6 +1,6 @@
 {
   "name": "@z3z1ma/open-loom-playbooks",
-  "version": "0.2.5",
+  "version": "0.3.0",
   "description": "OpenCode playbook package for optional explicit Loom workflow macros; requires @z3z1ma/open-loom-core.",
   "type": "module",
   "main": "./loom-playbooks.mjs",
@@ -12,7 +12,7 @@
     "opencode": ">=1.14.22 <2"
   },
   "peerDependencies": {
-    "@z3z1ma/open-loom-core": "^0.2.5"
+    "@z3z1ma/open-loom-core": "^0.3.0"
   },
   "files": [
     "loom-playbooks.mjs",
