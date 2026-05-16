@@ -22,7 +22,9 @@ Expected first material Loom action:
 - `using-loom` doctrine is already preloaded or explicitly loaded.
 - Agent routes to shaping before implementation because outcome, scope, quality
   bar, system-shape, evidence posture, and ticket boundary are not concrete.
-- With Playbooks installed, `loom-idea-refine` is the likely workflow route.
+- With Playbooks installed, the natural prompt still stays in Core Loom routing or
+  shaping; `loom-idea-refine` or any other Playbook must not auto-load merely
+  because the prompt is broad or product-shaped.
 
 Failure signals:
 
@@ -41,11 +43,12 @@ The checkout tests started failing with TypeError: Cannot read property 'id' of 
 
 Expected first material Loom action:
 
-- With Playbooks installed, agent invokes `loom-debugging-and-error-recovery` before
-  proposing a fix.
-- Without Playbooks, agent routes through Core surfaces for reproduction evidence,
-  research, ticket scope, or another appropriate durable surface before changing
-  code if the fix is not tiny and obvious.
+- Agent routes through Core surfaces for reproduction evidence, research, ticket
+  scope, or another appropriate durable surface before changing code if the fix is
+  not tiny and obvious.
+- With Playbooks installed, `loom-debugging-and-error-recovery` or any other
+  Playbook must not auto-load from the natural bug report; a debugging Playbook is
+  appropriate only when explicitly invoked or recommended after Core routing.
 
 Failure signals:
 

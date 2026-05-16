@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for a shared interface needs consumer, compatibility, error, permission, or migration design before implementation, including REST, GraphQL, CLI, event, module, component, file-format, worker, or cross-system contracts."
+description = "Use when a shared interface needs consumer, compatibility, error, permission, or migration design before implementation, including REST, GraphQL, CLI, event, module, component, file-format, worker, or cross-system contracts."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

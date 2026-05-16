@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for the work is a safe removal or replacement path: deprecating APIs/features, migrating users/data/config/integrations, consolidating duplicate implementations, proving zero usage, or retiring legacy behavior."
+description = "Use when the work is a safe removal or replacement path: deprecating APIs/features, migrating users/data/config/integrations, consolidating duplicate implementations, proving zero usage, or retiring legacy behavior."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

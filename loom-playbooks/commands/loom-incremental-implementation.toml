@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for non-trivial ticket or plan execution needs bounded implementation slices, sequencing, multiple-file/record changes, feature flags, refactor/behavior separation, worker handoff, evidence, and continuation state; not for unshaped asks with unresolved scope, system-shape, data-model, state, or coherence choices."
+description = "Use when non-trivial ticket or plan execution needs bounded implementation slices, sequencing, multiple-file/record changes, feature flags, refactor/behavior separation, worker handoff, evidence, and continuation state; not for unshaped asks with unresolved scope, system-shape, data-model, state, or coherence choices."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

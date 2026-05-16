@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for an unexpected or unexplained failure needs diagnosis before fixes: failing tests/builds/CI/runtime/UI behavior, bug reports, regressions, intermittent failures, reproduction, localization, guard tests, or recovery evidence."
+description = "Use when an unexpected or unexplained failure needs diagnosis before fixes: failing tests/builds/CI/runtime/UI behavior, bug reports, regressions, intermittent failures, reproduction, localization, guard tests, or recovery evidence."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

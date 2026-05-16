@@ -111,12 +111,18 @@ Expose `loom-core` first, then Playbooks:
 /absolute/path/to/agent-loom/loom-playbooks
 ```
 
-Or expose the Core skill tree and the relocated Playbook corpus:
+Or expose the Core skill tree and the relocated Playbook corpus when your harness
+honors explicit-only metadata or lets you invoke Playbooks deliberately:
 
 ```text
 /absolute/path/to/agent-loom/loom-core/skills
 /absolute/path/to/agent-loom/loom-playbooks/playbooks
 ```
+
+Do not expose `loom-playbooks/playbooks` as a raw ordinary skill path in a harness
+that auto-loads every matching skill from natural prompts. In generic setups, Core
+is the natural-language routing surface; Playbooks should enter only through a
+supported explicit command, explicit-only skill, or deliberate invocation.
 
 OpenCode can load `loom-playbooks.mjs`. Git-based installs for Claude Code,
 Codex, Cursor, and Gemini CLI use the native manifests in this package. The npm

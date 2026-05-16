@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for work is blocked by ambiguous project/domain vocabulary, conflicting terms, code-vs-operator language mismatch, cross-domain ownership questions, or an architectural tradeoff that may need durable precedent."
+description = "Use when work is blocked by ambiguous project/domain vocabulary, conflicting terms, code-vs-operator language mismatch, cross-domain ownership questions, or an architectural tradeoff that may need durable precedent."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

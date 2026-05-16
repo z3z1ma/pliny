@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for code work on an isolated branch or worktree appears complete and the next decision is branch disposition: local merge, PR, keep, discard, cleanup, or follow-up routing."
+description = "Use when code work on an isolated branch or worktree appears complete and the next decision is branch disposition: local merge, PR, keep, discard, cleanup, or follow-up routing."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

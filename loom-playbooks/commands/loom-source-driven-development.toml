@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for correctness depends on current source authority: framework/library/platform versions, official docs, standards, changelogs, migration guides, peer repos, project source reality, or conflicting documented patterns."
+description = "Use when correctness depends on current source authority: framework/library/platform versions, official docs, standards, changelogs, migration guides, peer repos, project source reality, or conflicting documented patterns."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

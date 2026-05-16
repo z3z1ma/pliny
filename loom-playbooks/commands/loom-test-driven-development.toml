@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for implementation should be driven by test-first verification: a focused executable check can fail before the change, pass after it, and provide evidence for a behavior, bug, logic, edge case, or acceptance claim."
+description = "Use when implementation should be driven by test-first verification: a focused executable check can fail before the change, pass after it, and provide evidence for a behavior, bug, logic, edge case, or acceptance claim."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

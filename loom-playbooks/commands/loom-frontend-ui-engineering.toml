@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for user-facing UI engineering needs coordinated behavior/design handling: components, pages, flows, layouts, interactions, responsive/accessibility/visual quality, frontend state, data fetching, or browser runtime evidence."
+description = "Use when user-facing UI engineering needs coordinated behavior/design handling: components, pages, flows, layouts, interactions, responsive/accessibility/visual quality, frontend state, data fetching, or browser runtime evidence."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

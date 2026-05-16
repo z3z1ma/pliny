@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Test explicit Loom skill requests and warn when non-skill tools run first.
+# Test explicit Loom skill requests and fail when non-skill tools run first.
 # Usage: bash tests/explicit-skill-requests/run-test.sh <skill-name> <prompt-file> [max-turns]
+# Parser probe: bash tests/explicit-skill-requests/run-test.sh <skill-name> --check-log <log-file>
 
 set -euo pipefail
 
@@ -11,6 +12,58 @@ MAX_TURNS="${3:-3}"
 if [[ -z "$SKILL_NAME" || -z "$PROMPT_FILE" ]]; then
   echo "Usage: $0 <skill-name> <prompt-file> [max-turns]" >&2
   exit 2
+fi
+
+SKILL_TOOL_PATTERN='"tool":"skill"|"name":"skill"|"name":"Skill"'
+SKILL_NAME_PATTERN='"skill":"([^"/:]+[/|:])?'"$SKILL_NAME"'"|"name":"'"$SKILL_NAME"'"|\b'"$SKILL_NAME"'\b'
+
+validate_skill_log() {
+  local log_file="$1"
+  local first_skill_record first_skill_line first_skill_payload premature_tools
+
+  first_skill_record="$(grep -nE "$SKILL_TOOL_PATTERN" "$log_file" | head -1 || true)"
+
+  if [[ -z "$first_skill_record" ]]; then
+    echo "FAIL: no skill tool invocation found"
+    echo "Full log: $log_file"
+    return 1
+  fi
+
+  first_skill_line="${first_skill_record%%:*}"
+  first_skill_payload="${first_skill_record#*:}"
+
+  premature_tools="$(head -n "$first_skill_line" "$log_file" \
+    | grep -E '"tool":"|"name":"' \
+    | grep -Ev '"tool":"skill"|"name":"skill"|"name":"Skill"' || true)"
+  if [[ -n "$premature_tools" ]]; then
+    echo "FAIL: non-skill tools were invoked before the first skill tool call"
+    echo "$premature_tools" | head -5
+    echo "Full log: $log_file"
+    return 1
+  fi
+
+  echo "OK: no non-skill tool invocation before first skill tool call"
+
+  if ! printf '%s\n' "$first_skill_payload" | grep -Eq "$SKILL_NAME_PATTERN"; then
+    echo "FAIL: first skill tool invocation was not '$SKILL_NAME'"
+    echo "First skill payload: $first_skill_payload"
+    echo "Skills mentioned in log:"
+    grep -Eo '"skill":"[^"]+"|"name":"loom-[^"]+"|"name":"using-loom"' "$log_file" | sort -u || true
+    echo "Full log: $log_file"
+    return 1
+  fi
+
+  echo "PASS: explicit skill '$SKILL_NAME' was triggered first"
+}
+
+if [[ "$PROMPT_FILE" == "--check-log" ]]; then
+  LOG_FILE="$MAX_TURNS"
+  if [[ -z "$LOG_FILE" || ! -f "$LOG_FILE" ]]; then
+    echo "Usage: $0 <skill-name> --check-log <log-file>" >&2
+    exit 2
+  fi
+  validate_skill_log "$LOG_FILE"
+  exit $?
 fi
 
 if ! command -v opencode >/dev/null 2>&1; then
@@ -90,32 +143,5 @@ if [[ $EXIT_CODE -eq 124 ]]; then
   exit 1
 fi
 
-SKILL_TOOL_PATTERN='"tool":"skill"|"name":"skill"|"name":"Skill"'
-SKILL_NAME_PATTERN='"skill":"([^"/:]+[/|:])?'"$SKILL_NAME"'"|"name":"'"$SKILL_NAME"'"|\b'"$SKILL_NAME"'\b'
-
-FIRST_SKILL_LINE="$(grep -nE "$SKILL_TOOL_PATTERN" "$LOG_FILE" | head -1 | cut -d: -f1 || true)"
-
-if [[ -n "$FIRST_SKILL_LINE" ]]; then
-  PREMATURE_TOOLS="$(head -n "$FIRST_SKILL_LINE" "$LOG_FILE" \
-    | grep -E '"tool":"|"name":"' \
-    | grep -Ev '"tool":"skill"|"name":"skill"|"name":"Skill"|"tool":"todowrite"|"name":"todowrite"' || true)"
-  if [[ -n "$PREMATURE_TOOLS" ]]; then
-    echo "WARNING: non-skill tools were invoked before the first skill tool call"
-    echo "$PREMATURE_TOOLS" | head -5
-  else
-    echo "OK: no non-skill tool invocation before first skill tool call"
-  fi
-else
-  echo "WARNING: no skill tool invocation found"
-fi
-
-if grep -Eq "$SKILL_TOOL_PATTERN" "$LOG_FILE" && grep -Eq "$SKILL_NAME_PATTERN" "$LOG_FILE"; then
-  echo "PASS: explicit skill '$SKILL_NAME' was triggered"
-  exit 0
-fi
-
-echo "FAIL: explicit skill '$SKILL_NAME' was not detected"
-echo "Skills mentioned in log:"
-grep -Eo '"skill":"[^"]+"|"name":"loom-[^"]+"|"name":"using-loom"' "$LOG_FILE" | sort -u || true
-echo "Full log: $LOG_FILE"
-exit 1
+validate_skill_log "$LOG_FILE"
+exit $?

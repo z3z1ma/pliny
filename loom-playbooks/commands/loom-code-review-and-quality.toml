@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for a code diff, branch, PR, worker output, or implementation-complete ticket needs a code-focused quality review across correctness, tests, architecture, security, performance, scope, and evidence before audit or closure."
+description = "Use when a code diff, branch, PR, worker output, or implementation-complete ticket needs a code-focused quality review across correctness, tests, architecture, security, performance, scope, and evidence before audit or closure."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

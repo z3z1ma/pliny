@@ -4,7 +4,7 @@ ID: spec:playbook-explicit-macros
 Type: Spec
 Status: active
 Created: 2026-05-15
-Updated: 2026-05-15
+Updated: 2026-05-16
 
 ## Summary
 
@@ -48,6 +48,11 @@ Supported harnesses should use the strongest explicit surface they support:
 - Cursor should expose Playbooks through plugin commands or explicit-only skills; if implemented as skills, they must use `disable-model-invocation: true`.
 - Codex should expose Playbooks as explicit-only plugin skills with `policy.allow_implicit_invocation: false` unless Codex later documents plugin-contributed prompt commands.
 
+Generated command descriptions should use the existing Playbook source description.
+Explicitness belongs in the command surface, explicit-only metadata, docs, and macro
+body framing, not in a mechanically added description prefix such as `Explicit
+optional workflow macro for`.
+
 ## Not Doing
 
 - Do not keep Playbooks as broad auto-activated skills in the default Playbooks package surface.
@@ -76,13 +81,23 @@ Supported harnesses should use the strongest explicit surface they support:
 
 - REQ-008: Playbook macro bodies MUST preserve Loom loop order. They may add workflow-specific pressure, but they must still route durable truth to Core surfaces and must not shorten required spec, plan, ticket, evidence, audit, or ticket-owned Ralph worker/review procedures.
 
-- REQ-009: Playbook macro descriptions and docs MUST present Playbooks as optional explicit lenses. They must not teach agents that a broad natural-language task requires Playbook activation before Core routing.
+- REQ-009: Playbook command surfaces, macro framing, and docs MUST present
+  Playbooks as optional explicit lenses. They must not teach agents that a broad
+  natural-language task requires Playbook activation before Core routing. Generated
+  command descriptions are governed by REQ-013.
 
 - REQ-010: Playbook packaging SHOULD keep canonical Playbook content in one source of truth or a generation workflow that prevents adapter-specific command bodies from drifting.
 
 - REQ-011: Verification MUST include negative activation coverage proving representative natural prompts do not auto-load Playbooks, plus positive explicit-invocation coverage proving each supported adapter exposes the intended macro surface.
 
 - REQ-012: Model-visible Playbook macro content MUST avoid contributor-facing leakage such as package smoke mechanics, adapter self-justification, dogfood state, test harness details, npm packaging, or repository workflow commentary.
+
+- REQ-013: Generated Playbook command descriptions MUST reuse the source Playbook
+  frontmatter description without adding an `Explicit optional workflow macro for`
+  prefix or other generic explicitness preamble. The command or explicit-only
+  surface, macro body framing, and docs remain responsible for communicating that
+  Playbooks are deliberately invoked lenses rather than natural-prompt activation
+  owners.
 
 ## Scenarios
 
@@ -132,6 +147,15 @@ WHEN a Playbook body changes
 THEN the adapter-specific emitted surfaces stay aligned with the canonical Playbook content
 AND model-visible bodies remain free of contributor-only repository, package, smoke, and dogfood details.
 
+### SCN-006: Command Description Uses Source Description
+
+Exercises: REQ-009, REQ-013
+
+GIVEN a Playbook source `SKILL.md` has a frontmatter `description`
+WHEN OpenCode or Gemini command metadata is generated from the Playbook catalog
+THEN the generated command description matches the source Playbook description
+AND it does not add a generic explicitness preamble such as `Explicit optional workflow macro for`.
+
 ## Evidence Plan
 
 - REQ-001 / SCN-001: Negative activation tests or harness smoke output show representative natural prompts do not auto-load Playbook content when Playbooks are installed.
@@ -144,6 +168,9 @@ AND model-visible bodies remain free of contributor-only repository, package, sm
 - REQ-010 / SCN-005: Diff or generation checks show adapter-specific Playbook bodies are derived from a canonical source or otherwise synchronized.
 - REQ-011: Updated smoke or activation tests include both positive explicit invocation and negative natural-prompt cases.
 - REQ-012 / SCN-005: Grep checks over model-visible Playbook macro content show no contributor-facing package, smoke, adapter-mechanics, dogfood, or repository workflow leakage.
+- REQ-013 / SCN-006: Source inspection and generated-command checks show command
+  descriptions are emitted from Playbook frontmatter descriptions without a generic
+  explicitness prefix.
 
 ## Open Questions
 
@@ -187,6 +214,15 @@ Registering `loom-playbooks/skills/` as a broad implicit model-visible skill pat
 - Harness-specific implementation must follow source-backed research instead of aspirational syntax claims.
 - Codex remains explicit-only skill based until source-backed research proves plugin command support.
 
+## Amendment Notes
+
+- 2026-05-16: Added REQ-013 and SCN-006 after operator direction from
+  `research:20260516-product-surface-scan`: generated Playbook command
+  descriptions should use existing Playbook descriptions and should not add the
+  `Explicit optional workflow macro for` prefix. This amendment does not remove the
+  requirement that Playbooks remain explicit lenses rather than natural-language
+  autoactivation owners.
+
 ## Related Records
 
 - `research:20260515-playbook-command-surfaces` - identifies supported explicit macro or explicit-only skill surfaces by harness.
@@ -198,3 +234,4 @@ Registering `loom-playbooks/skills/` as a broad implicit model-visible skill pat
 - `spec:ticket-owned-worker-handoffs` - defines the worker/review handoff model Playbooks must preserve when adding workflow pressure.
 - `loom-core/skills/using-loom/SKILL.md` - owns Core activation and routing doctrine.
 - `loom-playbooks/` - current package surface to convert.
+- `research:20260516-product-surface-scan` - records the command description polish finding and operator disposition.

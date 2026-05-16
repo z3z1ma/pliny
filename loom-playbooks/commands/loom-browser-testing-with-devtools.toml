@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for a browser-run UI or client claim needs real runtime observation: visual state, DOM, accessibility tree, console, network, CORS, viewport, screenshot, or browser performance."
+description = "Use when a browser-run UI or client claim needs real runtime observation: visual state, DOM, accessibility tree, console, network, CORS, viewport, screenshot, or browser performance."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

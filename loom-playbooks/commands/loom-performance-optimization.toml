@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for a concrete performance claim, symptom, budget, regression, or metric needs measure-first work: baseline, bottleneck identification, optimization, remeasurement, guardrail, and evidence."
+description = "Use when a concrete performance claim, symptom, budget, regression, or metric needs measure-first work: baseline, bottleneck identification, optimization, remeasurement, guardrail, and evidence."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

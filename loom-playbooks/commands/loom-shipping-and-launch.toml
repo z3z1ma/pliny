@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for release readiness or launch coordination is the work: production deploys, feature-flag enablement, staged rollout, migrations/API/infrastructure release, rollback, monitoring, changelog, or launch communication."
+description = "Use when release readiness or launch coordination is the work: production deploys, feature-flag enablement, staged rollout, migrations/API/infrastructure release, rollback, monitoring, changelog, or launch communication."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

@@ -56,20 +56,27 @@ Expose Core to your harness:
 /absolute/path/to/agent-loom/loom-core/skills
 ```
 
-Expose Playbooks only if you want explicit workflow macros:
+Expose Playbooks only if you want explicit workflow macros and your harness can
+keep them explicit:
 
 ```text
 /absolute/path/to/agent-loom/loom-playbooks
 /absolute/path/to/agent-loom/loom-playbooks/playbooks
 ```
 
+Do not expose `loom-playbooks/playbooks` as ordinary model-invoked skills in a
+generic harness that ignores explicit-only metadata. In that case, use the native
+package or command surface for Playbooks, or invoke a Playbook deliberately through
+the harness's explicit skill mechanism. Core remains the natural-language routing
+surface for ordinary prompts.
+
 If your harness has `AGENTS.md`, user rules, or a similar instruction file, keep
 the pointer short:
 
 ```md
 Loom is active here. Use `using-loom` before Loom work unless the same doctrine is
-already preloaded. Route durable facts through Loom records. Optional workflow
-skills add routes without changing the owning surfaces.
+already preloaded. Route durable facts through Loom records. Optional Playbooks are
+explicit workflow lenses and do not replace Core routing.
 ```
 
 ## OpenCode
@@ -223,8 +230,10 @@ loom-playbooks/.cursor-plugin/plugin.json
 
 Enable Core before Playbooks. Core points at `loom-core/hooks/hooks-cursor.json`
 for `using-loom` preload where Cursor supports hooks. If native plugin discovery
-or hooks are unavailable, expose `loom-core/skills/` and
-`loom-playbooks/playbooks/`, then start with `using-loom`.
+or hooks are unavailable, expose `loom-core/skills/`, then start with
+`using-loom`. Expose `loom-playbooks/playbooks/` only when the harness keeps those
+skills explicit-only or when you will invoke them deliberately; do not make them an
+ordinary natural-prompt skill path.
 
 Cursor Playbooks are explicit-only workflow skills. Invoke them deliberately when
 you want the workflow lens; ordinary natural prompts should continue through Core

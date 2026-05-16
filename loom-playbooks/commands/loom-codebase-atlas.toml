@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for an unfamiliar code area needs a reusable map of modules, callers, interfaces, data flow, constraints, and related records before safe implementation, review, debugging, or planning."
+description = "Use when an unfamiliar code area needs a reusable map of modules, callers, interfaces, data flow, constraints, and related records before safe implementation, review, debugging, or planning."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

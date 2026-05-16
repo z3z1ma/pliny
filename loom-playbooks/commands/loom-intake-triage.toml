@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for incoming bugs, feature requests, or external issues need intake disposition before a ready Loom ticket exists: classification, reproduction, info request, worker/operator readiness, duplicate handling, or rejection rationale."
+description = "Use when incoming bugs, feature requests, or external issues need intake disposition before a ready Loom ticket exists: classification, reproduction, info request, worker/operator readiness, duplicate handling, or rejection rationale."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

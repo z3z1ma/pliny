@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for implementation needs workspace isolation or provenance because unrelated changes, worker write scopes, baseline ambiguity, branch/worktree setup, or later cleanup/finish decisions could affect safety."
+description = "Use when implementation needs workspace isolation or provenance because unrelated changes, worker write scopes, baseline ambiguity, branch/worktree setup, or later cleanup/finish decisions could affect safety."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

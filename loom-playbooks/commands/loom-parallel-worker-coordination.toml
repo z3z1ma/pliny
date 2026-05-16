@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for multiple independent tickets or ticket-defined worker scopes can run concurrently and need coordination, non-overlapping write scopes, integration reconciliation, and combined evidence/audit."
+description = "Use when multiple independent tickets or ticket-defined worker scopes can run concurrently and need coordination, non-overlapping write scopes, integration reconciliation, and combined evidence/audit."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

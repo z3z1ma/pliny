@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for an operator's rough product, engineering, workflow, research, or opportunity idea lacks clear problem, audience, scope decisions, system-shape, data-model or state implications, success criteria, design coherence, direction, or next Loom record move."
+description = "Use when an operator's rough product, engineering, workflow, research, or opportunity idea lacks clear problem, audience, scope decisions, system-shape, data-model or state implications, success criteria, design coherence, direction, or next Loom record move."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

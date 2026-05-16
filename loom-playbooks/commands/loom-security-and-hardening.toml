@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for the work touches security-sensitive boundaries: untrusted input, authn/authz, secrets, sensitive data, uploads, webhooks, command/database execution, external integrations, dependencies, or hardening review."
+description = "Use when the work touches security-sensitive boundaries: untrusted input, authn/authz, secrets, sensitive data, uploads, webhooks, command/database execution, external integrations, dependencies, or hardening review."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

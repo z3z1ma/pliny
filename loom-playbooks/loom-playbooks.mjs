@@ -72,14 +72,7 @@ export function readSkillFiles(options = {}) {
 }
 
 function macroDescription(skill) {
-  const description = skill.description
-    .replace(/^Use\s+(?:when|before|after)\s+/i, "")
-    .replace(/^this\s+/i, "")
-    .trim();
-
-  return description
-    ? `Explicit optional workflow macro for ${description}`
-    : "Explicit optional Loom workflow macro.";
+  return skill.description;
 }
 
 function macroBody(skill) {
@@ -146,12 +139,12 @@ export function inspectPlaybookMacroCatalog(options = {}) {
   const missingMacros = skills
     .filter((skill) => !macros.some((macro) => macro.name === skill.name && macro.source === skill.path))
     .map((skill) => skill.name);
-  const automaticDescriptionFailures = macros
-    .filter((macro) => /\bUse\s+(?:when|before|after)\b/i.test(macro.description))
+  const explicitDescriptionPrefixFailures = macros
+    .filter((macro) => macro.description.includes("Explicit optional workflow macro for"))
     .map((macro) => ({ name: macro.name, description: macro.description }));
 
   return {
-    ok: missingMacros.length === 0 && automaticDescriptionFailures.length === 0,
+    ok: missingMacros.length === 0 && explicitDescriptionPrefixFailures.length === 0,
     result: "derived from skills as explicit optional workflow macros",
     count: macros.length,
     items: macros.map((macro) => ({
@@ -160,7 +153,7 @@ export function inspectPlaybookMacroCatalog(options = {}) {
       description: macro.description,
     })),
     missingMacros,
-    automaticDescriptionFailures,
+    explicitDescriptionPrefixFailures,
   };
 }
 
@@ -247,7 +240,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url) && process.argv.includes(
     macroChecks: {
       ok: inspection.macros.ok,
       missingMacros: inspection.macros.missingMacros,
-      automaticDescriptionFailures: inspection.macros.automaticDescriptionFailures,
+      explicitDescriptionPrefixFailures: inspection.macros.explicitDescriptionPrefixFailures,
     },
     registeredPlaybookSkillPaths: inspection.skills.registeredPlaybookSkillPaths,
     playbookSkillPathsRegistered: inspection.skills.registeredPlaybookSkillPaths.length > 0,

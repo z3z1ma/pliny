@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for working code needs behavior-preserving simplification because readability, duplication, dead code, naming, nesting, wrappers, or abstraction debt is the problem; not when behavior is still wrong."
+description = "Use when working code needs behavior-preserving simplification because readability, duplication, dead code, naming, nesting, wrappers, or abstraction debt is the problem; not when behavior is still wrong."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 

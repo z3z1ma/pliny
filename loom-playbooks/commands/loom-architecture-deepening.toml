@@ -1,4 +1,4 @@
-description = "Explicit optional workflow macro for architecture work is about increasing module depth, leverage, locality, test seams, or caller simplicity in tangled or shallow code, not local readability cleanup."
+description = "Use when architecture work is about increasing module depth, leverage, locality, test seams, or caller simplicity in tangled or shallow code, not local readability cleanup."
 prompt = '''
 The user explicitly invoked this Loom Playbook as an optional workflow macro.
 
