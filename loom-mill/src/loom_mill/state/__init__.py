@@ -1,6 +1,6 @@
 """In-memory Loom Mill state and events."""
 
-from .models import GitState, MillEvent, MillState, RecordAdded, RecordChanged, RecordRemoved, GitStateChanged
+from .models import GitState, GitStateChanged, MillEvent, MillState, RecordAdded, RecordChanged, RecordRemoved, WorkstationStateChanged
 from .store import MillStateStore
 
 __all__ = [
@@ -12,4 +12,5 @@ __all__ = [
     "RecordAdded",
     "RecordChanged",
     "RecordRemoved",
+    "WorkstationStateChanged",
 ]

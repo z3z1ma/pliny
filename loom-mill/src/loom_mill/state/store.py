@@ -4,6 +4,8 @@ import asyncio
 
 from loom_mill.parser import LoomRecord
 
+from loom_mill.workstation import WorkstationState
+
 from .models import GitState, MillEvent, MillState
 
 
@@ -26,12 +28,17 @@ class MillStateStore:
     def __init__(self) -> None:
         self._records: dict[str, LoomRecord] = {}
         self._git = GitState()
+        self._workstations: dict[str, WorkstationState] = {}
         self._subscribers: set[asyncio.Queue[MillEvent]] = set()
         self._lock = asyncio.Lock()
 
     async def snapshot(self) -> MillState:
         async with self._lock:
-            return MillState(records=tuple(self._records[path] for path in sorted(self._records)), git=self._git)
+            return MillState(
+                records=tuple(self._records[path] for path in sorted(self._records)),
+                git=self._git,
+                workstations=dict(self._workstations),
+            )
 
     async def record(self, path: str) -> LoomRecord | None:
         async with self._lock:
@@ -63,6 +70,12 @@ class MillStateStore:
         async with self._lock:
             previous = self._git
             self._git = git
+            return previous
+
+    async def replace_workstation_state(self, ticket_id: str, workstation: WorkstationState) -> WorkstationState | None:
+        async with self._lock:
+            previous = self._workstations.get(ticket_id)
+            self._workstations[ticket_id] = workstation
             return previous
 
     async def publish(self, event: MillEvent) -> None:

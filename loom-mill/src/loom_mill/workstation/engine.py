@@ -89,6 +89,7 @@ class WorkstationEngine:
             self.state.status = status
             return self.state
 
+        self.state.status = status
         process.send_signal(signal.SIGTERM)
         try:
             await asyncio.wait_for(process.wait(), timeout=self.stop_timeout)
@@ -98,7 +99,6 @@ class WorkstationEngine:
 
         await asyncio.gather(*self._capture_tasks)
         self.state.exit_code = process.returncode
-        self.state.status = status
         return self.state
 
     async def _wait_for_exit(self) -> int:

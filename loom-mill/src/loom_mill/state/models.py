@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from loom_mill.parser import LoomRecord
+from loom_mill.workstation import WorkstationState
 
 
 @dataclass(frozen=True)
@@ -16,6 +17,7 @@ class GitState:
 class MillState:
     records: tuple[LoomRecord, ...] = ()
     git: GitState = field(default_factory=GitState)
+    workstations: dict[str, WorkstationState] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -43,4 +45,10 @@ class GitStateChanged:
     previous: GitState
 
 
-MillEvent = RecordAdded | RecordChanged | RecordRemoved | GitStateChanged
+@dataclass(frozen=True)
+class WorkstationStateChanged:
+    ticket_id: str
+    workstation: WorkstationState
+
+
+MillEvent = RecordAdded | RecordChanged | RecordRemoved | GitStateChanged | WorkstationStateChanged

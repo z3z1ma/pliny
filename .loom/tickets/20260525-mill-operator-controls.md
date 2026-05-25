@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-operator-controls
 Type: Ticket
-Status: open
+Status: active
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: medium - convergence point connecting visibility and execution; integration complexity.

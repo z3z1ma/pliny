@@ -2,6 +2,7 @@ import asyncio
 import json
 from dataclasses import asdict, is_dataclass
 from datetime import date
+from pathlib import Path
 
 from starlette.endpoints import WebSocketEndpoint
 from starlette.websockets import WebSocket
@@ -12,6 +13,8 @@ from loom_mill.state import MillStateStore
 def _json_default(obj):
     if isinstance(obj, date):
         return obj.isoformat()
+    if isinstance(obj, Path):
+        return str(obj)
     if is_dataclass(obj):
         return asdict(obj)
     raise TypeError(f"Type {type(obj)} not serializable")

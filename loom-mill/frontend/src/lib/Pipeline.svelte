@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { LoomRecord } from './types';
+  import type { LoomRecord, WorkstationState } from './types';
   import TicketCard from './TicketCard.svelte';
 
-  let { records }: { records: LoomRecord[] } = $props();
+  let { records, workstations }: { records: LoomRecord[]; workstations: Record<string, WorkstationState> } = $props();
 
   let tickets = $derived(records.filter(r => r.metadata.type?.toLowerCase() === 'ticket' || r.path.includes('tickets/')));
 
@@ -43,7 +43,7 @@
       
       <div class="flex flex-col gap-2 overflow-y-auto">
         {#each groupedTickets()[col] as ticket (ticket.path)}
-          <TicketCard record={ticket} />
+          <TicketCard record={ticket} workstation={workstations[ticket.metadata.id?.replace('ticket:', '') || '']} />
         {/each}
       </div>
     </div>

@@ -3,6 +3,7 @@
   import { store } from './lib/ws.svelte';
   import Pipeline from './lib/Pipeline.svelte';
   import GitPanel from './lib/GitPanel.svelte';
+  import HarnessConfig from './lib/HarnessConfig.svelte';
 
   onMount(() => {
     store.connect();
@@ -40,10 +41,12 @@
 
   <div class="flex flex-1 overflow-hidden">
     <div class="flex-1 overflow-hidden p-6">
-      <Pipeline records={store.state.records} />
+      <Pipeline records={store.state.records} workstations={store.state.workstations} />
     </div>
     
     <aside class="w-80 border-l border-slate-800 bg-slate-900/20 p-6 overflow-y-auto">
+      <HarnessConfig />
+      <div class="my-6 border-t border-slate-800"></div>
       <GitPanel git={store.state.git} />
     </aside>
   </div>

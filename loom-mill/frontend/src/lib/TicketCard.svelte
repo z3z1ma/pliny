@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { LoomRecord } from './types';
+  import type { LoomRecord, WorkstationState } from './types';
+  import WorkstationControls from './WorkstationControls.svelte';
 
-  let { record }: { record: LoomRecord } = $props();
+  let { record, workstation }: { record: LoomRecord; workstation?: WorkstationState } = $props();
 
   // The parser now captures #, ##, and ### headings.
   // The first heading is usually the title.
@@ -29,7 +30,9 @@
   </div>
   
   <h3 class="text-sm font-medium text-slate-200 line-clamp-2">{title}</h3>
-  
+
+  <WorkstationControls ticketId={id} workstation={workstation} />
+
   <div class="mt-2 flex items-center justify-between text-xs text-slate-500">
     <div class="flex gap-1.5">
       {#if hasEvidence}

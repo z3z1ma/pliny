@@ -3,7 +3,8 @@ import { type MillState, type LoomRecord, type GitState } from './types';
 export class MillStore {
   state = $state<MillState>({
     records: [],
-    git: { current_branch: null, recent_commits: [], dirty: false }
+    git: { current_branch: null, recent_commits: [], dirty: false },
+    workstations: {}
   });
   connected = $state(false);
 
@@ -42,6 +43,7 @@ export class MillStore {
       case 'snapshot':
         this.state.records = data.records;
         this.state.git = data.git;
+        this.state.workstations = data.workstations || {};
         break;
       case 'RecordAdded':
         this.state.records.push(data.record);
@@ -59,6 +61,9 @@ export class MillStore {
         break;
       case 'GitStateChanged':
         this.state.git = data.git;
+        break;
+      case 'WorkstationStateChanged':
+        this.state.workstations[data.ticket_id] = data.workstation;
         break;
     }
   }
