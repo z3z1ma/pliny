@@ -19,7 +19,7 @@ TOP_LABELS = {
 }
 
 TOP_LABEL_RE = re.compile(r"^(ID|Type|Status|Created|Updated|Risk|Priority|Depends On):\s*(.*)$")
-HEADING_RE = re.compile(r"^(##|###)\s+(.+?)\s*$")
+HEADING_RE = re.compile(r"^(#|##|###)\s+(.+?)\s*$")
 REFERENCE_RE = re.compile(
     r"\b(?:"
     r"ticket:\d{8}-[A-Za-z0-9][A-Za-z0-9_-]*"
@@ -75,8 +75,8 @@ def parse_record(path: str | Path, root: str | Path | None = None) -> LoomRecord
 def _parse_metadata(lines: Iterable[str]) -> RecordMetadata:
     values: dict[str, str] = {}
     for line in lines:
-        if line.startswith("## "):
-            break
+        if line.startswith("# ") or line.startswith("## "):
+            continue
         match = TOP_LABEL_RE.match(line)
         if match is None:
             continue

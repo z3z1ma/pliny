@@ -1,22 +1,50 @@
 <script lang="ts">
-  let activeLane = $state("Scaffold");
-  let status = $derived(`${activeLane} ready`);
+  import { onMount } from 'svelte';
+  import { store } from './lib/ws.svelte';
+  import Pipeline from './lib/Pipeline.svelte';
+  import GitPanel from './lib/GitPanel.svelte';
+
+  onMount(() => {
+    store.connect();
+  });
 
   $effect(() => {
-    document.title = `Loom Mill - ${status}`;
+    document.title = `Loom Mill - ${store.connected ? 'Connected' : 'Disconnected'}`;
   });
 </script>
 
-<main class="min-h-screen bg-slate-950 text-slate-100">
-  <section class="mx-auto flex min-h-screen max-w-5xl flex-col justify-center px-6 py-16">
-    <p class="mb-3 text-sm font-medium uppercase tracking-[0.4em] text-cyan-300">Factory Floor</p>
-    <h1 class="text-5xl font-semibold tracking-tight sm:text-7xl">Loom Mill</h1>
-    <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-      Local control-room shell for Loom execution. The scaffold is intentionally empty of business logic.
-    </p>
-    <div class="mt-10 rounded-2xl border border-slate-800 bg-slate-900/70 p-5 shadow-2xl shadow-cyan-950/30">
-      <p class="text-sm text-slate-400">Current lane</p>
-      <p class="mt-2 text-2xl font-medium text-cyan-100">{status}</p>
+<main class="flex h-screen flex-col bg-slate-950 text-slate-100 overflow-hidden">
+  <header class="flex items-center justify-between border-b border-slate-800 bg-slate-900/50 px-6 py-4">
+    <div class="flex items-center gap-4">
+      <h1 class="text-xl font-semibold tracking-tight text-cyan-100">Loom Mill</h1>
+      <span class="rounded bg-slate-800 px-2 py-1 text-xs font-medium uppercase tracking-widest text-slate-400">
+        Factory Floor
+      </span>
     </div>
-  </section>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 text-sm">
+        <span class="relative flex h-2.5 w-2.5">
+          {#if store.connected}
+            <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+          {:else}
+            <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-rose-500"></span>
+          {/if}
+        </span>
+        <span class={store.connected ? 'text-emerald-400' : 'text-rose-400'}>
+          {store.connected ? 'Connected' : 'Disconnected'}
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex flex-1 overflow-hidden">
+    <div class="flex-1 overflow-hidden p-6">
+      <Pipeline records={store.state.records} />
+    </div>
+    
+    <aside class="w-80 border-l border-slate-800 bg-slate-900/20 p-6 overflow-y-auto">
+      <GitPanel git={store.state.git} />
+    </aside>
+  </div>
 </main>

@@ -76,7 +76,7 @@ Updated: 2026-05-25
         "ticket:20260525-prereq",
         "spec:loom-mill-factory-floor-mvp",
     )
-    assert ticket.headings == ((2, "Summary"), (2, "Acceptance"), (3, "Detail"))
+    assert ticket.headings == ((1, "Example Ticket"), (2, "Summary"), (2, "Acceptance"), (3, "Detail"))
     assert ticket.references == (
         "ticket:20260525-example",
         "ticket:20260525-prereq",
@@ -132,7 +132,7 @@ References constitution:main, roadmap:loom-mill, principle:single-piece-flow, an
     assert len(graph.records) == 3
     plain = next(record for record in graph.records if record.path == "non_loom.md")
     assert plain.metadata.id is None
-    assert plain.headings == ((2, "Section"),)
+    assert plain.headings == ((1, "Plain Markdown"), (2, "Section"))
     assert plain.references == ()
     assert plain.labeled_ids == ("ACC-001",)
 

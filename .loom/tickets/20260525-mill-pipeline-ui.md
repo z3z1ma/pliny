@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-pipeline-ui
 Type: Ticket
-Status: open
+Status: active
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: low - frontend rendering of known state shape with no execution side effects.
