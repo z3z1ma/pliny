@@ -1,0 +1,21 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "loom-mill"
+version = "0.1.0"
+description = "Local Factory Floor application scaffold for Loom."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "starlette>=0.37,<1",
+  "uvicorn[standard]>=0.30,<1",
+  "watchfiles>=0.22,<2"
+]
+
+[project.scripts]
+loom-mill-dev = "loom_mill.dev:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/loom_mill"]

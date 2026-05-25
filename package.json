@@ -5,6 +5,7 @@
   "description": "Repository workspace for the Loom Markdown-native AI work protocol packages.",
   "type": "module",
   "scripts": {
+    "dev:mill": "loom-mill/.venv/bin/python -m loom_mill.dev",
     "smoke:core": "npm --prefix loom-core run smoke",
     "smoke:playbooks": "npm --prefix loom-playbooks run smoke",
     "smoke:packages": "npm run smoke:core && npm run smoke:playbooks",

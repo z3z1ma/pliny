@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-project-scaffold
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: low - greenfield scaffolding with known tools, no production behavior yet.
@@ -53,8 +53,9 @@ Stop conditions:
 
 ## Current State
 
-Not started. Waiting for first Ralph worker run.
+Complete. All acceptance criteria satisfied. Frontend builds, backend imports clean, health endpoint responds, gitignore covers generated artifacts.
 
 ## Journal
 
 - 2026-05-25: Created from `plan:20260525-factory-floor-mvp` Unit 1.
+- 2026-05-25: Ralph worker run via `general` subagent completed. Frontend (Svelte 5 + Tailwind + Vite) and backend (Starlette + uvicorn) scaffolded. Verified: npm build passes, pip install succeeds, app imports clean.

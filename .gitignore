@@ -6,3 +6,9 @@
 /.venv/
 /uv.lock
 /.npmrc
+/.mill/
+__pycache__/
+*.py[cod]
+/loom-mill/.venv/
+/loom-mill/frontend/node_modules/
+/loom-mill/frontend/dist/
