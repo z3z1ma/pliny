@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-record-parser
 Type: Ticket
-Status: active
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: low - well-defined input (Markdown with known labels), pure function with no side effects.

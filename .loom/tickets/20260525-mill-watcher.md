@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-watcher
 Type: Ticket
-Status: active
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: low - file watching is well-understood; state model is in-memory only.

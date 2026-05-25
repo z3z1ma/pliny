@@ -12,3 +12,4 @@ __pycache__/
 /loom-mill/.venv/
 /loom-mill/frontend/node_modules/
 /loom-mill/frontend/dist/
+/.playwright-mcp

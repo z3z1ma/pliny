@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-workstation-engine
 Type: Ticket
-Status: active
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: medium - subprocess management and worktree isolation have edge cases around cleanup, signals, and concurrent access.

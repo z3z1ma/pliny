@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-backpressure-andon
 Type: Ticket
-Status: active
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: medium - pattern detection thresholds affect false-positive/negative tradeoff; getting this wrong either annoys or misleads the operator.

@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-linear-theme
 Type: Ticket
-Status: active
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: low - purely visual/CSS changes with no backend or behavioral impact.
