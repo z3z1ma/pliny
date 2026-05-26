@@ -3,6 +3,7 @@
   import ReadyTicketRow from './ReadyTicketRow.svelte';
   import WorkstationRow from './WorkstationRow.svelte';
   import TicketRow from './TicketRow.svelte';
+  import { apiUrl } from './api';
 
   const WIP_LIMIT = 3;
 
@@ -103,11 +104,10 @@
 
   async function clearAllCompleted(e: Event) {
     e.stopPropagation();
-    const apiBase = `${window.location.protocol}//${window.location.hostname}:8765`;
     const completed = completedWorkstations();
     for (const ws of completed) {
       try {
-        await fetch(`${apiBase}/workstations/${ws.id}`, { method: 'DELETE' });
+        await fetch(apiUrl(`/workstations/${ws.id}`), { method: 'DELETE' });
       } catch (err) {
         console.error(`Failed to dismiss workstation ${ws.id}:`, err);
       }

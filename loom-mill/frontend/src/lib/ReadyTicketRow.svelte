@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { LoomRecord } from './types';
+  import { apiUrl } from './api';
 
   let {
     record,
@@ -30,8 +31,7 @@
 
     starting = true;
     try {
-      const apiBase = `${window.location.protocol}//${window.location.hostname}:8765`;
-      const response = await fetch(`${apiBase}/workstations`, {
+      const response = await fetch(apiUrl('/workstations'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ticket_id: ticketId(), ticket_path: record.path })

@@ -4,6 +4,7 @@
   import DiffViewer from './DiffViewer.svelte';
   import { store } from './ws.svelte';
   import { formatDuration } from './utils';
+  import { apiUrl } from './api';
 
   let { workstationId, onClose, embedded = false }: { workstationId: string; onClose: () => void; embedded?: boolean } = $props();
 
@@ -13,11 +14,9 @@
   let loading = $state(true);
   let error = $state('');
 
-  const apiBase = `${window.location.protocol}//${window.location.hostname}:8765`;
-
   async function fetchIterations() {
     try {
-      const res = await fetch(`${apiBase}/workstations/${workstationId}/iterations`);
+      const res = await fetch(apiUrl(`/workstations/${workstationId}/iterations`));
       if (!res.ok) throw new Error('Failed to fetch iterations');
       iterations = await res.json();
       if (iterations.length > 0) {
@@ -39,10 +38,10 @@
     try {
       let url = '';
       if (step === -1) {
-        url = `${apiBase}/workstations/${workstationId}/diff`;
+        url = apiUrl(`/workstations/${workstationId}/diff`);
       } else {
         const iteration = iterations[step];
-        url = `${apiBase}/workstations/${workstationId}/iterations/${iteration.iteration}/diff`;
+        url = apiUrl(`/workstations/${workstationId}/iterations/${iteration.iteration}/diff`);
       }
       
       const res = await fetch(url);

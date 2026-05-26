@@ -26,7 +26,7 @@ export interface GitState {
   dirty: boolean;
 }
 
-export type WorkstationStatus = 'idle' | 'running' | 'paused' | 'stopped' | 'completed';
+export type WorkstationStatus = 'idle' | 'running' | 'paused' | 'stopped' | 'completed' | 'finished' | 'conflict';
 
 export interface OutputEvent {
   stream: 'stdout' | 'stderr';
@@ -93,6 +93,8 @@ export interface TaktState {
 
 export interface WorkstationState {
   status: WorkstationStatus;
+  ticket_id: string;
+  ticket_slug: string;
   worktree_path: string | null;
   process_id: number | null;
   exit_code: number | null;

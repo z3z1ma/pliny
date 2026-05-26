@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { WorkstationState } from './types';
+  import { apiUrl } from './api';
 
   let { ticketId, workstation, compact = false }: { ticketId: string; workstation?: WorkstationState; compact?: boolean } = $props();
 
@@ -10,12 +11,11 @@
   let canPause = $derived(status === 'running');
   let canStop = $derived(status === 'running' || status === 'paused');
   let canSteer = $derived(status === 'paused');
-  const apiBase = `${window.location.protocol}//${window.location.hostname}:8765`;
 
   async function command(path: string, body?: unknown) {
     busy = true;
     error = '';
-    const response = await fetch(`${apiBase}${path}`, {
+    const response = await fetch(apiUrl(path), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: body ? JSON.stringify(body) : undefined

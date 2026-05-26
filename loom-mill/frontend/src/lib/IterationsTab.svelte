@@ -3,6 +3,7 @@
   import type { IterationRecord } from './types';
   import DiffViewer from './DiffViewer.svelte';
   import { formatDuration, formatRelativeTime } from './utils';
+  import { apiUrl } from './api';
 
   let { workstationId }: { workstationId: string } = $props();
 
@@ -20,8 +21,7 @@
     loading = true;
     error = null;
     try {
-      const apiBase = `${window.location.protocol}//${window.location.hostname}:8765`;
-      const res = await fetch(`${apiBase}/workstations/${workstationId}/iterations`);
+      const res = await fetch(apiUrl(`/workstations/${workstationId}/iterations`));
       if (!res.ok) throw new Error(`Failed to load iterations: ${res.statusText}`);
       iterations = await res.json();
     } catch (err: any) {

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { LoomRecord, WorkstationState } from './types';
   import { formatDuration } from './utils';
+  import { apiUrl } from './api';
 
   let { 
     workstationId,
@@ -66,15 +67,14 @@
   async function handleAction(action: string, e: Event) {
     e.stopPropagation();
     try {
-      const apiBase = `${window.location.protocol}//${window.location.hostname}:8765`;
       if (action === 'dismiss') {
-        await fetch(`${apiBase}/workstations/${workstationId}`, { method: 'DELETE' });
+        await fetch(apiUrl(`/workstations/${workstationId}`), { method: 'DELETE' });
       } else if (action === 'stop') {
-        await fetch(`${apiBase}/api/workstation/${workstationId}/stop`, { method: 'POST' });
+        await fetch(apiUrl(`/api/workstation/${workstationId}/stop`), { method: 'POST' });
       } else if (action === 'resolve' || action === 'abort') {
-        await fetch(`${apiBase}/shipping/${workstationId}/${action}`, { method: 'POST' });
+        await fetch(apiUrl(`/shipping/${workstationId}/${action}`), { method: 'POST' });
       } else {
-        await fetch(`${apiBase}/workstations/${workstationId}/${action}`, { method: 'POST' });
+        await fetch(apiUrl(`/workstations/${workstationId}/${action}`), { method: 'POST' });
       }
     } catch (err) {
       console.error(`Failed to ${action} workstation:`, err);

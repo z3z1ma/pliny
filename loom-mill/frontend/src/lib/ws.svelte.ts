@@ -1,4 +1,5 @@
 import { type MillState, type LoomRecord, type GitState } from './types';
+import { wsUrl } from './api';
 
 export class MillStore {
   state = $state<MillState>({
@@ -10,33 +11,60 @@ export class MillStore {
     andon_events: {}
   });
   connected = $state(false);
+  reconnecting = $state(false);
+  reconnectAttempt = $state(0);
+  error = $state<string | null>(null);
+  maxReconnectAttempts = 10;
 
   private ws: WebSocket | null = null;
+  private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
 
   connect() {
     if (this.ws) return;
 
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const host = window.location.hostname;
-    // Assuming backend is on port 8765 as per dev.py
-    const wsUrl = `${protocol}//${host}:8765/ws`;
-
-    this.ws = new WebSocket(wsUrl);
+    const url = wsUrl('/ws');
+    this.ws = new WebSocket(url);
 
     this.ws.onopen = () => {
       this.connected = true;
+      this.reconnecting = false;
+      this.reconnectAttempt = 0;
+      this.error = null;
     };
 
     this.ws.onclose = () => {
       this.connected = false;
       this.ws = null;
-      setTimeout(() => this.connect(), 2000);
+      
+      if (this.reconnectAttempt < this.maxReconnectAttempts) {
+        this.reconnecting = true;
+        const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempt), 16000);
+        this.reconnectAttempt++;
+        this.reconnectTimeout = setTimeout(() => this.connect(), delay);
+      } else {
+        this.reconnecting = false;
+        this.error = 'Connection lost. Max reconnect attempts reached.';
+      }
     };
 
     this.ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      this.handleMessage(message);
+      try {
+        const message = JSON.parse(event.data);
+        this.handleMessage(message);
+      } catch (err) {
+        console.error('Failed to parse WebSocket message:', err, event.data);
+      }
     };
+  }
+
+  retry() {
+    this.reconnectAttempt = 0;
+    this.error = null;
+    if (this.reconnectTimeout) {
+      clearTimeout(this.reconnectTimeout);
+      this.reconnectTimeout = null;
+    }
+    this.connect();
   }
 
   private handleMessage(message: any) {

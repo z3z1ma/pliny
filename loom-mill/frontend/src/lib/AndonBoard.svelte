@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { LoomRecord, WorkstationState, AndonEventPayload } from './types';
   import { formatRelativeTime } from './utils';
+  import { apiUrl } from './api';
 
   let { records, workstations, andonEvents }: { 
     records: LoomRecord[]; 
@@ -8,7 +9,6 @@
     andonEvents: Record<string, AndonEventPayload[]>;
   } = $props();
 
-  const apiBase = `${window.location.protocol}//${window.location.hostname}:8765`;
   let busy = $state<Record<string, boolean>>({});
 
   let activeAlerts = $derived(() => {
@@ -47,7 +47,7 @@
   async function acknowledge(ticketId: string) {
     busy[ticketId] = true;
     try {
-      await fetch(`${apiBase}/api/workstation/${ticketId}/acknowledge-andon`, { method: 'POST' });
+      await fetch(apiUrl(`/api/workstation/${ticketId}/acknowledge-andon`), { method: 'POST' });
     } finally {
       busy[ticketId] = false;
     }

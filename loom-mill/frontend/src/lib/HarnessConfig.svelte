@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import type { HarnessConfig } from './types';
+  import { apiUrl } from './api';
 
   let command = $state('');
   let argsText = $state('');
@@ -10,8 +11,6 @@
   let message = $state('');
   let testing = $state(false);
   let testResult = $state<{success: boolean, output?: string, error?: string} | null>(null);
-
-  const apiBase = `${window.location.protocol}//${window.location.hostname}:8765`;
 
   function applyConfig(config: HarnessConfig) {
     command = config.command;
@@ -36,7 +35,7 @@
   }
 
   async function loadConfig() {
-    const response = await fetch(`${apiBase}/api/config/harness`);
+    const response = await fetch(apiUrl('/api/config/harness'));
     if (response.ok) {
       applyConfig(await response.json());
     }
@@ -45,7 +44,7 @@
   async function saveConfig() {
     saving = true;
     message = '';
-    const response = await fetch(`${apiBase}/api/config/harness`, {
+    const response = await fetch(apiUrl('/api/config/harness'), {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -69,7 +68,7 @@
     testing = true;
     testResult = null;
     try {
-      const response = await fetch(`${apiBase}/harness/test`, {
+      const response = await fetch(apiUrl('/harness/test'), {
         method: 'POST'
       });
       testResult = await response.json();
