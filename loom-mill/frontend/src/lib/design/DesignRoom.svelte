@@ -4,6 +4,7 @@
   import { fly } from 'svelte/transition';
   import GraphSidebar from './GraphSidebar.svelte';
   import DocumentEditor from './DocumentEditor.svelte';
+  import GraphView from './GraphView.svelte';
   import ChatPanel from './ChatPanel.svelte';
 
   let selectedDocumentId = $state<string | null>(null);
@@ -15,6 +16,7 @@
 
   let showGraph = $state(true);
   let showChat = $state(true);
+  let showConnectedGraph = $state(false);
   
   let designRoomContainer: HTMLDivElement;
 
@@ -84,6 +86,15 @@
       console.error('Error saving record:', err);
     }
   }
+
+  function handleNavigate(id: string) {
+    const record = store.state.records.find(r => r.metadata.id === id || r.path === id);
+    if (record) {
+      selectedDocumentId = record.path;
+    } else {
+      selectedDocumentId = id;
+    }
+  }
 </script>
 
 <div bind:this={designRoomContainer} class="flex h-full w-full overflow-hidden relative">
@@ -106,6 +117,16 @@
     
     <!-- Center: Document editor -->
     <div class="flex-1 min-w-0 flex flex-col relative z-0">
+      <button
+        class="absolute right-24 top-1 z-30 flex h-6 items-center gap-1 rounded border border-border-default bg-bg-surface px-2 text-[10px] text-text-tertiary shadow-sm transition-colors hover:bg-bg-surface-hover hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
+        onclick={() => showConnectedGraph = !showConnectedGraph}
+        disabled={!selectedDocumentId}
+        title={showConnectedGraph ? 'Show Editor' : 'Show Connected Graph'}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51 15.42 17.49"/><path d="M15.41 6.51 8.59 10.49"/></svg>
+        {showConnectedGraph ? 'Editor' : 'Graph'}
+      </button>
+
       {#if !showGraph}
         <button 
           class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-bg-surface border border-border-default border-l-0 rounded-r-md p-1 shadow-sm hover:bg-bg-surface-hover text-text-tertiary hover:text-text-primary transition-colors"
@@ -124,19 +145,16 @@
         </button>
       {/if}
 
-      <DocumentEditor 
-        documentPath={selectedDocumentId} 
-        onSave={handleSaveDocument} 
-        onAttachContext={handleAttachContext}
-        onNavigate={(id) => {
-          const record = store.state.records.find(r => r.metadata.id === id || r.path === id);
-          if (record) {
-            selectedDocumentId = record.path;
-          } else {
-            selectedDocumentId = id;
-          }
-        }}
-      />
+      {#if showConnectedGraph}
+        <GraphView documentId={selectedDocumentId} onNavigate={handleNavigate} />
+      {:else}
+        <DocumentEditor
+          documentPath={selectedDocumentId}
+          onSave={handleSaveDocument}
+          onAttachContext={handleAttachContext}
+          onNavigate={handleNavigate}
+        />
+      {/if}
 
       {#if !showChat}
         <button 

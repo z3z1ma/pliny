@@ -6,6 +6,7 @@
   import { formatDuration } from './utils';
   import RecordRenderer from './RecordRenderer.svelte';
   import MetadataBadges from './MetadataBadges.svelte';
+  import ReviewActions from './ReviewActions.svelte';
   import { apiUrl } from './api';
   import { store } from './ws.svelte';
 
@@ -202,6 +203,9 @@
       <div class="flex-1 overflow-y-auto px-4 py-4">
         {#if recordContent}
           <RecordRenderer content={recordContent} />
+          {#if record.metadata.status === 'review' && record.metadata.id}
+            <ReviewActions recordId={record.metadata.id} onTransition={fetchContent} />
+          {/if}
         {:else if loadingContent}
           <div class="flex items-center gap-2 text-text-tertiary text-[12px]">
             <span class="animate-pulse">Loading record content...</span>

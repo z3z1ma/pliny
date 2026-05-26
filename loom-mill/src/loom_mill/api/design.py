@@ -132,6 +132,75 @@ async def update_record(request: Request) -> JSONResponse:
     return JSONResponse({"id": record_id, "path": record.path, "updated": True})
 
 
+async def transition_record(request: Request) -> JSONResponse:
+    record_id = request.path_params["record_id"]
+    try:
+        body = await _json_body(request)
+    except ValueError as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+
+    action = body.get("action")
+    notes = str(body.get("notes") or "").strip()
+    if action not in ("accept", "escalate", "request_change"):
+        return JSONResponse({"error": "action must be accept, escalate, or request_change"}, status_code=400)
+
+    store: MillStateStore = request.app.state.store
+    snapshot = await store.snapshot()
+    record = next((item for item in snapshot.records if item.metadata.id == record_id or item.path == record_id), None)
+    if record is None:
+        return JSONResponse({"error": "record not found"}, status_code=404)
+
+    path = _workspace_root(request) / ".loom" / record.path
+    if not path.exists():
+        return JSONResponse({"error": "file not found"}, status_code=404)
+
+    content = path.read_text(encoding="utf-8")
+    today = date.today().isoformat()
+
+    if action == "accept":
+        content = content.replace("Status: review", "Status: closed", 1)
+        journal_line = f"- {today}: Accepted from review."
+    elif action == "escalate":
+        if re.search(r"^Risk:.*$", content, flags=re.MULTILINE):
+            content = re.sub(
+                r"^Risk:.*$",
+                "Risk: high - escalated for operator attention",
+                content,
+                count=1,
+                flags=re.MULTILINE,
+            )
+        else:
+            content = re.sub(
+                r"^Updated:.*$",
+                f"Updated: {today}\nRisk: high - escalated for operator attention",
+                content,
+                count=1,
+                flags=re.MULTILINE,
+            )
+        journal_line = f"- {today}: Escalated for operator attention."
+    else:
+        content = content.replace("Status: review", "Status: active", 1)
+        journal_line = f"- {today}: Change requested, returned to active."
+
+    if notes:
+        journal_line += f" Notes: {notes}"
+
+    content = re.sub(r"^Updated:.*$", f"Updated: {today}", content, count=1, flags=re.MULTILINE)
+    content = content.rstrip() + "\n" + journal_line + "\n"
+
+    tmp_name = None
+    try:
+        with tempfile.NamedTemporaryFile("w", encoding="utf-8", dir=path.parent, delete=False) as tmp_file:
+            tmp_name = tmp_file.name
+            tmp_file.write(content)
+        os.replace(tmp_name, path)
+    finally:
+        if tmp_name and os.path.exists(tmp_name):
+            os.unlink(tmp_name)
+
+    return JSONResponse({"ok": True, "action": action})
+
+
 async def create_record(request: Request) -> JSONResponse:
     try:
         body = await _json_body(request)

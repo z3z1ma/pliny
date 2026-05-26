@@ -8,7 +8,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 from starlette.routing import Route, WebSocketRoute
 
-from loom_mill.api.design import create_chat_session, create_record, end_chat_session, get_chat_session, send_chat_message, update_record
+from loom_mill.api.design import create_chat_session, create_record, end_chat_session, get_chat_session, send_chat_message, transition_record, update_record
 from loom_mill.api.records import get_record_content
 from loom_mill.api.shipping import abort_workstation, resolve_workstation, ship_workstation, shipping_queue, skip_workstation
 from loom_mill.api.scheduling import scheduling_log, scheduling_queue, put_scheduling_enabled, put_scheduling_overrides
@@ -76,6 +76,7 @@ def create_app() -> Starlette:
             Route("/config", get_config, methods=["GET"]),
             Route("/config", put_config, methods=["PUT"]),
             Route("/records", create_record, methods=["POST"]),
+            Route("/records/{record_id}/transition", transition_record, methods=["POST"]),
             Route("/records/{record_id:path}", update_record, methods=["PUT"]),
             Route("/records/{record_id:path}/content", get_record_content, methods=["GET"]),
             Route("/chat/sessions", create_chat_session, methods=["POST"]),

@@ -38,6 +38,7 @@ def test_design_routes_are_registered():
         return any(route_path == path and method in methods for route_path, methods in routes)
 
     assert has_route("/records", "POST")
+    assert has_route("/records/{record_id}/transition", "POST")
     assert has_route("/records/{record_id:path}", "PUT")
     assert has_route("/chat/sessions", "POST")
     assert has_route("/chat/sessions/{session_id}", "GET")
@@ -78,6 +79,82 @@ async def test_update_record_returns_404_for_unknown_record(tmp_path: Path):
 
     assert response.status_code == 404
     assert _body(response) == {"detail": "Record not found"}
+
+
+@pytest.mark.asyncio
+async def test_transition_record_accepts_review_ticket_and_appends_journal(tmp_path: Path):
+    content = """# Example Ticket
+
+ID: ticket:20260526-example
+Type: Ticket
+Status: review
+Created: 2026-05-26
+Updated: 2026-05-26
+Risk: low - example
+
+## Journal
+
+- 2026-05-26: Moved to review.
+"""
+    path = tmp_path / ".loom" / "tickets" / "20260526-example.md"
+    _write(path, content)
+    store = MillStateStore()
+    await store.replace_all_records((parse_record(path, root=tmp_path / ".loom"),))
+
+    response = await design.transition_record(
+        Request(
+            tmp_path,
+            store,
+            {"action": "accept", "notes": "Looks good."},
+            {"record_id": "ticket:20260526-example"},
+        )
+    )
+
+    today = design.date.today().isoformat()
+    updated = path.read_text(encoding="utf-8")
+    assert response.status_code == 200
+    assert _body(response) == {"ok": True, "action": "accept"}
+    assert "Status: closed" in updated
+    assert f"Updated: {today}" in updated
+    assert f"- {today}: Accepted from review. Notes: Looks good." in updated
+
+
+@pytest.mark.asyncio
+async def test_transition_record_request_change_returns_ticket_to_active(tmp_path: Path):
+    content = """# Example Ticket
+
+ID: ticket:20260526-example
+Type: Ticket
+Status: review
+Created: 2026-05-26
+Updated: 2026-05-26
+Risk: low - example
+
+## Journal
+
+- 2026-05-26: Moved to review.
+"""
+    path = tmp_path / ".loom" / "tickets" / "20260526-example.md"
+    _write(path, content)
+    store = MillStateStore()
+    await store.replace_all_records((parse_record(path, root=tmp_path / ".loom"),))
+
+    response = await design.transition_record(
+        Request(
+            tmp_path,
+            store,
+            {"action": "request_change", "notes": "Needs tests."},
+            {"record_id": "ticket:20260526-example"},
+        )
+    )
+
+    today = design.date.today().isoformat()
+    updated = path.read_text(encoding="utf-8")
+    assert response.status_code == 200
+    assert _body(response) == {"ok": True, "action": "request_change"}
+    assert "Status: active" in updated
+    assert f"Updated: {today}" in updated
+    assert f"- {today}: Change requested, returned to active. Notes: Needs tests." in updated
 
 
 @pytest.mark.asyncio
