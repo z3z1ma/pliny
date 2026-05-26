@@ -38,7 +38,45 @@ export class MillStore {
   }
 
   private handleMessage(message: any) {
-    const { type, data } = message;
+    const { type, data, workstation_id, event, payload } = message;
+
+    if (event && workstation_id) {
+      // Handle workstation events
+      if (!this.state.workstations[workstation_id] && event !== 'state_change') {
+        return; // Ignore events for unknown workstations unless it's a state_change
+      }
+
+      switch (event) {
+        case 'state_change':
+          this.state.workstations[workstation_id] = payload;
+          if (payload.backpressure_signals?.length) {
+            this.state.backpressure_signals[workstation_id] = payload.backpressure_signals;
+          } else {
+            delete this.state.backpressure_signals[workstation_id];
+          }
+          break;
+        case 'log':
+          if (!this.state.workstations[workstation_id].output) {
+            this.state.workstations[workstation_id].output = [];
+          }
+          this.state.workstations[workstation_id].output.push(payload);
+          // Keep last 500 lines
+          if (this.state.workstations[workstation_id].output.length > 500) {
+            this.state.workstations[workstation_id].output.shift();
+          }
+          break;
+        case 'iteration':
+          this.state.workstations[workstation_id].iteration_summary = payload;
+          break;
+        case 'takt':
+          this.state.workstations[workstation_id].takt = payload;
+          break;
+        case 'shipping':
+          // Handle shipping if needed
+          break;
+      }
+      return;
+    }
 
     switch (type) {
       case 'snapshot':
@@ -63,14 +101,6 @@ export class MillStore {
         break;
       case 'GitStateChanged':
         this.state.git = data.git;
-        break;
-      case 'WorkstationStateChanged':
-        this.state.workstations[data.ticket_id] = data.workstation;
-        if (data.workstation.backpressure_signals?.length) {
-          this.state.backpressure_signals[data.ticket_id] = data.workstation.backpressure_signals;
-        } else {
-          delete this.state.backpressure_signals[data.ticket_id];
-        }
         break;
     }
   }

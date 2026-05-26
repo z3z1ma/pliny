@@ -71,6 +71,25 @@ export interface IterationSummary {
   storage_path: string;
 }
 
+export interface IterationRecord {
+  iteration: number;
+  started_at: string;
+  ended_at: string;
+  duration_seconds: number;
+  exit_code: number | null;
+  commit_sha: string | null;
+  files_changed: string[];
+  lines_added: number;
+  lines_removed: number;
+  diff_stat: string;
+  previous_commit_sha: string | null;
+}
+
+export interface TaktState {
+  iteration: number;
+  duration_seconds: number;
+}
+
 export interface WorkstationState {
   status: WorkstationStatus;
   worktree_path: string | null;
@@ -80,6 +99,7 @@ export interface WorkstationState {
   iteration_summary: IterationSummary | null;
   backpressure_signals: BackpressureSignal[];
   andon: AndonState;
+  takt?: TaktState;
 }
 
 export interface HarnessConfig {

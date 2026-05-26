@@ -7,9 +7,18 @@
   import AndonAlert from './lib/AndonAlert.svelte';
   import IterationSummary from './lib/IterationSummary.svelte';
   import ThemeToggle from './lib/ThemeToggle.svelte';
+  import Playback from './lib/Playback.svelte';
+  import WorkstationGrid from './lib/WorkstationGrid.svelte';
+
+  let playbackWorkstationId = $state<string | null>(null);
 
   onMount(() => {
     store.connect();
+    
+    // Listen for custom event from WorkstationControls
+    window.addEventListener('open-playback', (e: any) => {
+      playbackWorkstationId = e.detail.workstationId;
+    });
   });
 
   $effect(() => {
@@ -48,8 +57,11 @@
     <div class="flex-1 overflow-hidden p-6">
       <div class="flex h-full flex-col gap-4">
         <AndonAlert records={store.state.records} workstations={store.state.workstations} />
-        <div class="min-h-0 flex-1 overflow-hidden">
+        <div class="h-72 shrink-0 overflow-hidden">
           <Pipeline records={store.state.records} workstations={store.state.workstations} />
+        </div>
+        <div class="min-h-0 flex-1 overflow-hidden">
+          <WorkstationGrid workstations={store.state.workstations} records={store.state.records} />
         </div>
       </div>
     </div>
@@ -62,4 +74,8 @@
       <GitPanel git={store.state.git} />
     </aside>
   </div>
+
+  {#if playbackWorkstationId}
+    <Playback workstationId={playbackWorkstationId} onClose={() => playbackWorkstationId = null} />
+  {/if}
 </main>
