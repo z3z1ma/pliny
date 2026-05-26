@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-design-room-backend
 Type: Ticket
-Status: open
+Status: review
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: high - harness subprocess management with streaming is architecturally novel for this codebase
@@ -204,19 +204,25 @@ Minimal templates per surface type:
 
 ## Current State
 
-Ready to start. The existing codebase has the patterns: `api/workstation.py` shows
-how to add routers, `api/ws.py` shows WebSocket broadcasting, the file watcher
-already emits RecordChanged events.
+Implementation completed in the current session and is ready for review/audit.
+The backend now has Design Room record CRUD endpoints, chat session persistence,
+prompt construction, harness subprocess streaming, WebSocket chat events, route
+registration, and tests.
 
-First Ralph run should:
-1. Create `loom-mill/src/loom_mill/chat/` package (session, prompt, harness)
-2. Create `loom-mill/src/loom_mill/api/design.py` with all endpoints
-3. Register in app.py
-4. Write tests
-5. Ensure `.mill/chat-sessions/` directory is created on first use
+Evidence: `evidence:20260526-mill-design-room-backend-tests` records the full
+`loom-mill/tests/` pass and scoped whitespace check. Separate audit is still the
+next honest step before closure because the ticket risk is high and the harness
+subprocess path is architecturally novel for this codebase.
 
 ## Journal
 
 - 2026-05-26: Created ticket with Status `open`. Backend-first to unblock all
   frontend Design Room work. Chat architecture: Mill-owned history, per-turn
   prompt construction, configurable harness command.
+- 2026-05-26: Status set to `active`; implementation running in current session
+  as a bounded Ralph slice over backend API, chat package, route registration,
+  and tests.
+- 2026-05-26: Implemented backend endpoints, chat package, WebSocket chat event
+  support, route registration, and tests. Full test suite passed: `57 passed in
+  29.64s`. Scoped `git diff --check` passed for backend/ticket files. Status set
+  to `review` pending audit.

@@ -93,6 +93,12 @@ class ShippingEvent:
 
 
 @dataclass(frozen=True)
+class ChatEvent:
+    event: Literal["chat_stream", "chat_complete", "chat_error"]
+    data: dict
+
+
+@dataclass(frozen=True)
 class WorkstationRemoved:
     workstation_id: str
 
@@ -109,4 +115,5 @@ MillEvent = (
     | WorkstationTakt
     | WorkstationAndon
     | ShippingEvent
+    | ChatEvent
 )
