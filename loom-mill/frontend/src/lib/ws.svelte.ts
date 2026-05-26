@@ -124,3 +124,4 @@ export class MillStore {
 }
 
 export const store = new MillStore();
+if (typeof window !== "undefined") (window as any).store = store;

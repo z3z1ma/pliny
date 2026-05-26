@@ -79,6 +79,17 @@
     if (count === 0) return '—';
     return formatDuration(total / count);
   });
+
+  let selectedRecord = $derived(() => {
+    if (!selectedWorkstationId) return undefined;
+    // If it's a workstation ID, find the record
+    const ws = store.state.workstations[selectedWorkstationId];
+    if (ws) {
+      return store.state.records.find(r => r.metadata.id === `ticket:${ws.ticket_id}`);
+    }
+    // Otherwise it might be a ticket ID directly
+    return store.state.records.find(r => r.metadata.id === `ticket:${selectedWorkstationId}` || r.metadata.id === selectedWorkstationId);
+  });
 </script>
 
 <main class="flex h-screen flex-col bg-bg-primary text-text-primary overflow-hidden font-sans">
@@ -130,6 +141,7 @@
       <DetailPanel 
         selectedId={selectedWorkstationId}
         workstation={selectedWorkstationId ? store.state.workstations[selectedWorkstationId] : undefined}
+        record={selectedRecord()}
       />
     </div>
   </div>

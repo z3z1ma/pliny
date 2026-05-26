@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { WorkstationState } from './types';
+  import type { WorkstationState, LoomRecord } from './types';
   import LogViewer from './LogViewer.svelte';
   import IterationsTab from './IterationsTab.svelte';
   import Playback from './Playback.svelte';
@@ -7,10 +7,12 @@
 
   let { 
     selectedId, 
-    workstation 
+    workstation,
+    record
   }: { 
     selectedId: string | null; 
     workstation: WorkstationState | undefined;
+    record?: LoomRecord | undefined;
   } = $props();
 
   let activeTab = $state<'logs' | 'iterations' | 'playback'>('logs');
@@ -67,18 +69,48 @@
       default: return 'Idle workstation.';
     }
   });
+
+  let recordTitle = $derived(() => {
+    if (!record) return '';
+    if (record.headings.length > 0) {
+      return record.headings[0][1];
+    }
+    return record.metadata.id || record.path;
+  });
 </script>
 
 <div class="flex flex-col h-full bg-bg-primary">
-  {#if !selectedId || !workstation}
+  {#if !selectedId}
     <!-- Empty state -->
     <div class="flex flex-1 items-center justify-center">
       <div class="flex flex-col items-center gap-2 text-text-tertiary">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="opacity-50"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-        <p class="text-[13px]">Select a workstation from the left panel to view details.</p>
+        <p class="text-[13px]">Select a ticket or workstation from the left panel to view details.</p>
       </div>
     </div>
-  {:else}
+  {:else if !workstation && record}
+    <!-- Non-workstation ticket state -->
+    <div class="flex flex-col h-full">
+      <div class="flex items-center gap-0 border-b border-border-default px-4 py-3 shrink-0 bg-bg-surface">
+        <h2 class="text-[13px] font-medium text-text-primary">{recordTitle()}</h2>
+        <div class="ml-auto flex items-center gap-2">
+          <span class="rounded-full px-2 py-0.5 text-[10px] font-medium bg-bg-surface-active text-text-secondary border border-border-subtle">
+            {record.metadata.status || 'unknown'}
+          </span>
+        </div>
+      </div>
+      <div class="flex flex-1 items-center justify-center p-8 text-center">
+        <div class="flex flex-col items-center gap-3 max-w-md">
+          <div class="w-12 h-12 rounded-full bg-bg-surface-active flex items-center justify-center text-text-tertiary mb-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <p class="text-[13px] text-text-secondary font-medium">This ticket is not currently executing in Mill</p>
+          <p class="text-[12px] text-text-tertiary">Ticket ID: {record.metadata.id || 'unknown'}</p>
+          <p class="text-[12px] text-text-tertiary mt-2">Full record rendering is future work.</p>
+        </div>
+      </div>
+    </div>
+  {:else if workstation}
     <!-- Tab bar -->
     <div class="flex items-center gap-0 border-b border-border-default px-4 shrink-0 bg-bg-surface">
       {#each tabs as tab}

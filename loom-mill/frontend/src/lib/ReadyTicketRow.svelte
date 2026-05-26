@@ -3,10 +3,12 @@
 
   let {
     record,
-    atWipLimit = false
+    atWipLimit = false,
+    onSelect = () => {}
   }: {
     record: LoomRecord;
     atWipLimit?: boolean;
+    onSelect?: () => void;
   } = $props();
 
   let starting = $state(false);
@@ -46,7 +48,10 @@
   }
 </script>
 
-<div class="group flex items-center gap-2 px-3 py-2 hover:bg-bg-surface-elevated transition-colors duration-150">
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div class="group flex items-center gap-2 px-3 py-2 hover:bg-bg-surface-elevated transition-colors duration-150 cursor-pointer"
+  onclick={onSelect}>
   <span class="w-2 h-2 rotate-45 border border-text-tertiary shrink-0"></span>
   <span class="flex-1 truncate text-[12px] text-text-secondary">{title()}</span>
   <button

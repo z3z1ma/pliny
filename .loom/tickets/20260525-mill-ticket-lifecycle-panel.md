@@ -2,9 +2,9 @@
 
 ID: ticket:20260525-mill-ticket-lifecycle-panel
 Type: Ticket
-Status: open
+Status: review
 Created: 2026-05-25
-Updated: 2026-05-25
+Updated: 2026-05-26
 Risk: medium - redesigns the left panel from workstation-centric to ticket-centric; touches WorkstationList, StatusBar, and filtering logic.
 Priority: high - the left panel currently shows nothing useful and has a filtering bug.
 
@@ -251,7 +251,7 @@ No tickets are currently in progress, ready, or under review.
 
 ## Current State
 
-Ready to start. The filtering bug and the design gap are both well-understood.
+- 2026-05-26: Implemented the full ticket lifecycle panel. Fixed the filtering bug by normalizing ticket IDs. Added `TicketRow.svelte` for non-workstation tickets. Updated `DetailPanel.svelte` to show a minimal view for non-workstation tickets. Made `StatusBar.svelte` pills clickable to scroll to sections. Verified with Playwright screenshots. Moving to `review` status.
 
 ## Journal
 
