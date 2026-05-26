@@ -2,7 +2,7 @@
 
 ID: plan:20260525-production-factory-floor
 Type: Plan
-Status: active
+Status: completed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: medium - significant backend concurrency work (N workstations, worktree management, subprocess multiplexing) plus LLM integration for SPC. Mitigated by: MVP architecture is sound, each unit is independently testable, and the work is additive to existing code.
@@ -177,8 +177,17 @@ What becomes true: The operator sees everything. N workstations live, diffs per 
 
 ## Current State
 
-Plan created. Specs are written and active. No child tickets created yet. Ready for ticket creation and execution.
+All 9 execution units completed and shipped. 46 backend tests passing. Frontend builds successfully (94.82 kB JS, 25.58 kB CSS). All 3 milestones satisfied.
 
 ## Journal
 
+Append material updates at the bottom. Record plan creation, child ticket creation,
+strategy changes, milestone movement, blockers, review, completion, and
+cancellation.
+
 - 2026-05-25: Created plan with 9 execution units across 3 milestones. Strategy: foundation → observability → intelligence → integration. Specs: `spec:mill-factory-floor`, `spec:mill-scheduling-agent`, `spec:mill-process-control`, `spec:mill-shipping-dock` all active.
+- 2026-05-25: Unit 1 (multi-workstation) completed. 23 tests passing.
+- 2026-05-25: Units 2, 3, 5, 6 completed in parallel. Log streaming, iteration history, scheduling agent, shipping dock all shipped. 42 tests passing.
+- 2026-05-25: Units 7, 8 (frontend workstations + diffs/playback) completed in parallel.
+- 2026-05-25: Unit 4 (SPC + jidoka) completed. 46 tests passing.
+- 2026-05-25: Unit 9 (frontend pipeline + andon + metrics + changelog) completed. All milestones satisfied. Plan completed.
