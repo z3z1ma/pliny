@@ -128,6 +128,7 @@
         documentPath={selectedDocumentId} 
         onSave={handleSaveDocument} 
         onAttachContext={handleAttachContext}
+        onNavigate={(id) => selectedDocumentId = id}
       />
 
       {#if !showChat}

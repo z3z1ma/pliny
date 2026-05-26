@@ -25,6 +25,18 @@ export const millTheme = EditorView.theme({
   },
   '&.cm-focused .cm-cursor': { borderLeftColor: 'var(--color-accent-primary)' },
   '.cm-line': { padding: '0 16px' },
+  '.cm-loom-ref': {
+    color: 'var(--color-accent-primary)',
+    textDecoration: 'underline',
+    textDecorationStyle: 'dotted',
+    cursor: 'pointer',
+    borderRadius: '2px',
+    padding: '0 1px',
+  },
+  '.cm-loom-ref:hover': {
+    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+    textDecorationStyle: 'solid',
+  },
 });
 
 export const millHighlighting = syntaxHighlighting(HighlightStyle.define([

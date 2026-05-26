@@ -6,13 +6,14 @@
   import { defaultKeymap, indentWithTab, history, historyKeymap } from '@codemirror/commands';
   import { searchKeymap, highlightSelectionMatches } from '@codemirror/search';
   import { millTheme, millHighlighting } from './editor-theme';
+  import { recordLinks, recordLinksClick, loomAutocompletion, recordHoverPreview } from './editor-extensions';
   import { apiUrl } from '../api';
   import { store } from '../ws.svelte';
   import SelectionAction from './SelectionAction.svelte';
   
-  let { documentPath, onSave, onAttachContext }: { documentPath: string | null; onSave: (content: string) => void; onAttachContext?: (context: any) => void } = $props();
+  let { documentPath, onSave, onAttachContext, onNavigate }: { documentPath: string | null; onSave: (content: string) => void; onAttachContext?: (context: any) => void; onNavigate?: (id: string) => void } = $props();
   
-  let view: EditorView | null = null;
+  let view = $state<EditorView | null>(null);
   let modified = $state(false);
   let lastSavedContent = '';
   let loading = $state(false);
@@ -21,6 +22,32 @@
 
   let selectionAction = $state<{ top: number; left: number; text: string; lineRange: [number, number] } | null>(null);
   let selectionTimeout: ReturnType<typeof setTimeout>;
+
+  let headings = $state<{ level: number; text: string; line: number }[]>([]);
+
+  let documentTitle = $derived(headings.length > 0 ? headings[0].text : null);
+
+  let showHeadings = $state(false);
+
+  function updateHeadings(doc: string) {
+    const lines = doc.split('\n');
+    headings = lines
+      .map((line, i) => {
+        const match = line.match(/^(#{1,3})\s+(.+)/);
+        if (match) return { level: match[1].length, text: match[2], line: i + 1 };
+        return null;
+      })
+      .filter(Boolean) as { level: number; text: string; line: number }[];
+  }
+
+  function jumpToLine(lineNum: number) {
+    if (view) {
+      const line = view.state.doc.line(lineNum);
+      view.dispatch({ selection: { anchor: line.from }, scrollIntoView: true });
+      view.focus();
+    }
+    showHeadings = false;
+  }
 
   // Fetch content when documentPath changes
   $effect(() => {
@@ -66,6 +93,7 @@
   function setContent(content: string) {
     if (view) {
       view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: content } });
+      updateHeadings(content);
     }
   }
 
@@ -121,6 +149,9 @@
           markdown(),
           millTheme,
           millHighlighting,
+          ...(onNavigate ? [recordLinks(onNavigate), recordLinksClick(onNavigate)] : []),
+          loomAutocompletion(() => store.state.records),
+          recordHoverPreview(() => store.state.records),
           history(),
           EditorView.lineWrapping,
           keymap.of([...defaultKeymap, ...historyKeymap, ...searchKeymap, indentWithTab]),
@@ -128,6 +159,7 @@
           EditorView.updateListener.of((update) => {
             if (update.docChanged) {
               const newContent = view!.state.doc.toString();
+              updateHeadings(newContent);
               if (newContent !== lastSavedContent) {
                 modified = true;
               } else {
@@ -184,9 +216,29 @@
 
 <div class="flex flex-col h-full">
   <!-- Editor header -->
-  <div class="flex items-center h-8 px-4 border-b border-border-default bg-bg-surface text-[11px] shrink-0">
+  <div class="flex items-center h-8 px-4 border-b border-border-default bg-bg-surface text-[11px] shrink-0 relative">
     {#if documentPath}
-      <span class="text-text-secondary truncate">{documentPath}</span>
+      <button onclick={() => showHeadings = !showHeadings} class="text-[10px] text-text-tertiary hover:text-text-secondary mr-2">
+        §
+      </button>
+      
+      {#if showHeadings}
+        <div class="absolute top-8 left-0 z-50 bg-bg-surface border border-border-default rounded shadow-lg max-h-64 overflow-y-auto w-64">
+          {#each headings as h}
+            <button onclick={() => jumpToLine(h.line)} class="block w-full text-left px-3 py-1.5 text-[11px] hover:bg-bg-surface-active"
+              style="padding-left: {(h.level - 2) * 12 + 12}px">
+              {h.text}
+            </button>
+          {/each}
+        </div>
+      {/if}
+
+      <div class="flex items-center gap-1 text-[11px]">
+        <span class="text-text-tertiary capitalize">{documentPath.split('/')[0]}</span>
+        <span class="text-text-tertiary">/</span>
+        <span class="text-text-secondary font-medium">{documentTitle || documentPath.split('/')[1] || documentPath}</span>
+      </div>
+
       {#if modified}
         <span class="ml-2 w-2 h-2 rounded-full bg-accent-primary" title="Unsaved changes"></span>
       {/if}
