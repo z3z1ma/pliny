@@ -1,0 +1,147 @@
+<script lang="ts">
+  import { onMount, onDestroy } from 'svelte';
+  import { EditorView, keymap, lineNumbers, highlightActiveLine, drawSelection } from '@codemirror/view';
+  import { EditorState } from '@codemirror/state';
+  import { markdown } from '@codemirror/lang-markdown';
+  import { defaultKeymap, indentWithTab } from '@codemirror/commands';
+  import { searchKeymap, highlightSelectionMatches } from '@codemirror/search';
+  import { millTheme, millHighlighting } from './editor-theme';
+  import { apiUrl } from '../api';
+  import { store } from '../ws.svelte';
+  
+  let { documentPath, onSave }: { documentPath: string | null; onSave: (content: string) => void } = $props();
+  
+  let view: EditorView | null = null;
+  let modified = $state(false);
+  let lastSavedContent = '';
+  let loading = $state(false);
+  let conflict = $state(false);
+
+  // Fetch content when documentPath changes
+  $effect(() => {
+    if (documentPath) {
+      fetchContent(documentPath);
+    } else {
+      if (view) view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: '' } });
+      modified = false;
+    }
+  });
+
+  // Watch for external file changes
+  $effect(() => {
+    // When store records change and matches our document, check for external update
+    const record = store.state.records.find(r => r.metadata.id === documentPath || r.path === documentPath);
+    if (record && !modified && view) {
+      // Re-fetch to see if content changed externally
+      // (The RecordChanged event means the file was modified)
+      // We only re-fetch if we don't have local modifications to avoid overwriting user's work
+      fetchContent(documentPath!);
+    } else if (record && modified && view) {
+      // If we have local modifications and the file changed externally, it's a conflict
+      conflict = true;
+    }
+  });
+
+  async function fetchContent(path: string) {
+    loading = true;
+    try {
+      const res = await fetch(apiUrl(`/records/${encodeURIComponent(path)}/content`));
+      if (res.ok) {
+        const data = await res.json();
+        setContent(data.content);
+        lastSavedContent = data.content;
+        modified = false;
+        conflict = false;
+      }
+    } finally {
+      loading = false;
+    }
+  }
+
+  function setContent(content: string) {
+    if (view) {
+      view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: content } });
+    }
+  }
+
+  function handleSave() {
+    if (view && modified) {
+      const content = view.state.doc.toString();
+      onSave(content);
+      lastSavedContent = content;
+      modified = false;
+      conflict = false;
+    }
+  }
+
+  function initEditor(node: HTMLDivElement) {
+    const saveKeymap = keymap.of([{ key: 'Mod-s', run: () => { handleSave(); return true; } }]);
+    
+    view = new EditorView({
+      state: EditorState.create({
+        doc: '',
+        extensions: [
+          lineNumbers(),
+          highlightActiveLine(),
+          drawSelection(),
+          highlightSelectionMatches(),
+          markdown(),
+          millTheme,
+          millHighlighting,
+          keymap.of([...defaultKeymap, ...searchKeymap, indentWithTab]),
+          saveKeymap,
+          EditorView.updateListener.of((update) => {
+            if (update.docChanged) {
+              const newContent = view!.state.doc.toString();
+              if (newContent !== lastSavedContent) {
+                modified = true;
+              } else {
+                modified = false;
+              }
+            }
+          }),
+        ],
+      }),
+      parent: node,
+    });
+
+    if (documentPath) {
+      fetchContent(documentPath);
+    }
+
+    return {
+      destroy() {
+        view?.destroy();
+        view = null;
+      }
+    };
+  }
+
+  onDestroy(() => { view?.destroy(); });
+</script>
+
+<div class="flex flex-col h-full">
+  <!-- Editor header -->
+  <div class="flex items-center h-8 px-4 border-b border-border-default bg-bg-surface text-[11px] shrink-0">
+    {#if documentPath}
+      <span class="text-text-secondary truncate">{documentPath}</span>
+      {#if modified}
+        <span class="ml-2 w-2 h-2 rounded-full bg-accent-primary" title="Unsaved changes"></span>
+      {/if}
+      {#if conflict}
+        <span class="ml-2 text-status-warning-text">File changed externally</span>
+        <button class="ml-1 text-[10px] underline" onclick={() => fetchContent(documentPath!)}>Reload</button>
+      {/if}
+    {:else}
+      <span class="text-text-tertiary">No document open</span>
+    {/if}
+  </div>
+  
+  <!-- Editor body -->
+  <div class="flex-1 min-h-0 overflow-auto {documentPath ? 'block' : 'hidden'}" use:initEditor></div>
+  {#if !documentPath}
+    <div class="flex-1 flex items-center justify-center text-[12px] text-text-tertiary">
+      Select a record from the graph to open it here.
+    </div>
+  {/if}
+</div>

@@ -10,7 +10,7 @@ async def get_record_content(request):
     store: MillStateStore = request.app.state.store
     snapshot = await store.snapshot()
 
-    record = next((item for item in snapshot.records if item.metadata.id == record_id), None)
+    record = next((item for item in snapshot.records if item.metadata.id == record_id or item.path == record_id), None)
     if record is None:
         return JSONResponse({"detail": "Record not found"}, status_code=404)
 
