@@ -104,25 +104,37 @@
     document.title = `Loom Mill - ${store.connected ? 'Connected' : 'Disconnected'}`;
   });
 
+  function resolveTicketTitle(ticketId: string | undefined, workstationId: string): string {
+    if (!ticketId) return workstationId;
+    const record = store.state.records.find(r => 
+      r.metadata.id === `ticket:${ticketId}` || r.path?.includes(ticketId)
+    );
+    if (record && record.headings && record.headings.length > 0) {
+      return record.headings[0][1];
+    }
+    return ticketId;
+  }
+
   $effect(() => {
     if (!toastRef) return;
     
     for (const [id, ws] of Object.entries(store.state.workstations)) {
       const prev = prevWorkstations[id];
+      const title = resolveTicketTitle(ws.ticket_id, id);
       if (!prev) {
         if (ws.status === 'running') {
-          const msg = `Started: ${ws.ticket_slug}`;
+          const msg = `Started: ${title}`;
           toastRef.show(`▶ ${msg}`, 'info');
           addNotification('started', msg);
         }
       } else if (prev.status !== ws.status) {
         if (ws.status === 'completed') {
           const duration = ws.iteration_summary?.duration_seconds ? ` (${formatDuration(ws.iteration_summary.duration_seconds)})` : '';
-          const msg = `Completed: ${ws.ticket_slug}${duration}`;
+          const msg = `Completed: ${title}${duration}`;
           toastRef.show(`✓ ${msg}`, 'info');
           addNotification('completed', msg);
         } else if (ws.status === 'stopped') {
-          const msg = `Stopped: ${ws.ticket_slug}`;
+          const msg = `Stopped: ${title}`;
           toastRef.show(`⛔ ${msg}`, 'error');
           addNotification('stopped', msg);
         }
@@ -133,7 +145,8 @@
       const prevCount = prevWorkstations[id]?.andonCount || 0;
       if (events.length > prevCount) {
         const latest = events[events.length - 1];
-        const msg = `Alert on ${store.state.workstations[id]?.ticket_slug || id}: ${latest.reasoning}`;
+        const wsTitle = resolveTicketTitle(store.state.workstations[id]?.ticket_id, id);
+        const msg = `Alert on ${wsTitle}: ${latest.reasoning}`;
         toastRef.show(`⚠ ${msg}`, 'warning');
         addNotification('andon', msg);
       }
@@ -150,10 +163,11 @@
     if (store.state.shipping_events.length > prevShippingCount) {
       const newEvents = store.state.shipping_events.slice(0, store.state.shipping_events.length - prevShippingCount);
       for (const event of newEvents) {
+        const title = resolveTicketTitle(event.ticket_id, event.ticket_id || 'unknown');
         if (event.action === 'merged') {
-          addNotification('shipping_merged', `Merged: ${event.ticket_slug}`);
+          addNotification('shipping_merged', `Merged: ${title}`);
         } else if (event.action === 'conflict') {
-          addNotification('shipping_conflict', `Conflict: ${event.ticket_slug}`);
+          addNotification('shipping_conflict', `Conflict: ${title}`);
         }
       }
       prevShippingCount = store.state.shipping_events.length;
