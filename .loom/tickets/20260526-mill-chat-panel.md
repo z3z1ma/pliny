@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-chat-panel
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: high - harness subprocess streaming is the most architecturally complex piece

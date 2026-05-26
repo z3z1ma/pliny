@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-document-editor
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - CodeMirror 6 integration requires new npm dependency and careful state management for live updates

@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-voice-polish
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: low - Web Speech API is browser-native; polish is incremental

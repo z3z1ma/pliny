@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-design-room-backend
 Type: Ticket
-Status: review
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: high - harness subprocess management with streaming is architecturally novel for this codebase
