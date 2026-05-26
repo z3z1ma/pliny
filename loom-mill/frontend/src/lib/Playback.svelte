@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import type { IterationRecord } from './types';
   import DiffViewer from './DiffViewer.svelte';
-  import { store } from './ws.svelte';
+  import { store } from './ws.svelte.ts';
   import { formatDuration } from './utils';
   import { apiUrl } from './api';
 

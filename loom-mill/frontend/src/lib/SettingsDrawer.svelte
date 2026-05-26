@@ -4,7 +4,7 @@
   import Changelog from './Changelog.svelte';
   import AndonBoard from './AndonBoard.svelte';
   import GitPanel from './GitPanel.svelte';
-  import { store } from './ws.svelte';
+  import { store } from './ws.svelte.ts';
 
   let { open, onClose } = $props<{ open: boolean; onClose: () => void }>();
 

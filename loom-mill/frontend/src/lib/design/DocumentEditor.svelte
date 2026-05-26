@@ -8,7 +8,7 @@
   import { millTheme, millHighlighting } from './editor-theme';
   import { recordLinks, recordLinksClick, loomAutocompletion, recordHoverPreview } from './editor-extensions';
   import { apiUrl } from '../api';
-  import { store } from '../ws.svelte';
+  import { store } from '../ws.svelte.ts';
   import SelectionAction from './SelectionAction.svelte';
   
   let { documentPath, onSave, onAttachContext, onNavigate }: { documentPath: string | null; onSave: (content: string) => void; onAttachContext?: (context: any) => void; onNavigate?: (id: string) => void } = $props();

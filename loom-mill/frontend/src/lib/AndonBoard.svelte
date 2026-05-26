@@ -2,7 +2,7 @@
   import type { LoomRecord, WorkstationState, AndonEventPayload } from './types';
   import { formatRelativeTime } from './utils';
   import { apiUrl } from './api';
-  import { store } from './ws.svelte';
+  import { store } from './ws.svelte.ts';
 
   let { records, workstations, andonEvents }: { 
     records: LoomRecord[]; 

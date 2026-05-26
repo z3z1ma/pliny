@@ -162,25 +162,32 @@ export class MillStore {
         this.state.git = data.git;
         break;
       case 'chat_stream':
-        console.log('chat_stream', data.session_id, this.chatSession.id);
         if (data.session_id === this.chatSession.id) {
-          this.chatSession.streaming = true;
-          this.chatSession.streamingContent += data.delta;
+          this.chatSession = {
+            ...this.chatSession,
+            streaming: true,
+            streamingContent: this.chatSession.streamingContent + data.delta
+          };
         }
         break;
       case 'chat_complete':
-        console.log('chat_complete', data.session_id, this.chatSession.id);
         if (data.session_id === this.chatSession.id) {
-          this.chatSession.streaming = false;
-          this.chatSession.messages.push(data.message);
-          this.chatSession.streamingContent = '';
+          this.chatSession = {
+            ...this.chatSession,
+            streaming: false,
+            messages: [...this.chatSession.messages, data.message],
+            streamingContent: ''
+          };
         }
         break;
       case 'chat_error':
         if (data.session_id === this.chatSession.id) {
-          this.chatSession.streaming = false;
-          this.chatSession.messages.push({ role: 'system', content: `Error: ${data.error}`, timestamp: new Date().toISOString() });
-          this.chatSession.streamingContent = '';
+          this.chatSession = {
+            ...this.chatSession,
+            streaming: false,
+            messages: [...this.chatSession.messages, { role: 'system', content: `Error: ${data.error}`, timestamp: new Date().toISOString() }],
+            streamingContent: ''
+          };
         }
         break;
     }

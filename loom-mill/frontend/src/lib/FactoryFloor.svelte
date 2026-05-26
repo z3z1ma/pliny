@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { store } from './ws.svelte';
+  import { store } from './ws.svelte.ts';
   import StatusBar from './StatusBar.svelte';
   import ConnectionBanner from './ConnectionBanner.svelte';
   import WorkstationList from './WorkstationList.svelte';

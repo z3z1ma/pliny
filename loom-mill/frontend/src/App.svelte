@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { store } from './lib/ws.svelte';
+  import { store } from './lib/ws.svelte.ts';
   import ThemeToggle from './lib/ThemeToggle.svelte';
   import SettingsDrawer from './lib/SettingsDrawer.svelte';
   import Toast from './lib/Toast.svelte';

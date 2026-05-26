@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { store } from './ws.svelte';
+  import { store } from './ws.svelte.ts';
 </script>
 
 {#if !store.connected}

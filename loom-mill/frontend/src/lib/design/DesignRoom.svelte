@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { store } from '../ws.svelte';
+  import { store } from '../ws.svelte.ts';
   import { apiUrl } from '../api';
   import { fly } from 'svelte/transition';
   import GraphSidebar from './GraphSidebar.svelte';
