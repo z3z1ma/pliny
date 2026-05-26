@@ -4,6 +4,8 @@
   import WorkstationRow from './WorkstationRow.svelte';
   import TicketRow from './TicketRow.svelte';
   import { apiUrl } from './api';
+  import { fly, fade } from 'svelte/transition';
+  import { flip } from 'svelte/animate';
 
   const WIP_LIMIT = 3;
 
@@ -21,6 +23,7 @@
 
   let readyExpanded = $state(true);
   let completedExpanded = $state(false);
+  let searchQuery = $state('');
 
   let tickets = $derived(records.filter(r => r.metadata.type?.toLowerCase() === 'ticket' || r.path.includes('tickets/')));
 
@@ -30,12 +33,33 @@
     return Object.values(workstations).some(ws => (ws.ticket_id || '').replace(/^ticket:/, '') === normalizedId);
   }
 
+  function matchesSearch(record?: LoomRecord, wsState?: WorkstationState): boolean {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    
+    if (record) {
+      const title = (record.headings[0]?.[1] || '').toLowerCase();
+      const id = (record.metadata.id || record.path).toLowerCase();
+      const status = (record.metadata.status || '').toLowerCase();
+      if (title.includes(q) || id.includes(q) || status.includes(q)) return true;
+    }
+    
+    if (wsState) {
+      const slug = (wsState.ticket_slug || '').toLowerCase();
+      const id = (wsState.ticket_id || '').toLowerCase();
+      const status = (wsState.status || '').toLowerCase();
+      if (slug.includes(q) || id.includes(q) || status.includes(q)) return true;
+    }
+    
+    return false;
+  }
+
   let readyTickets = $derived(() => {
     const readyStatuses = new Set(['open', 'shaped', 'todo']);
     return tickets.filter(r => {
       const status = (r.metadata.status || '').toLowerCase();
       const ticketId = (r.metadata.id || r.path.split('/').pop()?.replace(/\.md$/, '') || '');
-      return readyStatuses.has(status) && !hasWorkstation(ticketId);
+      return readyStatuses.has(status) && !hasWorkstation(ticketId) && matchesSearch(r);
     }).sort((a, b) => {
       const titleA = a.headings[0]?.[1] || a.metadata.id || a.path;
       const titleB = b.headings[0]?.[1] || b.metadata.id || b.path;
@@ -47,7 +71,7 @@
     return tickets.filter(r => {
       const status = (r.metadata.status || '').toLowerCase();
       const ticketId = (r.metadata.id || r.path.split('/').pop()?.replace(/\.md$/, '') || '');
-      return (status === 'active' || status === 'in progress') && !hasWorkstation(ticketId);
+      return (status === 'active' || status === 'in progress') && !hasWorkstation(ticketId) && matchesSearch(r);
     });
   });
 
@@ -56,18 +80,20 @@
     for (const [id, state] of Object.entries(workstations)) {
       if (state.status === 'running' || state.status === 'paused' || state.status === 'idle' || state.status === 'stopped' || state.status === 'conflict') {
         const record = records.find(r => r.metadata.id === `ticket:${state.ticket_id}`);
-        active.push({ id, record, state });
+        if (matchesSearch(record, state)) {
+          active.push({ id, record, state });
+        }
       }
     }
     return active;
   });
 
   let reviewTickets = $derived(() => {
-    return tickets.filter(r => (r.metadata.status || '').toLowerCase() === 'review' || (r.metadata.status || '').toLowerCase() === 'evidence');
+    return tickets.filter(r => ((r.metadata.status || '').toLowerCase() === 'review' || (r.metadata.status || '').toLowerCase() === 'evidence') && matchesSearch(r));
   });
 
   let blockedTickets = $derived(() => {
-    return tickets.filter(r => (r.metadata.status || '').toLowerCase() === 'blocked');
+    return tickets.filter(r => (r.metadata.status || '').toLowerCase() === 'blocked' && matchesSearch(r));
   });
 
   let completedWorkstations = $derived(() => {
@@ -75,7 +101,9 @@
     for (const [id, state] of Object.entries(workstations)) {
       if (state.status === 'completed' || state.status === 'finished') {
         const record = records.find(r => r.metadata.id === `ticket:${state.ticket_id}`);
-        completed.push({ id, record, state });
+        if (matchesSearch(record, state)) {
+          completed.push({ id, record, state });
+        }
       }
     }
     return completed;
@@ -86,7 +114,7 @@
       .filter(r => {
         const status = (r.metadata.status || '').toLowerCase();
         const ticketId = (r.metadata.id || r.path.split('/').pop()?.replace(/\.md$/, '') || '');
-        return (status === 'closed' || status === 'done' || status === 'cancelled') && !hasWorkstation(ticketId);
+        return (status === 'closed' || status === 'done' || status === 'cancelled') && !hasWorkstation(ticketId) && matchesSearch(r);
       })
       .sort((a, b) => (b.metadata.updated || '').localeCompare(a.metadata.updated || ''))
       .slice(0, 5);
@@ -102,6 +130,67 @@
     blockedTickets().length
   );
 
+  let allListItems = $derived(() => {
+    const items: { id: string, type: string, record?: LoomRecord, ws?: WorkstationState }[] = [];
+    if (readyExpanded) {
+      for (const r of readyTickets()) items.push({ id: r.metadata.id || r.path, type: 'ready', record: r });
+    }
+    for (const r of externallyExecuting()) items.push({ id: r.metadata.id || r.path, type: 'external', record: r });
+    for (const ws of activeWorkstations()) items.push({ id: ws.id, type: 'active', record: ws.record, ws: ws.state });
+    for (const r of reviewTickets()) items.push({ id: r.metadata.id || r.path, type: 'review', record: r });
+    for (const r of blockedTickets()) items.push({ id: r.metadata.id || r.path, type: 'blocked', record: r });
+    if (completedExpanded) {
+      for (const ws of completedWorkstations()) items.push({ id: ws.id, type: 'completed', record: ws.record, ws: ws.state });
+      for (const r of recentlyClosed()) items.push({ id: r.metadata.id || r.path, type: 'closed', record: r });
+    }
+    return items;
+  });
+
+  let focusedIndex = $state(-1);
+
+  function handleKeydown(e: KeyboardEvent) {
+    // Don't interfere if user is typing in an input
+    if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+    const items = allListItems();
+    if (items.length === 0) return;
+
+    if (e.key === 'j') {
+      e.preventDefault();
+      focusedIndex = focusedIndex < items.length - 1 ? focusedIndex + 1 : focusedIndex;
+      scrollToFocused();
+    } else if (e.key === 'k') {
+      e.preventDefault();
+      focusedIndex = focusedIndex > 0 ? focusedIndex - 1 : 0;
+      scrollToFocused();
+    } else if (e.key === 'Enter') {
+      if (focusedIndex >= 0 && focusedIndex < items.length) {
+        e.preventDefault();
+        onSelect(items[focusedIndex].id);
+      }
+    } else if (e.key === 'Escape') {
+      e.preventDefault();
+      onSelect(''); // Deselect
+    }
+  }
+
+  function scrollToFocused() {
+    setTimeout(() => {
+      const el = document.getElementById(`list-item-${focusedIndex}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
+  }
+
+  // Reset focus when list changes significantly
+  $effect(() => {
+    allListItems();
+    if (focusedIndex >= allListItems().length) {
+      focusedIndex = Math.max(0, allListItems().length - 1);
+    }
+  });
+
   async function clearAllCompleted(e: Event) {
     e.stopPropagation();
     const completed = completedWorkstations();
@@ -115,6 +204,8 @@
   }
 </script>
 
+<svelte:window onkeydown={handleKeydown} />
+
 <div class="flex flex-col h-full bg-bg-surface">
   <!-- List header with WIP indicator -->
   <div class="flex items-center justify-between px-3 py-2 border-b border-border-default shrink-0">
@@ -122,7 +213,16 @@
     <span class="text-[10px] text-text-tertiary">{activeWorkstations().length}/{WIP_LIMIT} WIP</span>
   </div>
   
-  <div class="flex-1 overflow-y-auto">
+  <div class="px-3 py-2 border-b border-border-subtle shrink-0">
+    <input 
+      type="text"
+      placeholder="Filter tickets..."
+      bind:value={searchQuery}
+      class="w-full px-2 py-1 text-[11px] rounded border border-border-default bg-bg-primary text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-accent-primary"
+    />
+  </div>
+  
+  <div class="flex-1 overflow-y-auto" role="listbox" aria-label="Ticket list">
     <!-- Ready tickets -->
     {#if readyTickets().length > 0}
       <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -136,7 +236,10 @@
       </div>
       {#if readyExpanded}
         {#each readyTickets() as record (record.path)}
-          <ReadyTicketRow {record} {atWipLimit} onSelect={() => onSelect(record.metadata.id || record.path)} />
+          {@const idx = allListItems().findIndex(i => i.id === (record.metadata.id || record.path))}
+          <div id="list-item-{idx}">
+            <ReadyTicketRow {record} {atWipLimit} focused={focusedIndex === idx} selected={selectedId === (record.metadata.id || record.path)} onSelect={() => onSelect(record.metadata.id || record.path)} />
+          </div>
         {/each}
       {/if}
     {/if}
@@ -150,12 +253,17 @@
         </div>
       </div>
       {#each externallyExecuting() as record (record.path)}
-        <TicketRow 
-          {record} 
-          badge="external" 
-          statusColor="bg-status-info-text animate-pulse"
-          onSelect={() => onSelect(record.metadata.id || record.path)}
-        />
+        {@const idx = allListItems().findIndex(i => i.id === (record.metadata.id || record.path))}
+        <div id="list-item-{idx}">
+          <TicketRow 
+            {record} 
+            badge="external" 
+            statusColor="bg-status-info-text animate-pulse"
+            focused={focusedIndex === idx}
+            selected={selectedId === (record.metadata.id || record.path)}
+            onSelect={() => onSelect(record.metadata.id || record.path)}
+          />
+        </div>
       {/each}
     {/if}
 
@@ -168,14 +276,18 @@
         </div>
       </div>
       {#each activeWorkstations() as ws (ws.id)}
-        <WorkstationRow
-          workstationId={ws.id}
-          record={ws.record}
-          workstation={ws.state}
-          selected={selectedId === ws.id}
-          dimmed={ws.state.status === 'stopped'}
-          onSelect={() => onSelect(ws.id)}
-        />
+        {@const idx = allListItems().findIndex(i => i.id === ws.id)}
+        <div id="list-item-{idx}">
+          <WorkstationRow
+            workstationId={ws.id}
+            record={ws.record}
+            workstation={ws.state}
+            selected={selectedId === ws.id}
+            focused={focusedIndex === idx}
+            dimmed={ws.state.status === 'stopped'}
+            onSelect={() => onSelect(ws.id)}
+          />
+        </div>
       {/each}
     {/if}
 
@@ -188,11 +300,16 @@
         </div>
       </div>
       {#each reviewTickets() as record (record.path)}
-        <TicketRow 
-          {record} 
-          statusColor="bg-status-warning-text"
-          onSelect={() => onSelect(record.metadata.id || record.path)}
-        />
+        {@const idx = allListItems().findIndex(i => i.id === (record.metadata.id || record.path))}
+        <div id="list-item-{idx}">
+          <TicketRow 
+            {record} 
+            statusColor="bg-status-warning-text"
+            focused={focusedIndex === idx}
+            selected={selectedId === (record.metadata.id || record.path)}
+            onSelect={() => onSelect(record.metadata.id || record.path)}
+          />
+        </div>
       {/each}
     {/if}
 
@@ -205,11 +322,16 @@
         </div>
       </div>
       {#each blockedTickets() as record (record.path)}
-        <TicketRow 
-          {record} 
-          statusColor="bg-status-error-text"
-          onSelect={() => onSelect(record.metadata.id || record.path)}
-        />
+        {@const idx = allListItems().findIndex(i => i.id === (record.metadata.id || record.path))}
+        <div id="list-item-{idx}">
+          <TicketRow 
+            {record} 
+            statusColor="bg-status-error-text"
+            focused={focusedIndex === idx}
+            selected={selectedId === (record.metadata.id || record.path)}
+            onSelect={() => onSelect(record.metadata.id || record.path)}
+          />
+        </div>
       {/each}
     {/if}
     
@@ -228,31 +350,47 @@
       </div>
       {#if completedExpanded}
         {#each completedWorkstations() as ws (ws.id)}
-          <WorkstationRow 
-            workstationId={ws.id}
-            record={ws.record} 
-            workstation={ws.state} 
-            selected={selectedId === ws.id} 
-            dimmed={true}
-            onSelect={() => onSelect(ws.id)} 
-          />
+          {@const idx = allListItems().findIndex(i => i.id === ws.id)}
+          <div id="list-item-{idx}">
+            <WorkstationRow 
+              workstationId={ws.id}
+              record={ws.record} 
+              workstation={ws.state} 
+              selected={selectedId === ws.id} 
+              focused={focusedIndex === idx}
+              dimmed={true}
+              onSelect={() => onSelect(ws.id)} 
+            />
+          </div>
         {/each}
         {#each recentlyClosed() as record (record.path)}
-          <TicketRow 
-            {record} 
-            statusColor="bg-text-tertiary opacity-50"
-            onSelect={() => onSelect(record.metadata.id || record.path)}
-          />
+          {@const idx = allListItems().findIndex(i => i.id === (record.metadata.id || record.path))}
+          <div id="list-item-{idx}">
+            <TicketRow 
+              {record} 
+              statusColor="bg-text-tertiary opacity-50"
+              focused={focusedIndex === idx}
+              selected={selectedId === (record.metadata.id || record.path)}
+              onSelect={() => onSelect(record.metadata.id || record.path)}
+            />
+          </div>
         {/each}
       {/if}
     {/if}
 
     <!-- Global empty state -->
     {#if totalVisible === 0 && completedWorkstations().length === 0 && recentlyClosed().length === 0}
-      <div class="m-4 flex items-center justify-center rounded-lg border border-dashed border-border-default p-6 text-center">
-        <p class="text-[12px] text-text-tertiary">All caught up.</p>
-        <p class="mt-1 text-[11px] text-text-tertiary opacity-70">No tickets are currently in progress, ready, or under review.</p>
-      </div>
+      {#if searchQuery}
+        <div class="m-4 flex flex-col items-center justify-center rounded-lg border border-dashed border-border-default p-6 text-center">
+          <p class="text-[12px] text-text-tertiary">No matching tickets.</p>
+          <button class="mt-2 text-[11px] text-accent-primary hover:underline" onclick={() => searchQuery = ''}>Clear filter</button>
+        </div>
+      {:else}
+        <div class="m-4 flex items-center justify-center rounded-lg border border-dashed border-border-default p-6 text-center">
+          <p class="text-[12px] text-text-tertiary">All caught up.</p>
+          <p class="mt-1 text-[11px] text-text-tertiary opacity-70">No tickets are currently in progress, ready, or under review.</p>
+        </div>
+      {/if}
     {/if}
   </div>
 </div>

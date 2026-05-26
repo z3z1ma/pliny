@@ -12,12 +12,16 @@
     selectedId, 
     workstation,
     record,
-    activeTab = $bindable('logs')
+    activeTab = $bindable('logs'),
+    mobile = false,
+    onBack = () => {}
   }: { 
     selectedId: string | null; 
     workstation: WorkstationState | undefined;
     record?: LoomRecord | undefined;
     activeTab?: 'logs' | 'iterations' | 'playback';
+    mobile?: boolean;
+    onBack?: () => void;
   } = $props();
 
   // Auto-switch default tab based on status
@@ -111,10 +115,34 @@
       recordContent = null;
     }
   });
+
+  function handleTabKeydown(e: KeyboardEvent) {
+    const currentIndex = tabs.findIndex(t => t.id === activeTab);
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      const nextIndex = (currentIndex + 1) % tabs.length;
+      activeTab = tabs[nextIndex].id;
+      document.getElementById(`tab-${tabs[nextIndex].id}`)?.focus();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+      activeTab = tabs[prevIndex].id;
+      document.getElementById(`tab-${tabs[prevIndex].id}`)?.focus();
+    }
+  }
 </script>
 
 <div class="flex flex-col h-full bg-bg-primary">
-  {#if !selectedId}
+  {#if mobile && selectedId}
+    <button onclick={onBack} class="flex items-center gap-1 px-4 py-2 text-[11px] text-text-secondary hover:text-text-primary bg-bg-surface border-b border-border-default shrink-0">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      Back to list
+    </button>
+  {/if}
+
+  <div class="flex-1 min-h-0 flex justify-center">
+    <div class="w-full min-[1600px]:max-w-[800px] min-[1600px]:border-x min-[1600px]:border-border-default flex flex-col h-full bg-bg-primary">
+      {#if !selectedId}
     <!-- Empty state -->
     <div class="flex flex-1 items-center justify-center">
       <div class="flex flex-col items-center gap-2 text-text-tertiary">
@@ -162,9 +190,15 @@
     </div>
   {:else if workstation}
     <!-- Tab bar -->
-    <div class="flex items-center gap-0 border-b border-border-default px-4 shrink-0 bg-bg-surface">
+    <div role="tablist" tabindex="0" class="flex items-center gap-0 border-b border-border-default px-4 shrink-0 bg-bg-surface" onkeydown={handleTabKeydown}>
       {#each tabs as tab}
-        <button class="px-3 py-2 text-[11px] font-medium border-b-2 transition-colors
+        <button 
+          id="tab-{tab.id}"
+          role="tab"
+          aria-selected={activeTab === tab.id}
+          aria-controls="panel-{tab.id}"
+          tabindex={activeTab === tab.id ? 0 : -1}
+          class="px-3 py-2 text-[11px] font-medium border-b-2 transition-colors
           {activeTab === tab.id ? 'border-accent-primary text-text-primary' : 'border-transparent text-text-tertiary hover:text-text-secondary'}"
           onclick={() => activeTab = tab.id}>
           {tab.label}
@@ -183,7 +217,7 @@
     </div>
     
     <!-- Tab content -->
-    <div class="flex-1 min-h-0 overflow-hidden relative transition-opacity duration-100 ease-in-out">
+    <div role="tabpanel" id="panel-{activeTab}" aria-labelledby="tab-{activeTab}" class="flex-1 min-h-0 overflow-hidden relative transition-opacity duration-100 ease-in-out">
       {#if workstation.status !== 'running'}
         <div class="border-b border-border-subtle bg-bg-surface px-4 py-2 text-[11px] {workstation.status === 'conflict' ? 'text-status-error-text' : 'text-text-tertiary'}">
           {statusMessage()}
@@ -198,4 +232,6 @@
       {/if}
     </div>
   {/if}
+    </div>
+  </div>
 </div>

@@ -8,6 +8,7 @@
     record, 
     workstation, 
     selected = false, 
+    focused = false,
     dimmed = false,
     onSelect
   }: { 
@@ -15,6 +16,7 @@
     record: LoomRecord | undefined;
     workstation: WorkstationState | undefined;
     selected?: boolean;
+    focused?: boolean;
     dimmed?: boolean;
     onSelect: () => void;
   } = $props();
@@ -104,8 +106,9 @@
 <!-- Single row: [status dot] [ticket title] [iteration] [duration] [hover: actions] -->
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
-<div class="group flex flex-col px-3 py-2 cursor-pointer transition-all duration-150 ease-out
+<div role="option" tabindex="-1" aria-selected={selected} class="group flex flex-col px-3 py-2 cursor-pointer transition-all duration-150 ease-out
   {selected ? 'bg-bg-surface-active border-l-2 border-l-accent-primary' : 'border-l-2 border-l-transparent hover:bg-bg-surface-elevated'}
+  {focused ? 'outline outline-2 outline-accent-primary -outline-offset-2' : ''}
   {status === 'conflict' ? '!border-l-status-error-text' : ''}
   {dimmed ? 'opacity-60' : ''}"
   onclick={onSelect}>

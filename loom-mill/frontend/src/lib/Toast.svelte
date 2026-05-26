@@ -1,19 +1,21 @@
 <script lang="ts">
-  let toasts = $state<{id: number; message: string; type: 'info' | 'warning' | 'error'}[]>([]);
+  import { fly, fade } from 'svelte/transition';
+
+  let toasts = $state<{id: number; message: string; type: 'info' | 'warning' | 'error'; duration: number}[]>([]);
   let nextId = 0;
 
-  export function show(message: string, type: 'info' | 'warning' | 'error' = 'info') {
+  export function show(message: string, type: 'info' | 'warning' | 'error' = 'info', duration = 4000) {
     const id = nextId++;
-    toasts = [...toasts, { id, message, type }];
+    toasts = [...toasts, { id, message, type, duration }];
     if (toasts.length > 3) toasts = toasts.slice(-3);
     setTimeout(() => {
       toasts = toasts.filter(t => t.id !== id);
-    }, 4000);
+    }, duration);
   }
 </script>
 
 {#if toasts.length > 0}
-  <div class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 items-center pointer-events-none">
+  <div role="alert" aria-live="polite" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 items-center pointer-events-none">
     {#each toasts as toast (toast.id)}
       <div class="pointer-events-auto flex items-center gap-2 rounded-lg border px-4 py-2 shadow-lg
         text-[12px] font-medium backdrop-blur-sm

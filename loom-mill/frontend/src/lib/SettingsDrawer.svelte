@@ -11,7 +11,7 @@
   let tab = $state<'harness' | 'metrics' | 'alerts' | 'git'>('harness');
 </script>
 
-<div class="fixed inset-0 z-50 {open ? '' : 'pointer-events-none'}">
+<div class="fixed inset-0 z-50 flex lg:block items-center justify-center {open ? '' : 'pointer-events-none'}">
   <!-- Backdrop -->
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -19,8 +19,9 @@
     onclick={onClose}></div>
   
   <!-- Drawer -->
-  <div class="absolute right-0 top-0 h-full w-[400px] bg-bg-surface border-l border-border-default flex flex-col
-    transform transition-transform duration-200 ease-in-out {open ? 'translate-x-0' : 'translate-x-full'}">
+  <div class="relative lg:absolute lg:right-0 lg:top-0 h-full lg:h-full w-full max-w-[400px] bg-bg-surface lg:border-l border-border-default flex flex-col rounded-none overflow-hidden
+    transform transition-all duration-200 ease-in-out 
+    {open ? 'translate-y-0 opacity-100 lg:translate-x-0 lg:opacity-100' : 'translate-y-8 opacity-0 lg:translate-y-0 lg:translate-x-full lg:opacity-100'}">
     
     <!-- Header -->
     <div class="flex items-center justify-between px-4 py-3 border-b border-border-default shrink-0">

@@ -81,11 +81,12 @@
   {#each stages() as stage}
     <button 
       onclick={() => scrollToSection(stage.id)}
+      aria-label="Scroll to {stage.label} section ({stage.count} tickets)"
       class="flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium
       transition-colors hover:bg-bg-surface-active
       {stage.count > 0 ? 'text-text-secondary cursor-pointer' : 'text-text-tertiary cursor-default'}">
       <span class="w-1.5 h-1.5 rounded-full {stage.color}"></span>
-      <span>{stage.label}</span>
+      <span class="hidden md:inline">{stage.label}</span>
       <span class="tabular-nums">{stage.count}</span>
     </button>
   {/each}

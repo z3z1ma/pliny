@@ -42,6 +42,11 @@
 }
 
 :root {
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+
   /* Dark mode (default) */
   --bg-primary: #0e1015;
   --bg-surface: #14171f;
@@ -163,6 +168,14 @@ body {
   50% { opacity: 0.5; }
 }
 .animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+@keyframes shrink {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+.animate-shrink {
+  animation: shrink linear forwards;
+}
 
 /* Shared badge base */
 .badge {
