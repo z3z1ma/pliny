@@ -12,6 +12,7 @@
   let isRecording = false;
   let recognition: any = null;
   let baseText = '';
+  let lastSentText = '';
 
   function toggleVoice() {
     if (isRecording) {
@@ -49,9 +50,23 @@
   }
 
   function handleKeydown(e: KeyboardEvent) {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && !e.metaKey && !e.ctrlKey) {
       e.preventDefault();
       send();
+    } else if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      send();
+    } else if (e.key === 'ArrowUp' && inputText === '' && lastSentText) {
+      e.preventDefault();
+      inputText = lastSentText;
+      // Move cursor to end
+      setTimeout(() => {
+        if (textareaRef) {
+          textareaRef.selectionStart = textareaRef.value.length;
+          textareaRef.selectionEnd = textareaRef.value.length;
+          handleInput();
+        }
+      }, 0);
     }
   }
 
@@ -61,6 +76,7 @@
       recognition?.stop();
       isRecording = false;
     }
+    lastSentText = inputText.trim();
     onSend(inputText.trim(), attachedContext);
     inputText = '';
     baseText = '';
@@ -94,7 +110,7 @@
     </div>
   {/if}
 
-  <div class="flex items-end gap-2 bg-bg-surface-hover border border-border-default rounded-lg p-1 focus-within:border-border-hover focus-within:ring-1 focus-within:ring-border-hover transition-all">
+  <div class="flex items-end gap-2 bg-bg-surface-hover border border-border-default rounded-lg p-1 focus-within:border-border-hover focus-within:ring-1 focus-within:ring-border-hover transition-all relative">
     <textarea
       bind:this={textareaRef}
       bind:value={inputText}
@@ -102,9 +118,13 @@
       on:input={handleInput}
       {disabled}
       placeholder="Shape this record..."
-      class="flex-1 bg-transparent border-none focus:ring-0 resize-none text-[13px] text-text-primary placeholder:text-text-tertiary p-2 min-h-[36px] max-h-[120px] overflow-y-auto"
+      class="flex-1 bg-transparent border-none focus:ring-0 resize-none text-[13px] text-text-primary placeholder:text-text-tertiary p-2 min-h-[36px] max-h-[120px] overflow-y-auto pb-6"
       rows="1"
     ></textarea>
+    
+    <div class="absolute bottom-1.5 left-3 text-[9px] text-text-tertiary pointer-events-none">
+      {inputText.length} chars
+    </div>
     
     <div class="flex items-center gap-1 p-1 shrink-0">
       <button 

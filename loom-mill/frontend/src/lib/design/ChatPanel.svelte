@@ -11,6 +11,56 @@
 
   let messagesContainer: HTMLDivElement;
   let isCreatingSession = false;
+  let harnessCommand = 'echo';
+  let testStatus: 'idle' | 'testing' | 'success' | 'error' = 'idle';
+  let lastUserMessage: { text: string, context?: any } | null = null;
+
+  onMount(() => {
+    harnessCommand = localStorage.getItem('mill-harness-command') || 'echo';
+    if (!store.chatSession.id) {
+      createSession();
+    }
+  });
+
+  function saveHarnessConfig() {
+    localStorage.setItem('mill-harness-command', harnessCommand);
+  }
+
+  async function testConnection() {
+    testStatus = 'testing';
+    try {
+      // Create a temporary session
+      const sessionRes = await fetch(apiUrl('/chat/sessions'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ harness_command: harnessCommand })
+      });
+      if (!sessionRes.ok) throw new Error('Failed to create session');
+      const sessionData = await sessionRes.json();
+      const sessionId = sessionData.session_id;
+
+      // Send a ping message
+      const msgRes = await fetch(apiUrl(`/chat/sessions/${sessionId}/messages`), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: 'ping' })
+      });
+
+      if (msgRes.ok) {
+        testStatus = 'success';
+      } else {
+        testStatus = 'error';
+      }
+
+      // Clean up session
+      await fetch(apiUrl(`/chat/sessions/${sessionId}`), { method: 'DELETE' });
+
+      setTimeout(() => testStatus = 'idle', 3000);
+    } catch (err) {
+      testStatus = 'error';
+      setTimeout(() => testStatus = 'idle', 3000);
+    }
+  }
 
   // Auto-scroll when messages change
   $: if (store.chatSession.messages.length || store.chatSession.streamingContent) {
@@ -35,7 +85,8 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          document_path: documentPath
+          document_path: documentPath,
+          harness_command: harnessCommand
         })
       });
       
@@ -71,6 +122,8 @@
       if (!store.chatSession.id) return; // Failed to create
     }
 
+    lastUserMessage = { text, context };
+
     // Optimistic update
     const userMessage = {
       role: 'user',
@@ -104,23 +157,78 @@
       console.error('Error sending message:', err);
       store.chatSession.messages = [...store.chatSession.messages, {
         role: 'system',
-        content: 'Network error sending message.',
+        content: 'Error: Network error sending message.',
         timestamp: new Date().toISOString()
       }];
     }
   }
 
-  onMount(() => {
-    if (!store.chatSession.id) {
-      createSession();
+  function handleRetry() {
+    if (!lastUserMessage) return;
+    // Remove the last system error message
+    const lastMsg = store.chatSession.messages[store.chatSession.messages.length - 1];
+    if (lastMsg && lastMsg.role === 'system' && lastMsg.content.startsWith('Error:')) {
+      store.chatSession.messages = store.chatSession.messages.slice(0, -1);
     }
-  });
+    // Remove the optimistic user message so it doesn't duplicate
+    const lastUserMsgIdx = store.chatSession.messages.map(m => m.role).lastIndexOf('user');
+    if (lastUserMsgIdx !== -1) {
+      store.chatSession.messages = store.chatSession.messages.slice(0, lastUserMsgIdx);
+    }
+    handleSend(lastUserMessage.text, lastUserMessage.context);
+  }
+
+  function formatTime(isoString: string) {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) return 'just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return `${Math.floor(diffHours / 24)}d ago`;
+  }
 </script>
 
 <div class="flex flex-col h-full w-full bg-bg-surface">
+  <!-- Harness Config Header -->
+  <div class="flex items-center gap-2 px-3 py-1.5 border-b border-border-subtle text-[10px]">
+    <span class="text-text-tertiary">Harness:</span>
+    <select bind:value={harnessCommand} on:change={saveHarnessConfig}
+      class="bg-transparent border border-border-default rounded px-1 py-0.5 text-text-secondary text-[10px] focus:outline-none focus:border-border-hover">
+      <option value="echo">echo (test)</option>
+      <option value="opencode run">opencode run</option>
+      <option value="claude -p">claude -p</option>
+      <option value="codex exec">codex exec</option>
+    </select>
+    <button on:click={testConnection} class="ml-auto px-2 py-0.5 rounded text-[9px] bg-bg-surface-active hover:bg-accent-primary/10 text-text-tertiary hover:text-accent-primary transition-colors">
+      {#if testStatus === 'testing'}
+        Testing...
+      {:else if testStatus === 'success'}
+        <span class="text-status-success-text">✓ Connected</span>
+      {:else if testStatus === 'error'}
+        <span class="text-status-error-text">✗ Failed</span>
+      {:else}
+        Test
+      {/if}
+    </button>
+  </div>
+
   <!-- Header -->
-  <div class="flex items-center justify-between h-8 px-4 border-b border-border-default shrink-0">
-    <div class="text-[11px] font-medium text-text-secondary">Chat</div>
+  <div class="flex items-center justify-between h-10 px-4 border-b border-border-default shrink-0">
+    <div class="flex flex-col">
+      <div class="text-[11px] font-medium text-text-secondary">Chat</div>
+      {#if store.chatSession.id}
+        <div class="text-[9px] text-text-tertiary">
+          Session · {store.chatSession.messages.length} messages
+          {#if store.chatSession.messages.length > 0}
+            · {formatTime(store.chatSession.messages[store.chatSession.messages.length - 1].timestamp)}
+          {/if}
+        </div>
+      {/if}
+    </div>
     <button 
       class="text-[10px] text-text-tertiary hover:text-text-primary transition-colors"
       on:click={createSession}
@@ -143,7 +251,7 @@
       </div>
     {:else}
       {#each store.chatSession.messages as message}
-        <ChatMessage {message} />
+        <ChatMessage {message} onRetry={handleRetry} />
       {/each}
       
       {#if store.chatSession.streamingContent}

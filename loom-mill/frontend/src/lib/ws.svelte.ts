@@ -134,7 +134,8 @@ export class MillStore {
       return;
     }
 
-    switch (type) {
+    const eventType = type || event;
+    switch (eventType) {
       case 'snapshot':
         this.state.records = data.records;
         this.state.git = data.git;
@@ -161,18 +162,26 @@ export class MillStore {
         this.state.git = data.git;
         break;
       case 'chat_stream':
-        this.chatSession.streaming = true;
-        this.chatSession.streamingContent += data.delta;
+        console.log('chat_stream', data.session_id, this.chatSession.id);
+        if (data.session_id === this.chatSession.id) {
+          this.chatSession.streaming = true;
+          this.chatSession.streamingContent += data.delta;
+        }
         break;
       case 'chat_complete':
-        this.chatSession.streaming = false;
-        this.chatSession.messages.push(data.message);
-        this.chatSession.streamingContent = '';
+        console.log('chat_complete', data.session_id, this.chatSession.id);
+        if (data.session_id === this.chatSession.id) {
+          this.chatSession.streaming = false;
+          this.chatSession.messages.push(data.message);
+          this.chatSession.streamingContent = '';
+        }
         break;
       case 'chat_error':
-        this.chatSession.streaming = false;
-        this.chatSession.messages.push({ role: 'system', content: `Error: ${data.error}`, timestamp: new Date().toISOString() });
-        this.chatSession.streamingContent = '';
+        if (data.session_id === this.chatSession.id) {
+          this.chatSession.streaming = false;
+          this.chatSession.messages.push({ role: 'system', content: `Error: ${data.error}`, timestamp: new Date().toISOString() });
+          this.chatSession.streamingContent = '';
+        }
         break;
     }
   }
