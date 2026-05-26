@@ -21,7 +21,12 @@ class WorkstationStatus(StrEnum):
 @dataclass(frozen=True)
 class OutputEvent:
     stream: str
-    data: str
+    line: str
+    timestamp: str
+
+    @property
+    def data(self) -> str:
+        return self.line + "\n"
 
 
 @dataclass

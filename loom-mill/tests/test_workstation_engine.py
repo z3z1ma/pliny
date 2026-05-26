@@ -58,7 +58,7 @@ async def test_workstation_starts_harness_and_captures_output(git_workspace: Pat
 
     assert engine.state.status == WorkstationStatus.COMPLETED
     assert engine.state.exit_code == 0
-    stdout = "".join(event.data for event in engine.state.output if event.stream == "stdout")
+    stdout = engine.log_path("stdout").read_text(encoding="utf-8")
     assert str(ticket_path) in stdout
     assert "configured" in stdout
 
@@ -77,7 +77,7 @@ async def test_workstation_records_failed_exit(git_workspace: Path) -> None:
 
     assert engine.state.status == WorkstationStatus.COMPLETED
     assert engine.state.exit_code == 7
-    stderr = "".join(event.data for event in engine.state.output if event.stream == "stderr")
+    stderr = engine.log_path("stderr").read_text(encoding="utf-8")
     assert "bad" in stderr
 
 
@@ -157,7 +157,7 @@ async def test_workstation_resume_starts_fresh_process_with_updated_ticket(git_w
     assert engine.state.status == WorkstationStatus.COMPLETED
     assert second_pid is not None
     assert second_pid != first_pid
-    stdout = "".join(event.data for event in engine.state.output if event.stream == "stdout")
+    stdout = engine.log_path("stdout").read_text(encoding="utf-8")
     assert "Constraint: updated during pause" in stdout
 
 
@@ -177,5 +177,5 @@ async def test_workstation_uses_relative_cwd_override(git_workspace: Path) -> No
     await engine.start()
     await engine.wait()
 
-    stdout = "".join(event.data for event in engine.state.output if event.stream == "stdout")
+    stdout = engine.log_path("stdout").read_text(encoding="utf-8")
     assert os.fspath(engine.state.worktree_path / "nested") in stdout

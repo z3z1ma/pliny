@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Literal
 
 from loom_mill.parser import LoomRecord
+from loom_mill.iterations import IterationRecord
 from loom_mill.processes.backpressure import BackpressureSignal
 from loom_mill.workstation.models import OutputEvent, WorkstationState
 
@@ -59,4 +61,38 @@ class WorkstationOutput:
     output: OutputEvent
 
 
-MillEvent = RecordAdded | RecordChanged | RecordRemoved | GitStateChanged | WorkstationStateChanged | WorkstationOutput
+@dataclass(frozen=True)
+class WorkstationIterationCompleted:
+    workstation_id: str
+    iteration: IterationRecord
+
+
+@dataclass(frozen=True)
+class WorkstationTakt:
+    workstation_id: str
+    iteration: int
+    duration_seconds: float
+
+
+@dataclass(frozen=True)
+class ShippingEvent:
+    workstation_id: str
+    ticket_id: str
+    action: Literal["merged", "conflict", "skipped", "aborted"]
+    target_branch: str
+    merge_sha: str | None
+    conflict_files: list[str] | None
+    timestamp: str
+
+
+MillEvent = (
+    RecordAdded
+    | RecordChanged
+    | RecordRemoved
+    | GitStateChanged
+    | WorkstationStateChanged
+    | WorkstationOutput
+    | WorkstationIterationCompleted
+    | WorkstationTakt
+    | ShippingEvent
+)

@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import asyncio
+import re
 import uuid
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from loom_mill.state.models import WorkstationOutput, WorkstationStateChanged
+from loom_mill.state.models import WorkstationIterationCompleted, WorkstationOutput, WorkstationStateChanged, WorkstationTakt
 
 from .config import FactoryConfig, HarnessConfig
 from .engine import WorkstationEngine
@@ -57,6 +58,7 @@ class WorkstationManager:
             await self._publish_state(engine)
             self._tasks[workstation_id] = {
                 asyncio.create_task(self._monitor_exit(engine)),
+                asyncio.create_task(self._pump_iterations(engine)),
                 asyncio.create_task(self._pump_output(engine)),
             }
             return engine
@@ -73,6 +75,7 @@ class WorkstationManager:
         await self._publish_state(engine)
         tasks = self._tasks.setdefault(workstation_id, set())
         tasks.add(asyncio.create_task(self._monitor_exit(engine)))
+        tasks.add(asyncio.create_task(self._pump_iterations(engine)))
         tasks.add(asyncio.create_task(self._pump_output(engine)))
         return state
 
@@ -93,6 +96,8 @@ class WorkstationManager:
             engine = self.workstations[workstation_id]
             if engine.state.status == WorkstationStatus.RUNNING:
                 await engine.stop()
+            else:
+                await engine.wait()
         for tasks in self._tasks.values():
             for task in tasks:
                 task.cancel()
@@ -116,10 +121,49 @@ class WorkstationManager:
         await self.store.publish(WorkstationStateChanged(workstation_id=engine.workstation_id, workstation=engine.state))
 
     async def _pump_output(self, engine: WorkstationEngine) -> None:
-        while engine.state.status == WorkstationStatus.RUNNING:
-            output = await engine.output_queue.get()
+        while True:
+            try:
+                output = await asyncio.wait_for(engine.output_queue.get(), timeout=0.1)
+            except TimeoutError:
+                if engine.state.status != WorkstationStatus.RUNNING and engine.output_queue.empty() and self._engine_wait_done(engine):
+                    break
+                continue
             await self.store.publish(WorkstationOutput(workstation_id=engine.workstation_id, output=output))
+
+    async def _pump_iterations(self, engine: WorkstationEngine) -> None:
+        while True:
+            try:
+                iteration = await asyncio.wait_for(engine.iteration_queue.get(), timeout=0.1)
+            except TimeoutError:
+                if engine.state.status != WorkstationStatus.RUNNING and engine.iteration_queue.empty() and self._engine_wait_done(engine):
+                    break
+                continue
+            await self.store.publish(WorkstationIterationCompleted(workstation_id=engine.workstation_id, iteration=iteration))
+            await self.store.publish(
+                WorkstationTakt(
+                    workstation_id=engine.workstation_id,
+                    iteration=iteration.iteration,
+                    duration_seconds=iteration.duration_seconds,
+                )
+            )
+
+    def _engine_wait_done(self, engine: WorkstationEngine) -> bool:
+        return engine.wait_done()
 
     async def _monitor_exit(self, engine: WorkstationEngine) -> None:
         await engine.wait()
         await self._publish_state(engine)
+        if engine.state.status == WorkstationStatus.COMPLETED:
+            from loom_mill.scheduling import SchedulingAgent
+
+            if self._ticket_ready_to_ship(engine.ticket_path):
+                from loom_mill.shipping import ShippingDock
+
+                await ShippingDock(self.workspace_root, self).handle_finished(engine.workstation_id)
+            await SchedulingAgent(self.workspace_root, self).on_workstation_finished(engine.workstation_id)
+
+    def _ticket_ready_to_ship(self, ticket_path: Path) -> bool:
+        if not ticket_path.exists():
+            return False
+        match = re.search(r"^Status:\s*(\S+)\s*$", ticket_path.read_text(encoding="utf-8"), re.MULTILINE)
+        return bool(match and match.group(1) in self.config.ready_to_ship_statuses)

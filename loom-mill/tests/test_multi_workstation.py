@@ -9,17 +9,18 @@ from types import SimpleNamespace
 import pytest
 import pytest_asyncio
 
-from loom_mill.api.workstation import delete_workstation, get_workstation, list_workstations, start_workstation
+from loom_mill.api.workstation import delete_workstation, get_workstation, get_workstation_logs, list_workstations, start_workstation
 from loom_mill.api.ws import _event_payload
-from loom_mill.state import MillStateStore, WorkstationStateChanged
+from loom_mill.state import MillStateStore, WorkstationOutput, WorkstationStateChanged
 from loom_mill.workstation import FactoryConfig, HarnessConfig, WorkstationStatus
 from loom_mill.workstation.manager import WorkstationManager
 
 
 class FakeRequest:
-    def __init__(self, app, data: dict | None = None, path_params: dict | None = None) -> None:
+    def __init__(self, app, data: dict | None = None, path_params: dict | None = None, query_params: dict | None = None) -> None:
         self.app = app
         self.path_params = path_params or {}
+        self.query_params = query_params or {}
         self._data = data or {}
 
     async def json(self) -> dict:
@@ -136,6 +137,68 @@ async def test_websocket_workstation_event_payload_includes_workstation_id(git_w
     assert payload["workstation_id"] == engine.workstation_id
     assert payload["event"] == "state_change"
     assert payload["payload"]["ticket_id"] == "ticket-a"
+
+    await manager.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_manager_streams_stdout_and_stderr_as_log_events(git_workspace: Path) -> None:
+    store = MillStateStore()
+    manager = WorkstationManager(
+        git_workspace,
+        store,
+        FactoryConfig(
+            harness=HarnessConfig(
+                command=sys.executable,
+                args=["-c", "import sys,time; print('out', flush=True); print('err', file=sys.stderr, flush=True); time.sleep(0.2)"],
+            )
+        ),
+    )
+    subscription = store.subscribe()
+
+    engine = await manager.start(git_workspace / ".loom" / "tickets" / "ticket-a.md", "ticket-a")
+    events = []
+    while len(events) < 2:
+        event = await asyncio.wait_for(subscription.__anext__(), timeout=1)
+        if isinstance(event, WorkstationOutput):
+            events.append(_event_payload(event))
+
+    assert {event["workstation_id"] for event in events} == {engine.workstation_id}
+    assert {event["event"] for event in events} == {"log"}
+    assert {event["payload"]["stream"] for event in events} == {"stdout", "stderr"}
+    assert {event["payload"]["line"] for event in events} == {"out", "err"}
+    assert all(event["payload"]["timestamp"] for event in events)
+
+    await subscription.aclose()
+    await manager.shutdown()
+
+
+@pytest.mark.asyncio
+async def test_logs_persist_and_rest_endpoint_returns_tail(git_workspace: Path) -> None:
+    store = MillStateStore()
+    manager = WorkstationManager(
+        git_workspace,
+        store,
+        FactoryConfig(harness=HarnessConfig(command=sys.executable, args=["-c", "print('one'); print('two'); print('three')"])),
+    )
+    app = SimpleNamespace(
+        state=SimpleNamespace(
+            workspace_root=str(git_workspace),
+            workstation_manager=manager,
+        )
+    )
+
+    engine = await manager.start(git_workspace / ".loom" / "tickets" / "ticket-a.md", "ticket-a")
+    await engine.wait()
+    await asyncio.sleep(0.1)
+
+    assert engine.log_path("stdout").read_text(encoding="utf-8") == "one\ntwo\nthree\n"
+    response = await get_workstation_logs(
+        FakeRequest(app, path_params={"workstation_id": engine.workstation_id}, query_params={"stream": "stdout", "tail": "2"})
+    )
+
+    assert response.status_code == 200
+    assert json.loads(response.body) == {"workstation_id": engine.workstation_id, "stream": "stdout", "lines": ["two", "three"]}
 
     await manager.shutdown()
 

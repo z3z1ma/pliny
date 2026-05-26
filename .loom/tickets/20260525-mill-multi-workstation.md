@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-multi-workstation
 Type: Ticket
-Status: review
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: medium - core concurrency change to the workstation engine; asyncio subprocess management at scale needs careful design.

@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-shipping-dock
 Type: Ticket
-Status: open
+Status: active
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: medium - parallel worktree merging can produce conflicts; git operations need careful sequencing.

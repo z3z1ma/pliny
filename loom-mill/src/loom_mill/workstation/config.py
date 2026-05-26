@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Literal
 
 
 @dataclass(frozen=True)
@@ -25,3 +26,10 @@ class FactoryConfig:
     harness: HarnessConfig = field(
         default_factory=lambda: HarnessConfig(command="opencode", args=["run", "--model", "gpt-5.5", "{ticket_path}"])
     )
+    shipping_mode: Literal["auto-merge", "operator-approved"] = "auto-merge"
+    default_target_branch: str = "main"
+    cleanup_branch_after_merge: bool = True
+    ready_to_ship_statuses: list[str] = field(default_factory=lambda: ["review", "closed"])
+    scheduling_enabled: bool = False
+    ready_ticket_statuses: list[str] = field(default_factory=lambda: ["open"])
+    spc_model: str | None = None

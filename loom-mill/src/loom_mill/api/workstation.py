@@ -5,12 +5,14 @@ import json
 import os
 import shlex
 import sys
+from collections import deque
 from dataclasses import asdict
 from pathlib import Path
 
 from starlette.requests import Request
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 
+from loom_mill.iterations import IterationStore
 from loom_mill.state import WorkstationStateChanged
 from loom_mill.workstation import FactoryConfig, HarnessConfig, WorkstationState, WorkstationStatus
 from loom_mill.workstation.manager import WorkstationManager
@@ -43,6 +45,10 @@ def _state_payload(state: WorkstationState) -> dict:
     return payload
 
 
+def _iteration_store(request: Request, workstation_id: str) -> IterationStore:
+    return IterationStore(_workspace_root(request), workstation_id)
+
+
 def _harness_payload(config: HarnessConfig) -> dict:
     return {
         "command": config.command,
@@ -56,6 +62,13 @@ def _config_payload(config: FactoryConfig) -> dict:
     return {
         "max_workstations": config.max_workstations,
         "harness": _harness_payload(config.harness),
+        "shipping_mode": config.shipping_mode,
+        "default_target_branch": config.default_target_branch,
+        "cleanup_branch_after_merge": config.cleanup_branch_after_merge,
+        "ready_to_ship_statuses": config.ready_to_ship_statuses,
+        "scheduling_enabled": config.scheduling_enabled,
+        "ready_ticket_statuses": config.ready_ticket_statuses,
+        "spc_model": config.spc_model,
     }
 
 
@@ -87,7 +100,26 @@ def load_factory_config(config_path: Path) -> FactoryConfig:
     max_workstations = int(data.get("max_workstations", 1))
     if max_workstations < 1:
         raise ValueError("max_workstations must be at least 1")
-    return FactoryConfig(max_workstations=max_workstations, harness=harness)
+    shipping_mode = str(data.get("shipping_mode", DEFAULT_CONFIG.shipping_mode))
+    if shipping_mode not in {"auto-merge", "operator-approved"}:
+        raise ValueError("shipping_mode must be auto-merge or operator-approved")
+    statuses = data.get("ready_to_ship_statuses", DEFAULT_CONFIG.ready_to_ship_statuses)
+    if not isinstance(statuses, list):
+        raise ValueError("ready_to_ship_statuses must be a list")
+    ready_ticket_statuses = data.get("ready_ticket_statuses", DEFAULT_CONFIG.ready_ticket_statuses)
+    if not isinstance(ready_ticket_statuses, list):
+        raise ValueError("ready_ticket_statuses must be a list")
+    return FactoryConfig(
+        max_workstations=max_workstations,
+        harness=harness,
+        shipping_mode=shipping_mode,
+        default_target_branch=str(data.get("default_target_branch", DEFAULT_CONFIG.default_target_branch)),
+        cleanup_branch_after_merge=bool(data.get("cleanup_branch_after_merge", DEFAULT_CONFIG.cleanup_branch_after_merge)),
+        ready_to_ship_statuses=[str(status) for status in statuses],
+        scheduling_enabled=bool(data.get("scheduling_enabled", DEFAULT_CONFIG.scheduling_enabled)),
+        ready_ticket_statuses=[str(status) for status in ready_ticket_statuses],
+        spc_model=str(data["spc_model"]) if data.get("spc_model") else None,
+    )
 
 
 def load_harness_config(config_path: Path) -> HarnessConfig:
@@ -101,7 +133,20 @@ def save_factory_config(config_path: Path, config: FactoryConfig) -> None:
 
 def save_harness_config(config_path: Path, config: HarnessConfig) -> None:
     existing = load_factory_config(config_path)
-    save_factory_config(config_path, FactoryConfig(max_workstations=existing.max_workstations, harness=config))
+    save_factory_config(
+        config_path,
+        FactoryConfig(
+            max_workstations=existing.max_workstations,
+            harness=config,
+            shipping_mode=existing.shipping_mode,
+            default_target_branch=existing.default_target_branch,
+            cleanup_branch_after_merge=existing.cleanup_branch_after_merge,
+            ready_to_ship_statuses=existing.ready_to_ship_statuses,
+            scheduling_enabled=existing.scheduling_enabled,
+            ready_ticket_statuses=existing.ready_ticket_statuses,
+            spc_model=existing.spc_model,
+        ),
+    )
 
 
 async def get_harness_config(request: Request) -> JSONResponse:
@@ -130,9 +175,28 @@ async def put_config(request: Request) -> JSONResponse:
         max_workstations = int(data.get("max_workstations", existing.max_workstations))
         if max_workstations < 1:
             raise ValueError("max_workstations must be at least 1")
+        shipping_mode = str(data.get("shipping_mode", existing.shipping_mode))
+        if shipping_mode not in {"auto-merge", "operator-approved"}:
+            raise ValueError("shipping_mode must be auto-merge or operator-approved")
+        statuses = data.get("ready_to_ship_statuses", existing.ready_to_ship_statuses)
+        if not isinstance(statuses, list):
+            raise ValueError("ready_to_ship_statuses must be a list")
+        ready_ticket_statuses = data.get("ready_ticket_statuses", existing.ready_ticket_statuses)
+        if not isinstance(ready_ticket_statuses, list):
+            raise ValueError("ready_ticket_statuses must be a list")
     except (json.JSONDecodeError, TypeError, ValueError) as error:
         return JSONResponse({"error": str(error)}, status_code=400)
-    config = FactoryConfig(max_workstations=max_workstations, harness=harness)
+    config = FactoryConfig(
+        max_workstations=max_workstations,
+        harness=harness,
+        shipping_mode=shipping_mode,
+        default_target_branch=str(data.get("default_target_branch", existing.default_target_branch)),
+        cleanup_branch_after_merge=bool(data.get("cleanup_branch_after_merge", existing.cleanup_branch_after_merge)),
+        ready_to_ship_statuses=[str(status) for status in statuses],
+        scheduling_enabled=bool(data.get("scheduling_enabled", existing.scheduling_enabled)),
+        ready_ticket_statuses=[str(status) for status in ready_ticket_statuses],
+        spc_model=str(data["spc_model"]) if data.get("spc_model") else None,
+    )
     save_factory_config(_config_path(request), config)
     _manager(request).update_config(config)
     return JSONResponse(_config_payload(config))
@@ -166,6 +230,62 @@ async def get_workstation(request: Request) -> JSONResponse:
     if engine is None:
         return JSONResponse({"error": "workstation not found"}, status_code=404)
     return JSONResponse(_state_payload(engine.state))
+
+
+async def list_iterations(request: Request) -> JSONResponse:
+    store = _iteration_store(request, request.path_params["workstation_id"])
+    return JSONResponse([asdict(record) for record in store.list()])
+
+
+async def get_iteration(request: Request) -> JSONResponse:
+    store = _iteration_store(request, request.path_params["workstation_id"])
+    try:
+        record = store.get(int(request.path_params["iteration"]))
+    except (FileNotFoundError, ValueError):
+        return JSONResponse({"error": "iteration not found"}, status_code=404)
+    return JSONResponse(asdict(record))
+
+
+async def get_iteration_diff(request: Request) -> Response:
+    store = _iteration_store(request, request.path_params["workstation_id"])
+    try:
+        iteration = int(request.path_params["iteration"])
+    except ValueError:
+        return JSONResponse({"error": "iteration not found"}, status_code=404)
+    diff = store.diff(iteration)
+    if diff is None:
+        return JSONResponse({"error": "iteration diff not found"}, status_code=404)
+    return Response(diff, media_type="text/plain")
+
+
+async def get_aggregate_diff(request: Request) -> Response:
+    store = _iteration_store(request, request.path_params["workstation_id"])
+    return Response(store.aggregate_diff(), media_type="text/plain")
+
+
+async def get_workstation_logs(request: Request) -> JSONResponse:
+    engine = _manager(request).get(request.path_params["workstation_id"])
+    if engine is None:
+        return JSONResponse({"error": "workstation not found"}, status_code=404)
+
+    stream = str(request.query_params.get("stream", "stdout"))
+    if stream not in {"stdout", "stderr"}:
+        return JSONResponse({"error": "stream must be stdout or stderr"}, status_code=400)
+
+    try:
+        tail = int(request.query_params.get("tail", "100"))
+    except ValueError:
+        return JSONResponse({"error": "tail must be an integer"}, status_code=400)
+    if tail < 0:
+        return JSONResponse({"error": "tail must be non-negative"}, status_code=400)
+
+    log_path = engine.log_path(stream)
+    lines: deque[str] = deque(maxlen=tail)
+    if log_path.exists() and tail > 0:
+        with log_path.open(encoding="utf-8") as log_file:
+            for line in log_file:
+                lines.append(line.rstrip("\r\n"))
+    return JSONResponse({"workstation_id": engine.workstation_id, "stream": stream, "lines": list(lines)})
 
 
 async def delete_workstation(request: Request) -> JSONResponse:

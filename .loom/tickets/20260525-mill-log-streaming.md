@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-log-streaming
 Type: Ticket
-Status: open
+Status: active
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: low - straightforward async IO piping; main concern is memory management for long-running subprocesses.
