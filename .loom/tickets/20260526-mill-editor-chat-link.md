@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-editor-chat-link
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: low - CodeMirror selection API is well-documented; chat input already accepts context
@@ -125,3 +125,4 @@ glue between them.
 - 2026-05-26: Created ticket with Status `open`. The coupling feature. Without
   this, the Design Room is just an editor next to a chat. With it, the operator
   can point at exactly what they want to shape.
+- 2026-05-26: Implemented `SelectionAction.svelte` and integrated it into `DocumentEditor.svelte`. Verified with Playwright that selecting text shows the floating action, and clicking it populates the chat input with the correct context. Status changed to `closed`.

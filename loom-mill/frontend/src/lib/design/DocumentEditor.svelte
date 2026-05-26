@@ -8,6 +8,7 @@
   import { millTheme, millHighlighting } from './editor-theme';
   import { apiUrl } from '../api';
   import { store } from '../ws.svelte';
+  import SelectionAction from './SelectionAction.svelte';
   
   let { documentPath, onSave, onAttachContext }: { documentPath: string | null; onSave: (content: string) => void; onAttachContext?: (context: any) => void } = $props();
   
@@ -16,6 +17,10 @@
   let lastSavedContent = '';
   let loading = $state(false);
   let conflict = $state(false);
+  let editorContainer: HTMLDivElement;
+
+  let selectionAction = $state<{ top: number; left: number; text: string; lineRange: [number, number] } | null>(null);
+  let selectionTimeout: ReturnType<typeof setTimeout>;
 
   // Fetch content when documentPath changes
   $effect(() => {
@@ -91,6 +96,17 @@
     });
   }
 
+  function sendSelectionToChat() {
+    if (selectionAction && documentPath && onAttachContext) {
+      onAttachContext({
+        path: documentPath,
+        selected_text: selectionAction.text,
+        line_range: selectionAction.lineRange
+      });
+      selectionAction = null;
+    }
+  }
+
   function initEditor(node: HTMLDivElement) {
     const saveKeymap = keymap.of([{ key: 'Mod-s', run: () => { handleSave(); return true; } }]);
     
@@ -114,6 +130,33 @@
                 modified = true;
               } else {
                 modified = false;
+              }
+            }
+            
+            if (update.selectionSet) {
+              clearTimeout(selectionTimeout);
+              const selection = update.state.selection.main;
+              if (selection.from !== selection.to) {
+                const text = update.state.doc.sliceString(selection.from, selection.to);
+                if (text.length > 5) {
+                  selectionTimeout = setTimeout(() => {
+                    if (!view || !editorContainer) return;
+                    const coords = view.coordsAtPos(selection.from);
+                    if (coords) {
+                      const fromLine = update.state.doc.lineAt(selection.from).number;
+                      const toLine = update.state.doc.lineAt(selection.to).number;
+                      const containerRect = editorContainer.getBoundingClientRect();
+                      selectionAction = {
+                        top: coords.top - containerRect.top + editorContainer.scrollTop,
+                        left: coords.left - containerRect.left + editorContainer.scrollLeft,
+                        text,
+                        lineRange: [fromLine, toLine]
+                      };
+                    }
+                  }, 200);
+                }
+              } else {
+                selectionAction = null;
               }
             }
           }),
@@ -166,7 +209,15 @@
   </div>
   
   <!-- Editor body -->
-  <div class="flex-1 min-h-0 overflow-auto {documentPath ? 'block' : 'hidden'}" use:initEditor></div>
+  <div bind:this={editorContainer} class="flex-1 min-h-0 overflow-auto relative {documentPath ? 'block' : 'hidden'}">
+    {#if selectionAction}
+      <SelectionAction 
+        position={{ top: selectionAction.top, left: selectionAction.left }}
+        onSendToChat={sendSelectionToChat}
+      />
+    {/if}
+    <div class="h-full" use:initEditor></div>
+  </div>
   {#if !documentPath}
     <div class="flex-1 flex items-center justify-center text-[12px] text-text-tertiary">
       Select a record from the graph to open it here.
