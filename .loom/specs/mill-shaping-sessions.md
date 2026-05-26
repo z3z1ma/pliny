@@ -28,18 +28,21 @@ records—all visible in a staging area before anything touches disk.
 
 A 10-60 minute interactive process where:
 
-1. The operator arrives with fuzzy intent ("I want to build X" / "We need to fix
-   the auth flow" / "Plan the next sprint")
-2. The agent begins by inspecting context: existing records, code, prior work
-3. The agent asks focused questions to narrow the space—not a form, but genuine
-   inquiry shaped by what it discovers
-4. As understanding develops, the agent proposes record drafts into a **staging
+1. The operator arrives with a text dump of thoughts—raw, unstructured intent
+2. Deep agents (opencode, claude, etc.) with bash and filesystem access perform
+   bounded explorations of the codebase, existing records, and domain context
+3. These explorations feed into a growing **internal context document**—a monolithic
+   Markdown corpus that accumulates everything the session knows, preventing
+   redundant re-exploration of the same ground
+4. From that context, the agent surfaces contradictions, ambiguities, missing
+   pieces, and design questions back to the operator
+5. As understanding develops, the agent proposes record drafts into a **staging
    area**: tickets, specs, plans, research notes
-5. The operator sees the growing subgraph, can edit individual drafts, ask for
-   changes, reject proposals, or redirect
-6. The agent maintains coherence across the staged records—references link
-   correctly, scope doesn't overlap, acceptance criteria don't contradict
-7. When the operator is satisfied, they commit the staged subgraph to disk
+6. The operator sees the growing subgraph, can edit individual drafts, ask for
+   changes, reject proposals, redirect, or explore branching directions
+7. The agent maintains coherence across the staged records
+8. When the operator is satisfied, they commit the staged subgraph to disk
+9. A durable session record captures the reasoning path that led to the output
 
 ### What a shaping session is NOT
 
@@ -47,6 +50,40 @@ A 10-60 minute interactive process where:
 - A wizard/form with sequential steps
 - An auto-generator that dumps 20 tickets without collaboration
 - A simple command ("make tickets for this")
+- A thin wrapper over chat with a staging panel added
+
+### Resolved Design Decisions
+
+**Input model**: No templates or presets. The operator provides initial input as a
+raw text dump of thoughts. This is the seed. Everything else emerges from
+exploration and interaction.
+
+**Context acquisition**: Deep agents with bash/filesystem access (the same harnesses
+used by workstations—opencode, claude, codex, etc.) perform bounded exploration
+runs. All reasoning comes from model invocations, not from static templates or
+canned questions.
+
+**Internal context document**: A growing Markdown document internal to the session
+that accumulates context across harness invocations. This prevents re-exploring the
+whole codebase on each turn. Agents make bounded iterations against this shared
+corpus, surfacing contradictions, ambiguities, and questions. This is the session's
+"memory" and reasoning substrate.
+
+**Parallel harness invocations**: The engine may launch multiple bounded harness
+runs in parallel with different goals (e.g., one exploring the auth code while
+another examines the existing spec). Results merge into the internal context document.
+
+**Branching**: Supported. The operator can explore two different directions before
+committing one. The staging area shows branches as distinct subgraphs.
+
+**Durable session records**: Yes. Committed sessions produce a durable record
+(research note or knowledge record) that captures the reasoning path, decisions
+made, and context gathered—not just the output records.
+
+**Interaction engine**: New, purpose-built. Not chat with extras. Not the existing
+harness subprocess piping. A new backend service that orchestrates bounded agent
+invocations, manages the internal context document, tracks session state, and
+streams structured interaction elements to the frontend.
 
 ### The interaction texture
 
@@ -191,24 +228,26 @@ remembers context and can continue asking questions or accept commit.
 
 ### Open Questions
 
-- **OQ-001**: Should shaping sessions have templates/presets for common workflows
-  (e.g., "Shape a feature", "Shape a sprint", "Investigate a bug")?
+- **OQ-007**: What is the exact interaction rendering model? The operator rejected
+  structured-chat-as-MVP and wants a fully novel experience. What visual primitives
+  compose the interaction stream? Cards? Inline-editable blocks? A conversation
+  that embeds structured elements? Something else?
 
-- **OQ-002**: How does the agent get "smart" context? Does it run code exploration
-  during the session, or does the operator provide context manually?
+- **OQ-008**: How does the operator steer branching? Does the agent propose a fork
+  ("I see two directions—A or B"), and the operator picks? Or can the operator
+  explicitly say "explore both and show me"? How is the unchosen branch represented?
 
-- **OQ-003**: Should the staging area support "branching" where the operator can
-  explore two different directions before committing one?
+- **OQ-009**: How does the internal context document relate to the staging area?
+  Is the context document visible to the operator, or is it purely agent-internal?
+  Can the operator see "what the agent knows so far"?
 
-- **OQ-004**: What's the relationship between shaping sessions and the existing
-  Loom outer loop? Is a shaping session effectively a UI for the outer loop?
+- **OQ-010**: What are the boundaries of bounded parallel harness invocations? How
+  many can run simultaneously? How is the operator notified when they complete? Can
+  the operator interrupt/cancel an in-flight exploration?
 
-- **OQ-005**: Should committed sessions create a durable record (e.g., a research
-  note or knowledge record) that captures the reasoning that led to the records?
-
-- **OQ-006**: What's the minimum viable interaction model? Could the first version
-  use structured chat messages as the interaction primitive, with the staging area
-  as the novel element, before building fully custom interaction components?
+- **OQ-011**: How do sessions compose with existing Design Room state? If the
+  operator already has a document open in the editor, does starting a shaping
+  session replace the editor panel, or does it become a new mode alongside it?
 
 ## Evidence Expectations
 
