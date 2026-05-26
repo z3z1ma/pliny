@@ -14,6 +14,26 @@ Applies To: loom-mill/frontend/, any frontend/UI work, agent selection for visua
 
 **Do NOT use `general` for frontend work** unless frontend-expert is completely unavailable. The general agent lacks Playwright and produces lower-quality frontend output (literal `\n` in templates, missing visual verification, no screenshot feedback loops).
 
+## Prompting Pattern
+
+When writing the prompt for frontend-expert, always include an explicit Playwright verification loop instruction. Example:
+
+```
+## Verification (REQUIRED)
+
+After implementing, you MUST verify visually:
+1. Start the backend: `cd /Users/alexanderbutler/code_projects/personal/agent-loom && source loom-mill/.venv/bin/activate && python -m uvicorn loom_mill.app:app --host 127.0.0.1 --port 8765 &`
+2. Start the frontend dev server and note the port
+3. Navigate to the frontend with Playwright
+4. Take a full-page screenshot
+5. Inspect the screenshot for visual issues (overlapping text, wrong spacing, missing elements, raw escape characters, clipped content)
+6. If issues are found: fix them and screenshot again
+7. Repeat until the screenshot looks correct
+8. Include the final screenshot filename in your output
+```
+
+This forces the agent into a build → render → inspect → fix loop rather than one-shot code generation. The visual feedback loop is what makes frontend-expert valuable over general.
+
 ## Continuation / Nudge Procedure
 
 Gemini (the model behind frontend-expert) sometimes returns empty on first invocation or stalls mid-iteration. When this happens:
