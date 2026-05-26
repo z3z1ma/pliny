@@ -5,7 +5,9 @@ export class MillStore {
     records: [],
     git: { current_branch: null, recent_commits: [], dirty: false },
     workstations: {},
-    backpressure_signals: {}
+    backpressure_signals: {},
+    shipping_events: [],
+    andon_events: {}
   });
   connected = $state(false);
 
@@ -71,8 +73,17 @@ export class MillStore {
         case 'takt':
           this.state.workstations[workstation_id].takt = payload;
           break;
+        case 'andon':
+          if (!this.state.andon_events[workstation_id]) {
+            this.state.andon_events[workstation_id] = [];
+          }
+          this.state.andon_events[workstation_id].push({
+            ...payload,
+            timestamp: new Date().toISOString()
+          });
+          break;
         case 'shipping':
-          // Handle shipping if needed
+          this.state.shipping_events.unshift(payload);
           break;
       }
       return;
@@ -84,6 +95,8 @@ export class MillStore {
         this.state.git = data.git;
         this.state.workstations = data.workstations || {};
         this.state.backpressure_signals = data.backpressure_signals || {};
+        this.state.shipping_events = data.shipping_events || [];
+        this.state.andon_events = data.andon_events || {};
         break;
       case 'RecordAdded':
         this.state.records.push(data.record);

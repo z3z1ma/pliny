@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-spc-jidoka
 Type: Ticket
-Status: active
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: medium - LLM integration for pattern detection adds external dependency; mitigated by deterministic fallback rules.

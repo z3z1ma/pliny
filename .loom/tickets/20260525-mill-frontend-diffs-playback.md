@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-frontend-diffs-playback
 Type: Ticket
-Status: active
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: low - UI rendering of diffs and timeline navigation; main concern is large diff performance.

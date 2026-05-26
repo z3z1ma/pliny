@@ -109,9 +109,27 @@ export interface HarnessConfig {
   cwd: string | null;
 }
 
+export interface AndonEventPayload {
+  signal: 'alert' | 'stop';
+  reasoning: string;
+  patterns: string[];
+  timestamp: string;
+}
+
+export interface ShippingEvent {
+  ticket_id: string;
+  action: 'merged' | 'conflict' | 'skipped' | 'aborted';
+  target_branch: string;
+  merge_sha: string | null;
+  conflict_files: string[] | null;
+  timestamp: string;
+}
+
 export interface MillState {
   records: LoomRecord[];
   git: GitState;
   workstations: Record<string, WorkstationState>;
   backpressure_signals: Record<string, BackpressureSignal[]>;
+  shipping_events: ShippingEvent[];
+  andon_events: Record<string, AndonEventPayload[]>;
 }

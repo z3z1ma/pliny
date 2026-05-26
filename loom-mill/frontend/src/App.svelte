@@ -4,7 +4,9 @@
   import Pipeline from './lib/Pipeline.svelte';
   import GitPanel from './lib/GitPanel.svelte';
   import HarnessConfig from './lib/HarnessConfig.svelte';
-  import AndonAlert from './lib/AndonAlert.svelte';
+  import AndonBoard from './lib/AndonBoard.svelte';
+  import Metrics from './lib/Metrics.svelte';
+  import Changelog from './lib/Changelog.svelte';
   import IterationSummary from './lib/IterationSummary.svelte';
   import ThemeToggle from './lib/ThemeToggle.svelte';
   import Playback from './lib/Playback.svelte';
@@ -56,7 +58,6 @@
   <div class="flex flex-1 overflow-hidden">
     <div class="flex-1 overflow-hidden p-6">
       <div class="flex h-full flex-col gap-4">
-        <AndonAlert records={store.state.records} workstations={store.state.workstations} />
         <div class="h-72 shrink-0 overflow-hidden">
           <Pipeline records={store.state.records} workstations={store.state.workstations} />
         </div>
@@ -66,7 +67,11 @@
       </div>
     </div>
     
-    <aside class="w-80 border-l border-border-default bg-bg-surface p-6 overflow-y-auto flex flex-col gap-6">
+    <aside class="w-80 border-l border-border-default bg-bg-surface p-4 overflow-y-auto flex flex-col gap-4">
+      <AndonBoard records={store.state.records} workstations={store.state.workstations} andonEvents={store.state.andon_events} />
+      <Metrics records={store.state.records} workstations={store.state.workstations} andonEvents={store.state.andon_events} shippingEvents={store.state.shipping_events} />
+      <Changelog records={store.state.records} shippingEvents={store.state.shipping_events} />
+      <div class="border-t border-border-default"></div>
       <HarnessConfig />
       <div class="border-t border-border-default"></div>
       <IterationSummary workstations={store.state.workstations} />

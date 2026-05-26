@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-frontend-pipeline-complete
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: low - UI rendering work integrating signals from multiple backend systems.
