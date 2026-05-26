@@ -316,7 +316,7 @@
       <div class="flex-1"></div>
       {#if onAttachContext}
         <button 
-          class="text-text-tertiary hover:text-text-primary transition-colors flex items-center gap-1"
+          class="text-text-tertiary hover:text-text-primary transition-colors flex items-center gap-1 mr-16"
           onclick={handleAttachContext}
           title="Select text and click to attach to chat"
         >

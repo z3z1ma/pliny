@@ -118,7 +118,7 @@
     <!-- Center: Document editor -->
     <div class="flex-1 min-w-0 flex flex-col relative z-0">
       <button
-        class="absolute right-24 top-1 z-30 flex h-6 items-center gap-1 rounded border border-border-default bg-bg-surface px-2 text-[10px] text-text-tertiary shadow-sm transition-colors hover:bg-bg-surface-hover hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
+        class="absolute right-2 top-1 z-30 flex h-6 items-center gap-1 rounded border border-border-default bg-bg-surface px-2 text-[10px] text-text-tertiary shadow-sm transition-colors hover:bg-bg-surface-hover hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
         onclick={() => showConnectedGraph = !showConnectedGraph}
         disabled={!selectedDocumentId}
         title={showConnectedGraph ? 'Show Editor' : 'Show Connected Graph'}
