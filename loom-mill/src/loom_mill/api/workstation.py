@@ -406,7 +406,7 @@ async def _control_workstation(request: Request, ticket_id: str, target_status: 
         state = await (
             _manager(request).pause(engine.workstation_id)
             if target_status == WorkstationStatus.PAUSED
-            else _manager(request).stop(engine.workstation_id, remove=target_status == WorkstationStatus.STOPPED)
+            else _manager(request).stop(engine.workstation_id, remove=False)
         )
     except RuntimeError as error:
         return JSONResponse({"error": str(error)}, status_code=409)

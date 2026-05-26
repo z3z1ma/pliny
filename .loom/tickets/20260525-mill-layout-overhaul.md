@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-layout-overhaul
 Type: Ticket
-Status: active
+Status: closed
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: medium - large structural refactor touching App.svelte and most layout components; must not break existing WebSocket/state wiring.

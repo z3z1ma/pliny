@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-settings-drawer
 Type: Ticket
-Status: open
+Status: active
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: low - moving existing components into a slide-out drawer; adding one small backend endpoint.

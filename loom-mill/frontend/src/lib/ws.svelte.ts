@@ -57,6 +57,10 @@ export class MillStore {
             delete this.state.backpressure_signals[workstation_id];
           }
           break;
+        case 'removed':
+          delete this.state.workstations[workstation_id];
+          delete this.state.backpressure_signals[workstation_id];
+          break;
         case 'log':
           if (!this.state.workstations[workstation_id].output) {
             this.state.workstations[workstation_id].output = [];

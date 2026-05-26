@@ -94,6 +94,8 @@ class WorkstationManager:
             for task in self._tasks.pop(workstation_id, set()):
                 task.cancel()
             await self.store.remove_workstation_state(workstation_id)
+            from loom_mill.state.models import WorkstationRemoved
+            await self.store.publish(WorkstationRemoved(workstation_id=workstation_id))
         return state
 
     async def shutdown(self) -> None:

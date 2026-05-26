@@ -59,6 +59,13 @@ def _event_payload(event) -> dict:
             "event": "state_change",
             "payload": asdict(event.workstation),
         }
+    from loom_mill.state.models import WorkstationRemoved
+    if isinstance(event, WorkstationRemoved):
+        return {
+            "workstation_id": event.workstation_id,
+            "event": "removed",
+            "payload": None,
+        }
     if isinstance(event, WorkstationOutput):
         return {
             "workstation_id": event.workstation_id,

@@ -2,7 +2,7 @@
 
 ID: ticket:20260525-mill-workstation-lifecycle-ux
 Type: Ticket
-Status: open
+Status: active
 Created: 2026-05-25
 Updated: 2026-05-25
 Risk: low - frontend-only behavioral improvements with minor backend endpoint addition.
@@ -118,8 +118,9 @@ Conflict/Andon workstations:
 
 ## Current State
 
-Blocked on layout overhaul (provides WorkstationRow/WorkstationList to modify).
+Dependency `ticket:20260525-mill-layout-overhaul` is closed. Implementation is active against the current master-detail frontend files and workstation API.
 
 ## Journal
 
 - 2026-05-25: Created ticket. Source: operator feedback that completed workstations pile up and controls don't match state.
+- 2026-05-25: Dependency `ticket:20260525-mill-layout-overhaul` is closed; unblocked lifecycle UX implementation.

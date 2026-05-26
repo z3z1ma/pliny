@@ -8,6 +8,8 @@
   let cwd = $state('');
   let saving = $state(false);
   let message = $state('');
+  let testing = $state(false);
+  let testResult = $state<{success: boolean, output?: string, error?: string} | null>(null);
 
   const apiBase = `${window.location.protocol}//${window.location.hostname}:8765`;
 
@@ -63,6 +65,21 @@
     }
   }
 
+  async function testHarness() {
+    testing = true;
+    testResult = null;
+    try {
+      const response = await fetch(`${apiBase}/harness/test`, {
+        method: 'POST'
+      });
+      testResult = await response.json();
+    } catch (err) {
+      testResult = { success: false, error: String(err) };
+    } finally {
+      testing = false;
+    }
+  }
+
   onMount(() => {
     loadConfig();
   });
@@ -101,4 +118,27 @@
   {#if message}
     <p class="text-[10px] {message.startsWith('Failed') ? 'text-status-error-text' : 'text-status-success-text'}">{message}</p>
   {/if}
+
+  <div class="mt-3 pt-3 border-t border-border-subtle">
+    <button 
+      onclick={testHarness}
+      disabled={testing}
+      class="flex items-center gap-2 px-3 py-1.5 rounded text-[11px] font-medium
+        bg-bg-surface-active border border-border-default text-text-secondary
+        hover:bg-bg-surface-elevated hover:text-text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+      {#if testing}
+        <span class="animate-spin">↻</span> Testing...
+      {:else}
+        ▶ Test Harness
+      {/if}
+    </button>
+    
+    {#if testResult}
+      <div class="mt-2 rounded border p-2 font-mono text-[10px] leading-relaxed whitespace-pre-wrap
+        {testResult.success ? 'border-status-success-border bg-status-success-bg text-status-success-text' : 
+                             'border-status-error-border bg-status-error-bg text-status-error-text'}">
+        {testResult.success ? '✓ ' : '✗ '}{testResult.output || testResult.error}
+      </div>
+    {/if}
+  </div>
 </section>

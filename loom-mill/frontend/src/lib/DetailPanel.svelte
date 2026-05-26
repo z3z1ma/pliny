@@ -33,10 +33,26 @@
 
   let exitCode = $derived(workstation?.exit_code ?? workstation?.iteration_summary?.exit_code);
   let iterationCount = $derived(workstation?.iteration_summary?.iteration ?? workstation?.takt?.iteration ?? 0);
-  let durationSeconds = $derived(workstation?.takt?.duration_seconds ?? workstation?.iteration_summary?.duration_seconds ?? 0);
+  let baseDurationSeconds = $derived(workstation?.takt?.duration_seconds ?? workstation?.iteration_summary?.duration_seconds ?? 0);
+
+  let liveDuration = $state(0);
+  let timer: ReturnType<typeof setInterval>;
+
+  $effect(() => {
+    liveDuration = baseDurationSeconds;
+    if (workstation?.status === 'running') {
+      clearInterval(timer);
+      timer = setInterval(() => {
+        liveDuration += 1;
+      }, 1000);
+    } else {
+      clearInterval(timer);
+    }
+    return () => clearInterval(timer);
+  });
 
   let formattedTotalDuration = $derived(() => {
-    const s = durationSeconds;
+    const s = liveDuration;
     if (s === 0) return '0s';
     if (s < 60) return `${Math.floor(s)}s`;
     if (s < 3600) return `${Math.floor(s / 60)}m ${Math.floor(s % 60)}s`;
@@ -63,6 +79,9 @@
       
       <!-- Workstation info in tab bar (right side) -->
       <div class="ml-auto flex items-center gap-3 text-[10px] text-text-tertiary">
+        {#if workstation.status === 'conflict'}
+          <span class="text-status-error-text animate-pulse">Conflict</span>
+        {/if}
         <span>Exit: {exitCode ?? '—'}</span>
         <span>Iter {iterationCount}</span>
         <span>{formattedTotalDuration()}</span>

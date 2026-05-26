@@ -92,12 +92,18 @@ class ShippingEvent:
     timestamp: str
 
 
+@dataclass(frozen=True)
+class WorkstationRemoved:
+    workstation_id: str
+
+
 MillEvent = (
     RecordAdded
     | RecordChanged
     | RecordRemoved
     | GitStateChanged
     | WorkstationStateChanged
+    | WorkstationRemoved
     | WorkstationOutput
     | WorkstationIterationCompleted
     | WorkstationTakt
