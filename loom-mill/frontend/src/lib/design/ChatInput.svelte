@@ -1,4 +1,6 @@
 <script lang="ts">
+  import VoiceIndicator from './VoiceIndicator.svelte';
+
   export let onSend: (text: string, context?: any) => void;
   export let disabled: boolean = false;
   export let attachedContext: any = null;
@@ -6,6 +8,45 @@
 
   let inputText = '';
   let textareaRef: HTMLTextAreaElement;
+
+  let isRecording = false;
+  let recognition: any = null;
+  let baseText = '';
+
+  function toggleVoice() {
+    if (isRecording) {
+      recognition?.stop();
+      isRecording = false;
+      return;
+    }
+    
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SR) {
+      alert("Voice not supported in this browser");
+      return;
+    }
+    
+    recognition = new SR();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+    
+    recognition.onresult = (event: any) => {
+      let transcript = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript;
+      }
+      inputText = baseText + (baseText && transcript ? ' ' : '') + transcript;
+      handleInput();
+    };
+    
+    recognition.onerror = () => { isRecording = false; };
+    recognition.onend = () => { isRecording = false; };
+    
+    baseText = inputText;
+    recognition.start();
+    isRecording = true;
+  }
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -16,8 +57,13 @@
 
   function send() {
     if (!inputText.trim() || disabled) return;
+    if (isRecording) {
+      recognition?.stop();
+      isRecording = false;
+    }
     onSend(inputText.trim(), attachedContext);
     inputText = '';
+    baseText = '';
     onClearContext();
     
     // Reset height
@@ -34,7 +80,8 @@
   }
 </script>
 
-<div class="flex flex-col border-t border-border-default bg-bg-surface p-3 gap-2">
+<div class="flex flex-col border-t border-border-default bg-bg-surface p-3 gap-2 relative">
+  <VoiceIndicator {isRecording} />
   {#if attachedContext}
     <div class="flex items-center justify-between bg-bg-surface-hover border border-border-default rounded px-2 py-1 text-[11px] text-text-secondary">
       <div class="flex items-center gap-1 overflow-hidden">
@@ -61,10 +108,14 @@
     
     <div class="flex items-center gap-1 p-1 shrink-0">
       <button 
-        class="p-1.5 text-text-tertiary hover:text-text-primary rounded hover:bg-bg-surface transition-colors"
-        title="Voice input (coming soon)"
+        class="p-1.5 rounded transition-colors relative {isRecording ? 'text-status-error-text bg-status-error-bg' : 'text-text-tertiary hover:text-text-primary hover:bg-bg-surface'}"
+        title="Voice input"
+        on:click={toggleVoice}
         {disabled}
       >
+        {#if isRecording}
+          <div class="absolute inset-0 rounded-full animate-pulse-ring"></div>
+        {/if}
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
       </button>
       <button 
