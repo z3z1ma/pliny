@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-record-rendering
 Type: Ticket
-Status: open
+Status: active
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - rendering arbitrary Markdown requires careful sanitization and styling
@@ -110,9 +110,8 @@ stubs, no placeholders, no "future work."
 
 ## Current State
 
-Ready to start after Unit 1 lands. Requires both backend work (new endpoint) and
-frontend work (renderer component). The backend endpoint is simple; the frontend
-renderer is the bulk of the work.
+Backend endpoint slice is implemented and verified. The full ticket still requires
+frontend renderer work and visual acceptance evidence.
 
 First Ralph run should:
 1. Add `GET /records/{record_id}/content` endpoint to backend
@@ -123,6 +122,12 @@ First Ralph run should:
 
 ## Journal
 
+- 2026-05-26: Backend endpoint slice started. Scope for this run is limited to
+  `GET /records/{record_id}/content`, backend route registration, and backend tests;
+  frontend renderer work remains out of scope for this run.
+- 2026-05-26: Backend endpoint slice completed. Added route and tests for raw
+  Markdown content lookup by record ID. Evidence: `source loom-mill/.venv/bin/activate
+  && python -m pytest loom-mill/tests/ -v` passed with 49 tests.
 - 2026-05-26: Created ticket with Status `open`. The "future work" stub at
   DetailPanel.svelte:109 is the most visible production gap. Backend already
   parses records; needs endpoint to serve raw content.

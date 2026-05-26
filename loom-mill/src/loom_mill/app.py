@@ -8,6 +8,7 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse
 from starlette.routing import Route, WebSocketRoute
 
+from loom_mill.api.records import get_record_content
 from loom_mill.api.shipping import abort_workstation, resolve_workstation, ship_workstation, shipping_queue, skip_workstation
 from loom_mill.api.scheduling import scheduling_log, scheduling_queue, put_scheduling_enabled, put_scheduling_overrides
 from loom_mill.api.workstation import (
@@ -73,6 +74,7 @@ def create_app() -> Starlette:
             Route("/harness/test", test_harness, methods=["POST"]),
             Route("/config", get_config, methods=["GET"]),
             Route("/config", put_config, methods=["PUT"]),
+            Route("/records/{record_id:path}/content", get_record_content, methods=["GET"]),
             Route("/workstations", list_workstations, methods=["GET"]),
             Route("/workstations", start_workstation, methods=["POST"]),
             Route("/workstations/{workstation_id}", get_workstation, methods=["GET"]),

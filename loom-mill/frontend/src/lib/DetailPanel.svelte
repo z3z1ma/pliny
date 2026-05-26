@@ -4,6 +4,9 @@
   import IterationsTab from './IterationsTab.svelte';
   import Playback from './Playback.svelte';
   import { formatDuration } from './utils';
+  import RecordRenderer from './RecordRenderer.svelte';
+  import MetadataBadges from './MetadataBadges.svelte';
+  import { apiUrl } from './api';
 
   let { 
     selectedId, 
@@ -77,6 +80,37 @@
     }
     return record.metadata.id || record.path;
   });
+
+  let recordContent = $state<string | null>(null);
+  let loadingContent = $state(false);
+
+  async function fetchContent() {
+    if (!record || !record.metadata.id) return;
+    loadingContent = true;
+    try {
+      const res = await fetch(apiUrl(`/records/${record.metadata.id}/content`));
+      if (res.ok) {
+        const data = await res.json();
+        recordContent = data.content;
+      } else {
+        console.error('Failed to fetch record content', res.status);
+        recordContent = null;
+      }
+    } catch (err) {
+      console.error('Error fetching record content', err);
+      recordContent = null;
+    } finally {
+      loadingContent = false;
+    }
+  }
+
+  $effect(() => {
+    if (record && !workstation) {
+      fetchContent();
+    } else {
+      recordContent = null;
+    }
+  });
 </script>
 
 <div class="flex flex-col h-full bg-bg-primary">
@@ -90,25 +124,41 @@
     </div>
   {:else if !workstation && record}
     <!-- Non-workstation ticket state -->
-    <div class="flex flex-col h-full">
-      <div class="flex items-center gap-0 border-b border-border-default px-4 py-3 shrink-0 bg-bg-surface">
-        <h2 class="text-[13px] font-medium text-text-primary">{recordTitle()}</h2>
-        <div class="ml-auto flex items-center gap-2">
-          <span class="rounded-full px-2 py-0.5 text-[10px] font-medium bg-bg-surface-active text-text-secondary border border-border-subtle">
-            {record.metadata.status || 'unknown'}
-          </span>
-        </div>
+    <div class="flex flex-col h-full overflow-hidden">
+      <!-- Header with title and badges -->
+      <div class="flex items-center gap-3 border-b border-border-default px-4 py-3 shrink-0 bg-bg-surface">
+        <h2 class="text-[14px] font-semibold text-text-primary truncate">{recordTitle()}</h2>
       </div>
-      <div class="flex flex-1 items-center justify-center p-8 text-center">
-        <div class="flex flex-col items-center gap-3 max-w-md">
-          <div class="w-12 h-12 rounded-full bg-bg-surface-active flex items-center justify-center text-text-tertiary mb-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <!-- Metadata badges row -->
+      <div class="px-4 py-2 border-b border-border-subtle bg-bg-surface shrink-0">
+        <MetadataBadges metadata={record.metadata} />
+      </div>
+      <!-- Scrollable content body -->
+      <div class="flex-1 overflow-y-auto px-4 py-4">
+        {#if recordContent}
+          <RecordRenderer content={recordContent} />
+        {:else if loadingContent}
+          <div class="flex items-center gap-2 text-text-tertiary text-[12px]">
+            <span class="animate-pulse">Loading record content...</span>
           </div>
-          <p class="text-[13px] text-text-secondary font-medium">This ticket is not currently executing in Mill</p>
-          <p class="text-[12px] text-text-tertiary">Ticket ID: {record.metadata.id || 'unknown'}</p>
-          <p class="text-[12px] text-text-tertiary mt-2">Full record rendering is future work.</p>
-        </div>
+        {:else}
+          <div class="text-text-tertiary text-[12px]">
+            <p>Record metadata is available but content could not be loaded.</p>
+            <button class="mt-2 text-accent-primary hover:underline" onclick={fetchContent}>Retry</button>
+          </div>
+        {/if}
       </div>
+      <!-- Footer: references if any -->
+      {#if record.references.length > 0}
+        <div class="border-t border-border-subtle px-4 py-2 shrink-0">
+          <p class="text-[10px] font-medium text-text-tertiary mb-1">References</p>
+          <div class="flex flex-wrap gap-1">
+            {#each record.references as ref}
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-bg-surface-active text-text-secondary">{ref}</span>
+            {/each}
+          </div>
+        </div>
+      {/if}
     </div>
   {:else if workstation}
     <!-- Tab bar -->
