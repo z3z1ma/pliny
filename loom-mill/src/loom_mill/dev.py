@@ -32,7 +32,7 @@ async def run_dev_stack() -> int:
             [
                 "npm",
                 "--prefix",
-                "loom-mill/frontend",
+                "frontend",
                 "run",
                 "dev",
                 "--",

@@ -158,6 +158,28 @@ body {
   background: var(--border-strong);
 }
 
+/* Svelvet overrides */
+.svelvet-wrapper {
+  --background-color: var(--bg-primary) !important;
+  --edge-color: var(--text-tertiary) !important;
+  --anchor-color: var(--border-strong) !important;
+  --anchor-connected: var(--text-tertiary) !important;
+  --anchor-hovering: var(--accent-primary) !important;
+  --anchor-connecting: var(--accent-primary) !important;
+  background-color: var(--bg-primary) !important;
+}
+.svelvet-graph-wrapper {
+  background-color: transparent !important;
+}
+.svelvet-minimap {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-default) !important;
+}
+.svelvet-controls {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-default) !important;
+}
+
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }

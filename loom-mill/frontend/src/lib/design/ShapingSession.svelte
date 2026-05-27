@@ -34,7 +34,9 @@
               stagedRecords: state.staged_records || [],
               activeBranch: state.active_branch || 'main',
               branches: state.branches || ['main'],
-              activeExplorations: state.active_explorations || []
+              activeExplorations: state.active_explorations || [],
+              advanceState: 'idle',
+              advanceError: null
             };
           }
         } else {
@@ -70,7 +72,9 @@
             stagedRecords: state.staged_records || [],
             activeBranch: state.active_branch || 'main',
             branches: state.branches || ['main'],
-            activeExplorations: state.active_explorations || []
+            activeExplorations: state.active_explorations || [],
+            advanceState: 'idle',
+            advanceError: null
           };
         }
         // Trigger the engine to start the shaping conversation

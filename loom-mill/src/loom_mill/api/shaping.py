@@ -374,10 +374,13 @@ async def advance_shaping_session(request: Request) -> JSONResponse:
         if session.state.ended_at is not None:
             return JSONResponse({"error": "Session has ended"}, status_code=409)
 
+        await request.app.state.store.publish(ShapingEvent(session_id=session.session_id, event="advance_started", data={}))
         engine = ShapingEngine(session, _orchestrator(request, session), request.app.state.store)
         try:
             nodes = await engine.advance()
+            await request.app.state.store.publish(ShapingEvent(session_id=session.session_id, event="advance_completed", data={"node_count": len(nodes)}))
         except Exception as error:
+            await request.app.state.store.publish(ShapingEvent(session_id=session.session_id, event="advance_error", data={"error": str(error)}))
             node = CanvasNode(
                 id=str(uuid4()),
                 type=CanvasNodeType.OBSERVATION,

@@ -33,6 +33,8 @@ export class MillStore {
     activeBranch: string;
     branches: string[];
     activeExplorations: string[];
+    advanceState: 'idle' | 'thinking' | 'error';
+    advanceError: string | null;
   } | null>(null);
 
   private ws: WebSocket | null = null;
@@ -297,6 +299,26 @@ export class MillStore {
           this.shapingSession = null;
         }
         break;
+      case 'shaping:advance_started':
+        this.ensureShapingSession(data.session_id);
+        if (this.shapingSession) {
+          this.shapingSession.advanceState = 'thinking';
+          this.shapingSession.advanceError = null;
+        }
+        break;
+      case 'shaping:advance_completed':
+        this.ensureShapingSession(data.session_id);
+        if (this.shapingSession) {
+          this.shapingSession.advanceState = 'idle';
+        }
+        break;
+      case 'shaping:advance_error':
+        this.ensureShapingSession(data.session_id);
+        if (this.shapingSession) {
+          this.shapingSession.advanceState = 'error';
+          this.shapingSession.advanceError = data.error;
+        }
+        break;
     }
   }
 
@@ -310,7 +332,9 @@ export class MillStore {
       stagedRecords: [],
       activeBranch: 'main',
       branches: ['main'],
-      activeExplorations: []
+      activeExplorations: [],
+      advanceState: 'idle',
+      advanceError: null
     };
   }
 }
