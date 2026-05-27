@@ -7,6 +7,7 @@ from loom_mill.parser import LoomRecord
 from loom_mill.iterations import IterationRecord
 from loom_mill.processes.backpressure import BackpressureSignal
 from loom_mill.processes.spc import SPCSignal
+from loom_mill.shaping.events import ShapingEvent
 from loom_mill.workstation.models import OutputEvent, WorkstationState
 
 
@@ -116,4 +117,5 @@ MillEvent = (
     | WorkstationAndon
     | ShippingEvent
     | ChatEvent
+    | ShapingEvent
 )

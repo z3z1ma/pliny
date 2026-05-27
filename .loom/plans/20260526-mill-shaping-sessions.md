@@ -2,7 +2,7 @@
 
 ID: plan:20260526-mill-shaping-sessions
 Type: Plan
-Status: open
+Status: active
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: high - architecturally novel feature; new backend service, new interaction model, tight coupling between agent reasoning and UI rendering
@@ -160,9 +160,10 @@ interactive shaping to commit.
 
 ## Current State
 
-Plan created. Spec is active. Ready to file child tickets and begin execution.
+Execution has started. The first child ticket, `ticket:20260526-mill-shaping-foundation`, is implemented and in review; remaining child tickets are still pending in dependency order.
 
 ## Journal
 
+- 2026-05-26: Marked active after implementation began on `ticket:20260526-mill-shaping-foundation`.
 - 2026-05-26: Created plan. All design questions resolved. Infrastructure mapped.
   Ready to decompose into detailed child tickets.

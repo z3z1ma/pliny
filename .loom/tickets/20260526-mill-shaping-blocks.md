@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-shaping-blocks
 Type: Ticket
-Status: open
+Status: review
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: high - core novelty of the feature; agent reasoning quality directly determines UX quality; prompt engineering intensive
@@ -378,13 +378,27 @@ The engine automatically transitions phases based on conversation progress:
 - ACC-006: Backend tests pass.
   - Evidence: Test output.
 
+## Evidence
+
+- `evidence:20260526-mill-shaping-blocks-engine-validation` - focused engine tests,
+  full backend tests, frontend build, and whitespace checks for touched files.
+
 ## Current State
 
-Ready to start after ticket:20260526-mill-shaping-harness provides bounded
-invocations. This is the most complex ticket—the prompt engineering will need
-iteration. Ship a working version first, refine the prompts based on real usage.
+Implementation is complete and ready for review/audit. The engine, parser, prompt
+templates, advance API endpoint, and tests are in place. Validation passed for the
+focused engine suite, full backend suite, and frontend build. A separate audit pass
+is still needed before closure because this is high-risk core reasoning behavior.
 
 ## Journal
 
+- 2026-05-26: Started implementation in the current session. Read the ticket,
+  related plan/spec, and shaping session/harness/orchestrator/API seams. Small
+  harness prompt override is needed so the engine can reuse bounded invocations
+  for internal decision prompts without streaming reasoning to the user.
+- 2026-05-26: Implemented the decision parser, prompt templates, shaping engine,
+  advance API endpoint, and focused tests. Validation evidence recorded in
+  `evidence:20260526-mill-shaping-blocks-engine-validation`; moved ticket to
+  review pending audit.
 - 2026-05-26: Created ticket. Third in the shaping sessions plan. This is the
   core novelty—the agent reasoning that drives meaningful shaping conversations.

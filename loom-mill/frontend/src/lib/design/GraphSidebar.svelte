@@ -1,18 +1,20 @@
 <script lang="ts">
   import type { LoomRecord } from '../types';
-  import NewRecordDropdown from './NewRecordDropdown.svelte';
+  
   import TreeNodeComponent from './TreeNodeComponent.svelte';
 
   let { 
     records, 
     selectedId, 
     onSelect, 
-    onCreateRecord 
+    onCreateRecord,
+    onStartShaping
   }: { 
     records: LoomRecord[]; 
     selectedId: string | null; 
     onSelect: (id: string) => void; 
     onCreateRecord: (surface: string) => void;
+    onStartShaping: () => void;
   } = $props();
 
   let searchQuery = $state('');
@@ -145,7 +147,12 @@
 <div class="flex flex-col h-full">
   <div class="flex items-center justify-between p-3 border-b border-border-default shrink-0">
     <span class="font-medium text-text-secondary text-[11px] uppercase tracking-wider">Records</span>
-    <NewRecordDropdown onSelect={onCreateRecord} />
+    <button 
+      class="px-2 py-1 bg-accent-primary text-white hover:bg-accent-primary/90 rounded text-[11px] font-medium transition-colors shadow-sm"
+      onclick={onStartShaping}
+    >
+      + New
+    </button>
   </div>
 
   <div class="px-3 py-2 border-b border-border-subtle shrink-0">

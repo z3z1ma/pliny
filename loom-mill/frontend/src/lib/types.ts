@@ -128,6 +128,24 @@ export interface ShippingEvent {
   timestamp: string;
 }
 
+export interface InteractionBlock {
+  id: string;
+  type: string;
+  timestamp: string;
+  content: Record<string, any>;
+}
+
+export interface StagedRecord {
+  temp_id: string;
+  surface: string;
+  title: string;
+  content: string;
+  branch: string;
+  status: string;
+  proposed_at: string;
+  modified_at: string | null;
+}
+
 export interface MillState {
   records: LoomRecord[];
   git: GitState;

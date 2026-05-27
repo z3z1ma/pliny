@@ -10,6 +10,7 @@ from starlette.routing import Route, WebSocketRoute
 
 from loom_mill.api.design import create_chat_session, create_record, end_chat_session, get_chat_session, send_chat_message, transition_record, update_record
 from loom_mill.api.records import get_record_content
+from loom_mill.api.shaping import accept_staged_record, add_shaping_input, advance_shaping_session, cancel_shaping_exploration, commit_shaping_session, create_shaping_branch, create_shaping_session, create_staged_record, delete_shaping_session, delete_staged_record, explore_shaping_session, get_shaping_context, get_shaping_session, list_shaping_explorations, list_shaping_sessions, merge_shaping_branch, switch_shaping_branch, update_staged_record
 from loom_mill.api.shipping import abort_workstation, resolve_workstation, ship_workstation, shipping_queue, skip_workstation
 from loom_mill.api.scheduling import scheduling_log, scheduling_queue, put_scheduling_enabled, put_scheduling_overrides
 from loom_mill.api.workstation import (
@@ -83,6 +84,24 @@ def create_app() -> Starlette:
             Route("/chat/sessions/{session_id}", get_chat_session, methods=["GET"]),
             Route("/chat/sessions/{session_id}/messages", send_chat_message, methods=["POST"]),
             Route("/chat/sessions/{session_id}", end_chat_session, methods=["DELETE"]),
+            Route("/shaping/sessions", create_shaping_session, methods=["POST"]),
+            Route("/shaping/sessions", list_shaping_sessions, methods=["GET"]),
+            Route("/shaping/sessions/{session_id}", get_shaping_session, methods=["GET"]),
+            Route("/shaping/sessions/{session_id}/context", get_shaping_context, methods=["GET"]),
+            Route("/shaping/sessions/{session_id}/input", add_shaping_input, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/advance", advance_shaping_session, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/staged", create_staged_record, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/staged/{temp_id}", update_staged_record, methods=["PUT"]),
+            Route("/shaping/sessions/{session_id}/staged/{temp_id}", delete_staged_record, methods=["DELETE"]),
+            Route("/shaping/sessions/{session_id}/staged/{temp_id}/accept", accept_staged_record, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/branch", create_shaping_branch, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/branch/{branch_id}/switch", switch_shaping_branch, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/branch/{source}/merge", merge_shaping_branch, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/commit", commit_shaping_session, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/explore", explore_shaping_session, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/explore/{invocation_id}/cancel", cancel_shaping_exploration, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/explorations", list_shaping_explorations, methods=["GET"]),
+            Route("/shaping/sessions/{session_id}", delete_shaping_session, methods=["DELETE"]),
             Route("/workstations", list_workstations, methods=["GET"]),
             Route("/workstations", start_workstation, methods=["POST"]),
             Route("/workstations/{workstation_id}", get_workstation, methods=["GET"]),

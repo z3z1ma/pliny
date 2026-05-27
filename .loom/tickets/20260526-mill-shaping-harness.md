@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-shaping-harness
 Type: Ticket
-Status: open
+Status: review
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - parallel subprocess management with shared mutable state (context doc); race conditions possible
@@ -359,11 +359,21 @@ class ShapingSession:
 
 ## Current State
 
-Ready to start after ticket:20260526-mill-shaping-foundation provides the session
-model and persistence. Reuses subprocess patterns from existing chat/workstation
-harnesses.
+Implementation is complete and ready for review. Added the bounded harness runner,
+parallel shaping orchestrator, exploration API endpoints, route registration, and
+focused backend tests. Verification passed for the focused harness suite, the full
+backend suite, and the frontend build. `git diff --check` is blocked by pre-existing
+trailing whitespace in `loom-mill/frontend/src/lib/design/GraphSidebar.svelte`,
+which is outside this ticket's write scope.
 
 ## Journal
 
+- 2026-05-26: Implemented bounded harness orchestration and moved to review.
+  Evidence: `uv run --extra dev python -m pytest tests/test_shaping_harness.py -x`
+  passed 6 tests; `uv run --extra dev python -m pytest tests/ -x` passed 75 tests;
+  `npm --prefix loom-mill/frontend run build` succeeded with existing Svelte/a11y
+  warnings. `git diff --check` reports unrelated trailing whitespace in
+  `GraphSidebar.svelte` lines 3 and 150.
+- 2026-05-26: Marked active and began implementation from the ticket boundary.
 - 2026-05-26: Created ticket. Second in the shaping sessions plan. Adds the
   exploration capability that feeds the context document.

@@ -6,7 +6,10 @@
   import DocumentEditor from './DocumentEditor.svelte';
   import GraphView from './GraphView.svelte';
   import ChatPanel from './ChatPanel.svelte';
+  import ShapingSession from './ShapingSession.svelte';
 
+  let centerMode = $state<'editor' | 'graph' | 'shaping'>('editor');
+  let shapingSessionId = $state<string | null>(null);
   let selectedDocumentId = $state<string | null>(null);
   let chatContext = $state<any>(null);
 
@@ -42,6 +45,11 @@
     if (!mobileMode && !showChat) {
       showChat = true;
     }
+  }
+
+  function handleStartShaping() {
+    centerMode = 'shaping';
+    shapingSessionId = null;
   }
 
   async function handleCreateRecord(surface: string) {
@@ -111,12 +119,14 @@
           selectedId={selectedDocumentId} 
           onSelect={(id) => selectedDocumentId = id}
           onCreateRecord={handleCreateRecord}
+          onStartShaping={handleStartShaping}
         />
       </div>
     {/if}
     
     <!-- Center: Document editor -->
     <div class="flex-1 min-w-0 flex flex-col relative z-0">
+      {#if centerMode !== 'shaping'}
       <button
         class="absolute right-2 top-1 z-30 flex h-6 items-center gap-1 rounded border border-border-default bg-bg-surface px-2 text-[10px] text-text-tertiary shadow-sm transition-colors hover:bg-bg-surface-hover hover:text-text-primary disabled:cursor-not-allowed disabled:opacity-40"
         onclick={() => showConnectedGraph = !showConnectedGraph}
@@ -126,6 +136,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.59 13.51 15.42 17.49"/><path d="M15.41 6.51 8.59 10.49"/></svg>
         {showConnectedGraph ? 'Editor' : 'Graph'}
       </button>
+      {/if}
 
       {#if !showGraph}
         <button 
@@ -145,7 +156,9 @@
         </button>
       {/if}
 
-      {#if showConnectedGraph}
+      {#if centerMode === 'shaping'}
+        <ShapingSession bind:sessionId={shapingSessionId} onExit={() => centerMode = 'editor'} />
+      {:else if showConnectedGraph}
         <GraphView documentId={selectedDocumentId} onNavigate={handleNavigate} />
       {:else}
         <DocumentEditor

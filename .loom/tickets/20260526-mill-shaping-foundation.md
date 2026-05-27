@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-shaping-foundation
 Type: Ticket
-Status: open
+Status: review
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - new backend module with new data model; must get the persistence and event shapes right since everything else builds on them
@@ -322,11 +322,17 @@ Handle `shaping:*` events by updating this state.
 
 ## Current State
 
-Ready to start. This is the first ticket in the shaping sessions implementation.
-No dependencies on other shaping tickets. Follows existing patterns from
-`chat/session.py` and `state/models.py`.
+Implementation is complete and awaiting review/audit. Added the shaping package,
+file-backed session persistence, REST endpoints, WebSocket event serialization,
+frontend store handling for shaping events, and focused tests. Verification passed:
+`uv run --extra dev python -m pytest tests/test_shaping_session.py -x`,
+`uv run --extra dev python -m pytest tests/ -x`, `npm --prefix
+loom-mill/frontend run build`, and `git diff --check`. Frontend build emitted
+existing Svelte warnings in chat components unrelated to this ticket.
 
 ## Journal
 
+- 2026-05-26: Implemented scoped backend/frontend foundation and moved to review. Evidence: targeted shaping tests passed (8 tests), full backend suite passed (69 tests), frontend production build passed with unrelated pre-existing warnings, and `git diff --check` passed.
+- 2026-05-26: Started implementation. Read ticket, parent plan, active spec, ticket procedure, and Ralph run discipline; proceeding inside the ticket write scope.
 - 2026-05-26: Created ticket. First in the shaping sessions plan. Establishes the
   data model and persistence that all subsequent tickets build on.

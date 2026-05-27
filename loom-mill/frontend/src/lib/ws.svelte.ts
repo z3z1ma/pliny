@@ -1,4 +1,4 @@
-import { type MillState, type LoomRecord, type GitState } from './types';
+import { type InteractionBlock, type MillState, type StagedRecord } from './types';
 import { apiUrl, wsUrl } from './api';
 
 export class MillStore {
@@ -23,6 +23,16 @@ export class MillStore {
     streamingContent: string;
     lastExitCode: number | null;
   }>({ id: null, messages: [], streaming: false, streamingContent: '', lastExitCode: null });
+
+  shapingSession = $state<{
+    id: string | null;
+    phase: string;
+    blocks: InteractionBlock[];
+    stagedRecords: StagedRecord[];
+    activeBranch: string;
+    branches: string[];
+    activeExplorations: string[];
+  } | null>(null);
 
   private ws: WebSocket | null = null;
   private reconnectTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -214,7 +224,33 @@ export class MillStore {
           };
         }
         break;
+      case 'shaping:block_added':
+        this.ensureShapingSession(data.session_id);
+        this.shapingSession!.blocks = [...this.shapingSession!.blocks, data.block];
+        break;
+      case 'shaping:phase_changed':
+        this.ensureShapingSession(data.session_id);
+        this.shapingSession!.phase = data.phase;
+        break;
+      case 'shaping:session_ended':
+        if (this.shapingSession?.id === data.session_id) {
+          this.shapingSession = null;
+        }
+        break;
     }
+  }
+
+  private ensureShapingSession(sessionId: string) {
+    if (this.shapingSession?.id === sessionId) return;
+    this.shapingSession = {
+      id: sessionId,
+      phase: 'exploring',
+      blocks: [],
+      stagedRecords: [],
+      activeBranch: 'main',
+      branches: ['main'],
+      activeExplorations: []
+    };
   }
 }
 

@@ -7,7 +7,7 @@ from pathlib import Path
 from starlette.endpoints import WebSocketEndpoint
 from starlette.websockets import WebSocket
 
-from loom_mill.state import ChatEvent, MillStateStore, ShippingEvent, WorkstationAndon, WorkstationIterationCompleted, WorkstationOutput, WorkstationStateChanged, WorkstationTakt
+from loom_mill.state import ChatEvent, MillStateStore, ShapingEvent, ShippingEvent, WorkstationAndon, WorkstationIterationCompleted, WorkstationOutput, WorkstationStateChanged, WorkstationTakt
 
 
 def _json_default(obj):
@@ -53,6 +53,8 @@ class MillWebSocket(WebSocketEndpoint):
 
 
 def _event_payload(event) -> dict:
+    if isinstance(event, ShapingEvent):
+        return {"type": f"shaping:{event.event}", "data": {"session_id": event.session_id, **event.data}}
     if isinstance(event, WorkstationStateChanged):
         return {
             "workstation_id": event.workstation_id,

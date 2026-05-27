@@ -1,0 +1,350 @@
+from __future__ import annotations
+
+import json
+from dataclasses import asdict
+from pathlib import Path
+from uuid import uuid4
+
+from starlette.requests import Request
+from starlette.responses import JSONResponse
+
+from loom_mill.shaping import BlockType, InteractionBlock, ShapingSession, list_sessions
+from loom_mill.shaping.commit import CommitFlow
+from loom_mill.shaping.engine import ShapingEngine
+from loom_mill.shaping.events import ShapingEvent
+from loom_mill.shaping.orchestrator import ShapingOrchestrator
+from loom_mill.shaping.session import utc_now
+from loom_mill.workstation.config import HarnessConfig
+
+
+def _workspace_root(request: Request) -> Path:
+    return Path(request.app.state.workspace_root)
+
+
+async def _json_body(request: Request) -> dict:
+    try:
+        body = await request.json()
+    except json.JSONDecodeError as error:
+        raise ValueError("invalid JSON") from error
+    if not isinstance(body, dict):
+        raise ValueError("JSON body must be an object")
+    return body
+
+
+def _state_payload(session: ShapingSession) -> dict:
+    return asdict(session.state)
+
+
+def _load_session(request: Request) -> ShapingSession:
+    return ShapingSession.load(request.path_params["session_id"], _workspace_root(request))
+
+
+def _harness_config(request: Request) -> HarnessConfig:
+    manager = getattr(request.app.state, "workstation_manager", None)
+    if manager is not None:
+        return manager.config.harness
+    return getattr(request.app.state, "harness_config", HarnessConfig(command="echo"))
+
+
+def _orchestrators(request: Request) -> dict[str, ShapingOrchestrator]:
+    if not hasattr(request.app.state, "shaping_orchestrators"):
+        request.app.state.shaping_orchestrators = {}
+    return request.app.state.shaping_orchestrators
+
+
+def _orchestrator(request: Request, session: ShapingSession) -> ShapingOrchestrator:
+    orchestrators = _orchestrators(request)
+    orchestrator = orchestrators.get(session.session_id)
+    if orchestrator is None:
+        orchestrator = ShapingOrchestrator(
+            session,
+            request.app.state.store,
+            _harness_config(request),
+            timeout_seconds=float(getattr(request.app.state, "shaping_timeout_seconds", 120.0)),
+        )
+        orchestrators[session.session_id] = orchestrator
+    else:
+        orchestrator.session = session
+    return orchestrator
+
+
+async def create_shaping_session(request: Request) -> JSONResponse:
+    try:
+        body = await _json_body(request)
+        initial_input = body["input"]
+        if not isinstance(initial_input, str) or not initial_input.strip():
+            raise ValueError("input must be a non-empty string")
+    except (KeyError, ValueError) as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+
+    session = ShapingSession.create(_workspace_root(request), initial_input)
+    return JSONResponse({"session_id": session.session_id, "state": _state_payload(session)})
+
+
+async def list_shaping_sessions(request: Request) -> JSONResponse:
+    payload = [
+        {
+            "id": state.id,
+            "phase": state.phase,
+            "created_at": state.created_at,
+            "block_count": len(state.blocks),
+            "staged_count": len(state.staged_records),
+        }
+        for state in list_sessions(_workspace_root(request))
+    ]
+    return JSONResponse(payload)
+
+
+async def get_shaping_session(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    return JSONResponse(_state_payload(session))
+
+
+async def get_shaping_context(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    content = session.read_context()
+    return JSONResponse({"content": content, "byte_length": len(content.encode("utf-8"))})
+
+
+async def add_shaping_input(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+
+    try:
+        body = await _json_body(request)
+        text = body["text"]
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError("text must be a non-empty string")
+    except (KeyError, ValueError) as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+
+    block = InteractionBlock(
+        id=str(uuid4()),
+        type=BlockType.OPERATOR_INPUT,
+        timestamp=utc_now(),
+        content={"text": text},
+    )
+    await session.append_context("Operator Input", text)
+    session.add_block(block)
+    await request.app.state.store.publish(
+        ShapingEvent(session_id=session.session_id, event="block_added", data={"block": asdict(block)})
+    )
+    return JSONResponse({"session_id": session.session_id, "block": asdict(block)})
+
+
+async def explore_shaping_session(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+
+    try:
+        body = await _json_body(request)
+        goal = body["goal"]
+        if not isinstance(goal, str) or not goal.strip():
+            raise ValueError("goal must be a non-empty string")
+    except (KeyError, ValueError) as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+
+    invocation_id = await _orchestrator(request, session).launch(goal.strip())
+    return JSONResponse({"session_id": session.session_id, "invocation_id": invocation_id, "goal": goal.strip()})
+
+
+async def advance_shaping_session(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+
+    engine = ShapingEngine(session, _orchestrator(request, session), request.app.state.store)
+    blocks = await engine.advance()
+    return JSONResponse({"session_id": session.session_id, "blocks": [asdict(block) for block in blocks]})
+
+
+async def create_staged_record(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+    try:
+        body = await _json_body(request)
+        surface = body["surface"]
+        title = body["title"]
+        content = body["content"]
+        if not isinstance(surface, str) or not surface.strip():
+            raise ValueError("surface must be a non-empty string")
+        if not isinstance(title, str) or not title.strip():
+            raise ValueError("title must be a non-empty string")
+        if not isinstance(content, str):
+            raise ValueError("content must be a string")
+        record = session.staging.propose(surface.strip(), title.strip(), content, session.state.active_branch)
+    except (KeyError, ValueError) as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+    return JSONResponse({"session_id": session.session_id, "record": asdict(record)})
+
+
+async def update_staged_record(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+    try:
+        body = await _json_body(request)
+        content = body.get("content")
+        title = body.get("title")
+        if content is not None and not isinstance(content, str):
+            raise ValueError("content must be a string")
+        if title is not None and (not isinstance(title, str) or not title.strip()):
+            raise ValueError("title must be a non-empty string")
+        record = session.staging.update(request.path_params["temp_id"], content=content, title=title.strip() if title else None)
+    except ValueError as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+    return JSONResponse({"session_id": session.session_id, "record": asdict(record)})
+
+
+async def delete_staged_record(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+    try:
+        session.staging.reject(request.path_params["temp_id"])
+    except ValueError as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+    return JSONResponse({"session_id": session.session_id, "rejected": request.path_params["temp_id"]})
+
+
+async def accept_staged_record(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+    try:
+        record = session.staging.accept(request.path_params["temp_id"])
+    except ValueError as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+    return JSONResponse({"session_id": session.session_id, "record": asdict(record)})
+
+
+async def create_shaping_branch(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+    try:
+        body = await _json_body(request)
+        branch_id = body["branch_id"]
+        label = body.get("label", branch_id)
+        if not isinstance(branch_id, str) or not branch_id.strip():
+            raise ValueError("branch_id must be a non-empty string")
+        if not isinstance(label, str) or not label.strip():
+            raise ValueError("label must be a non-empty string")
+        session.staging.create_branch(branch_id.strip(), label.strip())
+    except (KeyError, ValueError) as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+    return JSONResponse({"session_id": session.session_id, "active_branch": session.state.active_branch, "branches": session.state.branches})
+
+
+async def switch_shaping_branch(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+    try:
+        session.staging.switch_branch(request.path_params["branch_id"])
+    except ValueError as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+    return JSONResponse({"session_id": session.session_id, "active_branch": session.state.active_branch, "branches": session.state.branches})
+
+
+async def merge_shaping_branch(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+    try:
+        body = await _json_body(request)
+        target = body.get("target", "main")
+        if not isinstance(target, str) or not target.strip():
+            raise ValueError("target must be a non-empty string")
+        session.staging.merge_branch(request.path_params["source"], target.strip())
+    except ValueError as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+    return JSONResponse({"session_id": session.session_id, "active_branch": session.state.active_branch, "branches": session.state.branches})
+
+
+async def commit_shaping_session(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+    try:
+        result = await CommitFlow(session, _workspace_root(request), request.app.state.store).commit()
+    except ValueError as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+    except RuntimeError as error:
+        return JSONResponse({"error": str(error)}, status_code=500)
+    return JSONResponse(asdict(result))
+
+
+async def cancel_shaping_exploration(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+
+    invocation_id = request.path_params["invocation_id"]
+    cancelled = await _orchestrator(request, session).cancel(invocation_id)
+    return JSONResponse({"session_id": session.session_id, "invocation_id": invocation_id, "cancelled": cancelled})
+
+
+async def list_shaping_explorations(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+
+    return JSONResponse(_orchestrator(request, session).list_explorations())
+
+
+async def delete_shaping_session(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    session.end()
+    await request.app.state.store.publish(
+        ShapingEvent(session_id=session.session_id, event="session_ended", data={"reason": "cancelled"})
+    )
+    _orchestrators(request).pop(session.session_id, None)
+    return JSONResponse({"session_id": session.session_id, "ended_at": session.state.ended_at})
