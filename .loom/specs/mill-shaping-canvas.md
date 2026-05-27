@@ -2,7 +2,7 @@
 
 ID: spec:mill-shaping-canvas
 Type: Spec
-Status: draft
+Status: active
 Created: 2026-05-26
 Updated: 2026-05-26
 Replaces: spec:mill-shaping-sessions
@@ -117,6 +117,17 @@ Multiple processing nodes can be active simultaneously. Each represents a bounde
 harness invocation. When processing completes, the processing node is replaced by
 its output nodes (questions, observations, options, or records).
 
+### REQ-012: Reactive downstream regeneration
+
+When the operator changes an assumption in an earlier node (edits an input, changes
+an answer to a question, or picks a different option), downstream nodes that
+depended on that assumption are invalidated and regenerated. This is the key
+reactive property: the graph is not just append-only, it's a live dependency tree.
+
+Invalidated nodes are marked as stale (visually dimmed), then regenerated via new
+AI processing. The operator sees the downstream consequences of changing their mind
+propagate through the graph.
+
 ## Scenarios
 
 ### SCN-001: Operator shapes a feature
@@ -162,14 +173,22 @@ a specific branch. Auto-layout keeps the graph readable.
 
 ## Open Questions
 
-- **OQ-001**: What canvas rendering technology? SVG (like the graph view) vs
-  Canvas API vs WebGL vs a library (react-flow equivalent for Svelte)?
+All resolved.
 
-- **OQ-002**: Should the operator be able to "prune" branches (collapse/hide dead
-  paths) or should the full tree always be visible?
+## Resolved Decisions
 
-- **OQ-003**: How does the canvas relate to the existing chat panel in the Design
-  Room? Does chat go away, or can it coexist for quick edits to existing records?
+- **Canvas rendering**: Svelvet (Svelte-native node graph library). Gives us
+  reactive node connections — changing assumptions in a node can regenerate
+  connected downstream nodes reactively. Provides zoom/pan, node dragging,
+  edge routing, and Svelte component nodes out of the box.
+
+- **Dead branch visibility**: Always visible by default. Add a "collapse dead
+  branches" toggle. Full tree shows reasoning history; collapsed view focuses
+  on the active path.
+
+- **Chat panel**: Goes away in shaping mode. The canvas IS the interaction. For
+  existing records, editor + chat remain as-is. "New" enters canvas mode;
+  opening existing records enters editor mode.
 
 ## Evidence Expectations
 
