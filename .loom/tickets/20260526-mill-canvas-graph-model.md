@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-graph-model
 Type: Ticket
-Status: open
+Status: review
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - core data model change affects persistence, API, WebSocket, and all downstream tickets
@@ -122,10 +122,20 @@ redesign before downstream tickets build on the model.
 
 ## Current State
 
-Ready to start after Svelvet proof passes. First Ralph run: implement models,
-update session persistence, update API, add WebSocket events, write tests.
+Implementation appears complete and is ready for review/audit. The shaping backend
+now persists and serves `nodes` and `edges`, creates root and follow-up input
+nodes, publishes graph WebSocket events, and no old block model references remain
+under `loom-mill/src`.
+
+Evidence: `evidence:20260526-mill-canvas-graph-tests` records `uv run pytest
+Separate audit has not yet been performed.
 
 ## Journal
 
 - 2026-05-26: Created ticket with Status `open`. Contract-first: defines the data
   model all other tickets depend on.
+- 2026-05-26: Set Status `active`. Implementing graph-native backend model,
+  persistence, REST/WebSocket events, and tests in one bounded pass.
+- 2026-05-26: Set Status `review`. Implemented graph model and updated shaping
+  persistence, REST API, WebSocket events, engine/orchestrator graph emission, and
+  tests. Evidence recorded in `evidence:20260526-mill-canvas-graph-tests`.

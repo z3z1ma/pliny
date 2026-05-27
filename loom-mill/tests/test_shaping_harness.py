@@ -10,7 +10,7 @@ import pytest
 
 from loom_mill.api import shaping
 from loom_mill.api.ws import _event_payload
-from loom_mill.shaping import BlockType, ShapingSession
+from loom_mill.shaping import ShapingSession
 from loom_mill.shaping.harness import InvocationConfig, run_bounded_invocation
 from loom_mill.shaping.orchestrator import ShapingOrchestrator
 from loom_mill.state import MillStateStore
@@ -116,7 +116,7 @@ print('summary for ' + goal)
 
 
 @pytest.mark.asyncio
-async def test_cancel_in_flight_exploration_records_system_block(tmp_path: Path) -> None:
+async def test_cancel_in_flight_exploration_records_cancelled_node(tmp_path: Path) -> None:
     session = ShapingSession.create(tmp_path, "initial")
     orchestrator = ShapingOrchestrator(
         session,
@@ -130,8 +130,8 @@ async def test_cancel_in_flight_exploration_records_system_block(tmp_path: Path)
 
     assert invocation_id not in session.state.active_explorations
     assert any(
-        block.type == BlockType.SYSTEM and block.content.get("invocation_id") == invocation_id
-        for block in session.state.blocks
+        node.content.get("event") == "exploration_cancelled" and node.content.get("invocation_id") == invocation_id
+        for node in session.state.nodes.values()
     )
     assert orchestrator.list_explorations()[0]["status"] == "cancelled"
 
@@ -178,14 +178,14 @@ print('event summary')
         await subscription.aclose()
 
     payloads = [_event_payload(event) for event in events]
-    assert payloads[0]["type"] == "shaping:block_added"
-    assert payloads[0]["data"]["block"]["type"] == "exploration_start"
-    assert payloads[1] == {
+    assert payloads[0]["type"] == "shaping:node_added"
+    assert payloads[0]["data"]["node"]["type"] == "processing"
+    assert any(payload == {
         "type": "shaping:exploration_start",
         "data": {"session_id": session_id, "invocation_id": invocation_id, "goal": "event exploration"},
-    }
+    } for payload in payloads)
     assert any(payload["type"] == "shaping:exploration_stream" and payload["data"]["delta"] == "line one\n" for payload in payloads)
-    assert any(payload["type"] == "shaping:block_added" and payload["data"]["block"]["type"] == "exploration_complete" for payload in payloads)
+    assert any(payload["type"] == "shaping:node_added" and payload["data"]["node"]["content"].get("event") == "exploration_complete" for payload in payloads)
     assert payloads[-1]["type"] == "shaping:exploration_complete"
 
 

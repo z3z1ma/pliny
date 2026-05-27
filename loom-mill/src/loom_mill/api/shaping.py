@@ -8,7 +8,7 @@ from uuid import uuid4
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
-from loom_mill.shaping import BlockType, InteractionBlock, ShapingSession, list_sessions
+from loom_mill.shaping import CanvasNode, CanvasNodeType, NodeStatus, ShapingSession, list_sessions
 from loom_mill.shaping.commit import CommitFlow
 from loom_mill.shaping.engine import ShapingEngine
 from loom_mill.shaping.events import ShapingEvent
@@ -78,6 +78,15 @@ async def create_shaping_session(request: Request) -> JSONResponse:
         return JSONResponse({"error": str(error)}, status_code=400)
 
     session = ShapingSession.create(_workspace_root(request), initial_input)
+    root_node = next(iter(session.state.nodes.values()))
+    await request.app.state.store.publish(
+        ShapingEvent(session_id=session.session_id, event="node_added", data={"node": asdict(root_node)})
+    )
+    for edge in session.state.edges:
+        if edge.target_id == root_node.id:
+            await request.app.state.store.publish(
+                ShapingEvent(session_id=session.session_id, event="edge_added", data={"edge": asdict(edge)})
+            )
     return JSONResponse({"session_id": session.session_id, "state": _state_payload(session)})
 
 
@@ -87,7 +96,7 @@ async def list_shaping_sessions(request: Request) -> JSONResponse:
             "id": state.id,
             "phase": state.phase,
             "created_at": state.created_at,
-            "block_count": len(state.blocks),
+            "node_count": len(state.nodes),
             "staged_count": len(state.staged_records),
         }
         for state in list_sessions(_workspace_root(request))
@@ -125,21 +134,33 @@ async def add_shaping_input(request: Request) -> JSONResponse:
         text = body["text"]
         if not isinstance(text, str) or not text.strip():
             raise ValueError("text must be a non-empty string")
+        parent_node_id = body.get("parent_node_id")
+        if parent_node_id is not None:
+            parent_node_id = str(parent_node_id)
+            if parent_node_id not in session.state.nodes:
+                raise ValueError("parent_node_id must reference an existing node")
     except (KeyError, ValueError) as error:
         return JSONResponse({"error": str(error)}, status_code=400)
 
-    block = InteractionBlock(
+    node = CanvasNode(
         id=str(uuid4()),
-        type=BlockType.OPERATOR_INPUT,
-        timestamp=utc_now(),
+        type=CanvasNodeType.INPUT,
+        parent_id=parent_node_id,
+        status=NodeStatus.ACTIVE,
         content={"text": text},
+        position=None,
+        timestamp=utc_now(),
     )
     await session.append_context("Operator Input", text)
-    session.add_block(block)
+    edge = session.add_node_with_edge(node)
     await request.app.state.store.publish(
-        ShapingEvent(session_id=session.session_id, event="block_added", data={"block": asdict(block)})
+        ShapingEvent(session_id=session.session_id, event="node_added", data={"node": asdict(node)})
     )
-    return JSONResponse({"session_id": session.session_id, "block": asdict(block)})
+    if edge is not None:
+        await request.app.state.store.publish(
+            ShapingEvent(session_id=session.session_id, event="edge_added", data={"edge": asdict(edge)})
+        )
+    return JSONResponse({"session_id": session.session_id, "node": asdict(node), "edge": asdict(edge) if edge else None})
 
 
 async def explore_shaping_session(request: Request) -> JSONResponse:
@@ -172,18 +193,21 @@ async def advance_shaping_session(request: Request) -> JSONResponse:
 
     engine = ShapingEngine(session, _orchestrator(request, session), request.app.state.store)
     try:
-        blocks = await engine.advance()
+        nodes = await engine.advance()
     except Exception as error:
-        block = InteractionBlock(
+        node = CanvasNode(
             id=str(uuid4()),
-            type=BlockType.SYSTEM,
-            timestamp=utc_now(),
+            type=CanvasNodeType.OBSERVATION,
+            parent_id=None,
+            status=NodeStatus.ACTIVE,
             content={"message": f"Shaping advance failed: {error}"},
+            position=None,
+            timestamp=utc_now(),
         )
-        session.add_block(block)
-        await request.app.state.store.publish(ShapingEvent(session_id=session.session_id, event="block_added", data={"block": asdict(block)}))
-        blocks = [block]
-    return JSONResponse({"session_id": session.session_id, "blocks": [asdict(block) for block in blocks]})
+        session.add_node(node)
+        await request.app.state.store.publish(ShapingEvent(session_id=session.session_id, event="node_added", data={"node": asdict(node)}))
+        nodes = [node]
+    return JSONResponse({"session_id": session.session_id, "nodes": [asdict(node) for node in nodes]})
 
 
 async def create_staged_record(request: Request) -> JSONResponse:

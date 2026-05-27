@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-response-protocol
 Type: Ticket
-Status: open
+Status: review
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - AI output format reliability is uncertain; parser must be robust to malformed/partial responses
@@ -173,11 +173,22 @@ simplify to one-node-per-advance with a `type` prefix line instead of XML.
 
 ## Current State
 
-Ready to start after Svelvet proof passes. First Ralph run: implement ParsedNode
-and ParsedResponse models, write parser, write prompt template, write comprehensive
-test suite.
+Implementation is complete and ready for audit/review. `parser.py` now exposes
+`ParsedNode`, `ParsedResponse`, and `parse_canvas_response()`. `prompts.py` now
+exposes `build_canvas_prompt()` and `format_node_history()`. The shaping engine
+consumer uses the new parser/prompt API, creates canvas nodes from parsed nodes,
+and launches exploration from `<explore goal="..."/>`. Parser and full Mill tests
+pass; evidence is recorded in
+`evidence:20260526-mill-canvas-response-protocol-validation`.
 
 ## Journal
 
 - 2026-05-26: Created ticket with Status `open`. Contract-first: defines how model
   output becomes graph nodes. Parser robustness is critical — AI output is noisy.
+- 2026-05-26: Status set to `active`; implementation run began for parser, prompt,
+  engine consumer updates, and parser-focused tests.
+- 2026-05-26: Implementation completed and status moved to `review`. Evidence
+  recorded in `evidence:20260526-mill-canvas-response-protocol-validation`:
+  parser tests `15 passed`, full Mill suite `111 passed` with one unrelated
+  asyncio subprocess warning, old action-block parser/prompt identifiers removed
+  from shaping source/tests, and `git diff --check` clean.

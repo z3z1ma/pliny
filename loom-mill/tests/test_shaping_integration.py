@@ -40,7 +40,7 @@ def _body(response) -> dict:
 
 
 def _printf_harness() -> HarnessConfig:
-    return HarnessConfig(command="printf", args=["```action\ntype: question\nquestion: What is the scope?\noptions: open\n```\n"])
+    return HarnessConfig(command="printf", args=['<node type="question">What is the scope?</node>\n'])
 
 
 def _init_git(path: Path) -> None:
@@ -59,17 +59,17 @@ async def test_full_shaping_session_lifecycle(tmp_path: Path) -> None:
     session_id = _body(create)["session_id"]
 
     first_advance = await shaping.advance_shaping_session(Request(tmp_path, store, path_params={"session_id": session_id}, harness_config=harness))
-    first_blocks = _body(first_advance)["blocks"]
-    assert first_blocks
-    assert first_blocks[0]["type"] in {"agent_question", "agent_observation", "agent_proposal"}
+    first_nodes = _body(first_advance)["nodes"]
+    assert first_nodes
+    assert first_nodes[0]["type"] in {"question", "observation", "record"}
 
     input_response = await shaping.add_shaping_input(
         Request(tmp_path, store, {"text": "Keep scope to a single backend validation fix."}, {"session_id": session_id}, harness)
     )
-    assert _body(input_response)["block"]["type"] == "operator_input"
+    assert _body(input_response)["node"]["type"] == "input"
 
     second_advance = await shaping.advance_shaping_session(Request(tmp_path, store, path_params={"session_id": session_id}, harness_config=harness))
-    assert _body(second_advance)["blocks"]
+    assert _body(second_advance)["nodes"]
 
     staged = await shaping.create_staged_record(
         Request(

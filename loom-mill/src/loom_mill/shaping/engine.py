@@ -7,10 +7,10 @@ from loom_mill.state.store import MillStateStore
 
 from .events import ShapingEvent
 from .harness import InvocationConfig, harness_command_error, run_bounded_invocation
-from .models import BlockType, InteractionBlock, SessionPhase
+from .models import CanvasNode, CanvasNodeType, NodeStatus, SessionPhase
 from .orchestrator import ShapingOrchestrator
-from .parser import Decision, parse_decision
-from .prompts import build_decision_prompt
+from .parser import ParsedNode, ParsedResponse, parse_canvas_response
+from .prompts import build_canvas_prompt
 from .session import ShapingSession, utc_now
 
 
@@ -20,43 +20,84 @@ class ShapingEngine:
         self.orchestrator = orchestrator
         self.store = store
 
-    async def advance(self) -> list[InteractionBlock]:
+    async def advance(self) -> list[CanvasNode]:
         await self._transition_for_operator_feedback()
+        parent_id = _active_parent_id(self.session.state.nodes)
         if error := harness_command_error(self.orchestrator.harness_config.command):
-            block = InteractionBlock(id=str(uuid4()), type=BlockType.SYSTEM, timestamp=utc_now(), content={"message": error})
-            self.session.add_block(block)
-            await self._publish_block(block)
-            return [block]
+            node = self._new_node(CanvasNodeType.OBSERVATION, {"message": error}, parent_id=parent_id)
+            edge = self.session.add_node_with_edge(node)
+            await self._publish_node(node)
+            if edge is not None:
+                await self._publish_edge(edge)
+            return [node]
         context = self.session.read_context()
-        recent_blocks = self.session.state.blocks[-20:]
-        decision = await self._decide_next_action(context, recent_blocks, self.session.state.phase)
+        recent_nodes = list(self.session.state.nodes.values())[-20:]
+        response = await self._decide_next_action(context, recent_nodes, self.session.state.phase)
 
-        if decision.action == "explore":
-            block_count = len(self.session.state.blocks)
-            await self.orchestrator.launch(decision.goal or "Explore context needed for shaping", decision.context_excerpt)
-            return self.session.state.blocks[block_count:]
+        if response.explore_goal and not response.nodes:
+            node_count = len(self.session.state.nodes)
+            await self.orchestrator.launch(response.explore_goal)
+            return list(self.session.state.nodes.values())[node_count:]
 
-        block = self._block_from_decision(decision)
-        if block.type == BlockType.AGENT_PROPOSAL:
-            staged = self.session.staging.propose(
-                str(block.content.get("surface") or "tickets"),
-                str(block.content.get("title") or "Untitled proposal"),
-                str(block.content.get("content") or ""),
-                self.session.state.active_branch,
+        nodes: list[CanvasNode] = []
+        for parsed_node in response.nodes:
+            if parsed_node.type == "option_group":
+                nodes.extend(await self._add_option_group(parsed_node, parent_id))
+                continue
+            node = self._node_from_parsed_node(parsed_node, parent_id)
+            if node.type == CanvasNodeType.RECORD:
+                staged = self.session.staging.propose(
+                    str(node.content.get("surface") or "tickets"),
+                    str(node.content.get("title") or "Untitled proposal"),
+                    str(node.content.get("content") or ""),
+                    self.session.state.active_branch,
+                )
+                node.content["temp_id"] = staged.temp_id
+            edge = self.session.add_node_with_edge(node)
+            await self._publish_node(node)
+            if edge is not None:
+                await self._publish_edge(edge)
+            await self._transition_after_node(node)
+            nodes.append(node)
+
+        if response.explore_goal:
+            await self.orchestrator.launch(response.explore_goal)
+        return nodes
+
+    async def _add_option_group(self, parsed_node: ParsedNode, parent_id: str | None) -> list[CanvasNode]:
+        group = self._new_node(CanvasNodeType.OPTION_GROUP, self._content_from_parsed_node(parsed_node), parent_id=parent_id)
+        group_edge = self.session.add_node_with_edge(group)
+        await self._publish_node(group)
+        if group_edge is not None:
+            await self._publish_edge(group_edge)
+
+        nodes = [group]
+        option_contents = [part.strip() for part in parsed_node.content.splitlines() if part.strip()]
+        for index, label in enumerate(parsed_node.option_labels or []):
+            option = CanvasNode(
+                id=str(uuid4()),
+                type=CanvasNodeType.OPTION,
+                parent_id=group.id,
+                status=NodeStatus.ACTIVE,
+                content={"label": label, "content": option_contents[index] if index < len(option_contents) else ""},
+                position=None,
+                timestamp=utc_now(),
+                option_group_id=group.id,
             )
-            block.content["temp_id"] = staged.temp_id
-        self.session.add_block(block)
-        await self._publish_block(block)
-        await self._transition_after_block(block)
-        return [block]
+            edge = self.session.add_node_with_edge(option, edge_type="option_group")
+            await self._publish_node(option)
+            if edge is not None:
+                await self._publish_edge(edge)
+            nodes.append(option)
+        return nodes
 
     async def _decide_next_action(
         self,
         context: str,
-        recent_blocks: list[InteractionBlock],
+        recent_nodes: list[CanvasNode],
         phase: SessionPhase,
-    ) -> Decision:
-        prompt = build_decision_prompt(context, recent_blocks, phase)
+    ) -> ParsedResponse:
+        prompt = build_canvas_prompt(context, recent_nodes, phase)
         config = InvocationConfig(
             goal="Decide next shaping action",
             context_excerpt="",
@@ -74,53 +115,72 @@ class ShapingEngine:
                 prompt_override=prompt,
             )
         except Exception as error:
-            return Decision(action="observation", observation=f"Decision harness failed: {error}")
+            return ParsedResponse(nodes=[ParsedNode(type="observation", content=f"Decision harness failed: {error}")])
 
         output = result.output.strip()
         if result.exit_code != 0 and not output:
             message = result.stderr.strip() or f"decision harness exited with code {result.exit_code}"
-            return Decision(action="observation", observation=f"Decision harness failed: {message}")
-        return parse_decision(output or result.stderr.strip())
+            return ParsedResponse(nodes=[ParsedNode(type="observation", content=f"Decision harness failed: {message}")])
+        return parse_canvas_response(output or result.stderr.strip())
 
-    def _block_from_decision(self, decision: Decision) -> InteractionBlock:
-        block_type = {
-            "question": BlockType.AGENT_QUESTION,
-            "observation": BlockType.AGENT_OBSERVATION,
-            "propose": BlockType.AGENT_PROPOSAL,
-            "branch": BlockType.BRANCH_POINT,
-        }.get(decision.action, BlockType.AGENT_OBSERVATION)
-        return InteractionBlock(id=str(uuid4()), type=block_type, timestamp=utc_now(), content=self._content_from_decision(decision))
+    def _node_from_parsed_node(self, parsed_node: ParsedNode, parent_id: str | None) -> CanvasNode:
+        node_type = {
+            "question": CanvasNodeType.QUESTION,
+            "observation": CanvasNodeType.OBSERVATION,
+            "record": CanvasNodeType.RECORD,
+            "option_group": CanvasNodeType.OPTION_GROUP,
+        }.get(parsed_node.type, CanvasNodeType.OBSERVATION)
+        return self._new_node(node_type, self._content_from_parsed_node(parsed_node), parent_id=parent_id)
 
-    def _content_from_decision(self, decision: Decision) -> dict:
-        if decision.action == "question":
+    def _new_node(self, node_type: CanvasNodeType, content: dict, parent_id: str | None = None) -> CanvasNode:
+        return CanvasNode(
+            id=str(uuid4()),
+            type=node_type,
+            parent_id=parent_id,
+            status=NodeStatus.ACTIVE,
+            content=content,
+            position=None,
+            timestamp=utc_now(),
+        )
+
+    def _content_from_parsed_node(self, parsed_node: ParsedNode) -> dict:
+        if parsed_node.type == "question":
             return {
-                "question": decision.question or "What should we clarify next?",
-                "options": decision.options,
-                "context_ref": decision.context_ref,
+                "question": parsed_node.content or "What should we clarify next?",
+                "options": parsed_node.options,
+                "context_ref": None,
             }
-        if decision.action == "propose":
+        if parsed_node.type == "record":
             return {
                 "temp_id": f"proposal-{uuid4().hex[:8]}",
-                "surface": decision.record_surface or "tickets",
-                "title": decision.record_title or "Untitled proposal",
-                "content": decision.record_content or "",
+                "surface": parsed_node.surface or "tickets",
+                "title": parsed_node.title or "Untitled proposal",
+                "content": parsed_node.content,
             }
-        if decision.action == "branch":
-            return {"branches": decision.branches or [], "reasoning": decision.reasoning}
-        return {"observation": decision.observation or "No structured decision was produced.", "evidence": decision.evidence}
+        if parsed_node.type == "option_group":
+            option_contents = [part.strip() for part in parsed_node.content.splitlines() if part.strip()]
+            return {
+                "branches": [
+                    {"id": f"branch-{index + 1}", "label": label, "content": option_contents[index] if index < len(option_contents) else ""}
+                    for index, label in enumerate(parsed_node.option_labels or [])
+                ],
+                "reasoning": parsed_node.reasoning,
+            }
+        return {"observation": parsed_node.content or "No structured response was produced.", "evidence": None}
 
     async def _transition_for_operator_feedback(self) -> None:
         if self.session.state.phase != SessionPhase.PROPOSING:
             return
-        last_proposal = _last_index(self.session.state.blocks, BlockType.AGENT_PROPOSAL)
-        last_input = _last_index(self.session.state.blocks, BlockType.OPERATOR_INPUT)
+        nodes = list(self.session.state.nodes.values())
+        last_proposal = _last_index(nodes, CanvasNodeType.RECORD)
+        last_input = _last_index(nodes, CanvasNodeType.INPUT)
         if last_proposal is not None and last_input is not None and last_input > last_proposal:
             await self._update_phase(SessionPhase.REFINING)
 
-    async def _transition_after_block(self, block: InteractionBlock) -> None:
-        if self.session.state.phase == SessionPhase.EXPLORING and block.type == BlockType.AGENT_QUESTION:
+    async def _transition_after_node(self, node: CanvasNode) -> None:
+        if self.session.state.phase == SessionPhase.EXPLORING and node.type == CanvasNodeType.QUESTION:
             await self._update_phase(SessionPhase.NARROWING)
-        elif block.type == BlockType.AGENT_PROPOSAL and self.session.state.phase != SessionPhase.REFINING:
+        elif node.type == CanvasNodeType.RECORD and self.session.state.phase != SessionPhase.REFINING:
             await self._update_phase(SessionPhase.PROPOSING)
 
     async def _update_phase(self, phase: SessionPhase) -> None:
@@ -129,12 +189,22 @@ class ShapingEngine:
         self.session.update_phase(phase)
         await self.store.publish(ShapingEvent(session_id=self.session.session_id, event="phase_changed", data={"phase": phase.value}))
 
-    async def _publish_block(self, block: InteractionBlock) -> None:
-        await self.store.publish(ShapingEvent(session_id=self.session.session_id, event="block_added", data={"block": asdict(block)}))
+    async def _publish_node(self, node: CanvasNode) -> None:
+        await self.store.publish(ShapingEvent(session_id=self.session.session_id, event="node_added", data={"node": asdict(node)}))
+
+    async def _publish_edge(self, edge) -> None:
+        await self.store.publish(ShapingEvent(session_id=self.session.session_id, event="edge_added", data={"edge": asdict(edge)}))
 
 
-def _last_index(blocks: list[InteractionBlock], block_type: BlockType) -> int | None:
-    for index in range(len(blocks) - 1, -1, -1):
-        if blocks[index].type == block_type:
+def _last_index(nodes: list[CanvasNode], node_type: CanvasNodeType) -> int | None:
+    for index in range(len(nodes) - 1, -1, -1):
+        if nodes[index].type == node_type:
             return index
+    return None
+
+
+def _active_parent_id(nodes: dict[str, CanvasNode]) -> str | None:
+    for node in reversed(list(nodes.values())):
+        if node.status == NodeStatus.ACTIVE and node.type != CanvasNodeType.PROCESSING:
+            return node.id
     return None

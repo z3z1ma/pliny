@@ -1,10 +1,12 @@
-from .models import BlockType, InteractionBlock, SessionPhase, SessionState, StagedRecord
+from .models import CanvasEdge, CanvasNode, CanvasNodeType, NodeStatus, SessionPhase, SessionState, StagedRecord
 from .session import ShapingSession, list_sessions
 from .staging import StagingArea
 
 __all__ = [
-    "BlockType",
-    "InteractionBlock",
+    "CanvasEdge",
+    "CanvasNode",
+    "CanvasNodeType",
+    "NodeStatus",
     "SessionPhase",
     "SessionState",
     "ShapingSession",

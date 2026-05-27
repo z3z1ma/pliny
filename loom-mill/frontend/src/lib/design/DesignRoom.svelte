@@ -8,8 +8,9 @@
   import ChatPanel from './ChatPanel.svelte';
   import ShapingSession from './ShapingSession.svelte';
   import SvelvetProof from './SvelvetProof.svelte';
+  import CanvasNodeShowcase from './canvas/CanvasNodeShowcase.svelte';
 
-  let centerMode = $state<'editor' | 'graph' | 'shaping' | 'svelvet-proof'>('editor');
+  let centerMode = $state<'editor' | 'graph' | 'shaping' | 'svelvet-proof' | 'canvas-showcase'>('editor');
   let shapingSessionId = $state<string | null>(null);
   let selectedDocumentId = $state<string | null>(null);
   let chatContext = $state<any>(null);
@@ -39,6 +40,8 @@
     const params = new URLSearchParams(window.location.search);
     if (params.get('mode') === 'svelvet-proof') {
       centerMode = 'svelvet-proof';
+    } else if (params.get('mode') === 'canvas-showcase') {
+      centerMode = 'canvas-showcase';
     } else {
       const savedSessionId = localStorage.getItem('loom_shaping_session_id');
       if (savedSessionId) {
@@ -179,6 +182,8 @@
 
       {#if centerMode === 'svelvet-proof'}
         <SvelvetProof />
+      {:else if centerMode === 'canvas-showcase'}
+        <CanvasNodeShowcase />
       {:else if centerMode === 'shaping'}
         <ShapingSession bind:sessionId={shapingSessionId} onExit={() => centerMode = 'editor'} />
       {:else if showConnectedGraph}

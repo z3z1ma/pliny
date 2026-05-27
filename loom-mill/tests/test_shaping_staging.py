@@ -9,7 +9,7 @@ import pytest
 
 from loom_mill.api import shaping
 from loom_mill.app import create_app
-from loom_mill.shaping import BlockType, SessionPhase, ShapingSession
+from loom_mill.shaping import CanvasNodeType, SessionPhase, ShapingSession
 from loom_mill.shaping.commit import CommitFlow, atomic_write_all, generate_real_id
 from loom_mill.shaping.engine import ShapingEngine
 from loom_mill.shaping.models import StagedRecord
@@ -188,11 +188,11 @@ async def test_engine_proposal_creates_staged_record(tmp_path: Path) -> None:
     session = ShapingSession.create(tmp_path, "shape notification bug")
     session.update_phase(SessionPhase.NARROWING)
     store = MillStateStore()
-    output = "```action\ntype: propose\nsurface: tickets\ntitle: Fix Notification Label\ncontent: # Fix Notification Label\n```"
+    output = '<node type="record" surface="tickets" title="Fix Notification Label"># Fix Notification Label</node>'
     engine = ShapingEngine(session, ShapingOrchestrator(session, store, HarnessConfig(command="printf", args=[output])), store)
 
-    blocks = await engine.advance()
+    nodes = await engine.advance()
 
-    assert blocks[0].type == BlockType.AGENT_PROPOSAL
-    assert blocks[0].content["temp_id"] == "temp:tickets:fix-notification-label"
-    assert session.state.staged_records[0].temp_id == blocks[0].content["temp_id"]
+    assert nodes[0].type == CanvasNodeType.RECORD
+    assert nodes[0].content["temp_id"] == "temp:tickets:fix-notification-label"
+    assert session.state.staged_records[0].temp_id == nodes[0].content["temp_id"]

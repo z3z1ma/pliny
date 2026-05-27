@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
-from .models import BlockType, InteractionBlock, SessionPhase, SessionState
+from .models import CanvasEdge, CanvasNode, CanvasNodeType, NodeStatus, SessionPhase, SessionState
 
 
 def utc_now() -> str:
@@ -45,18 +45,21 @@ class ShapingSession:
         session = cls(session_id, workspace_root)
         session._base_dir.mkdir(parents=True, exist_ok=True)
         now = utc_now()
-        block = InteractionBlock(
+        node = CanvasNode(
             id=str(uuid4()),
-            type=BlockType.OPERATOR_INPUT,
-            timestamp=now,
+            type=CanvasNodeType.INPUT,
+            parent_id=None,
+            status=NodeStatus.ACTIVE,
             content={"text": initial_input},
+            position=None,
+            timestamp=now,
         )
         session.state = SessionState(
             id=session_id,
             phase=SessionPhase.EXPLORING,
             created_at=now,
             updated_at=now,
-            blocks=[block],
+            nodes={node.id: node},
         )
         session._write_context(f"# Shaping Session\n\n## Operator Input\n\n{initial_input}\n")
         session._persist_state()
@@ -81,10 +84,48 @@ class ShapingSession:
     def read_context(self) -> str:
         return self._context_path.read_text(encoding="utf-8")
 
-    def add_block(self, block: InteractionBlock) -> None:
-        self.state.blocks.append(block)
+    def add_node(self, node: CanvasNode) -> None:
+        self.state.nodes[node.id] = node
         self.state.updated_at = utc_now()
         self._persist_state()
+
+    def add_edge(self, edge: CanvasEdge) -> None:
+        self.state.edges.append(edge)
+        self.state.updated_at = utc_now()
+        self._persist_state()
+
+    def add_node_with_edge(self, node: CanvasNode, edge_type: str = "causal") -> CanvasEdge | None:
+        self.state.nodes[node.id] = node
+        edge = None
+        if node.parent_id is not None:
+            edge = CanvasEdge(id=str(uuid4()), source_id=node.parent_id, target_id=node.id, type=edge_type)
+            self.state.edges.append(edge)
+        self.state.updated_at = utc_now()
+        self._persist_state()
+        return edge
+
+    def update_node(self, node_id: str, changes: dict) -> CanvasNode:
+        node = self.state.nodes[node_id]
+        for key, value in changes.items():
+            if key == "type":
+                value = CanvasNodeType(str(value))
+            elif key == "status":
+                value = NodeStatus(str(value))
+            setattr(node, key, value)
+        self.state.updated_at = utc_now()
+        self._persist_state()
+        return node
+
+    def invalidate_nodes(self, node_ids: list[str]) -> list[str]:
+        invalidated: list[str] = []
+        for node_id in node_ids:
+            if node_id in self.state.nodes:
+                self.state.nodes[node_id].status = NodeStatus.STALE
+                invalidated.append(node_id)
+        if invalidated:
+            self.state.updated_at = utc_now()
+            self._persist_state()
+        return invalidated
 
     def update_phase(self, phase: SessionPhase) -> None:
         self.state.phase = phase

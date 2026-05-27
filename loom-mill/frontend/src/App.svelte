@@ -58,6 +58,10 @@
   let prevWorkstations: Record<string, { status: string, andonCount: number }> = {};
 
   onMount(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('mode') === 'svelvet-proof' || params.get('mode') === 'canvas-showcase') {
+      activeMode = 'design';
+    }
     try {
       const saved = localStorage.getItem('loom-mill-notifications');
       if (saved) {
