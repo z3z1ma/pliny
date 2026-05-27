@@ -388,13 +388,16 @@ async def test_list_and_delete_active_sessions(tmp_path: Path) -> None:
     listed = _body(await shaping.list_shaping_sessions(Request(tmp_path, store)))
     assert {item["id"] for item in listed} == {first, second}
     assert all("node_count" in item for item in listed)
+    assert {item["seed_text"] for item in listed} == {"first", "second"}
+    assert all(item["status"] == "active" for item in listed)
 
     response = await shaping.delete_shaping_session(Request(tmp_path, store, path_params={"session_id": first}))
     assert response.status_code == 200
     assert _body(response)["ended_at"] is not None
 
     listed_after_delete = _body(await shaping.list_shaping_sessions(Request(tmp_path, store)))
-    assert [item["id"] for item in listed_after_delete] == [second]
+    assert {item["id"] for item in listed_after_delete} == {first, second}
+    assert next(item for item in listed_after_delete if item["id"] == first)["status"] == "committed"
 
 
 @pytest.mark.asyncio

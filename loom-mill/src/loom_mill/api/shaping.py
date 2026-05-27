@@ -35,6 +35,14 @@ def _state_payload(session: ShapingSession) -> dict:
     return asdict(session.state)
 
 
+def _seed_text(state) -> str:
+    inputs = [node for node in state.nodes.values() if node.type == CanvasNodeType.INPUT]
+    inputs.sort(key=lambda node: node.timestamp)
+    if not inputs:
+        return ""
+    return str(inputs[0].content.get("text") or "")
+
+
 def _load_session(request: Request) -> ShapingSession:
     return ShapingSession.load(request.path_params["session_id"], _workspace_root(request))
 
@@ -123,11 +131,14 @@ async def list_shaping_sessions(request: Request) -> JSONResponse:
             "id": state.id,
             "phase": state.phase,
             "created_at": state.created_at,
+            "seed_text": _seed_text(state),
             "node_count": len(state.nodes),
             "staged_count": len(state.staged_records),
+            "status": "committed" if state.ended_at is not None else "active",
         }
         for state in list_sessions(_workspace_root(request))
     ]
+    payload.sort(key=lambda item: item["created_at"], reverse=True)
     return JSONResponse(payload)
 
 

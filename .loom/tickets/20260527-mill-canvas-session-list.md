@@ -2,7 +2,7 @@
 
 ID: ticket:20260527-mill-canvas-session-list
 Type: Ticket
-Status: open
+Status: review
 Created: 2026-05-27
 Updated: 2026-05-27
 Risk: low - additive UI feature; backend list endpoint likely already exists
@@ -104,10 +104,21 @@ create it.
 
 ## Current State
 
-Ready to start. Need to verify what `GET /shaping/sessions` currently returns,
-then build the frontend list component and integrate it into the shaping entry flow.
+Implementation complete and ready for review. Backend list endpoint now returns all
+sessions with seed text, node count, status, and created timestamp; frontend list,
+new-session, resume, and canvas back-to-sessions flows are wired. Build and backend
+test suite passed; Playwright acceptance screenshots/manual browser checks were not
+run in this slice per operator instruction not to start dev servers.
 
 ## Journal
 
 - 2026-05-27: Created ticket. Operator emphasized this is a first-class concern —
   sessions are decision trees worth revisiting, not disposable chat threads.
+- 2026-05-27: Started implementation. Verified `GET /shaping/sessions` and
+  `ShapingSession.list_sessions()` before editing; backend needs seed text/status
+  and must include ended sessions for all-session browsing.
+- 2026-05-27: Implemented backend metadata and frontend session list flow. Evidence:
+  `npm run build 2>&1 | grep "✓ built"` in `loom-mill/frontend` returned
+  `✓ built in 2.63s`; `uv run pytest tests/ -q 2>&1 | tail -3` in `loom-mill`
+  returned `126 passed in 43.88s`. Remaining verification gap: Playwright/browser
+  UX acceptance and audit were not run.

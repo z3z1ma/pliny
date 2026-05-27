@@ -202,6 +202,5 @@ def list_sessions(workspace_root: str | Path) -> list[SessionState]:
             state = SessionState.from_dict(json.loads(path.read_text(encoding="utf-8")))
         except (json.JSONDecodeError, OSError, ValueError):
             continue
-        if state.ended_at is None:
-            sessions.append(state)
+        sessions.append(state)
     return sessions
