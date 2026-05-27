@@ -13,7 +13,14 @@
   );
 
   let status = $derived(
-    store.shapingSession?.explorationStatus?.[invocationId ?? ''] ?? 'running'
+    store.shapingSession?.explorationStatus?.[invocationId ?? ''] ?? 'unknown'
+  );
+
+  // If status is unknown and no lines, the subprocess is not active (old session)
+  let displayStatus = $derived(
+    status === 'unknown'
+      ? (lines.length > 0 ? 'completed' : 'inactive')
+      : status
   );
   
   let logContainer: HTMLDivElement;
@@ -35,7 +42,7 @@
   }
 </script>
 
-<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick={onClose} onkeydown={(e) => e.key === 'Escape' && onClose()} role="dialog" aria-modal="true">
+<div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-sm" onclick={onClose} onkeydown={(e) => e.key === 'Escape' && onClose()} role="dialog" aria-modal="true">
   <div 
     class="flex flex-col w-[80%] h-[70%] bg-[#0d1117] border border-border-primary rounded-lg shadow-2xl overflow-hidden"
     onclick={(e) => e.stopPropagation()}
@@ -63,8 +70,12 @@
       onscroll={handleScroll}
       class="flex-1 overflow-y-auto p-4 font-mono text-[12px] leading-relaxed text-green-400/90"
     >
-      {#if lines.length === 0}
+      {#if lines.length === 0 && displayStatus === 'inactive'}
+        <div class="text-text-muted italic">No output captured for this exploration. The subprocess is no longer running.</div>
+      {:else if lines.length === 0 && displayStatus === 'running'}
         <div class="text-text-muted italic">Waiting for output...</div>
+      {:else if lines.length === 0}
+        <div class="text-text-muted italic">No output captured.</div>
       {:else}
         {#each lines as line}
           <div class="whitespace-pre-wrap break-words">{line}</div>
@@ -77,8 +88,8 @@
       <div class="flex items-center gap-4">
         <span>{lines.length} lines</span>
         <span class="flex items-center gap-1.5">
-          <span class="w-2 h-2 rounded-full {status === 'running' ? 'bg-blue-500 animate-pulse' : status === 'completed' ? 'bg-green-500' : 'bg-red-500'}"></span>
-          <span class="capitalize">{status}</span>
+          <span class="w-2 h-2 rounded-full {displayStatus === 'running' ? 'bg-blue-500 animate-pulse' : displayStatus === 'completed' ? 'bg-green-500' : displayStatus === 'inactive' ? 'bg-gray-500' : 'bg-red-500'}"></span>
+          <span class="capitalize">{displayStatus}</span>
         </span>
       </div>
       <div class="flex items-center gap-2">
