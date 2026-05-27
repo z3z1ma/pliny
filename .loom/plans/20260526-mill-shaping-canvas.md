@@ -2,7 +2,7 @@
 
 ID: plan:20260526-mill-shaping-canvas
 Type: Plan
-Status: open
+Status: completed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: high - Svelvet Svelte 5 compatibility is unproven; reactive regeneration is novel; response protocol design affects entire AI interaction model
@@ -493,10 +493,18 @@ use.
 
 ## Current State
 
-Plan created. No tickets executed yet. Svelvet compatibility is the critical
-unknown. The existing shaping backend (session, harness, orchestrator, staging,
-commit) is largely reusable — the model and engine need evolution, not replacement.
-The frontend timeline is fully replaced.
+All 9 tickets implemented, audited, and blocker-fixed. Plan complete.
+
+- 126 backend tests passing
+- Frontend builds clean
+- Adversarial audit: 3 blockers found and fixed, dead code removed
+- All milestones satisfied
+
+Known deferred items (minor, from final audit):
+- Canvas visual state (zoom/pan/drag positions) not persisted to backend
+- Auto-pan not implemented (Svelvet has no programmatic pan API)
+- `exploration_stream`/`exploration_cancelled` WS events not handled (frontend)
+- Rejected record state not durable across page refresh
 
 ## Journal
 
@@ -504,3 +512,16 @@ The frontend timeline is fully replaced.
   Strategy: risk-first (Svelvet proof), contract-first (model + protocol), then
   vertical integration, then interaction breadth, then regeneration, then polish.
   Nine execution units filed as child tickets.
+- 2026-05-26: Ticket 1 (Svelvet proof) closed. Risk gate passes. Plan proceeds.
+- 2026-05-26: Tickets 2, 3, 4 implemented in parallel. Adversarial audit found 5
+  issues (sibling parent_id, parser truncation, field mismatches, missing event,
+  stale ticket status). All fixed.
+- 2026-05-26: Ticket 5 (e2e tracer) implemented. Full pipe working.
+- 2026-05-26: Tickets 6 (interaction) and 8 (layout) implemented in parallel.
+  Option selection, dead propagation, tree layout, collapse toggle all working.
+- 2026-05-26: Tickets 7 (regeneration) and 9 (staging/commit) implemented in
+  parallel. Edit/reselect endpoints, stale subtree removal, commit filtering.
+- 2026-05-26: Final adversarial audit. 3 blockers found: hydration contract
+  mismatch, ObservationNode crash, commit filtering. All fixed. Dead code
+  (ShapingTimeline, ShapingBlock) deleted. Advance serialized.
+- 2026-05-26: Status → completed.
