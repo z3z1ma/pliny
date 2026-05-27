@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-layout
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: low - layout is visual polish; core functionality works without it (Svelvet provides basic positioning)

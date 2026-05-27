@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-staging-commit
 Type: Ticket
-Status: review
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - session resume must preserve full canvas state (node positions, selections, dead branches); data loss on refresh would break trust

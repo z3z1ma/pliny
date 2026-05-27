@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-response-protocol
 Type: Ticket
-Status: review
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - AI output format reliability is uncertain; parser must be robust to malformed/partial responses
@@ -98,7 +98,7 @@ What quality bar matters most: visual polish or interaction speed?
 
 ID: ticket:20260526-canvas-zoom
 Type: Ticket
-Status: open
+Status: closed
 ...full Markdown content...
 </node>
 

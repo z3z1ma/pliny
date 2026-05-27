@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-node-components
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - Svelvet custom node API constraints unknown until proof completes; interaction affordances inside nodes may be limited

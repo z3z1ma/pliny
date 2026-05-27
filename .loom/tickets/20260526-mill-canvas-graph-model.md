@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-graph-model
 Type: Ticket
-Status: review
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - core data model change affects persistence, API, WebSocket, and all downstream tickets

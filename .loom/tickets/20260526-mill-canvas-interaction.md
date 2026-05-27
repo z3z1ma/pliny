@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-interaction
 Type: Ticket
-Status: review
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - interaction state machine complexity; dead branch propagation must be complete and correct

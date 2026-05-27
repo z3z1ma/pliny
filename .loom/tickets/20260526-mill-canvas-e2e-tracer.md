@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-e2e-tracer
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: high - integrates all contracts (model, protocol, components, WebSocket); first point where mismatches surface

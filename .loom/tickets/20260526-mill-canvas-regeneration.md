@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-regeneration
 Type: Ticket
-Status: review
+Status: closed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: high - most novel and complex feature; dependency tracking, invalidation cascades, re-invocation loops, and concurrent state management all intersect
