@@ -7,8 +7,9 @@
   import GraphView from './GraphView.svelte';
   import ChatPanel from './ChatPanel.svelte';
   import ShapingSession from './ShapingSession.svelte';
+  import SvelvetProof from './SvelvetProof.svelte';
 
-  let centerMode = $state<'editor' | 'graph' | 'shaping'>('editor');
+  let centerMode = $state<'editor' | 'graph' | 'shaping' | 'svelvet-proof'>('editor');
   let shapingSessionId = $state<string | null>(null);
   let selectedDocumentId = $state<string | null>(null);
   let chatContext = $state<any>(null);
@@ -34,10 +35,16 @@
   import { onMount } from 'svelte';
 
   onMount(() => {
-    const savedSessionId = localStorage.getItem('loom_shaping_session_id');
-    if (savedSessionId) {
-      shapingSessionId = savedSessionId;
-      centerMode = 'shaping';
+    // Check for svelvet-proof mode via URL param
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('mode') === 'svelvet-proof') {
+      centerMode = 'svelvet-proof';
+    } else {
+      const savedSessionId = localStorage.getItem('loom_shaping_session_id');
+      if (savedSessionId) {
+        shapingSessionId = savedSessionId;
+        centerMode = 'shaping';
+      }
     }
 
     const handleResize = () => {
@@ -170,7 +177,9 @@
         </button>
       {/if}
 
-      {#if centerMode === 'shaping'}
+      {#if centerMode === 'svelvet-proof'}
+        <SvelvetProof />
+      {:else if centerMode === 'shaping'}
         <ShapingSession bind:sessionId={shapingSessionId} onExit={() => centerMode = 'editor'} />
       {:else if showConnectedGraph}
         <GraphView documentId={selectedDocumentId} onNavigate={handleNavigate} />
