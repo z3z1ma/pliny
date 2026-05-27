@@ -2,7 +2,7 @@
 
 ID: ticket:20260527-mill-canvas-processing-log-modal
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-27
 Updated: 2026-05-27
 Risk: low - UI-only change; backend already streams harness output via WebSocket

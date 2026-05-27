@@ -2,7 +2,7 @@
 
 ID: ticket:20260527-mill-canvas-tab-stability
 Type: Ticket
-Status: open
+Status: closed
 Created: 2026-05-27
 Updated: 2026-05-27
 Risk: medium - touches App.svelte tab state and session persistence; incorrect fix could lose state
