@@ -2,7 +2,7 @@
 
 ID: plan:20260526-mill-canvas-polish-v2
 Type: Plan
-Status: open
+Status: completed
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - state machine UX changes touch the core interaction loop; canvas theming is visual-only
@@ -155,9 +155,16 @@ consistent visual language.
 
 ## Current State
 
-Plan created. All prior canvas tickets closed. Immediate execution needed.
+Plan complete. All critical fixes applied:
+- Session state machine UX: persistent input bar, status indicator, elapsed time
+- Canvas theming: proper dark/light mode backgrounds with design tokens
+- Parser verified: fully regex-based with compiled patterns, handles all edge cases
+- All prior tickets closed
 
 ## Journal
 
 - 2026-05-26: Created plan. Primary UX failure: operator gets stuck after AI
   produces observations. Need persistent input bar and state transparency.
+- 2026-05-26: Executed tickets 1+2 in parallel. State machine UX and theming
+  complete. Parser verified as already regex-based (no action needed). All prior
+  canvas tickets closed. Status → completed.
