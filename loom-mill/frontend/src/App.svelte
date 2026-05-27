@@ -57,10 +57,17 @@
 
   let prevWorkstations: Record<string, { status: string, andonCount: number }> = {};
 
+  function setActiveMode(mode: 'design' | 'factory') {
+    activeMode = mode;
+    try {
+      localStorage.setItem('loom-mill-active-mode', mode);
+    } catch (e) {}
+  }
+
   onMount(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('mode') === 'svelvet-proof' || params.get('mode') === 'canvas-showcase') {
-      activeMode = 'design';
+    const savedMode = localStorage.getItem('loom-mill-active-mode');
+    if (savedMode === 'design' || savedMode === 'factory') {
+      activeMode = savedMode;
     }
     try {
       const saved = localStorage.getItem('loom-mill-notifications');
@@ -210,7 +217,7 @@
         </button>
       {/if}
       <h1 class="text-[13px] font-semibold text-text-primary">Loom Mill</h1>
-      <ModeSwitch {activeMode} onSwitch={(mode) => activeMode = mode} />
+      <ModeSwitch {activeMode} onSwitch={setActiveMode} />
     </div>
     
     <div class="flex items-center gap-3">
@@ -259,16 +266,18 @@
     </div>
   </header>
 
-  {#if activeMode === 'design'}
-    <DesignRoom />
-  {:else}
+  <div class="min-h-0 flex-1 overflow-hidden {activeMode === 'design' ? 'block' : 'hidden'}">
+    <DesignRoom active={activeMode === 'design'} />
+  </div>
+  <div class="min-h-0 flex-1 overflow-hidden {activeMode === 'factory' ? 'flex' : 'hidden'}">
     <FactoryFloor 
+      active={activeMode === 'factory'}
       {layoutMode} 
       bind:showSidebar 
       bind:selectedWorkstationId 
       bind:activeTab 
     />
-  {/if}
+  </div>
 
   <SettingsDrawer open={settingsOpen} onClose={() => settingsOpen = false} />
   

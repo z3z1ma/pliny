@@ -7,11 +7,15 @@
   import GraphView from './GraphView.svelte';
   import ChatPanel from './ChatPanel.svelte';
   import ShapingSession from './ShapingSession.svelte';
-  import SvelvetProof from './SvelvetProof.svelte';
-  import CanvasNodeShowcase from './canvas/CanvasNodeShowcase.svelte';
 
-  let centerMode = $state<'editor' | 'graph' | 'shaping' | 'svelvet-proof' | 'canvas-showcase'>('editor');
-  let shapingSessionId = $state<string | null>(null);
+  let { active = true }: { active?: boolean } = $props();
+
+  const initialShapingSessionId = typeof window !== 'undefined'
+    ? localStorage.getItem('loom_shaping_session_id')
+    : null;
+
+  let centerMode = $state<'editor' | 'graph' | 'shaping'>(initialShapingSessionId ? 'shaping' : 'editor');
+  let shapingSessionId = $state<string | null>(initialShapingSessionId);
   let selectedDocumentId = $state<string | null>(null);
   let chatContext = $state<any>(null);
 
@@ -33,23 +37,15 @@
     }
   });
 
+  $effect(() => {
+    if (shapingSessionId && centerMode !== 'shaping') {
+      centerMode = 'shaping';
+    }
+  });
+
   import { onMount } from 'svelte';
 
   onMount(() => {
-    // Check for svelvet-proof mode via URL param
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('mode') === 'svelvet-proof') {
-      centerMode = 'svelvet-proof';
-    } else if (params.get('mode') === 'canvas-showcase') {
-      centerMode = 'canvas-showcase';
-    } else {
-      const savedSessionId = localStorage.getItem('loom_shaping_session_id');
-      if (savedSessionId) {
-        shapingSessionId = savedSessionId;
-        centerMode = 'shaping';
-      }
-    }
-
     const handleResize = () => {
       layoutWidth = window.innerWidth;
       if (layoutWidth < 1024 && layoutWidth >= 768) {
@@ -180,11 +176,7 @@
         </button>
       {/if}
 
-      {#if centerMode === 'svelvet-proof'}
-        <SvelvetProof />
-      {:else if centerMode === 'canvas-showcase'}
-        <CanvasNodeShowcase />
-      {:else if centerMode === 'shaping'}
+      {#if centerMode === 'shaping'}
         <ShapingSession bind:sessionId={shapingSessionId} onExit={() => centerMode = 'editor'} />
       {:else if showConnectedGraph}
         <GraphView documentId={selectedDocumentId} onNavigate={handleNavigate} />
@@ -217,7 +209,7 @@
     </div>
     
     <!-- Right: Chat panel -->
-    {#if showChat}
+    {#if showChat && active}
       <div transition:fly={{ x: 360, duration: 200 }} class="w-[360px] shrink-0 border-l border-border-default flex flex-col bg-bg-surface relative z-10">
         <ChatPanel 
           documentPath={selectedDocumentId} 

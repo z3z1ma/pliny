@@ -7,11 +7,13 @@
   import { formatDuration } from './utils';
 
   let { 
+    active = true,
     layoutMode, 
     showSidebar = $bindable(), 
     selectedWorkstationId = $bindable(), 
     activeTab = $bindable()
   } = $props<{
+    active?: boolean;
     layoutMode: 'desktop' | 'laptop' | 'tablet' | 'mobile';
     showSidebar: boolean;
     selectedWorkstationId: string | null;
@@ -71,6 +73,7 @@
       {/if}
       <div class="{layoutMode === 'desktop' ? 'w-80 shrink-0 border-r border-border-default' : layoutMode === 'laptop' ? 'w-60 shrink-0 border-r border-border-default' : layoutMode === 'tablet' ? 'absolute left-0 top-0 bottom-0 w-60 z-50 border-r border-border-default shadow-xl' : 'absolute inset-0 z-50'} bg-bg-surface transition-all {layoutMode === 'mobile' && !showSidebar && selectedWorkstationId ? 'hidden' : ''}">
         <WorkstationList 
+          {active}
           records={store.state.records} 
           workstations={store.state.workstations} 
           selectedId={selectedWorkstationId}

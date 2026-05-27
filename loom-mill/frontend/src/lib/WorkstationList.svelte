@@ -10,11 +10,13 @@
   const WIP_LIMIT = 3;
 
   let { 
+    active = true,
     records, 
     workstations,
     selectedId,
     onSelect
   }: { 
+    active?: boolean;
     records: LoomRecord[]; 
     workstations: Record<string, WorkstationState>;
     selectedId: string | null;
@@ -149,6 +151,8 @@
   let focusedIndex = $state(-1);
 
   function handleKeydown(e: KeyboardEvent) {
+    if (!active) return;
+
     // Don't interfere if user is typing in an input
     if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
