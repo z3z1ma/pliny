@@ -6,13 +6,15 @@
     records, 
     branches, 
     activeBranch, 
-    onCommit 
+    onCommit,
+    onRecordClick
   }: { 
     sessionId: string; 
     records: StagedRecord[]; 
     branches: string[]; 
     activeBranch: string; 
     onCommit: () => void;
+    onRecordClick?: (tempId: string) => void;
   } = $props();
 
   let acceptedCount = $derived(records.filter(r => r.status === 'accepted').length);
@@ -40,13 +42,8 @@
     }
   }
 
-  function scrollToProposal(tempId: string) {
-    const el = document.querySelector(`[data-temp-id="${tempId}"]`);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      el.classList.add('ring-2', 'ring-accent-primary');
-      setTimeout(() => el.classList.remove('ring-2', 'ring-accent-primary'), 1500);
-    }
+  function selectRecord(tempId: string) {
+    onRecordClick?.(tempId);
   }
 </script>
 
@@ -90,7 +87,7 @@
                record.status === 'rejected' ? 'bg-status-error-bg/10 border-status-error-border/30 text-status-error-text opacity-50 grayscale' : 
                'bg-accent-primary/10 border-accent-primary/50 text-accent-primary animate-pulse'}"
             title={record.title}
-            onclick={() => scrollToProposal(record.temp_id)}
+            onclick={() => selectRecord(record.temp_id)}
           >
             {surfaceIcon(record.surface)}
           </button>
@@ -112,7 +109,7 @@
         class="flex flex-col gap-1.5 p-3 rounded-lg text-left hover:bg-bg-surface transition-all border border-transparent hover:border-border-default group
           {record.status === 'rejected' ? 'opacity-50' : ''}
           {record.status === 'accepted' ? 'bg-status-success-bg/5' : ''}"
-        onclick={() => scrollToProposal(record.temp_id)}
+        onclick={() => selectRecord(record.temp_id)}
       >
         <div class="flex items-center justify-between w-full">
           <div class="flex items-center gap-2 overflow-hidden">

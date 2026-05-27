@@ -13,13 +13,27 @@ from loom_mill.api.ws import _event_payload
 from loom_mill.app import create_app
 from loom_mill.shaping import CanvasEdge, CanvasNode, CanvasNodeType, NodeStatus, SessionPhase, ShapingSession
 from loom_mill.shaping.events import ShapingEvent
-from loom_mill.shaping.session import mark_dead_recursive
+from loom_mill.shaping.session import mark_dead_recursive, mark_stale_recursive
 from loom_mill.state import MillStateStore
+from loom_mill.workstation.config import HarnessConfig
 
 
 class Request:
-    def __init__(self, workspace_root: Path, store: MillStateStore, body: dict | None = None, path_params: dict | None = None):
-        self.app = SimpleNamespace(state=SimpleNamespace(workspace_root=str(workspace_root), store=store))
+    def __init__(
+        self,
+        workspace_root: Path,
+        store: MillStateStore,
+        body: dict | None = None,
+        path_params: dict | None = None,
+        harness_config: HarnessConfig | None = None,
+    ):
+        self.app = SimpleNamespace(
+            state=SimpleNamespace(
+                workspace_root=str(workspace_root),
+                store=store,
+                harness_config=harness_config or HarnessConfig(command="printf", args=['<node type="observation">default</node>']),
+            )
+        )
         self._body = body or {}
         self.path_params = path_params or {}
 
@@ -48,6 +62,8 @@ def test_shaping_routes_are_registered() -> None:
     assert has_route("/shaping/sessions/{session_id}/context", "GET")
     assert has_route("/shaping/sessions/{session_id}/input", "POST")
     assert has_route("/shaping/sessions/{session_id}/nodes/{node_id}/select", "POST")
+    assert has_route("/shaping/sessions/{session_id}/nodes/{node_id}/edit", "POST")
+    assert has_route("/shaping/sessions/{session_id}/nodes/{node_id}/reselect", "POST")
     assert has_route("/shaping/sessions/{session_id}", "DELETE")
 
 
@@ -186,6 +202,110 @@ def test_mark_dead_recursive_propagates_to_three_plus_levels(tmp_path: Path) -> 
     assert all(session.state.nodes[node_id].status == NodeStatus.DEAD for node_id in affected)
 
 
+def test_mark_stale_recursive_marks_descendants_not_parent_or_dead_nodes(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "initial")
+    root_id = next(iter(session.state.nodes))
+    _add_node(session, "child-1", CanvasNodeType.OBSERVATION, root_id)
+    _add_node(session, "child-2", CanvasNodeType.QUESTION, "child-1")
+    _add_node(session, "dead-child", CanvasNodeType.RECORD, "child-1")
+    session.state.nodes["dead-child"].status = NodeStatus.DEAD
+
+    affected = mark_stale_recursive(session.state, root_id)
+
+    assert affected == ["child-1", "child-2"]
+    assert session.state.nodes[root_id].status == NodeStatus.ACTIVE
+    assert session.state.nodes["child-1"].status == NodeStatus.STALE
+    assert session.state.nodes["child-2"].status == NodeStatus.STALE
+    assert session.state.nodes["dead-child"].status == NodeStatus.DEAD
+
+
+@pytest.mark.asyncio
+async def test_edit_input_publishes_update_invalidates_and_regenerates(tmp_path: Path) -> None:
+    store = MillStateStore()
+    harness = HarnessConfig(command="printf", args=['<node type="observation">replacement</node>'])
+    session = ShapingSession.create(tmp_path, "initial")
+    root_id = next(iter(session.state.nodes))
+    _add_node(session, "old-child", CanvasNodeType.OBSERVATION, root_id)
+    _add_node(session, "old-grandchild", CanvasNodeType.QUESTION, "old-child")
+    subscription = store.subscribe()
+    try:
+        response = await shaping.edit_node(
+            Request(
+                tmp_path,
+                store,
+                {"content": "edited"},
+                {"session_id": session.session_id, "node_id": root_id},
+                harness_config=harness,
+            )
+        )
+        events = [await subscription.__anext__(), await subscription.__anext__(), await subscription.__anext__(), await subscription.__anext__(), await subscription.__anext__()]
+    finally:
+        await subscription.aclose()
+
+    payload = _body(response)
+    loaded = ShapingSession.load(session.session_id, tmp_path)
+    new_children = [node for node in loaded.state.nodes.values() if node.parent_id == root_id]
+    assert response.status_code == 200
+    assert payload["edited"] == root_id
+    assert payload["stale_ids"] == ["old-child", "old-grandchild"]
+    assert loaded.state.nodes[root_id].content["text"] == "edited"
+    assert "old-child" not in loaded.state.nodes
+    assert "old-grandchild" not in loaded.state.nodes
+    assert len(new_children) == 1
+    assert new_children[0].content["observation"] == "replacement"
+    assert [_event_payload(event)["type"] for event in events] == [
+        "shaping:node_updated",
+        "shaping:node_invalidated",
+        "shaping:nodes_removed",
+        "shaping:node_added",
+        "shaping:edge_added",
+    ]
+
+
+@pytest.mark.asyncio
+async def test_cannot_edit_non_input_node(tmp_path: Path) -> None:
+    store = MillStateStore()
+    session = ShapingSession.create(tmp_path, "initial")
+    root_id = next(iter(session.state.nodes))
+    _add_node(session, "question-1", CanvasNodeType.QUESTION, root_id)
+
+    response = await shaping.edit_node(
+        Request(tmp_path, store, {"content": "edited"}, {"session_id": session.session_id, "node_id": "question-1"})
+    )
+
+    assert response.status_code == 400
+    assert _body(response)["error"] == "Only input nodes are editable"
+
+
+@pytest.mark.asyncio
+async def test_reselect_dead_option_deactivates_old_branch_and_advances_new_branch(tmp_path: Path) -> None:
+    store = MillStateStore()
+    harness = HarnessConfig(command="printf", args=['<node type="observation">new branch</node>'])
+    session = ShapingSession.create(tmp_path, "initial")
+    root_id = next(iter(session.state.nodes))
+    _add_node(session, "option-a", CanvasNodeType.OPTION, root_id, option_group_id="group-1")
+    _add_node(session, "option-b", CanvasNodeType.OPTION, root_id, option_group_id="group-1")
+    _add_node(session, "a-child", CanvasNodeType.OBSERVATION, "option-a")
+    session.state.nodes["option-a"].selected = True
+    session.state.nodes["option-b"].status = NodeStatus.DEAD
+    session._persist_state()
+
+    response = await shaping.reselect_option_node(
+        Request(tmp_path, store, path_params={"session_id": session.session_id, "node_id": "option-b"}, harness_config=harness)
+    )
+
+    loaded = ShapingSession.load(session.session_id, tmp_path)
+    b_children = [node for node in loaded.state.nodes.values() if node.parent_id == "option-b"]
+    assert response.status_code == 200
+    assert loaded.state.nodes["option-a"].status == NodeStatus.DEAD
+    assert loaded.state.nodes["a-child"].status == NodeStatus.DEAD
+    assert loaded.state.nodes["option-a"].selected is False
+    assert loaded.state.nodes["option-b"].status == NodeStatus.ACTIVE
+    assert loaded.state.nodes["option-b"].selected is True
+    assert len(b_children) == 1
+    assert b_children[0].content["observation"] == "new branch"
+
+
 @pytest.mark.asyncio
 async def test_selecting_already_selected_option_is_noop(tmp_path: Path) -> None:
     store = MillStateStore()
@@ -296,12 +416,14 @@ def test_shaping_websocket_event_payloads() -> None:
     edge_payload = _event_payload(ShapingEvent(session_id="session-1", event="edge_added", data={"edge": {"id": "e1"}}))
     update_payload = _event_payload(ShapingEvent(session_id="session-1", event="node_updated", data={"node_id": "n1", "changes": {"status": "stale"}}))
     invalidated_payload = _event_payload(ShapingEvent(session_id="session-1", event="node_invalidated", data={"node_ids": ["n1"]}))
+    removed_payload = _event_payload(ShapingEvent(session_id="session-1", event="nodes_removed", data={"node_ids": ["n1"]}))
     phase_payload = _event_payload(ShapingEvent(session_id="session-1", event="phase_changed", data={"phase": "narrowing"}))
 
     assert node_payload == {"type": "shaping:node_added", "data": {"session_id": "session-1", "node": {"id": "n1"}}}
     assert edge_payload == {"type": "shaping:edge_added", "data": {"session_id": "session-1", "edge": {"id": "e1"}}}
     assert update_payload == {"type": "shaping:node_updated", "data": {"session_id": "session-1", "node_id": "n1", "changes": {"status": "stale"}}}
     assert invalidated_payload == {"type": "shaping:node_invalidated", "data": {"session_id": "session-1", "node_ids": ["n1"]}}
+    assert removed_payload == {"type": "shaping:nodes_removed", "data": {"session_id": "session-1", "node_ids": ["n1"]}}
     assert phase_payload == {"type": "shaping:phase_changed", "data": {"session_id": "session-1", "phase": "narrowing"}}
 
 

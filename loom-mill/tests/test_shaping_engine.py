@@ -144,6 +144,72 @@ async def test_engine_advance_with_multiple_nodes_creates_siblings(tmp_path: Pat
 
 
 @pytest.mark.asyncio
+async def test_engine_regenerate_removes_stale_direct_subtree_and_replaces_children(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "shape a graph view")
+    root_id = next(iter(session.state.nodes))
+    session.add_node_with_edge(
+        CanvasNode(
+            id="stale-child",
+            type=CanvasNodeType.OBSERVATION,
+            parent_id=root_id,
+            status=NodeStatus.STALE,
+            content={"observation": "old"},
+            position=None,
+            timestamp=utc_now(),
+        )
+    )
+    session.add_node_with_edge(
+        CanvasNode(
+            id="stale-grandchild",
+            type=CanvasNodeType.QUESTION,
+            parent_id="stale-child",
+            status=NodeStatus.STALE,
+            content={"question": "old question"},
+            position=None,
+            timestamp=utc_now(),
+        )
+    )
+    store = MillStateStore()
+    output = '<node type="observation">replacement child</node>'
+    engine = ShapingEngine(session, ShapingOrchestrator(session, store, _printf_harness(output)), store)
+
+    nodes = await engine.regenerate(root_id, max_depth=3)
+
+    assert "stale-child" not in session.state.nodes
+    assert "stale-grandchild" not in session.state.nodes
+    assert all(edge.source_id != "stale-child" and edge.target_id != "stale-child" for edge in session.state.edges)
+    assert len(nodes) == 1
+    assert nodes[0].parent_id == root_id
+    assert nodes[0].content["observation"] == "replacement child"
+
+
+@pytest.mark.asyncio
+async def test_engine_regenerate_max_depth_zero_does_not_remove_or_advance(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "shape a graph view")
+    root_id = next(iter(session.state.nodes))
+    session.add_node_with_edge(
+        CanvasNode(
+            id="stale-child",
+            type=CanvasNodeType.OBSERVATION,
+            parent_id=root_id,
+            status=NodeStatus.STALE,
+            content={"observation": "old"},
+            position=None,
+            timestamp=utc_now(),
+        )
+    )
+    store = MillStateStore()
+    output = '<node type="observation">replacement child</node>'
+    engine = ShapingEngine(session, ShapingOrchestrator(session, store, _printf_harness(output)), store)
+
+    nodes = await engine.regenerate(root_id, max_depth=0)
+
+    assert nodes == []
+    assert "stale-child" in session.state.nodes
+    assert [node.parent_id for node in session.state.nodes.values()].count(root_id) == 1
+
+
+@pytest.mark.asyncio
 async def test_engine_advance_with_proposal_publishes_node_and_moves_to_proposing(tmp_path: Path) -> None:
     session = ShapingSession.create(tmp_path, "shape notification bug")
     session.update_phase(SessionPhase.NARROWING)

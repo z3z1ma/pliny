@@ -7,7 +7,7 @@ from loom_mill.state.store import MillStateStore
 
 from .events import ShapingEvent
 from .harness import InvocationConfig, harness_command_error, run_bounded_invocation
-from .models import CanvasNode, CanvasNodeType, NodeStatus, SessionPhase
+from .models import CanvasEdge, CanvasNode, CanvasNodeType, NodeStatus, SessionPhase
 from .orchestrator import ShapingOrchestrator
 from .parser import ParsedNode, ParsedResponse, parse_canvas_response
 from .prompts import build_canvas_prompt
@@ -23,6 +23,46 @@ class ShapingEngine:
     async def advance(self) -> list[CanvasNode]:
         await self._transition_for_operator_feedback()
         parent_id = _active_parent_id(self.session.state.nodes)
+        return await self._advance_from(parent_id)
+
+    async def regenerate(self, from_node_id: str, max_depth: int = 3) -> list[CanvasNode]:
+        """Re-invoke from a specific node, replacing stale direct child subtrees."""
+        if max_depth <= 0:
+            return []
+        stale_ids = [
+            node.id
+            for node in list(self.session.state.nodes.values())
+            if node.parent_id == from_node_id and node.status == NodeStatus.STALE
+        ]
+        removed_ids: list[str] = []
+        for stale_id in stale_ids:
+            removed_ids.extend(self._remove_subtree(stale_id))
+        if removed_ids:
+            self.session.state.updated_at = utc_now()
+            self.session._persist_state()
+            await self.store.publish(
+                ShapingEvent(
+                    session_id=self.session.session_id,
+                    event="nodes_removed",
+                    data={"node_ids": removed_ids},
+                )
+            )
+        return await self._advance_from(from_node_id)
+
+    def _remove_subtree(self, node_id: str) -> list[str]:
+        """Remove a node and all descendants from session state."""
+        removed: list[str] = []
+        children = [node.id for node in list(self.session.state.nodes.values()) if node.parent_id == node_id]
+        for child_id in children:
+            removed.extend(self._remove_subtree(child_id))
+        if self.session.state.nodes.pop(node_id, None) is not None:
+            removed.append(node_id)
+        self.session.state.edges = [
+            edge for edge in self.session.state.edges if edge.source_id != node_id and edge.target_id != node_id
+        ]
+        return removed
+
+    async def _advance_from(self, parent_id: str | None) -> list[CanvasNode]:
         if error := harness_command_error(self.orchestrator.harness_config.command):
             node = self._new_node(CanvasNodeType.OBSERVATION, {"message": error}, parent_id=parent_id)
             edge = self.session.add_node_with_edge(node)
@@ -30,8 +70,8 @@ class ShapingEngine:
             if edge is not None:
                 await self._publish_edge(edge)
             return [node]
-        context = self.session.read_context()
-        recent_nodes = list(self.session.state.nodes.values())[-20:]
+        context = self._context_for_node(parent_id)
+        recent_nodes = self._path_to_node(parent_id)[-20:] if parent_id else list(self.session.state.nodes.values())[-20:]
         response = await self._decide_next_action(context, recent_nodes, self.session.state.phase)
 
         if response.explore_goal and not response.nodes:
@@ -63,6 +103,28 @@ class ShapingEngine:
         if response.explore_goal:
             await self.orchestrator.launch(response.explore_goal)
         return nodes
+
+    def _path_to_node(self, node_id: str | None) -> list[CanvasNode]:
+        path: list[CanvasNode] = []
+        current_id = node_id
+        seen: set[str] = set()
+        while current_id and current_id not in seen:
+            seen.add(current_id)
+            node = self.session.state.nodes.get(current_id)
+            if node is None:
+                break
+            path.append(node)
+            current_id = node.parent_id
+        return list(reversed(path))
+
+    def _context_for_node(self, node_id: str | None) -> str:
+        path = self._path_to_node(node_id)
+        if not path:
+            return self.session.read_context()
+        lines = ["# Shaping Session", "", "## Context Path"]
+        for node in path:
+            lines.append(f"- {node.type.value}: {_node_summary(node)}")
+        return "\n".join(lines) + "\n"
 
     async def _add_option_group(self, parsed_node: ParsedNode, parent_id: str | None) -> list[CanvasNode]:
         group = self._new_node(CanvasNodeType.OPTION_GROUP, self._content_from_parsed_node(parsed_node), parent_id=parent_id)
@@ -192,7 +254,7 @@ class ShapingEngine:
     async def _publish_node(self, node: CanvasNode) -> None:
         await self.store.publish(ShapingEvent(session_id=self.session.session_id, event="node_added", data={"node": asdict(node)}))
 
-    async def _publish_edge(self, edge) -> None:
+    async def _publish_edge(self, edge: CanvasEdge) -> None:
         await self.store.publish(ShapingEvent(session_id=self.session.session_id, event="edge_added", data={"edge": asdict(edge)}))
 
 
@@ -208,3 +270,11 @@ def _active_parent_id(nodes: dict[str, CanvasNode]) -> str | None:
         if node.status == NodeStatus.ACTIVE and node.type != CanvasNodeType.PROCESSING:
             return node.id
     return None
+
+
+def _node_summary(node: CanvasNode) -> str:
+    for key in ("text", "question", "observation", "label", "title", "message"):
+        value = node.content.get(key)
+        if value:
+            return str(value)
+    return str(node.content)

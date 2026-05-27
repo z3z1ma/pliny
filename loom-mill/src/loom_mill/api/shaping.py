@@ -13,7 +13,7 @@ from loom_mill.shaping.commit import CommitFlow
 from loom_mill.shaping.engine import ShapingEngine
 from loom_mill.shaping.events import ShapingEvent
 from loom_mill.shaping.orchestrator import ShapingOrchestrator
-from loom_mill.shaping.session import mark_dead_recursive, utc_now
+from loom_mill.shaping.session import mark_active_recursive, mark_dead_recursive, mark_stale_recursive, utc_now
 from loom_mill.workstation.config import HarnessConfig
 
 
@@ -66,6 +66,33 @@ def _orchestrator(request: Request, session: ShapingSession) -> ShapingOrchestra
     else:
         orchestrator.session = session
     return orchestrator
+
+
+def _session_locks(request: Request) -> dict[str, object]:
+    if not hasattr(request.app.state, "shaping_session_locks"):
+        request.app.state.shaping_session_locks = {}
+    return request.app.state.shaping_session_locks
+
+
+def _session_lock(request: Request, session_id: str):
+    import asyncio
+
+    locks = _session_locks(request)
+    lock = locks.get(session_id)
+    if lock is None:
+        lock = asyncio.Lock()
+        locks[session_id] = lock
+    return lock
+
+
+def _unique(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    result: list[str] = []
+    for value in values:
+        if value not in seen:
+            seen.add(value)
+            result.append(value)
+    return result
 
 
 async def create_shaping_session(request: Request) -> JSONResponse:
@@ -210,6 +237,111 @@ async def select_option_node(request: Request) -> JSONResponse:
             )
 
     return JSONResponse({"session_id": session.session_id, "state": _state_payload(session), "changed_node_ids": changed})
+
+
+async def edit_node(request: Request) -> JSONResponse:
+    session_id = request.path_params["session_id"]
+    async with _session_lock(request, session_id):
+        try:
+            session = _load_session(request)
+        except KeyError:
+            return JSONResponse({"detail": "Session not found"}, status_code=404)
+        if session.state.ended_at is not None:
+            return JSONResponse({"error": "Session has ended"}, status_code=409)
+
+        node_id = request.path_params["node_id"]
+        try:
+            body = await _json_body(request)
+            new_content = body["content"]
+            if not isinstance(new_content, str):
+                raise ValueError("content must be a string")
+        except (KeyError, ValueError) as error:
+            return JSONResponse({"error": str(error)}, status_code=400)
+
+        node = session.state.nodes.get(node_id)
+        if node is None:
+            return JSONResponse({"error": "Node not found"}, status_code=404)
+        if node.type != CanvasNodeType.INPUT:
+            return JSONResponse({"error": "Only input nodes are editable"}, status_code=400)
+
+        node.content["text"] = new_content
+        stale_ids = mark_stale_recursive(session.state, node_id)
+        session.state.updated_at = utc_now()
+        session._persist_state()
+
+        store = request.app.state.store
+        await store.publish(
+            ShapingEvent(
+                session_id=session.session_id,
+                event="node_updated",
+                data={"node": asdict(node), "node_id": node_id, "changes": {"content": node.content}},
+            )
+        )
+        if stale_ids:
+            await store.publish(
+                ShapingEvent(session_id=session.session_id, event="node_invalidated", data={"node_ids": stale_ids})
+            )
+
+        engine = ShapingEngine(session, _orchestrator(request, session), store)
+        await engine.regenerate(node_id, max_depth=3)
+        return JSONResponse({"edited": node_id, "stale_ids": stale_ids})
+
+
+async def reselect_option_node(request: Request) -> JSONResponse:
+    session_id = request.path_params["session_id"]
+    async with _session_lock(request, session_id):
+        try:
+            session = _load_session(request)
+        except KeyError:
+            return JSONResponse({"detail": "Session not found"}, status_code=404)
+        if session.state.ended_at is not None:
+            return JSONResponse({"error": "Session has ended"}, status_code=409)
+
+        node_id = request.path_params["node_id"]
+        node = session.state.nodes.get(node_id)
+        if node is None:
+            return JSONResponse({"error": "Node not found"}, status_code=404)
+        if node.type != CanvasNodeType.OPTION:
+            return JSONResponse({"error": "Node must be an option"}, status_code=400)
+
+        siblings = [
+            candidate
+            for candidate in session.state.nodes.values()
+            if candidate.type == CanvasNodeType.OPTION
+            and candidate.id != node.id
+            and candidate.option_group_id is not None
+            and candidate.option_group_id == node.option_group_id
+        ]
+        changed: list[str] = []
+        for sibling in siblings:
+            if sibling.selected and sibling.status == NodeStatus.ACTIVE:
+                changed.extend(mark_dead_recursive(session.state, sibling.id))
+
+        node.status = NodeStatus.ACTIVE
+        node.selected = True
+        changed.append(node.id)
+        child_ids = [child.id for child in session.state.nodes.values() if child.parent_id == node.id]
+        for child_id in child_ids:
+            changed.extend(mark_active_recursive(session.state, child_id))
+        changed = _unique(changed)
+
+        session.state.updated_at = utc_now()
+        session._persist_state()
+        store = request.app.state.store
+        for changed_node_id in changed:
+            await store.publish(
+                ShapingEvent(
+                    session_id=session.session_id,
+                    event="node_updated",
+                    data={"node": asdict(session.state.nodes[changed_node_id])},
+                )
+            )
+
+        if not child_ids:
+            engine = ShapingEngine(session, _orchestrator(request, session), store)
+            await engine.regenerate(node_id, max_depth=3)
+
+        return JSONResponse({"session_id": session.session_id, "state": _state_payload(session), "changed_node_ids": changed})
 
 
 async def explore_shaping_session(request: Request) -> JSONResponse:

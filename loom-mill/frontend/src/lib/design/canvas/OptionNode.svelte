@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Node, Anchor } from 'svelvet';
 
-  let { node, position, connections = [], onSelect } = $props();
+  let { node, position, connections = [], onSelect, onReselect } = $props();
   
   let isSelected = $derived(node.status === 'active' && node.selected);
 </script>
@@ -33,7 +33,7 @@
           <div class="w-3.5 h-3.5 rounded-full border border-border-default"></div>
         {/if}
       </div>
-      <div>
+      <div class="min-w-0 flex-1">
         <div class="text-[13px] font-medium {node.status === 'dead' ? 'line-through text-text-tertiary' : 'text-text-primary'}">
           {node.content.label}
         </div>
@@ -41,6 +41,17 @@
           <div class="text-[11px] mt-1 {node.status === 'dead' ? 'text-text-tertiary' : 'text-text-secondary'}">
             {node.content.content}
           </div>
+        {/if}
+        {#if node.status === 'dead' && onReselect}
+          <button
+            class="mt-2 rounded border border-red-500/30 px-2 py-1 text-[10px] uppercase tracking-wide text-red-300 hover:bg-red-500/10"
+            onclick={(event) => {
+              event.stopPropagation();
+              onReselect(node.id);
+            }}
+          >
+            Re-select
+          </button>
         {/if}
       </div>
     </div>

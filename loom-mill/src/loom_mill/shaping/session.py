@@ -44,6 +44,32 @@ def mark_dead_recursive(session_state: SessionState, node_id: str) -> list[str]:
     return affected
 
 
+def mark_stale_recursive(state: SessionState, parent_id: str) -> list[str]:
+    """Mark all descendants of parent_id as stale, excluding dead nodes and parent."""
+    affected: list[str] = []
+    for node in list(state.nodes.values()):
+        if node.parent_id == parent_id and node.status != NodeStatus.DEAD:
+            node.status = NodeStatus.STALE
+            affected.append(node.id)
+            affected.extend(mark_stale_recursive(state, node.id))
+    return affected
+
+
+def mark_active_recursive(state: SessionState, parent_id: str) -> list[str]:
+    """Mark parent_id and all descendants active when reviving a dead branch."""
+    affected: list[str] = []
+    node = state.nodes.get(parent_id)
+    if node is None:
+        return affected
+    if node.status != NodeStatus.ACTIVE:
+        node.status = NodeStatus.ACTIVE
+        affected.append(node.id)
+    for child in list(state.nodes.values()):
+        if child.parent_id == parent_id:
+            affected.extend(mark_active_recursive(state, child.id))
+    return affected
+
+
 class ShapingSession:
     def __init__(self, session_id: str, workspace_root: str | Path):
         self.session_id = session_id

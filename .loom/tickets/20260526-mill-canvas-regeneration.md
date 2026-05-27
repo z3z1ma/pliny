@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-regeneration
 Type: Ticket
-Status: open
+Status: review
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: high - most novel and complex feature; dependency tracking, invalidation cascades, re-invocation loops, and concurrent state management all intersect
@@ -143,11 +143,27 @@ Frontend:
 
 ## Current State
 
-Blocked on integration and interaction tickets. This is the hardest feature.
-First Ralph run: implement edit endpoint, invalidation cascade, regeneration
-engine method, frontend edit affordance, test with Playwright.
+Implementation and requested verification are complete for the current run. The
+backend now supports edit/reselect endpoints, stale invalidation, bounded
+regeneration, stale subtree removal events, and per-session mutation locks. The
+frontend now has InputNode edit and dead-option reselect affordances, plus WebSocket
+handling for invalidation, removal, and both `node_updated` payload shapes.
+
+Evidence: `evidence:20260526-mill-canvas-regeneration-validation`
+
+Remaining review posture: no Playwright visual/browser verification or audit has
+been performed yet, so the ticket is in `review` rather than `closed`.
 
 ## Journal
 
 - 2026-05-26: Created ticket with Status `open`. The novel differentiator. High
   risk but high reward. Multiple stop conditions defined for scope control.
+- 2026-05-26: Status set to `active` for ticket-owned Ralph implementation run.
+  Live code confirms the dependency surfaces named in the operator prompt exist;
+  scope remains limited to regeneration, reselect, stale/removal events, frontend
+  affordances, and requested verification.
+- 2026-05-26: Implemented backend edit/reselect regeneration, session stale/active
+  helpers, bounded engine regeneration, frontend edit/reselect affordances, stale
+  removal handling, backend tests, and frontend build verification. Evidence
+  recorded in `evidence:20260526-mill-canvas-regeneration-validation`. Status set
+  to `review` because Playwright visual evidence and audit remain unperformed.

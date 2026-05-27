@@ -228,6 +228,12 @@ export class MillStore {
       case 'shaping:node_added':
         this.ensureShapingSession(data.session_id);
         if (this.shapingSession) {
+          for (const [nodeId, existing] of Object.entries(this.shapingSession.nodes)) {
+            if (existing.status === 'stale' && existing.parent_id === data.node.parent_id) {
+              delete this.shapingSession.nodes[nodeId];
+              this.shapingSession.edges = this.shapingSession.edges.filter(edge => edge.source_id !== nodeId && edge.target_id !== nodeId);
+            }
+          }
           this.shapingSession.nodes[data.node.id] = data.node;
         }
         break;
@@ -239,11 +245,18 @@ export class MillStore {
         break;
       case 'shaping:node_updated':
         this.ensureShapingSession(data.session_id);
-        if (this.shapingSession && this.shapingSession.nodes[data.node.id]) {
-          this.shapingSession.nodes[data.node.id] = {
-            ...this.shapingSession.nodes[data.node.id],
-            ...data.node
-          };
+        if (this.shapingSession) {
+          if (data.node && this.shapingSession.nodes[data.node.id]) {
+            this.shapingSession.nodes[data.node.id] = {
+              ...this.shapingSession.nodes[data.node.id],
+              ...data.node
+            };
+          } else if (data.node_id && this.shapingSession.nodes[data.node_id]) {
+            this.shapingSession.nodes[data.node_id] = {
+              ...this.shapingSession.nodes[data.node_id],
+              ...(data.changes ?? {})
+            };
+          }
         }
         break;
       case 'shaping:node_invalidated':
@@ -254,6 +267,15 @@ export class MillStore {
               this.shapingSession.nodes[nodeId].status = 'stale';
             }
           }
+        }
+        break;
+      case 'shaping:nodes_removed':
+        this.ensureShapingSession(data.session_id);
+        if (this.shapingSession) {
+          for (const nodeId of data.node_ids) {
+            delete this.shapingSession.nodes[nodeId];
+          }
+          this.shapingSession.edges = this.shapingSession.edges.filter(edge => !data.node_ids.includes(edge.source_id) && !data.node_ids.includes(edge.target_id));
         }
         break;
       case 'shaping:phase_changed':

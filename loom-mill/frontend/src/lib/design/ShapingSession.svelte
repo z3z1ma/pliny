@@ -9,6 +9,8 @@
   let seedInput = $state('');
   let starting = $state(false);
   let advancing = $state(false);
+  let highlightedTempId = $state<string | null>(null);
+  let highlightTimeout: ReturnType<typeof setTimeout> | null = null;
 
   import { onMount } from 'svelte';
 
@@ -88,6 +90,9 @@
         method: 'POST'
       });
       if (response.ok) {
+        store.shapingSession = null;
+        localStorage.removeItem('loom_shaping_session_id');
+        sessionId = null;
         onExit();
       } else {
         console.error('Failed to commit session:', await response.text());
@@ -95,6 +100,15 @@
     } catch (err) {
       console.error('Error committing session:', err);
     }
+  }
+
+  function highlightRecord(tempId: string) {
+    highlightedTempId = tempId;
+    if (highlightTimeout) clearTimeout(highlightTimeout);
+    highlightTimeout = setTimeout(() => {
+      highlightedTempId = null;
+      highlightTimeout = null;
+    }, 2000);
   }
 </script>
 
@@ -135,6 +149,7 @@
       <ShapingCanvas 
         {sessionId} 
         {advancing}
+        {highlightedTempId}
       />
     </div>
     <div class="w-72 shrink-0 border-l border-border-default overflow-y-auto bg-bg-surface">
@@ -144,6 +159,7 @@
         branches={store.shapingSession.branches} 
         activeBranch={store.shapingSession.activeBranch} 
         onCommit={handleCommit} 
+        onRecordClick={highlightRecord}
       />
     </div>
   {/if}

@@ -2,7 +2,7 @@
 
 ID: ticket:20260526-mill-canvas-staging-commit
 Type: Ticket
-Status: open
+Status: review
 Created: 2026-05-26
 Updated: 2026-05-26
 Risk: medium - session resume must preserve full canvas state (node positions, selections, dead branches); data loss on refresh would break trust
@@ -132,11 +132,27 @@ sessions), strip observation content from the state and re-fetch on hydration.
 
 ## Current State
 
-Blocked on integration and interaction tickets. First Ralph run: wire record node
-actions to staging API, implement canvas state persistence, implement session
-resume, test commit flow end-to-end.
+Frontend implementation is complete for the user-requested slice: RecordNode accept,
+reject, and edit actions call the existing staging API and refetch session state;
+StagingPanel clicks trigger a temporary RecordNode highlight; commit clears the
+shaping session state, removes the persisted localStorage session ID, and exits
+back to editor mode. Session resume remains the existing GET/hydration path per
+the user-scoped instruction to skip real-time Svelvet position persistence for now.
+
+Evidence: `evidence:20260526-mill-canvas-staging-commit-build`.
+
+Not yet verified: browser/Playwright behavior against a running backend, actual
+commit files written under `.loom/`, pan-to-node behavior beyond the temporary
+highlight fallback, full refresh preservation of manual Svelvet positions, and
+audit.
 
 ## Journal
 
 - 2026-05-26: Created ticket with Status `open`. Closes the production loop:
   shape → accept → commit → records on disk. Session resume prevents data loss.
+- 2026-05-26: Status set to `active` for frontend implementation of RecordNode
+  staging API actions, staging-panel canvas highlighting, commit flow wiring, and
+  requested frontend build verification.
+- 2026-05-26: Implemented the requested frontend integration slice and recorded
+  build evidence. Status moved to `review`; remaining work is browser/e2e
+  verification of the running staging/commit flow and audit.

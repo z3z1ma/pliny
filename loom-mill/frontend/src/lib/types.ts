@@ -132,7 +132,7 @@ export interface CanvasNode {
   id: string;
   type: 'input' | 'processing' | 'question' | 'observation' | 'option_group' | 'option' | 'record';
   parent_id: string | null;
-  status: 'active' | 'dead' | 'stale';
+  status: 'active' | 'dead' | 'stale' | 'accepted' | 'rejected';
   content: Record<string, any>;
   position: { x: number; y: number } | null;
   timestamp: string;
