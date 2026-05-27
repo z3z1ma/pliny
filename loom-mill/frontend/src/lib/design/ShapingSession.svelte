@@ -2,6 +2,7 @@
   import { store } from '../ws.svelte.ts';
   import { apiUrl } from '../api';
   import ShapingCanvas from './canvas/ShapingCanvas.svelte';
+  import ProcessingLogModal from './canvas/ProcessingLogModal.svelte';
   import SessionList from './canvas/SessionList.svelte';
   import StagingPanel from './StagingPanel.svelte';
 
@@ -12,12 +13,15 @@
   let advancing = $state(false);
   let view = $state<'list' | 'new' | 'canvas'>(sessionId ? 'canvas' : 'list');
   let highlightedTempId = $state<string | null>(null);
+  let showLogModal = $state(false);
+  let logModalInvocationId = $state<string | null>(null);
   let highlightTimeout: ReturnType<typeof setTimeout> | null = null;
 
   function exitShaping() {
     store.shapingSession = null;
     localStorage.removeItem('loom_shaping_session_id');
     sessionId = null;
+    showLogModal = false;
     onExit();
   }
 
@@ -35,9 +39,16 @@
       activeBranch: state.active_branch || 'main',
       branches: state.branches || ['main'],
       activeExplorations: state.active_explorations || [],
+      explorationLogs: {},
+      explorationStatus: {},
       advanceState: 'idle',
       advanceError: null
     };
+  }
+
+  function openLogModal(invocationId: string) {
+    logModalInvocationId = invocationId;
+    showLogModal = true;
   }
 
   async function hydrateSession(id: string) {
@@ -77,6 +88,7 @@
   function showNewSession() {
     sessionId = null;
     store.shapingSession = null;
+    showLogModal = false;
     seedInput = '';
     view = 'new';
   }
@@ -84,6 +96,7 @@
   function showSessionList() {
     sessionId = null;
     store.shapingSession = null;
+    showLogModal = false;
     view = 'list';
   }
 
@@ -128,6 +141,7 @@
         store.shapingSession = null;
         localStorage.removeItem('loom_shaping_session_id');
         sessionId = null;
+        showLogModal = false;
         onExit();
       } else {
         console.error('Failed to commit session:', await response.text());
@@ -208,6 +222,7 @@
         {sessionId} 
         {advancing}
         {highlightedTempId}
+        onOpenLogs={openLogModal}
       />
     </div>
     <div class="w-72 shrink-0 border-l border-border-default overflow-y-auto bg-bg-surface">
@@ -222,3 +237,11 @@
     </div>
   {/if}
 </div>
+
+{#if showLogModal}
+  <ProcessingLogModal
+    invocationId={logModalInvocationId}
+    sessionId={sessionId ?? ''}
+    onClose={() => showLogModal = false}
+  />
+{/if}

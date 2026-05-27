@@ -1,20 +1,38 @@
 <script lang="ts">
   import { Node, Anchor } from 'svelvet';
-  import { onMount, onDestroy } from 'svelte';
   import { apiUrl } from '../../api';
   import { store } from '../../ws.svelte.ts';
 
   let { node, position, connections = [], onOpenLogs } = $props();
 
   let elapsed = $state(0);
-  let timer: ReturnType<typeof setInterval>;
+  let timer: ReturnType<typeof setInterval> | null = null;
+  let invocationId = $derived(node.content.invocation_id as string | undefined);
+  let explorationStatus = $derived(
+    invocationId ? store.shapingSession?.explorationStatus?.[invocationId] : undefined
+  );
+  let isRunning = $derived(explorationStatus === 'running');
+  let displayMessage = $derived(
+    isRunning
+      ? (node.content.message || 'Processing...')
+      : explorationStatus === 'failed'
+        ? 'Exploration ended'
+        : 'Exploration completed'
+  );
 
-  onMount(() => {
+  $effect(() => {
+    if (!isRunning) {
+      if (timer) clearInterval(timer);
+      timer = null;
+      return;
+    }
+
+    elapsed = 0;
     timer = setInterval(() => { elapsed++; }, 1000);
-  });
-
-  onDestroy(() => {
-    if (timer) clearInterval(timer);
+    return () => {
+      if (timer) clearInterval(timer);
+      timer = null;
+    };
   });
 
   async function handleCancel() {
@@ -44,32 +62,35 @@
 </script>
 
 <Node id={node.id} {position} let:selected>
-  <div class="bg-bg-surface border border-accent-primary/50 rounded-lg p-3 min-w-[200px] shadow-sm animate-pulse flex flex-col gap-2
+  <div class="bg-bg-surface border rounded-lg p-3 min-w-[200px] shadow-sm flex flex-col gap-2
+    {isRunning ? 'border-accent-primary/50 animate-pulse' : 'border-border-default opacity-80'}
     {selected ? 'ring-2 ring-accent-primary/50' : ''}
   ">
     <div class="flex items-center justify-between gap-2">
       <div class="flex items-center gap-2">
-        <div class="w-2 h-2 rounded-full bg-accent-primary animate-ping"></div>
+        <div class="w-2 h-2 rounded-full {isRunning ? 'bg-accent-primary animate-ping' : 'bg-text-muted'}"></div>
         <div class="text-[12px] text-text-secondary italic">
-          {node.content.message || 'Processing...'} {elapsed}s
+          {displayMessage}{isRunning ? ` ${elapsed}s` : ''}
         </div>
       </div>
-      <button 
-        class="text-[10px] px-1.5 py-0.5 bg-bg-secondary hover:bg-bg-tertiary rounded text-text-secondary hover:text-text-primary transition-colors"
-        onclick={handleCancel}
-      >
-        Cancel
-      </button>
+      {#if isRunning}
+        <button
+          class="text-[10px] px-1.5 py-0.5 bg-bg-secondary hover:bg-bg-tertiary rounded text-text-secondary hover:text-text-primary transition-colors"
+          onclick={handleCancel}
+        >
+          Cancel
+        </button>
+      {/if}
     </div>
-    {#if node.content.invocation_id}
-      <button 
+    {#if isRunning && invocationId}
+      <button
         class="text-[10px] text-left text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1"
-        onclick={() => onOpenLogs?.(node.content.invocation_id)}
+        onclick={() => onOpenLogs?.(invocationId)}
       >
-        📋 View logs
+        View logs
       </button>
     {/if}
-    {#if elapsed > 30}
+    {#if isRunning && elapsed > 30}
       <div class="text-[10px] text-text-tertiary">
         This is taking longer than usual...
       </div>

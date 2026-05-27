@@ -8,12 +8,11 @@
   import OptionNode from './OptionNode.svelte';
   import RecordNode from './RecordNode.svelte';
   import CanvasInputBar from './CanvasInputBar.svelte';
-  import ProcessingLogModal from './ProcessingLogModal.svelte';
   import { apiUrl } from '../../api';
   import type { CanvasNode } from '../../types';
   import { computeTreeLayout } from './layout';
 
-  let { sessionId, advancing, highlightedTempId }: { sessionId: string, advancing: boolean, highlightedTempId?: string | null } = $props();
+  let { sessionId, advancing, highlightedTempId, onOpenLogs }: { sessionId: string, advancing: boolean, highlightedTempId?: string | null, onOpenLogs?: (invocationId: string) => void } = $props();
 
   let allNodes = $derived(store.shapingSession?.nodes ? Object.values(store.shapingSession.nodes) : []);
   let allEdges = $derived(store.shapingSession?.edges ?? []);
@@ -21,14 +20,6 @@
   let collapseDead = $state(false);
   let rejectedTempIds = $state<Set<string>>(new Set());
   
-  let showLogModal = $state(false);
-  let logModalInvocationId = $state<string | null>(null);
-
-  function openLogModal(invocationId: string) {
-    logModalInvocationId = invocationId;
-    showLogModal = true;
-  }
-
   let nodes = $derived(
     collapseDead
       ? allNodes.filter(n => n.status !== 'dead')
@@ -71,6 +62,8 @@
     store.shapingSession.activeBranch = state.active_branch || 'main';
     store.shapingSession.branches = state.branches || ['main'];
     store.shapingSession.activeExplorations = state.active_explorations || [];
+    store.shapingSession.explorationLogs = store.shapingSession.explorationLogs || {};
+    store.shapingSession.explorationStatus = store.shapingSession.explorationStatus || {};
   }
 
   async function refetchSessionState() {
@@ -218,7 +211,7 @@
         {#if node.type === 'input'}
           <InputNode {node} {sessionId} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} />
         {:else if node.type === 'processing'}
-          <ProcessingNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onOpenLogs={openLogModal} />
+          <ProcessingNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} {onOpenLogs} />
         {:else if node.type === 'question'}
           <QuestionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onRespond={(content) => handleRespond(content, node.id)} />
         {:else if node.type === 'observation'}
@@ -257,11 +250,4 @@
     }).catch(err => console.error('Error triggering advance:', err));
   }} />
   
-  {#if showLogModal}
-    <ProcessingLogModal 
-      invocationId={logModalInvocationId} 
-      {sessionId} 
-      onClose={() => showLogModal = false} 
-    />
-  {/if}
 </div>
