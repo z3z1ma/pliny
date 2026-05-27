@@ -160,8 +160,8 @@ Each edge has source_id, target_id, and type (causal/option-group).
 
 Update `SessionState` to use the new model. Update session persistence (JSON files
 under `.mill/shaping-sessions/`). Update the REST API to serve the graph structure.
-Maintain backward compatibility: existing sessions with flat blocks should still
-load (migration path or ignore).
+Existing sessions with old flat-block format in `.mill/shaping-sessions/` can be
+discarded (transient runtime state, not committed). No migration needed.
 
 The API contract change: `GET /shaping/sessions/{id}` returns `{nodes: {...}, edges: [...], ...}` instead of `{blocks: [...]}`.
 
@@ -219,8 +219,7 @@ to instruct the model on the new format. The parser should be tolerant: if the m
 outputs the old ```action format, treat it as a single node for compatibility.
 
 Evidence: Unit tests demonstrating multi-node parsing for all node types. Tests for
-malformed output (graceful degradation). Tests for backward-compatible single-action
-parsing.
+malformed output (graceful degradation). Tests for all node type parsing.
 
 Audit: Generalist reviews parser robustness, edge cases, and prompt clarity.
 

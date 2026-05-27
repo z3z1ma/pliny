@@ -18,19 +18,19 @@ the model to emit combinations: observation + question, multiple options,
 observation + record proposal, etc.
 
 The format uses XML-like tags that the parser extracts. The prompt template
-instructs the model on the format. The parser is tolerant of malformed output
-and backward-compatible with the old single-action format.
+instructs the model on the format. The parser is tolerant of malformed output.
+The old ` ```action ` format and `parse_decision()` function are deleted — we own
+the entire stack and do not carry dead code paths.
 
 Single closure claim: The parser correctly extracts multiple typed nodes from model
-XML output, with tested robustness for malformed responses and backward
-compatibility.
+XML output, with tested robustness for malformed responses.
 
 ## Related Records
 
 - `spec:mill-shaping-canvas` — REQ-002 defines node types; REQ-011 requires
   parallel processing
 - `plan:20260526-mill-shaping-canvas` — parent plan; this is Unit 3
-- `loom-mill/src/loom_mill/shaping/parser.py` — current parser being extended
+- `loom-mill/src/loom_mill/shaping/parser.py` — current parser being replaced
 - `loom-mill/src/loom_mill/shaping/prompts.py` — current prompt being rewritten
 - `loom-mill/src/loom_mill/shaping/engine.py` — consumer of parsed output
 
@@ -50,21 +50,20 @@ compatibility.
 - New `ParsedResponse` dataclass:
   - `nodes: list[ParsedNode]`
   - `explore_goal: str | None` (if model wants to explore)
-- New `parse_canvas_response(output: str) -> ParsedResponse` function
-- Keep existing `parse_decision()` for backward compatibility (existing tests)
+- New `parse_canvas_response(output: str) -> ParsedResponse` function (replaces
+  `parse_decision()` entirely — delete the old function and its tests)
 - Parser extraction rules:
   - Find all `<node type="...">...</node>` blocks
   - Find `<node type="option-group" ...><option ...>...</option>...</node>` blocks
-  - If no XML tags found, fall back to `parse_decision()` and wrap result as
-    single-node response
+  - If no XML tags found, treat the entire output as a single observation node
+    (graceful degradation, not backward compat)
   - If `<explore goal="..."/>` self-closing tag found, set explore_goal
   - Gracefully handle: unclosed tags, nested tags, extra whitespace, mixed
     content outside tags
 
 `loom-mill/src/loom_mill/shaping/prompts.py`:
-- Rewrite `build_decision_prompt()` → `build_canvas_prompt()` that instructs the
-  model to respond in the multi-node XML format
-- Prompt must include:
+- Replace `build_decision_prompt()` with `build_canvas_prompt()` (delete the old
+  function entirely):
   - Format specification with examples for each node type
   - Clear instruction that multiple nodes are allowed/encouraged
   - Instruction to emit observation + question together when appropriate
@@ -73,7 +72,6 @@ compatibility.
   - Instruction for `<explore goal="..."/>` when codebase exploration is needed
   - Guidelines: be specific, produce complete records not stubs, ask focused
     questions, observe contradictions
-- Keep `build_decision_prompt()` available for backward compatibility
 
 **Response format specification:**
 
@@ -123,9 +121,14 @@ Should we migrate the existing model or create a clean replacement?
 ```
 
 **What must NOT change:**
-- Existing `parse_decision()` function signature (keep for backward compat)
 - Harness invocation mechanism (this ticket only changes what we PARSE from output)
 - Session persistence format (that's the graph model ticket)
+
+**What gets deleted:**
+- `parse_decision()` function and its `Decision` dataclass
+- `build_decision_prompt()` function
+- All tests that verify the old ` ```action ` format
+- The `_parse_fields`, `_parse_options`, `_parse_branches` helper functions
 
 **Stop condition:** If testing with real LLMs shows the XML format is unreliable
 (models frequently produce malformed output that the parser can't recover from),
@@ -147,14 +150,16 @@ simplify to one-node-per-advance with a `type` prefix line instead of XML.
 
 - ACC-003: Parser is tolerant of malformed output
   - Evidence: Unit tests for: unclosed tags, extra text outside tags, partially
-    formed tags, empty tags, duplicate attributes, no tags at all (falls back to
-    legacy parser)
-  - Audit: Verify graceful degradation (produces at least one node or falls back)
+    formed tags, empty tags, duplicate attributes, no tags at all (degrades to
+    single observation node from raw text)
+  - Audit: Verify graceful degradation (always produces at least one node)
 
-- ACC-004: Backward compatibility with old ` ```action ` format
-  - Evidence: Unit test: input with old format → parse_canvas_response wraps as
-    single-node ParsedResponse with correct type mapping
-  - Audit: Verify existing engine can consume the result
+- ACC-004: Old parser code is fully deleted (no backward compat dead code)
+  - Evidence: `parse_decision`, `Decision`, `build_decision_prompt`,
+    `_parse_fields`, `_parse_options`, `_parse_branches` are all gone from the
+    codebase. Old tests are replaced, not maintained.
+  - Audit: `grep -r "parse_decision\|Decision\|build_decision_prompt" loom-mill/src/`
+    returns nothing
 
 - ACC-005: Prompt template clearly instructs the model with examples and constraints
   - Evidence: Prompt text includes format specification, examples for each type,

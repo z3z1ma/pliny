@@ -67,7 +67,7 @@ Frontend:
 
 - Update TypeScript types in `loom-mill/frontend/src/lib/types.ts`:
   - Add `CanvasNode`, `CanvasEdge`, `NodeStatus`, `CanvasNodeType` types
-  - Keep `InteractionBlock` for now (backward compat) but mark deprecated
+  - Remove `InteractionBlock` type entirely (replaced by `CanvasNode`)
 
 Backend:
 - Modify `loom-mill/src/loom_mill/shaping/engine.py`:

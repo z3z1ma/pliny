@@ -55,13 +55,13 @@ correct types, statuses, and relationships through the REST API and WebSocket ev
   - `nodes: dict[str, CanvasNode]` (id → node)
   - `edges: list[CanvasEdge]`
   - Keep `staged_records`, `active_branch`, `branches` as-is
-  - Remove `blocks` (or keep as deprecated field for migration)
+  - Remove `blocks` field entirely (we own the stack; no backward compat)
   - Add `active_explorations` tracking by node_id
 
 `loom-mill/src/loom_mill/shaping/session.py`:
 - Persistence reads/writes new graph structure to JSON
-- Migration: if loaded JSON has `blocks` but no `nodes`, convert each block to a
-  node with sequential parent_ids (best-effort migration for existing sessions)
+- Old sessions under `.mill/shaping-sessions/` with flat `blocks` format are
+  transient runtime state (not committed) — discard them; no migration needed
 
 `loom-mill/src/loom_mill/api/shaping.py`:
 - `GET /sessions/{id}` returns `{nodes: {...}, edges: [...], ...}`
@@ -111,16 +111,14 @@ redesign before downstream tickets build on the model.
     structure
   - Audit: Verify event payloads contain all fields the frontend will need
 
-- ACC-005: Migration: loading a session with old `blocks` format either succeeds
-  (best-effort conversion) or fails gracefully (does not crash)
-  - Evidence: Test loading a JSON file with `blocks` field, verify it produces
-    a valid (possibly empty) graph state
-  - Audit: Verify no data corruption path
+- ACC-005: Old `InteractionBlock` model and `BlockType` enum are deleted
+  - Evidence: `grep -r "InteractionBlock\|BlockType" loom-mill/src/` returns nothing
+  - Audit: Verify no dead code paths for old format remain
 
-- ACC-006: All existing backend tests pass or are adapted to new model (no
+- ACC-006: All existing backend tests pass or are rewritten for new model (no
   regressions in unrelated functionality)
   - Evidence: `pytest` full suite passes
-  - Audit: Review adapted tests for honesty (not just deleted to pass)
+  - Audit: Review rewritten tests for honesty (test real behavior, not just deleted)
 
 ## Current State
 
