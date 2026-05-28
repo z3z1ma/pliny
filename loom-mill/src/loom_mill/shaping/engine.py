@@ -167,7 +167,7 @@ class ShapingEngine:
             args=list(self.orchestrator.harness_config.args),
             env=dict(self.orchestrator.harness_config.env or {}),
             cwd=self.orchestrator.harness_config.cwd,
-            timeout_seconds=60.0,
+            timeout_seconds=300.0,
         )
         try:
             result = await run_bounded_invocation(
