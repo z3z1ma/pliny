@@ -159,6 +159,17 @@
       highlightTimeout = null;
     }, 2000);
   }
+
+  async function refetchStaging() {
+    if (!sessionId) return;
+    try {
+      const resp = await fetch(apiUrl(`/shaping/sessions/${sessionId}`));
+      if (resp.ok) {
+        const data = await resp.json();
+        applySessionState(sessionId, toSessionState(data));
+      }
+    } catch (err) { console.error('Failed to refetch staging:', err); }
+  }
 </script>
 
 <div class="flex h-full w-full">
@@ -226,13 +237,14 @@
       />
     </div>
     <div class="w-72 shrink-0 border-l border-border-default overflow-y-auto bg-bg-surface">
-      <StagingPanel 
-        {sessionId} 
-        records={store.shapingSession.stagedRecords} 
-        branches={store.shapingSession.branches} 
-        activeBranch={store.shapingSession.activeBranch} 
-        onCommit={handleCommit} 
+      <StagingPanel
+        {sessionId}
+        records={store.shapingSession.stagedRecords}
+        branches={store.shapingSession.branches}
+        activeBranch={store.shapingSession.activeBranch}
+        onCommit={handleCommit}
         onRecordClick={highlightRecord}
+        onChanged={refetchStaging}
       />
     </div>
   {/if}

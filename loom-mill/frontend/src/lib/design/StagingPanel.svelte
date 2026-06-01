@@ -1,20 +1,23 @@
 <script lang="ts">
   import type { StagedRecord } from '../types';
+  import { apiUrl } from '../api';
 
-  let { 
-    sessionId, 
-    records, 
-    branches, 
-    activeBranch, 
+  let {
+    sessionId,
+    records,
+    branches,
+    activeBranch,
     onCommit,
-    onRecordClick
-  }: { 
-    sessionId: string; 
-    records: StagedRecord[]; 
-    branches: string[]; 
-    activeBranch: string; 
+    onRecordClick,
+    onChanged
+  }: {
+    sessionId: string;
+    records: StagedRecord[];
+    branches: string[];
+    activeBranch: string;
     onCommit: () => void;
     onRecordClick?: (tempId: string) => void;
+    onChanged?: () => void;
   } = $props();
 
   let acceptedCount = $derived(records.filter(r => r.status === 'accepted').length);
@@ -44,6 +47,38 @@
 
   function selectRecord(tempId: string) {
     onRecordClick?.(tempId);
+  }
+
+  let selected = $state<Set<string>>(new Set());
+  function toggleSelect(tempId: string) {
+    const next = new Set(selected);
+    if (next.has(tempId)) next.delete(tempId); else next.add(tempId);
+    selected = next;
+  }
+
+  async function discardRecord(tempId: string) {
+    const resp = await fetch(apiUrl(`/shaping/sessions/${sessionId}/staged/${encodeURIComponent(tempId)}`), { method: 'DELETE' });
+    if (!resp.ok) { console.error('Failed to discard staged record:', await resp.text()); return; }
+    const next = new Set(selected); next.delete(tempId); selected = next;
+    onChanged?.();
+  }
+
+  async function consolidateSelected() {
+    const targets = [...selected];
+    if (targets.length < 2) return;
+    const chosen = records.filter(r => targets.includes(r.temp_id));
+    if (chosen.length < 2) return;
+    const surface = chosen[0].surface;
+    const title = `${chosen[0].title} (consolidated)`;
+    const content = chosen.map(r => r.content).join('\n\n---\n\n');
+    const resp = await fetch(apiUrl(`/shaping/sessions/${sessionId}/staged/consolidate`), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ targets, surface, title, content })
+    });
+    if (!resp.ok) { console.error('Failed to consolidate staged records:', await resp.text()); return; }
+    selected = new Set();
+    onChanged?.();
   }
 </script>
 
@@ -105,31 +140,60 @@
       </div>
     {/if}
     {#each records as record}
-      <button 
-        class="flex flex-col gap-1.5 p-3 rounded-lg text-left hover:bg-bg-surface transition-all border border-transparent hover:border-border-default group
+      <div
+        class="flex flex-col gap-1.5 p-3 rounded-lg transition-all border border-transparent hover:border-border-default group
           {record.status === 'rejected' ? 'opacity-50' : ''}
           {record.status === 'accepted' ? 'bg-status-success-bg/5' : ''}"
-        onclick={() => selectRecord(record.temp_id)}
       >
-        <div class="flex items-center justify-between w-full">
-          <div class="flex items-center gap-2 overflow-hidden">
-            <span class="text-[14px] bg-bg-surface w-6 h-6 rounded flex items-center justify-center shadow-sm border border-border-subtle group-hover:border-border-default transition-colors">{surfaceIcon(record.surface)}</span>
-            <span class="text-[12px] font-medium text-text-primary truncate">{record.title}</span>
-          </div>
-          {#if record.status === 'accepted'}
-            <span class="text-status-success-text text-[12px] bg-status-success-bg/20 w-5 h-5 rounded-full flex items-center justify-center">✓</span>
-          {:else if record.status === 'rejected'}
-            <span class="text-status-error-text text-[12px] bg-status-error-bg/20 w-5 h-5 rounded-full flex items-center justify-center">✗</span>
-          {:else}
-            <span class="w-2 h-2 rounded-full bg-accent-primary animate-ping mr-1.5"></span>
+        <div class="flex items-center gap-2 w-full">
+          <input
+            type="checkbox"
+            checked={selected.has(record.temp_id)}
+            onchange={() => toggleSelect(record.temp_id)}
+            onclick={(e) => e.stopPropagation()}
+            class="shrink-0"
+          />
+          <button
+            class="flex-1 min-w-0 flex items-center justify-between text-left hover:opacity-80 transition-opacity"
+            onclick={() => selectRecord(record.temp_id)}
+          >
+            <div class="flex items-center gap-2 overflow-hidden">
+              <span class="text-[14px] bg-bg-surface w-6 h-6 rounded flex items-center justify-center shadow-sm border border-border-subtle group-hover:border-border-default transition-colors">{surfaceIcon(record.surface)}</span>
+              <span class="text-[12px] font-medium text-text-primary truncate">{record.title}</span>
+            </div>
+            {#if record.status === 'accepted'}
+              <span class="text-status-success-text text-[12px] bg-status-success-bg/20 w-5 h-5 rounded-full flex items-center justify-center shrink-0">✓</span>
+            {:else if record.status === 'rejected'}
+              <span class="text-status-error-text text-[12px] bg-status-error-bg/20 w-5 h-5 rounded-full flex items-center justify-center shrink-0">✗</span>
+            {:else}
+              <span class="w-2 h-2 rounded-full bg-accent-primary animate-ping mr-1.5 shrink-0"></span>
+            {/if}
+          </button>
+          {#if record.status !== 'accepted'}
+            <button
+              onclick={(e) => { e.stopPropagation(); discardRecord(record.temp_id); }}
+              class="text-[11px] text-status-error-text hover:opacity-80 shrink-0"
+            >
+              Discard
+            </button>
           {/if}
         </div>
         <div class="text-[10px] font-mono text-text-tertiary truncate pl-8">
           {record.temp_id}
         </div>
-      </button>
+      </div>
     {/each}
   </div>
+
+  <!-- Consolidate Action -->
+  {#if selected.size >= 2}
+    <div class="p-3 border-t border-border-subtle shrink-0 bg-bg-surface">
+      <button class="w-full py-2 rounded-md text-[12px] font-medium bg-accent-primary text-white hover:bg-accent-primary/90"
+        onclick={consolidateSelected}>
+        Consolidate {selected.size} records
+      </button>
+    </div>
+  {/if}
 
   <!-- Commit Action -->
   <div class="p-4 border-t border-border-default shrink-0 bg-bg-surface relative overflow-hidden">
