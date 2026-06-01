@@ -466,6 +466,33 @@ async def delete_staged_record(request: Request) -> JSONResponse:
     return JSONResponse({"session_id": session.session_id, "rejected": request.path_params["temp_id"]})
 
 
+async def consolidate_staged_records(request: Request) -> JSONResponse:
+    try:
+        session = _load_session(request)
+    except KeyError:
+        return JSONResponse({"detail": "Session not found"}, status_code=404)
+    if session.state.ended_at is not None:
+        return JSONResponse({"error": "Session has ended"}, status_code=409)
+    try:
+        body = await _json_body(request)
+        targets = body["targets"]
+        surface = body["surface"]
+        title = body["title"]
+        content = body["content"]
+        if not isinstance(targets, list) or len(targets) < 2:
+            raise ValueError("targets must be a list with at least 2 items")
+        if not isinstance(surface, str) or not surface.strip():
+            raise ValueError("surface must be a non-empty string")
+        if not isinstance(title, str) or not title.strip():
+            raise ValueError("title must be a non-empty string")
+        if not isinstance(content, str):
+            raise ValueError("content must be a string")
+        session.staging.consolidate([str(t) for t in targets], surface.strip(), title.strip(), content)
+    except (KeyError, ValueError) as error:
+        return JSONResponse({"error": str(error)}, status_code=400)
+    return JSONResponse({"session_id": session.session_id, "staged_records": [asdict(r) for r in session.state.staged_records]})
+
+
 async def accept_staged_record(request: Request) -> JSONResponse:
     try:
         session = _load_session(request)

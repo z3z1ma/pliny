@@ -10,7 +10,7 @@ from starlette.routing import Route, WebSocketRoute
 
 from loom_mill.api.design import create_chat_session, create_record, end_chat_session, get_chat_session, send_chat_message, transition_record, update_record
 from loom_mill.api.records import get_record_content
-from loom_mill.api.shaping import accept_staged_record, add_shaping_input, advance_shaping_session, cancel_shaping_exploration, commit_shaping_session, create_shaping_branch, create_shaping_session, create_staged_record, delete_shaping_session, delete_staged_record, edit_node, explore_shaping_session, get_shaping_context, get_shaping_session, list_shaping_explorations, list_shaping_sessions, merge_shaping_branch, reselect_option_node, select_option_node, switch_shaping_branch, update_staged_record
+from loom_mill.api.shaping import accept_staged_record, add_shaping_input, advance_shaping_session, cancel_shaping_exploration, commit_shaping_session, consolidate_staged_records, create_shaping_branch, create_shaping_session, create_staged_record, delete_shaping_session, delete_staged_record, edit_node, explore_shaping_session, get_shaping_context, get_shaping_session, list_shaping_explorations, list_shaping_sessions, merge_shaping_branch, reselect_option_node, select_option_node, switch_shaping_branch, update_staged_record
 from loom_mill.api.shipping import abort_workstation, resolve_workstation, ship_workstation, shipping_queue, skip_workstation
 from loom_mill.api.scheduling import scheduling_log, scheduling_queue, put_scheduling_enabled, put_scheduling_overrides
 from loom_mill.api.workstation import (
@@ -94,6 +94,7 @@ def create_app() -> Starlette:
             Route("/shaping/sessions/{session_id}/nodes/{node_id}/reselect", reselect_option_node, methods=["POST"]),
             Route("/shaping/sessions/{session_id}/advance", advance_shaping_session, methods=["POST"]),
             Route("/shaping/sessions/{session_id}/staged", create_staged_record, methods=["POST"]),
+            Route("/shaping/sessions/{session_id}/staged/consolidate", consolidate_staged_records, methods=["POST"]),
             Route("/shaping/sessions/{session_id}/staged/{temp_id}", update_staged_record, methods=["PUT"]),
             Route("/shaping/sessions/{session_id}/staged/{temp_id}", delete_staged_record, methods=["DELETE"]),
             Route("/shaping/sessions/{session_id}/staged/{temp_id}/accept", accept_staged_record, methods=["POST"]),
