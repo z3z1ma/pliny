@@ -1,12 +1,10 @@
 <script lang="ts">
   import { Node, Anchor } from 'svelvet';
+  import RecordModal from './RecordModal.svelte';
 
   let { node, position, connections = [], highlighted = false, onAccept, onReject, onEdit } = $props();
 
-  let expanded = $state(false);
-  let editing = $state(false);
-  let editContent = $state('');
-  let saving = $state(false);
+  let modalOpen = $state(false);
 
   let surfaceColor = $derived(() => {
     const s = node.content.surface?.toLowerCase() || '';
@@ -46,76 +44,27 @@
     <div class="text-[13px] font-bold text-text-primary mb-1 {node.status === 'rejected' ? 'line-through' : ''}">
       {node.content.title}
     </div>
-    
-    {#if editing}
-      <div class="flex flex-col gap-2 mt-2">
-        <textarea
-          bind:value={editContent}
-          class="w-full h-48 p-2 rounded border border-accent-primary/50 bg-bg-primary text-[12px] text-text-primary font-mono resize-y focus:outline-none focus:border-accent-primary"
-        ></textarea>
-        <div class="flex justify-end gap-2">
-          <button
-            class="px-2 py-1 text-[11px] rounded border border-border-default text-text-secondary hover:text-text-primary hover:bg-bg-surface-hover"
-            onclick={() => { editing = false; editContent = node.content.content || ''; }}
-            disabled={saving}
-          >
-            Cancel
-          </button>
-          <button
-            class="px-2 py-1 text-[11px] rounded bg-accent-primary text-white hover:bg-accent-primary/90 disabled:opacity-50"
-            onclick={async () => {
-              if (!onEdit) return;
-              saving = true;
-              try {
-                await onEdit(node.id, editContent);
-                editing = false;
-              } finally {
-                saving = false;
-              }
-            }}
-            disabled={saving || editContent === node.content.content}
-          >
-            {saving ? 'Saving...' : 'Save'}
-          </button>
-        </div>
-      </div>
-    {:else}
-      <div class="text-[12px] text-text-secondary whitespace-pre-wrap break-words font-mono bg-bg-primary p-2 rounded mt-2 {expanded ? '' : 'line-clamp-6'}">
-        {node.content.content}
-      </div>
-    {/if}
-    
-    {#if !editing && node.content.content && node.content.content.split('\n').length > 6}
-      <button 
-        class="text-[10px] text-text-tertiary hover:text-text-primary mt-1 w-full text-center py-1"
-        onclick={() => expanded = !expanded}
-      >
-        {expanded ? 'Collapse' : 'Expand'}
-      </button>
-    {/if}
+
+    <div class="text-[11px] text-text-secondary line-clamp-2 mt-1">
+      {(node.content.content || '').split('\n').find((l) => l.trim() && !l.startsWith('#')) || ''}
+    </div>
+    <button class="mt-2 text-[11px] text-accent-primary hover:underline" onclick={() => (modalOpen = true)}>Open document</button>
     
     {#if node.status === 'active'}
       <div class="flex gap-2 mt-3 pt-3 border-t border-border-subtle">
-        <button 
+        <button
           class="flex-1 flex items-center justify-center gap-1 py-1.5 bg-green-500/10 text-green-500 border border-green-500/20 rounded hover:bg-green-500/20 transition-colors text-[11px]"
           onclick={() => onAccept && onAccept(node.id)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
           Accept
         </button>
-        <button 
+        <button
           class="flex-1 flex items-center justify-center gap-1 py-1.5 bg-red-500/10 text-red-500 border border-red-500/20 rounded hover:bg-red-500/20 transition-colors text-[11px]"
           onclick={() => onReject && onReject(node.id)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
           Reject
-        </button>
-        <button 
-          class="px-2 py-1.5 bg-bg-surface-hover text-text-secondary border border-border-default rounded hover:text-text-primary transition-colors text-[11px]"
-          onclick={() => { editContent = node.content.content || ''; editing = true; }}
-          title="Edit"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
         </button>
       </div>
     {/if}
@@ -133,3 +82,7 @@
     {/if}
   </div>
 </Node>
+
+{#if modalOpen}
+  <RecordModal {node} onClose={() => (modalOpen = false)} onSave={onEdit} />
+{/if}
