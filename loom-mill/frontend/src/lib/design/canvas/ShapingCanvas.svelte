@@ -17,8 +17,12 @@
   let allNodes = $derived(store.shapingSession?.nodes ? Object.values(store.shapingSession.nodes) : []);
   let allEdges = $derived(store.shapingSession?.edges ?? []);
 
+  let thinkingTrace = $derived(store.shapingSession?.thinkingTrace ?? '');
+  let isThinking = $derived(store.shapingSession?.advanceState === 'thinking');
+
   let collapseDead = $state(false);
   let rejectedTempIds = $state<Set<string>>(new Set());
+  let thinkingDismissed = $state(false);
   
   let nodes = $derived(
     collapseDead
@@ -39,6 +43,10 @@
   let hiddenCount = $derived(allNodes.length - nodes.length);
 
   let layoutResult = $derived(computeTreeLayout(nodes, edges));
+
+  $effect(() => {
+    if (isThinking) thinkingDismissed = false;
+  });
 
   function getChildConnections(nodeId: string) {
     const conns = edges
@@ -241,6 +249,18 @@
         {/if}
       {/each}
     </Svelvet>
+
+    {#if isThinking && thinkingTrace && !thinkingDismissed}
+      <div class="absolute bottom-4 left-4 z-20 max-w-[420px] max-h-[40vh] overflow-auto
+        bg-bg-surface/95 border border-border-default rounded-lg shadow-lg p-3">
+        <div class="flex items-center justify-between mb-1">
+          <div class="text-[10px] uppercase tracking-wider text-text-tertiary">Thinking…</div>
+          <button class="text-text-tertiary hover:text-text-primary text-xs leading-none"
+            onclick={() => (thinkingDismissed = true)} aria-label="Dismiss thinking panel">✕</button>
+        </div>
+        <div class="text-[11px] font-mono text-text-secondary whitespace-pre-wrap break-words">{thinkingTrace}</div>
+      </div>
+    {/if}
   </div>
 
   <CanvasInputBar {sessionId} onAdvance={() => {
