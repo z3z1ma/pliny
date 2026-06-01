@@ -4,6 +4,8 @@
   let saving = $state(false);
 </script>
 
+<svelte:window onkeydown={(e) => { if (e.key === 'Escape') onClose(); }} />
+
 <div class="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-sm"
   onclick={onClose} onkeydown={(e) => e.key === 'Escape' && onClose()} role="dialog" aria-modal="true">
   <div class="flex flex-col w-[720px] max-w-[92vw] max-h-[85vh] bg-bg-surface border border-border-default rounded-lg shadow-2xl overflow-hidden"
