@@ -80,7 +80,7 @@ def test_canvas_prompt_includes_context_history_and_phase() -> None:
         position=None,
     )
 
-    prompt = build_canvas_prompt("context facts", [node], SessionPhase.EXPLORING)
+    prompt = build_canvas_prompt("context facts", "graph view text", [node], SessionPhase.EXPLORING)
 
     assert "## Current Phase: exploring" in prompt
     assert "context facts" in prompt

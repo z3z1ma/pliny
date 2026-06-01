@@ -3,18 +3,25 @@ from __future__ import annotations
 from .models import CanvasNode
 
 
-def build_canvas_prompt(context: str, recent_nodes: list[CanvasNode], phase: str) -> str:
+def build_canvas_prompt(context: str, graph_view: str, recent_nodes: list[CanvasNode], phase: str) -> str:
     context_excerpt = context[-8000:] if context else "(no context yet)"
     history = format_node_history(recent_nodes)
     phase_value = getattr(phase, "value", phase)
+    disposition = _disposition_for_phase(str(phase_value))
     return f"""You are a shaping agent in a Loom session. Your job is to help the operator shape fuzzy intent into concrete Loom records (tickets, specs, plans, research) using a branching canvas.
 
 ## Current Phase: {phase_value}
 
+## Disposition
+{disposition}
+
 ## Internal Context Document
 {context_excerpt}
 
-## Recent Canvas Nodes
+## Current Canvas Graph (all nodes, statuses, and the staging area)
+{graph_view}
+
+## Recent Path
 {history}
 
 ## Response Format
@@ -50,6 +57,21 @@ Use an option group when there are materially different paths. Each option must 
 <option label="Custom SVG">Build from scratch with d3 and raw SVG for maximum control over layout and rendering.</option>
 <option label="Hybrid">Use Svelvet for graph interaction, but own the layout algorithm and record-node components.</option>
 </node>
+
+### Framing Node
+Use a framing node to name a distinct lens on the problem. Framings invite parallel exploration; emit two or three competing framings early rather than committing immediately.
+
+<node type="framing">Treat the canvas as a latency problem: the bottleneck is render time, not model quality.</node>
+
+### Tension Node
+Use a tension node for a contradiction, risk, or constraint that should stay open rather than be resolved away. A tension is an invitation to continue, not a dead end.
+
+<node type="tension">Operators want full document context on the canvas, but full inline documents make the canvas unreadable.</node>
+
+### Decision Node
+Use a decision node when a choice is resolved and branches should be pruned. A decision marks convergence.
+
+<node type="decision">Use a layered tree layout with orthogonal edges; the force-directed option is rejected for legibility.</node>
 
 ### Record Proposal Node
 Use a record node when you can propose a complete Loom record. The content must be full Markdown, not a stub.
@@ -100,6 +122,22 @@ The session model currently uses a flat block list with no parent references, wh
 Should we migrate the existing session model or create a clean canvas-specific graph model?
 </node>
 
+### Mutation Ops
+You can see the full graph and staging area above. Mutate them with self-closing ops:
+
+- Continue from any existing node (including an observation or tension):
+  <op kind="continue" from="<node_id>"/> followed by the new nodes.
+- Consolidate duplicate staged records into one (pair with a single record node):
+  <op kind="supersede" targets="temp:specs:a,temp:specs:b"/>
+  <node type="record" surface="specs" title="Merged">...full markdown...</node>
+- Rewrite one staged record (pair with a record node carrying the new content):
+  <op kind="edit-staged" temp_id="temp:specs:a"/>
+  <node type="record" surface="specs" title="Spec A">...</node>
+- Drop a staged record: <op kind="discard-staged" temp_id="temp:specs:a"/>
+- Revise a prior node's subtree: <op kind="revise" node="<node_id>"/> followed by replacement nodes.
+
+Use these to keep the graph coherent: when two staged records cover the same thing, supersede them; when a thread ended in an observation that should continue, continue from it.
+
 ## Guidelines
 - Be specific. Name files, records, constraints, and contradictions when known.
 - Produce complete records, not placeholders or stubs.
@@ -108,7 +146,7 @@ Should we migrate the existing session model or create a clean canvas-specific g
 - Observe contradictions, missing pieces, scope creep, and incoherence directly.
 - Use option groups for materially different paths, not minor wording choices.
 - Use record proposals only when the scope boundary, acceptance, and evidence path are coherent.
-- Move toward proposing records as quickly as certainty allows.
+- Branch and surface tensions while exploring and narrowing. Converge to decisions and records when the operator signals readiness or certainty is genuinely high — do not rush to records.
 """
 
 
@@ -157,3 +195,16 @@ def _one_line(value: str, limit: int = 500) -> str:
     if len(value) <= limit:
         return value
     return value[: limit - 3].rstrip() + "..."
+
+
+def _disposition_for_phase(phase: str) -> str:
+    if phase in ("exploring", "narrowing"):
+        return (
+            "You are in divergent mode. Prefer framing and tension nodes, options, and one "
+            "focused question at a time. Branch the canvas. Do not propose records yet unless "
+            "the operator has clearly signalled readiness."
+        )
+    return (
+        "You are in convergent mode. Resolve open tensions into decisions and propose complete, "
+        "coherent records. Consolidate duplicate staged records with the supersede op."
+    )

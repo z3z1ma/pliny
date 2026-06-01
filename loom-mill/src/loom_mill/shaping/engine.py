@@ -11,6 +11,7 @@ from .models import CanvasEdge, CanvasNode, CanvasNodeType, NodeStatus, SessionP
 from .orchestrator import ShapingOrchestrator
 from .parser import ParsedNode, ParsedResponse, parse_canvas_response
 from .prompts import build_canvas_prompt
+from .serialize import serialize_graph
 from .session import ShapingSession, utc_now
 
 
@@ -107,8 +108,9 @@ class ShapingEngine:
                 await self._publish_edge(edge)
             return [node]
         context = self._context_for_node(parent_id)
+        graph_view = serialize_graph(self.session.state)
         recent_nodes = self._path_to_node(parent_id)[-20:] if parent_id else list(self.session.state.nodes.values())[-20:]
-        response = await self._decide_next_action(context, recent_nodes, self.session.state.phase)
+        response = await self._decide_next_action(context, graph_view, recent_nodes, self.session.state.phase)
 
         if response.explore_goal and not response.nodes:
             node_count = len(self.session.state.nodes)
@@ -238,10 +240,11 @@ class ShapingEngine:
     async def _decide_next_action(
         self,
         context: str,
+        graph_view: str,
         recent_nodes: list[CanvasNode],
         phase: SessionPhase,
     ) -> ParsedResponse:
-        prompt = build_canvas_prompt(context, recent_nodes, phase)
+        prompt = build_canvas_prompt(context, graph_view, recent_nodes, phase)
         config = InvocationConfig(
             goal="Decide next shaping action",
             context_excerpt="",
