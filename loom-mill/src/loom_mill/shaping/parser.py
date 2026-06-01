@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -16,15 +16,23 @@ class ParsedNode:
 
 
 @dataclass
+class ParsedOp:
+    kind: str
+    args: dict[str, str]
+
+
+@dataclass
 class ParsedResponse:
     nodes: list[ParsedNode]
     explore_goal: str | None = None
+    ops: list["ParsedOp"] = field(default_factory=list)
 
 
 _NODE_OPEN_RE = re.compile(r"<node\b(?P<attrs>[^>]*)>", re.IGNORECASE | re.DOTALL)
 _NODE_CLOSE_RE = re.compile(r"</node\s*>", re.IGNORECASE)
 _OPTION_RE = re.compile(r"<option\b(?P<attrs>[^>]*)>(?P<body>.*?)</option\s*>", re.IGNORECASE | re.DOTALL)
 _EXPLORE_RE = re.compile(r"<explore\b(?P<attrs>[^>]*)/\s*>", re.IGNORECASE | re.DOTALL)
+_OP_RE = re.compile(r"<op\b(?P<attrs>[^>]*)/\s*>", re.IGNORECASE | re.DOTALL)
 _XML_TAG_RE = re.compile(r"</?\w+\b|<\w+\b[^>]*/\s*>")
 _ATTR_RE = re.compile(
     r"(?P<name>[\w:-]+)\s*=\s*(?:\"(?P<double>.*?)\"|'(?P<single>.*?)'|(?P<bare>[^\s>]+))",
@@ -34,14 +42,25 @@ _ATTR_RE = re.compile(
 
 def parse_canvas_response(output: str) -> ParsedResponse:
     explore_goal = _first_explore_goal(output)
+    ops = _parse_ops(output)
     nodes = [_parse_node(attrs, body) for attrs, body in _node_blocks(output)]
 
-    if not nodes and not _XML_TAG_RE.search(output):
+    if not nodes and not ops and not _XML_TAG_RE.search(output):
         nodes.append(ParsedNode(type="observation", content=output.strip()))
-    elif not nodes and explore_goal is None:
+    elif not nodes and not ops and explore_goal is None:
         nodes.append(ParsedNode(type="observation", content=output.strip()))
 
-    return ParsedResponse(nodes=nodes, explore_goal=explore_goal)
+    return ParsedResponse(nodes=nodes, explore_goal=explore_goal, ops=ops)
+
+
+def _parse_ops(output: str) -> list[ParsedOp]:
+    ops: list[ParsedOp] = []
+    for match in _OP_RE.finditer(output):
+        attrs = _parse_attrs(match.group("attrs"))
+        kind = (attrs.pop("kind", "") or "").strip().lower()
+        if kind:
+            ops.append(ParsedOp(kind=kind, args=attrs))
+    return ops
 
 
 def _node_blocks(output: str) -> list[tuple[str, str]]:
