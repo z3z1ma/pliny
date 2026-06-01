@@ -13,3 +13,4 @@ __pycache__/
 /loom-mill/frontend/node_modules/
 /loom-mill/frontend/dist/
 /.playwright-mcp
+.superpowers/
