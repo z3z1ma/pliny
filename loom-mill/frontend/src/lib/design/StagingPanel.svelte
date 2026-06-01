@@ -151,6 +151,7 @@
             checked={selected.has(record.temp_id)}
             onchange={() => toggleSelect(record.temp_id)}
             onclick={(e) => e.stopPropagation()}
+            aria-label="Select {record.title} for consolidation"
             class="shrink-0"
           />
           <button
