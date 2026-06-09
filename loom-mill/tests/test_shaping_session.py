@@ -238,7 +238,14 @@ async def test_edit_input_publishes_update_invalidates_and_regenerates(tmp_path:
                 harness_config=harness,
             )
         )
-        events = [await subscription.__anext__(), await subscription.__anext__(), await subscription.__anext__(), await subscription.__anext__(), await subscription.__anext__()]
+        events = [
+            await subscription.__anext__(),
+            await subscription.__anext__(),
+            await subscription.__anext__(),
+            await subscription.__anext__(),
+            await subscription.__anext__(),
+            await subscription.__anext__(),
+        ]
     finally:
         await subscription.aclose()
 
@@ -257,6 +264,7 @@ async def test_edit_input_publishes_update_invalidates_and_regenerates(tmp_path:
         "shaping:node_updated",
         "shaping:node_invalidated",
         "shaping:nodes_removed",
+        "shaping:advance_stream",
         "shaping:node_added",
         "shaping:edge_added",
     ]

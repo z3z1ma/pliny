@@ -4,7 +4,7 @@ ID: ticket:20260526-mill-shaping-blocks
 Type: Ticket
 Status: review
 Created: 2026-05-26
-Updated: 2026-05-26
+Updated: 2026-06-09
 Risk: high - core novelty of the feature; agent reasoning quality directly determines UX quality; prompt engineering intensive
 Depends On: ticket:20260526-mill-shaping-harness
 
@@ -390,8 +390,18 @@ templates, advance API endpoint, and tests are in place. Validation passed for t
 focused engine suite, full backend suite, and frontend build. A separate audit pass
 is still needed before closure because this is high-risk core reasoning behavior.
 
+Current follow-up review found engine/parser issues that affect this ticket's
+acceptance: invalid continue/revise paths must fail closed, revise must stale the
+full affected branch rather than only direct children, and parser op tags embedded
+inside record Markdown must not execute. Those fixes have been implemented,
+adversarially reviewed, and covered by focused verification; this ticket remains
+in review until acceptance disposition is reconciled.
+
 ## Journal
 
+- 2026-06-09: Reconciled stale ledger state after the current implementation
+  review. Three of the nine follow-up findings touch this ticket's engine/parser
+  behavior; fixes are implemented and covered by focused backend tests.
 - 2026-05-26: Started implementation in the current session. Read the ticket,
   related plan/spec, and shaping session/harness/orchestrator/API seams. Small
   harness prompt override is needed so the engine can reuse bounded invocations

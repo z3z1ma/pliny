@@ -17,7 +17,7 @@
   import { computeTreeLayout } from './layout';
   import { causalEdgeColor } from './edge-style';
 
-  let { sessionId, advancing, highlightedTempId, onOpenLogs }: { sessionId: string, advancing: boolean, highlightedTempId?: string | null, onOpenLogs?: (invocationId: string) => void } = $props();
+  let { sessionId, advancing, highlightedTempId, discardedTempIds = new Set<string>(), onOpenLogs }: { sessionId: string, advancing: boolean, highlightedTempId?: string | null, discardedTempIds?: Set<string>, onOpenLogs?: (invocationId: string) => void } = $props();
 
   let allNodes = $derived(store.shapingSession?.nodes ? Object.values(store.shapingSession.nodes) : []);
   let allEdges = $derived(store.shapingSession?.edges ?? []);
@@ -28,6 +28,7 @@
   let collapseDead = $state(false);
   let rejectedTempIds = $state<Set<string>>(new Set());
   let thinkingDismissed = $state(false);
+  let continuePending = $state(false);
 
   let nodes = $derived(
     collapseDead
@@ -110,9 +111,12 @@
     const tempId = node.content.temp_id;
     if (!tempId) return node;
     const staged = store.shapingSession?.stagedRecords.find(record => record.temp_id === tempId);
-    const stagedNode = staged ? { ...node, content: { ...node.content, title: staged.title, content: staged.content } } : node;
-    if (staged?.status === 'accepted') return { ...stagedNode, status: 'accepted' };
-    if (rejectedTempIds.has(tempId)) return { ...node, status: 'rejected' };
+    if (!staged) {
+      if (rejectedTempIds.has(tempId) || discardedTempIds.has(tempId)) return { ...node, status: 'rejected' };
+      return node;
+    }
+    const stagedNode = { ...node, content: { ...node.content, title: staged.title, content: staged.content } };
+    if (staged.status === 'accepted') return { ...stagedNode, status: 'accepted' };
     return stagedNode;
   }
 
@@ -147,7 +151,7 @@
   async function handleRecordEdit(nodeId: string, content: string) {
     const node = store.shapingSession?.nodes[nodeId];
     const tempId = node?.content.temp_id;
-    if (!tempId) return;
+    if (!tempId) return false;
     const response = await fetch(apiUrl(`/shaping/sessions/${sessionId}/staged/${tempId}`), {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -155,12 +159,13 @@
     });
     if (!response.ok) {
       console.error('Failed to edit staged record:', await response.text());
-      return;
+      return false;
     }
     if (store.shapingSession?.nodes[nodeId]) {
       store.shapingSession.nodes[nodeId].content = { ...store.shapingSession.nodes[nodeId].content, content };
     }
     await refetchSessionState();
+    return true;
   }
 
   async function handleRespond(content: string, parentNodeId: string) {
@@ -222,15 +227,27 @@
     }
   }
 
-  async function handleContinue(_nodeId: string) {
-    if (!sessionId) return;
+  async function handleContinue(nodeId: string) {
+    if (!sessionId || isThinking || continuePending) return;
+    continuePending = true;
     try {
+      const inputRes = await fetch(apiUrl(`/shaping/sessions/${sessionId}/input`), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: 'Continue from here.', parent_node_id: nodeId })
+      });
+      if (!inputRes.ok) {
+        console.error('Error adding continue input:', await inputRes.text());
+        return;
+      }
       await fetch(apiUrl(`/shaping/sessions/${sessionId}/advance`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
     } catch (err) {
       console.error('Error continuing from node:', err);
+    } finally {
+      continuePending = false;
     }
   }
 </script>
@@ -260,11 +277,11 @@
         {:else if node.type === 'question'}
           <QuestionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onRespond={(content) => handleRespond(content, node.id)} />
         {:else if node.type === 'observation'}
-          <ObservationNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onContinue={handleContinue} />
+          <ObservationNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onContinue={handleContinue} continueDisabled={isThinking || continuePending} />
         {:else if node.type === 'framing'}
           <FramingNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} />
         {:else if node.type === 'tension'}
-          <TensionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onContinue={handleContinue} />
+          <TensionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onContinue={handleContinue} continueDisabled={isThinking || continuePending} />
         {:else if node.type === 'decision'}
           <DecisionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} />
         {:else if node.type === 'option'}

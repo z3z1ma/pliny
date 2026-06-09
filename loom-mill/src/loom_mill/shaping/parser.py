@@ -42,7 +42,7 @@ _ATTR_RE = re.compile(
 
 def parse_canvas_response(output: str) -> ParsedResponse:
     explore_goal = _first_explore_goal(output)
-    ops = _parse_ops(output)
+    ops = _parse_ops(_mask_record_node_bodies(output))
     nodes = [_parse_node(attrs, body) for attrs, body in _node_blocks(output)]
 
     if not nodes and not ops and not _XML_TAG_RE.search(output):
@@ -63,6 +63,38 @@ def _parse_ops(output: str) -> list[ParsedOp]:
     return ops
 
 
+def _mask_record_node_bodies(output: str) -> str:
+    masked = list(output)
+    position = 0
+    while match := _NODE_OPEN_RE.search(output, position):
+        body_start = match.end()
+        attrs = match.group("attrs")
+        node_type = _normalize_type(_parse_attrs(attrs).get("type") or "observation")
+        if node_type == "record":
+            close = _find_record_close(output, body_start)
+            body_end = close.start() if close else len(output)
+            for index in range(body_start, body_end):
+                masked[index] = " "
+        else:
+            next_open = _NODE_OPEN_RE.search(output, body_start)
+            next_start = next_open.start() if next_open else len(output)
+            close = _NODE_CLOSE_RE.search(output, body_start, next_start)
+            if close is None:
+                position = next_start
+                if position <= match.start():
+                    position = match.end()
+                continue
+        position = close.end() if close else len(output)
+        if position <= match.start():
+            position = match.end()
+    return "".join(masked)
+
+
+def _find_record_close(output: str, body_start: int):
+    close_matches = list(_NODE_CLOSE_RE.finditer(output, body_start))
+    return close_matches[-1] if close_matches else None
+
+
 def _node_blocks(output: str) -> list[tuple[str, str]]:
     blocks: list[tuple[str, str]] = []
     position = 0
@@ -74,8 +106,7 @@ def _node_blocks(output: str) -> list[tuple[str, str]]:
         next_start = next_open.start() if next_open else len(output)
 
         if node_type == "record":
-            close_matches = list(_NODE_CLOSE_RE.finditer(output, body_start, next_start))
-            close = close_matches[-1] if close_matches else None
+            close = _find_record_close(output, body_start)
         else:
             close = _NODE_CLOSE_RE.search(output, body_start, next_start)
 

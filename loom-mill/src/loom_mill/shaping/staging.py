@@ -43,6 +43,7 @@ class StagingArea:
 
     def update(self, temp_id: str, content: str | None = None, title: str | None = None) -> StagedRecord:
         record = self._find(temp_id)
+        self._ensure_mutable(record)
         if content is not None:
             record.content = content
         if title is not None:
@@ -55,6 +56,8 @@ class StagingArea:
 
     def accept(self, temp_id: str) -> StagedRecord:
         record = self._find(temp_id)
+        if record.status == "accepted":
+            return record
         record.status = "accepted"
         record.modified_at = utc_now()
         self.session.state.updated_at = utc_now()
@@ -62,23 +65,37 @@ class StagingArea:
         return record
 
     def reject(self, temp_id: str) -> None:
-        before = len(self.session.state.staged_records)
+        record = self._find(temp_id)
+        self._ensure_mutable(record)
         self.session.state.staged_records = [record for record in self.session.state.staged_records if record.temp_id != temp_id]
-        if len(self.session.state.staged_records) == before:
-            raise ValueError(f"Staged record {temp_id} not found")
         self.session.state.updated_at = utc_now()
         self.session._persist_state()
 
     def consolidate(self, targets: list[str], surface: str, title: str, content: str) -> StagedRecord:
+        if len(targets) != len(set(targets)):
+            raise ValueError("Consolidation targets must be unique")
         records = [self._find(temp_id) for temp_id in targets]
         for record in records:
-            if record.status == "accepted":
-                raise ValueError(f"Cannot consolidate accepted record {record.temp_id}")
+            self._ensure_mutable(record, action="consolidate")
         branch = records[0].branch if records else self.session.state.active_branch
-        merged = self.propose(surface, title, content, branch)
-        for temp_id in targets:
-            if temp_id != merged.temp_id:
-                self.reject(temp_id)
+        merged_temp_id = f"temp:{surface}:{slugify(title)}"
+        target_ids = set(targets)
+        if any(record.temp_id == merged_temp_id and record.temp_id not in target_ids for record in self.session.state.staged_records):
+            raise ValueError(f"Staged record {merged_temp_id} already exists")
+        now = utc_now()
+        merged = StagedRecord(
+            temp_id=merged_temp_id,
+            surface=surface,
+            title=title,
+            content=content,
+            branch=branch,
+            status="proposed",
+            proposed_at=now,
+        )
+        self.session.state.staged_records = [record for record in self.session.state.staged_records if record.temp_id not in target_ids]
+        self.session.state.staged_records.append(merged)
+        self.session.state.updated_at = now
+        self.session._persist_state()
         return merged
 
     def list_branch(self, branch: str = "main") -> list[StagedRecord]:
@@ -87,6 +104,8 @@ class StagingArea:
     def create_branch(self, branch_id: str, label: str) -> None:
         if branch_id in self.session.state.branches:
             raise ValueError(f"Branch {branch_id} already exists")
+        for record in self.list_branch(self.session.state.active_branch):
+            self._ensure_mutable(record, action="branch")
         self.session.state.branches.append(branch_id)
         for record in self.list_branch(self.session.state.active_branch):
             self.session.state.staged_records.append(
@@ -111,7 +130,12 @@ class StagingArea:
             raise ValueError("source and target branches must differ")
 
         source_records = self.list_branch(source)
+        for record in source_records:
+            self._ensure_mutable(record, action="merge")
         source_keys = {(record.surface, record.title) for record in source_records}
+        for record in self.list_branch(target):
+            if (record.surface, record.title) in source_keys:
+                self._ensure_mutable(record, action="merge")
         self.session.state.staged_records = [
             record
             for record in self.session.state.staged_records
@@ -138,3 +162,7 @@ class StagingArea:
             if record.temp_id == temp_id:
                 return record
         raise ValueError(f"Staged record {temp_id} not found")
+
+    def _ensure_mutable(self, record: StagedRecord, action: str = "mutate") -> None:
+        if record.status == "accepted":
+            raise ValueError(f"Cannot {action} accepted record {record.temp_id}")

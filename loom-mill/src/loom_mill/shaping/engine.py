@@ -12,7 +12,7 @@ from .orchestrator import ShapingOrchestrator
 from .parser import ParsedNode, ParsedResponse, parse_canvas_response
 from .prompts import build_canvas_prompt
 from .serialize import serialize_graph
-from .session import ShapingSession, utc_now
+from .session import ShapingSession, mark_stale_recursive, utc_now
 
 
 class ShapingEngine:
@@ -119,15 +119,19 @@ class ShapingEngine:
 
         # Resolve parent override for continue/revise ops; fail closed on unknown nodes
         pre_op_nodes: list[CanvasNode] = []
+        invalid_parent_op = False
+        revise_targets: list[str] = []
         for op in response.ops:
             if op.kind == "continue":
                 target_id = op.args.get("from")
                 if target_id in self.session.state.nodes:
                     parent_id = target_id
-                elif target_id:
+                else:
+                    invalid_parent_op = True
+                    message = f"Op 'continue' references unknown node {target_id}" if target_id else "Op 'continue' requires a from node"
                     node = self._new_node(
                         CanvasNodeType.OBSERVATION,
-                        {"observation": f"Op 'continue' references unknown node {target_id}", "evidence": None},
+                        {"observation": message, "evidence": None},
                         parent_id=parent_id,
                     )
                     edge = self.session.add_node_with_edge(node)
@@ -138,14 +142,14 @@ class ShapingEngine:
             elif op.kind == "revise":
                 target_id = op.args.get("node")
                 if target_id in self.session.state.nodes:
-                    self.session.invalidate_nodes(
-                        [n.id for n in self.session.state.nodes.values() if n.parent_id == target_id]
-                    )
+                    revise_targets.append(target_id)
                     parent_id = target_id
-                elif target_id:
+                else:
+                    invalid_parent_op = True
+                    message = f"Op 'revise' references unknown node {target_id}" if target_id else "Op 'revise' requires a node"
                     node = self._new_node(
                         CanvasNodeType.OBSERVATION,
-                        {"observation": f"Op 'revise' references unknown node {target_id}", "evidence": None},
+                        {"observation": message, "evidence": None},
                         parent_id=parent_id,
                     )
                     edge = self.session.add_node_with_edge(node)
@@ -154,11 +158,28 @@ class ShapingEngine:
                         await self._publish_edge(edge)
                     pre_op_nodes.append(node)
 
+        if not invalid_parent_op:
+            for target_id in revise_targets:
+                stale_ids = mark_stale_recursive(self.session.state, target_id)
+                if stale_ids:
+                    self.session.state.updated_at = utc_now()
+                    self.session._persist_state()
+                    await self.store.publish(
+                        ShapingEvent(
+                            session_id=self.session.session_id,
+                            event="node_invalidated",
+                            data={"node_ids": stale_ids},
+                        )
+                    )
+
+        ops_to_apply = [] if invalid_parent_op else response.ops
+
         # Identify records consumed by supersede/edit-staged ops
-        consuming_ops = {op.kind for op in response.ops} & {"supersede", "edit-staged"}
+        consuming_ops = {op.kind for op in ops_to_apply} & {"supersede", "edit-staged"}
 
         nodes: list[CanvasNode] = []
-        for parsed_node in response.nodes:
+        parsed_nodes = [] if invalid_parent_op else response.nodes
+        for parsed_node in parsed_nodes:
             # Skip record nodes that will be consumed by supersede/edit-staged
             if parsed_node.type == "record" and consuming_ops:
                 continue
@@ -182,7 +203,7 @@ class ShapingEngine:
             nodes.append(node)
 
         # Apply structured mutation ops
-        op_nodes = await self._apply_ops(response.ops, response.nodes, parent_id)
+        op_nodes = await self._apply_ops(ops_to_apply, parsed_nodes, parent_id)
 
         if response.explore_goal:
             await self.orchestrator.launch(response.explore_goal)

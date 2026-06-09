@@ -2,6 +2,8 @@
   let { node, onClose, onSave } = $props();
   let editContent = $state(node.content.content ?? '');
   let saving = $state(false);
+  let immutable = $derived(node.status !== 'active');
+  let saveError = $state<string | null>(null);
 </script>
 
 <svelte:window onkeydown={(e) => { if (e.key === 'Escape') onClose(); }} />
@@ -18,13 +20,20 @@
     </div>
     <div class="flex-1 overflow-auto p-4">
       <textarea bind:value={editContent}
-        class="w-full h-[55vh] p-3 rounded border border-border-default bg-bg-primary text-[12px] font-mono text-text-primary resize-none focus:outline-none focus:border-accent-primary"></textarea>
+        readonly={immutable}
+        class="w-full h-[55vh] p-3 rounded border border-border-default bg-bg-primary text-[12px] font-mono text-text-primary resize-none focus:outline-none focus:border-accent-primary {immutable ? 'opacity-75 cursor-default' : ''}"></textarea>
+      {#if saveError}
+        <p class="mt-2 text-[11px] text-status-error-text">{saveError}</p>
+      {/if}
+      {#if immutable}
+        <p class="mt-2 text-[11px] text-text-tertiary">Accepted or discarded records are locked. Reopen shaping from an active proposal to edit.</p>
+      {/if}
     </div>
     <div class="flex items-center justify-end gap-2 px-4 py-3 border-t border-border-subtle bg-bg-primary">
       <button class="px-3 py-1.5 text-[12px] rounded border border-border-default text-text-secondary hover:text-text-primary" onclick={onClose}>Close</button>
       <button class="px-3 py-1.5 text-[12px] rounded bg-accent-primary text-white disabled:opacity-50"
-        disabled={saving || editContent === node.content.content}
-        onclick={async () => { if (!onSave) return; saving = true; try { await onSave(node.id, editContent); onClose(); } finally { saving = false; } }}>
+        disabled={immutable || saving || editContent === node.content.content}
+        onclick={async () => { if (!onSave || immutable) return; saveError = null; saving = true; try { const saved = await onSave(node.id, editContent); if (saved === false) saveError = 'Save failed. The staged record was not changed.'; else onClose(); } finally { saving = false; } }}>
         {saving ? 'Saving…' : 'Save'}
       </button>
     </div>

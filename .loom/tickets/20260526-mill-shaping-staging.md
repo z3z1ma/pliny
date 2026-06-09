@@ -4,7 +4,7 @@ ID: ticket:20260526-mill-shaping-staging
 Type: Ticket
 Status: review
 Created: 2026-05-26
-Updated: 2026-05-26
+Updated: 2026-06-09
 Risk: medium - atomic multi-file writes with cross-reference resolution; branch state management
 Depends On: ticket:20260526-mill-shaping-blocks
 
@@ -400,6 +400,12 @@ full backend suite, and frontend build. Repository-wide whitespace check is stil
 limited by pre-existing trailing whitespace in `GraphSidebar.svelte`, outside this
 ticket's write scope; touched-file whitespace check passed.
 
+Current follow-up review found staging issues that affect this ticket's
+acceptance: accepted staged records must not remain mutable/deletable, and record
+consolidation must not create duplicate temp IDs. Fixes are implemented,
+adversarially reviewed, and covered by focused verification, so this ticket stays
+in review until acceptance disposition is reconciled.
+
 ## Evidence
 
 - `evidence:20260526-mill-shaping-staging-validation` - focused staging tests, full
@@ -407,6 +413,9 @@ ticket's write scope; touched-file whitespace check passed.
 
 ## Journal
 
+- 2026-06-09: Reconciled stale ledger state after the current implementation
+  review. Two of the nine follow-up findings touch staging semantics; fixes are
+  implemented and covered by focused staging/engine tests.
 - 2026-05-26: Started implementation in the current session. Read ticket, parent
   plan, prerequisite block-engine ticket, shaping-session spec, and existing
   record creation pattern. Working inside the ticket write scope for staging,

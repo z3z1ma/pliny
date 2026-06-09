@@ -4,7 +4,7 @@ ID: ticket:20260526-mill-shaping-backend-audit-fixes
 Type: Ticket
 Status: review
 Created: 2026-05-26
-Updated: 2026-05-26
+Updated: 2026-06-09
 Risk: medium - fixes cross-cut shaping session runtime behavior, error handling, event delivery, and commit rollback
 Priority: high - adversarial audit found blocking backend issues before shaping sessions can be trusted
 
@@ -67,7 +67,20 @@ Must not change frontend files, start servers, bind ports, or widen into unrelat
 
 Implementation is complete and ready for review/audit. Backend changes were made only in the shaping engine/API/orchestrator/harness/commit paths and shaping tests. Requested verification passed for the full backend suite, focused shaping integration test, and frontend build. Repository-wide `git diff --check` is blocked by unrelated frontend trailing whitespace outside this ticket's backend write scope.
 
+A fresh implementation review found nine remaining issues across backend and
+frontend shaping behavior plus stale Loom records. Backend-adjacent findings
+included accepted staged records remaining mutable/deletable, consolidation
+duplicate temp IDs, invalid continue/revise paths not failing closed, revise
+staling only direct children, and parser op tags embedded inside record Markdown
+executing. Those backend-adjacent fixes are implemented, adversarially reviewed,
+and covered by focused backend tests; this ticket remains in review until
+acceptance disposition is reconciled.
+
 ## Journal
 
+- 2026-06-09: Reconciled stale ledger state with the current implementation
+  review. The nine-finding follow-up fixes are implemented, adversarially
+  reviewed, and covered by focused verification, but should not be treated as
+  accepted until ticket acceptance disposition lands.
 - 2026-05-26: Created ticket from the operator-provided adversarial audit findings and marked active for current-session implementation. Non-goals include frontend edits and server startup.
 - 2026-05-26: Implemented backend audit fixes and moved to review. Evidence recorded in `evidence:20260526-mill-shaping-backend-audit-fixes-validation`; separate adversarial audit still recommended before closure because this ticket directly follows audit findings.

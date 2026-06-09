@@ -4,7 +4,7 @@ ID: plan:20260526-mill-shaping-sessions
 Type: Plan
 Status: active
 Created: 2026-05-26
-Updated: 2026-05-26
+Updated: 2026-06-09
 Risk: high - architecturally novel feature; new backend service, new interaction model, tight coupling between agent reasoning and UI rendering
 
 ## Summary
@@ -160,10 +160,23 @@ interactive shaping to commit.
 
 ## Current State
 
-Execution has started. The first child ticket, `ticket:20260526-mill-shaping-foundation`, is implemented and in review; remaining child tickets are still pending in dependency order.
+The branch contains implementation for all original child units: foundation,
+harness orchestration, interaction block engine, staging/commit flow, frontend UI,
+and backend audit fixes. This plan is not closed: the current branch is in review
+after an implementation review found nine follow-up issues across record staging,
+engine fail-closed behavior, parser safety, frontend continuation/disablement
+state, staging refetch behavior, and Loom ledger staleness. The follow-up fixes
+are implemented on `feature/design-room-redesign`; adversarial review findings
+from this pass were fixed, focused verification passed, and acceptance remains
+with the ticket review/acceptance gate.
 
 ## Journal
 
+- 2026-06-09: Reconciled plan state with branch reality. The original five
+  shaping units plus backend audit fixes exist on the branch. The nine-finding
+  follow-up fixes have been implemented, adversarially reviewed, and covered by
+  focused backend/frontend verification. Only intentional source, record, and test
+  changes are part of the branch state.
 - 2026-05-26: Marked active after implementation began on `ticket:20260526-mill-shaping-foundation`.
 - 2026-05-26: Created plan. All design questions resolved. Infrastructure mapped.
   Ready to decompose into detailed child tickets.

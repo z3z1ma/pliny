@@ -4,7 +4,7 @@ ID: ticket:20260526-mill-shaping-harness
 Type: Ticket
 Status: review
 Created: 2026-05-26
-Updated: 2026-05-26
+Updated: 2026-06-09
 Risk: medium - parallel subprocess management with shared mutable state (context doc); race conditions possible
 Depends On: ticket:20260526-mill-shaping-foundation
 
@@ -366,8 +366,18 @@ backend suite, and the frontend build. `git diff --check` is blocked by pre-exis
 trailing whitespace in `loom-mill/frontend/src/lib/design/GraphSidebar.svelte`,
 which is outside this ticket's write scope.
 
+Branch-level truth update: later shaping tickets and backend audit fixes now exist
+on the branch. This ticket remains review-gated because a fresh implementation
+review found nine issues across adjacent shaping behavior. The follow-up fixes
+have been implemented, adversarially reviewed, and covered by focused
+verification; closure still waits for acceptance disposition.
+
 ## Journal
 
+- 2026-06-09: Reconciled stale ledger state. The branch contains the full shaping
+  stack, and the nine-finding follow-up fixes are implemented with focused
+  verification and adversarial review. This ticket stays in review pending
+  acceptance disposition.
 - 2026-05-26: Implemented bounded harness orchestration and moved to review.
   Evidence: `uv run --extra dev python -m pytest tests/test_shaping_harness.py -x`
   passed 6 tests; `uv run --extra dev python -m pytest tests/ -x` passed 75 tests;

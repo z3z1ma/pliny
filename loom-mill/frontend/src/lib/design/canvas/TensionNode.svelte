@@ -2,7 +2,7 @@
   import { Node, Anchor } from 'svelvet';
   import { causalEdgeColor } from './edge-style';
 
-  let { node, position, connections = [], onContinue } = $props();
+  let { node, position, connections = [], onContinue, continueDisabled = false } = $props();
 
   let text = $derived(node.content.tension || node.content.text || 'No content');
 </script>
@@ -15,7 +15,8 @@
     <div class="text-[11px] font-semibold text-amber-400 mb-1 uppercase tracking-wider">⚠ Tension</div>
     <div class="text-[12px] text-text-secondary whitespace-pre-wrap break-words">{text}</div>
     {#if node.status === 'active'}
-      <button class="mt-2 text-[10px] text-amber-400 hover:text-amber-300"
+      <button class="mt-2 text-[10px] text-amber-400 hover:text-amber-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled={continueDisabled}
         onclick={() => onContinue && onContinue(node.id)}>Continue from here →</button>
     {/if}
   </div>

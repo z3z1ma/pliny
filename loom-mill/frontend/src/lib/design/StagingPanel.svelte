@@ -17,7 +17,7 @@
     activeBranch: string;
     onCommit: () => void;
     onRecordClick?: (tempId: string) => void;
-    onChanged?: () => void;
+    onChanged?: (discardedTempId?: string) => void;
   } = $props();
 
   let acceptedCount = $derived(records.filter(r => r.status === 'accepted').length);
@@ -60,7 +60,7 @@
     const resp = await fetch(apiUrl(`/shaping/sessions/${sessionId}/staged/${encodeURIComponent(tempId)}`), { method: 'DELETE' });
     if (!resp.ok) { console.error('Failed to discard staged record:', await resp.text()); return; }
     const next = new Set(selected); next.delete(tempId); selected = next;
-    onChanged?.();
+    onChanged?.(tempId);
   }
 
   async function consolidateSelected() {

@@ -69,6 +69,20 @@ def test_parse_canvas_response_question_record_option_group_and_fallback() -> No
     assert fallback.nodes[0].type == "observation"
 
 
+def test_parse_canvas_response_ignores_ops_inside_record_markdown() -> None:
+    parsed = parse_canvas_response(
+        '<node type="record" surface="specs" title="Spec">'
+        '# Spec\n\nLiteral node example: <node type="observation">Example</node>\n'
+        'Literal closing tag example: </node>\n'
+        'Literal op example: <op kind="discard-staged" temp_id="temp:specs:kept"/>\n'
+        '</node>'
+    )
+
+    assert parsed.ops == []
+    assert len(parsed.nodes) == 1
+    assert '<op kind="discard-staged"' in parsed.nodes[0].content
+
+
 def test_canvas_prompt_includes_context_history_and_phase() -> None:
     node = CanvasNode(
         id="n1",
@@ -448,6 +462,171 @@ async def test_advance_continue_unknown_node_fails_closed(tmp_path: Path) -> Non
     engine = ShapingEngine(session, ShapingOrchestrator(session, store, _printf_harness(output)), store)
     nodes = await engine.advance()
     assert any(n.type == CanvasNodeType.OBSERVATION and "unknown node" in str(n.content) for n in nodes)
+    assert not any(n.content.get("observation") == "Child" for n in nodes)
+
+
+@pytest.mark.asyncio
+async def test_advance_continue_unknown_node_skips_other_mutation_ops(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "shape a feature")
+    record = session.staging.propose("specs", "Draft", "# Draft", "main")
+    store = MillStateStore()
+    output = f'<op kind="continue" from="does-not-exist"/><op kind="discard-staged" temp_id="{record.temp_id}"/>'
+    engine = ShapingEngine(session, ShapingOrchestrator(session, store, _printf_harness(output)), store)
+
+    nodes = await engine.advance()
+
+    assert any(n.type == CanvasNodeType.OBSERVATION and "unknown node" in str(n.content) for n in nodes)
+    assert [r.temp_id for r in session.state.staged_records] == [record.temp_id]
+
+
+@pytest.mark.asyncio
+async def test_advance_revise_unknown_node_fails_closed_without_paired_node(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "shape a feature")
+    store = MillStateStore()
+    output = '<op kind="revise" node="does-not-exist"/><node type="observation">Replacement</node>'
+    engine = ShapingEngine(session, ShapingOrchestrator(session, store, _printf_harness(output)), store)
+
+    nodes = await engine.advance()
+
+    assert any(n.type == CanvasNodeType.OBSERVATION and "unknown node" in str(n.content) for n in nodes)
+    assert not any(n.content.get("observation") == "Replacement" for n in nodes)
+
+
+@pytest.mark.asyncio
+async def test_advance_invalid_parent_op_does_not_stale_valid_revise_target(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "shape a feature")
+    root_id = next(iter(session.state.nodes))
+    child = CanvasNode(
+        id="child",
+        type=CanvasNodeType.OBSERVATION,
+        parent_id=root_id,
+        status=NodeStatus.ACTIVE,
+        content={"observation": "child"},
+        position=None,
+        timestamp=utc_now(),
+    )
+    session.add_node(child)
+    store = MillStateStore()
+    output = f'<op kind="revise" node="{root_id}"/><op kind="continue" from="missing"/><node type="observation">Replacement</node>'
+    engine = ShapingEngine(session, ShapingOrchestrator(session, store, _printf_harness(output)), store)
+
+    nodes = await engine.advance()
+
+    assert any(n.type == CanvasNodeType.OBSERVATION and "unknown node" in str(n.content) for n in nodes)
+    assert session.state.nodes["child"].status == NodeStatus.ACTIVE
+    assert not any(n.content.get("observation") == "Replacement" for n in nodes)
+
+
+@pytest.mark.asyncio
+async def test_advance_revise_stales_full_descendant_subtree(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "shape a feature")
+    root_id = next(iter(session.state.nodes))
+    child = CanvasNode(
+        id="child",
+        type=CanvasNodeType.OBSERVATION,
+        parent_id=root_id,
+        status=NodeStatus.ACTIVE,
+        content={"observation": "child"},
+        position=None,
+        timestamp=utc_now(),
+    )
+    grandchild = CanvasNode(
+        id="grandchild",
+        type=CanvasNodeType.OBSERVATION,
+        parent_id="child",
+        status=NodeStatus.ACTIVE,
+        content={"observation": "grandchild"},
+        position=None,
+        timestamp=utc_now(),
+    )
+    session.add_node(child)
+    session.add_node(grandchild)
+    store = MillStateStore()
+    output = f'<op kind="revise" node="{root_id}"/><node type="observation">Replacement</node>'
+    engine = ShapingEngine(session, ShapingOrchestrator(session, store, _printf_harness(output)), store)
+
+    nodes = await engine.advance()
+
+    assert session.state.nodes["child"].status == NodeStatus.STALE
+    assert session.state.nodes["grandchild"].status == NodeStatus.STALE
+    assert any(n.parent_id == root_id and n.content.get("observation") == "Replacement" for n in nodes)
+
+
+@pytest.mark.asyncio
+async def test_advance_revise_publishes_descendant_invalidations(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "shape a feature")
+    root_id = next(iter(session.state.nodes))
+    child = CanvasNode(
+        id="child",
+        type=CanvasNodeType.OBSERVATION,
+        parent_id=root_id,
+        status=NodeStatus.ACTIVE,
+        content={"observation": "child"},
+        position=None,
+        timestamp=utc_now(),
+    )
+    grandchild = CanvasNode(
+        id="grandchild",
+        type=CanvasNodeType.OBSERVATION,
+        parent_id="child",
+        status=NodeStatus.ACTIVE,
+        content={"observation": "grandchild"},
+        position=None,
+        timestamp=utc_now(),
+    )
+    session.add_node(child)
+    session.add_node(grandchild)
+    store = MillStateStore()
+    output = f'<op kind="revise" node="{root_id}"/><node type="observation">Replacement</node>'
+    engine = ShapingEngine(session, ShapingOrchestrator(session, store, _printf_harness(output)), store)
+    subscription = store.subscribe()
+    collected: list[dict] = []
+    try:
+        await engine.advance()
+        for _ in range(8):
+            try:
+                event = await asyncio.wait_for(subscription.__anext__(), timeout=1.0)
+            except (StopAsyncIteration, asyncio.TimeoutError):
+                break
+            collected.append(_event_payload(event))
+    finally:
+        await subscription.aclose()
+
+    invalidations = [event for event in collected if event["type"] == "shaping:node_invalidated"]
+    assert invalidations
+    assert invalidations[0]["data"]["node_ids"] == ["child", "grandchild"]
+
+
+@pytest.mark.asyncio
+async def test_advance_discard_accepted_staged_op_reports_error_and_keeps_record(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "shape a feature")
+    record = session.staging.propose("specs", "Accepted", "# Accepted", "main")
+    session.staging.accept(record.temp_id)
+    store = MillStateStore()
+    output = f'<op kind="discard-staged" temp_id="{record.temp_id}"/>'
+    engine = ShapingEngine(session, ShapingOrchestrator(session, store, _printf_harness(output)), store)
+
+    nodes = await engine.advance()
+
+    assert any(n.type == CanvasNodeType.OBSERVATION and "accepted" in str(n.content) for n in nodes)
+    assert session.state.staged_records[0].temp_id == record.temp_id
+    assert session.state.staged_records[0].status == "accepted"
+
+
+@pytest.mark.asyncio
+async def test_advance_edit_accepted_staged_op_reports_error_and_keeps_record(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "shape a feature")
+    record = session.staging.propose("specs", "Accepted", "# Accepted", "main")
+    session.staging.accept(record.temp_id)
+    store = MillStateStore()
+    output = f'<op kind="edit-staged" temp_id="{record.temp_id}"/><node type="record" surface="specs" title="Accepted"># Mutated</node>'
+    engine = ShapingEngine(session, ShapingOrchestrator(session, store, _printf_harness(output)), store)
+
+    nodes = await engine.advance()
+
+    assert any(n.type == CanvasNodeType.OBSERVATION and "accepted" in str(n.content) for n in nodes)
+    assert session.state.staged_records[0].content == "# Accepted"
+    assert session.state.staged_records[0].status == "accepted"
 
 
 @pytest.mark.asyncio

@@ -2,9 +2,9 @@
 
 ID: ticket:20260526-mill-shaping-frontend
 Type: Ticket
-Status: closed
+Status: review
 Created: 2026-05-26
-Updated: 2026-05-26
+Updated: 2026-06-09
 Risk: high - novel interaction design with no prior art to copy; visual quality and interaction feel determine whether the feature succeeds
 Depends On: ticket:20260526-mill-shaping-foundation
 
@@ -337,14 +337,23 @@ shapingSession = $state<{
 
 ## Current State
 
-Ready to start after ticket:20260526-mill-shaping-foundation provides the API
-surface and event types. Can begin with mock/stub data for the timeline and
-proposal cards before the full backend engine is ready.
-
-The frontend-expert should own this ticket for visual quality and interaction feel.
+Implementation exists on the branch and was previously marked closed after
+Playwright verification, but that closure is now stale. A fresh implementation
+review found frontend issues that affect acceptance: continue must use the clicked
+node, discarding from the sidebar must not leave the canvas actionable, and
+staging refetch must not reset advance state or the thinking trace. Follow-up
+fixes are implemented, adversarially reviewed, and the frontend production build
+passed, so this ticket is back in review until acceptance disposition is
+reconciled.
 
 ## Journal
 
+- 2026-06-09: Reopened from closed to review because the prior closure did not
+  reflect the current branch state. Three of the nine implementation-review
+  findings touch frontend behavior; fixes are implemented and the frontend build
+  passes with existing warnings.
 - 2026-05-26: Created ticket. Fifth in the shaping sessions plan. This is where
   the novel UX lives—the timeline, staging, proposals, and commit flow.
-- 2026-05-27: Implemented the frontend shaping session UI. Verified with Playwright. Closed ticket.
+- 2026-05-27: Implemented the frontend shaping session UI and verified with
+  Playwright. The ticket was marked closed at the time; that closure has since
+  been superseded by the 2026-06-09 review finding pass.

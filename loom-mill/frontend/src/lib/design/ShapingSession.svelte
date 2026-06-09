@@ -15,6 +15,7 @@
   let highlightedTempId = $state<string | null>(null);
   let showLogModal = $state(false);
   let logModalInvocationId = $state<string | null>(null);
+  let discardedTempIds = $state<Set<string>>(new Set());
   let highlightTimeout: ReturnType<typeof setTimeout> | null = null;
 
   function exitShaping() {
@@ -30,6 +31,7 @@
   }
 
   function applySessionState(id: string, state: any) {
+    const current = store.shapingSession?.id === id ? store.shapingSession : null;
     store.shapingSession = {
       id,
       phase: state.phase,
@@ -39,10 +41,11 @@
       activeBranch: state.active_branch || 'main',
       branches: state.branches || ['main'],
       activeExplorations: state.active_explorations || [],
-      explorationLogs: {},
-      explorationStatus: {},
-      advanceState: 'idle',
-      advanceError: null
+      explorationLogs: current?.explorationLogs ?? {},
+      explorationStatus: current?.explorationStatus ?? {},
+      advanceState: current?.advanceState ?? 'idle',
+      advanceError: current?.advanceError ?? null,
+      thinkingTrace: current?.thinkingTrace ?? ''
     };
   }
 
@@ -160,8 +163,11 @@
     }, 2000);
   }
 
-  async function refetchStaging() {
+  async function refetchStaging(discardedTempId?: string) {
     if (!sessionId) return;
+    if (discardedTempId) {
+      discardedTempIds = new Set([...discardedTempIds, discardedTempId]);
+    }
     try {
       const resp = await fetch(apiUrl(`/shaping/sessions/${sessionId}`));
       if (resp.ok) {
@@ -233,6 +239,7 @@
         {sessionId} 
         {advancing}
         {highlightedTempId}
+        {discardedTempIds}
         onOpenLogs={openLogModal}
       />
     </div>

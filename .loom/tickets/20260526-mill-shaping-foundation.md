@@ -4,7 +4,7 @@ ID: ticket:20260526-mill-shaping-foundation
 Type: Ticket
 Status: review
 Created: 2026-05-26
-Updated: 2026-05-26
+Updated: 2026-06-09
 Risk: medium - new backend module with new data model; must get the persistence and event shapes right since everything else builds on them
 
 ## Summary
@@ -330,8 +330,19 @@ frontend store handling for shaping events, and focused tests. Verification pass
 loom-mill/frontend run build`, and `git diff --check`. Frontend build emitted
 existing Svelte warnings in chat components unrelated to this ticket.
 
+Branch-level truth update: the shaping branch now contains later harness, engine,
+staging, frontend, and backend audit-fix work. This foundation ticket remains in
+review, not closed, because a fresh implementation review found nine cross-cutting
+issues. The follow-up fixes have been implemented, adversarially reviewed, and
+covered by focused verification; closure still waits for the ticket acceptance
+gate.
+
 ## Journal
 
+- 2026-06-09: Reconciled stale ledger state. The implementation remains
+  review-gated after the nine-finding follow-up fixes; focused verification and
+  adversarial review passed for this branch state, but ticket closure still
+  requires acceptance disposition.
 - 2026-05-26: Implemented scoped backend/frontend foundation and moved to review. Evidence: targeted shaping tests passed (8 tests), full backend suite passed (69 tests), frontend production build passed with unrelated pre-existing warnings, and `git diff --check` passed.
 - 2026-05-26: Started implementation. Read ticket, parent plan, active spec, ticket procedure, and Ralph run discipline; proceeding inside the ticket write scope.
 - 2026-05-26: Created ticket. First in the shaping sessions plan. Establishes the
