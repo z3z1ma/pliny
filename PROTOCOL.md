@@ -27,15 +27,15 @@ Records live under `.loom/` in directories named by type. Each record is a Markd
   decisions/
     superseded/
   research/
+    .storage/
     superseded/
-    artifacts/
   specs/
     superseded/
   tickets/
     done/
     cancelled/
   evidence/
-    artifacts/
+    .storage/
   reviews/
   knowledge/
 ```
@@ -84,7 +84,7 @@ A research record should contain at least:
 
 Include raw data, benchmarks, code snippets, comparison tables, timelines, or anything else that substantiates the findings. Research is temporal — it can go stale as libraries evolve, APIs change, or the project's context shifts. When reusing old research, verify its conclusions still hold.
 
-Store reference materials — PDFs, papers, exported pages, datasets — in `.loom/research/artifacts/` and reference them by file path from the research record.
+Store reference materials — PDFs, papers, exported pages, datasets — in `.loom/research/.storage/` and reference them by file path from the research record.
 
 Statuses: `active`, `done`, `superseded`
 
@@ -147,7 +147,7 @@ An evidence record should contain at least:
 
 Include full output logs, screenshots, file diffs, or any raw artifact that substantiates the observation. Evidence doesn't decide anything. It records what happened and is honest about its scope.
 
-Store binary artifacts — screenshots, recordings, exported files, build outputs — in `.loom/evidence/artifacts/` and reference them by file path from the evidence record.
+Store binary artifacts — screenshots, recordings, exported files, build outputs — in `.loom/evidence/.storage/` and reference them by file path from the evidence record.
 
 Status: `recorded`
 
