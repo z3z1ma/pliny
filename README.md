@@ -119,20 +119,20 @@ Records appear in `.loom/` as the agent works.
 
 ```mermaid
 flowchart TB
-  Goal["human goal"] --> Shape["shape with the agent"]
-  Shape --> Records["Loom records"]
-  Records --> Ticket["ticket: bounded work"]
-  Ticket --> SubAgent["sub-agent execution"]
-  SubAgent --> Code
-  Code --> Evidence["evidence: observed output"]
-  Evidence --> Review["review: adversarial critique"]
-  Review --> Reconcile["reconcile records"]
-  Reconcile --> Knowledge["promote reusable knowledge"]
-  Reconcile --> Shape
+  Goal["human goal"]
+  Goal --> Outer["outer loop: shape intent into records"]
+  Outer --> Tickets["tickets bridge to execution"]
+  Tickets --> Inner["inner loop: sub-agent · evidence · review"]
+  Inner -->|"done"| Knowledge["knowledge compounds"]
+  Inner -->|"new scope"| Outer
 ```
 
-Read the chart as a recovery path. Tiny work can stay tiny. The graph pays for
-itself when work has ambiguity, risk, handoff, review pressure, or future value.
+Two loops, one bridge. The outer loop shapes vague intent into concrete records.
+The inner loop executes bounded tickets and produces evidence that reviews
+challenge. Discoveries cycle back. Knowledge compounds across sessions.
+
+Tiny work can stay tiny. The graph pays for itself when work has ambiguity,
+risk, handoff, review pressure, or future value.
 
 ## What Changes
 
@@ -157,6 +157,34 @@ Loom forces useful friction at the exact points where agents usually blur things
 | evidence | observed facts, outputs, reproductions, screenshots, logs |
 | reviews | adversarial critique, findings, verdicts, residual risk |
 | knowledge | shared vocabulary, conventions, procedures, troubleshooting |
+
+```mermaid
+flowchart TB
+  A["agent does software work"] --> B{"what should be durable?"}
+
+  B -->|choice, constraint, tradeoff| D["decisions"]
+  B -->|uncertainty, investigation| R["research"]
+  B -->|intended behavior, scenario| S["specs"]
+  B -->|bounded work, progress| T["tickets"]
+  B -->|observed output, test, log| E["evidence"]
+  B -->|adversarial critique, risk| V["reviews"]
+  B -->|reusable context, vocabulary| K["knowledge"]
+
+  D --> G[".loom/ record graph"]
+  R --> G
+  S --> G
+  T --> G
+  E --> G
+  V --> G
+  K --> G
+
+  G --> T
+  T --> Sub["sub-agent"]
+  Sub --> E
+  Sub --> T
+  E --> V
+  V --> T
+```
 
 ## When It Helps
 
