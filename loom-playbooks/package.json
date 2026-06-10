@@ -1,7 +1,7 @@
 {
   "name": "@z3z1ma/open-loom-playbooks",
-  "version": "0.3.0",
-  "description": "OpenCode playbook package for optional explicit Loom workflow macros; requires @z3z1ma/open-loom-core.",
+  "version": "0.3.0-zero.0",
+  "description": "Loom Zero playbooks skeleton for testing an empty workflow layer.",
   "type": "module",
   "main": "./loom-playbooks.mjs",
   "exports": {
@@ -12,18 +12,16 @@
     "opencode": ">=1.14.22 <2"
   },
   "peerDependencies": {
-    "@z3z1ma/open-loom-core": "^0.3.0"
+    "@z3z1ma/open-loom-core": "^0.3.0-zero.0"
   },
   "files": [
-    "loom-playbooks.mjs",
-    "playbooks/"
+    "loom-playbooks.mjs"
   ],
   "keywords": [
     "opencode",
     "loom",
-    "playbooks",
-    "agent-skills",
-    "markdown"
+    "loom-zero",
+    "playbooks"
   ],
   "author": "z3z1ma",
   "license": "MIT",

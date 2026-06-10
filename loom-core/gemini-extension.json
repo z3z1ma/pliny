@@ -1,6 +1,0 @@
-{
-  "name": "loom-core",
-  "version": "0.3.0",
-  "description": "Core Loom Markdown-native AI work protocol skills for Gemini CLI.",
-  "contextFileName": "gemini-bootstrap.md"
-}

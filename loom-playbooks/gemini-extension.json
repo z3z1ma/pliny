@@ -1,5 +1,0 @@
-{
-  "name": "loom-playbooks",
-  "version": "0.3.0",
-  "description": "Optional Loom workflow playbook commands for Gemini CLI; depends on loom-core for using-loom bootstrap context and does not duplicate it."
-}

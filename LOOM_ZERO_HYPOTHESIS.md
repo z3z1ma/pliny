@@ -40,49 +40,22 @@ That means Loom is not primarily a skill system. Loom is a lightweight filesyste
 
 ## Candidate Minimal Doctrine
 
-The entire product may be expressible as something close to this:
+Do not treat any snippet in this file as the starting doctrine.
 
-```md
-# Loom
+The next step is interactive: decide the smallest possible wording through
+back-and-forth, not by inheriting the current corpus or a prematurely drafted
+replacement. The doctrine may be only a few sentences, and it may not name every
+record type in advance.
 
-Use `.loom/` to preserve project truth that should survive the chat.
+What likely survives is not a template but a handful of invariants:
 
-Every Loom record is Markdown and starts with:
+- durable project truth should survive chat
+- records need enough header shape to be found and resolved later
+- different kinds of knowledge should not be collapsed into one blob
+- resolution/closure must be honest about evidence, review, and remaining risk
+- the agent should use its own judgment for structure beyond the invariants
 
-ID: <type>:<slug>
-Type: <type>
-Status: <current|resolved|superseded|cancelled>
-Created: YYYY-MM-DD
-Updated: YYYY-MM-DD
-
-Use stable IDs and link records by ID.
-
-## Record types
-
-Decision records durable project judgments, constraints, and tradeoffs. Use one when future agents should inherit a choice instead of re-deciding it.
-
-Research records investigation: sources checked, options considered, null results, tradeoffs, and conclusions. Use one when an answer should remain citable.
-
-Spec records intended behavior. Use one when “what should happen” matters beyond one edit. Include concrete requirements or scenarios when useful.
-
-Ticket records live work. Use one when execution spans more than one obvious local edit. A ticket owns scope, acceptance, progress, blockers, evidence, review state, and closure.
-
-Evidence records observations: commands, tests, screenshots, logs, reproductions, inspected files. Evidence says what was observed and what it does not prove.
-
-Review records adversarial critique: target, findings, severity, verdict, residual risk. Review challenges work; it does not close it.
-
-Knowledge records reusable explanation, preferences, procedures, glossary terms, troubleshooting, or project concepts accepted as useful context.
-
-## Rules
-
-Put each fact in the record type that owns it.
-Do not let chat be the only place important truth exists.
-Do not claim work is done unless the ticket, evidence, and review state support it.
-When a record is renamed, superseded, or contradicted, repair the links.
-Write only as much structure as the situation needs.
-```
-
-This snippet is not final. It is the starting artifact to test whether the full Loom ontology can live as background doctrine rather than as a skill corpus.
+The starting text remains unsettled on purpose.
 
 ## Candidate Loom Zero Directory Shape
 

@@ -1,7 +1,7 @@
 {
   "name": "@z3z1ma/open-loom-core",
-  "version": "0.3.0",
-  "description": "OpenCode core package for the Loom Markdown-native AI work protocol.",
+  "version": "0.3.0-zero.0",
+  "description": "Loom Zero core skeleton for testing minimal always-on doctrine.",
   "type": "module",
   "main": "./loom-core.mjs",
   "exports": {
@@ -12,16 +12,12 @@
     "opencode": ">=1.14.22 <2"
   },
   "files": [
-    "agents/",
-    "codex/",
-    "loom-core.mjs",
-    "skills/"
+    "loom-core.mjs"
   ],
   "keywords": [
     "opencode",
     "loom",
-    "ai-agents",
-    "agent-skills",
+    "loom-zero",
     "markdown"
   ],
   "author": "z3z1ma",
