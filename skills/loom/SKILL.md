@@ -19,6 +19,8 @@ Before shaping new work, fish through what already exists. Grep open tickets to 
 
 As things crystallize during conversation, externalize them into the right record shape immediately. A decision made mid-conversation is still a decision. A term of art clarified is still knowledge. A behavior described concretely is a spec. Don't wait for a neat stopping point — write things down as they become clear.
 
+Other tools, skills, or workflows may produce artifacts that overlap with Loom record types. When something lands outside `.loom/` but corresponds to a Loom record type, create the Loom record anyway. It can be thin — some context, headers, and a pointer to the canonical location — but it must exist so the `.loom/` graph remains complete and navigable. The graph is the index; gaps in it are invisible work.
+
 Build a shared glossary. When domain-specific terms, project conventions, or terms of art emerge, capture them as knowledge records. Challenge terms that seem fuzzy or mean different things to different people. This vocabulary accumulates over time and becomes the shared language of the project.
 
 You are in the outer loop whenever scope, behavior, constraints, terminology, or acceptance criteria are not yet concrete enough to execute against.
