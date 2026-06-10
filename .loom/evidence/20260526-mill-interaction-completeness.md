@@ -17,6 +17,6 @@ All acceptance criteria have been verified.
 
 ## Artifacts
 
-- `artifacts/20260526-mill-interaction-completeness/ui-loaded.png` - UI loaded correctly
-- `artifacts/20260526-mill-interaction-completeness/ui-disconnected.png` - Connection banner visible when backend killed
-- `artifacts/20260526-mill-interaction-completeness/ui-reconnected.png` - Connection banner disappears when backend restarted
+- `.storage/20260526-mill-interaction-completeness/ui-loaded.png` - UI loaded correctly
+- `.storage/20260526-mill-interaction-completeness/ui-disconnected.png` - Connection banner visible when backend killed
+- `.storage/20260526-mill-interaction-completeness/ui-reconnected.png` - Connection banner disappears when backend restarted

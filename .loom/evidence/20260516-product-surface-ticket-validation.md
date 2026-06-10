@@ -68,7 +68,7 @@ and formatting checks used by ticket review and closure.
 ## Artifacts
 
 - Command excerpts are summarized above. No separate raw log artifact was persisted.
-- Explicit skill request logs were written by the test runner under `/tmp/loom-tests/1778918168/explicit-skill-requests/` for the final passing run; those temp logs were not copied into `.loom/evidence/artifacts/`.
+those temp logs were not copied into `.loom/evidence/.storage/`.
 
 ## What This Shows
 
