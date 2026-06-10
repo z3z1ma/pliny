@@ -9,11 +9,12 @@ import pytest
 
 from loom_mill.api import shaping
 from loom_mill.app import create_app
-from loom_mill.shaping import CanvasNodeType, SessionPhase, ShapingSession
+from loom_mill.shaping import CanvasNode, CanvasNodeType, NodeStatus, SessionPhase, ShapingSession
 from loom_mill.shaping.commit import CommitFlow, atomic_write_all, generate_real_id
 from loom_mill.shaping.engine import ShapingEngine
 from loom_mill.shaping.models import StagedRecord
 from loom_mill.shaping.orchestrator import ShapingOrchestrator
+from loom_mill.shaping.session import utc_now
 from loom_mill.state import MillStateStore
 from loom_mill.workstation.config import HarnessConfig
 
@@ -209,6 +210,51 @@ async def test_staging_api_endpoints_and_routes(tmp_path: Path) -> None:
     routes = [(route.path, route.methods or set()) for route in create_app().routes if hasattr(route, "methods")]
     assert ("/shaping/sessions/{session_id}/commit", {"POST"}) in [(path, methods) for path, methods in routes]
     assert any(path == "/shaping/sessions/{session_id}/staged/{temp_id}/accept" and "POST" in methods for path, methods in routes)
+
+
+@pytest.mark.asyncio
+async def test_delete_staged_record_marks_matching_record_nodes_rejected(tmp_path: Path) -> None:
+    store = MillStateStore()
+    session = ShapingSession.create(tmp_path, "initial")
+    record = session.staging.propose("tickets", "Auth Fix", "# Auth Fix")
+    session.add_node_with_edge(
+        CanvasNode(
+            id="record-node",
+            type=CanvasNodeType.RECORD,
+            parent_id=next(iter(session.state.nodes)),
+            status=NodeStatus.ACTIVE,
+            content={"temp_id": record.temp_id, "surface": "tickets", "title": "Auth Fix", "content": "# Auth Fix"},
+            position=None,
+            timestamp=utc_now(),
+        )
+    )
+    session.add_node_with_edge(
+        CanvasNode(
+            id="dead-record-node",
+            type=CanvasNodeType.RECORD,
+            parent_id=next(iter(session.state.nodes)),
+            status=NodeStatus.DEAD,
+            content={"temp_id": record.temp_id, "surface": "tickets", "title": "Auth Fix", "content": "# Auth Fix"},
+            position=None,
+            timestamp=utc_now(),
+        )
+    )
+    subscription = store.subscribe()
+    try:
+        response = await shaping.delete_staged_record(
+            Request(tmp_path, store, path_params={"session_id": session.session_id, "temp_id": record.temp_id})
+        )
+        event = await subscription.__anext__()
+    finally:
+        await subscription.aclose()
+
+    loaded = ShapingSession.load(session.session_id, tmp_path)
+    assert response.status_code == 200
+    assert loaded.state.nodes["record-node"].status == NodeStatus.REJECTED
+    assert loaded.state.nodes["dead-record-node"].status == NodeStatus.REJECTED
+    assert event.event == "node_updated"
+    assert event.data["node"]["id"] == "record-node"
+    assert event.data["node"]["status"] == "rejected"
 
 
 @pytest.mark.asyncio

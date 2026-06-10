@@ -15,7 +15,8 @@
   let highlightedTempId = $state<string | null>(null);
   let showLogModal = $state(false);
   let logModalInvocationId = $state<string | null>(null);
-  let discardedTempIds = $state<Set<string>>(new Set());
+  let lastDiscardedTempId = $state<string | null>(null);
+  let discardedVersion = $state(0);
   let highlightTimeout: ReturnType<typeof setTimeout> | null = null;
 
   function exitShaping() {
@@ -166,7 +167,8 @@
   async function refetchStaging(discardedTempId?: string) {
     if (!sessionId) return;
     if (discardedTempId) {
-      discardedTempIds = new Set([...discardedTempIds, discardedTempId]);
+      lastDiscardedTempId = discardedTempId;
+      discardedVersion += 1;
     }
     try {
       const resp = await fetch(apiUrl(`/shaping/sessions/${sessionId}`));
@@ -239,7 +241,8 @@
         {sessionId} 
         {advancing}
         {highlightedTempId}
-        {discardedTempIds}
+        {lastDiscardedTempId}
+        {discardedVersion}
         onOpenLogs={openLogModal}
       />
     </div>

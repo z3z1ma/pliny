@@ -13,7 +13,7 @@ from loom_mill.api.ws import _event_payload
 from loom_mill.app import create_app
 from loom_mill.shaping import CanvasEdge, CanvasNode, CanvasNodeType, NodeStatus, SessionPhase, ShapingSession
 from loom_mill.shaping.events import ShapingEvent
-from loom_mill.shaping.session import mark_dead_recursive, mark_stale_recursive
+from loom_mill.shaping.session import mark_active_recursive, mark_dead_recursive, mark_stale_recursive
 from loom_mill.state import MillStateStore
 from loom_mill.workstation.config import HarnessConfig
 
@@ -153,6 +153,32 @@ async def test_add_input_accepts_parent_node_id_and_adds_edge(tmp_path: Path) ->
     assert payload["edge"]["target_id"] == payload["node"]["id"]
 
 
+@pytest.mark.asyncio
+async def test_add_input_preserves_source_option_metadata_after_edit(tmp_path: Path) -> None:
+    store = MillStateStore()
+    session_id = _body(await shaping.create_shaping_session(Request(tmp_path, store, {"input": "initial"})))["session_id"]
+    session = ShapingSession.load(session_id, tmp_path)
+    parent_id = next(iter(session.state.nodes))
+
+    response = await shaping.add_shaping_input(
+        Request(
+            tmp_path,
+            store,
+            {"text": "Original choice", "parent_node_id": parent_id, "source_option": "Original choice"},
+            {"session_id": session_id},
+        )
+    )
+    input_id = _body(response)["node"]["id"]
+    edit_response = await shaping.edit_node(
+        Request(tmp_path, store, {"content": "Edited branch text"}, {"session_id": session_id, "node_id": input_id})
+    )
+
+    session = ShapingSession.load(session_id, tmp_path)
+    assert response.status_code == 200
+    assert edit_response.status_code == 200
+    assert session.state.nodes[input_id].content == {"text": "Edited branch text", "source_option": "Original choice"}
+
+
 def _add_node(session: ShapingSession, node_id: str, node_type: CanvasNodeType, parent_id: str | None, *, option_group_id: str | None = None) -> None:
     session.add_node_with_edge(
         CanvasNode(
@@ -200,6 +226,23 @@ def test_mark_dead_recursive_propagates_to_three_plus_levels(tmp_path: Path) -> 
 
     assert affected == ["option-a", "child-1", "child-2", "child-3"]
     assert all(session.state.nodes[node_id].status == NodeStatus.DEAD for node_id in affected)
+
+
+def test_branch_walkers_preserve_rejected_record_nodes(tmp_path: Path) -> None:
+    session = ShapingSession.create(tmp_path, "initial")
+    root_id = next(iter(session.state.nodes))
+    _add_node(session, "option-a", CanvasNodeType.OPTION, root_id, option_group_id="group-1")
+    _add_node(session, "record-1", CanvasNodeType.RECORD, "option-a")
+    session.state.nodes["record-1"].status = NodeStatus.REJECTED
+
+    dead = mark_dead_recursive(session.state, "option-a")
+    active = mark_active_recursive(session.state, "option-a")
+    stale = mark_stale_recursive(session.state, "option-a")
+
+    assert dead == ["option-a"]
+    assert active == ["option-a"]
+    assert stale == []
+    assert session.state.nodes["record-1"].status == NodeStatus.REJECTED
 
 
 def test_mark_stale_recursive_marks_descendants_not_parent_or_dead_nodes(tmp_path: Path) -> None:

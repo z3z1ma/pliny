@@ -4,7 +4,7 @@ ID: plan:20260526-mill-shaping-sessions
 Type: Plan
 Status: active
 Created: 2026-05-26
-Updated: 2026-06-09
+Updated: 2026-06-10
 Risk: high - architecturally novel feature; new backend service, new interaction model, tight coupling between agent reasoning and UI rendering
 
 ## Summary
@@ -162,16 +162,25 @@ interactive shaping to commit.
 
 The branch contains implementation for all original child units: foundation,
 harness orchestration, interaction block engine, staging/commit flow, frontend UI,
-and backend audit fixes. This plan is not closed: the current branch is in review
-after an implementation review found nine follow-up issues across record staging,
-engine fail-closed behavior, parser safety, frontend continuation/disablement
-state, staging refetch behavior, and Loom ledger staleness. The follow-up fixes
-are implemented on `feature/design-room-redesign`; adversarial review findings
-from this pass were fixed, focused verification passed, and acceptance remains
-with the ticket review/acceptance gate.
+and backend audit fixes. This plan is not closed: the branch remains in review
+after earlier follow-up issues across record staging, engine fail-closed behavior,
+parser safety, frontend continuation/disablement state, staging refetch behavior,
+and Loom ledger staleness. A newer designer adversarial frontend pass found
+additional blockers: record-node resurrection on deterministic temp IDs, canvas
+origin flicker from the Svelvet positioning workaround, missing immediate
+advancing feedback, option/question race gaps, and repeated multiple-choice
+selections creating duplicate branches. The current follow-up pass on
+`feature/design-room-redesign` is addressing those frontend interaction issues;
+frontend build, relevant backend shaping tests, and final adversarial-review
+confirmation passed, and acceptance remains with the ticket review/acceptance gate.
 
 ## Journal
 
+- 2026-06-10: Reconciled plan state for the designer adversarial frontend
+  follow-up. The branch is addressing deterministic-temp-id resurrection, Svelvet
+  origin flicker, immediate advancing feedback, option/question race gaps, and
+  duplicate multiple-choice branches. Frontend build, relevant backend shaping
+  tests, and final adversarial-review confirmation passed, so the plan stays active.
 - 2026-06-09: Reconciled plan state with branch reality. The original five
   shaping units plus backend audit fixes exist on the branch. The nine-finding
   follow-up fixes have been implemented, adversarially reviewed, and covered by

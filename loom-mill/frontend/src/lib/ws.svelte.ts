@@ -240,12 +240,32 @@ export class MillStore {
             }
           }
           this.shapingSession.nodes[data.node.id] = data.node;
+          if (data.node.type === 'record' && data.node.content?.temp_id) {
+            const tempId = String(data.node.content.temp_id);
+            if (!this.shapingSession.stagedRecords.some(record => record.temp_id === tempId)) {
+              this.shapingSession.stagedRecords = [
+                ...this.shapingSession.stagedRecords,
+                {
+                  temp_id: tempId,
+                  surface: String(data.node.content.surface ?? ''),
+                  title: String(data.node.content.title ?? 'Untitled proposal'),
+                  content: String(data.node.content.content ?? ''),
+                  branch: this.shapingSession.activeBranch,
+                  status: 'proposed',
+                  proposed_at: String(data.node.timestamp ?? ''),
+                  modified_at: null
+                }
+              ];
+            }
+          }
         }
         break;
       case 'shaping:edge_added':
         this.ensureShapingSession(data.session_id);
         if (this.shapingSession) {
-          this.shapingSession.edges.push(data.edge);
+          if (!this.shapingSession.edges.some(edge => edge.id === data.edge.id)) {
+            this.shapingSession.edges = [...this.shapingSession.edges, data.edge];
+          }
         }
         break;
       case 'shaping:node_updated':

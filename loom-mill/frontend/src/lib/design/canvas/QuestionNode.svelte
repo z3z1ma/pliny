@@ -2,11 +2,13 @@
   import { Node, Anchor } from 'svelvet';
   import { causalEdgeColor } from './edge-style';
 
-  let { node, position, connections = [], onRespond } = $props();
+  let { node, position, connections = [], onRespond, disabled = false, usedOptions = [] } = $props();
   
   let responseText = $state('');
   
   function handleSubmit() {
+    if (disabled) return;
+
     if (responseText.trim() && onRespond) {
       onRespond(responseText.trim());
       responseText = '';
@@ -14,10 +16,18 @@
   }
   
   function handleKeydown(e: KeyboardEvent) {
+    if (disabled) return;
+
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSubmit();
     }
+  }
+
+  function respondToOption(option: string) {
+    if (disabled || usedOptions.includes(option) || !onRespond) return;
+
+    onRespond(option, option);
   }
 </script>
 
@@ -37,9 +47,16 @@
       {#if node.content.options && node.content.options.length > 0}
         <div class="flex flex-wrap gap-2">
           {#each node.content.options as option}
+            {@const optionUsed = usedOptions.includes(option)}
             <button 
-              class="px-3 py-1.5 text-[12px] bg-bg-surface-hover border border-border-default rounded-md hover:border-purple-400 hover:text-purple-300 transition-colors text-left"
-              onclick={() => onRespond && onRespond(option)}
+              class="px-3 py-1.5 text-[12px] border rounded-md transition-colors text-left
+                {disabled || optionUsed
+                  ? 'bg-bg-surface border-border-subtle text-text-tertiary cursor-not-allowed opacity-60'
+                  : 'bg-bg-surface-hover border-border-default hover:border-purple-400 hover:text-purple-300'}"
+              disabled={disabled || optionUsed}
+              aria-label={optionUsed ? `${option} already branched` : option}
+              title={optionUsed ? 'Already branched' : undefined}
+              onclick={() => respondToOption(option)}
             >
               {option}
             </button>
@@ -51,12 +68,13 @@
             bind:value={responseText}
             onkeydown={handleKeydown}
             placeholder="Type your answer..."
-            class="w-full bg-bg-primary border border-border-default rounded p-2 text-[12px] text-text-primary resize-none focus:outline-none focus:border-purple-400"
+            class="w-full bg-bg-primary border border-border-default rounded p-2 text-[12px] text-text-primary resize-none focus:outline-none focus:border-purple-400 disabled:cursor-not-allowed disabled:opacity-60 disabled:text-text-tertiary"
             rows="2"
+            {disabled}
           ></textarea>
           <button 
             class="self-end px-3 py-1 text-[11px] bg-purple-500/20 text-purple-300 border border-purple-500/30 rounded hover:bg-purple-500/30 transition-colors disabled:opacity-50"
-            disabled={!responseText.trim()}
+            disabled={disabled || !responseText.trim()}
             onclick={handleSubmit}
           >
             Submit

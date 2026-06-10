@@ -33,7 +33,7 @@ def mark_dead_recursive(session_state: SessionState, node_id: str) -> list[str]:
     """Mark a node and all descendants as dead. Returns affected node IDs."""
     affected: list[str] = []
     node = session_state.nodes.get(node_id)
-    if not node or node.status == NodeStatus.DEAD:
+    if not node or node.status in {NodeStatus.DEAD, NodeStatus.REJECTED}:
         return affected
     node.status = NodeStatus.DEAD
     node.selected = False
@@ -48,7 +48,7 @@ def mark_stale_recursive(state: SessionState, parent_id: str) -> list[str]:
     """Mark all descendants of parent_id as stale, excluding dead nodes and parent."""
     affected: list[str] = []
     for node in list(state.nodes.values()):
-        if node.parent_id == parent_id and node.status != NodeStatus.DEAD:
+        if node.parent_id == parent_id and node.status not in {NodeStatus.DEAD, NodeStatus.REJECTED}:
             node.status = NodeStatus.STALE
             affected.append(node.id)
             affected.extend(mark_stale_recursive(state, node.id))
@@ -60,6 +60,8 @@ def mark_active_recursive(state: SessionState, parent_id: str) -> list[str]:
     affected: list[str] = []
     node = state.nodes.get(parent_id)
     if node is None:
+        return affected
+    if node.status == NodeStatus.REJECTED:
         return affected
     if node.status != NodeStatus.ACTIVE:
         node.status = NodeStatus.ACTIVE

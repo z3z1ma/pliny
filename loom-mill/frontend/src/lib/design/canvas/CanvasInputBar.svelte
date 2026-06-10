@@ -2,9 +2,11 @@
   import { apiUrl } from '../../api';
   import { store } from '../../ws.svelte.ts';
   
-  let { sessionId, onAdvance }: {
+  let { sessionId, onAdvance, disabled = false, onSubmittingChange }: {
     sessionId: string;
     onAdvance: () => void;
+    disabled?: boolean;
+    onSubmittingChange?: (submitting: boolean) => void;
   } = $props();
   
   let inputText = $state('');
@@ -31,8 +33,9 @@
   });
   
   async function submit() {
-    if (!inputText.trim() || submitting || sessionState === 'thinking') return;
+    if (!inputText.trim() || submitting || disabled || sessionState === 'thinking') return;
     submitting = true;
+    onSubmittingChange?.(true);
     try {
       await fetch(apiUrl(`/shaping/sessions/${sessionId}/input`), {
         method: 'POST',
@@ -40,11 +43,13 @@
         body: JSON.stringify({ text: inputText })
       });
       inputText = '';
+      onSubmittingChange?.(false);
       onAdvance();
     } catch (err) {
       console.error('Failed to send input:', err);
     } finally {
       submitting = false;
+      onSubmittingChange?.(false);
     }
   }
 
@@ -60,14 +65,14 @@
   <div class="flex items-center gap-2 text-sm">
     {#if sessionState === 'idle'}
       <div class="w-2 h-2 rounded-full bg-status-success-text"></div>
-      <span class="text-text-secondary">Ready — type to continue or ask a follow-up</span>
+      <span class="text-text-secondary">{disabled ? 'Starting…' : 'Ready — type to continue or ask a follow-up'}</span>
     {:else if sessionState === 'thinking'}
       <div class="w-2 h-2 rounded-full bg-accent-primary animate-ping"></div>
       <span class="text-text-secondary">Processing... {elapsed}s</span>
     {:else if sessionState === 'error'}
       <div class="w-2 h-2 rounded-full bg-status-error-text"></div>
       <span class="text-status-error-text">Error: {advanceError}</span>
-      <button class="px-2 py-0.5 bg-bg-secondary hover:bg-bg-tertiary rounded text-text-primary text-xs" onclick={onAdvance}>
+      <button class="px-2 py-0.5 bg-bg-secondary hover:bg-bg-tertiary rounded text-text-primary text-xs disabled:opacity-50 disabled:cursor-not-allowed" disabled={disabled || sessionState === 'thinking'} onclick={onAdvance}>
         Retry
       </button>
     {/if}
@@ -77,14 +82,14 @@
     <textarea
       bind:value={inputText}
       onkeydown={handleKeydown}
-      disabled={sessionState === 'thinking' || submitting}
+      disabled={disabled || sessionState === 'thinking' || submitting}
       placeholder="What's next?"
       class="flex-1 bg-bg-primary border border-border-default rounded p-2 text-text-primary focus:outline-none focus:ring-1 focus:ring-brand-primary resize-none min-h-[40px] max-h-[120px] disabled:opacity-50"
       rows="1"
     ></textarea>
     <button
       onclick={submit}
-      disabled={!inputText.trim() || sessionState === 'thinking' || submitting}
+      disabled={disabled || !inputText.trim() || sessionState === 'thinking' || submitting}
       class="px-4 py-2 bg-brand-primary hover:bg-brand-secondary text-white rounded font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
     >
       Send

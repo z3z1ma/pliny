@@ -30,6 +30,7 @@ class NodeStatus(StrEnum):
     ACTIVE = "active"
     DEAD = "dead"
     STALE = "stale"
+    REJECTED = "rejected"
 
 
 @dataclass

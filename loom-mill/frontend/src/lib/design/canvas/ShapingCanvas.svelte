@@ -17,7 +17,7 @@
   import { computeTreeLayout } from './layout';
   import { causalEdgeColor } from './edge-style';
 
-  let { sessionId, advancing, highlightedTempId, discardedTempIds = new Set<string>(), onOpenLogs }: { sessionId: string, advancing: boolean, highlightedTempId?: string | null, discardedTempIds?: Set<string>, onOpenLogs?: (invocationId: string) => void } = $props();
+  let { sessionId, advancing, highlightedTempId, lastDiscardedTempId, discardedVersion = 0, onOpenLogs }: { sessionId: string, advancing: boolean, highlightedTempId?: string | null, lastDiscardedTempId?: string | null, discardedVersion?: number, onOpenLogs?: (invocationId: string) => void } = $props();
 
   let allNodes = $derived(store.shapingSession?.nodes ? Object.values(store.shapingSession.nodes) : []);
   let allEdges = $derived(store.shapingSession?.edges ?? []);
@@ -26,9 +26,16 @@
   let isThinking = $derived(store.shapingSession?.advanceState === 'thinking');
 
   let collapseDead = $state(false);
-  let rejectedTempIds = $state<Set<string>>(new Set());
+  let rejectedRecordNodeIds = $state<Set<string>>(new Set());
+  let discardedRecordNodeIds = $state<Set<string>>(new Set());
+  let observedDiscardedVersion = $state(0);
   let thinkingDismissed = $state(false);
   let continuePending = $state(false);
+  let responsePending = $state(false);
+  let selectPending = $state(false);
+  let inputAdvancePending = $state(false);
+  let inputSubmitting = $state(false);
+  let hasObservedDiscardedVersion = $state(false);
 
   let nodes = $derived(
     collapseDead
@@ -50,7 +57,7 @@
 
   let layoutResult = $derived(computeTreeLayout(nodes, edges));
 
-  // FIX: Defer position application to ensure edges render on load.
+  // FIX: Defer position application to ensure edges render on the first load.
   // Bug: Svelvet anchors mount and measure positions before Node.svelte's reactive
   // block syncs the position prop to the internal store, so anchors capture (0,0) and
   // edges render with degenerate paths. Solution: start all nodes at origin, let them
@@ -58,13 +65,35 @@
   // position sync in Node.svelte AFTER anchors exist, causing them to recalculate via
   // afterUpdate and draw correct edge geometry.
   let applyPositions = $state(false);
+  let appliedInitialAnchorWorkaround = $state(false);
   $effect(() => {
-    if (nodes.length > 0) {
+    if (nodes.length > 0 && !appliedInitialAnchorWorkaround) {
+      appliedInitialAnchorWorkaround = true;
       applyPositions = false;
       setTimeout(() => {
         applyPositions = true;
       }, 50);
     }
+  });
+
+  let advanceDisabled = $derived(advancing || isThinking || continuePending || responsePending || selectPending || inputAdvancePending || inputSubmitting);
+
+  $effect(() => {
+    if (!hasObservedDiscardedVersion) {
+      observedDiscardedVersion = discardedVersion;
+      hasObservedDiscardedVersion = true;
+      return;
+    }
+    if (discardedVersion === observedDiscardedVersion) return;
+    observedDiscardedVersion = discardedVersion;
+    if (!lastDiscardedTempId) return;
+    const nextDiscarded = new Set(discardedRecordNodeIds);
+    for (const node of allNodes) {
+      if (node.type === 'record' && node.content.temp_id === lastDiscardedTempId) {
+        nextDiscarded.add(node.id);
+      }
+    }
+    discardedRecordNodeIds = nextDiscarded;
   });
 
   $effect(() => {
@@ -82,6 +111,47 @@
     if (!applyPositions) return { x: 0, y: 0 }; // Start all nodes at origin
     if (node.position) return node.position;
     return layoutResult.positions[node.id] ?? { x: 0, y: 0 };
+  }
+
+  function hasDownstreamInputChild(nodeId: string) {
+    return edges.some(edge => {
+      if (edge.source_id !== nodeId) return false;
+      const child = store.shapingSession?.nodes[edge.target_id];
+      return child?.type === 'input';
+    });
+  }
+
+  function getQuestionUsedOptions(node: CanvasNode) {
+    const options = node.content.options;
+    if (!Array.isArray(options)) return [];
+    const childInputTexts = new Set<string>();
+    for (const edge of edges) {
+      if (edge.source_id !== node.id) continue;
+      const child = store.shapingSession?.nodes[edge.target_id];
+      if (child?.type !== 'input') continue;
+      const sourceOption = child.content.source_option;
+      const text = child.content.text;
+      if (typeof sourceOption === 'string') childInputTexts.add(sourceOption);
+      else if (typeof text === 'string') childInputTexts.add(text);
+    }
+    return options.filter((option): option is string => typeof option === 'string' && childInputTexts.has(option));
+  }
+
+  function getOptionText(node: CanvasNode) {
+    const label = node.content.label;
+    const content = node.content.content;
+    const labelText = typeof label === 'string' ? label.trim() : '';
+    const contentText = typeof content === 'string' ? content.trim() : '';
+    if (labelText && contentText && labelText !== contentText) return `${labelText}\n\n${contentText}`;
+    return labelText || contentText;
+  }
+
+  function applyInputResult(data: { node?: CanvasNode; edge?: { id: string; source_id: string; target_id: string; type: 'causal' | 'option_group' } | null }) {
+    if (!store.shapingSession || !data.node) return;
+    store.shapingSession.nodes = { ...store.shapingSession.nodes, [data.node.id]: data.node };
+    if (data.edge && !store.shapingSession.edges.some(edge => edge.id === data.edge?.id)) {
+      store.shapingSession.edges = [...store.shapingSession.edges, data.edge];
+    }
   }
 
   function applySessionState(data: any) {
@@ -110,10 +180,11 @@
   function withStagingStatus(node: CanvasNode): CanvasNode {
     const tempId = node.content.temp_id;
     if (!tempId) return node;
+    if (node.status === 'rejected') return node;
+    if (rejectedRecordNodeIds.has(node.id) || discardedRecordNodeIds.has(node.id)) return { ...node, status: 'rejected' };
     const staged = store.shapingSession?.stagedRecords.find(record => record.temp_id === tempId);
     if (!staged) {
-      if (rejectedTempIds.has(tempId) || discardedTempIds.has(tempId)) return { ...node, status: 'rejected' };
-      return node;
+      return { ...node, status: 'rejected' };
     }
     const stagedNode = { ...node, content: { ...node.content, title: staged.title, content: staged.content } };
     if (staged.status === 'accepted') return { ...stagedNode, status: 'accepted' };
@@ -129,8 +200,10 @@
       console.error('Failed to accept staged record:', await response.text());
       return;
     }
-    rejectedTempIds.delete(tempId);
-    rejectedTempIds = new Set(rejectedTempIds);
+    rejectedRecordNodeIds.delete(nodeId);
+    rejectedRecordNodeIds = new Set(rejectedRecordNodeIds);
+    discardedRecordNodeIds.delete(nodeId);
+    discardedRecordNodeIds = new Set(discardedRecordNodeIds);
     await refetchSessionState();
   }
 
@@ -143,8 +216,8 @@
       console.error('Failed to reject staged record:', await response.text());
       return;
     }
-    rejectedTempIds.add(tempId);
-    rejectedTempIds = new Set(rejectedTempIds);
+    rejectedRecordNodeIds.add(nodeId);
+    rejectedRecordNodeIds = new Set(rejectedRecordNodeIds);
     await refetchSessionState();
   }
 
@@ -168,18 +241,22 @@
     return true;
   }
 
-  async function handleRespond(content: string, parentNodeId: string) {
-    if (!sessionId) return;
+  async function handleRespond(content: string, parentNodeId: string, sourceOption?: string) {
+    if (!sessionId || advanceDisabled) return;
+    responsePending = true;
     try {
+      const body: { text: string; parent_node_id: string; source_option?: string } = { text: content, parent_node_id: parentNodeId };
+      if (sourceOption) body.source_option = sourceOption;
       const inputRes = await fetch(apiUrl(`/shaping/sessions/${sessionId}/input`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: content, parent_node_id: parentNodeId })
+        body: JSON.stringify(body)
       });
       if (!inputRes.ok) {
         console.error('Error sending input:', await inputRes.text());
         return;
       }
+      applyInputResult(await inputRes.json());
       
       // Trigger the engine to produce the next node
       await fetch(apiUrl(`/shaping/sessions/${sessionId}/advance`), {
@@ -188,12 +265,19 @@
       });
     } catch (err) {
       console.error('Error in shaping respond:', err);
+    } finally {
+      responsePending = false;
     }
   }
 
   async function handleSelect(nodeId: string) {
-    if (!sessionId) return;
+    if (!sessionId || advanceDisabled || hasDownstreamInputChild(nodeId)) return;
+    selectPending = true;
     try {
+      const node = store.shapingSession?.nodes[nodeId];
+      if (!node) return;
+      const optionText = getOptionText(node);
+      if (!optionText) return;
       const selectRes = await fetch(apiUrl(`/shaping/sessions/${sessionId}/nodes/${nodeId}/select`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
@@ -203,12 +287,28 @@
         return;
       }
 
+      const selectData = await selectRes.json();
+      applySessionState(selectData);
+
+      const inputRes = await fetch(apiUrl(`/shaping/sessions/${sessionId}/input`), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: optionText, parent_node_id: nodeId })
+      });
+      if (!inputRes.ok) {
+        console.error('Error adding option input:', await inputRes.text());
+        return;
+      }
+      applyInputResult(await inputRes.json());
+
       await fetch(apiUrl(`/shaping/sessions/${sessionId}/advance`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
       });
     } catch (err) {
       console.error('Error in shaping option select:', err);
+    } finally {
+      selectPending = false;
     }
   }
 
@@ -228,7 +328,7 @@
   }
 
   async function handleContinue(nodeId: string) {
-    if (!sessionId || isThinking || continuePending) return;
+    if (!sessionId || advanceDisabled) return;
     continuePending = true;
     try {
       const inputRes = await fetch(apiUrl(`/shaping/sessions/${sessionId}/input`), {
@@ -240,6 +340,7 @@
         console.error('Error adding continue input:', await inputRes.text());
         return;
       }
+      applyInputResult(await inputRes.json());
       await fetch(apiUrl(`/shaping/sessions/${sessionId}/advance`), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' }
@@ -248,6 +349,21 @@
       console.error('Error continuing from node:', err);
     } finally {
       continuePending = false;
+    }
+  }
+
+  async function handleInputAdvance() {
+    if (!sessionId || advancing || isThinking || continuePending || responsePending || selectPending || inputAdvancePending || inputSubmitting) return;
+    inputAdvancePending = true;
+    try {
+      await fetch(apiUrl(`/shaping/sessions/${sessionId}/advance`), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } catch (err) {
+      console.error('Error triggering advance:', err);
+    } finally {
+      inputAdvancePending = false;
     }
   }
 </script>
@@ -275,17 +391,17 @@
         {:else if node.type === 'processing'}
           <ProcessingNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} {onOpenLogs} />
         {:else if node.type === 'question'}
-          <QuestionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onRespond={(content) => handleRespond(content, node.id)} />
+          <QuestionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onRespond={(content, sourceOption) => handleRespond(content, node.id, sourceOption)} disabled={advanceDisabled} usedOptions={getQuestionUsedOptions(node)} />
         {:else if node.type === 'observation'}
-          <ObservationNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onContinue={handleContinue} continueDisabled={isThinking || continuePending} />
+          <ObservationNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onContinue={handleContinue} continueDisabled={advanceDisabled} />
         {:else if node.type === 'framing'}
           <FramingNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} />
         {:else if node.type === 'tension'}
-          <TensionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onContinue={handleContinue} continueDisabled={isThinking || continuePending} />
+          <TensionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onContinue={handleContinue} continueDisabled={advanceDisabled} />
         {:else if node.type === 'decision'}
           <DecisionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} />
         {:else if node.type === 'option'}
-          <OptionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onSelect={handleSelect} onReselect={handleReselect} />
+          <OptionNode {node} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} onSelect={handleSelect} onReselect={handleReselect} disabled={advanceDisabled || hasDownstreamInputChild(node.id)} reselectDisabled={advanceDisabled} />
         {:else if node.type === 'record'}
           <RecordNode node={withStagingStatus(node)} position={node.position ?? computePosition(node)} connections={getChildConnections(node.id)} highlighted={highlightedTempId === node.content.temp_id} onAccept={handleRecordAccept} onReject={handleRecordReject} onEdit={handleRecordEdit} />
         {:else}
@@ -323,11 +439,6 @@
     {/if}
   </div>
 
-  <CanvasInputBar {sessionId} onAdvance={() => {
-    fetch(apiUrl(`/shaping/sessions/${sessionId}/advance`), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
-    }).catch(err => console.error('Error triggering advance:', err));
-  }} />
+  <CanvasInputBar {sessionId} onAdvance={handleInputAdvance} disabled={advanceDisabled} onSubmittingChange={(submitting) => (inputSubmitting = submitting)} />
   
 </div>

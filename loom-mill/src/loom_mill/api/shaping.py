@@ -177,15 +177,24 @@ async def add_shaping_input(request: Request) -> JSONResponse:
             parent_node_id = str(parent_node_id)
             if parent_node_id not in session.state.nodes:
                 raise ValueError("parent_node_id must reference an existing node")
+        source_option = body.get("source_option")
+        if source_option is not None:
+            if not isinstance(source_option, str) or not source_option.strip():
+                raise ValueError("source_option must be a non-empty string")
+            source_option = source_option.strip()
     except (KeyError, ValueError) as error:
         return JSONResponse({"error": str(error)}, status_code=400)
+
+    content = {"text": text}
+    if source_option is not None:
+        content["source_option"] = source_option
 
     node = CanvasNode(
         id=str(uuid4()),
         type=CanvasNodeType.INPUT,
         parent_id=parent_node_id,
         status=NodeStatus.ACTIVE,
-        content={"text": text},
+        content=content,
         position=None,
         timestamp=utc_now(),
     )
@@ -460,10 +469,28 @@ async def delete_staged_record(request: Request) -> JSONResponse:
     if session.state.ended_at is not None:
         return JSONResponse({"error": "Session has ended"}, status_code=409)
     try:
-        session.staging.reject(request.path_params["temp_id"])
+        temp_id = request.path_params["temp_id"]
+        session.staging.reject(temp_id)
+        rejected_nodes = _mark_record_nodes_rejected(session, temp_id)
     except ValueError as error:
         return JSONResponse({"error": str(error)}, status_code=400)
-    return JSONResponse({"session_id": session.session_id, "rejected": request.path_params["temp_id"]})
+    for node in rejected_nodes:
+        await request.app.state.store.publish(
+            ShapingEvent(session_id=session.session_id, event="node_updated", data={"node": asdict(node)})
+        )
+    return JSONResponse({"session_id": session.session_id, "rejected": temp_id})
+
+
+def _mark_record_nodes_rejected(session: ShapingSession, temp_id: str) -> list[CanvasNode]:
+    rejected: list[CanvasNode] = []
+    for node in session.state.nodes.values():
+        if node.type == CanvasNodeType.RECORD and node.content.get("temp_id") == temp_id and node.status != NodeStatus.REJECTED:
+            node.status = NodeStatus.REJECTED
+            rejected.append(node)
+    if rejected:
+        session.state.updated_at = utc_now()
+        session._persist_state()
+    return rejected
 
 
 async def consolidate_staged_records(request: Request) -> JSONResponse:

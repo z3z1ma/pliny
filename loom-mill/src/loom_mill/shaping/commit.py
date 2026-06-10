@@ -4,7 +4,7 @@ import os
 import re
 import subprocess
 from dataclasses import dataclass, replace
-from datetime import date
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -87,7 +87,7 @@ class CommitFlow:
         return self.workspace_root / ".loom" / record.surface / f"{stem}.md"
 
     def _session_record(self, records: list[StagedRecord], id_map: dict[str, str]) -> StagedRecord:
-        today = date.today().isoformat()
+        today = _utc_date().isoformat()
         slug = f"{today.replace('-', '')}-shaping-session-{self.session.session_id[:8]}"
         refs = "\n".join(f"- `{id_map[record.temp_id]}` - {record.title}" for record in records)
         content = f"""# Shaping Session Record
@@ -141,9 +141,13 @@ The full session context document is available at `.mill/shaping-sessions/{self.
 
 
 def generate_real_id(surface: str, title: str) -> str:
-    today = date.today().strftime("%Y%m%d")
+    today = _utc_date().strftime("%Y%m%d")
     surface_singular = SURFACE_SINGULAR.get(surface, surface.rstrip("s"))
     return f"{surface_singular}:{today}-{slugify(title)}"
+
+
+def _utc_date():
+    return datetime.now(timezone.utc).date()
 
 
 def resolve_references(records: list[StagedRecord], id_map: dict[str, str]) -> list[StagedRecord]:
