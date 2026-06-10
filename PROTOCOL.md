@@ -205,9 +205,9 @@ Status: `active` (delete or update when no longer true)
 
 ## Inner Loop
 
-When scope and intent are clear, execute with discipline.
+When scope and intent are clear, execute with discipline. Work in the inner loop is carried out by sub-agents scoped to a single ticket. The records are what make this possible — a well-written ticket and its referenced records should give a sub-agent with no prior context everything it needs to do accurate work.
 
-Before starting work on a ticket, read it fully. Read the specs that describe the behavior you're implementing — and related specs for adjacent surfaces that might be affected. Read decisions that constrain your approach. Search for relevant research, especially if the work involves technical choices or integrations where prior investigation might exist. Check knowledge for relevant conventions and procedures. Read prior evidence from earlier attempts at similar work. Understand the landscape before changing it.
+Before starting work on a ticket, read it fully. Tickets reference related records by file path — specs, decisions, research, knowledge, prior evidence. Follow those references; they are the working context. Understand the landscape before changing it.
 
 Tickets are your unit of work. Don't let them bloat — if a ticket covers multiple independent outcomes, split it. Log progress and notes inside the ticket as you go. Move it through statuses honestly.
 
