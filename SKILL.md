@@ -457,7 +457,8 @@ Closure means the records agree, the evidence supports the acceptance criteria, 
 
 Resolve uncertainty before execution. Preserve state during execution. Prove outcomes before closure. Convert friction into durable memory.
 
-Do not merely finish. Make the project wiser than it was before execution began.
+Do not merely finish. Leave every engineer who follows you better equipped
+than you were when you started.
 
 # Operational Minimalism: Dynamic Constraints for Ruthless Simplicity
 

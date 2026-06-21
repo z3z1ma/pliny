@@ -30,10 +30,11 @@ When something breaks, they don't guess-and-check. They read the logs, form a
 specific hypothesis, isolate the variable, and write one targeted fix with a
 regression test. When they're about to build something, they mentally simulate
 the failure modes first - cascading failures, race conditions, what happens
-under backpressure. And critically, they leave the project smarter every time
-they touch it. Their decisions get written down with the alternatives that were
-rejected. Their investigations document the dead ends. Their specs define
-behavior precisely enough that someone else can verify it independently.
+under backpressure. Every time they touch the codebase, the next engineer who
+opens it starts further ahead. Decisions get written down with the alternatives
+that were rejected. Dead
+ends get documented so nobody walks down them twice. Specs are precise enough
+that someone else can verify the behavior independently.
 
 That's not extra process. That's how they multiply the team. A junior engineer
 onboards faster because the ADRs exist. A teammate picks up the work cold
@@ -42,22 +43,23 @@ doesn't re-evaluate a settled decision because the tradeoffs are written down
 in plain English.
 
 Right now, your AI agent operates at the opposite end of this spectrum. It's
-a brilliant syntax generator with zero engineering judgment. It starts every
-session from scratch. It accepts vague instructions without pushing back. It
-solves the immediate ticket without considering whether the ticket should exist.
-It says "done" because a command exited zero, without asking whether the
-output actually satisfies the intent. And it forgets everything it learned the
-moment you close the chat - so next session, you're explaining the same
+a brilliant syntax generator with zero engineering judgment. Every session
+starts from scratch. Vague instructions pass without pushback. It solves the
+immediate ticket without considering whether the ticket should exist, says
+"done" because a command exited zero, and forgets everything it learned the
+moment you close the chat. Next session, you're explaining the same
 architectural context for the fourth time.
 
 10x is a skill that makes your agent operate the way that developer operates.
-Not by typing faster - by thinking more carefully. It interrogates unclear requirements until the fundamentals are unambiguous. It searches the
-project for existing answers before asking you questions. It decomposes work
-into bounded pieces that can be independently verified. It captures evidence
-of what actually happened - observed output, not "I believe it works." It runs
-adversarial review on its own work. And because working this way naturally
-produces documentation, the reasoning accumulates in `.10x/` as structured
-engineering records that any future agent (or human) can pick up cold.
+Not by typing faster - by thinking more carefully. When requirements are
+unclear, your agent pushes back, asking the questions a principal engineer
+would ask before writing a line of code. It searches the project for existing
+answers before bothering you, breaks work into pieces small enough to check
+independently, and captures evidence of what actually happened - observed
+output, not "I believe it works." It challenges its own work before calling
+it done. And because working this way naturally produces documentation, the
+reasoning accumulates in `.10x/` as structured engineering records that any
+future agent (or human) can pick up cold.
 
 Thursday's agent uses Tuesday's judgment because Tuesday's agent worked
 carefully enough to leave a trail.
@@ -91,22 +93,21 @@ also produce the records that survive.
 
 ## How a 10x developer works (and how 10x makes your agent work)
 
-A 10x developer separates understanding from execution - not as two phases of
-a process, but as a discipline of knowing when they have enough clarity to
-proceed and when they don't.
+A 10x developer separates understanding from execution. It's a discipline:
+knowing when you have enough clarity to proceed and when you don't.
 
 When requirements are unclear, the agent stays in the outer loop. It searches
 the codebase and existing records for answers before asking you anything. It
 interrogates vague terms and challenges unstated assumptions - the way a
 principal engineer who's been burned enough times refuses to let "it should
-just work" pass without defining what "work" means. As understanding
-crystallizes, decisions get recorded with their alternatives. Specs get written
-with testable behavior. Research documents what was tried and what dead-ended.
-Not as bookkeeping, but because a 10x developer knows that a decision without
-recorded rationale is a decision the next person will re-evaluate from scratch.
+just work" pass without defining what "work" means. As things get clearer,
+decisions get recorded with their alternatives, specs get written with
+testable behavior, and research documents what was tried and what dead-ended.
+A decision without recorded rationale is a decision the next person will
+re-evaluate from scratch.
 
-When the work is clear enough that a cold-start executor could proceed without
-inventing requirements, a bounded ticket enters the inner loop. The agent
+When the work is clear enough that a new teammate could pick it up without
+guessing at requirements, a bounded ticket enters the inner loop. The agent
 treats execution the way a careful engineer treats a production deployment:
 observe what actually happens, capture the evidence, compare it against the
 stated criteria, and don't declare success until they match. Subagent output is
@@ -114,11 +115,10 @@ treated as a hypothesis until evidence confirms it - the same way a senior
 engineer treats a junior's "it's fixed" as a claim that needs a reproduction
 test.
 
-When a ticket closes, the agent runs a retrospective. Not because process
-demands it, but because a 10x developer knows that the most expensive thing
-in engineering is paying the same cost twice. Discoveries become permanent
-knowledge. Recurring friction becomes a reusable skill. Follow-up work gets
-its own ticket. The project compounds.
+When a ticket closes, the agent runs a retrospective - because the most
+expensive thing in engineering is paying the same cost twice. Discoveries
+become permanent knowledge, recurring friction becomes a reusable skill, and
+follow-up work gets its own ticket. The team's capability compounds.
 
 ```mermaid
 flowchart TB
@@ -199,22 +199,22 @@ to show for it.
 **With 10x:** Monday morning. New session. The agent reads the decision record,
 follows the link to the research, picks up the open question about rotation
 intervals. Asks about that specifically - with a concrete recommendation and
-the tradeoffs named. One answer and real work starts. The project is smarter
-than it was yesterday, and nobody had to re-explain anything.
+the tradeoffs named. One answer and real work starts. Everyone starts further
+ahead than yesterday, and nobody had to re-explain anything.
 
 ## Why not RAG, vectors, or longer context windows?
 
 Those are retrieval mechanisms. They help the agent find relevant text in a
 large corpus. They don't change how the agent thinks or works.
 
-An agent with a vector database still accepts vague requirements. It still
-says "done" without verifying. It still doesn't record why it chose one
-approach over another. It just remembers slightly more of the raw conversation
+An agent with a vector database still accepts vague requirements, still says
+"done" without verifying, still doesn't record why it chose one approach over
+another. It just remembers slightly more of the raw conversation
 while repeating all the same judgment failures.
 
 10x is behavioral. The records it produces are useful for retrieval, but the
-behavior that produces them - interrogating assumptions, decomposing work,
-capturing evidence, proving closure - is where the actual leverage comes from.
+behavior that produces them - questioning assumptions, breaking down work,
+recording what happened, proving it's actually done - is where the actual leverage comes from.
 The same leverage that makes a human 10x.
 
 ## Keep your current workflow
@@ -347,7 +347,7 @@ That gap never closed. It widened. But what it measures shifted: a 10x
 developer in 2025 isn't someone who writes 10x more code. They usually write
 less. They're 10x because they eliminate problems instead of solving them,
 multiply the people around them through radical documentation, and make the
-project smarter every time they touch it.
+next engineer's job easier every time they touch something.
 
 With AI agents handling syntax, that gap widens further. The mechanical act of
 writing code is commoditized. What remains scarce is engineering judgment -
