@@ -46,6 +46,20 @@ class ValidateContractsTest(unittest.TestCase):
 
         self.assertIn("scenarios.json: missing scenario IDs: SCN-015", result.errors)
 
+    def test_unknown_split_scenario_fails_validation(self):
+        with copied_contract_root() as root:
+            split_path = root / "autoresearch" / "splits" / "skill-improvement-v1.json"
+            data = json.loads(split_path.read_text(encoding="utf-8"))
+            data["held_out_scenarios"].append("SCN-999")
+            split_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+
+            result = validate.validate_contracts(root)
+
+        self.assertIn(
+            "splits/skill-improvement-v1.json: held_out_scenarios unknown scenario SCN-999",
+            result.errors,
+        )
+
 
 class copied_contract_root:
     def __enter__(self):
@@ -54,7 +68,7 @@ class copied_contract_root:
         source = REPO_ROOT / "autoresearch"
         target = root / "autoresearch"
         target.mkdir()
-        for child in ("catalogs", "schemas", "templates"):
+        for child in ("catalogs", "schemas", "templates", "splits"):
             shutil.copytree(source / child, target / child)
         spec_target = root / ".10x" / "specs"
         spec_target.mkdir(parents=True)

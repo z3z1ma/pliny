@@ -128,6 +128,56 @@ class ReportTest(unittest.TestCase):
             self.assertIn("wrote", stdout.getvalue())
             self.assertIn("# 10x Autoresearch Score Report", out_path.read_text(encoding="utf-8"))
 
+    def test_campaign_metadata_renders_without_changing_score_statuses(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            score_dir = root / "scores"
+            score_dir.mkdir()
+            campaign_path = root / "campaign.json"
+            _write_score(score_dir / "candidate.score.json", _artifact())
+            campaign_path.write_text(
+                json.dumps(
+                    {
+                        "campaign_id": "EXP-20260623-301-first-calibration-campaign",
+                        "candidate_id": "candidate-variant",
+                        "baseline_id": "current-10x",
+                        "verdict": "null",
+                        "result_status": "confounded",
+                        "statuses": ["null", "confounded"],
+                        "promotion_decision": "not-performed",
+                        "manual_inspection": {
+                            "status": "recorded-in-evidence",
+                            "by": "parent-review",
+                        },
+                        "evidence_refs": [
+                            ".10x/evidence/2026-06-23-first-autoresearch-calibration-campaign.md"
+                        ],
+                        "limits": ["campaign metadata is not scorer output"],
+                    },
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            markdown = report.build_report(score_dir, campaign_path=campaign_path)
+
+        self.assertIn("## Campaign Verdict", markdown)
+        self.assertIn("EXP-20260623-301-first-calibration-campaign", markdown)
+        self.assertIn("null", markdown)
+        self.assertIn("confounded", markdown)
+        self.assertIn("Campaign verdict metadata is manual/contextual", markdown)
+        self.assertIn("required-not-done", markdown)
+
+    def test_report_without_campaign_metadata_has_no_campaign_section(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            score_dir = Path(tmp)
+            _write_score(score_dir / "current.score.json", _artifact())
+
+            markdown = report.build_report(score_dir)
+
+        self.assertNotIn("## Campaign Verdict", markdown)
+
 
 def _artifact(
     *,

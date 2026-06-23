@@ -1,4 +1,4 @@
-Status: open
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 Parent: none
@@ -43,6 +43,10 @@ Excluded:
 - 2026-06-23: Opened from first calibration campaign because
   `candidate-variant` was a placeholder/null candidate using current `SKILL.md`
   and identical fixtures.
+- 2026-06-23: Added two real experimental candidate artifacts and registered
+  them in `autoresearch/candidates/candidates.json`: campaign status metadata
+  discipline and retrospective follow-up capture discipline. Evidence:
+  `.10x/evidence/2026-06-23-real-autoresearch-candidates.md`.
 
 ## Blockers
 

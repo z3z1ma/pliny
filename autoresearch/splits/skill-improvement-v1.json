@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source_scenarios": "autoresearch/catalogs/scenarios.json",
+  "exploration_scenarios": [
+    "SCN-001",
+    "SCN-002",
+    "SCN-003",
+    "SCN-004",
+    "SCN-005",
+    "SCN-006",
+    "SCN-007",
+    "SCN-008",
+    "SCN-009",
+    "SCN-010",
+    "SCN-011",
+    "SCN-012"
+  ],
+  "held_out_scenarios": [
+    "SCN-013",
+    "SCN-014",
+    "SCN-015"
+  ],
+  "review_scenarios": [
+    "SCN-008",
+    "SCN-009",
+    "SCN-012",
+    "SCN-013",
+    "SCN-014",
+    "SCN-015"
+  ],
+  "rules": [
+    "Use exploration scenarios for candidate search and micro-optimization.",
+    "Use held-out scenarios only when a candidate is ready for review.",
+    "A candidate that improves exploration scenarios but fails held-out scenarios is not promotion-ready.",
+    "Review scenarios are a minimum promotion-review set, not a complete proof of correctness."
+  ]
+}

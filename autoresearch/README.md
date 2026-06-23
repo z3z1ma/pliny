@@ -1,8 +1,8 @@
 # Autoresearch
 
-`autoresearch/` contains implementation-facing static contracts for the 10x
-autoresearch loop: score catalogs, scenario catalogs, artifact schemas, and
-record templates.
+`autoresearch/` contains the human-owned autoresearch program plus one-shot
+experiment tooling: score catalogs, scenario catalogs, artifact schemas, record
+templates, runners, scorers, reports, and diagnostics.
 
 `.10x/` remains the durable record graph. Research conclusions, evidence,
 reviews, decisions, tickets, knowledge, and skills that should survive a session
@@ -11,6 +11,7 @@ check those records.
 
 The initial contracts follow:
 
+- `autoresearch/program.md`
 - `.10x/specs/10x-autoresearch-loop.md`
 - `.10x/decisions/autoresearch-initial-implementation-defaults.md`
 
@@ -53,6 +54,25 @@ The validator checks JSON syntax, required score and scenario IDs, catalog
 shapes, cross-references, template sections, and score-artifact schema sanity.
 It does not score transcripts, run subject-agent experiments, execute harnesses,
 or produce reports.
+
+## Research Program
+
+The core autoresearch loop is in `autoresearch/program.md`. It is a human-owned
+program for the LLM researcher, not a Python daemon or controller. Autoresearch
+agents read it before experimenting and do not edit it unless a human explicitly
+asks for a program change.
+
+The loop is:
+
+1. mutate one candidate artifact;
+2. run one MICRO or FULL experiment;
+3. read the score artifacts and report;
+4. append a row to an untracked `results.tsv`;
+5. keep, discard, mutate, branch, or retry;
+6. repeat until manually interrupted.
+
+Python utilities do not own the loop. They run one experiment, produce scores,
+validate contracts, render reports, or run diagnostics.
 
 ## Offline Scoring
 
@@ -145,6 +165,36 @@ The first runner slice only supports dry-run and fixture-backed execution. It
 does not call live APIs, run Codex, run Claude, run OpenCode, run oh-my-pi, make
 promotion decisions, or implement FULL harness behavior.
 
+## One-Shot Runner
+
+Run exactly one registered MICRO or FULL experiment and write a report:
+
+```bash
+python3 autoresearch/run_once.py --experiment path/to/experiment.json --out .10x/evidence/.storage/<run-tag>/<experiment-id> --require-clean-canonical
+```
+
+`run_once.py` dispatches to `run_micro.py` for MICRO definitions and
+`run_full_codex.py` for FULL definitions. It writes runner artifacts under the
+output directory and renders `<out>/report.md` by default.
+
+It deliberately does not loop, resume, create stop files, maintain event logs,
+generate candidates, or mutate canonical `SKILL.md`. The LLM researcher follows
+`autoresearch/program.md` and calls `run_once.py` repeatedly.
+
+For exploratory work before setup is committed, omit `--require-clean-canonical`;
+the command still writes `<out>/canonical_guard.json` and fails if `SKILL.md` or
+`autoresearch/program.md` changes during the run.
+
+Initialize and append the untracked research ledger with:
+
+```bash
+python3 autoresearch/results.py init --path results.tsv
+python3 autoresearch/results.py append --path results.tsv --experiment-id EXP-YYYYMMDD-NNN-slug --tier MICRO --candidate candidate-name --score-vector "S001=90;S006=80" --status review --description "short description without commas"
+```
+
+Use `autoresearch/splits/skill-improvement-v1.json` to separate exploration
+scenarios from held-out review scenarios.
+
 The required definition fields are:
 
 ```json
@@ -203,6 +253,12 @@ Generate a readable Markdown report from saved `*.score.json` artifacts:
 python3 autoresearch/report.py --scores path/to/scores --out path/to/report.md
 ```
 
+Include manual campaign-level verdict metadata without mutating score artifacts:
+
+```bash
+python3 autoresearch/report.py --scores path/to/scores --campaign path/to/campaign.json --out path/to/report.md
+```
+
 The report is a secondary view. It shows score vectors, arm comparisons,
 scenario breakdowns, quality floors and floor failures, result statuses,
 manual-inspection and scorer trust state, limits, and available costs. Missing
@@ -210,3 +266,36 @@ fields render as `unknown` instead of failing report generation.
 
 `report.py` does not run experiments, score raw fixtures, make promotion
 decisions, or compute a top-line aggregate that could hide component failures.
+
+## Scorer Calibration
+
+Compare first-pass scorer output against human-authored fixture labels:
+
+```bash
+python3 autoresearch/calibrate_scorer.py --out .10x/evidence/.storage/scorer-calibration
+```
+
+The default labels live at `autoresearch/calibration/offline-trust-labels.json`
+and currently cover S001, S004, and S007. Calibration output includes JSON and
+Markdown summaries with true/false positive and negative counts. This does not
+upgrade `offline-coverage-v1` beyond Trust Level 1.
+
+## Codex Isolation Battery
+
+Plan a tiny live Codex isolation battery:
+
+```bash
+python3 autoresearch/run_codex_isolation.py --out .10x/evidence/.storage/codex-isolation --max-runs 2 --dry-run
+```
+
+Run the live battery:
+
+```bash
+python3 autoresearch/run_codex_isolation.py --out .10x/evidence/.storage/codex-isolation --max-runs 2 --run
+```
+
+The battery uses no-tool, no-write prompts, generated workspaces, read-only
+sandboxing, `--disable plugins`, and `--ignore-user-config`. It records command
+metadata, JSONL, stderr, final messages, token usage, and workspace manifests.
+It is isolation evidence only; it does not prove hidden context absence or
+candidate quality.

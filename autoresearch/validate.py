@@ -127,6 +127,7 @@ def validate_contracts(root: str | Path) -> ValidationResult:
     manual_path = (
         repo_root / "autoresearch" / "templates" / "manual-inspection.md"
     )
+    split_path = repo_root / "autoresearch" / "splits" / "skill-improvement-v1.json"
 
     scores_data = _load_json(scores_path, "scores.json", errors)
     scenarios_data = _load_json(scenarios_path, "scenarios.json", errors)
@@ -137,9 +138,10 @@ def validate_contracts(root: str | Path) -> ValidationResult:
         _validate_contract_sources("scores.json", scores_data, errors)
         score_ids = _validate_scores(scores_data, requirement_ids, errors)
 
+    scenario_ids: set[str] = set()
     if isinstance(scenarios_data, dict):
         _validate_contract_sources("scenarios.json", scenarios_data, errors)
-        _validate_scenarios(scenarios_data, score_ids, errors)
+        scenario_ids = _validate_scenarios(scenarios_data, score_ids, errors)
 
     if isinstance(schema_data, dict):
         _validate_score_artifact_schema(schema_data, errors)
@@ -155,6 +157,10 @@ def validate_contracts(root: str | Path) -> ValidationResult:
     )
     if manual_text is not None:
         _validate_manual_inspection_template(manual_text, errors)
+
+    split_data = _load_json(split_path, "splits/skill-improvement-v1.json", errors)
+    if isinstance(split_data, dict):
+        _validate_skill_improvement_split(split_data, scenario_ids, errors)
 
     return ValidationResult(errors)
 
@@ -541,6 +547,61 @@ def _validate_manual_inspection_template(text: str, errors: list[str]) -> None:
     for required_check in MANUAL_INSPECTION_CHECKS:
         if required_check not in text:
             errors.append(f"{label}: missing required check {required_check}")
+
+
+def _validate_skill_improvement_split(
+    data: dict[str, Any], scenario_ids: set[str], errors: list[str]
+) -> None:
+    label = "splits/skill-improvement-v1.json"
+    if data.get("schema_version") != 1:
+        errors.append(f"{label}: schema_version must be 1")
+    if data.get("source_scenarios") != "autoresearch/catalogs/scenarios.json":
+        errors.append(f"{label}: source_scenarios must point to scenarios catalog")
+
+    exploration = _scenario_list(label, "exploration_scenarios", data, scenario_ids, errors)
+    held_out = _scenario_list(label, "held_out_scenarios", data, scenario_ids, errors)
+    review = _scenario_list(label, "review_scenarios", data, scenario_ids, errors)
+
+    overlap = sorted(set(exploration) & set(held_out))
+    if overlap:
+        errors.append(f"{label}: exploration and held_out overlap: {', '.join(overlap)}")
+    missing = sorted(scenario_ids - (set(exploration) | set(held_out)))
+    if missing:
+        errors.append(f"{label}: scenarios missing from exploration/held_out: {', '.join(missing)}")
+    if not set(held_out).issubset(set(review)):
+        errors.append(f"{label}: review_scenarios must include all held_out_scenarios")
+
+    rules = data.get("rules")
+    if not isinstance(rules, list) or not rules:
+        errors.append(f"{label}: rules must be a non-empty list")
+    elif not all(_non_empty_string(rule) for rule in rules):
+        errors.append(f"{label}: rules must contain only non-empty strings")
+
+
+def _scenario_list(
+    label: str,
+    field: str,
+    data: dict[str, Any],
+    scenario_ids: set[str],
+    errors: list[str],
+) -> list[str]:
+    value = data.get(field)
+    if not isinstance(value, list) or not value:
+        errors.append(f"{label}: {field} must be a non-empty list")
+        return []
+    result = []
+    seen = set()
+    for item in value:
+        if not isinstance(item, str):
+            errors.append(f"{label}: {field} entries must be strings")
+            continue
+        if item in seen:
+            errors.append(f"{label}: {field} duplicate scenario {item}")
+        seen.add(item)
+        if item not in scenario_ids:
+            errors.append(f"{label}: {field} unknown scenario {item}")
+        result.append(item)
+    return result
 
 
 def _validate_common_headers(label: str, text: str, errors: list[str]) -> None:

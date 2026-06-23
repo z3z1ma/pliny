@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "candidates": [
+    {
+      "id": "candidate-campaign-status-metadata-v1",
+      "path": "autoresearch/candidates/2026-06-23-campaign-status-metadata.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S004", "S006", "S008"],
+      "target_scenarios": ["SCN-013", "SCN-014", "SCN-015"],
+      "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-retrospective-follow-up-capture-v1",
+      "path": "autoresearch/candidates/2026-06-23-retrospective-follow-up-capture.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S006", "S007", "S008"],
+      "target_scenarios": ["SCN-009", "SCN-012", "SCN-008"],
+      "promotion": "manual-only"
+    }
+  ]
+}

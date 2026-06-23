@@ -1,4 +1,4 @@
-Status: open
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 Parent: none
@@ -44,6 +44,12 @@ Excluded:
 - 2026-06-23: Opened from first calibration campaign because all campaign score
   artifacts were Trust Level 1 with low confidence and required manual
   inspection.
+- 2026-06-23: Added `autoresearch/calibration/offline-trust-labels.json`,
+  `autoresearch/calibrate_scorer.py`, and unit tests. Calibration records
+  mismatch metrics for S001, S004, and S007 and keeps `offline-coverage-v1` at
+  Trust Level 1. Evidence:
+  `.10x/evidence/2026-06-23-autoresearch-scorer-calibration.md`. Review:
+  `.10x/reviews/2026-06-23-scorer-calibration-trust.md`.
 
 ## Blockers
 

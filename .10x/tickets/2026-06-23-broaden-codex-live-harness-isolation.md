@@ -1,4 +1,4 @@
-Status: open
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 Parent: none
@@ -43,7 +43,13 @@ Excluded:
 - 2026-06-23: Opened from first calibration campaign because FULL fixture-smoke
   generated no live Codex calls and previous live evidence supports only narrow
   smoke claims.
+- 2026-06-23: Added `autoresearch/run_codex_isolation.py` and tests. Ran a
+  bounded two-run live battery with `--disable plugins`, `--ignore-user-config`,
+  generated workspaces, read-only sandboxing, command metadata, JSONL, stderr,
+  token fields, and workspace manifests. Evidence:
+  `.10x/evidence/2026-06-23-codex-isolation-battery.md`.
 
 ## Blockers
 
-Requires operator-approved live-run budget and limits before execution.
+None. Live-run limits are bounded by this ticket and the accepted subscription
+budget policy.

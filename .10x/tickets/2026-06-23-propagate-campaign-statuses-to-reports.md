@@ -1,4 +1,4 @@
-Status: open
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 Parent: none
@@ -45,6 +45,10 @@ Excluded:
 - 2026-06-23: Opened from first calibration campaign because `report.md`
   reported no result statuses even though the campaign verdict was
   null/confounded in research and evidence.
+- 2026-06-23: Added optional campaign metadata input to `autoresearch/report.py`
+  and tests for null/confounded metadata plus the no-metadata path. Reports now
+  render `## Campaign Verdict` while keeping score artifacts separate. Evidence:
+  `.10x/evidence/2026-06-23-report-campaign-status-metadata.md`.
 
 ## Blockers
 

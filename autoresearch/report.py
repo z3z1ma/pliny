@@ -31,9 +31,15 @@ class ReportError(ValueError):
     pass
 
 
-def build_report(scores_path: str | Path, *, repo_root: Path = REPO_ROOT) -> str:
+def build_report(
+    scores_path: str | Path,
+    *,
+    campaign_path: str | Path | None = None,
+    repo_root: Path = REPO_ROOT,
+) -> str:
     source = Path(scores_path)
     artifacts = load_artifacts(source)
+    campaign = load_campaign_metadata(campaign_path) if campaign_path else None
     score_catalog = _load_catalog(
         repo_root / "autoresearch" / "catalogs" / "scores.json",
         "scores",
@@ -50,6 +56,8 @@ def build_report(scores_path: str | Path, *, repo_root: Path = REPO_ROOT) -> str
         "",
     ]
     if not artifacts:
+        if campaign:
+            lines.extend(_campaign_section(campaign))
         lines.extend(
             [
                 "No score artifacts were found.",
@@ -61,6 +69,8 @@ def build_report(scores_path: str | Path, *, repo_root: Path = REPO_ROOT) -> str
         return "\n".join(lines)
 
     lines.extend(_summary_section(artifacts))
+    if campaign:
+        lines.extend(_campaign_section(campaign))
     lines.extend(_score_vectors_section(artifacts, score_catalog, scenario_catalog))
     lines.extend(_arm_comparison_section(artifacts, score_catalog))
     lines.extend(_scenario_breakdown_section(artifacts, score_catalog))
@@ -103,9 +113,22 @@ def load_artifacts(scores_path: str | Path) -> list[dict[str, Any]]:
     return artifacts
 
 
-def write_report(scores_path: str | Path, out_path: str | Path) -> Path:
+def load_campaign_metadata(path: str | Path) -> dict[str, Any]:
+    metadata_path = Path(path)
+    data = json.loads(metadata_path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ReportError(f"{metadata_path}: campaign metadata must be a JSON object")
+    return data
+
+
+def write_report(
+    scores_path: str | Path,
+    out_path: str | Path,
+    *,
+    campaign_path: str | Path | None = None,
+) -> Path:
     output_path = Path(out_path)
-    report = build_report(scores_path)
+    report = build_report(scores_path, campaign_path=campaign_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(report, encoding="utf-8")
     return output_path
@@ -127,10 +150,15 @@ def main(argv: list[str] | None = None) -> int:
         required=True,
         help="Markdown report path to write.",
     )
+    parser.add_argument(
+        "--campaign",
+        type=Path,
+        help="Optional campaign metadata JSON with manual verdict/status context.",
+    )
     args = parser.parse_args(argv)
 
     try:
-        output_path = write_report(args.scores, args.out)
+        output_path = write_report(args.scores, args.out, campaign_path=args.campaign)
     except (OSError, json.JSONDecodeError, ReportError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
@@ -159,6 +187,53 @@ def _summary_section(artifacts: list[dict[str, Any]]) -> list[str]:
         ),
         "",
     ]
+
+
+def _campaign_section(campaign: dict[str, Any]) -> list[str]:
+    lines = [
+        "## Campaign Verdict",
+        "",
+        "| Field | Value |",
+        "| --- | --- |",
+    ]
+    fields = (
+        "campaign_id",
+        "experiment_id",
+        "verdict",
+        "result_status",
+        "promotion_decision",
+        "candidate_id",
+        "baseline_id",
+    )
+    for field in fields:
+        if field in campaign:
+            lines.append(f"| {_cell(field)} | {_cell(campaign.get(field))} |")
+
+    statuses = campaign.get("statuses")
+    if statuses is not None:
+        lines.append(f"| statuses | {_cell(statuses)} |")
+
+    manual = _dict(campaign.get("manual_inspection"))
+    if manual:
+        lines.append(f"| manual_inspection.status | {_cell(manual.get('status'))} |")
+        lines.append(f"| manual_inspection.by | {_cell(manual.get('by'))} |")
+
+    evidence_refs = _strings(campaign.get("evidence_refs"))
+    if evidence_refs:
+        lines.append(f"| evidence_refs | {_cell(evidence_refs)} |")
+
+    limits = _strings(campaign.get("limits"))
+    if limits:
+        lines.append(f"| limits | {_cell(limits)} |")
+
+    lines.extend(
+        [
+            "",
+            "Campaign verdict metadata is manual/contextual. It does not modify score artifacts or upgrade scorer trust.",
+            "",
+        ]
+    )
+    return lines
 
 
 def _score_vectors_section(
