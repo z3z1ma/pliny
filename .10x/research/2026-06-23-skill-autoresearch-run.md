@@ -195,6 +195,10 @@ Canonical start guard:
   prior `.10x` record graph. The runner now removes inherited `.10x` only from
   control execution workspaces while preserving control-created `.10x` output
   for scoring.
+- Throughput should increase by overlapping independent work: while one live
+  experiment runs, prepare the next hypothesis/candidate/scenario, and delegate
+  bounded read-only scouting or experiment babysitting to subagents when the
+  task has explicit inputs, outputs, and no promotion authority.
 
 ## Execution Log
 
@@ -363,3 +367,7 @@ Canonical start guard:
   operator noted that `no-10x-control` should not inherit a preexisting `.10x`.
   Validation passed with 48 autoresearch tests, `autoresearch/validate.py`, and
   `git diff --check`.
+- 2026-06-23: Opened
+  `.10x/tickets/2026-06-23-increase-autoresearch-throughput.md` and spawned two
+  read-only explorer subagents to propose next hypotheses and minimal
+  throughput improvements.
