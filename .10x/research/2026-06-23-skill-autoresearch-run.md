@@ -304,3 +304,8 @@ Canonical start guard:
   prior candidate met the fully net-positive promotion standard; explicit
   concise blockers were partially subsumed by the already promoted
   upstream-gated blocker rule.
+- 2026-06-23: Ran
+  `EXP-20260623-819-ticket-readiness-gate-scn006-live-micro`. Candidate scored
+  `S003=100` versus current `S003=80` and control `S003=80`; logged status
+  `keep` because manual inspection found a better ticket shape, but control
+  discrimination was weak.

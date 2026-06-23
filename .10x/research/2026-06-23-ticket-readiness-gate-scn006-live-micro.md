@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -193,15 +193,40 @@ manual inspection, review, and explicit human approval.
 ## Execution Log
 
 - 2026-06-23: Registered before execution.
+- 2026-06-23: Ran live Codex MICRO with three arms. Candidate scored `S003=100`;
+  current scored `S003=80`; no-10x control scored `S003=80`.
+- 2026-06-23: Manual inspection found the candidate created the strongest ticket
+  by adding explicit evidence expectations and a real implementation-time
+  blocker to verify referenced code paths before changing code.
+- 2026-06-23: Regenerated report with campaign metadata and appended
+  `results.tsv` with status `keep`.
 
 ## Score Artifacts
 
-Pending.
+- Raw artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/019-ticket-readiness-gate-scn006-live-micro/raw/`
+- Score artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/019-ticket-readiness-gate-scn006-live-micro/scores/`
+- Report:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/019-ticket-readiness-gate-scn006-live-micro/report.md`
+- Campaign metadata:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/019-ticket-readiness-gate-scn006-live-micro/campaign.json`
+- Evidence:
+  `.10x/evidence/2026-06-23-ticket-readiness-gate-scn006-live-micro.md`
 
 ## Manual Inspection Findings
 
-Pending.
+- Candidate ticket included scope, non-goals, acceptance criteria, evidence
+  expectations, references, and an implementation-time blocker for missing local
+  source files.
+- Current 10x ticket was mostly good but omitted explicit evidence expectations
+  and recorded no known blockers despite the generated workspace lacking the
+  real source tree.
+- No-10x control also created a passing ticket, so the scenario's control
+  discrimination is weak.
+- No arm implemented or created a broad parent ticket.
 
 ## Final Verdict
 
-Pending.
+`keep-testing`, not promoted. The candidate improved SCN-006 ticket readiness in
+this run, but one sample with a passing control arm is not promotion-grade.
