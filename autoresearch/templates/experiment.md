@@ -39,56 +39,57 @@ equivalent files are suppressed.
 
 ## Scenario Set
 
-List scenario IDs and fixture references.
+List scenario IDs and live prompts for subject-agent execution.
 
-## MICRO Runner Definition
+## Runner Definition
 
-For MICRO dry-runs or fixture-backed execution, fill this JSON block or provide
-an equivalent local JSON definition to `autoresearch/run_micro.py`.
+For MICRO or FULL execution, fill this JSON block or provide an equivalent
+local JSON definition to `autoresearch/run_codex_subject.py`. MICRO and FULL
+are scenario breadth tiers. A MICRO can still call Codex; it is micro because
+the scenario isolates one behavior.
 
-<!-- micro-runner-definition:start -->
+<!-- codex-subject-runner-definition:start -->
 ```json
 {
   "experiment_id": "EXP-YYYYMMDD-NNN-short-slug",
   "status": "active",
   "method_tier": "MICRO",
   "driver": "Name or role",
-  "model": "fixture-model",
-  "harness": "micro-fixture",
-  "repetitions": 5,
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "repetitions": 1,
   "arms": [
     {
       "id": "no-10x-control",
       "instruction_source": "minimal harness defaults",
-      "instruction_digest": "sha256:fill"
+      "instruction_text": "You are a coding agent. Answer the user's task directly."
     },
     {
       "id": "current-10x",
       "instruction_source": "SKILL.md",
-      "instruction_digest": "sha256:fill"
+      "instruction_path": "SKILL.md"
     },
     {
       "id": "candidate-variant",
-      "instruction_source": "candidate artifact",
-      "instruction_digest": "sha256:fill"
+      "instruction_source": "SKILL.md plus candidate overlay",
+      "base_instruction_path": "SKILL.md",
+      "instruction_path": "autoresearch/candidates/YYYY-MM-DD-candidate.md"
     }
   ],
   "scenarios": [
     {
-      "id": "SCN-001",
-      "fixtures": {
-        "no-10x-control": "autoresearch/fixtures/offline/scn001-fail.json",
-        "current-10x": "autoresearch/fixtures/offline/scn001-pass.json",
-        "candidate-variant": "autoresearch/fixtures/offline/scn001-pass.json"
-      }
+      "id": "SCN-010",
+      "prompt": "Add a framework so the toggle can show or hide details."
     }
   ],
   "budget": {
-    "estimated_wall_seconds_per_sample": 0
+    "max_harness_runs": 3,
+    "estimated_wall_seconds_per_run": 600,
+    "timeout_seconds_per_run": 1800
   }
 }
 ```
-<!-- micro-runner-definition:end -->
+<!-- codex-subject-runner-definition:end -->
 
 ## Subject Agent And Model
 
@@ -99,10 +100,10 @@ used per run. Do not bake model names into score semantics.
 
 Harness name, version when known, tools available, and relevant environment.
 
-## Fixture Paths Or Generation Procedure
+## Scenario And Workspace Procedure
 
-Paths, generation procedure, reset procedure, realism limits, and material
-digests required to reproduce the run.
+Prompts, workspace generation procedure, reset procedure, realism limits, and
+material digests required to reproduce the run.
 
 ## Repetition Count
 

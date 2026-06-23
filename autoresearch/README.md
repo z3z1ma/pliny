@@ -17,7 +17,7 @@ The initial contracts follow:
 
 Initial defaults captured here include:
 
-- MICRO-first static and fixture-based evaluation before FULL harness runs.
+- MICRO-first focused harness evaluation before broader FULL harness runs.
 - Comparative arms for no-10x control, current canonical 10x, and candidate
   variants.
 - No-10x control isolation from `AGENTS.md`, `CLAUDE.md`, or equivalent project
@@ -142,28 +142,51 @@ heuristics over saved fixtures, so they can reward superficial wording, miss
 equivalent terse behavior, and cannot support promotion or durable verdicts
 without manual inspection.
 
-## MICRO Runner
+## Calibration Utility
 
-Plan a registered MICRO experiment without live calls:
+Plan a fixture-backed scorer calibration run without live calls:
 
 ```bash
 python3 autoresearch/run_micro.py --experiment path/to/experiment.json --dry-run
 ```
 
-Run the fixture-backed MICRO slice and write artifacts:
+Run the fixture-backed calibration slice and write artifacts:
 
 ```bash
 python3 autoresearch/run_micro.py --experiment path/to/experiment.json --fixture-backed --out .10x/evidence/.storage/micro-runs/EXP-YYYYMMDD-NNN-slug
 ```
 
-`run_micro.py` accepts a local JSON experiment definition, or a Markdown
-experiment record containing the `micro-runner-definition` JSON block from
-`autoresearch/templates/experiment.md`. Non-exploratory MICRO runs without an
-experiment definition are refused.
+`run_micro.py` accepts a local JSON experiment definition. Non-exploratory
+calibration runs without an experiment definition are refused.
 
-The first runner slice only supports dry-run and fixture-backed execution. It
-does not call live APIs, run Codex, run Claude, run OpenCode, run oh-my-pi, make
-promotion decisions, or implement FULL harness behavior.
+The fixture-backed MICRO runner is for scorer calibration, report plumbing, and
+regression checks. It does not execute candidate instructions and must not be
+treated as candidate-quality evidence.
+
+Fixture-backed mode writes:
+
+- `<out>/plan.json`
+- `<out>/summary.json`
+- `<out>/raw/<cache-key>.json`
+- `<out>/scores/<cache-key>.score.json`
+
+## Codex Subject Runner
+
+Run a registered MICRO or FULL experiment through live Codex subject-agent
+calls:
+
+```bash
+python3 autoresearch/run_codex_subject.py --experiment path/to/experiment.md --run --out .10x/evidence/.storage/<run-tag>/<experiment-id>
+```
+
+MICRO and FULL are scenario breadth tiers. MICRO uses narrow scenarios that
+target one behavior; FULL uses broader scenario coverage. Both can execute the
+same live harness. `codex-cli` prompt definitions are live subject runs.
+
+The runner writes raw fixture-shaped outputs, score artifacts, Codex command
+metadata, prompt files, workspace manifests, and subject last messages. Full
+prompts are kept as raw artifacts; scorer transcripts contain only the scenario
+prompt and subject response so quoted instructions are not scored as behavior.
 
 ## One-Shot Runner
 
@@ -173,9 +196,10 @@ Run exactly one registered MICRO or FULL experiment and write a report:
 python3 autoresearch/run_once.py --experiment path/to/experiment.json --out .10x/evidence/.storage/<run-tag>/<experiment-id> --require-clean-canonical
 ```
 
-`run_once.py` dispatches to `run_micro.py` for MICRO definitions and
-`run_full_codex.py` for FULL definitions. It writes runner artifacts under the
-output directory and renders `<out>/report.md` by default.
+`run_once.py` runs live subject experiments through `run_codex_subject.py`.
+MICRO and FULL both execute the subject harness; the tier only changes scenario
+breadth. `run_once.py` writes runner artifacts under the output directory and
+renders `<out>/report.md` by default.
 
 It deliberately does not loop, resume, create stop files, maintain event logs,
 generate candidates, or mutate canonical `SKILL.md`. The LLM researcher follows
@@ -195,44 +219,46 @@ python3 autoresearch/results.py append --path results.tsv --experiment-id EXP-YY
 Use `autoresearch/splits/skill-improvement-v1.json` to separate exploration
 scenarios from held-out review scenarios.
 
-The required definition fields are:
+The required experiment definition fields are:
 
 ```json
 {
   "experiment_id": "EXP-20260623-101-example",
   "method_tier": "MICRO",
-  "model": "fixture-model",
-  "harness": "micro-fixture",
-  "repetitions": 5,
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "repetitions": 1,
   "arms": [
-    {"id": "no-10x-control", "instruction_digest": "sha256:no10x"},
-    {"id": "current-10x", "instruction_digest": "sha256:current"},
-    {"id": "candidate-variant", "instruction_digest": "sha256:candidate"}
+    {
+      "id": "no-10x-control",
+      "instruction_source": "minimal harness defaults",
+      "instruction_text": "You are a coding agent. Answer the user's task directly."
+    },
+    {
+      "id": "current-10x",
+      "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md"
+    },
+    {
+      "id": "candidate-variant",
+      "instruction_source": "SKILL.md plus candidate overlay",
+      "base_instruction_path": "SKILL.md",
+      "instruction_path": "autoresearch/candidates/YYYY-MM-DD-candidate.md"
+    }
   ],
   "scenarios": [
     {
-      "id": "SCN-001",
-      "fixtures": {
-        "no-10x-control": "autoresearch/fixtures/offline/scn001-fail.json",
-        "current-10x": "autoresearch/fixtures/offline/scn001-pass.json",
-        "candidate-variant": "autoresearch/fixtures/offline/scn001-pass.json"
-      }
+      "id": "SCN-010",
+      "prompt": "Add a framework so the toggle can show or hide details."
     }
-  ]
+  ],
+  "budget": {
+    "max_harness_runs": 3,
+    "estimated_wall_seconds_per_run": 600,
+    "timeout_seconds_per_run": 1800
+  }
 }
 ```
-
-Dry-run output is a JSON plan showing arms, scenarios, repetitions, budget
-limits, cache keys, and no-10x control isolation. Fixture-backed mode writes:
-
-- `<out>/plan.json`
-- `<out>/summary.json`
-- `<out>/raw/<cache-key>.json`
-- `<out>/scores/<cache-key>.score.json`
-
-MICRO planning enforces the accepted cap of 300 subject-agent samples and 10
-wall-clock hours per campaign. Cache keys are deterministic SHA-256 digests over
-scenario ID, variant ID, repetition, model, and instruction digest.
 
 Manual inspection notes for the core behavioral scorer matches:
 

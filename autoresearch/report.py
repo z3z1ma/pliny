@@ -75,7 +75,7 @@ def build_report(
     lines.extend(_arm_comparison_section(artifacts, score_catalog))
     lines.extend(_scenario_breakdown_section(artifacts, score_catalog))
     lines.extend(_quality_floor_section(artifacts, score_catalog))
-    lines.extend(_status_section(artifacts))
+    lines.extend(_status_section(artifacts, campaign_present=campaign is not None))
     lines.extend(_inspection_section(artifacts))
     lines.extend(_cost_section(artifacts))
     lines.extend(
@@ -398,7 +398,11 @@ def _quality_floor_section(
     return lines
 
 
-def _status_section(artifacts: list[dict[str, Any]]) -> list[str]:
+def _status_section(
+    artifacts: list[dict[str, Any]],
+    *,
+    campaign_present: bool = False,
+) -> list[str]:
     rows = []
     for artifact in artifacts:
         data = artifact["data"]
@@ -415,6 +419,14 @@ def _status_section(artifacts: list[dict[str, Any]]) -> list[str]:
 
     lines = ["## Result Statuses", ""]
     if not rows:
+        if campaign_present:
+            lines.extend(
+                [
+                    "No artifact-embedded result statuses were present. See Campaign Verdict above for contextual verdict metadata.",
+                    "",
+                ]
+            )
+            return lines
         lines.extend(
             [
                 "No negative, null, backfire, confounded, or other result statuses were present.",

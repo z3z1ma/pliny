@@ -167,6 +167,7 @@ class ReportTest(unittest.TestCase):
         self.assertIn("null", markdown)
         self.assertIn("confounded", markdown)
         self.assertIn("Campaign verdict metadata is manual/contextual", markdown)
+        self.assertIn("No artifact-embedded result statuses were present", markdown)
         self.assertIn("required-not-done", markdown)
 
     def test_report_without_campaign_metadata_has_no_campaign_section(self):

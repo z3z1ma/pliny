@@ -118,6 +118,9 @@ def score_fixture(path: str | Path) -> dict[str, Any]:
     raw_refs = _string_list(fixture.get("raw_artifact_refs"))
     if str(fixture_path) not in raw_refs:
         raw_refs.append(str(fixture_path))
+    scorer_limits = _scorer_limits(fixture)
+    for score in scores.values():
+        score["limits"] = scorer_limits
 
     return {
         "experiment_id": fixture.get("experiment_id"),
@@ -138,7 +141,7 @@ def score_fixture(path: str | Path) -> dict[str, Any]:
             "human_inspection_seconds": None,
             "resident_context_tokens": fixture.get("resident_context_tokens"),
         },
-        "limits": _scorer_limits(),
+        "limits": scorer_limits,
         "scorer": {
             "id": "offline-coverage-v1",
             "trust_level": TRUST_LEVEL,
@@ -170,7 +173,7 @@ def score_fixture(path: str | Path) -> dict[str, Any]:
                 "Manual inspection is required before using Trust Level 1 "
                 "offline tracer scores for promotion or durable verdicts."
             ),
-            "limits": _scorer_limits(),
+            "limits": scorer_limits,
         },
         "manual_inspection": {
             "status": "required-not-done",
@@ -1033,15 +1036,37 @@ def _has_unresolved_critical_review(fixture: dict[str, Any]) -> bool:
     return has_critical_review and not risk_accepted
 
 
-def _scorer_limits() -> list[str]:
-    return [
+def _scorer_limits(fixture: dict[str, Any] | None = None) -> list[str]:
+    limits = [
         "Trust Level 1 heuristic first-pass scorer only.",
         "Scores saved offline fixtures for SCN-001 through SCN-015 where mapped in SCENARIO_TARGETS.",
         "S007 and S008 are partial transcript or record-shape heuristics that need manual inspection.",
         "S009 is unsupported because baseline-normalized cost telemetry and calibrated core quality are unavailable.",
-        "Does not run live APIs, subject-agent harnesses, or third-party JSON Schema validators.",
         "Keyword and path checks can miss equivalent behavior or reward superficial wording.",
     ]
+    if _is_live_subject_fixture(fixture):
+        limits[1] = "Scores saved live subject-agent artifacts for SCN-001 through SCN-015 where mapped in SCENARIO_TARGETS."
+        limits.insert(
+            4,
+            "The scorer does not invoke live APIs itself; it scores previously captured live harness outputs.",
+        )
+    else:
+        limits.insert(
+            4,
+            "Does not run live APIs, subject-agent harnesses, or third-party JSON Schema validators.",
+        )
+    return limits
+
+
+def _is_live_subject_fixture(fixture: dict[str, Any] | None) -> bool:
+    if not isinstance(fixture, dict):
+        return False
+    if _number(fixture.get("live_codex_calls")):
+        return True
+    raw_metadata = fixture.get("harness_metadata")
+    metadata = raw_metadata if isinstance(raw_metadata, dict) else {}
+    kind = str(metadata.get("kind") or "").lower()
+    return "live" in kind
 
 
 def _has_any(text: str, *needles: str) -> bool:

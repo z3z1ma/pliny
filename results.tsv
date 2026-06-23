@@ -1,0 +1,5 @@
+timestamp	experiment_id	tier	candidate	score_vector	status	description
+2026-06-23T18:30:29Z	EXP-20260623-301-first-calibration-micro	MICRO	baseline-current	S001=100;S007=80	review	baseline current skill micro
+2026-06-23T18:34:18Z	EXP-20260623-801-closure-evidence-matrix-micro	MICRO	candidate-closure-evidence-matrix-v1	S002=85;S004=100;S006=100	mutate	ties current on saturated closure fixtures
+2026-06-23T18:37:38Z	EXP-20260623-802-smallest-executable-unit-gate-micro	MICRO	candidate-smallest-executable-unit-gate-v1	S003=100;S005=100;S007=75	mutate	ties current on ticket minimalism fixtures
+2026-06-23T19:13:49Z	EXP-20260623-803-smallest-executable-unit-live-subject	MICRO	candidate-smallest-executable-unit-gate-v1	S005=80;S007=30	discard	live Codex MICRO underperformed current on S005 and tied S007

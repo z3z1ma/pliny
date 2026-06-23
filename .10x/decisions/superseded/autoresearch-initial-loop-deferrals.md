@@ -1,8 +1,12 @@
-Status: active
+Status: superseded
 Created: 2026-06-23
 Updated: 2026-06-23
 
 # Autoresearch Initial Loop Deferrals
+
+Superseded by:
+
+- `.10x/decisions/autoresearch-subject-harness-policy.md`
 
 ## Context
 

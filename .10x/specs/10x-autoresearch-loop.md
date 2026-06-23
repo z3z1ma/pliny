@@ -1681,8 +1681,11 @@ Invalid design:
 
 The following defaults are accepted for the first implementation pass:
 
-- First harness: transcript/file-output simulator for MICRO behavior, then Codex
-  as the first FULL harness.
+- First calibration utility: transcript/file-output simulator for scorer and
+  report plumbing.
+- First optimization harness: Codex for both MICRO and FULL experiments. MICRO
+  isolates a specific behavior through narrow scenarios; FULL broadens scenario
+  coverage.
 - Control policy: minimal harness defaults with no 10x text, current canonical
   `SKILL.md`, and candidate variant.
 - No-guidance handling: test harnesses that normally load `AGENTS.md`,

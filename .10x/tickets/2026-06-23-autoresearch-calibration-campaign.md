@@ -75,7 +75,7 @@ Excluded:
 - 2026-06-23: Parent verification completed. Evidence and review records support
   AC-001 through AC-006 within the ticket's calibration scope. Status set to
   done; promotion-grade gaps are tracked in follow-up tickets and deferred by
-  `.10x/decisions/autoresearch-initial-loop-deferrals.md`.
+  `.10x/decisions/superseded/autoresearch-initial-loop-deferrals.md`.
 
 ## Blockers
 

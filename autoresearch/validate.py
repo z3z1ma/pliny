@@ -61,7 +61,7 @@ EXPERIMENT_TEMPLATE_SECTIONS = (
     "Scenario Set",
     "Subject Agent And Model",
     "Harness Target",
-    "Fixture Paths Or Generation Procedure",
+    "Scenario And Workspace Procedure",
     "Repetition Count",
     "Prediction",
     "Metrics To Score",

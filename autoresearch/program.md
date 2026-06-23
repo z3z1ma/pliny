@@ -99,11 +99,18 @@ python3 autoresearch/run_once.py --experiment path/to/experiment.json --out .10x
 ```
 
 For MICRO experiments, use scenarios that isolate one behavior or failure mode.
-MICRO is for fast, focused optimization.
+MICRO is for fast, focused optimization. MICRO still executes the subject
+harness; it is narrow because the scenario is narrow, not because it uses
+prewritten pass fixtures.
 
-For FULL experiments, use broader scenario coverage and the Codex FULL
-fixture-smoke harness. FULL is for checking whether a candidate that looked good
-in focused tests still behaves coherently across the broader surface.
+For FULL experiments, use broader scenario coverage in the subject harness.
+FULL is for checking whether a candidate that looked good in focused tests still
+behaves coherently across the broader surface.
+
+Fixture-backed utilities are calibration and regression tools. They can
+validate scorer behavior, report plumbing, and guardrails, but they are not
+candidate-quality evidence because they do not execute candidate instructions.
+FULL experiments must use a real subject harness.
 
 `run_once.py` writes `<out>/canonical_guard.json`. Before considering a result,
 confirm that `unchanged_during_run` is true. If the guard fails, discard the
@@ -117,7 +124,7 @@ After each run, inspect:
 - `<out>/report.md`;
 - `<out>/scores/*.score.json`;
 - raw artifacts under `<out>/raw/`;
-- FULL workspace manifests when applicable.
+- workspace manifests when a harness run creates them.
 
 Record the score vector in `results.tsv`. Use a compact form such as:
 

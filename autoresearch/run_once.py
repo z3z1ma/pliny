@@ -7,10 +7,10 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from autoresearch import canonical_guard, report, run_full_codex, run_micro
+    from autoresearch import canonical_guard, report, run_codex_subject
 except ImportError:  # pragma: no cover - supports direct script execution.
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from autoresearch import canonical_guard, report, run_full_codex, run_micro
+    from autoresearch import canonical_guard, report, run_codex_subject
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -29,10 +29,13 @@ def load_definition(path: str | Path) -> dict[str, Any]:
         return data
 
     errors = []
-    for loader in (run_micro.load_definition, run_full_codex.load_definition):
+    for loader in (run_codex_subject.load_definition,):
         try:
             return loader(definition_path)
-        except (run_micro.ExperimentError, run_full_codex.ExperimentError, json.JSONDecodeError) as exc:
+        except (
+            run_codex_subject.ExperimentError,
+            json.JSONDecodeError,
+        ) as exc:
             errors.append(str(exc))
     raise RunOnceError("could not load experiment definition: " + " | ".join(errors))
 
@@ -41,14 +44,15 @@ def run_once(
     definition: dict[str, Any],
     out_dir: str | Path,
     *,
-    tier: str = "auto",
     write_report: bool = True,
     campaign_path: str | Path | None = None,
     guard_canonical: bool = True,
     require_clean_canonical: bool = False,
     repo_root: Path = REPO_ROOT,
 ) -> dict[str, Any]:
-    selected_tier = _selected_tier(definition, tier)
+    method_tier = definition.get("method_tier")
+    if not isinstance(method_tier, str):
+        raise RunOnceError("experiment definition missing method_tier")
     output_root = Path(out_dir)
     output_root.mkdir(parents=True, exist_ok=True)
     guard_before = None
@@ -59,14 +63,11 @@ def run_once(
         guard_before = canonical_guard.snapshot(repo_root)
         guard_path = output_root / "canonical_guard.json"
 
-    if selected_tier == "MICRO":
-        runner_summary = run_micro.run_fixture_backed(definition, output_root, repo_root=repo_root)
-        runner = "autoresearch/run_micro.py"
-    elif selected_tier == "FULL":
-        runner_summary = run_full_codex.run_fixture_smoke(definition, output_root, repo_root=repo_root)
-        runner = "autoresearch/run_full_codex.py"
+    if _uses_live_codex_subject(definition):
+        runner_summary = run_codex_subject.run_live(definition, output_root, repo_root=repo_root)
+        runner = "autoresearch/run_codex_subject.py"
     else:
-        raise RunOnceError(f"unsupported method_tier: {selected_tier}")
+        raise RunOnceError("unsupported experiment definition")
 
     report_path = None
     if write_report:
@@ -89,7 +90,7 @@ def run_once(
 
     return {
         "experiment_id": runner_summary.get("experiment_id", definition.get("experiment_id")),
-        "method_tier": selected_tier,
+        "method_tier": method_tier,
         "runner": runner,
         "mode": runner_summary.get("mode"),
         "out_dir": str(output_root),
@@ -102,11 +103,7 @@ def run_once(
         "samples_written": runner_summary.get("samples_written"),
         "promotion_decision": "not-performed",
         "loop_controller": "LLM reasoning engine; this command runs exactly one iteration",
-        "limits": [
-            "run_once.py does not loop, resume, generate candidates, or mutate canonical SKILL.md.",
-            "canonical_guard.json records SKILL.md and autoresearch/program.md pre/post hashes when guard_canonical is enabled.",
-            "Fixture-backed scores remain limited by scorer trust and scenario coverage.",
-        ],
+        "limits": _limits_for_runner(runner_summary),
     }
 
 
@@ -116,7 +113,6 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--experiment", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--tier", choices=("auto", "MICRO", "FULL"), default="auto")
     parser.add_argument("--campaign", type=Path)
     parser.add_argument("--no-report", action="store_true")
     parser.add_argument("--no-canonical-guard", action="store_true")
@@ -135,7 +131,6 @@ def main(argv: list[str] | None = None) -> int:
         result = run_once(
             definition,
             args.out,
-            tier=args.tier,
             write_report=not args.no_report,
             campaign_path=args.campaign,
             guard_canonical=not args.no_canonical_guard,
@@ -147,8 +142,7 @@ def main(argv: list[str] | None = None) -> int:
         RunOnceError,
         canonical_guard.CanonicalGuardError,
         report.ReportError,
-        run_micro.ExperimentError,
-        run_full_codex.ExperimentError,
+        run_codex_subject.ExperimentError,
     ) as exc:
         print(str(exc), file=sys.stderr)
         return 2
@@ -156,13 +150,28 @@ def main(argv: list[str] | None = None) -> int:
     return 0
 
 
-def _selected_tier(definition: dict[str, Any], tier: str) -> str:
-    if tier != "auto":
-        return tier
-    method_tier = definition.get("method_tier")
-    if not isinstance(method_tier, str):
-        raise RunOnceError("experiment definition missing method_tier")
-    return method_tier
+def _uses_live_codex_subject(definition: dict[str, Any]) -> bool:
+    if str(definition.get("harness", "")).lower() != "codex-cli":
+        return False
+    for scenario in definition.get("scenarios", []):
+        if isinstance(scenario, dict) and scenario.get("fixtures"):
+            return False
+    return True
+
+
+def _limits_for_runner(runner_summary: dict[str, Any]) -> list[str]:
+    limits = [
+        "run_once.py does not loop, resume, generate candidates, or mutate canonical SKILL.md.",
+        "canonical_guard.json records SKILL.md and autoresearch/program.md pre/post hashes when guard_canonical is enabled.",
+    ]
+    if runner_summary.get("mode") == "live":
+        limits.extend(
+            [
+                "Live subject outputs are candidate-quality evidence, but scores remain Trust Level 1 offline scoring until manually inspected.",
+                "Codex system context and authenticated home state are outside complete runner control; inspect workspace manifests and command artifacts.",
+            ]
+        )
+    return limits
 
 
 if __name__ == "__main__":

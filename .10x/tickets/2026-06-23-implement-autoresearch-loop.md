@@ -2,7 +2,7 @@ Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 Parent: none
-Depends-On: .10x/specs/10x-autoresearch-loop.md, .10x/decisions/autoresearch-initial-implementation-defaults.md, .10x/decisions/autoresearch-initial-loop-deferrals.md
+Depends-On: .10x/specs/10x-autoresearch-loop.md, .10x/decisions/autoresearch-initial-implementation-defaults.md, .10x/decisions/superseded/autoresearch-initial-loop-deferrals.md
 
 # Implement 10x Autoresearch Loop
 
@@ -105,7 +105,7 @@ Excluded:
   `.10x/reviews/2026-06-23-first-autoresearch-calibration-campaign.md`. Parent
   ticket status set to done. Promotion-grade requirements not satisfied by the
   first implementation are explicitly deferred by
-  `.10x/decisions/autoresearch-initial-loop-deferrals.md` and tracked in
+  `.10x/decisions/superseded/autoresearch-initial-loop-deferrals.md` and tracked in
   follow-up tickets with `Parent: none`.
 
 ## Blockers

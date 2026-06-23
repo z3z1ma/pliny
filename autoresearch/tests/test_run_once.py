@@ -13,64 +13,109 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 class RunOnceTest(unittest.TestCase):
-    def test_micro_run_writes_scores_and_report(self):
+    def test_live_subject_micro_run_uses_candidate_executing_runner(self):
         with tempfile.TemporaryDirectory() as tmp:
-            result = run_once.run_once(_micro_definition(), tmp, repo_root=REPO_ROOT)
+            with mock.patch("autoresearch.run_once.run_codex_subject.run_live") as run_live:
+                run_live.return_value = {
+                    "experiment_id": "EXP-20260623-703-run-once-live",
+                    "mode": "live",
+                    "samples_written": 3,
+                    "plan_path": str(Path(tmp) / "plan.json"),
+                    "raw_output_dir": str(Path(tmp) / "raw"),
+                    "score_artifact_dir": str(Path(tmp) / "scores"),
+                    "live_codex_calls": 3,
+                }
+                with mock.patch("autoresearch.run_once.report.write_report"):
+                    result = run_once.run_once(
+                        _live_subject_definition(),
+                        tmp,
+                        repo_root=REPO_ROOT,
+                    )
 
-            root = Path(tmp)
             self.assertEqual("MICRO", result["method_tier"])
-            self.assertEqual("autoresearch/run_micro.py", result["runner"])
+            self.assertEqual("autoresearch/run_codex_subject.py", result["runner"])
             self.assertEqual(3, result["samples_written"])
-            self.assertTrue((root / "summary.json").exists())
-            self.assertTrue((root / "plan.json").exists())
-            self.assertTrue((root / "report.md").exists())
-            self.assertTrue((root / "canonical_guard.json").exists())
-            self.assertEqual(3, len(list((root / "scores").glob("*.score.json"))))
-            self.assertIn("exactly one iteration", result["loop_controller"])
-            self.assertIn("canonical_guard.json", result["canonical_guard_path"])
+            self.assertTrue(any("Live subject outputs" in item for item in result["limits"]))
+            self.assertFalse(any("Fixture-backed" in item for item in result["limits"]))
 
-    def test_full_run_writes_scores_workspaces_and_report(self):
+    def test_live_subject_full_run_uses_candidate_executing_runner(self):
         with tempfile.TemporaryDirectory() as tmp:
-            result = run_once.run_once(_full_definition(), tmp, repo_root=REPO_ROOT)
+            with mock.patch("autoresearch.run_once.run_codex_subject.run_live") as run_live:
+                run_live.return_value = {
+                    "experiment_id": "EXP-20260623-704-run-once-live-full",
+                    "mode": "live",
+                    "samples_written": 3,
+                    "plan_path": str(Path(tmp) / "plan.json"),
+                    "raw_output_dir": str(Path(tmp) / "raw"),
+                    "score_artifact_dir": str(Path(tmp) / "scores"),
+                    "live_codex_calls": 3,
+                }
+                with mock.patch("autoresearch.run_once.report.write_report"):
+                    result = run_once.run_once(
+                        _live_subject_definition(method_tier="FULL"),
+                        tmp,
+                        repo_root=REPO_ROOT,
+                    )
 
-            root = Path(tmp)
             self.assertEqual("FULL", result["method_tier"])
-            self.assertEqual("autoresearch/run_full_codex.py", result["runner"])
+            self.assertEqual("autoresearch/run_codex_subject.py", result["runner"])
             self.assertEqual(3, result["samples_written"])
-            self.assertTrue((root / "workspaces").exists())
-            self.assertTrue((root / "report.md").exists())
-            self.assertEqual(3, len(list((root / "scores").glob("*.score.json"))))
 
     def test_unsupported_tier_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
-            definition = _micro_definition()
-            definition["method_tier"] = "LONG"
-
             with self.assertRaises(run_once.RunOnceError):
-                run_once.run_once(definition, tmp, repo_root=REPO_ROOT)
+                run_once.run_once(_unsupported_definition(), tmp, repo_root=REPO_ROOT)
 
     def test_cli_writes_json_summary(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             experiment = root / "experiment.json"
             out_dir = root / "out"
-            experiment.write_text(json.dumps(_micro_definition()), encoding="utf-8")
+            experiment.write_text(json.dumps(_live_subject_definition()), encoding="utf-8")
             stdout = io.StringIO()
 
-            with contextlib.redirect_stdout(stdout):
-                exit_code = run_once.main(["--experiment", str(experiment), "--out", str(out_dir)])
+            with mock.patch("autoresearch.run_once.run_codex_subject.run_live") as run_live:
+                run_live.return_value = {
+                    "experiment_id": "EXP-20260623-703-run-once-live",
+                    "mode": "live",
+                    "samples_written": 3,
+                    "plan_path": str(out_dir / "plan.json"),
+                    "raw_output_dir": str(out_dir / "raw"),
+                    "score_artifact_dir": str(out_dir / "scores"),
+                    "live_codex_calls": 3,
+                }
+                with mock.patch("autoresearch.run_once.report.write_report"):
+                    with contextlib.redirect_stdout(stdout):
+                        exit_code = run_once.main(
+                            ["--experiment", str(experiment), "--out", str(out_dir)]
+                        )
 
             self.assertEqual(0, exit_code)
             result = json.loads(stdout.getvalue())
             self.assertEqual("MICRO", result["method_tier"])
-            self.assertTrue((out_dir / "report.md").exists())
+
+    def test_load_definition_accepts_live_subject_markdown_block(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "experiment.md"
+            path.write_text(
+                "<!-- codex-subject-runner-definition:start -->\n"
+                "```json\n"
+                + json.dumps(_live_subject_definition())
+                + "\n```\n"
+                "<!-- codex-subject-runner-definition:end -->\n",
+                encoding="utf-8",
+            )
+
+            definition = run_once.load_definition(path)
+
+        self.assertEqual("codex-cli", definition["harness"])
 
     def test_cli_rejects_campaign_without_report(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             experiment = root / "experiment.json"
             campaign = root / "campaign.json"
-            experiment.write_text(json.dumps(_micro_definition()), encoding="utf-8")
+            experiment.write_text(json.dumps(_live_subject_definition()), encoding="utf-8")
             campaign.write_text("{}", encoding="utf-8")
             stderr = io.StringIO()
 
@@ -100,19 +145,19 @@ class RunOnceTest(unittest.TestCase):
             def mutate(_definition, out_dir, repo_root):
                 (repo_root / "SKILL.md").write_text("changed\n", encoding="utf-8")
                 return {
-                    "experiment_id": "EXP-20260623-701-run-once-micro",
-                    "mode": "fixture-backed",
+                    "experiment_id": "EXP-20260623-703-run-once-live",
+                    "mode": "live",
                     "samples_written": 0,
                     "plan_path": str(Path(out_dir) / "plan.json"),
                     "raw_output_dir": str(Path(out_dir) / "raw"),
                     "score_artifact_dir": str(Path(out_dir) / "scores"),
                 }
 
-            with mock.patch("autoresearch.run_once.run_micro.run_fixture_backed", side_effect=mutate):
+            with mock.patch("autoresearch.run_once.run_codex_subject.run_live", side_effect=mutate):
                 with mock.patch("autoresearch.run_once.report.write_report"):
                     with self.assertRaises(run_once.RunOnceError):
                         run_once.run_once(
-                            _micro_definition(),
+                            _live_subject_definition(),
                             root / "out",
                             repo_root=root,
                         )
@@ -137,62 +182,38 @@ class RunOnceTest(unittest.TestCase):
             )
             (root / "SKILL.md").write_text("dirty\n", encoding="utf-8")
 
-            with mock.patch("autoresearch.run_once.run_micro.run_fixture_backed"):
+            with mock.patch("autoresearch.run_once.run_codex_subject.run_live"):
                 with self.assertRaises(run_once.canonical_guard.CanonicalGuardError):
                     run_once.run_once(
-                        _micro_definition(),
+                        _live_subject_definition(),
                         root / "out",
                         repo_root=root,
                         require_clean_canonical=True,
                     )
 
 
-def _micro_definition():
-    return {
-        "experiment_id": "EXP-20260623-701-run-once-micro",
+def _live_subject_definition(*, method_tier="MICRO"):
+    definition = {
+        "experiment_id": "EXP-20260623-703-run-once-live",
         "status": "active",
-        "method_tier": "MICRO",
+        "method_tier": method_tier,
         "driver": "unit-test",
-        "model": "fixture-model",
-        "harness": "micro-fixture",
-        "repetitions": 1,
-        "arms": _arms(),
-        "scenarios": [
-            {
-                "id": "SCN-001",
-                "fixtures": {
-                    "no-10x-control": "autoresearch/fixtures/offline/scn001-fail.json",
-                    "current-10x": "autoresearch/fixtures/offline/scn001-pass.json",
-                    "candidate-variant": "autoresearch/fixtures/offline/scn001-pass.json",
-                },
-            }
-        ],
-        "budget": {"estimated_wall_seconds_per_sample": 0},
-    }
-
-
-def _full_definition():
-    return {
-        "experiment_id": "EXP-20260623-702-run-once-full",
-        "status": "active",
-        "method_tier": "FULL",
-        "driver": "unit-test",
-        "model": "fixture-codex-model",
+        "model": "codex-cli-default",
         "harness": "codex-cli",
         "repetitions": 1,
         "arms": _arms(),
-        "scenarios": [
-            {
-                "id": "SCN-008",
-                "fixtures": {
-                    "no-10x-control": "autoresearch/fixtures/offline/scn008-pass.json",
-                    "current-10x": "autoresearch/fixtures/offline/scn008-pass.json",
-                    "candidate-variant": "autoresearch/fixtures/offline/scn008-pass.json",
-                },
-            }
-        ],
+        "scenarios": [{"id": "SCN-010", "prompt": "Add a framework."}],
         "budget": {"estimated_wall_seconds_per_run": 0},
     }
+    definition["experiment_id"] = "EXP-20260623-703-run-once-live"
+    return definition
+
+
+def _unsupported_definition():
+    definition = _live_subject_definition()
+    definition["method_tier"] = "LONG"
+    definition["harness"] = "unsupported-harness"
+    return definition
 
 
 def _arms():

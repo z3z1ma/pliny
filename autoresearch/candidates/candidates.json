@@ -20,6 +20,26 @@
       "target_scores": ["S006", "S007", "S008"],
       "target_scenarios": ["SCN-009", "SCN-012", "SCN-008"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-closure-evidence-matrix-v1",
+      "path": "autoresearch/candidates/2026-06-23-closure-evidence-matrix.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S006", "S007", "S004"],
+      "target_scenarios": ["SCN-009", "SCN-012", "SCN-008"],
+      "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-smallest-executable-unit-gate-v1",
+      "path": "autoresearch/candidates/2026-06-23-smallest-executable-unit-gate.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S003", "S005", "S007"],
+      "target_scenarios": ["SCN-006", "SCN-010", "SCN-011"],
+      "promotion": "manual-only"
     }
   ]
 }
