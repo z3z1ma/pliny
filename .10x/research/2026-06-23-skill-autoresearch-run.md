@@ -115,6 +115,11 @@ Canonical start guard:
   enough. The next mutation should require the single question to explicitly
   name the missing behavior, scope, or acceptance criterion; otherwise current
   10x already performs better on S001.
+- Operator challenged the one-question direction as potentially harmful because
+  complex software ambiguity may require a long, rigorous interview. Fresh
+  `SKILL.md` review agreed: the optimization target should be information gain
+  and ambiguity resolution completeness, not question count. Research recorded
+  at `.10x/research/2026-06-23-skill-fresh-hypothesis-review.md`.
 
 ## Execution Log
 
@@ -183,3 +188,8 @@ Canonical start guard:
   `EXP-20260623-805-one-decisive-question-live-micro-rerun`. Candidate scored
   `S001=65;S007=60`; current scored `S001=100;S007=55`; no-10x scored
   `S001=55;S007=10`. Logged candidate as `mutate`.
+- 2026-06-23: Interrupted
+  `EXP-20260623-806-one-decisive-question-v2-live-micro` before scoreable
+  output after the operator challenged the hypothesis direction. Marked v2 as
+  cancelled. Fresh review concluded the next candidate should target
+  information-gain interrogation, not fewer questions.
