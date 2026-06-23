@@ -81,6 +81,16 @@ Canonical start guard:
   researcher can answer each arm's actual question after reading its transcript.
   Evidence:
   `.10x/evidence/2026-06-23-dynamic-subject-continuations.md`.
+- `candidate-one-decisive-question-v1` improved shaping style in the first live
+  SCN-001 run, but that run exposed a runner measurement bug: Codex
+  `command_execution` events were not captured as `tool_invocations`. The bug
+  was fixed and recorded at
+  `.10x/evidence/2026-06-23-codex-tool-event-capture.md`.
+- Clean rerun
+  `EXP-20260623-805-one-decisive-question-live-micro-rerun` scored the
+  candidate at `S001=65;S007=60` versus current 10x at `S001=100;S007=55`.
+  Evidence:
+  `.10x/evidence/2026-06-23-one-decisive-question-live-micro-rerun.md`.
 
 ## Conclusions
 
@@ -101,6 +111,10 @@ Canonical start guard:
   prewritten follow-up scripts: the researcher should run a first turn, inspect
   raw transcripts, then register at most one next-turn continuation per
   experiment using arm-specific answers when needed.
+- The one-decisive-question idea has promise for brevity but v1 is not strong
+  enough. The next mutation should require the single question to explicitly
+  name the missing behavior, scope, or acceptance criterion; otherwise current
+  10x already performs better on S001.
 
 ## Execution Log
 
@@ -159,3 +173,13 @@ Canonical start guard:
   `python3 -m unittest discover -s autoresearch/tests` ran 44 tests with `OK`;
   `python3 autoresearch/validate.py` reported `autoresearch contracts valid`;
   `python3 autoresearch/canonical_guard.py` recorded a canonical snapshot.
+- 2026-06-23: Added `candidate-one-decisive-question-v1` targeting S001/S007
+  question quality and ran
+  `EXP-20260623-804-one-decisive-question-live-micro`. The run showed a
+  promising transcript but was marked review/confounded after raw Codex JSONL
+  inspection found command execution events were not captured as tool
+  invocations.
+- 2026-06-23: Fixed Codex tool event capture and reran the candidate as
+  `EXP-20260623-805-one-decisive-question-live-micro-rerun`. Candidate scored
+  `S001=65;S007=60`; current scored `S001=100;S007=55`; no-10x scored
+  `S001=55;S007=10`. Logged candidate as `mutate`.
