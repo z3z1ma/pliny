@@ -78,3 +78,7 @@ held-out checks, review, and explicit human promotion. It must not directly edit
 for further testing. Candidate scored `S001=100;S002=60;S007=80` versus current
 `S001=100;S002=50;S007=60`; manual inspection favored candidate retrieval
 clarity. Not promoted.
+
+`EXP-20260623-827-records-first-retrieval-no-citation-scn003-live-micro`
+repeated the same positive vector without explicit prompt wording to cite record
+paths. Still not promoted; next confidence step is fresh-record retrieval.

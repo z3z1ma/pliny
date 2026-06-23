@@ -400,3 +400,9 @@ Canonical start guard:
   `EXP-20260623-827-records-first-retrieval-no-citation-scn003-live-micro` as a
   prompt-ablation follow-up to test whether records-first path citation comes
   from the candidate overlay rather than explicit prompt wording.
+- 2026-06-23: Ran
+  `EXP-20260623-827-records-first-retrieval-no-citation-scn003-live-micro`.
+  Candidate repeated the positive retrieval vector
+  `S001=100;S002=60;S007=80` versus current `S001=100;S002=50;S007=60` without
+  explicit citation wording in the prompt. Logged status `keep`; next required
+  confidence step is a fresh-record retrieval test.

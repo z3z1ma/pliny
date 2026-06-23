@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -193,15 +193,44 @@ narrow canonical promotion review.
 ## Execution Log
 
 - 2026-06-23: Registered before execution.
+- 2026-06-23: Ran live. Score vector:
+  `candidate:S001=100,S002=60,S007=80 current:S001=100,S002=50,S007=60 control:S001=40,S002=50,S007=20`.
+- 2026-06-23: Canonical guard reported `unchanged_during_run: true`.
+- 2026-06-23: Manual inspection confirmed candidate named both source records
+  without explicit citation wording in the prompt. Current answered from
+  `.10x` records but was less explicit about the source set.
+- 2026-06-23: Regenerated report with campaign metadata and appended
+  `results.tsv` with status `keep`.
 
 ## Score Artifacts
 
-Pending.
+- report:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/027-records-first-retrieval-no-citation-scn003-live-micro/report.md`
+- campaign:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/027-records-first-retrieval-no-citation-scn003-live-micro/campaign.json`
+- canonical guard:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/027-records-first-retrieval-no-citation-scn003-live-micro/canonical_guard.json`
+- candidate score:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/027-records-first-retrieval-no-citation-scn003-live-micro/scores/sha256-f566bcafd2dcad32e57f3c792eaabea61c622cc38a925a69ef8bf9310fb089b9.score.json`
+- current score:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/027-records-first-retrieval-no-citation-scn003-live-micro/scores/sha256-472f27ca7f5308146b73a48fa1fb57fb37dda70ada4741f422ef1e69ced2585f.score.json`
+- control score:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/027-records-first-retrieval-no-citation-scn003-live-micro/scores/sha256-542f6d9b0afefddf52fc4bbac1954905661409f20cbb03624cacf9d53d0edfdd.score.json`
 
 ## Manual Inspection Findings
 
-Pending.
+- Candidate named both records it used:
+  `.10x/specs/enterprise-billing-dashboard-sales-validation.md` and
+  `.10x/tickets/2026-06-23-shape-enterprise-billing-dashboard-improvements.md`.
+- Candidate preserved blockers and did not ask the user to restate context.
+- Current answered from `.10x` records and linked the next ticket but did not
+  make the source record set as explicit.
+- No-10x control answered from a non-`.10x` ad hoc record and again moved toward
+  implementation-ticket scope.
+- No new duplicate records were created by current or candidate.
 
 ## Final Verdict
 
-Pending.
+Keep testing, not promoted. The prompt ablation supports that records-first path
+citation came from the candidate overlay rather than explicit prompt wording.
+Fresh-record retrieval is still needed before a promotion review.
