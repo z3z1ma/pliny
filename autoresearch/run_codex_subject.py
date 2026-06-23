@@ -878,6 +878,15 @@ def _tool_invocations(events: list[dict[str, Any]]) -> list[dict[str, Any]]:
         event_type = str(event.get("type", ""))
         if "tool" in event_type or "function" in event_type:
             invocations.append(event)
+            continue
+        item = event.get("item")
+        if not isinstance(item, dict):
+            continue
+        if event_type == "item.completed" and item.get("type") in {
+            "command_execution",
+            "file_change",
+        }:
+            invocations.append(event)
     return invocations
 
 

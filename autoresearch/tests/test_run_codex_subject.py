@@ -64,6 +64,11 @@ class CodexSubjectRunnerTest(unittest.TestCase):
                 self.assertNotIn("Non-scoring sentinel instruction", transcript_text)
                 self.assertIn("Add a framework", transcript_text)
                 self.assertIn("smaller native solution", transcript_text)
+                self.assertEqual(1, len(raw["tool_invocations"]))
+                self.assertEqual(
+                    "command_execution",
+                    raw["tool_invocations"][0]["item"]["type"],
+                )
                 artifact = offline_score.score_fixture(raw_path)
                 self.assertEqual([], offline_score.validate_score_artifact(artifact))
                 limits = artifact["limits"]
@@ -211,7 +216,11 @@ def _fake_run(argv, stdout, stderr, text, timeout=None):
     )
     return mock.Mock(
         returncode=0,
-        stdout='{"type":"turn.completed","usage":{"input_tokens":10,"output_tokens":20}}\n',
+        stdout=(
+            '{"type":"item.completed","item":{"type":"command_execution",'
+            '"command":"rg --files","status":"completed","exit_code":0}}\n'
+            '{"type":"turn.completed","usage":{"input_tokens":10,"output_tokens":20}}\n'
+        ),
         stderr="",
     )
 
