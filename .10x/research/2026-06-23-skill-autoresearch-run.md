@@ -334,3 +334,9 @@ Canonical start guard:
   `EXP-20260623-822-record-economy-threshold-scn005-live-micro` to test whether
   a record-economy threshold reduces unnecessary `.10x` record spread without
   losing durable context.
+- 2026-06-23: Ran
+  `EXP-20260623-822-record-economy-threshold-scn005-live-micro`. All arms
+  created exactly one knowledge record and scored
+  `S002=65;S005=80`, so the run was a null/weak-discriminator result. The next
+  record-economy test needs a harder prompt that tempts decision/spec/ticket
+  spread.

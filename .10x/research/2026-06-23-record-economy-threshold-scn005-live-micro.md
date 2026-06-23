@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -187,15 +187,45 @@ evidence, manual inspection, review, and explicit human approval.
 ## Execution Log
 
 - 2026-06-23: Registered before execution.
+- 2026-06-23: Live run completed with score vector
+  `candidate:S002=65,S005=80 current:S002=65,S005=80 control:S002=65,S005=80`.
+- 2026-06-23: Generated report at
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/022-record-economy-threshold-scn005-live-micro/report.md`
+  and canonical guard at
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/022-record-economy-threshold-scn005-live-micro/canonical_guard.json`.
+- 2026-06-23: Manual inspection found all three arms created exactly one
+  knowledge record. The prompt was too easy to discriminate the candidate.
 
 ## Score Artifacts
 
-Pending.
+- no-10x-control:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/022-record-economy-threshold-scn005-live-micro/scores/sha256-e915269a3cc257dd698af9bce08996b454e71e170861b027de619bccc95bdbc4.score.json`
+  scored `S002=65`, `S005=80`.
+- current-10x:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/022-record-economy-threshold-scn005-live-micro/scores/sha256-04ff5a823c11ca560f2f26b4c196e0bc85c444a2fa1f0567be271161bdc3a28d.score.json`
+  scored `S002=65`, `S005=80`.
+- candidate-variant:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/022-record-economy-threshold-scn005-live-micro/scores/sha256-70611509ed503507e0029db22c28a9a4132200ee951499431151a189a6cd9d05.score.json`
+  scored `S002=65`, `S005=80`.
 
 ## Manual Inspection Findings
 
-Pending.
+- no-10x-control created one knowledge record:
+  `.10x/knowledge/billing-dashboard-csv-exports.md`.
+- current-10x created one knowledge record:
+  `.10x/knowledge/billing-dashboard-csv-export-convention.md`.
+- candidate-variant created one knowledge record:
+  `.10x/knowledge/billing-dashboard-csv-export-convention.md`.
+- Candidate wording was slightly more precise about applicability limits, but
+  current and control both avoided record spread. This run does not test the
+  candidate's threshold under meaningful pressure.
+- The S002 floor failures are scorer-conservative: manual inspection found the
+  record count and record type directionally appropriate for the prompt.
 
 ## Final Verdict
 
-Pending.
+Null and weak discriminator. Do not promote
+`candidate-record-economy-threshold-v1` from this run. The candidate may still
+be worth testing against a harder SCN-005 prompt that tempts the agent to create
+decision/spec/ticket/evidence spread, but this prompt only proves the simple
+case is already handled by current 10x and even by the no-10x control.
