@@ -313,3 +313,9 @@ Canonical start guard:
   `EXP-20260623-820-ticket-readiness-gate-scn006-handoff-live-micro` as a
   stronger SCN-006 discriminator that asks for safe handoff without explicitly
   saying "Create the 10x ticket."
+- 2026-06-23: Marked
+  `EXP-20260623-820-ticket-readiness-gate-scn006-handoff-live-micro`
+  confounded after manual inspection found the candidate arm reused a current
+  arm ticket from a sibling generated workspace. Opened
+  `.10x/tickets/done/2026-06-23-isolate-live-subject-workspaces.md` before any
+  further promotion decision from this scenario.

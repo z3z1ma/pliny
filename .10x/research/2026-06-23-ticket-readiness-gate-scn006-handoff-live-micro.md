@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -119,9 +119,14 @@ injection per arm.
 
 ## Scenario And Workspace Procedure
 
-The runner creates an isolated generated workspace for each arm, suppresses
-project-level instruction files, injects the scenario prompt, and captures raw
+The runner intended to create a generated workspace for each arm, suppress
+project-level instruction files, inject the scenario prompt, and capture raw
 transcripts, file outputs, command metadata, and score artifacts.
+
+Manual inspection later found the generated arm workspaces were siblings under
+the same artifact parent during live execution. That allowed a later arm to
+discover earlier arm output by traversing `..`. This run is therefore
+confounded for candidate-versus-current uplift.
 
 ## Repetition Count
 
@@ -188,19 +193,51 @@ evidence, manual inspection, review, and explicit human approval.
 - Current `SKILL.md` may already be optimal.
 - One sample cannot distinguish stochastic handoff quality from candidate
   effect.
+- The candidate arm read a sibling current-arm generated workspace and reused
+  its ticket as prior art, so its ticket quality cannot be attributed only to
+  `candidate-ticket-readiness-gate-v1`.
 
 ## Execution Log
 
 - 2026-06-23: Registered before execution.
+- 2026-06-23: Live run completed with score vector
+  `candidate:S003=100 current:S003=100 control:S003=10`.
+- 2026-06-23: Manual inspection found the candidate ticket's progress notes
+  stated it searched nearby generated workspaces and found a prior matching
+  ticket at
+  `../sha256-9c6faade8508609e9e1681b1aa51a27db254c904d70b56f29af1a56a18c424e5/.10x/tickets/2026-06-23-enterprise-billing-csv-export.md`.
+  The run was marked confounded.
+- 2026-06-23: Opened
+  `.10x/tickets/done/2026-06-23-isolate-live-subject-workspaces.md` to fix the
+  harness before reusing this scenario as promotion evidence.
 
 ## Score Artifacts
 
-Pending.
+- no-10x-control:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/020-ticket-readiness-gate-scn006-handoff-live-micro/scores/sha256-902eb6fa2f15820c2c3e84c5ac632b4cadc133c31d8c3589c406762e89ebafec.score.json`
+  scored `S003=10`.
+- current-10x:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/020-ticket-readiness-gate-scn006-handoff-live-micro/scores/sha256-9c6faade8508609e9e1681b1aa51a27db254c904d70b56f29af1a56a18c424e5.score.json`
+  scored `S003=100`.
+- candidate-variant:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/020-ticket-readiness-gate-scn006-handoff-live-micro/scores/sha256-f53f6e8e54955bf51ec6aa5c9e5cb9ee433da0d5c3179b0d9a55d7010b6b8878.score.json`
+  scored `S003=100`.
 
 ## Manual Inspection Findings
 
-Pending.
+- no-10x-control wrote a prose handoff artifact and did not create a 10x ticket,
+  so the `S003=10` floor is directionally correct.
+- current-10x created a bounded `.10x/tickets/` ticket with scope, non-goals,
+  acceptance criteria, test expectations, evidence expectations, and an
+  implementation-time verification blocker.
+- candidate-variant created a similarly strong ticket, but its own notes state
+  it found and used the current arm's ticket in a nearby sibling generated
+  workspace. Candidate output is therefore contaminated.
 
 ## Final Verdict
 
-Pending.
+Confounded. This run is useful evidence that SCN-006 handoff prompts separate
+10x from no-10x behavior, but it is not valid evidence that
+`candidate-ticket-readiness-gate-v1` improves over current canonical `SKILL.md`.
+Do not promote or reject the candidate from this run. Re-run after fixing live
+subject workspace isolation.

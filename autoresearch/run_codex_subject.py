@@ -4,8 +4,10 @@ import argparse
 import copy
 import hashlib
 import json
+import shutil
 import subprocess
 import sys
+import tempfile
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -262,134 +264,146 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
-    workspace = Path(sample["planned_workspace_dir"])
+    archive_workspace = Path(sample["planned_workspace_dir"])
     raw_path = Path(sample["planned_raw_output_path"])
     score_path = Path(sample["planned_score_artifact_path"])
     command_path = Path(sample["planned_command_path"])
     stdout_path = Path(sample["planned_stdout_jsonl_path"])
     stderr_path = Path(sample["planned_stderr_path"])
     prompt_path = Path(sample["prompt_path"])
-    manifest_path = Path(sample["planned_workspace_manifest_path"])
+    archive_manifest_path = Path(sample["planned_workspace_manifest_path"])
 
-    workspace.mkdir(parents=True, exist_ok=True)
     raw_path.parent.mkdir(parents=True, exist_ok=True)
     score_path.parent.mkdir(parents=True, exist_ok=True)
     command_path.parent.mkdir(parents=True, exist_ok=True)
     prompt_path.parent.mkdir(parents=True, exist_ok=True)
 
-    pre_present = _present_suppressed(workspace)
-    prior_transcript = list(sample.get("prior_transcript", []))
-    transcript: list[dict[str, str]] = list(prior_transcript)
-    command_outputs = []
-    raw_refs = [sample["prior_raw_path"]] if sample.get("prior_raw_path") else []
-    all_events: list[dict[str, Any]] = []
-    usage = {"input_tokens": 0, "output_tokens": 0}
-    wall_seconds = 0.0
-    timed_out = False
-    exit_code = 0
+    with tempfile.TemporaryDirectory(prefix="10x-autoresearch-") as temp_root:
+        workspace = Path(temp_root) / "workspace"
+        if archive_workspace.exists():
+            shutil.copytree(archive_workspace, workspace)
+        else:
+            workspace.mkdir(parents=True)
 
-    for planned_turn in sample["planned_turns"]:
-        prompt_path = Path(planned_turn["prompt_path"])
-        command_path = Path(planned_turn["command_path"])
-        stdout_path = Path(planned_turn["stdout_jsonl_path"])
-        stderr_path = Path(planned_turn["stderr_path"])
-        last_message_path = Path(planned_turn["last_message_path"])
-        prompt = _turn_prompt(
-            sample,
-            planned_turn["user_message"],
-            transcript,
-        )
-        argv = _planned_codex_argv(workspace, prompt, last_message_path)
+        pre_present = _present_suppressed(workspace)
+        prior_transcript = list(sample.get("prior_transcript", []))
+        transcript: list[dict[str, str]] = list(prior_transcript)
+        command_outputs = []
+        raw_refs = [sample["prior_raw_path"]] if sample.get("prior_raw_path") else []
+        all_events: list[dict[str, Any]] = []
+        usage = {"input_tokens": 0, "output_tokens": 0}
+        wall_seconds = 0.0
+        timed_out = False
+        exit_code = 0
 
-        prompt_path.parent.mkdir(parents=True, exist_ok=True)
-        command_path.parent.mkdir(parents=True, exist_ok=True)
-        prompt_path.write_text(prompt, encoding="utf-8")
-
-        started = _now()
-        start = time.monotonic()
-        turn_timed_out = False
-        try:
-            completed = subprocess.run(
-                argv,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                timeout=float(sample["timeout_seconds"]),
+        for planned_turn in sample["planned_turns"]:
+            prompt_path = Path(planned_turn["prompt_path"])
+            command_path = Path(planned_turn["command_path"])
+            stdout_path = Path(planned_turn["stdout_jsonl_path"])
+            stderr_path = Path(planned_turn["stderr_path"])
+            last_message_path = Path(planned_turn["last_message_path"])
+            prompt = _turn_prompt(
+                sample,
+                planned_turn["user_message"],
+                transcript,
             )
-        except subprocess.TimeoutExpired as exc:
-            turn_timed_out = True
-            completed = SimpleNamespace(
-                returncode=124,
-                stdout=_coerce_timeout_output(exc.stdout),
-                stderr=(
-                    _coerce_timeout_output(exc.stderr)
-                    + f"\nTimed out after {sample['timeout_seconds']} seconds."
-                ).strip(),
-            )
-        turn_wall_seconds = time.monotonic() - start
-        ended = _now()
+            argv = _planned_codex_argv(workspace, prompt, last_message_path)
 
-        stdout_path.write_text(completed.stdout, encoding="utf-8")
-        stderr_path.write_text(completed.stderr, encoding="utf-8")
-        last_message = last_message_path.read_text(encoding="utf-8") if last_message_path.exists() else ""
-        events = _jsonl_events(completed.stdout)
-        turn_usage = _usage(events)
-        all_events.extend(events)
-        usage["input_tokens"] += int(turn_usage.get("input_tokens") or 0)
-        usage["output_tokens"] += int(turn_usage.get("output_tokens") or 0)
-        wall_seconds += turn_wall_seconds
-        timed_out = timed_out or turn_timed_out
-        exit_code = completed.returncode
+            prompt_path.parent.mkdir(parents=True, exist_ok=True)
+            command_path.parent.mkdir(parents=True, exist_ok=True)
+            prompt_path.write_text(prompt, encoding="utf-8")
 
-        command = {
-            "schema_version": 1,
-            "start_timestamp_utc": started,
-            "end_timestamp_utc": ended,
-            "turn_index": planned_turn["turn_index"],
-            "argv": _public_argv(argv, prompt_path),
-            "exit_code": completed.returncode,
-            "stdout_jsonl_path": str(stdout_path),
-            "stderr_path": str(stderr_path),
-            "last_message_path": str(last_message_path),
-            "prompt_path": str(prompt_path),
-            "usage": turn_usage,
-            "timed_out": turn_timed_out,
-            "timeout_seconds": sample["timeout_seconds"],
-            "control_isolation": sample["control_isolation"],
-        }
-        command_path.write_text(json.dumps(command, indent=2) + "\n", encoding="utf-8")
+            started = _now()
+            start = time.monotonic()
+            turn_timed_out = False
+            try:
+                completed = subprocess.run(
+                    argv,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    text=True,
+                    timeout=float(sample["timeout_seconds"]),
+                )
+            except subprocess.TimeoutExpired as exc:
+                turn_timed_out = True
+                completed = SimpleNamespace(
+                    returncode=124,
+                    stdout=_coerce_timeout_output(exc.stdout),
+                    stderr=(
+                        _coerce_timeout_output(exc.stderr)
+                        + f"\nTimed out after {sample['timeout_seconds']} seconds."
+                    ).strip(),
+                )
+            turn_wall_seconds = time.monotonic() - start
+            ended = _now()
 
-        transcript.append({"role": "user", "content": planned_turn["user_message"]})
-        transcript.append({"role": "assistant", "content": last_message})
-        command_outputs.append(
-            {
-                "command": " ".join(argv[:8]) + " ...",
+            stdout_path.write_text(completed.stdout, encoding="utf-8")
+            stderr_path.write_text(completed.stderr, encoding="utf-8")
+            last_message = last_message_path.read_text(encoding="utf-8") if last_message_path.exists() else ""
+            events = _jsonl_events(completed.stdout)
+            turn_usage = _usage(events)
+            all_events.extend(events)
+            usage["input_tokens"] += int(turn_usage.get("input_tokens") or 0)
+            usage["output_tokens"] += int(turn_usage.get("output_tokens") or 0)
+            wall_seconds += turn_wall_seconds
+            timed_out = timed_out or turn_timed_out
+            exit_code = completed.returncode
+
+            command = {
+                "schema_version": 1,
+                "start_timestamp_utc": started,
+                "end_timestamp_utc": ended,
+                "turn_index": planned_turn["turn_index"],
+                "argv": _public_argv(argv, prompt_path),
                 "exit_code": completed.returncode,
-                "output": _command_output(completed.stderr, stdout_path),
+                "stdout_jsonl_path": str(stdout_path),
+                "stderr_path": str(stderr_path),
+                "last_message_path": str(last_message_path),
+                "prompt_path": str(prompt_path),
+                "usage": turn_usage,
+                "timed_out": turn_timed_out,
+                "timeout_seconds": sample["timeout_seconds"],
+                "control_isolation": sample["control_isolation"],
             }
-        )
-        raw_refs.extend(
-            [
-                str(prompt_path),
-                str(command_path),
-                str(stdout_path),
-                str(stderr_path),
-                str(last_message_path),
-            ]
-        )
-        if completed.returncode != 0:
-            break
+            command_path.write_text(json.dumps(command, indent=2) + "\n", encoding="utf-8")
 
-    post_present = _present_suppressed(workspace)
-    file_outputs = _workspace_file_outputs(workspace, manifest_path)
-    tool_invocations = _tool_invocations(all_events)
+            transcript.append({"role": "user", "content": planned_turn["user_message"]})
+            transcript.append({"role": "assistant", "content": last_message})
+            command_outputs.append(
+                {
+                    "command": " ".join(argv[:8]) + " ...",
+                    "exit_code": completed.returncode,
+                    "output": _command_output(completed.stderr, stdout_path),
+                }
+            )
+            raw_refs.extend(
+                [
+                    str(prompt_path),
+                    str(command_path),
+                    str(stdout_path),
+                    str(stderr_path),
+                    str(last_message_path),
+                ]
+            )
+            if completed.returncode != 0:
+                break
+
+        post_present = _present_suppressed(workspace)
+        run_manifest_path = workspace / archive_manifest_path.name
+        file_outputs = _workspace_file_outputs(workspace, run_manifest_path)
+        tool_invocations = _tool_invocations(all_events)
+
+        archive_workspace.parent.mkdir(parents=True, exist_ok=True)
+        if archive_workspace.exists():
+            shutil.rmtree(archive_workspace)
+        shutil.copytree(workspace, archive_workspace)
 
     manifest = {
         "schema_version": 1,
         "experiment_id": sample["experiment_id"],
         "scenario_id": sample["scenario_id"],
         "variant_id": sample["variant_id"],
-        "workspace": str(workspace),
+        "workspace": str(archive_workspace),
         "suppressed_instruction_files": SUPPRESSED_INSTRUCTION_FILES,
         "pre_run_present_suppressed_instruction_files": pre_present,
         "post_run_present_suppressed_instruction_files": post_present,
@@ -402,7 +416,7 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
         "planned_new_turns": len(sample["planned_turns"]),
         "control_isolation": sample["control_isolation"],
     }
-    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    archive_manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
     raw_fixture = {
         "schema_version": 1,
@@ -417,7 +431,7 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
         "tool_invocations": tool_invocations,
         "file_outputs": file_outputs,
         "command_outputs": command_outputs,
-        "raw_artifact_refs": raw_refs + [str(manifest_path), str(raw_path)],
+        "raw_artifact_refs": raw_refs + [str(archive_manifest_path), str(raw_path)],
         "wall_seconds": wall_seconds,
         "input_tokens": usage.get("input_tokens"),
         "output_tokens": usage.get("output_tokens"),
@@ -429,7 +443,7 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
             "instruction_source": sample["instruction_source"],
             "instruction_path": sample.get("instruction_path"),
             "base_instruction_path": sample.get("base_instruction_path"),
-            "workspace_manifest_path": str(manifest_path),
+            "workspace_manifest_path": str(archive_manifest_path),
             "prior_raw_path": sample.get("prior_raw_path"),
             "prior_turn_count": len(prior_transcript) // 2,
             "turns": [
@@ -465,7 +479,7 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
             "usage": usage,
             "timed_out": timed_out,
             "timeout_seconds": sample["timeout_seconds"],
-            "workspace_manifest_path": str(manifest_path),
+            "workspace_manifest_path": str(archive_manifest_path),
             "turns": sample["planned_turns"],
             "raw_output_path": str(raw_path),
             "score_artifact_path": str(score_path),
@@ -782,7 +796,7 @@ def _control_isolation() -> dict[str, Any]:
     return {
         "suppress_instruction_files": SUPPRESSED_INSTRUCTION_FILES,
         "codex_args": ["--disable", "plugins", "--ignore-user-config"],
-        "workspace_strategy": "Run from generated workspaces that omit project instruction files and skill directories.",
+        "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
         "instruction_strategy": "Pass current and candidate instructions explicitly in the prompt; no-10x receives minimal instructions.",
         "limitation": "Codex system context and authenticated home remain outside this runner's control.",
     }

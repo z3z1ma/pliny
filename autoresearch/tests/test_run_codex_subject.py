@@ -86,6 +86,45 @@ class CodexSubjectRunnerTest(unittest.TestCase):
             self.assertEqual([], no_10x_manifest["pre_run_present_suppressed_instruction_files"])
             self.assertEqual([], no_10x_manifest["post_run_present_suppressed_instruction_files"])
 
+    def test_live_run_hides_sibling_arm_workspaces_during_execution(self):
+        visible_sibling_markers = []
+
+        def fake_run(argv, stdout, stderr, text, timeout=None):
+            workspace = Path(argv[argv.index("--cd") + 1])
+            visible_sibling_markers.append(
+                [
+                    str(path)
+                    for path in workspace.parent.rglob("arm-marker.txt")
+                    if workspace not in path.parents
+                ]
+            )
+            (workspace / "arm-marker.txt").write_text("marker", encoding="utf-8")
+            last_message = Path(argv[argv.index("--output-last-message") + 1])
+            last_message.parent.mkdir(parents=True, exist_ok=True)
+            last_message.write_text("Done.", encoding="utf-8")
+            return mock.Mock(
+                returncode=0,
+                stdout='{"type":"turn.completed","usage":{"input_tokens":1,"output_tokens":1}}\n',
+                stderr="",
+            )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with mock.patch("subprocess.run", side_effect=fake_run):
+                run_codex_subject.run_live(
+                    _definition(),
+                    Path(tmp),
+                    repo_root=REPO_ROOT,
+                )
+
+            manifests = sorted((Path(tmp) / "workspaces").glob("*/workspace-manifest.json"))
+            self.assertEqual(3, len(manifests))
+            for manifest_path in manifests:
+                workspace = Path(json.loads(manifest_path.read_text(encoding="utf-8"))["workspace"])
+                self.assertEqual(Path(tmp) / "workspaces", workspace.parent)
+                self.assertTrue((workspace / "arm-marker.txt").exists())
+
+        self.assertEqual([[], [], []], visible_sibling_markers)
+
     def test_missing_default_arm_is_rejected(self):
         definition = _definition()
         definition["arms"] = definition["arms"][:2]
