@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -155,15 +155,32 @@ Inspect combined transcripts, file outputs, workspace manifests, and report.
 ## Execution Log
 
 - 2026-06-23: Registered before execution.
+- 2026-06-23: Ran live continuation with three arms using `prior_raw_paths` and
+  arm-specific dynamic answers. Candidate scored `S001=100;S007=80`, current
+  scored `S001=100;S007=35`, and no-10x control scored `S001=40;S007=20`.
+- 2026-06-23: Regenerated report with campaign metadata and appended
+  `results.tsv` with status `keep`.
 
 ## Score Artifacts
 
-Pending.
+- Raw artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/017-upstream-gated-blockers-scn001-continuation-live-micro/raw/`
+- Score artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/017-upstream-gated-blockers-scn001-continuation-live-micro/scores/`
+- Report:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/017-upstream-gated-blockers-scn001-continuation-live-micro/report.md`
+- Evidence:
+  `.10x/evidence/2026-06-23-upstream-gated-blockers-scn001-continuation-live-micro.md`
 
 ## Manual Inspection Findings
 
-Pending.
+- Candidate preserved implementation blocking and produced proper `.10x`
+  shaping records.
+- Candidate explicitly named remaining blockers instead of treating product
+  shaping as implementation authorization.
+- No-10x control wrote an ad hoc non-`.10x` spec/ticket artifact.
 
 ## Final Verdict
 
-Pending.
+`keep-testing`, not promoted. Candidate won the dynamic continuation and remains
+the leading candidate pending held-out checks.

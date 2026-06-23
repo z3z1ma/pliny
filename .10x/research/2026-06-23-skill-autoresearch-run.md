@@ -118,6 +118,10 @@ Canonical start guard:
   both target first-turn MICROs: SCN-001 candidate `S001=100;S007=90` versus
   current `S001=100;S007=30`; SCN-002 candidate `S001=100;S007=75` versus
   current `S001=100;S007=55`.
+- Upstream-gated continuation
+  `EXP-20260623-816-upstream-gated-blockers-scn001-continuation-live-micro`
+  confirmed the candidate keeps dynamic-answer behavior: candidate
+  `S001=100;S007=80` versus current `S001=100;S007=35`.
 
 ## Conclusions
 
@@ -166,6 +170,9 @@ Canonical start guard:
 - Upstream gating appears to solve the SCN-001 brevity/tradeoff gap without
   regressing SCN-002. Next step: run held-out SCN-003/SCN-006 or a repeated
   target split before considering canonical `SKILL.md` edits.
+- Upstream-gated dynamic continuation passed. Next held-out check should ask the
+  subject to answer from the records created in that continuation rather than
+  asking the user to restate context.
 
 ## Execution Log
 
@@ -261,3 +268,7 @@ Canonical start guard:
   `EXP-20260623-814-upstream-gated-blockers-scn001-live-micro` plus
   `EXP-20260623-815-upstream-gated-blockers-scn002-live-micro` in parallel.
   Logged both rows as `keep`.
+- 2026-06-23: Ran
+  `EXP-20260623-816-upstream-gated-blockers-scn001-continuation-live-micro`
+  as a true continuation from upstream-gated raw artifacts. Logged result as
+  `keep`.
