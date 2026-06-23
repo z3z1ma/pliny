@@ -60,6 +60,16 @@
       "target_scores": ["S001", "S007"],
       "target_scenarios": ["SCN-001", "SCN-002", "SCN-003"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-information-gain-interrogation-v1",
+      "path": "autoresearch/candidates/2026-06-23-information-gain-interrogation.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S001", "S007"],
+      "target_scenarios": ["SCN-001", "SCN-002", "SCN-003", "SCN-006"],
+      "promotion": "manual-only"
     }
   ]
 }
