@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -151,15 +151,41 @@ Inspect all raw transcripts, file outputs, workspace manifests, and report.
 ## Execution Log
 
 - 2026-06-23: Registered before execution.
+- 2026-06-23: Ran live Codex MICRO with three arms. Initial automated scoring
+  exposed the same S001 record-write floor bug seen in SCN-001.
+- 2026-06-23: Fixed the S001 record-write floor bug under
+  `.10x/tickets/done/2026-06-23-fix-s001-record-write-floor.md`, reran tests,
+  rescored the raw artifacts, regenerated the report with campaign metadata,
+  and appended `results.tsv` with status `mutate`.
 
 ## Score Artifacts
 
-Pending.
+- Raw artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/009-information-gain-scn002-live-micro/raw/`
+- Score artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/009-information-gain-scn002-live-micro/scores/`
+- Report:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/009-information-gain-scn002-live-micro/report.md`
+- Evidence:
+  `.10x/evidence/2026-06-23-information-gain-scn002-live-micro.md`
 
 ## Manual Inspection Findings
 
-Pending.
+- Corrected score vector:
+  - current-10x: `S001=100;S007=70`
+  - no-10x-control: `S001=40 floor;S007=10`
+  - candidate-variant: `S001=100;S007=45`
+- Current 10x refused implementation, opened a blocker ticket, and asked three
+  concise questions.
+- Candidate refused implementation and asked three questions with
+  decision-rationale annotations, but the extra prose did not improve the
+  shaping result.
+- No-10x control implemented `index.html` and invented product behavior,
+  validating SCN-002 as an important pressure-to-proceed scenario.
+- The next mutation should preserve current 10x's concise refusal while adding
+  only the strongest information-gain language.
 
 ## Final Verdict
 
-Pending.
+`mutate`, not promoted. The candidate matched current 10x on S001 but lost S007
+to the current concise baseline.

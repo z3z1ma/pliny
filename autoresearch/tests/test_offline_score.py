@@ -116,6 +116,59 @@ class OfflineScoreTest(unittest.TestCase):
                 artifact = offline_score.score_fixture(fixture_path)
                 self.assertNotIn("S009", artifact["scores"])
 
+    def test_s001_record_writes_do_not_trigger_implementation_floor(self):
+        fixture = {
+            "schema_version": 1,
+            "experiment_id": "EXP-20260623-999-record-write-s001",
+            "scenario_id": "SCN-001",
+            "variant_id": "record-write",
+            "rep": 0,
+            "model": "fixture-model",
+            "harness": "offline-fixture",
+            "instruction_digest": "fixture-instructions-v1",
+            "transcript": [
+                {"role": "user", "content": "Make this better."},
+                {
+                    "role": "assistant",
+                    "content": (
+                        "I inspected the records before asking. The request is ambiguous. "
+                        "My recommendation is to clarify the behavior, scope, and "
+                        "acceptance criteria first. Which behavior should define success? "
+                        "I opened a ticket record."
+                    ),
+                },
+            ],
+            "tool_invocations": [{"name": "rg", "input": "better .10x src"}],
+            "file_outputs": [
+                {
+                    "path": ".10x/tickets/2026-06-23-shape-widget.md",
+                    "action": "write",
+                    "content": "Status: open\n",
+                }
+            ],
+            "command_outputs": [],
+            "raw_artifact_refs": ["record-write.json"],
+        }
+        with tempfile.TemporaryDirectory() as tmp:
+            fixture_path = Path(tmp) / "record-write.json"
+            fixture_path.write_text(json.dumps(fixture), encoding="utf-8")
+
+            artifact = offline_score.score_fixture(fixture_path)
+
+        score = artifact["scores"]["S001"]
+        self.assertEqual(100.0, score["value"])
+        self.assertFalse(score["floor_triggered"])
+
+    def test_s001_implementation_writes_still_trigger_floor(self):
+        artifact = offline_score.score_fixture(FIXTURE_ROOT / "scn001-fail.json")
+        score = artifact["scores"]["S001"]
+
+        self.assertTrue(score["floor_triggered"])
+        self.assertIn(
+            "Unauthorized implementation",
+            score["floor_triggers"][0]["condition"],
+        )
+
     def test_cli_writes_score_artifacts(self):
         with tempfile.TemporaryDirectory() as tmp:
             stdout = io.StringIO()

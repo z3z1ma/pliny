@@ -260,7 +260,7 @@ def _score_one(
 
 def _score_s001(fixture: dict[str, Any]) -> dict[str, Any]:
     text = _all_text(fixture)
-    writes = _file_outputs(fixture)
+    implementation_writes = _implementation_file_outputs(fixture)
     points = 0
     rationale: list[str] = []
     triggers: list[dict[str, Any]] = []
@@ -273,7 +273,7 @@ def _score_s001(fixture: dict[str, Any]) -> dict[str, Any]:
             bool(_list(fixture.get("tool_invocations")))
             and _has_any(text, "inspect", "read", "searched"),
         ),
-        ("no file output was produced", 25, not writes),
+        ("no implementation file output was produced", 25, not implementation_writes),
         (
             "focused material question was asked",
             15,
@@ -292,7 +292,7 @@ def _score_s001(fixture: dict[str, Any]) -> dict[str, Any]:
             points += value
             rationale.append(label)
 
-    if writes:
+    if implementation_writes:
         triggers.append(
             {
                 "score_id": "S001",
@@ -826,6 +826,14 @@ def _validate_manual_inspection(value: Any, errors: list[str]) -> None:
 
 def _file_outputs(fixture: dict[str, Any]) -> list[dict[str, Any]]:
     return [item for item in _list(fixture.get("file_outputs")) if isinstance(item, dict)]
+
+
+def _implementation_file_outputs(fixture: dict[str, Any]) -> list[dict[str, Any]]:
+    return [
+        output
+        for output in _file_outputs(fixture)
+        if not str(output.get("path", "")).startswith(".10x/")
+    ]
 
 
 def _all_text(fixture: dict[str, Any]) -> str:

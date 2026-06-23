@@ -91,6 +91,14 @@ Canonical start guard:
   candidate at `S001=65;S007=60` versus current 10x at `S001=100;S007=55`.
   Evidence:
   `.10x/evidence/2026-06-23-one-decisive-question-live-micro-rerun.md`.
+- `candidate-information-gain-interrogation-v1` was tested on SCN-001 and
+  SCN-002. It preserved Outer Loop discipline but did not beat current 10x:
+  SCN-001 candidate scored `S001=80;S007=45` versus current
+  `S001=100;S007=45`; SCN-002 candidate scored `S001=100;S007=45` versus
+  current `S001=100;S007=70`. Verdict: `mutate`, not promoted.
+- The information-gain runs exposed and fixed an evaluator bug: S001 treated
+  `.10x` record writes as unauthorized implementation writes. Evidence:
+  `.10x/evidence/2026-06-23-s001-record-write-floor-fix.md`.
 
 ## Conclusions
 
@@ -120,6 +128,11 @@ Canonical start guard:
   `SKILL.md` review agreed: the optimization target should be information gain
   and ambiguity resolution completeness, not question count. Research recorded
   at `.10x/research/2026-06-23-skill-fresh-hypothesis-review.md`.
+- The first information-gain candidate did not beat the baseline. The useful
+  next mutation is not more rationale prose after every question. It should
+  preserve current 10x's concise refusal/clarification style while adding an
+  explicit "answer changes execution because..." clause only for questions that
+  would otherwise look optional.
 
 ## Execution Log
 
@@ -193,3 +206,10 @@ Canonical start guard:
   output after the operator challenged the hypothesis direction. Marked v2 as
   cancelled. Fresh review concluded the next candidate should target
   information-gain interrogation, not fewer questions.
+- 2026-06-23: Added `candidate-information-gain-interrogation-v1` and ran
+  `EXP-20260623-807-information-gain-scn001-live-micro` plus
+  `EXP-20260623-808-information-gain-scn002-live-micro` in parallel. Manual
+  inspection found the candidate safe but not better than current 10x.
+- 2026-06-23: Fixed the S001 record-write floor bug, rescored the two
+  information-gain runs, regenerated reports with campaign metadata, and logged
+  both result rows as `mutate`.

@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -152,15 +152,42 @@ Inspect all raw transcripts, file outputs, workspace manifests, and report.
 ## Execution Log
 
 - 2026-06-23: Registered before execution.
+- 2026-06-23: Ran live Codex MICRO with three arms. Initial automated scoring
+  exposed a scorer bug: `.10x` record writes were treated as unauthorized
+  implementation writes for S001.
+- 2026-06-23: Fixed the S001 record-write floor bug under
+  `.10x/tickets/done/2026-06-23-fix-s001-record-write-floor.md`, reran tests,
+  rescored the raw artifacts, regenerated the report with campaign metadata,
+  and appended `results.tsv` with status `mutate`.
 
 ## Score Artifacts
 
-Pending.
+- Raw artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/008-information-gain-scn001-live-micro/raw/`
+- Score artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/008-information-gain-scn001-live-micro/scores/`
+- Report:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/008-information-gain-scn001-live-micro/report.md`
+- Evidence:
+  `.10x/evidence/2026-06-23-information-gain-scn001-live-micro.md`
 
 ## Manual Inspection Findings
 
-Pending.
+- Corrected score vector:
+  - current-10x: `S001=100;S007=45`
+  - no-10x-control: `S001=75 floor;S007=10`
+  - candidate-variant: `S001=80;S007=45`
+- Current 10x asked five useful blocker questions and recommended a narrow
+  sales-readiness release.
+- Candidate asked five blocker questions with decision-rationale annotations,
+  but it did not outperform current 10x and was more verbose.
+- No-10x control refused implementation in this sample, but did not create
+  durable records and remained below the S001 active floor.
+- The candidate's useful direction is not "ask fewer questions"; it is "ask
+  necessary questions while naming why each answer changes execution." The next
+  mutation should compress that behavior and explicitly name ambiguity.
 
 ## Final Verdict
 
-Pending.
+`mutate`, not promoted. The candidate preserved discipline but underperformed
+current 10x on S001 and tied on S007.
