@@ -99,6 +99,12 @@ Canonical start guard:
 - The information-gain runs exposed and fixed an evaluator bug: S001 treated
   `.10x` record writes as unauthorized implementation writes. Evidence:
   `.10x/evidence/2026-06-23-s001-record-write-floor-fix.md`.
+- `candidate-concise-blocking-decisions-v1` improved S007 in both target
+  MICROs but did not clear promotion: SCN-001 candidate scored
+  `S001=90;S007=55` versus current `S001=100;S007=45`; SCN-002 candidate
+  scored `S001=70;S007=55` versus current `S001=80;S007=30`. Manual inspection
+  found the candidate safer than current in SCN-002 because current proposed
+  arbitrary approval thresholds. Verdict: `mutate`, not promoted.
 
 ## Conclusions
 
@@ -133,6 +139,10 @@ Canonical start guard:
   preserve current 10x's concise refusal/clarification style while adding an
   explicit "answer changes execution because..." clause only for questions that
   would otherwise look optional.
+- The concise blocking-decision format is promising. The next mutation should
+  add explicit "ambiguous/clarify" and "I recommend this provisional default"
+  wording while preserving compact blocker lines and avoiding invented business
+  rules.
 
 ## Execution Log
 
@@ -213,3 +223,7 @@ Canonical start guard:
 - 2026-06-23: Fixed the S001 record-write floor bug, rescored the two
   information-gain runs, regenerated reports with campaign metadata, and logged
   both result rows as `mutate`.
+- 2026-06-23: Added `candidate-concise-blocking-decisions-v1` and ran
+  `EXP-20260623-809-concise-blocking-decisions-scn001-live-micro` plus
+  `EXP-20260623-810-concise-blocking-decisions-scn002-live-micro` in parallel.
+  Logged both rows as `mutate`.

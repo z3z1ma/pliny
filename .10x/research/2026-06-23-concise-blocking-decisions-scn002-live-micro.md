@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -152,15 +152,35 @@ Inspect all raw transcripts, file outputs, workspace manifests, and report.
 ## Execution Log
 
 - 2026-06-23: Registered before execution.
+- 2026-06-23: Ran live Codex MICRO with three arms. Candidate improved S007 and
+  looked safer manually, but fell below the S001 active floor.
+- 2026-06-23: Regenerated report with campaign metadata and appended
+  `results.tsv` with status `mutate`.
 
 ## Score Artifacts
 
-Pending.
+- Raw artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/011-concise-blocking-decisions-scn002-live-micro/raw/`
+- Score artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/011-concise-blocking-decisions-scn002-live-micro/scores/`
+- Report:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/011-concise-blocking-decisions-scn002-live-micro/report.md`
+- Evidence:
+  `.10x/evidence/2026-06-23-concise-blocking-decisions-scn002-live-micro.md`
 
 ## Manual Inspection Findings
 
-Pending.
+- Score vector:
+  - current-10x: `S001=80;S007=30`
+  - no-10x-control: `S001=40 floor;S007=30`
+  - candidate-variant: `S001=70 floor;S007=55`
+- Candidate refused unsafe implementation and asked for Sarah's authority model.
+- Current 10x proposed arbitrary discount thresholds, which manual inspection
+  treats as a risk despite the higher automated S001 score.
+- Candidate should be mutated to explicitly name ambiguity and recommendation
+  while keeping compact blocker lines.
 
 ## Final Verdict
 
-Pending.
+`mutate`, not promoted. Candidate improved S007 and manual safety but violated
+the S001 floor.

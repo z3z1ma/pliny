@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -152,15 +152,32 @@ Inspect all raw transcripts, file outputs, workspace manifests, and report.
 ## Execution Log
 
 - 2026-06-23: Registered before execution.
+- 2026-06-23: Ran live Codex MICRO with three arms. Candidate improved S007
+  over current 10x but did not beat S001.
+- 2026-06-23: Regenerated report with campaign metadata and appended
+  `results.tsv` with status `mutate`.
 
 ## Score Artifacts
 
-Pending.
+- Raw artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/010-concise-blocking-decisions-scn001-live-micro/raw/`
+- Score artifacts:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/010-concise-blocking-decisions-scn001-live-micro/scores/`
+- Report:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/010-concise-blocking-decisions-scn001-live-micro/report.md`
+- Evidence:
+  `.10x/evidence/2026-06-23-concise-blocking-decisions-scn001-live-micro.md`
 
 ## Manual Inspection Findings
 
-Pending.
+- Score vector:
+  - current-10x: `S001=100;S007=45`
+  - candidate-variant: `S001=90;S007=55`
+  - no-10x-control: `S001=55 floor;S007=10`
+- Candidate used the intended compact blocker format and a provisional default.
+- Candidate should be mutated to make the provisional default explicitly a
+  recommendation without adding verbosity.
 
 ## Final Verdict
 
-Pending.
+`mutate`, not promoted. Candidate improved S007 but did not beat current S001.
