@@ -330,3 +330,7 @@ Canonical start guard:
   found no sibling-workspace contamination. Candidate passed, but current 10x
   matched it and produced an extra evidence record, so
   `candidate-ticket-readiness-gate-v1` is not promoted.
+- 2026-06-23: Added `candidate-record-economy-threshold-v1` and registered
+  `EXP-20260623-822-record-economy-threshold-scn005-live-micro` to test whether
+  a record-economy threshold reduces unnecessary `.10x` record spread without
+  losing durable context.

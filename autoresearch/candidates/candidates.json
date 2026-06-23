@@ -110,6 +110,16 @@
       "target_scores": ["S003", "S007"],
       "target_scenarios": ["SCN-006", "SCN-007", "SCN-001", "SCN-002", "SCN-010"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-record-economy-threshold-v1",
+      "path": "autoresearch/candidates/2026-06-23-record-economy-threshold.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S002", "S005"],
+      "target_scenarios": ["SCN-005", "SCN-004", "SCN-008", "SCN-009"],
+      "promotion": "manual-only"
     }
   ]
 }
