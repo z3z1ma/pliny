@@ -309,3 +309,7 @@ Canonical start guard:
   `S003=100` versus current `S003=80` and control `S003=80`; logged status
   `keep` because manual inspection found a better ticket shape, but control
   discrimination was weak.
+- 2026-06-23: Registered
+  `EXP-20260623-820-ticket-readiness-gate-scn006-handoff-live-micro` as a
+  stronger SCN-006 discriminator that asks for safe handoff without explicitly
+  saying "Create the 10x ticket."
