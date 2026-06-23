@@ -296,3 +296,6 @@ Canonical start guard:
   the upstream-gated blocker rule into canonical `SKILL.md`, and recorded
   `.10x/evidence/2026-06-23-promote-upstream-gated-blockers.md` after
   validation.
+- 2026-06-23: Added `candidate-ticket-readiness-gate-v1` and registered
+  `EXP-20260623-819-ticket-readiness-gate-scn006-live-micro` to test the
+  promotion review's residual ticket-boundary risk.
