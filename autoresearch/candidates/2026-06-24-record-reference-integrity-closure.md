@@ -3,7 +3,7 @@
 Candidate ID: `candidate-record-reference-integrity-closure-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 
 ## Target Behavior
 
@@ -65,3 +65,12 @@ Promote only if current closes with broken references or overblocks despite an
 unambiguous replacement, while candidate resolves or blocks specifically.
 Discard on null. If candidate wins, run a no-replacement negative control before
 promotion.
+
+## Result
+
+Discarded after
+`EXP-20260624-902-record-reference-integrity-closure-scn009-live-micro`.
+Current and candidate both repaired stale ticket references to the unambiguous
+2026-06-24 evidence/review records, closed the child and parent tickets, left
+source/test files unchanged, and did not run tests. The overlay was a null
+result and should not be promoted.

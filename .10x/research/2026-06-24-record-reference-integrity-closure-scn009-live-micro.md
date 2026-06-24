@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -191,3 +191,30 @@ promotion.
 ## Execution Log
 
 - 2026-06-24: Registered from Gauss scout recommendation.
+- 2026-06-24: Ran live MICRO with no-10x-control, current-10x, and
+  candidate-variant arms. Automated score vector:
+  candidate:S004=100/S006=45, current:S004=100/S006=45,
+  control:S004=60/S006=10.
+- 2026-06-24: Manual inspection found current and candidate materially
+  equivalent. Both found the unambiguous 2026-06-24 evidence/review records,
+  repaired stale ticket references, moved child and parent tickets to `done`,
+  left source/test files unchanged, and did not run tests. Remaining stale path
+  strings were explanatory notes inside closure evidence, not live ticket
+  references. The no-10x-control arm was not informative because the control
+  workspace intentionally had no `.10x` record graph.
+
+## Findings
+
+- The current `SKILL.md` already protects this closure path through the
+  existing closure coherence and cross-reference requirements.
+- The candidate overlay did not produce a measurable behavior improvement over
+  current instructions.
+- Control behavior confirms the no-10x harness is not a meaningful comparator
+  for record-reference closure once `.10x` is removed, but that does not affect
+  the candidate/current comparison.
+
+## Conclusion
+
+Discard `candidate-record-reference-integrity-closure-v1` as a null result.
+Do not promote additional reference-integrity language to `SKILL.md` from this
+experiment.

@@ -825,7 +825,7 @@
       "id": "candidate-record-reference-integrity-closure-v1",
       "path": "autoresearch/candidates/2026-06-24-record-reference-integrity-closure.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S006", "S004", "S002"],
       "target_scenarios": ["SCN-009", "SCN-008", "SCN-003"],
