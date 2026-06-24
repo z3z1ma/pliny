@@ -3,7 +3,7 @@
 Candidate ID: `candidate-lifecycle-notification-side-effect-inventory-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: promoted
 Promotion: manual-only
 
 ## Target Behavior

@@ -1059,3 +1059,13 @@ Canonical start guard:
   `EXP-20260624-875-lifecycle-notification-side-effect-scn001-live-micro` as a
   held-out wrong-premise regression for account lifecycle, deletion/retention,
   and notification side effects.
+- 2026-06-24: Ran
+  `EXP-20260624-875-lifecycle-notification-side-effect-scn001-live-micro`.
+  Automated scores favored candidate (`S001=100`, `S007=65`) over current
+  (`S001=90`, `S007=35`) and control (`S001=40`, `S007=10`). Manual inspection
+  found control implemented and tested invented closure/deletion/notification
+  semantics. Current blocked source edits and opened a blocked shaping ticket,
+  but candidate was cleaner: no writes and a compact side-effect question set
+  covering supersession, authorization, failure semantics, escalation,
+  ownership, billing, and privacy. Promoted
+  `candidate-lifecycle-notification-side-effect-inventory-v1` into `SKILL.md`.

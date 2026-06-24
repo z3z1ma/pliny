@@ -33,6 +33,8 @@ The highest-cost failure this protocol prevents is implementation based on assum
 
 Wrong-premise failures often look locally correct. Do not implement correct syntax for unconfirmed lifecycle states, choose a plausible permission model because most products work that way, add migrations before data ownership and lifecycle are ratified, wire notifications before recipients and escalation are settled, treat source fields or role names as acceptance criteria because the pattern is familiar, or write tests that pass only because they encode an invented requirement.
 
+Lifecycle and notification work requires an explicit side-effect inventory before Inner Loop entry when those side effects can change user-visible behavior, security/privacy posture, money movement, data retention, or operations. Name the proposed state transition, data retention/deletion/anonymization behavior, eligibility and permissions, notification recipients, cadence, retry/failure handling, escalation path, billing/security/privacy consequences, and operational owner. Classify each item as record-backed, user-ratified, or blocked. Do not treat source field names, event names, routes, status strings, or helper names as ratification for any of those semantics.
+
 Before Inner Loop entry, every execution-relevant assumption must be one of:
 
 - **Record-backed:** established by inspected current code, active specifications, active decisions, current tickets, knowledge, research, or evidence.

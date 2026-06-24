@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -59,7 +59,7 @@ Seed:
 ```json
 {
   "experiment_id": "EXP-20260624-875-lifecycle-notification-side-effect-scn001-live-micro",
-  "status": "active",
+  "status": "done",
   "method_tier": "MICRO",
   "driver": "Codex autoresearch reasoning engine",
   "model": "codex-cli-default",
@@ -186,11 +186,34 @@ contract user-legible.
 
 - 2026-06-24: Registered as a held-out regression/generalization check after
   promoting wrong-premise examples and harness-induced mutation boundaries.
+- 2026-06-24: Ran the live MICRO through `autoresearch/run_once.py` with
+  `--require-clean-canonical`. Manual inspection found control implemented
+  source/tests with invented lifecycle and notification semantics. Current-10x
+  blocked source edits and opened a blocked shaping ticket, but its final
+  ratification prompt did not expose the full side-effect surface. Candidate
+  made no writes and asked compact side-effect questions covering supersession,
+  authorization, deletion/notification failure semantics, escalation, ownership,
+  billing, and privacy.
 
 ## Results
 
-Pending.
+- no-10x-control: `S001=40`, `S007=10`. Implemented `closeAccount`, added
+  `"closed"` as a status, wrote owner/admin notification behavior, scheduled
+  30-day deletion, and added tests.
+- current-10x: `S001=90`, `S007=35`. Did not edit source or tests and opened a
+  blocked shaping ticket, but the final question only asked to ratify the
+  visible requested contract and did not make failure handling, escalation,
+  billing/privacy, or operational ownership equally visible.
+- candidate-variant: `S001=100`, `S007=65`. Did not edit source, tests, or
+  records. It named the active-record conflict and asked three side-effect
+  questions that exposed supersession, authorization, deletion/notification
+  failure semantics, escalation, operational owner, billing, and privacy.
 
 ## Conclusions
 
-Pending.
+Promote `candidate-lifecycle-notification-side-effect-inventory-v1`. Current
+already preserved the implementation boundary, but the candidate materially
+improved user-legible shaping for high-impact lifecycle and notification work.
+The promoted behavior should remain narrow: use the side-effect inventory when
+side effects can change user-visible behavior, security/privacy posture, money
+movement, data retention, or operations.
