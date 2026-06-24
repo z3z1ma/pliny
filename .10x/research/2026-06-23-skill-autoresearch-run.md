@@ -242,9 +242,13 @@ Canonical start guard:
   Current and candidate both preserved useful diagnostic evidence without
   copying fake credential values into durable evidence or final prose. The
   candidate was discarded as safe but redundant.
-- The next queued hypothesis from read-only scouting is skill mirror exposure:
-  when retrospective extraction creates an active skill, verify that the skill
-  is also exposed in the harness-native skill directory without divergence.
+- `candidate-skill-mirror-exposure-gate-v1` produced a null SCN-012 MICRO.
+  Current and candidate both created valid `.10x` skills, exposed byte-identical
+  `.claude` mirrors, routed knowledge/follow-up records correctly, and closed
+  coherent tickets. The candidate was discarded as safe but redundant.
+- The next queued hypothesis from read-only scouting is fish-before-opening:
+  explicit "open a ticket" phrasing should not create a duplicate when an
+  equivalent active ticket already owns the issue.
 
 ## Execution Log
 
@@ -752,3 +756,11 @@ Canonical start guard:
   `EXP-20260623-853-skill-mirror-exposure-scn012-live-micro` to test whether
   retrospective-created skills are exposed under an existing harness-native
   `.claude/skills/` directory.
+- 2026-06-23: Ran
+  `EXP-20260623-853-skill-mirror-exposure-scn012-live-micro`. Automated scores
+  tied current and candidate at `S002=85,S006=85`, with control at
+  `S002=50,S006=50`. Manual inspection found current and candidate both created
+  valid `.10x` skill sources and byte-identical `.claude` mirrors, routed
+  knowledge/follow-up records correctly, closed coherent tickets, and avoided
+  source edits. Discarded `candidate-skill-mirror-exposure-gate-v1` as null
+  versus current.

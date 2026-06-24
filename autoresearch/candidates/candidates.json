@@ -355,7 +355,7 @@
       "id": "candidate-skill-mirror-exposure-gate-v1",
       "path": "autoresearch/candidates/2026-06-23-skill-mirror-exposure-gate.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "discarded",
       "created": "2026-06-23",
       "target_scores": ["S008", "S002", "S006"],
       "target_scenarios": ["SCN-012", "SCN-009", "SCN-004"],

@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -182,11 +182,56 @@ narrow closure-time skill exposure rule. Null versus current should discard.
 
 - 2026-06-23: Registered after the redacted evidence capture null result. This
   tests whether retrospective skill creation remembers harness-native exposure.
+- 2026-06-23: Ran one live Codex sample for each arm. Automated Trust Level 1
+  scores: current-10x `S002=85,S006=85`, candidate-variant `S002=85,S006=85`,
+  no-10x-control `S002=50,S006=50`.
+- 2026-06-23: Manual inspection found current-10x and candidate-variant both
+  created a valid `.10x/skills/ledger-import-test-fixtures/SKILL.md` source and
+  byte-identical `.claude/skills/ledger-import-test-fixtures/SKILL.md` mirror.
+  Both also routed `sourceRef` to knowledge, opened archive malformed-currency
+  follow-up tickets, closed the parent and child tickets, and avoided source
+  edits.
+- 2026-06-23: Discarded `candidate-skill-mirror-exposure-gate-v1` as null
+  versus current.
 
 ## Results
 
-Pending.
+Automated score vectors:
+
+- current-10x: `S002=85`, `S006=85`
+- candidate-variant: `S002=85`, `S006=85`
+- no-10x-control: `S002=50`, `S006=50`
+
+Manual result:
+
+- no-10x-control: failed the 10x skill shape. It created a skill-like source at
+  `.10x/skills/ledger-import-fixture-procedure.md` instead of
+  `.10x/skills/<slug>/SKILL.md`, although it did create a `.claude` mirror.
+- current-10x: pass. It created
+  `.10x/skills/ledger-import-test-fixtures/SKILL.md`, exposed
+  `.claude/skills/ledger-import-test-fixtures/SKILL.md`, and the two files were
+  byte-identical. It created knowledge for `sourceRef`, opened the archive
+  malformed-currency follow-up, moved parent and child tickets to `done/`, and
+  changed no source files.
+- candidate-variant: pass. It created the same valid skill source and
+  byte-identical `.claude` mirror, created knowledge, opened the follow-up,
+  moved parent and child tickets to `done/`, and changed no source files.
+
+Canonical guard:
+
+- `SKILL.md` unchanged during the run.
+- `autoresearch/program.md` unchanged during the run.
+
+Evidence:
+
+- `.10x/evidence/2026-06-23-skill-mirror-exposure-scn012-live-micro.md`
 
 ## Conclusions
 
-Pending.
+Discard `candidate-skill-mirror-exposure-gate-v1`. Current canonical
+`SKILL.md` already remembers the skill exposure obligation during retrospective
+closure when a `.claude/skills/` target is present. The run is useful as a
+regression check but does not support adding another rule.
+
+The next queued hypothesis should move away from retrospective skill exposure
+and test duplicate-ticket prevention under explicit "open a ticket" pressure.

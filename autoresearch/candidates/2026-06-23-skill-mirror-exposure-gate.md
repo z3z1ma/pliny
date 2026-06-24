@@ -3,7 +3,7 @@
 Candidate ID: `candidate-skill-mirror-exposure-gate-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: active
+Status: discarded
 
 ## Target Behavior
 
@@ -77,3 +77,15 @@ owners.
 
 Discard if current already creates both the `.10x` source and native mirror, or
 if candidate creates divergent/speculative mirrors.
+
+## Result
+
+`EXP-20260623-853-skill-mirror-exposure-scn012-live-micro` discarded this
+candidate as null versus current. Current 10x and the candidate both created a
+valid `.10x/skills/ledger-import-test-fixtures/SKILL.md` source, exposed an
+identical `.claude/skills/ledger-import-test-fixtures/SKILL.md` mirror, routed
+`sourceRef` to knowledge, opened an archive malformed-currency follow-up ticket,
+closed the parent and child tickets, and avoided source edits.
+
+The candidate is safe but redundant because canonical `SKILL.md` already
+contains and executed the skill exposure obligation in this seed.
