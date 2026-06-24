@@ -969,3 +969,10 @@ Canonical start guard:
   `EXP-20260624-868-ticket-assumption-ledger-scn006-live-micro` to test whether
   executable tickets with mixed provenance should include a compact visible
   assumption provenance ledger.
+- 2026-06-24: Ran
+  `EXP-20260624-868-ticket-assumption-ledger-scn006-live-micro`. Automated S003
+  tied current and candidate at `100`, but manual inspection found candidate
+  preserved current's strong executable-ticket behavior while adding a compact
+  `Assumption Provenance` section that separated record-backed, source-observed,
+  current user-ratified, and blocked claims. Promoted
+  `candidate-ticket-assumption-ledger-v1` into `SKILL.md`.

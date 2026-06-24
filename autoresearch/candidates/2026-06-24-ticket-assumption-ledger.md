@@ -3,7 +3,7 @@
 Candidate ID: `candidate-ticket-assumption-ledger-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: promoted
 Promotion: manual-only
 
 ## Target Behavior
@@ -64,3 +64,20 @@ Promote only if current creates an executable ticket that is otherwise
 reasonable but leaves the mixed provenance implicit, while candidate creates a
 bounded executable ticket with a compact, accurate provenance ledger and no
 unresolved assumptions.
+
+## Result
+
+Promoted on 2026-06-24 from
+`EXP-20260624-868-ticket-assumption-ledger-scn006-live-micro`.
+
+Automated S003 tied current and candidate at `100`, but manual inspection found
+the target difference:
+
+- Current created a strong executable ticket with governing references and
+  accurate acceptance criteria, but provenance was implied across scope,
+  acceptance criteria, and progress notes.
+- Candidate created an equally bounded executable ticket and included a compact
+  `Assumption Provenance` section separating record-backed requirements,
+  source-observed facts, current user-ratified behavior, and `Blocked: None`.
+
+Promoted narrowly for high-impact or mixed-provenance executable tickets.

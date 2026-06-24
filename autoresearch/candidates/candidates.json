@@ -495,7 +495,7 @@
       "id": "candidate-ticket-assumption-ledger-v1",
       "path": "autoresearch/candidates/2026-06-24-ticket-assumption-ledger.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "promoted",
       "created": "2026-06-24",
       "target_scores": ["S003", "S006", "S002"],
       "target_scenarios": ["SCN-006", "SCN-007", "SCN-009"],

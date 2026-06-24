@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -183,8 +183,37 @@ creation.
 
 ## Results
 
-Pending.
+Runner output:
+
+- Artifact root:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/068-ticket-assumption-ledger-scn006-live-micro/`
+- Canonical guard: unchanged for `SKILL.md` and `autoresearch/program.md`.
+- Automated score report:
+  - current-10x: `S003=100`
+  - candidate-variant: `S003=100`
+  - no-10x-control: `S003=80`
+
+Manual inspection:
+
+- no-10x-control created an executable ticket but had inherited `.10x` removed
+  by control isolation and therefore recorded that the active spec/decision
+  paths needed to be attached before execution.
+- current-10x inspected the active spec, active decision, and source; created
+  one bounded executable ticket; incorporated the user-ratified `owner_email`
+  column; avoided source edits; and recorded no blockers. Its ticket implied
+  provenance through references and progress notes but did not include a
+  dedicated provenance ledger.
+- candidate-variant inspected the same context, created one bounded executable
+  ticket, incorporated the user-ratified `owner_email` column, avoided source
+  edits, recorded no blockers, and added a compact `Assumption Provenance`
+  section with record-backed, source-observed, user-ratified, and blocked
+  categories.
 
 ## Conclusions
 
-Pending.
+Promote `candidate-ticket-assumption-ledger-v1` into `SKILL.md`.
+
+The canonical change should stay narrow: require a compact provenance section
+only for executable tickets with high-impact semantics or mixed provenance. Do
+not make a ledger mandatory for trivial tickets with one obvious authority
+source.
