@@ -200,6 +200,16 @@
       "target_scores": ["S001", "S007", "S005"],
       "target_scenarios": ["SCN-001", "SCN-002", "SCN-006"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-record-hardening-gate-v1",
+      "path": "autoresearch/candidates/2026-06-23-record-hardening-gate.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S003", "S007", "S002"],
+      "target_scenarios": ["SCN-006", "SCN-001", "SCN-004"],
+      "promotion": "manual-only"
     }
   ]
 }

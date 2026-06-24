@@ -547,3 +547,8 @@ Canonical start guard:
   ratified, kept threshold/source-field blocked, and asked one remaining
   semantic question. Promoted the narrow continuation-provenance rule into
   `SKILL.md`.
+- 2026-06-23: Added `candidate-record-hardening-gate-v1`, tracked continuation
+  seed `autoresearch/fixtures/live-seeds/record-hardening-gate/raw.json`, and
+  registered `EXP-20260623-837-record-hardening-gate-scn006-live-micro` to test
+  whether agents launder unratified source-field/threshold semantics into active
+  specs, decisions, or executable-ticket acceptance criteria.
