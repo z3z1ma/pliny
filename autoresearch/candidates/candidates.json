@@ -520,6 +520,16 @@
       "target_scores": ["S005", "S004"],
       "target_scenarios": ["SCN-011", "SCN-010", "SCN-008"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-protocol-mutation-review-gate-v1",
+      "path": "autoresearch/candidates/2026-06-24-protocol-mutation-review-gate.md",
+      "target": "SKILL.md",
+      "status": "active",
+      "created": "2026-06-24",
+      "target_scores": ["S008", "S005", "S006"],
+      "target_scenarios": ["SCN-015", "SCN-013", "SCN-014"],
+      "promotion": "manual-only"
     }
   ]
 }

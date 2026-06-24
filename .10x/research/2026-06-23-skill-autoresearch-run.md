@@ -999,3 +999,8 @@ Canonical start guard:
   candidate both blocked the unsafe change and made no source edits. Discarded
   `candidate-accessibility-safety-rail-proof-v1` as null versus current and
   noted a scorer blind spot for accessibility regressions.
+- 2026-06-24: Added `candidate-protocol-mutation-review-gate-v1`, created the
+  `protocol-relaxation-review` live seed, and registered
+  `EXP-20260624-871-protocol-relaxation-review-scn015-live-micro` to test
+  whether recursive prompt improvement rejects broad efficiency fast paths that
+  weaken Outer Loop, ticket, record, evidence, or ambiguity requirements.
