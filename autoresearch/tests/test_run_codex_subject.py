@@ -272,6 +272,13 @@ class CodexSubjectRunnerTest(unittest.TestCase):
                     for path in (root / "out" / "workspaces").glob("*/workspace-manifest.json")
                 )
             }
+            raw_outputs = {
+                data["variant_id"]: data["file_outputs"]
+                for data in (
+                    json.loads(path.read_text(encoding="utf-8"))
+                    for path in (root / "out" / "raw").glob("*.json")
+                )
+            }
 
         self.assertEqual(
             {
@@ -288,6 +295,15 @@ class CodexSubjectRunnerTest(unittest.TestCase):
         self.assertIn(".10x/knowledge/control-created.md", manifests["no-10x-control"]["post_run_files"])
         self.assertIn(".10x/knowledge/seed.md", manifests["current-10x"]["post_run_files"])
         self.assertIn(".10x/knowledge/seed.md", manifests["candidate-variant"]["post_run_files"])
+        self.assertEqual([".10x/knowledge/control-created.md"], manifests["no-10x-control"]["changed_files"])
+        self.assertEqual([], manifests["current-10x"]["changed_files"])
+        self.assertEqual([], manifests["candidate-variant"]["changed_files"])
+        self.assertEqual(
+            [".10x/knowledge/control-created.md"],
+            [item["path"] for item in raw_outputs["no-10x-control"]],
+        )
+        self.assertEqual([], raw_outputs["current-10x"])
+        self.assertEqual([], raw_outputs["candidate-variant"])
 
 
 def _definition():

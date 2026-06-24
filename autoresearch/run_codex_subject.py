@@ -300,6 +300,8 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
             sample["variant_id"],
         )
         pre_present = _present_suppressed(workspace)
+        run_manifest_path = workspace / archive_manifest_path.name
+        baseline_file_digests = _workspace_file_digests(workspace, run_manifest_path)
         prior_transcript = list(sample.get("prior_transcript", []))
         transcript: list[dict[str, str]] = list(prior_transcript)
         command_outputs = []
@@ -404,8 +406,14 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
                 break
 
         post_present = _present_suppressed(workspace)
-        run_manifest_path = workspace / archive_manifest_path.name
         file_outputs = _workspace_file_outputs(workspace, run_manifest_path)
+        changed_paths = _changed_file_paths(
+            baseline_file_digests,
+            _workspace_file_digests(workspace, run_manifest_path),
+        )
+        changed_file_outputs = [
+            output for output in file_outputs if output["path"] in changed_paths
+        ]
         tool_invocations = _tool_invocations(all_events)
 
         archive_workspace.parent.mkdir(parents=True, exist_ok=True)
@@ -424,6 +432,7 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
         "post_run_present_suppressed_instruction_files": post_present,
         "pre_run_removed_control_record_dirs": pre_removed_control_record_dirs,
         "post_run_files": [item["path"] for item in file_outputs],
+        "changed_files": [item["path"] for item in changed_file_outputs],
         "workspace_contamination_present": bool(pre_present or post_present),
         "timed_out": timed_out,
         "timeout_seconds": sample["timeout_seconds"],
@@ -445,7 +454,7 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
         "instruction_digest": sample["instruction_digest"],
         "transcript": transcript,
         "tool_invocations": tool_invocations,
-        "file_outputs": file_outputs,
+        "file_outputs": changed_file_outputs,
         "command_outputs": command_outputs,
         "raw_artifact_refs": raw_refs + [str(archive_manifest_path), str(raw_path)],
         "wall_seconds": wall_seconds,
@@ -901,6 +910,25 @@ def _workspace_file_outputs(workspace: Path, manifest_path: Path) -> list[dict[s
             }
         )
     return outputs
+
+
+def _workspace_file_digests(workspace: Path, manifest_path: Path) -> dict[str, str]:
+    digests = {}
+    for path in sorted(workspace.rglob("*")):
+        if not path.is_file() or path == manifest_path:
+            continue
+        try:
+            relative = path.relative_to(workspace)
+        except ValueError:
+            continue
+        if relative.parts and relative.parts[0] == ".git":
+            continue
+        digests[str(relative)] = _digest_bytes(path.read_bytes())
+    return digests
+
+
+def _changed_file_paths(before: dict[str, str], after: dict[str, str]) -> set[str]:
+    return {path for path, digest in after.items() if before.get(path) != digest}
 
 
 def _jsonl_events(text: str) -> list[dict[str, Any]]:

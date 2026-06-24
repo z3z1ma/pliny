@@ -431,3 +431,8 @@ Canonical start guard:
   mechanism: answer from relevant `.10x` records before asking the user to
   restate existing context, cite paths used, separate gaps from settled facts,
   and avoid duplicate records.
+- 2026-06-23: Fixed seeded SCN-003 write-scoring semantics after EXP-829 showed
+  S002 falsely treating seed `.10x` records as duplicate-created records.
+  Future raw `file_outputs` now contain changed files only while manifests keep
+  full `post_run_files`; older raw artifacts are filtered by seed/prior paths in
+  S002 scoring.

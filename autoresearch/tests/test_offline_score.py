@@ -169,6 +169,67 @@ class OfflineScoreTest(unittest.TestCase):
             score["floor_triggers"][0]["condition"],
         )
 
+    def test_s002_existing_records_ignores_seeded_record_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            seed = root / "seed"
+            (seed / ".10x" / "decisions").mkdir(parents=True)
+            (seed / ".10x" / "decisions" / "existing.md").write_text(
+                "Status: active\nCreated: 2026-06-23\nUpdated: 2026-06-23\n",
+                encoding="utf-8",
+            )
+            fixture = _existing_records_fixture(
+                seed,
+                [
+                    {
+                        "path": ".10x/decisions/existing.md",
+                        "action": "write",
+                        "content": "Status: active\n",
+                    }
+                ],
+            )
+            fixture_path = root / "fixture.json"
+            fixture_path.write_text(json.dumps(fixture), encoding="utf-8")
+
+            artifact = offline_score.score_fixture(fixture_path)
+
+        score = artifact["scores"]["S002"]
+        self.assertEqual(100.0, score["value"])
+        self.assertFalse(score["floor_triggered"])
+
+    def test_s002_existing_records_still_penalizes_new_duplicate_decision(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            seed = root / "seed"
+            (seed / ".10x" / "decisions").mkdir(parents=True)
+            (seed / ".10x" / "decisions" / "existing.md").write_text(
+                "Status: active\nCreated: 2026-06-23\nUpdated: 2026-06-23\n",
+                encoding="utf-8",
+            )
+            fixture = _existing_records_fixture(
+                seed,
+                [
+                    {
+                        "path": ".10x/decisions/existing.md",
+                        "action": "write",
+                        "content": "Status: active\n",
+                    },
+                    {
+                        "path": ".10x/decisions/duplicate.md",
+                        "action": "write",
+                        "content": "Status: active\n",
+                    },
+                ],
+            )
+            fixture_path = root / "fixture.json"
+            fixture_path.write_text(json.dumps(fixture), encoding="utf-8")
+
+            artifact = offline_score.score_fixture(fixture_path)
+
+        score = artifact["scores"]["S002"]
+        self.assertTrue(score["floor_triggered"])
+        self.assertIn("Duplicate research or decision", score["floor_triggers"][0]["condition"])
+
     def test_cli_writes_score_artifacts(self):
         with tempfile.TemporaryDirectory() as tmp:
             stdout = io.StringIO()
@@ -184,6 +245,37 @@ class OfflineScoreTest(unittest.TestCase):
             for output_path in output_paths:
                 artifact = json.loads(output_path.read_text(encoding="utf-8"))
                 self.assertEqual([], offline_score.validate_score_artifact(artifact))
+
+
+def _existing_records_fixture(seed_workspace_dir: Path, file_outputs: list[dict[str, str]]) -> dict:
+    return {
+        "schema_version": 1,
+        "experiment_id": "EXP-20260623-999-seeded-scn003",
+        "scenario_id": "SCN-003",
+        "variant_id": "seeded",
+        "rep": 0,
+        "model": "fixture-model",
+        "harness": "offline-fixture",
+        "instruction_digest": "fixture-instructions-v1",
+        "transcript": [
+            {"role": "user", "content": "Use existing records."},
+            {
+                "role": "assistant",
+                "content": (
+                    "I read .10x/decisions/existing.md. The existing decision "
+                    "is the recorded conclusion. No need to ask you to restate it. "
+                    "The remaining gap is implementation timing."
+                ),
+            },
+        ],
+        "tool_invocations": [{"name": "rg", "input": ".10x decisions"}],
+        "file_outputs": file_outputs,
+        "command_outputs": [],
+        "raw_artifact_refs": ["seeded-scn003.json"],
+        "harness_metadata": {
+            "seed_workspace_dir": str(seed_workspace_dir),
+        },
+    }
 
 
 if __name__ == "__main__":

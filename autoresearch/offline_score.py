@@ -362,7 +362,7 @@ def _score_s002_record_routing(fixture: dict[str, Any]) -> dict[str, Any]:
 
 def _score_s002_existing_records(fixture: dict[str, Any]) -> dict[str, Any]:
     text = _all_text(fixture)
-    writes = _file_outputs(fixture)
+    writes = _new_file_outputs(fixture)
     triggers: list[dict[str, Any]] = []
     points = 0
     rationale: list[str] = []
@@ -834,6 +834,58 @@ def _implementation_file_outputs(fixture: dict[str, Any]) -> list[dict[str, Any]
         for output in _file_outputs(fixture)
         if not str(output.get("path", "")).startswith(".10x/")
     ]
+
+
+def _new_file_outputs(fixture: dict[str, Any]) -> list[dict[str, Any]]:
+    preexisting_paths = _preexisting_file_paths(fixture)
+    if not preexisting_paths:
+        return _file_outputs(fixture)
+    return [
+        output
+        for output in _file_outputs(fixture)
+        if str(output.get("path", "")) not in preexisting_paths
+    ]
+
+
+def _preexisting_file_paths(fixture: dict[str, Any]) -> set[str]:
+    paths: set[str] = set()
+    metadata = fixture.get("harness_metadata")
+    if not isinstance(metadata, dict):
+        return paths
+
+    seed_workspace_dir = metadata.get("seed_workspace_dir")
+    if isinstance(seed_workspace_dir, str):
+        paths.update(_workspace_file_paths(Path(seed_workspace_dir)))
+
+    prior_raw_path = metadata.get("prior_raw_path")
+    if isinstance(prior_raw_path, str):
+        paths.update(_prior_fixture_file_paths(Path(prior_raw_path)))
+
+    return paths
+
+
+def _workspace_file_paths(workspace_dir: Path) -> set[str]:
+    if not workspace_dir.exists():
+        return set()
+    return {
+        path.relative_to(workspace_dir).as_posix()
+        for path in workspace_dir.rglob("*")
+        if path.is_file()
+    }
+
+
+def _prior_fixture_file_paths(raw_path: Path) -> set[str]:
+    if not raw_path.exists():
+        return set()
+    try:
+        prior = json.loads(raw_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+    return {
+        str(output.get("path", ""))
+        for output in _file_outputs(prior)
+        if str(output.get("path", ""))
+    }
 
 
 def _all_text(fixture: dict[str, Any]) -> str:
