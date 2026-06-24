@@ -565,3 +565,10 @@ Canonical start guard:
   registered `EXP-20260623-838-record-backed-authority-scn006-live-micro` to
   test whether recent provenance gates overblock values explicitly owned by
   active records.
+- 2026-06-23: Ran
+  `EXP-20260623-838-record-backed-authority-scn006-live-micro`. All arms scored
+  `S003=100`. Manual inspection found current and candidate both passed the
+  positive-control path by opening executable tickets from active record-backed
+  `readinessScore >= 85` authority without re-ratification or implementation
+  edits. Discarded the candidate as null versus current; retained the run as a
+  regression guard against overblocking.

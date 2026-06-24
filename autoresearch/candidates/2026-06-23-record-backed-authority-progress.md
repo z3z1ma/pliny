@@ -3,7 +3,7 @@
 Candidate ID: `candidate-record-backed-authority-progress-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 
 ## Target Behavior
 
@@ -61,3 +61,13 @@ active records explicitly owning the semantic values, and candidate proceeds
 with a bounded executable ticket while preserving evidence/record discipline.
 Discard if current already behaves correctly or if candidate treats stale/draft
 records as authority.
+
+## Result
+
+`EXP-20260623-838-record-backed-authority-scn006-live-micro` discarded this
+candidate. Current and candidate both scored `S003=100` and both manually passed
+the positive-control behavior: they used active records as authority for
+`KappaReleaseRow.readinessScore >= 85`, avoided user re-ratification, opened an
+executable ticket, and did not edit implementation files. Current also recorded
+inspection evidence, so there was no candidate-over-current behavior worth
+promoting.

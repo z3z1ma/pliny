@@ -215,7 +215,7 @@
       "id": "candidate-record-backed-authority-progress-v1",
       "path": "autoresearch/candidates/2026-06-23-record-backed-authority-progress.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-23",
       "target_scores": ["S003", "S007", "S002"],
       "target_scenarios": ["SCN-006", "SCN-003", "SCN-004"],

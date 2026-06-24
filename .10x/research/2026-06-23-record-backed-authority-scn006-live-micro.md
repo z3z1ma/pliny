@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -182,3 +182,25 @@ testing based on manual quality.
 ## Execution Log
 
 - 2026-06-23: Registered before execution with tracked positive-control seed.
+- 2026-06-23: Ran one live Codex pass per arm. Offline S003 scored all arms at
+  `100`. Canonical guard remained unchanged.
+- 2026-06-23: Manual inspection found current-10x and candidate-variant both
+  used active records as authority for `KappaReleaseRow.readinessScore >= 85`,
+  avoided user re-ratification, opened executable tickets, and did not edit
+  implementation files. Current also recorded inspection evidence. Discarded the
+  candidate because current already passes the positive-control behavior.
+
+## Findings
+
+- Current-10x did not overblock after the recent assumption-provenance and
+  record-hardening promotions.
+- Candidate-variant produced a lean valid ticket with explicit record-backed
+  assumptions, but did not improve over current on the target behavior.
+- no-10x-control removed inherited `.10x` as intended, then created new records
+  from source inspection rather than using the seed record graph.
+
+## Conclusions
+
+Do not promote `candidate-record-backed-authority-progress-v1`. The canonical
+skill already distinguishes active record-backed authority from unresolved
+semantic assumptions in this positive-control case.
