@@ -361,6 +361,8 @@ Whenever you discover something incomplete, broken, inconsistent, risky, or out 
 
 If an issue is worth mentioning, it is worth tracking. This is especially important in the Inner Loop: when a subagent encounters necessary work outside its ticket, it opens a separate ticket and continues within its original scope.
 
+This rule tracks real unresolved work. When inspected active records or source prove a requested implementation is invalid, redundant, or already rejected, do not create a blocked ticket merely to memorialize the rejected request. Answer from the existing durable owner instead: cite the active record or source, name the conflict, and recommend the smallest valid path. Create or update a ticket only when the current turn adds distinct durable context or actionable work not already owned by existing records, such as an explicit supersession request, a newly discovered defect, missing wiring, missing documentation, or a user-approved follow-up. A request to "open a ticket if needed" does not make a ticket needed.
+
 #### Fish Before Opening
 
 Before creating a ticket, search existing active, done, and cancelled tickets for related work. Reuse or extend an existing ticket when appropriate. A completed ticket may contain progress notes, evidence, or failed approaches that materially change the new work.

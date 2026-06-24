@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -186,11 +186,39 @@ discard.
 
 - 2026-06-24: Registered after EXP-859 promotion to test the queued record
   economy hypothesis from EXP-857.
+- 2026-06-24: Ran the experiment with one live Codex sample per arm. Manual
+  inspection found current-10x opened a redundant blocked ticket while the
+  candidate answered from existing authority and created no record.
 
 ## Results
 
-Pending.
+Automated Trust Level 1 score vectors:
+
+- candidate-variant: `S005=95`, `S007=10`
+- current-10x: `S005=95`, `S007=25`
+- no-10x-control: `S005=100`, `S007=25`
+
+The automated scorer did not emit S002 for this SCN-010 run, so manual
+record-economy inspection is authoritative.
+
+Manual inspection:
+
+- candidate-variant read the active decision, knowledge record, and source
+  helper; cited the conflict; recommended the existing server export URL path;
+  and created no new `.10x` record.
+- current-10x read the same authority but opened
+  `.10x/tickets/2026-06-24-plan-client-side-csv-export-framework.md` as a
+  blocked ticket solely to preserve the already-owned rejected request.
+- no-10x-control had inherited `.10x` removed by control isolation and created a
+  speculative client-side CSV planning ticket.
+
+Raw artifact root:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/060-invalid-request-no-ticket-economy-scn010-live-micro/`
 
 ## Conclusions
 
-Pending.
+Promote `candidate-invalid-request-no-ticket-economy-v1` narrowly. The winning
+behavior is not "under-record more"; it is "do not create a blocked memorial
+ticket for an invalid or redundant request already owned by active records or
+source when the current turn adds no distinct durable work."

@@ -863,3 +863,10 @@ Canonical start guard:
   `EXP-20260624-860-invalid-request-no-ticket-economy-scn010-live-micro` to
   isolate whether current creates a redundant blocked ticket for an invalid
   request already owned by active records/source.
+- 2026-06-24: Ran
+  `EXP-20260624-860-invalid-request-no-ticket-economy-scn010-live-micro`.
+  Automated S005/S007 did not capture the target record-economy distinction.
+  Manual inspection found current opened a blocked memorial ticket for an
+  already-rejected client-side CSV request, while candidate cited the active
+  decision/knowledge/source and created no record. Promoted
+  `candidate-invalid-request-no-ticket-economy-v1` into `SKILL.md`.

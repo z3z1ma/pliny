@@ -3,7 +3,7 @@
 Candidate ID: `candidate-invalid-request-no-ticket-economy-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: promoted
 
 ## Target Behavior
 

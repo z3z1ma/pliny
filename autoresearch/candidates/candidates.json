@@ -425,7 +425,7 @@
       "id": "candidate-invalid-request-no-ticket-economy-v1",
       "path": "autoresearch/candidates/2026-06-24-invalid-request-no-ticket-economy.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "promoted",
       "created": "2026-06-24",
       "target_scores": ["S002", "S005", "S007"],
       "target_scenarios": ["SCN-010", "SCN-005", "SCN-003"],
