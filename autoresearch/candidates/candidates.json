@@ -870,6 +870,26 @@
       "target_scores": ["S001", "S007", "S003"],
       "target_scenarios": ["SCN-001", "SCN-006", "SCN-003"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-record-lifecycle-reference-repair-v1",
+      "path": "autoresearch/candidates/2026-06-24-record-lifecycle-reference-repair.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-24",
+      "target_scores": ["S002", "S003", "S006"],
+      "target_scenarios": ["SCN-004", "SCN-003", "SCN-009"],
+      "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-active-record-source-drift-arbitration-v1",
+      "path": "autoresearch/candidates/2026-06-24-active-record-source-drift-arbitration.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-24",
+      "target_scores": ["S003", "S001", "S002"],
+      "target_scenarios": ["SCN-006", "SCN-003", "SCN-009"],
+      "promotion": "manual-only"
     }
   ]
 }
