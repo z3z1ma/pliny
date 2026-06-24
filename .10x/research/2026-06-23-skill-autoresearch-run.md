@@ -1109,3 +1109,8 @@ Canonical start guard:
   the source dry-run branch, but current already satisfied the target. Discarded
   `candidate-harness-dry-run-positive-control-v1` as null versus current and
   noted a scorer false positive for the positive-control scenario.
+- 2026-06-24: Added `candidate-notification-side-effect-economy-v1`, created the
+  `notification-copy-positive-control` live seed, and registered
+  `EXP-20260624-879-notification-copy-positive-control-scn006-live-micro` to
+  test whether the lifecycle/notification side-effect inventory overblocks a
+  record-backed display-only notification copy ticket.
