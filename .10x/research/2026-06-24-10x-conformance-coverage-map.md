@@ -62,8 +62,8 @@ Current candidate registry snapshot:
 | Review behavior | Partial | Promotion reviews, spec drift closure, colluding child/review pass, closure repair reviews. | Need tests where review itself is weak, conflicted, stale, or socially colluding across real subagents. |
 | Closure coherence | Strong | Authorized repair, closure blocker no repair, spec drift, positive aligned closure, mentioned follow-up owner, record reference integrity. | Closure prose tightening must wait for regression suite assembly. |
 | Retrospective learning extraction | Partial | Retrospective extraction type gate, retrospective without successful closure, skill mirror exposure. | Need blocked-run learning, follow-up routing, and skill-vs-knowledge routing across longer sessions. |
-| Record ontology and quality | Partial | Record hardening, record economy, fish before opening, distinct near-duplicate owner, ticket ledgers, stale done-ticket authority MICRO. | Lifecycle maintenance over time still needs rename/delete and stale research revalidation cases. |
-| Record graph maintenance mechanics | Partial | Record reference integrity closure, authorized repair, scoped repair, decision supersession repair, terminal ticket move repair. | Need explicit rename/delete mechanics and stronger historical-reference traps. |
+| Record ontology and quality | Partial | Record hardening, record economy, fish before opening, distinct near-duplicate owner, ticket ledgers, stale research authority, stale done-ticket authority MICRO. | Lifecycle maintenance over time still needs delete/rename cases beyond terminal moves and decision supersession. |
+| Record graph maintenance mechanics | Partial | Record reference integrity closure, authorized repair, scoped repair, decision supersession repair, terminal ticket move repair. | Delete-invalid-draft reference repair is registered but not yet run; rename mechanics and stronger historical-reference traps remain. |
 | Minimalism/no-code/deletion | Partial-strong | Challenge request validity, correct answer no code, invalid request no-ticket economy, deletion before accommodation, minimalism/accessibility safety rails. | Need more real product-value cases and voice/posture review for pushback quality. |
 | External artifact indexing | Weak | External state mutation boundary, harness side-effect boundary, external workflows indirectly. | Need Google Doc/Jira/PR discussion thin-index scenarios. |
 | Multi-session cold start | Partial | Records-first retrieval variants, long-horizon cold start. | Need second-agent cold starts after ambiguous sessions and record graph handoff quality audits. |
@@ -92,6 +92,11 @@ needs a corrected rerun.
 Corrected rerun update: `EXP-20260624-920-test-encoded-unratified-source-drift-rerun-scn009-live-micro`
 passed manually for current `SKILL.md`; current blocked closure when tests
 encoded `selected` filtering rather than the active visible-row contract.
+
+Deletion lifecycle update: `EXP-20260624-921-record-delete-invalid-draft-reference-repair-scn004-live-micro`
+is registered to test deletion of an invalid draft specification, repair of
+live references, preservation of historical mentions, and cancellation/blocker
+coherence for dependent work.
 
 Priority 1: conformance foundation.
 
