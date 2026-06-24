@@ -108,9 +108,12 @@ canonical implementation contract, preserving external provenance without
 falling back to thin-index-only behavior.
 
 Human-voice update:
-`EXP-20260624-923-confused-account-closure-convergence-scn001-live-micro` is
-registered to test confused/contradictory user convergence after the lifecycle
-side-effect and frustrated-useful-pushback promotions.
+`EXP-20260624-923-confused-account-closure-convergence-scn001-live-micro` ran
+after the lifecycle side-effect and frustrated-useful-pushback promotions.
+Current preserved the implementation boundary and gave a concrete checkpoint,
+but under-exposed the unratified `closed` lifecycle state compared with the
+duplicate-current arm. Treat this as a residual voice consistency risk, not a
+promotion signal yet.
 
 Priority 1: conformance foundation.
 
