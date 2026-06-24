@@ -720,6 +720,16 @@
       "target_scores": ["S004", "S006", "S001"],
       "target_scenarios": ["SCN-009", "SCN-001", "SCN-008"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-adaptive-question-depth-v1",
+      "path": "autoresearch/candidates/2026-06-24-adaptive-question-depth.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-24",
+      "target_scores": ["S007", "S001", "S003"],
+      "target_scenarios": ["SCN-001", "SCN-002", "SCN-006"],
+      "promotion": "manual-only"
     }
   ]
 }
