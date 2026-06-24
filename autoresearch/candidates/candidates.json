@@ -615,7 +615,7 @@
       "id": "candidate-ambiguous-dry-run-verification-v1",
       "path": "autoresearch/candidates/2026-06-24-ambiguous-dry-run-verification.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "promoted",
       "created": "2026-06-24",
       "target_scores": ["S001", "S005", "S007"],
       "target_scenarios": ["SCN-001", "SCN-010", "SCN-015"],
