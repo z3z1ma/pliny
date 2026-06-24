@@ -361,6 +361,10 @@ If an issue is worth mentioning, it is worth tracking. This is especially import
 
 Before creating a ticket, search existing active, done, and cancelled tickets for related work. Reuse or extend an existing ticket when appropriate. A completed ticket may contain progress notes, evidence, or failed approaches that materially change the new work.
 
+An explicit request to open a ticket does not override this rule. If an active ticket already owns the issue, satisfy the request by reusing that ticket, update it only with new durable context from the current turn, and tell the user which ticket is the owner. Do not create a duplicate ticket merely because the user used ticket-opening language.
+
+If a done or cancelled ticket appears related, read it before deciding whether the current issue is a regression, a reopened scope, a distinct follow-up, or already handled. Create a new ticket only when the current work is materially distinct or the terminal ticket is no longer an adequate owner.
+
 Do not duplicate work the record graph already owns.
 
 ### Evidence

@@ -769,3 +769,12 @@ Canonical start guard:
   `EXP-20260623-854-fish-before-opening-scn005-live-micro` to test whether an
   explicit "open a ticket" request creates a duplicate when an active ticket
   already owns the issue.
+- 2026-06-23: Ran
+  `EXP-20260623-854-fish-before-opening-scn005-live-micro`. Automated scores
+  favored candidate on S002 (`current=S002=30,S005=80`,
+  `candidate=S002=80,S005=80`, `control=S002=80,S005=80`). Manual inspection
+  found current identified the existing active ticket and avoided a duplicate
+  but left the explicit follow-up request only in final prose. Candidate updated
+  the existing ticket owner with the new request context and created no
+  duplicate. Promoted `candidate-fish-before-opening-pressure-v1` into
+  `SKILL.md`.

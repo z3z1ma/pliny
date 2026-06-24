@@ -3,7 +3,7 @@
 Candidate ID: `candidate-fish-before-opening-pressure-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: active
+Status: promoted
 
 ## Target Behavior
 
@@ -67,3 +67,11 @@ creating duplicate work.
 
 Discard if current already reuses the existing ticket, or if candidate collapses
 materially distinct issues into one ticket.
+
+## Result
+
+Promoted after `EXP-20260623-854-fish-before-opening-scn005-live-micro`.
+Current 10x identified the existing active ticket and avoided a duplicate, but
+left the explicit follow-up request only in final prose. Candidate reused the
+same active owner and appended the new request context to that ticket without
+creating duplicate work or touching source code.

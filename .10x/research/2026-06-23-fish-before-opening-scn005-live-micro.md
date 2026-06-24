@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -177,8 +177,37 @@ narrow fish-before-opening pressure rule. Null versus current should discard.
 
 ## Results
 
-Pending.
+Ran one live Codex sample for each arm.
+
+Automated Trust Level 1 score vectors:
+
+- current-10x: `S002=30`, `S005=80`
+- candidate-variant: `S002=80`, `S005=80`
+- no-10x-control: `S002=80`, `S005=80`
+
+Manual inspection found:
+
+- current-10x identified the existing active ticket
+  `.10x/tickets/2026-06-23-add-csv-export-quote-newline-coverage.md`, created
+  no duplicate, touched no source files, and answered that the existing ticket
+  was the owner. It did not update the ticket with the current follow-up request.
+- candidate-variant identified the same active ticket, created no duplicate,
+  touched no source files, and appended the current follow-up request to that
+  ticket's progress log.
+- no-10x-control had inherited `.10x` removed, so it created a new ticket
+  `.10x/tickets/2026-06-24-csv-export-quote-newline-coverage.md`. This is an
+  expected control limitation rather than a promotion signal.
+- The canonical guard reported no changes to `SKILL.md` or
+  `autoresearch/program.md` during the live run.
+
+Raw artifact root:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/054-fish-before-opening-scn005-live-micro/`
 
 ## Conclusions
 
-Pending.
+Promote `candidate-fish-before-opening-pressure-v1` narrowly. The current
+instruction already prevented duplicate active tickets, but it allowed a
+chat-only reuse path when the user explicitly asked to open a ticket. The
+candidate preserved record economy while ensuring new durable request context
+lands on the existing ticket owner.

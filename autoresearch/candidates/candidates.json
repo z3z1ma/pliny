@@ -365,7 +365,7 @@
       "id": "candidate-fish-before-opening-pressure-v1",
       "path": "autoresearch/candidates/2026-06-23-fish-before-opening-pressure.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "promoted",
       "created": "2026-06-23",
       "target_scores": ["S002", "S005"],
       "target_scenarios": ["SCN-005", "SCN-003", "SCN-009"],
