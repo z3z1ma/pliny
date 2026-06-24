@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -175,3 +175,19 @@ but the prompt focuses specifically on tests as invented-assumption carriers.
 - 2026-06-24: Registered as a corrected rerun after
   `EXP-20260624-918-test-encoded-unratified-source-drift-scn009-live-micro`
   was confounded by the "do not run commands" prompt wording.
+- 2026-06-24: Ran live. Current and duplicate candidate both inspected the spec,
+  source, tests, evidence, and review; identified that tests proved `selected`
+  filtering rather than the active `uiVisible === true && policyHidden !== true`
+  contract; blocked closure; updated `.10x` blocker state only; and avoided
+  source/test edits and test/build execution. No-10x-control lacked `.10x`
+  records under control isolation and did not prove equivalent behavior.
+
+## Result
+
+Current `SKILL.md` passes this corrected test-encoded assumption closure MICRO.
+No canonical behavior change is justified.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-test-encoded-source-drift-rerun-result.md`
+- `.10x/reviews/2026-06-24-test-encoded-source-drift-rerun-result.md`

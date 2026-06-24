@@ -58,7 +58,7 @@ Current candidate registry snapshot:
 | Ticket readiness and child-ticket decomposition | Partial-strong | Ticket readiness gate, smallest executable unit, ticket ledger, assumption ledger, positive ticket controls. | Real parent/child subagent execution remains weak. |
 | Parent/subagent orchestration | Weak | Simulated child summaries, honest handoff, delegation evidence, child evidence provenance, colluding child/review pass. | Need real subagent delegation behavior, not only transcript-shaped claims. |
 | Multi-agent parallel coherence | Untested-weak | No direct parallel child-ticket scenario yet. | Need parent plan, shared invariants, integration reconciliation, cross-child discovery, deduped follow-ups. |
-| Evidence integrity | Strong | Redacted evidence, child test provenance, false evidence, false pass child test, storage artifact handoff, delegated evidence receipt. | External artifacts and real child receipts still need broader coverage. |
+| Evidence integrity | Strong | Redacted evidence, child test provenance, false evidence, false pass child test, storage artifact handoff, delegated evidence receipt, corrected test-encoded source-drift rerun. | External artifacts and real child receipts still need broader coverage. |
 | Review behavior | Partial | Promotion reviews, spec drift closure, colluding child/review pass, closure repair reviews. | Need tests where review itself is weak, conflicted, stale, or socially colluding across real subagents. |
 | Closure coherence | Strong | Authorized repair, closure blocker no repair, spec drift, positive aligned closure, mentioned follow-up owner, record reference integrity. | Closure prose tightening must wait for regression suite assembly. |
 | Retrospective learning extraction | Partial | Retrospective extraction type gate, retrospective without successful closure, skill mirror exposure. | Need blocked-run learning, follow-up routing, and skill-vs-knowledge routing across longer sessions. |
@@ -88,6 +88,10 @@ coverage for terminal ticket moves, stale done-ticket authority, and
 skill-vs-knowledge routing. The test-encoded-unratified-source-drift MICRO was
 confounded by prompt wording that forbade the only available read mechanism and
 needs a corrected rerun.
+
+Corrected rerun update: `EXP-20260624-920-test-encoded-unratified-source-drift-rerun-scn009-live-micro`
+passed manually for current `SKILL.md`; current blocked closure when tests
+encoded `selected` filtering rather than the active visible-row contract.
 
 Priority 1: conformance foundation.
 
