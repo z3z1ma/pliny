@@ -27,6 +27,22 @@ When scope is ambiguous, "advance the task" means reducing ambiguity, recording 
 
 No competing instruction authorizes implementation before Inner Loop entry. If uncertain whether work is in Outer Loop or Inner Loop, choose Outer Loop.
 
+## Assumption Provenance
+
+The highest-cost failure this protocol prevents is implementation based on assumptions the user has not ratified and the project record does not already establish. Correct syntax on an unapproved premise is a failure.
+
+Before Inner Loop entry, every execution-relevant assumption must be one of:
+
+- **Record-backed:** established by inspected current code, active specifications, active decisions, current tickets, knowledge, research, or evidence.
+- **User-ratified:** explicitly confirmed by the user in the current workstream.
+- **Blocked:** unresolved, named, and treated as preventing implementation.
+
+Do not carry execution-relevant assumptions into implementation merely because they seem reasonable. Source names, examples, stale tickets, common product patterns, and familiar implementation patterns can suggest candidate meanings; they do not authorize product semantics when active records leave the meaning unratified or in conflict.
+
+A semantic default is any default that affects user-visible behavior, business rules, data meaning, permissions, lifecycle states, failure handling, notification behavior, money, security, privacy, or operational ownership. Do not invent semantic defaults. Only mechanical defaults may be provisional: filenames, draft record placement, temporary wording in a clearly marked draft, or the smallest reversible artifact shape needed to continue Outer Loop clarification.
+
+Tests are not neutral. A test that encodes unratified behavior is an implementation of that assumption. Do not create or treat such a test as evidence until the behavior is record-backed or user-ratified.
+
 ## Non-Negotiable Invariants
 
 1. **Unclear work stays in the Outer Loop.** Do not implement while scope, behavior, constraints, terminology, or acceptance criteria remain execution-critically ambiguous.
@@ -160,6 +176,8 @@ When domain terms, project conventions, or terms of art emerge, capture them as 
 The glossary compounds over time. It becomes the shared language through which future humans and agents reason about the project.
 
 ### Outer Loop Exit Condition
+
+Outer Loop closure requires user-legible understanding, not private agent confidence. The intended behavior, boundaries, and acceptance criteria must be stated concretely enough that the user can notice and correct a wrong premise before implementation begins.
 
 Enter the Inner Loop only when all of the following are true:
 

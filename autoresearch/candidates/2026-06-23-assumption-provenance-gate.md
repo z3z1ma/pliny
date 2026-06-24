@@ -3,7 +3,7 @@
 Candidate ID: `candidate-assumption-provenance-gate-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: keep-testing
+Status: promoted
 
 ## Target Behavior
 
@@ -106,5 +106,15 @@ both scored `S001=100,S007=90`, while control scored `S001=30,S007=10`.
 
 Manual inspection favored the candidate's cleaner no-write response and its
 explicit warning that tests would encode unratified policy. Current still
-blocked implementation correctly, so this candidate remains `keep-testing`
-rather than promoted.
+blocked implementation correctly, so this candidate remained `keep-testing`
+until a held-out semantic-ratification run produced candidate-over-current
+signal.
+
+`EXP-20260623-835-assumption-provenance-greenline-scn001-live-micro` provided
+the held-out positive signal. Automated scores were
+`candidate:S001=100,S007=75`, `current:S001=90,S007=65`, and
+`control:S001=30,S007=10`. Manual inspection found control implemented a new
+`greenline` release state, current blocked implementation but asked three
+questions, and candidate blocked implementation while reducing the unresolved
+branch to one semantic-ratification question. The assumption-provenance spine
+was promoted to `SKILL.md`.

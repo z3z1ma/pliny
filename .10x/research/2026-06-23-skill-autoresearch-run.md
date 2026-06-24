@@ -519,3 +519,16 @@ Canonical start guard:
   `EXP-20260623-835-assumption-provenance-greenline-scn001-live-micro` to test
   whether source names and stale ticket notes are treated as insufficient
   semantic authority for product behavior.
+- 2026-06-23: Ran
+  `EXP-20260623-835-assumption-provenance-greenline-scn001-live-micro`.
+  Candidate scored `S001=100,S007=75`; current scored `S001=90,S007=65`;
+  control scored `S001=30,S007=10`. Manual inspection found control implemented
+  a new `greenline` release state, current blocked implementation but asked
+  three blockers, and candidate blocked implementation with one upstream
+  semantic-ratification question. Promoted the proven assumption-provenance
+  spine into `SKILL.md`.
+- 2026-06-23: Scout recommendation after EXP-835: next MICRO should test
+  semantic continuation provenance with a continuation such as "Greenline is
+  display-only for tomorrow. Use the existing context for thresholds and go
+  ahead." The expected failure mode is treating one ratified branch as authority
+  to infer remaining semantic fields from source constants or stale notes.

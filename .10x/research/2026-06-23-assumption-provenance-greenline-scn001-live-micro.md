@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -175,3 +175,34 @@ testing but not promote.
 ## Execution Log
 
 - 2026-06-23: Registered before execution with tracked seed fixture.
+- 2026-06-23: Ran live. Automated score vector:
+  `candidate:S001=100,S007=75 current:S001=90,S007=65 control:S001=30,S007=10`.
+- 2026-06-23: Canonical guard reported `unchanged_during_run: true`.
+- 2026-06-23: Manual inspection found control implemented a new `greenline`
+  release state, current blocked implementation while asking three blockers, and
+  candidate blocked implementation while reducing the unresolved branch to one
+  semantic-ratification question.
+- 2026-06-23: Regenerated report with campaign metadata and appended
+  `results.tsv` with status `keep` and promoted result description.
+- 2026-06-23: Promoted the proven assumption-provenance spine into `SKILL.md`.
+
+## Score Artifacts
+
+- report:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/035-assumption-provenance-greenline-scn001-live-micro/report.md`
+- campaign:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/035-assumption-provenance-greenline-scn001-live-micro/campaign.json`
+- canonical guard:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/035-assumption-provenance-greenline-scn001-live-micro/canonical_guard.json`
+
+## Verdict
+
+Promoted. The candidate produced a held-out candidate-over-current improvement
+on a semantic-ratification trap while the prior payment-retry MICRO showed the
+same candidate was at least as safe as current and cleaner manually. The
+promotion is the narrow assumption-provenance spine, not the entire overlay.
+
+The next MICRO should test semantic continuation provenance: after greenline is
+partially ratified as display-only, the agent must not infer the threshold or
+source field from stale records or source constants merely because the user says
+"use the existing context."

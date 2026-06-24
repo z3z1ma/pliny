@@ -185,7 +185,7 @@
       "id": "candidate-assumption-provenance-gate-v1",
       "path": "autoresearch/candidates/2026-06-23-assumption-provenance-gate.md",
       "target": "SKILL.md",
-      "status": "keep-testing",
+      "status": "promoted",
       "created": "2026-06-23",
       "target_scores": ["S001", "S007", "S005"],
       "target_scenarios": ["SCN-001", "SCN-002", "SCN-006", "SCN-010"],
