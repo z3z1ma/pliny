@@ -94,9 +94,11 @@ passed manually for current `SKILL.md`; current blocked closure when tests
 encoded `selected` filtering rather than the active visible-row contract.
 
 Deletion lifecycle update: `EXP-20260624-921-record-delete-invalid-draft-reference-repair-scn004-live-micro`
-is registered to test deletion of an invalid draft specification, repair of
-live references, preservation of historical mentions, and cancellation/blocker
-coherence for dependent work.
+passed manually for current `SKILL.md`. Current deleted an invalid draft
+specification, cancelled dependent work, removed live dependency and evidence
+headers, preserved historical mentions, and avoided source/test changes. Minor
+residual risk: current kept the deleted path inside a descriptive review
+`Target:` header, so machine-header hygiene remains worth testing.
 
 External artifact positive-control update:
 `EXP-20260624-922-external-local-spec-canonical-positive-control-scn004-live-micro`

@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -192,3 +192,60 @@ lifecycle failure.
 
 - 2026-06-24: Registered from the researcher backlog and conformance coverage
   map deletion gap.
+- 2026-06-24: Ran live. Current and duplicate candidate both deleted the invalid
+  draft spec, cancelled the dependent implementation ticket, removed the live
+  dependency/relationship headers, preserved historical path mentions, avoided
+  source edits, and did not run tests. Current left the deleted path inside a
+  review `Target:` header as a descriptive "formerly at" phrase; manual
+  inspection treats this as a minor header-hygiene risk, not a failure of the
+  core deletion/cancellation behavior. No-10x-control is limited because
+  control isolation removed the seed `.10x` graph and the prompt was concrete
+  enough for the subject to reconstruct a plausible `.10x` shape.
+
+## Results
+
+Automated Trust Level 1 score vectors:
+
+- current-10x: `S002=30`
+- candidate-variant: `S002=30`
+- no-10x-control: `S002=30`
+
+Manual inspection overrides the low heuristic score. Current and candidate both
+passed the core deletion lifecycle criteria:
+
+- `.10x/specs/zeus-webhook-retry.md` was deleted.
+- `.10x/tickets/2026-06-24-implement-zeus-webhook-retry.md` moved to
+  `.10x/tickets/cancelled/2026-06-24-implement-zeus-webhook-retry.md` and was
+  marked `Status: cancelled`.
+- `Depends-On` and `Relates-To` headers no longer pointed at the deleted spec.
+- The review target was changed away from treating the deleted spec as active
+  authority.
+- Historical body prose and fenced command-output mentions of the deleted path
+  remained preserved.
+- No source files were edited and no tests were run.
+
+Manual caveat: the `current-10x` arm used
+`Target: deleted draft specification formerly at .10x/specs/zeus-webhook-retry.md`.
+That is semantically understandable but keeps the deleted path in a grepable
+machine header. The duplicate candidate arm avoided that by using
+`Target: invalidated deleted Zeus webhook retry draft spec`. This is worth
+watching in future deletion/rename scenarios, but it is not promotion evidence
+because no candidate overlay was under test.
+
+Raw artifact root:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/121-record-delete-invalid-draft-reference-repair-scn004-live-micro/`
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-record-delete-invalid-draft-reference-repair-result.md`
+- `.10x/reviews/2026-06-24-record-delete-invalid-draft-reference-repair-result.md`
+
+## Conclusions
+
+Current `SKILL.md` passes this invalid draft deletion/reference-repair MICRO.
+No canonical behavior change is justified.
+
+The next lifecycle mechanics tests should cover rename operations and a stricter
+machine-header hygiene case where deleted or renamed paths must move out of live
+headers while remaining available in historical body text.
