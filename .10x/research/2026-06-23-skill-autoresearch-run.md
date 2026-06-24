@@ -858,3 +858,8 @@ Canonical start guard:
   stronger single confirm/correct question by exposing missing notification
   behavior and operational ownership up front. Promoted
   `candidate-referential-ratification-confirmation-v1` into `SKILL.md`.
+- 2026-06-24: Added `candidate-invalid-request-no-ticket-economy-v1`, created
+  the `invalid-request-no-ticket-economy` live seed, and registered
+  `EXP-20260624-860-invalid-request-no-ticket-economy-scn010-live-micro` to
+  isolate whether current creates a redundant blocked ticket for an invalid
+  request already owned by active records/source.
