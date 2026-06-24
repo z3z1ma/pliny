@@ -778,3 +778,8 @@ Canonical start guard:
   the existing ticket owner with the new request context and created no
   duplicate. Promoted `candidate-fish-before-opening-pressure-v1` into
   `SKILL.md`.
+- 2026-06-23: Added `candidate-stale-research-authority-gate-v1`, created the
+  `stale-research-authority` live seed, and registered
+  `EXP-20260623-855-stale-research-authority-scn003-live-micro` to test whether
+  2024 version-sensitive research is treated as revalidation context rather than
+  current implementation authority.
