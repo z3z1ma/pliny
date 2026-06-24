@@ -598,3 +598,7 @@ Canonical start guard:
   and closed both tickets. Candidate preserved closure safety by changing only
   the parent ticket blocker and leaving child and parent tickets open/active.
   Promoted the narrow closure-review-no-repair rule into `SKILL.md`.
+- 2026-06-23: Added `candidate-authorized-closure-repair-v1` and registered
+  `EXP-20260623-842-authorized-closure-repair-scn009-live-micro` as a
+  positive-control test for the promoted closure rule: when the user explicitly
+  authorizes bounded verification or repair, current 10x should not overblock.

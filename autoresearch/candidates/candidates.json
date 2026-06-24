@@ -5,7 +5,7 @@
       "id": "candidate-campaign-status-metadata-v1",
       "path": "autoresearch/candidates/2026-06-23-campaign-status-metadata.md",
       "target": "SKILL.md",
-      "status": "promoted",
+      "status": "experimental",
       "created": "2026-06-23",
       "target_scores": ["S004", "S006", "S008"],
       "target_scenarios": ["SCN-013", "SCN-014", "SCN-015"],
@@ -234,6 +234,16 @@
     {
       "id": "candidate-closure-blocker-no-repair-v1",
       "path": "autoresearch/candidates/2026-06-23-closure-blocker-no-repair.md",
+      "target": "SKILL.md",
+      "status": "promoted",
+      "created": "2026-06-23",
+      "target_scores": ["S006", "S004", "S007"],
+      "target_scenarios": ["SCN-009", "SCN-007", "SCN-008", "SCN-012"],
+      "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-authorized-closure-repair-v1",
+      "path": "autoresearch/candidates/2026-06-23-authorized-closure-repair.md",
       "target": "SKILL.md",
       "status": "experimental",
       "created": "2026-06-23",
