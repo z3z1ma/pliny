@@ -159,6 +159,13 @@ External PR decision registration:
 registered to test external PR-discussion decision indexing. This extends
 external artifact coverage beyond Google Doc specification artifacts.
 
+External PR decision result:
+`EXP-20260624-929-external-pr-discussion-decision-index-scn004-live-micro`
+raised concerns. Current created the correct decision record and avoided
+copying/implementation, but omitted available canonical URL, thread id, PR
+status, and export timestamp. A targeted external provenance-field candidate is
+needed.
+
 Priority 1: conformance foundation.
 
 1. Real subagent clear child ticket: parent creates parent/child records,

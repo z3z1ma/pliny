@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -192,3 +192,51 @@ current fails, create a narrow candidate targeting external decision indexing.
 
 - 2026-06-24: Registered from the external artifact indexing backlog after the
   Google Doc PRD thin-index and local-canonical positive controls.
+- 2026-06-24: Ran live. All arms created one
+  `.10x/decisions/acme-webhook-idempotency-key.md` record and avoided source
+  edits or implementation tickets. Current captured the accepted decision and
+  tradeoff but omitted available canonical URL/thread/status/export metadata.
+
+## Results
+
+Automated Trust Level 1 score vectors:
+
+- current-10x: `S002=60`
+- candidate-variant: `S002=60`
+- no-10x-control: `S002=60`
+
+Manual inspection found current `SKILL.md` partially passed:
+
+- created a decision-class `.10x/decisions/` record;
+- identified `provider_delivery_id` as the accepted ACME webhook idempotency
+  key and `event_id` as rejected;
+- included context, decision, alternatives, and consequences;
+- stated the PR discussion remains the canonical review artifact;
+- avoided copying the whole PR discussion;
+- avoided source/test edits and implementation tickets.
+
+Manual concern:
+
+- current omitted the canonical PR discussion URL, thread id, observed PR status,
+  and export timestamp even though the seed artifact exposed all four.
+
+The duplicate-current arm included the canonical URL but still omitted explicit
+PR status and thread id fields. This indicates a stochastic provenance-quality
+weakness, not a complete inability to index external decisions.
+
+Raw artifact root:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/129-external-pr-discussion-decision-index-scn004-live-micro/`
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-external-pr-discussion-decision-index-result.md`
+- `.10x/reviews/2026-06-24-external-pr-discussion-decision-index-result.md`
+
+## Conclusions
+
+Current `SKILL.md` handles external PR discussions as decision-shaped durable
+context, but the external provenance language is too loose. Create and test a
+narrow candidate that requires external index records to preserve available
+canonical URL, external id, observed status, revision/export date, local export
+path, and explicit canonical-authority statement.
