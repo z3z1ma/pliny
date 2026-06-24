@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -184,3 +184,51 @@ decisiveness without weakening ticket quality or semantic-default discipline.
 - 2026-06-24: Registered after `candidate-no-ticket-ratification-checkpoint-v1`
   promotion to test the complementary positive action rule for mechanical
   defaults.
+- 2026-06-24: Ran live with `run_once.py` using `--require-clean-canonical`.
+  Canonical guard reported no `SKILL.md` or `autoresearch/program.md` changes
+  during the run.
+- 2026-06-24: Logged `keep` in untracked `results.tsv`. Candidate remains
+  experimental pending a subtler follow-up or ablation.
+
+## Results
+
+Artifacts:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/086-mechanical-default-action-gate-scn006-live-micro/summary.json`
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/086-mechanical-default-action-gate-scn006-live-micro/report.md`
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/086-mechanical-default-action-gate-scn006-live-micro/canonical_guard.json`
+
+Score vector:
+
+- no-10x-control: `S003=100`
+- current-10x: `S003=85`
+- candidate-variant: `S003=100`
+
+Manual inspection:
+
+- no-10x-control created one ticket despite having inherited `.10x` removed,
+  but its ticket stated no active `.10x` records existed and relied on source
+  only.
+- current-10x created exactly one executable child ticket, made no
+  implementation edits, preserved active spec/decision references, and asked no
+  mechanical naming or placement questions.
+- candidate-variant created exactly one executable child ticket, made no
+  implementation edits, preserved active spec/decision dependencies, included
+  explicit exclusions and evidence expectations, and recorded that filename and
+  title were mechanical repo-conventional defaults rather than semantic choices.
+
+## Conclusions
+
+Keep `candidate-mechanical-default-action-gate-v1` for follow-up, but do not
+promote yet.
+
+The candidate improved the measured ticket shape and had lower wall time/tool
+count than current, but the prompt explicitly named filename/title as mechanical
+details. The result supports the hypothesis that positive mechanical-default
+guidance may improve ticket quality, but does not yet prove the instruction is
+needed when the model must infer the mechanical/semantic boundary itself.
+
+Next useful test: a subtler SCN-006 or SCN-005 prompt where records/source imply
+the remaining default is mechanical, but the user does not label it as such.
+Promotion should require candidate-over-current improvement there without any
+semantic default leakage.

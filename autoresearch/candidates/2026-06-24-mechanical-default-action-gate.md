@@ -71,3 +71,26 @@ Promote only if current asks about mechanical naming/placement or creates a
 blocked/mechanical placeholder while candidate creates the correct bounded
 ticket without semantic invention. Discard if current already proceeds with
 comparable ticket quality, or if candidate defaults any product behavior.
+
+## Result
+
+Kept for follow-up after
+`EXP-20260624-886-mechanical-default-action-gate-scn006-live-micro`.
+
+Automated first-pass scoring:
+
+- candidate: `S003=100`
+- current: `S003=85`
+- control: `S003=100`
+
+Manual inspection found current and candidate both created one executable child
+ticket, made no implementation edits, and asked no naming or placement
+questions. Candidate's ticket was materially stronger: it preserved active
+decision/spec dependencies, included explicit exclusions, evidence expectations,
+and stated that filename/title were mechanical defaults. Current also created a
+valid ticket but did not name mechanical-default reasoning and scored lower on
+boundary/non-goal signals.
+
+Do not promote from this result alone. The prompt explicitly told the subject
+that filename/title were mechanical, so the candidate needs a subtler follow-up
+or ablation before canonical `SKILL.md` absorbs the paragraph.
