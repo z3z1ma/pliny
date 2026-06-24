@@ -465,7 +465,7 @@
       "id": "candidate-scoped-authorized-closure-repair-v1",
       "path": "autoresearch/candidates/2026-06-24-scoped-authorized-closure-repair.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "promoted",
       "created": "2026-06-24",
       "target_scores": ["S006", "S005", "S004"],
       "target_scenarios": ["SCN-009", "SCN-007", "SCN-008", "SCN-012"],

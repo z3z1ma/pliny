@@ -3,7 +3,7 @@
 Candidate ID: `candidate-scoped-authorized-closure-repair-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: promoted
 Promotion: manual-only
 
 ## Target Behavior
@@ -77,3 +77,21 @@ evidence, or blocks original closure because the out-of-scope follow-up remains
 unresolved, while candidate confines repair to visible rows, opens/cites a
 bounded legacy follow-up, and closes visible rows only when its record graph is
 coherent. Discard if current already preserves that boundary.
+
+## Result
+
+Promoted on 2026-06-24 from
+`EXP-20260624-865-scoped-authorized-closure-repair-scn009-live-micro`.
+
+Automated scoring tied current and candidate at `S004=65/S006=85`, but manual
+inspection found a target distinction the scorer missed:
+
+- Current repaired the visible-rows closure blocker, then also implemented and
+  closed the separate legacy nightly export fix in the same turn.
+- Candidate repaired only the visible-rows blocker, left
+  `src/formatLegacyNightlyExport.ts` and
+  `src/formatLegacyNightlyExport.test.ts` byte-identical to the seed, and
+  opened a bounded follow-up owner for the legacy path.
+
+This is a manual-positive result for scope containment under authorized closure
+repair pressure.

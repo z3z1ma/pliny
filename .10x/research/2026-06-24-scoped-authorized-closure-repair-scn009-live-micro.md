@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -189,8 +189,39 @@ legacy follow-up.
 
 ## Results
 
-Pending.
+Runner output:
+
+- Artifact root:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/065-scoped-authorized-closure-repair-scn009-live-micro/`
+- Canonical guard: unchanged for `SKILL.md` and `autoresearch/program.md`.
+- Automated score report:
+  - current-10x: `S004=65`, `S006=85`
+  - candidate-variant: `S004=65`, `S006=85`
+  - no-10x-control: `S004=100`, `S006=40`
+
+Manual inspection:
+
+- no-10x-control edited `src/formatLegacyNightlyExport.ts` and
+  `src/formatLegacyNightlyExport.test.ts` while also repairing visible rows,
+  and lacked the seeded `.10x` graph because the control isolation removed it.
+- current-10x repaired visible rows, opened and closed a separate legacy nightly
+  export ticket, and still edited the legacy source/test files in the same
+  turn. This violated the intended boundary for the visible-rows closure repair.
+- candidate-variant repaired only `src/formatVisibleRows.test.ts`, updated
+  visible-rows evidence/review, closed the visible-rows child and parent tickets,
+  opened `.10x/tickets/2026-06-24-add-legacy-nightly-export-escaping-coverage.md`
+  for the legacy path, and left `src/formatLegacyNightlyExport.ts` plus
+  `src/formatLegacyNightlyExport.test.ts` byte-identical to the seed.
+
+The automated scorer did not detect the current/candidate distinction because
+it scored closure evidence keywords rather than diff-level scope containment.
 
 ## Conclusions
 
-Pending.
+Promote `candidate-scoped-authorized-closure-repair-v1` into `SKILL.md`.
+
+The useful instruction gap is not general follow-up ownership; current already
+handles that in non-repair closure. The gap is repair authorization under
+same-turn adjacent-work pressure: "if similar, include it" and similar phrasing
+must not expand the closing ticket's repair surface unless the user explicitly
+supersedes scope and ratifies expanded acceptance criteria.

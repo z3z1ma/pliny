@@ -931,3 +931,11 @@ Canonical start guard:
   `EXP-20260624-865-scoped-authorized-closure-repair-scn009-live-micro` to test
   whether authorized closure repair remains confined to the visible-rows
   closure blocker when a similar legacy nightly export gap is present.
+- 2026-06-24: Ran
+  `EXP-20260624-865-scoped-authorized-closure-repair-scn009-live-micro`.
+  Automated scores tied current and candidate at `S004=65/S006=85`, but manual
+  inspection found current repaired the visible-rows blocker and also
+  implemented the separate legacy nightly export fix in the same turn.
+  Candidate repaired only the visible-rows blocker, opened a bounded legacy
+  follow-up owner, and left legacy source/test files byte-identical to the seed.
+  Promoted `candidate-scoped-authorized-closure-repair-v1` into `SKILL.md`.
