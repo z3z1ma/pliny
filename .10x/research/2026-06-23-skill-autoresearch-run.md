@@ -634,3 +634,7 @@ Canonical start guard:
   supersession authority. Candidate blocked on the active-record conflict and
   kept the shaping ticket coherent. Promoted the implicit-supersession gate into
   `SKILL.md`.
+- 2026-06-23: Added `candidate-test-only-semantic-provenance-v1` and registered
+  `EXP-20260623-845-test-only-semantic-provenance-scn001-live-micro` to test
+  whether "just add tests" pressure can still cause unratified threshold/source
+  semantics to be encoded in regression tests.
