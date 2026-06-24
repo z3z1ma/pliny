@@ -926,3 +926,8 @@ Canonical start guard:
   existing visible-rows ticket, recognized archive export behavior was excluded,
   opened one bounded legacy nightly/archive follow-up, and edited no source
   files. Discarded `candidate-distinct-near-duplicate-owner-v1`.
+- 2026-06-24: Added `candidate-scoped-authorized-closure-repair-v1`, created the
+  `scoped-closure-repair` live seed, and registered
+  `EXP-20260624-865-scoped-authorized-closure-repair-scn009-live-micro` to test
+  whether authorized closure repair remains confined to the visible-rows
+  closure blocker when a similar legacy nightly export gap is present.
