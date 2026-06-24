@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -190,3 +190,22 @@ promotion.
 ## Execution Log
 
 - 2026-06-24: Registered from reused Kierkegaard scout recommendation.
+- 2026-06-24: Initial live run wrote artifacts under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/108-record-graph-supersession-reference-repair-scn004-live-micro/`.
+  The `candidate-variant` arm is confounded because Codex returned a temporary
+  usage-limit failure before executing the turn.
+- 2026-06-24: Manual inspection of the `current-10x` arm found strong behavior:
+  it created a new active FinchPay auto-approval decision, moved the old
+  decision to `.10x/decisions/superseded/`, updated live spec/ticket links to
+  the active decision, repointed historical review/evidence metadata to the
+  moved superseded decision, preserved historical body text and fenced `rg`
+  output, edited no source files, and ran no tests. This is a likely null
+  result unless a clean candidate rerun shows material improvement.
+- 2026-06-24: Clean rerun wrote artifacts under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/108b-record-graph-supersession-reference-repair-scn004-live-micro-rerun/`.
+  Current and candidate both scored `S002=45`; manual inspection overrides the
+  low heuristic score. Current and candidate both repaired active references and
+  preserved historical path mentions. Candidate also cancelled the old shaping
+  ticket and opened an implementation follow-up, adding workflow churn beyond
+  the requested record-graph repair. Candidate discarded as null to slightly
+  worse versus current.

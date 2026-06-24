@@ -875,7 +875,7 @@
       "id": "candidate-record-lifecycle-reference-repair-v1",
       "path": "autoresearch/candidates/2026-06-24-record-lifecycle-reference-repair.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S002", "S003", "S006"],
       "target_scenarios": ["SCN-004", "SCN-003", "SCN-009"],
