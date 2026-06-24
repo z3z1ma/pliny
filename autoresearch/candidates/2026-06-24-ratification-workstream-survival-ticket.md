@@ -3,7 +3,7 @@
 Candidate ID: `candidate-ratification-workstream-survival-ticket-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 Promotion: manual-only
 
 ## Target Behavior
@@ -72,3 +72,13 @@ ratification questions and no executable acceptance criteria, source edits,
 tests, invented payout policy, or duplicate record churn. Discard if current
 already handles this boundary or candidate weakens no-ticket economy for
 immediate interactive clarification.
+
+## Result
+
+Discarded after
+`EXP-20260624-890-ratification-workstream-survival-ticket-scn001-live-micro`.
+Current canonical 10x already preserved the unresolved Finance/Ops ratification
+work durably by creating a draft ratification specification with exact policy
+gaps and no implementation authorization. The candidate also preserved the work
+well as a blocked shaping ticket, but promoting "must be a ticket" would be
+over-specific when a draft specification can be the better record shape.

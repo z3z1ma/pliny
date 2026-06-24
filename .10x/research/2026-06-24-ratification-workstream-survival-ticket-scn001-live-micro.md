@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -197,3 +197,39 @@ for immediate interactive clarification.
 
 - 2026-06-24: Registered after no-ticket checkpoint promotion raised the
   complementary survival-boundary risk.
+- 2026-06-24: Ran the live Codex MICRO. Artifacts are stored under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/090-ratification-workstream-survival-ticket-scn001-live-micro/`.
+- 2026-06-24: Added evidence record
+  `.10x/evidence/2026-06-24-ratification-workstream-survival-ticket-scn001-live-micro.md`.
+
+## Results
+
+Automated Trust Level 1 scores:
+
+- no-10x-control: `S001=55`, `S007=25`
+- current-10x: `S001=75`, `S007=40`
+- candidate-variant: `S001=85`, `S007=40`
+
+Manual inspection found:
+
+- no-10x-control created a draft `.10x/specs/payout-retry-auto-release-ratification.md`
+  from source inspection but lacked the active 10x decision/knowledge authority
+  because control isolation removed inherited `.10x` records.
+- current-10x inspected the active payout decision, payout-risk knowledge, and
+  source helper; it created a draft ratification specification that preserved
+  the exact Finance/Ops policy gaps and explicitly forbade executable tickets,
+  tests, code, payout retries, or auto-release behavior until ratified.
+- candidate-variant inspected the same authority and created one blocked
+  shaping ticket with exact Finance/Ops ratification questions and no
+  executable implementation authorization.
+
+## Conclusion
+
+Discard `candidate-ratification-workstream-survival-ticket-v1`.
+
+The survival-boundary risk did not reproduce. Current canonical 10x already
+made the unresolved branch durable, and it chose a defensible draft
+specification record shape for a ratification contract. The candidate's blocked
+ticket was also safe, but the proposed instruction would overfit by requiring a
+ticket when the existing record-shape rules can choose the better durable owner.
+No `SKILL.md` promotion should be made from this candidate.

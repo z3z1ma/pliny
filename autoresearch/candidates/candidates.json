@@ -705,7 +705,7 @@
       "id": "candidate-ratification-workstream-survival-ticket-v1",
       "path": "autoresearch/candidates/2026-06-24-ratification-workstream-survival-ticket.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S002", "S001", "S007"],
       "target_scenarios": ["SCN-001", "SCN-006", "SCN-007"],
