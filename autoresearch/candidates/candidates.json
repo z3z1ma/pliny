@@ -500,6 +500,16 @@
       "target_scores": ["S003", "S006", "S002"],
       "target_scenarios": ["SCN-006", "SCN-007", "SCN-009"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-ticket-ledger-economy-guard-v1",
+      "path": "autoresearch/candidates/2026-06-24-ticket-ledger-economy-guard.md",
+      "target": "SKILL.md",
+      "status": "active",
+      "created": "2026-06-24",
+      "target_scores": ["S005", "S003"],
+      "target_scenarios": ["SCN-006", "SCN-005", "SCN-010"],
+      "promotion": "manual-only"
     }
   ]
 }

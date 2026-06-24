@@ -976,3 +976,8 @@ Canonical start guard:
   `Assumption Provenance` section that separated record-backed, source-observed,
   current user-ratified, and blocked claims. Promoted
   `candidate-ticket-assumption-ledger-v1` into `SKILL.md`.
+- 2026-06-24: Added `candidate-ticket-ledger-economy-guard-v1`, created the
+  `ticket-ledger-economy` live seed, and registered
+  `EXP-20260624-869-ticket-ledger-economy-scn006-live-micro` as an immediate
+  regression check that the promoted provenance ledger is not overused on
+  trivial single-provenance tickets.
