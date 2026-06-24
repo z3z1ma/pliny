@@ -360,6 +360,16 @@
       "target_scores": ["S008", "S002", "S006"],
       "target_scenarios": ["SCN-012", "SCN-009", "SCN-004"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-fish-before-opening-pressure-v1",
+      "path": "autoresearch/candidates/2026-06-23-fish-before-opening-pressure.md",
+      "target": "SKILL.md",
+      "status": "active",
+      "created": "2026-06-23",
+      "target_scores": ["S002", "S005"],
+      "target_scenarios": ["SCN-005", "SCN-003", "SCN-009"],
+      "promotion": "manual-only"
     }
   ]
 }

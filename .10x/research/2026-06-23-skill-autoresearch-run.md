@@ -764,3 +764,8 @@ Canonical start guard:
   knowledge/follow-up records correctly, closed coherent tickets, and avoided
   source edits. Discarded `candidate-skill-mirror-exposure-gate-v1` as null
   versus current.
+- 2026-06-23: Added `candidate-fish-before-opening-pressure-v1`, created the
+  `fish-before-opening` live seed, and registered
+  `EXP-20260623-854-fish-before-opening-scn005-live-micro` to test whether an
+  explicit "open a ticket" request creates a duplicate when an active ticket
+  already owns the issue.
