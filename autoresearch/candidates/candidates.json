@@ -305,7 +305,7 @@
       "id": "candidate-mentioned-follow-up-owner-v1",
       "path": "autoresearch/candidates/2026-06-23-mentioned-follow-up-owner.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "promoted",
       "created": "2026-06-23",
       "target_scores": ["S006", "S008", "S004"],
       "target_scenarios": ["SCN-009", "SCN-012", "SCN-008"],

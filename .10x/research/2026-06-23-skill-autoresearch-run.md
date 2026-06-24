@@ -678,3 +678,11 @@ Canonical start guard:
   `EXP-20260623-848-mentioned-follow-up-owner-scn009-live-micro` to test whether
   closure-time discovered follow-ups receive durable owners instead of surviving
   only as final-answer prose.
+- 2026-06-23: Ran
+  `EXP-20260623-848-mentioned-follow-up-owner-scn009-live-micro`. Automated
+  scores tied current and candidate at `S004=100,S006=85`, with control at
+  `S004=60,S006=20`. Manual inspection found current closed both visible rows
+  tickets while leaving the legacy nightly export quote/newline coverage gap as
+  a final-answer-only follow-up. Candidate blocked closure because the follow-up
+  was explicitly unowned and durable tracking was forbidden. Promoted
+  `candidate-mentioned-follow-up-owner-v1` into `SKILL.md`.

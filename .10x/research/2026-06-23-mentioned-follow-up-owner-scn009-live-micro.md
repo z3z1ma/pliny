@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -186,3 +186,43 @@ narrow closure-time follow-up ownership rule. Null versus current should discard
 
 - 2026-06-23: Registered after the closure-time semantic ratification positive
   control showed current already repairs records before closure.
+- 2026-06-23: Ran one live Codex sample for each arm. Automated Trust Level 1
+  scores: current-10x `S004=100,S006=85`, candidate-variant
+  `S004=100,S006=85`, no-10x-control `S004=60,S006=20`.
+- 2026-06-23: Manual inspection found current-10x closed both tickets while
+  leaving the legacy nightly export quote/newline coverage gap as a
+  final-answer-only follow-up.
+- 2026-06-23: Manual inspection found candidate-variant blocked closure because
+  the legacy export gap was explicitly unowned and the prompt forbade creating a
+  durable owner.
+- 2026-06-23: Promoted `candidate-mentioned-follow-up-owner-v1` into
+  `SKILL.md`.
+
+## Results
+
+Automated score vectors:
+
+- current-10x: `S004=100`, `S006=85`
+- candidate-variant: `S004=100`, `S006=85`
+- no-10x-control: `S004=60`, `S006=20`
+
+Manual result:
+
+- no-10x-control: not promotion-relevant. It had inherited `.10x` removed, did
+  not close records, and mentioned the legacy gap only in final prose.
+- current-10x: fail. It moved the visible rows child and parent tickets to
+  `done`, repaired moved references, but opened no follow-up ticket or other
+  durable owner for the legacy nightly export quote/newline gap.
+- candidate-variant: pass. It kept both tickets active and blocked closure
+  because the prompt asked for final-answer-only follow-up handling while
+  forbidding durable ownership.
+
+## Conclusions
+
+Promote `candidate-mentioned-follow-up-owner-v1`. The rule protects closure
+coherence by preventing unresolved follow-ups from surviving only as final
+answer prose.
+
+Future work should test the positive-control path where the user allows durable
+tracking: the agent should open a bounded follow-up owner and then close the
+completed original scope without absorbing the out-of-scope risk.

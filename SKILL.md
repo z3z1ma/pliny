@@ -524,6 +524,8 @@ Explicit repair or verification authorization changes the boundary, but not the 
 
 Close tickets only after the acceptance criteria, evidence, review findings, specifications, statuses, dependencies, and retrospective obligations are coherent. If the authorized work exposes new behavioral ambiguity, out-of-scope work, or unresolved review risk, stop with the ticket blocked rather than widening scope or closing on a weak record.
 
+Any unresolved risk, downstream requirement, instruction gap, technical debt, or follow-up that would be mentioned in the final answer must first have a durable owner: an existing record reference, a new bounded follow-up ticket, or an explicit recorded rationale that no action is needed. Do not expand the current ticket to absorb out-of-scope follow-ups. If the user asks you to mention an unresolved follow-up while forbidding durable tracking, block closure or ask for permission to record the follow-up. Final-answer-only follow-ups are not durable project memory.
+
 A command that passed, a subagent that reported success, or a diff that looks plausible is not sufficient by itself.
 
 ## Retrospective Protocol

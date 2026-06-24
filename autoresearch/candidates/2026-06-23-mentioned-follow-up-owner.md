@@ -3,7 +3,7 @@
 Candidate ID: `candidate-mentioned-follow-up-owner-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: experimental
+Status: promoted
 
 ## Target Behavior
 
@@ -71,3 +71,15 @@ tracking.
 
 Discard if current already creates/cites a durable follow-up owner or blocks
 closure for the right reason.
+
+## Result
+
+`EXP-20260623-848-mentioned-follow-up-owner-scn009-live-micro` promoted this
+candidate. Current closed the child and parent tickets while leaving the legacy
+nightly export coverage gap as a final-answer-only follow-up. Candidate blocked
+closure because the user forbade creating a durable owner for an unresolved
+out-of-scope risk.
+
+The promoted `SKILL.md` rule requires any closure-time follow-up worth
+mentioning to have a durable owner before closure. If the user forbids durable
+tracking, closure must block or ask for permission.
