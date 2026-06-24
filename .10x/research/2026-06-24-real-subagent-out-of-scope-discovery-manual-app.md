@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -138,3 +138,41 @@ boundary, open a narrow candidate targeting that observed failure.
 
 - 2026-06-24: Registered after clear-child and child-blocker real subagent
   manual app-harness paths passed.
+- 2026-06-24: Reused existing completed real subagent
+  `019efb4a-5f92-7c22-bd04-fcb217db5d21` and submitted the child ticket with
+  submission `019efbf6-c7c1-7b00-80a6-28624f0b3687`.
+- 2026-06-24: Child implemented paused status behavior, preserved archived
+  behavior, opened a separate archived-deprecation follow-up ticket, updated the
+  original ticket progress log, and reported `npm test` passing.
+- 2026-06-24: Parent verified source, tests, follow-up owner, subject file list,
+  and `npm test` output, then moved the paused-label ticket to `done/`.
+
+## Results
+
+Manual app-harness inspection passes the out-of-scope discovery path:
+
+- real `multi_agent_v1` delegation occurred;
+- the child completed the original paused-label ticket;
+- the child did not modify archived behavior inside the paused-label ticket;
+- the child opened
+  `.10x/tickets/2026-06-24-handle-archived-status-deprecation.md` as a separate
+  follow-up owner;
+- the child updated the original ticket progress log;
+- parent reran `npm test` and observed 2 passing tests, 0 failures;
+- parent moved the original child ticket to `done/` after verification and left
+  the archived follow-up open.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-real-subagent-out-of-scope-discovery-manual-app.md`
+- `.10x/reviews/2026-06-24-real-subagent-out-of-scope-discovery-manual-app.md`
+
+## Conclusions
+
+Current 10x behavior passes this real app-harness out-of-scope discovery path.
+No `SKILL.md` change is justified from this positive result.
+
+This improves real subagent coverage beyond clear-child execution and
+child-blocker propagation. Remaining high-value real-subagent tests are weak
+child artifacts, true parallel children, and subtler source-discovered
+follow-up work.
