@@ -3,7 +3,7 @@
 Candidate ID: `candidate-explicit-policy-ratification-proceeds-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: active
+Status: discarded
 
 ## Target Behavior
 
@@ -65,3 +65,11 @@ candidate creates coherent active decision/ticket records without source edits.
 Discard if current already proceeds correctly. Reject if candidate weakens the
 original revalidation-is-not-ratification boundary by accepting vague
 referential policy adoption.
+
+## Result
+
+Discarded 2026-06-24 after
+`EXP-20260623-858-explicit-policy-ratification-scn006-live-micro`. Automated
+S003 tied candidate, current, and control at 100, and manual inspection found
+current already proceeded correctly after explicit concrete policy ratification.
+The candidate was null versus current.
