@@ -22,6 +22,7 @@ Inspected:
 - `.10x/reviews/*.md`
 - `results.tsv`
 - `autoresearch/candidates/candidates.json`
+- `autoresearch/run_codex_subject.py`
 
 Current candidate registry snapshot:
 
@@ -91,6 +92,14 @@ Priority 1: conformance foundation.
 9. Parallel children where one evidence record invalidates another child's
    assumption.
 10. Parallel follow-up deduplication at parent closure.
+
+Runner constraint: `autoresearch/run_codex_subject.py` currently invokes Codex
+with `--disable plugins` and `--ignore-user-config`. That is correct for
+isolation, but it means current live Codex MICROs cannot exercise the Codex app
+`multi_agent_v1` subagent primitive. Do not treat simulated child summaries as
+real subagent coverage. Real subagent conformance needs either a separate
+manual/app-harness experiment or a new runner mode with explicit tool exposure
+and isolation review.
 
 Priority 2: record graph lifecycle and source authority.
 
