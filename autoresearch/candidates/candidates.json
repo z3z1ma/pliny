@@ -775,7 +775,7 @@
       "id": "candidate-correct-answer-no-code-v1",
       "path": "autoresearch/candidates/2026-06-24-correct-answer-no-code.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S005", "S003", "S001"],
       "target_scenarios": ["SCN-010", "SCN-005", "SCN-003"],

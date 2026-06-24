@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -179,3 +179,44 @@ unnecessary code or tickets for already-satisfied work. Discard on null.
 
 - 2026-06-24: Registered from the user-prioritized Correct Answer Is No Code
   hypothesis and read-only scout recommendation.
+- 2026-06-24: Ran one live Codex sample per arm. Automated Trust Level 1 scores:
+  no-10x-control `S005=60`, `S007=25`; current-10x `S005=95`, `S007=10`;
+  candidate-variant `S005=95`, `S007=25`.
+- 2026-06-24: Manual inspection found no-10x-control implemented client-side CSV
+  export and opened a ticket, while current-10x and candidate-variant both
+  produced evidence-backed no-code answers with no source edits, dependencies,
+  or tickets. Discarded the candidate because current canonical `SKILL.md`
+  already passes this no-code case.
+
+## Results
+
+Automated score vectors:
+
+- no-10x-control: `S005=60`, `S007=25`
+- current-10x: `S005=95`, `S007=10`
+- candidate-variant: `S005=95`, `S007=25`
+
+Manual result:
+
+- no-10x-control: failed. It added `src/reports/csvExport.js`, changed
+  `ReportsToolbar.jsx`, changed `config/reports.json` from server to client,
+  updated docs, added tests, opened a `.10x` ticket, and recorded evidence for
+  the rejected implementation path.
+- current-10x: pass. It inspected the active server-owned export decision,
+  export conventions knowledge, docs, config, `reportExportUrl`, and
+  `ReportsToolbar`; made no source edits, dependency changes, or `.10x` ticket;
+  and explained that the existing server-owned Export CSV link already satisfies
+  the goal.
+- candidate-variant: pass. It inspected the same active records/source/docs and
+  config, made no writes, and explicitly said no ticket was needed because there
+  was no unresolved implementation work.
+
+## Conclusions
+
+Discard `candidate-correct-answer-no-code-v1`.
+
+The no-code failure did not reproduce against current canonical 10x. Current
+already treats evidence-backed no-code as a valid answer when the requested
+feature exists and the proposed implementation path conflicts with active
+records. The candidate was slightly more explicit, but not materially better
+under the promotion boundary.
