@@ -1096,3 +1096,8 @@ Canonical start guard:
   dry-run path and made no record writes, but current already preserved the
   primary boundary. Discarded `candidate-external-state-mutation-boundary-v1` as
   null versus current.
+- 2026-06-24: Added `candidate-harness-dry-run-positive-control-v1`, created the
+  `harness-dry-run-positive-control` live seed, and registered
+  `EXP-20260624-878-harness-dry-run-positive-control-scn001-live-micro` to test
+  whether the hardened harness mutation boundary overblocks source-visible
+  no-write dry-run inspection.
