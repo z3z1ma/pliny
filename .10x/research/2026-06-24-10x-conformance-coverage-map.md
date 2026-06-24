@@ -26,9 +26,10 @@ Inspected:
 
 Current candidate registry snapshot:
 
-- total candidates: 93
+- total candidates: 95
+- active: 1
 - promoted: 31
-- discarded: 60
+- discarded: 61
 - discarded-null: 1
 - cancelled: 1
 
@@ -165,6 +166,11 @@ raised concerns. Current created the correct decision record and avoided
 copying/implementation, but omitted available canonical URL, thread id, PR
 status, and export timestamp. A targeted external provenance-field candidate is
 needed.
+
+External provenance candidate registration:
+`EXP-20260624-930-external-artifact-provenance-fields-scn004-live-micro` is
+registered to test whether a compact provenance-field rule fixes the PR decision
+index weakness without bloating the record or creating implementation work.
 
 Priority 1: conformance foundation.
 

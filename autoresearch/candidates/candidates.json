@@ -940,6 +940,16 @@
       "target_scores": ["S007", "S001", "S005"],
       "target_scenarios": ["SCN-001", "SCN-002", "SCN-010"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-external-artifact-provenance-fields-v1",
+      "path": "autoresearch/candidates/2026-06-24-external-artifact-provenance-fields.md",
+      "target": "SKILL.md",
+      "status": "active",
+      "created": "2026-06-24",
+      "target_scores": ["S002", "S005", "S003"],
+      "target_scenarios": ["SCN-004", "SCN-003", "SCN-008"],
+      "promotion": "manual-only"
     }
   ]
 }
