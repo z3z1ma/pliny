@@ -750,6 +750,16 @@
       "target_scores": ["S001", "S007", "S003"],
       "target_scenarios": ["SCN-001", "SCN-006", "SCN-007"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-explicit-user-override-without-supersession-v1",
+      "path": "autoresearch/candidates/2026-06-24-explicit-user-override-without-supersession.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-24",
+      "target_scores": ["S001", "S003", "S002"],
+      "target_scenarios": ["SCN-006", "SCN-001", "SCN-010"],
+      "promotion": "manual-only"
     }
   ]
 }
