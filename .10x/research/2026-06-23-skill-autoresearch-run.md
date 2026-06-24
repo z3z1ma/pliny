@@ -664,3 +664,12 @@ Canonical start guard:
   positive-control test: when the user explicitly authorizes the missing Kappa
   source-field and threshold semantics, the agent should repair the active
   records before using child tests as closure evidence.
+- 2026-06-23: Ran
+  `EXP-20260623-847-closure-time-semantic-ratification-scn009-live-micro`.
+  Current and candidate both scored `S004=65,S006=65`; control scored
+  `S004=100,S006=45`, with manual inspection overriding the misleading control
+  evidence score because control had no inherited seed `.10x` graph. Current and
+  candidate both repaired/superseded active records before closure and avoided
+  implementation edits. Current had stronger closure dependencies in the done
+  parent ticket, while candidate left the shaping ticket open. Discarded the
+  candidate as null to slightly weaker versus current.

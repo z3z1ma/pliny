@@ -295,7 +295,7 @@
       "id": "candidate-closure-time-semantic-ratification-record-coherence-v1",
       "path": "autoresearch/candidates/2026-06-23-closure-time-semantic-ratification-record-coherence.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-23",
       "target_scores": ["S004", "S006", "S002"],
       "target_scenarios": ["SCN-009", "SCN-006", "SCN-001"],

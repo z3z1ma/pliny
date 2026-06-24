@@ -3,7 +3,7 @@
 Candidate ID: `candidate-closure-time-semantic-ratification-record-coherence-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 
 ## Target Behavior
 
@@ -68,3 +68,17 @@ is supported.
 
 Discard if current already handles the positive path coherently or candidate
 widens scope beyond record repair and closure review.
+
+## Result
+
+`EXP-20260623-847-closure-time-semantic-ratification-scn009-live-micro`
+discarded this candidate as null to slightly weaker versus current. Both
+current and candidate recognized the user's explicit supersession authority,
+updated or superseded the active Kappa records, created closure evidence and a
+pass review, and closed the child and parent without editing implementation
+files.
+
+Current was at least as strong because its done tickets carried fuller
+dependencies back to the active decision, closure evidence, and review. The
+candidate kept the upstream shaping ticket open and left the parent ticket with
+weaker closure cross-references. The candidate overlay is not promoted.

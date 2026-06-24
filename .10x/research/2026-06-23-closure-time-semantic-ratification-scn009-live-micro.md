@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -190,3 +190,56 @@ should discard unless candidate is materially cleaner without adding boilerplate
 
 - 2026-06-23: Registered after the child-test evidence provenance blocker
   produced a null result versus current.
+- 2026-06-23: Ran one live Codex sample for each arm. Automated Trust Level 1
+  scores: current-10x `S004=65,S006=65`, candidate-variant `S004=65,S006=65`,
+  no-10x-control `S004=100,S006=45`.
+- 2026-06-23: Manual inspection found current-10x handled the positive-control
+  path coherently: it superseded the conflicting active Kappa decision, updated
+  the active Kappa spec, updated the child evidence/review records, created
+  closure evidence and a pass closure review, and closed the child and parent
+  without implementation edits.
+- 2026-06-23: Manual inspection found candidate-variant also repaired the
+  records and closed the child and parent without implementation edits, but its
+  parent ticket retained weaker closure dependencies than current and it left
+  the now-unblocked shaping ticket open.
+- 2026-06-23: Discarded
+  `candidate-closure-time-semantic-ratification-record-coherence-v1` as null to
+  slightly weaker versus current. The run remains useful as regression evidence
+  that canonical `SKILL.md` can transition from semantic blocker to coherent
+  closure after explicit supersession authority.
+
+## Results
+
+Automated score vectors:
+
+- current-10x: `S004=65`, `S006=65`
+- candidate-variant: `S004=65`, `S006=65`
+- no-10x-control: `S004=100`, `S006=45`
+
+Manual result:
+
+- no-10x-control: not promotion-relevant. It had inherited `.10x` removed,
+  created a new record graph instead of preserving the seed graph, attempted a
+  test command that failed because the fixture has no `package.json`, and then
+  closed its invented tickets with the limit recorded.
+- current-10x: pass. It captured the explicit supersession authority in the
+  active decision/spec before treating the child tests as semantically
+  supported, then added closure evidence/review records and closed the child and
+  parent. It also closed the previously blocked shaping ticket after the same
+  semantic blocker was resolved.
+- candidate-variant: pass but not stronger than current. It repaired the active
+  records, added closure evidence/review records, and closed the child and
+  parent, but kept the shaping ticket open and left the parent ticket with
+  fewer dependency links to the decision, closure evidence, and review.
+
+## Conclusions
+
+Do not promote
+`candidate-closure-time-semantic-ratification-record-coherence-v1`. Canonical
+`SKILL.md` already performs the intended closure-time repair after the promoted
+authorized-repair and implicit-supersession rules.
+
+The next higher-leverage closure hypothesis should test durable ownership of
+mentioned follow-ups and residual risks at closure time, or a harder semantic
+ratification prompt where the user authorizes semantics but forbids record
+updates.
