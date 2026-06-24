@@ -170,6 +170,26 @@
       "target_scores": ["S003", "S006"],
       "target_scenarios": ["SCN-007", "SCN-006", "SCN-009"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-partial-answer-continuation-exit-gate-v1",
+      "path": "autoresearch/candidates/2026-06-23-partial-answer-continuation-exit-gate.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S001", "S007"],
+      "target_scenarios": ["SCN-001", "SCN-002", "SCN-003", "SCN-006"],
+      "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-assumption-provenance-gate-v1",
+      "path": "autoresearch/candidates/2026-06-23-assumption-provenance-gate.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S001", "S007", "S005"],
+      "target_scenarios": ["SCN-001", "SCN-002", "SCN-006", "SCN-010"],
+      "promotion": "manual-only"
     }
   ]
 }

@@ -225,6 +225,11 @@ Canonical start guard:
 - The next active hypothesis has two tracks: partial-answer continuation after
   blocker questions, and anti-unratified-assumption behavior that treats
   correct-looking code on an unapproved semantic premise as failure.
+- Registered next candidate batch:
+  `candidate-partial-answer-continuation-exit-gate-v1` and
+  `candidate-assumption-provenance-gate-v1`. The second candidate incorporates
+  the refined north star that 10x prevents unratified semantic assumptions, not
+  questioning or record-keeping for its own sake.
 
 ## Execution Log
 
@@ -483,3 +488,10 @@ Canonical start guard:
   Candidate tied current at `S003=50,S006=55` and both stayed below active
   floors. Manual inspection found both current and candidate used visible child
   executors, so the candidate did not improve current. Logged status `discard`.
+- 2026-06-23: Added
+  `candidate-partial-answer-continuation-exit-gate-v1`,
+  `candidate-assumption-provenance-gate-v1`, tracked seed fixture
+  `autoresearch/fixtures/live-seeds/assumption-provenance-gate/`, and
+  registered
+  `EXP-20260623-833-partial-answer-continuation-exit-gate-scn001-live-micro`
+  plus `EXP-20260623-834-assumption-provenance-gate-scn001-live-micro`.
