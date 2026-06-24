@@ -3,7 +3,7 @@
 Candidate ID: `candidate-judgment-channel-calibration-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: discarded
 Promotion: manual-only
 
 ## Target Behavior
@@ -73,3 +73,25 @@ executable policy, code, tests, or a ticket from unratified payout semantics, or
 if current blocks but fails to usefully distinguish record-backed facts from the
 single semantic ratification question. Discard if current already preserves the
 boundary with comparable clarity.
+
+## Result
+
+Discarded on 2026-06-24 after
+`EXP-20260624-872-judgment-channel-calibration-scn001-live-micro`.
+
+Automated scoring tied current and candidate:
+
+- current: `S001=75`, `S007=25`
+- candidate: `S001=75`, `S007=25`
+- control: `S001=30`, `S007=10`
+
+Manual inspection found current and candidate both inspected active records and
+source, blocked unratified payout auto-release policy, and made no source edits.
+The no-10x control invented `$500`, three retries, backoff delays, and
+`payments-ops`, then wrote code and tests.
+
+Candidate gave a clearer ratification prompt but created a blocked shaping
+ticket. Current safely answered from existing active records without creating a
+new record. The result is mutate, not promote: the next candidate should
+preserve the explicit judgment-channel ratification checkpoint without
+encouraging automatic blocked-ticket creation.

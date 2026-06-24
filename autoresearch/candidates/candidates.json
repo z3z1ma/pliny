@@ -535,7 +535,7 @@
       "id": "candidate-judgment-channel-calibration-v1",
       "path": "autoresearch/candidates/2026-06-24-judgment-channel-calibration.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S001", "S007", "S005"],
       "target_scenarios": ["SCN-001", "SCN-011", "SCN-006"],
