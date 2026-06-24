@@ -395,7 +395,7 @@
       "id": "candidate-challenge-request-validity-v1",
       "path": "autoresearch/candidates/2026-06-23-challenge-request-validity.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "discarded",
       "created": "2026-06-23",
       "target_scores": ["S005", "S007"],
       "target_scenarios": ["SCN-010", "SCN-001", "SCN-006"],

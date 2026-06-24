@@ -3,7 +3,7 @@
 Candidate ID: `candidate-challenge-request-validity-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: active
+Status: discarded
 
 ## Target Behavior
 
@@ -70,3 +70,11 @@ smaller valid path without losing any real requirement.
 
 Discard if current already challenges the request correctly, or if candidate
 rejects a valid request without evidence.
+
+## Result
+
+Discarded after `EXP-20260623-857-challenge-request-validity-scn010-live-micro`.
+Current and candidate both challenged the client-side CSV framework request and
+avoided source edits or dependency additions. Candidate was cleaner because it
+made no record writes, while current opened a blocked ticket to preserve the
+conflict. The central target failure did not occur in current 10x.
