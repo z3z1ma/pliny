@@ -981,3 +981,10 @@ Canonical start guard:
   `EXP-20260624-869-ticket-ledger-economy-scn006-live-micro` as an immediate
   regression check that the promoted provenance ledger is not overused on
   trivial single-provenance tickets.
+- 2026-06-24: Ran
+  `EXP-20260624-869-ticket-ledger-economy-scn006-live-micro`. Automated S003
+  tied all arms at `100`, but manual inspection found current overused the
+  newly promoted provenance ledger on a trivial single-spec ticket. Candidate
+  kept the executable ticket compact while preserving scope, exclusions,
+  acceptance criteria, evidence expectations, references, progress notes, and
+  blockers. Promoted `candidate-ticket-ledger-economy-guard-v1` into `SKILL.md`.

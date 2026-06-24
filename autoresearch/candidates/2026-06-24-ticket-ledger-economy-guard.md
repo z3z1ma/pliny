@@ -3,7 +3,7 @@
 Candidate ID: `candidate-ticket-ledger-economy-guard-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: promoted
 Promotion: manual-only
 
 ## Target Behavior
@@ -51,3 +51,21 @@ Secondary scenario:
 Promote only if current adds an unnecessary provenance ledger to the simple
 single-provenance ticket while candidate keeps the ticket compact and complete.
 Discard if current already avoids ledger overuse.
+
+## Result
+
+Promoted on 2026-06-24 from
+`EXP-20260624-869-ticket-ledger-economy-scn006-live-micro`.
+
+Automated S003 tied all arms at `100`, but manual inspection found the target
+regression:
+
+- Current created a complete ticket but added an unnecessary `Assumption
+  Provenance` section even though all executable behavior came from one active
+  spec and the work was not high-impact.
+- Candidate created a complete compact ticket with scope, exclusions,
+  acceptance criteria, evidence expectations, references, progress notes, and
+  `Blockers: None`, but no ledger.
+
+Promoted as a narrow economy correction to the newly added ticket provenance
+rule.

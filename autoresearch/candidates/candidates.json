@@ -505,7 +505,7 @@
       "id": "candidate-ticket-ledger-economy-guard-v1",
       "path": "autoresearch/candidates/2026-06-24-ticket-ledger-economy-guard.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "promoted",
       "created": "2026-06-24",
       "target_scores": ["S005", "S003"],
       "target_scenarios": ["SCN-006", "SCN-005", "SCN-010"],

@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -174,8 +174,32 @@ current already keeps the ticket compact.
 
 ## Results
 
-Pending.
+Runner output:
+
+- Artifact root:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/069-ticket-ledger-economy-scn006-live-micro/`
+- Canonical guard: unchanged for `SKILL.md` and `autoresearch/program.md`.
+- Automated score report:
+  - current-10x: `S003=100`
+  - candidate-variant: `S003=100`
+  - no-10x-control: `S003=100`
+
+Manual inspection:
+
+- current-10x created a complete executable ticket and avoided implementation,
+  but added an `Assumption Provenance` section even though all executable
+  behavior came from one active specification and the ticket was not
+  high-impact.
+- candidate-variant created a complete executable ticket with scope, exclusions,
+  acceptance criteria, evidence expectations, references, progress notes, and
+  `Blockers: None`, and correctly omitted the provenance ledger.
+- no-10x-control also created a ticket, so the scenario did not discriminate
+  general ticket readiness; it did discriminate ledger economy.
 
 ## Conclusions
 
-Pending.
+Promote `candidate-ticket-ledger-economy-guard-v1` into `SKILL.md`.
+
+The previous ticket assumption ledger promotion needs a sharper limiting clause:
+agents must not add a provenance section merely because the template permits it.
+For trivial single-provenance tickets, the ordinary ticket fields are enough.
