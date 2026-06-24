@@ -561,6 +561,10 @@ A command that passed, a subagent that reported success, or a diff that looks pl
 
 Ticket closure is an act of extraction, not merely completion.
 
+Durable learning is not closure-gated. If execution becomes blocked, fails, or pauses before successful closure, preserve any durable learning that has already crystallized instead of waiting for ticket closure. Keep the owning ticket open or blocked. Do not close a ticket merely to run a retrospective. Classify the learning using the same routing below: procedures become skills, concepts and conventions become knowledge, unresolved work becomes tickets or blockers, and investigations or observations become research or evidence with limits.
+
+Do not record low-value churn from every failed attempt. Preserve only learning that should change how a future cold-start agent works, speaks, tests, or continues the blocked work.
+
 After satisfying the final criteria of any major work, review the entire execution window. Examine mistakes, dead ends, unexpected constraints, successful techniques, and solutions engineered under pressure. Convert that volatile history into durable project capability immediately.
 
 - Elevate durable conceptual facts into `knowledge` records.

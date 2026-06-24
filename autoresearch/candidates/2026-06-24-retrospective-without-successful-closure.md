@@ -3,7 +3,7 @@
 Candidate ID: `candidate-retrospective-without-successful-closure-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: promoted
 
 ## Target Behavior
 
@@ -68,3 +68,17 @@ Promote only if current loses durable pre-closure learning while candidate keeps
 the ticket blocked/open and creates the appropriate durable skill and knowledge
 owners. Discard if current already preserves the learning or if candidate
 creates generic low-value records, closes the blocked ticket, or edits source.
+
+## Result
+
+`EXP-20260624-898-retrospective-without-successful-closure-scn012-live-micro`
+promoted this candidate. Current 10x kept the ticket blocked, preserved
+`sourceRef` vocabulary as knowledge, and avoided implementation edits, but
+routed the repeatable tracked-CSV/frozen-date fixture procedure to research
+rather than a skill. Candidate kept the same blocker discipline and created a
+self-contained `.10x/skills/ledger-import-test-fixtures.md` procedure plus the
+knowledge record.
+
+The promoted `SKILL.md` change is narrower than the experimental overlay: it
+adds pre-closure extraction while preserving the closure gate, blocker status,
+typed record routing, and low-value-churn guard.

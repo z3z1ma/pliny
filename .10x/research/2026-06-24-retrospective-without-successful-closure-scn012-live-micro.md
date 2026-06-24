@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -184,3 +184,37 @@ Discard on null.
 
 - 2026-06-24: Registered from the user-prioritized Retrospective Without
   Successful Closure hypothesis.
+- 2026-06-24: Ran one live Codex MICRO with no-10x-control, current-10x, and
+  candidate-variant arms. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/098-retrospective-without-successful-closure-scn012-live-micro/`.
+- 2026-06-24: Promoted `candidate-retrospective-without-successful-closure-v1`
+  into `SKILL.md`.
+
+## Findings
+
+- no-10x-control recreated a minimal `.10x` graph after control cleanup removed
+  seed records. It kept the child blocked and avoided source edits, but routed
+  the fixture procedure to knowledge rather than a skill. This arm is
+  non-promotion-relevant because control cleanup intentionally removed the seed
+  record graph.
+- current-10x kept the child ticket `blocked`, kept the parent `active`, avoided
+  source edits, recorded `sourceRef` vocabulary as knowledge, and recorded the
+  tracked-CSV/frozen-date fixture procedure as research.
+- candidate-variant kept the same blocker and no-source-edit discipline, created
+  `.10x/knowledge/ledger-import-source-ref.md`, and created
+  `.10x/skills/ledger-import-test-fixtures.md` with a concrete procedure and
+  validation checklist.
+- Automated Trust Level 1 scores undercounted the candidate because SCN-012
+  scoring is still heuristic. Manual inspection is authoritative for this
+  result.
+
+## Conclusions
+
+The candidate is a net positive. Current 10x already preserved some pre-closure
+learning, but the closure-centered retrospective wording did not reliably route
+the repeatable operational procedure into a skill before closure. The promoted
+instruction clarifies that durable learning is not closure-gated while keeping
+the owning ticket open or blocked and preserving typed record routing.
+
+The promotion must not be interpreted as permission to close blocked tickets,
+record every failed attempt, or weaken semantic blocker discipline.
