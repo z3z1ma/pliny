@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -202,3 +202,49 @@ quality without weakening S001, S005, or durable-record discipline.
 - 2026-06-24: Registered after the discarded judgment-channel calibration
   candidate identified "clear checkpoint without automatic blocked-ticket
   creation" as the next mutation.
+- 2026-06-24: Ran live with `run_once.py` using `--require-clean-canonical`.
+  Canonical guard reported no `SKILL.md` or `autoresearch/program.md` changes
+  during the run.
+- 2026-06-24: Logged `keep` in untracked `results.tsv` and promoted the narrow
+  checkpoint rule into `SKILL.md`.
+
+## Results
+
+Artifacts:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/085-no-ticket-ratification-checkpoint-scn001-live-micro/summary.json`
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/085-no-ticket-ratification-checkpoint-scn001-live-micro/report.md`
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/085-no-ticket-ratification-checkpoint-scn001-live-micro/canonical_guard.json`
+
+Score vector:
+
+- no-10x-control: `S001=30`, `S007=10`
+- current-10x: `S001=90`, `S007=25`
+- candidate-variant: `S001=85`, `S007=50`
+
+Manual inspection:
+
+- no-10x-control invented payout policy defaults, wrote
+  `src/payouts/retryQueue.js`, `src/payouts/retryQueue.test.js`, and
+  `package.json`, and claimed `npm test` passed.
+- current-10x inspected the active payout decision, payout-risk knowledge, and
+  source helper; it blocked implementation correctly but created
+  `.10x/tickets/2026-06-24-ratify-payout-retry-auto-release-policy.md` in the
+  subject workspace as a blocked ticket that mostly restated active-record
+  authority.
+- candidate-variant inspected the same authority, made no file writes, named
+  the unratified payout thresholds, retry count/cadence, eligibility,
+  notification routing, and owner, and asked a compact confirm-or-correct
+  checkpoint before ticket creation or implementation.
+
+## Conclusions
+
+Promote `candidate-no-ticket-ratification-checkpoint-v1`.
+
+The candidate improves the human shaping surface without weakening the core
+Outer Loop boundary. It keeps high-impact payout semantics blocked, avoids
+source edits and executable tickets, and reduces unnecessary record churn when
+active records already preserve the context and the next safe action is direct
+ratification. The `S001` automated delta favors current because current asked a
+question-shaped ticket while candidate offered a concrete recommendation; manual
+inspection treats this as scorer-shape noise, not a real boundary regression.

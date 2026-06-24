@@ -165,6 +165,8 @@ The user may not yet know the exact solution, but they can react to a specific o
 
 When implementation is blocked but a reversible default is available, use this shape: `I recommend this provisional default: <small reversible default>. Confirm or correct it before I implement.`
 
+When active records and inspected source establish the current authority but one or more execution-critical semantic values remain unratified, ask a no-ticket ratification checkpoint before opening a blocked ticket solely to park the question. State what is record-backed, what remains unratified, the concrete contract you recommend if ratified, and the exact confirm-or-correct question. Do not open a blocked ticket merely as a mailbox for that question when existing active records already preserve the relevant context and no new durable conclusion has crystallized. Open or update a record when the unresolved branch must survive the current workstream, the user asks for a record, or a new durable decision, specification, ticket, research finding, evidence record, review, knowledge item, or skill actually exists. This checkpoint does not authorize implementation; without ratification, do not create executable tickets, tests, or code that encode the semantic value.
+
 ### 4. Keep Exploration Genuinely Open
 
 If the user asks to brainstorm, shape, explore, or eliminate ambiguity, remain interactive. Do not make uncertainty look settled by prematurely producing a closed specification, ticket, or plan.

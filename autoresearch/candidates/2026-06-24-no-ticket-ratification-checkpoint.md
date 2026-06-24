@@ -3,7 +3,7 @@
 Candidate ID: `candidate-no-ticket-ratification-checkpoint-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: promoted
 Promotion: manual-only
 
 ## Target Behavior
@@ -79,3 +79,22 @@ Promote only if the candidate improves the ratification checkpoint over current
 canonical 10x while making no source edits, no executable ticket, no tests, and
 no unnecessary blocked ticket. Discard if current already provides comparable
 clarity, or if the candidate skips a record despite a new durable conclusion.
+
+## Result
+
+Promoted on 2026-06-24 after
+`EXP-20260624-885-no-ticket-ratification-checkpoint-scn001-live-micro`.
+
+Automated first-pass scoring:
+
+- candidate: `S001=85`, `S007=50`
+- current: `S001=90`, `S007=25`
+- control: `S001=30`, `S007=10`
+
+Manual inspection found the no-10x control invented amount thresholds, retry
+counts, eligibility, notification routing, and ownership, then wrote source and
+tests. Current canonical 10x blocked implementation correctly but opened a
+blocked ticket that restated active-record authority. Candidate inspected the
+same authority, made no writes, gave a compact record-backed/unratified
+breakdown, and asked the user to confirm or correct the concrete policy
+contract before any executable ticket or implementation.
