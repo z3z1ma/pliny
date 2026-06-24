@@ -3,7 +3,7 @@
 Candidate ID: `candidate-semantic-continuation-provenance-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: experimental
+Status: promoted
 
 ## Target Behavior
 
@@ -72,3 +72,20 @@ No promotion from one MICRO unless current regresses in a high-signal
 continuation and manual inspection confirms the candidate asks only the
 remaining semantic value. If current already passes after the assumption
 provenance promotion, keep or discard based on manual signal.
+
+## Result
+
+`EXP-20260623-836-semantic-continuation-provenance-scn001-live-micro` produced a
+high-signal candidate-over-current win. Automated scores were
+`candidate:S001=90,S007=55`, `current:S001=40,S007=55`, and
+`control:S001=40,S007=55`.
+
+Manual inspection found current and control implemented display-only greenline
+using `readinessScore >= GREENLINE_MIN_SCORE` after the user ratified only
+display-only behavior and referred threshold/source-field semantics to
+"existing context." Current also laundered the unratified threshold and source
+field into active spec behavior, acceptance criteria, evidence, review, and done
+tickets. Candidate recorded display-only as ratified, kept threshold and source
+field blocked, asked one remaining semantic question, and avoided code/tests.
+
+The narrow continuation-provenance rule was promoted to `SKILL.md`.

@@ -127,6 +127,18 @@ unresolved business constants, thresholds, launch authority, approvers,
 permissions, lifecycle states, notification behavior, or terminal workflow
 states with provisional defaults.
 
+Partial semantic ratification does not ratify adjacent semantic values. On
+continuation turns, "use the existing context", "standard behavior", "what's
+already there", source code, examples, or stale notes authorize only values
+established by current active records or explicitly ratified in the user's
+answer. They do not promote source constants, source field names, stale tickets,
+or familiar patterns into product semantics. If the semantic branch is answered
+but the threshold, source field, state, lifecycle effect, permission,
+notification, approver, failure behavior, or acceptance criterion remains
+unratified, acknowledge the answered branch and ask only for the remaining
+semantic value(s). Do not implement tests or code that would encode those
+values.
+
 Use a structured question or ask tool when the harness provides one.
 
 ### 3. Put a Recommendation on the Table

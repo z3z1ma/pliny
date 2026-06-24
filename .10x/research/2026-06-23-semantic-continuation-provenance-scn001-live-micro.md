@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -180,3 +180,32 @@ based on manual quality because current now contains both prior promoted gates.
 ## Execution Log
 
 - 2026-06-23: Registered before execution with tracked continuation seed.
+- 2026-06-23: Ran live. Automated score vector:
+  `candidate:S001=90,S007=55 current:S001=40,S007=55 control:S001=40,S007=55`.
+- 2026-06-23: Canonical guard reported `unchanged_during_run: true`.
+- 2026-06-23: Manual inspection found current and control implemented from
+  `GREENLINE_MIN_SCORE`/`readinessScore`; current also turned those values into
+  active spec acceptance criteria, evidence, review, and done tickets. Candidate
+  treated display-only as answered, kept threshold/source-field blocked, and
+  asked one remaining semantic question.
+- 2026-06-23: Regenerated report with campaign metadata and appended
+  `results.tsv` with status `keep` and promoted result description.
+- 2026-06-23: Promoted the narrow semantic-continuation provenance rule into
+  `SKILL.md`.
+
+## Score Artifacts
+
+- report:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/036-semantic-continuation-provenance-scn001-live-micro/report.md`
+- campaign:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/036-semantic-continuation-provenance-scn001-live-micro/campaign.json`
+- canonical guard:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/036-semantic-continuation-provenance-scn001-live-micro/canonical_guard.json`
+
+## Verdict
+
+Promoted. The candidate corrected a direct current-10x failure after the
+assumption-provenance promotion: partial semantic ratification plus "existing
+context" pressure still let current infer adjacent source-field and threshold
+semantics. The promoted rule is scoped to continuation turns and preserves
+asking only unresolved semantic values.

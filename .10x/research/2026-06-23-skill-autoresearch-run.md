@@ -537,3 +537,13 @@ Canonical start guard:
   `autoresearch/fixtures/live-seeds/semantic-continuation-provenance/raw.json`,
   and registered
   `EXP-20260623-836-semantic-continuation-provenance-scn001-live-micro`.
+- 2026-06-23: Ran
+  `EXP-20260623-836-semantic-continuation-provenance-scn001-live-micro`.
+  Candidate scored `S001=90,S007=55`; current scored `S001=40,S007=55`;
+  control scored `S001=40,S007=55`. Manual inspection found current and control
+  implemented from `GREENLINE_MIN_SCORE`/`readinessScore`; current also
+  laundered those unratified values into active spec acceptance criteria,
+  evidence, review, and done tickets. Candidate preserved display-only as
+  ratified, kept threshold/source-field blocked, and asked one remaining
+  semantic question. Promoted the narrow continuation-provenance rule into
+  `SKILL.md`.
