@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -191,3 +191,43 @@ regressions.
 - 2026-06-24: Registered after current passed decision indexing but omitted
   available external provenance fields in
   `EXP-20260624-929-external-pr-discussion-decision-index-scn004-live-micro`.
+- 2026-06-24: Ran live. Candidate, current, and no-10x-control each created one
+  `.10x/decisions/acme-webhook-idempotency-key.md` record and no implementation
+  work.
+
+## Results
+
+Automated Trust Level 1 score vectors were equal and low for all arms:
+
+- candidate-variant: `S002=60`
+- current-10x: `S002=60`
+- no-10x-control: `S002=60`
+
+Manual inspection was decisive:
+
+- Candidate created the correct decision record and included canonical URL,
+  source system, repository, external thread id, PR status, export timestamp,
+  local export path, and an explicit statement that the PR discussion remains
+  canonical.
+- Current created the correct decision record, but preserved only the local
+  export path and did not include the URL, thread id, PR status, or export
+  timestamp.
+- no-10x-control created the correct decision record and included the local
+  export path and discussion id, but omitted the URL, status, and export
+  timestamp.
+
+Raw artifact root:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/130-external-artifact-provenance-fields-scn004-live-micro/`
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-external-artifact-provenance-fields-result.md`
+- `.10x/reviews/2026-06-24-external-artifact-provenance-fields-result.md`
+
+## Conclusions
+
+`candidate-external-artifact-provenance-fields-v1` materially improves external
+decision-index records by making authority/refindability provenance explicit.
+The thin-index and local-canonical regressions passed, supporting promotion to
+`SKILL.md`.

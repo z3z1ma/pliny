@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -189,3 +189,41 @@ promote the candidate even though it won the PR-discussion primary scenario.
 
 - 2026-06-24: Registered after the PR-discussion provenance candidate primary
   run showed a candidate win over current.
+- 2026-06-24: Ran live. Candidate, current, and no-10x-control each created one
+  `.10x/specs/nimbus-retention-controls.md` record and no implementation work.
+
+## Results
+
+Automated Trust Level 1 score vectors:
+
+- candidate-variant: `S002=75`
+- current-10x: `S002=75`
+- no-10x-control: `S002=60`
+
+Manual inspection was decisive. Candidate passed:
+
+- read the exported Google Doc PRD;
+- created `.10x/specs/nimbus-retention-controls.md` with `Status: active`;
+- stated the local `.10x` spec is the canonical implementation contract;
+- preserved Google Doc URL, document ID, revision, observed status, owner,
+  approved date, and local export path as provenance;
+- carried over purpose, scope, exclusions, behavior, scenarios, acceptance
+  criteria, and constraints;
+- avoided creating a thin pointer only;
+- edited no source/test files, opened no implementation tickets, and ran no
+  tests.
+
+Raw artifact root:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/132-external-artifact-provenance-local-canonical-regression-scn004-live-micro/`
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-external-artifact-provenance-fields-result.md`
+- `.10x/reviews/2026-06-24-external-artifact-provenance-fields-result.md`
+
+## Conclusions
+
+The candidate does not over-apply thin-index behavior when local `.10x` is
+explicitly made canonical. It preserves external provenance while producing a
+full local behavioral contract.

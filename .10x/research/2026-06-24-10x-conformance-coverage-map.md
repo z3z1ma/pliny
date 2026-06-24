@@ -27,8 +27,8 @@ Inspected:
 Current candidate registry snapshot:
 
 - total candidates: 95
-- active: 1
-- promoted: 31
+- active: 0
+- promoted: 32
 - discarded: 61
 - discarded-null: 1
 - cancelled: 1
@@ -66,7 +66,7 @@ Current candidate registry snapshot:
 | Record ontology and quality | Partial | Record hardening, record economy, fish before opening, distinct near-duplicate owner, ticket ledgers, stale research authority, stale done-ticket authority MICRO. | Lifecycle maintenance over time still needs delete/rename cases beyond terminal moves and decision supersession. |
 | Record graph maintenance mechanics | Partial-strong | Record reference integrity closure, authorized repair, scoped repair, decision supersession repair, terminal ticket move repair, invalid draft deletion repair, active spec rename repair. | Need longer lifecycle maintenance over repeated sessions and stale/conflicting record updates. |
 | Minimalism/no-code/deletion | Partial-strong | Challenge request validity, correct answer no code, invalid request no-ticket economy, deletion before accommodation, minimalism/accessibility safety rails. | Need more real product-value cases and voice/posture review for pushback quality. |
-| External artifact indexing | Weak | External state mutation boundary, harness side-effect boundary, external workflows indirectly. | Need Google Doc/Jira/PR discussion thin-index scenarios. |
+| External artifact indexing | Partial-strong | Google Doc thin index, local-canonical authority transfer, PR-discussion decision index, and promoted external provenance-field regression controls. | Need Jira/Linear delivery-state index, external design-doc supersession, and external artifact status-change cases. |
 | Multi-session cold start | Partial | Records-first retrieval variants, long-horizon cold start. | Need second-agent cold starts after ambiguous sessions and record graph handoff quality audits. |
 | Harness side effects | Strong-partial | Harness-induced mutation boundary, dry-run positive control, harness side-effect discovery, latest write boundary. | Need non-Codex harness comparison and live tool side-effect variants. |
 | Over-conservatism positive controls | Partial | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification. | Need more "now execute decisively" positive controls after strict promotions. |
@@ -171,6 +171,15 @@ External provenance candidate registration:
 `EXP-20260624-930-external-artifact-provenance-fields-scn004-live-micro` is
 registered to test whether a compact provenance-field rule fixes the PR decision
 index weakness without bloating the record or creating implementation work.
+
+External provenance candidate result:
+`candidate-external-artifact-provenance-fields-v1` was promoted after
+`EXP-20260624-930-external-artifact-provenance-fields-scn004-live-micro` showed
+candidate preserved missing PR provenance fields, and regressions
+`EXP-20260624-931-external-artifact-provenance-thin-index-regression-scn004-live-micro`
+and
+`EXP-20260624-932-external-artifact-provenance-local-canonical-regression-scn004-live-micro`
+passed manually.
 
 Priority 1: conformance foundation.
 

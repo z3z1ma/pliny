@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -185,3 +185,38 @@ promote the candidate even though it won the PR-discussion primary scenario.
 
 - 2026-06-24: Registered after the PR-discussion provenance candidate primary
   run showed a candidate win over current.
+- 2026-06-24: Ran live. Candidate, current, and no-10x-control each created one
+  specification-class index record and no implementation work.
+
+## Results
+
+Automated Trust Level 1 score vectors were equal and low for all arms:
+
+- candidate-variant: `S002=40`
+- current-10x: `S002=40`
+- no-10x-control: `S002=40`
+
+Manual inspection overrides the heuristic score. Candidate passed:
+
+- read the exported Google Doc PRD;
+- created one thin `.10x/specs/nimbus-retention-controls-prd.md` index record;
+- included canonical URL, source system, document ID, observed status, revision,
+  owner, approved date, and local export path;
+- stated the Google Doc remains canonical and the local record is only an index;
+- kept the record to 31 lines versus the 78-line external PRD;
+- did not copy the PRD body, all scenarios, or all acceptance criteria;
+- created no implementation tickets and edited no source/test files.
+
+Raw artifact root:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/131-external-artifact-provenance-thin-index-regression-scn004-live-micro/`
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-external-artifact-provenance-fields-result.md`
+- `.10x/reviews/2026-06-24-external-artifact-provenance-fields-result.md`
+
+## Conclusions
+
+The candidate does not regress thin external-artifact indexing. It adds useful
+provenance while preserving economy and canonical-external authority.

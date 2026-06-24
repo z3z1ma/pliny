@@ -3,7 +3,7 @@
 Candidate ID: `candidate-external-artifact-provenance-fields-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: promoted
 
 ## Target Behavior
 
@@ -68,3 +68,23 @@ better than current on the PR-decision scenario, while passing the thin-index
 and local-canonical regression controls. Discard if current already improves on
 rerun, or if candidate copies too much artifact content, invents metadata, or
 weakens local-canonical authority transfer.
+
+## Promotion Result
+
+Promoted to `SKILL.md` on 2026-06-24 after:
+
+- `EXP-20260624-930-external-artifact-provenance-fields-scn004-live-micro`
+  showed candidate preserved the missing canonical URL, source system,
+  repository, thread id, PR status, export timestamp, local export path, and
+  canonical-authority statement while current omitted most of that provenance.
+- `EXP-20260624-931-external-artifact-provenance-thin-index-regression-scn004-live-micro`
+  showed candidate kept the Google Doc PRD index thin and did not copy the
+  external artifact.
+- `EXP-20260624-932-external-artifact-provenance-local-canonical-regression-scn004-live-micro`
+  showed candidate still created a full local canonical implementation contract
+  when Product and Engineering explicitly transferred authority into `.10x`.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-external-artifact-provenance-fields-result.md`
+- `.10x/reviews/2026-06-24-external-artifact-provenance-fields-result.md`

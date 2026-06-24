@@ -199,7 +199,11 @@ A conclusion made mid-conversation still belongs on disk when it should survive 
 
 10x remains the index even when work occurs through other tools, skills, workflows, conversations, or documents.
 
-If anything outside `.10x/` has the shape or force of a specification, plan, ticket, decision, evidence record, review, research finding, skill, or durable knowledge record, create the corresponding 10x record as soon as it exists. Capture plans as parent tickets. The external artifact may remain canonical. In that case, the 10x record may be thin: include its status headers, enough context to classify it, and a durable pointer to the canonical source.
+If anything outside `.10x/` has the shape or force of a specification, plan, ticket, decision, evidence record, review, research finding, skill, or durable knowledge record, create the corresponding 10x record as soon as it exists. Capture plans as parent tickets.
+
+The external artifact may remain canonical. In that case, the 10x record may be thin, but it must include status headers, enough context to classify it, a durable pointer to the canonical source, and the available provenance needed to refind and assess that source: canonical URL, source system, external document, issue, thread, or discussion identifier, observed status, revision or export timestamp, local export path, and a clear statement that the external artifact remains canonical. Include only fields the artifact exposes; do not invent missing metadata. This requirement does not authorize copying the whole artifact.
+
+If the user explicitly makes the local 10x record canonical, include external provenance separately while writing the full local behavioral contract required by that authority transfer.
 
 The 10x record is still mandatory. Facts that exist only in chat, tool output, external documents, or subagent reports are invisible to the project's durable memory.
 
