@@ -1114,3 +1114,11 @@ Canonical start guard:
   `EXP-20260624-879-notification-copy-positive-control-scn006-live-micro` to
   test whether the lifecycle/notification side-effect inventory overblocks a
   record-backed display-only notification copy ticket.
+- 2026-06-24: Ran
+  `EXP-20260624-879-notification-copy-positive-control-scn006-live-micro`.
+  Automated S003 tied current and candidate at `85`, with control at `80`.
+  Manual inspection found current and candidate both created exactly one
+  executable ticket, made no source edits, inspected the active knowledge record
+  and source, and preserved no-side-effect non-goals. Candidate's ticket was
+  slightly more compact, but current already satisfied the target. Discarded
+  `candidate-notification-side-effect-economy-v1` as null versus current.

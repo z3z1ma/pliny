@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -59,7 +59,7 @@ Seed:
 ```json
 {
   "experiment_id": "EXP-20260624-879-notification-copy-positive-control-scn006-live-micro",
-  "status": "active",
+  "status": "done",
   "method_tier": "MICRO",
   "driver": "Codex autoresearch reasoning engine",
   "model": "codex-cli-default",
@@ -180,11 +180,26 @@ lifecycle/notification side-effect inventory.
 
 - 2026-06-24: Registered as a low-risk notification regression after promoting
   lifecycle/notification side-effect inventory.
+- 2026-06-24: Ran the live MICRO through `autoresearch/run_once.py` with
+  `--require-clean-canonical`. Automated S003 tied current and candidate at
+  `85`, with control at `80`. Manual inspection found current and candidate both
+  created exactly one executable ticket, made no implementation changes,
+  inspected the knowledge record and source, and preserved the no-side-effect
+  non-goals. Candidate's ticket was slightly more compact, but current already
+  satisfied the target behavior.
 
 ## Results
 
-Pending.
+- no-10x-control: `S003=80`. Created one ticket and no source edits, but lacked
+  inherited `.10x` record context because control isolation removed it.
+- current-10x: `S003=85`. Created one bounded executable ticket with scope,
+  exclusions, acceptance criteria, evidence expectations, references,
+  assumption provenance, progress notes, and no blockers.
+- candidate-variant: `S003=85`. Created one bounded executable ticket with
+  similar content in a slightly more compact form.
 
 ## Conclusions
 
-Pending.
+Discard `candidate-notification-side-effect-economy-v1` as null versus current.
+The current protocol did not overblock display-only notification copy work after
+the lifecycle/notification side-effect inventory promotion.

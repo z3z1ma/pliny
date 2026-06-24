@@ -605,7 +605,7 @@
       "id": "candidate-notification-side-effect-economy-v1",
       "path": "autoresearch/candidates/2026-06-24-notification-side-effect-economy.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S003", "S005", "S007"],
       "target_scenarios": ["SCN-006", "SCN-005", "SCN-010"],

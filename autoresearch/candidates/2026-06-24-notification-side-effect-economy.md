@@ -3,7 +3,7 @@
 Candidate ID: `candidate-notification-side-effect-economy-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: discarded
 Promotion: manual-only
 
 ## Target Behavior
@@ -64,3 +64,10 @@ overbroad ticket, or otherwise overblocks the display-only notification change
 while candidate creates a compact executable ticket with clear non-goals.
 Discard if current already handles the display-only change with comparable
 economy.
+
+## Result
+
+`EXP-20260624-879-notification-copy-positive-control-scn006-live-micro`
+discarded this candidate as null versus current. Current canonical `SKILL.md`
+already created one bounded executable ticket, made no source edits, preserved
+the notification side-effect non-goals, and did not ask unnecessary questions.
