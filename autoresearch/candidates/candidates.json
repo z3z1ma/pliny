@@ -345,7 +345,7 @@
       "id": "candidate-redacted-evidence-capture-v1",
       "path": "autoresearch/candidates/2026-06-23-redacted-evidence-capture.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "discarded",
       "created": "2026-06-23",
       "target_scores": ["S004", "S002"],
       "target_scenarios": ["SCN-008", "SCN-009", "SCN-004"],

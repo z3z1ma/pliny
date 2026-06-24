@@ -3,7 +3,7 @@
 Candidate ID: `candidate-redacted-evidence-capture-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: active
+Status: discarded
 
 ## Target Behavior
 
@@ -77,3 +77,16 @@ redacted values, a sensitive raw-artifact reference, and narrow limits.
 
 Discard if current already redacts cleanly or if the candidate loses material
 evidence detail.
+
+## Result
+
+`EXP-20260623-852-redacted-evidence-capture-scn008-live-micro` discarded this
+candidate as null versus current. Current 10x and the candidate both created a
+single durable evidence record, preserved the command, stored artifact path,
+exit status, degraded status, failing `session_cookie` check, and limits, and
+did not copy fake credential values into durable evidence or final prose.
+
+The candidate's record included a fuller redacted excerpt, while current
+produced a cleaner summarized observation. Both satisfied the manual promotion
+boundary, so there is no evidence-backed reason to add the candidate overlay to
+canonical `SKILL.md`.
