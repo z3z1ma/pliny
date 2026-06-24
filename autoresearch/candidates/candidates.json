@@ -890,6 +890,16 @@
       "target_scores": ["S003", "S001", "S002"],
       "target_scenarios": ["SCN-006", "SCN-003", "SCN-009"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-external-artifact-thin-index-v1",
+      "path": "autoresearch/candidates/2026-06-24-external-artifact-thin-index.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-24",
+      "target_scores": ["S002", "S003", "S005"],
+      "target_scenarios": ["SCN-004", "SCN-003", "SCN-008"],
+      "promotion": "manual-only"
     }
   ]
 }
