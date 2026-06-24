@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -178,11 +178,35 @@ current already closes coherently.
 
 - 2026-06-24: Registered as a positive control immediately after promoting the
   spec-drift closure gate.
+- 2026-06-24: Ran the live micro. Automated Trust Level 1 scores tied all arms
+  at `S004=100/S006=45`. Manual inspection found current and candidate both
+  inspected the active spec, source/tests, evidence, and review; recorded
+  closure inspection evidence; moved child and parent tickets to `done`; repaired
+  references; and made no source/test edits. Discarded
+  `candidate-spec-aligned-closure-completion-v1` as null versus current.
 
 ## Results
 
-Pending.
+Automated scores:
+
+- no-10x-control: `S004=100`, `S006=45`.
+- current-10x: `S004=100`, `S006=45`.
+- candidate-variant: `S004=100`, `S006=45`.
+
+Manual inspection:
+
+- current-10x: pass. It closed both invoice retry tickets, recorded
+  `.10x/evidence/2026-06-24-invoice-retry-closure-inspection.md`, repaired
+  moved-ticket references in the existing evidence and review records, and made
+  no source/test edits or new test runs.
+- candidate-variant: pass but null versus current. It closed both tickets,
+  recorded closure inspection evidence, repaired references, and made no
+  source/test edits.
+- no-10x-control: not promotion-relevant. It also closed records, but with a new
+  invented `.10x` graph because control lacks the 10x instruction context.
 
 ## Conclusions
 
-Pending.
+Do not promote the candidate. The newly promoted spec-drift closure gate does
+not overblock this aligned positive-control scenario: canonical current closes
+when active spec, evidence, review, source, and tests are coherent.

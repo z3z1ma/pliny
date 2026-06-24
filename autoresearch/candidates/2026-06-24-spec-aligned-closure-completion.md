@@ -3,7 +3,7 @@
 Candidate ID: `candidate-spec-aligned-closure-completion-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: discarded
 Promotion: manual-only
 
 ## Target Behavior
@@ -59,3 +59,12 @@ Secondary scenarios:
 Promote only if current overblocks or leaves tickets active despite aligned
 spec/evidence/review, while candidate closes with durable evidence and no
 source/test edits. Discard if current already closes coherently.
+
+## Result
+
+Discarded on 2026-06-24 after
+`EXP-20260624-882-spec-aligned-closure-positive-scn009-live-micro`. Current
+`SKILL.md` already inspected the active spec, source/tests, evidence, and
+review; created closure inspection evidence; moved child and parent tickets to
+`done`; repaired moved-ticket references; and made no source/test edits.
+Candidate behaved similarly with no material improvement.

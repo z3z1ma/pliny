@@ -635,7 +635,7 @@
       "id": "candidate-spec-aligned-closure-completion-v1",
       "path": "autoresearch/candidates/2026-06-24-spec-aligned-closure-completion.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S006", "S004", "S005"],
       "target_scenarios": ["SCN-009", "SCN-011", "SCN-005"],

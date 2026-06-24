@@ -1151,3 +1151,10 @@ Canonical start guard:
   `spec-aligned-closure-positive` live seed, and registered
   `EXP-20260624-882-spec-aligned-closure-positive-scn009-live-micro` as a
   positive control for the newly promoted spec-drift closure gate.
+- 2026-06-24: Ran
+  `EXP-20260624-882-spec-aligned-closure-positive-scn009-live-micro`. Automated
+  scores tied all arms at `S004=100/S006=45`. Manual inspection found current
+  and candidate both closed the aligned child and parent tickets coherently,
+  created closure inspection evidence, repaired moved-ticket references, and
+  made no source/test edits. Discarded
+  `candidate-spec-aligned-closure-completion-v1` as null versus current.
