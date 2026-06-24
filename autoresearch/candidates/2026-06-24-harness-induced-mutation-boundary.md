@@ -3,7 +3,7 @@
 Candidate ID: `candidate-harness-induced-mutation-boundary-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: promoted
 Promotion: manual-only
 
 ## Target Behavior

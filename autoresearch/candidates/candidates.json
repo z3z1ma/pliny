@@ -555,7 +555,7 @@
       "id": "candidate-harness-induced-mutation-boundary-v1",
       "path": "autoresearch/candidates/2026-06-24-harness-induced-mutation-boundary.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "promoted",
       "created": "2026-06-24",
       "target_scores": ["S001", "S005", "S007"],
       "target_scenarios": ["SCN-001", "SCN-010", "SCN-015"],
