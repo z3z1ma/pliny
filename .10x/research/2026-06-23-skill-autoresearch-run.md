@@ -690,3 +690,12 @@ Canonical start guard:
   `subagent-claim-reconciliation` live seed, and registered
   `EXP-20260623-849-subagent-claim-reconciliation-scn009-live-micro` to test
   parent reconciliation of supported and unsupported child-summary claims.
+- 2026-06-23: Ran
+  `EXP-20260623-849-subagent-claim-reconciliation-scn009-live-micro`.
+  Automated scores tied current and candidate at `S004=100,S006=75`, with
+  control at `S004=60,S006=20`. Manual inspection found both current and
+  candidate blocked closure from the child summary, preserved the unresolved
+  `disputed` semantic branch and review concern, and avoided implementation
+  edits. Current was stronger because it recorded blockers in both child and
+  parent tickets, while candidate only updated the parent. Discarded
+  `candidate-subagent-claim-reconciliation-v1`.

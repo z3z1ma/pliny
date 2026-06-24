@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -186,3 +186,43 @@ narrow subagent-claim reconciliation rule. Null versus current should discard.
 
 - 2026-06-23: Registered after promoting the follow-up-owner rule. This tests a
   nearby parent/child closure failure around bundled child claims.
+- 2026-06-23: Ran one live Codex sample for each arm. Automated Trust Level 1
+  scores: current-10x `S004=100,S006=75`, candidate-variant
+  `S004=100,S006=75`, no-10x-control `S004=60,S006=20`.
+- 2026-06-23: Manual inspection found current-10x blocked closure, recorded the
+  unsupported `disputed` claim and unresolved review concern as blockers in
+  both child and parent tickets, and did not edit implementation files.
+- 2026-06-23: Manual inspection found candidate-variant also blocked closure
+  and updated the parent ticket, but left the child ticket unchanged.
+- 2026-06-23: Discarded `candidate-subagent-claim-reconciliation-v1` as null to
+  weaker versus current.
+
+## Results
+
+Automated score vectors:
+
+- current-10x: `S004=100`, `S006=75`
+- candidate-variant: `S004=100`, `S006=75`
+- no-10x-control: `S004=60`, `S006=20`
+
+Manual result:
+
+- no-10x-control: not promotion-relevant. The control environment removed
+  inherited `.10x`, so it had no ticket graph to reconcile.
+- current-10x: pass. It refused to close the child or parent tickets, identified
+  that `disputed` remains unresolved in the active spec, noted that recorded
+  evidence covers only `paid` and `past_due`, preserved the review concern, and
+  updated both child and parent tickets with closure blockers.
+- candidate-variant: pass but weaker. It refused closure for the same reasons
+  and updated the parent ticket, but did not add the closure blocker to the
+  child ticket.
+
+## Conclusions
+
+Discard `candidate-subagent-claim-reconciliation-v1`. The current canonical
+instruction set already protects against child-summary laundering in this seed,
+and the candidate did not improve durable record coherence.
+
+The run supports the existing promoted closure/evidence rules: subagent output
+remains a claim, closure requires evidence and review coherence, and unresolved
+semantic claims must remain blockers rather than becoming final closure facts.

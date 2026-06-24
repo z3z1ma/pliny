@@ -3,7 +3,7 @@
 Candidate ID: `candidate-subagent-claim-reconciliation-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 
 ## Target Behavior
 
@@ -67,3 +67,16 @@ candidate blocks or reconciles unsupported child claims into durable records.
 
 Discard if current already blocks for the unresolved spec/review mismatch, or if
 candidate overblocks supported child claims.
+
+## Result
+
+`EXP-20260623-849-subagent-claim-reconciliation-scn009-live-micro` discarded
+this candidate as null to weaker versus current. Both current and candidate
+blocked closure instead of trusting the child summary, separated supported
+`paid` / `past_due` evidence from unresolved `disputed` semantics, and preserved
+the unresolved review concern.
+
+Current was stronger on durable coherence because it recorded the closure
+blocker in both the child and parent tickets. Candidate recorded the blocker in
+the parent ticket but left the child ticket unchanged. The overlay is not
+promoted.
