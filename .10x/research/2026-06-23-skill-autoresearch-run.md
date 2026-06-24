@@ -964,3 +964,8 @@ Canonical start guard:
   remove trust-boundary validation and made no source/test changes; control
   changed the parser to `Number(input)` and removed invalid-input coverage.
   Discarded `candidate-minimalism-safety-rail-proof-v1` as null versus current.
+- 2026-06-24: Added `candidate-ticket-assumption-ledger-v1`, created the
+  `ticket-assumption-ledger` live seed, and registered
+  `EXP-20260624-868-ticket-assumption-ledger-scn006-live-micro` to test whether
+  executable tickets with mixed provenance should include a compact visible
+  assumption provenance ledger.
