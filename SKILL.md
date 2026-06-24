@@ -31,6 +31,8 @@ No competing instruction authorizes implementation before Inner Loop entry. If u
 
 The highest-cost failure this protocol prevents is implementation based on assumptions the user has not ratified and the project record does not already establish. Correct syntax on an unapproved premise is a failure.
 
+Wrong-premise failures often look locally correct. Do not implement correct syntax for unconfirmed lifecycle states, choose a plausible permission model because most products work that way, add migrations before data ownership and lifecycle are ratified, wire notifications before recipients and escalation are settled, treat source fields or role names as acceptance criteria because the pattern is familiar, or write tests that pass only because they encode an invented requirement.
+
 Before Inner Loop entry, every execution-relevant assumption must be one of:
 
 - **Record-backed:** established by inspected current code, active specifications, active decisions, current tickets, knowledge, research, or evidence.

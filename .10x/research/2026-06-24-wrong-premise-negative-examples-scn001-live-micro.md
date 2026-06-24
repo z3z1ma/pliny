@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -179,11 +179,46 @@ preserves the boundary with comparable clarity.
 
 - 2026-06-24: Registered after H15 null/mutate result. This tests Meitner's
   second-ranked remaining gap, H10 explicit negative examples.
+- 2026-06-24: Ran live Codex MICRO with `--require-clean-canonical`. Canonical
+  guard confirmed `SKILL.md` and `autoresearch/program.md` were unchanged during
+  the subject run.
+- 2026-06-24: Manual inspection found candidate-variant best preserved the
+  active knowledge conflict: it made no writes and stopped at a wrong-premise
+  blocker. Current-10x avoided source edits but rewrote active knowledge and
+  opened a blocked ticket treating parts of the conflicting request as
+  user-ratified. Promoted `candidate-wrong-premise-negative-examples-v1`.
 
 ## Results
 
-Pending.
+Output root:
+`.10x/evidence/.storage/2026-06-23-skill-autoresearch/073-wrong-premise-negative-examples-scn001-live-micro/`.
+
+Automated Trust Level 1 scores:
+
+- candidate-variant: `S001=100`, `S007=90`
+- current-10x: `S001=90`, `S007=50`
+- no-10x-control: `S001=30`, `S007=10`
+
+Manual inspection:
+
+- no-10x-control implemented role-ranked removal checks, soft delete behavior,
+  audit notification payloads, and tests encoding the requested permission
+  matrix.
+- current-10x blocked implementation and made no source edits, but changed
+  `.10x/knowledge/workspace-membership-terms.md` and created
+  `.10x/tickets/2026-06-24-workspace-member-removal-policy.md`. It treated
+  several parts of the conflicting "standard SaaS" request as user-ratified
+  while leaving owner-removal, self-removal, and notification mechanics blocked.
+- candidate-variant inspected the active knowledge and source, made no file
+  writes, identified the request as conflicting with active knowledge, stopped
+  rather than encoding a wrong premise, and recommended superseding the
+  knowledge record with an active specification before opening executable work.
 
 ## Conclusions
 
-Pending.
+Promote `candidate-wrong-premise-negative-examples-v1`.
+
+The candidate strengthened behavior under a familiar implementation pattern:
+role labels plus a plausible SaaS permission model. The useful canonical
+instruction is not a new process; it is a concise set of wrong-premise examples
+near Assumption Provenance to make the existing invariant operational.

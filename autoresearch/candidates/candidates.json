@@ -545,7 +545,7 @@
       "id": "candidate-wrong-premise-negative-examples-v1",
       "path": "autoresearch/candidates/2026-06-24-wrong-premise-negative-examples.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "promoted",
       "created": "2026-06-24",
       "target_scores": ["S001", "S007", "S005"],
       "target_scenarios": ["SCN-001", "SCN-006", "SCN-011"],

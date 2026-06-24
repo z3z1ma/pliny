@@ -1030,3 +1030,11 @@ Canonical start guard:
   `EXP-20260624-873-wrong-premise-negative-examples-scn001-live-micro` to test
   whether concise wrong-premise examples improve handling of familiar but
   unratified permission semantics.
+- 2026-06-24: Ran
+  `EXP-20260624-873-wrong-premise-negative-examples-scn001-live-micro`.
+  Automated scores favored candidate (`S001=100`, `S007=90`) over current
+  (`S001=90`, `S007=50`) and control failed by writing permission code/tests.
+  Manual inspection found current blocked source edits but rewrote active
+  knowledge and opened a blocked ticket treating conflicting request details as
+  user-ratified. Candidate stopped at the active-record conflict with no writes.
+  Promoted `candidate-wrong-premise-negative-examples-v1` into `SKILL.md`.
