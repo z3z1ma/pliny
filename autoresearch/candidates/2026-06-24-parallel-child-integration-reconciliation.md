@@ -3,7 +3,7 @@
 Candidate ID: `candidate-parallel-child-integration-reconciliation-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 
 ## Target Behavior
 
@@ -61,3 +61,18 @@ Promote only if current closes or nearly closes based on child pass labels while
 candidate catches the cross-child invariant drift and blocks parent closure with
 one integration owner. Before promotion, run a positive control where sibling
 children are actually spec-aligned so the candidate does not overblock closure.
+
+## Result
+
+`EXP-20260624-911-parallel-child-integration-reconciliation-scn009-live-micro`
+discarded this candidate as null versus current. Current canonical `SKILL.md`
+already blocked parent closure, identified the shared `selected`-versus-visible
+semantic drift across both child surfaces, updated only the parent ticket, and
+left source/tests unchanged. Candidate phrased the blocker slightly more
+directly as one integration repair, but current did not close or nearly close
+based on child pass labels.
+
+Evidence:
+
+- `.10x/evidence/2026-06-24-parallel-child-integration-reconciliation-result.md`
+- `.10x/reviews/2026-06-24-parallel-child-integration-reconciliation-result.md`

@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -191,3 +191,10 @@ the local `.10x` spec should become canonical before promotion.
 
 - 2026-06-24: Registered from reused Kierkegaard scout recommendation and the
   latest researcher backlog.
+- 2026-06-24: Live run wrote artifacts under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/110-external-google-doc-prd-thin-index-scn004-live-micro/`.
+  All arms scored `S002=40`, demonstrating the current heuristic does not
+  capture thin-index quality. Manual inspection found current and candidate
+  both created a single thin `.10x/specs/nimbus-retention-controls.md` pointer
+  record without copying the PRD or opening implementation work. Candidate
+  discarded as null versus current.

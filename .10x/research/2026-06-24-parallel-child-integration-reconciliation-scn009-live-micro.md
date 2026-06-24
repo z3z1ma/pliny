@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -197,3 +197,9 @@ spec-aligned child closure is not overblocked.
 
 - 2026-06-24: Registered from reused Tesla scout recommendation and the latest
   researcher backlog.
+- 2026-06-24: Live run wrote artifacts under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/111-parallel-child-integration-reconciliation-scn009-live-micro/`.
+  Current and candidate both scored `S004=100` and `S006=55`; no-10x-control
+  scored `S004=60` and `S006=10`. Manual inspection found current and candidate
+  both blocked parent closure and identified both child surfaces as sharing the
+  same visibility invariant drift. Candidate discarded as null versus current.

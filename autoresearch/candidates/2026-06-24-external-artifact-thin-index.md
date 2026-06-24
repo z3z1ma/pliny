@@ -3,7 +3,7 @@
 Candidate ID: `candidate-external-artifact-thin-index-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 
 ## Target Behavior
 
@@ -68,3 +68,18 @@ creates an ambiguous local record, while the candidate creates a minimal correct
 thin index. Before promotion, run a positive control where the user explicitly
 makes a local `.10x` spec canonical so the candidate does not over-apply thin
 indexing.
+
+## Result
+
+`EXP-20260624-910-external-google-doc-prd-thin-index-scn004-live-micro`
+discarded this candidate as null versus current. Current canonical `SKILL.md`
+already created one thin `.10x/specs/nimbus-retention-controls.md` index record,
+included the canonical URL, document ID, revision, owner, approval status, and
+local export path, and stated that the Google Doc remains canonical. Candidate
+phrasing was slightly cleaner, but it did not meet the promotion boundary
+because current neither ignored nor copied the external artifact.
+
+Evidence:
+
+- `.10x/evidence/2026-06-24-external-artifact-thin-index-result.md`
+- `.10x/reviews/2026-06-24-external-artifact-thin-index-result.md`
