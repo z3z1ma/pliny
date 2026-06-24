@@ -60,6 +60,30 @@ class ValidateContractsTest(unittest.TestCase):
             result.errors,
         )
 
+    def test_live_seed_manifest_without_workspace_fails_validation(self):
+        with copied_contract_root() as root:
+            manifest_path = (
+                root
+                / "autoresearch"
+                / "fixtures"
+                / "live-seeds"
+                / "explicit-policy-ratification"
+                / "workspace"
+                / "workspace-manifest.json"
+            )
+            data = json.loads(manifest_path.read_text(encoding="utf-8"))
+            del data["workspace"]
+            manifest_path.write_text(
+                json.dumps(data, indent=2) + "\n", encoding="utf-8"
+            )
+
+            result = validate.validate_contracts(root)
+
+        self.assertIn(
+            "autoresearch/fixtures/live-seeds/explicit-policy-ratification/workspace/workspace-manifest.json: seed workspace manifest requires workspace",
+            result.errors,
+        )
+
 
 class copied_contract_root:
     def __enter__(self):
@@ -68,7 +92,7 @@ class copied_contract_root:
         source = REPO_ROOT / "autoresearch"
         target = root / "autoresearch"
         target.mkdir()
-        for child in ("catalogs", "schemas", "templates", "splits"):
+        for child in ("catalogs", "schemas", "templates", "splits", "fixtures"):
             shutil.copytree(source / child, target / child)
         spec_target = root / ".10x" / "specs"
         spec_target.mkdir(parents=True)

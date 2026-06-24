@@ -162,6 +162,8 @@ def validate_contracts(root: str | Path) -> ValidationResult:
     if isinstance(split_data, dict):
         _validate_skill_improvement_split(split_data, scenario_ids, errors)
 
+    _validate_live_seed_workspaces(repo_root, errors)
+
     return ValidationResult(errors)
 
 
@@ -175,12 +177,64 @@ def _load_json(path: Path, label: str, errors: list[str]) -> Any | None:
     return None
 
 
+def _validate_live_seed_workspaces(repo_root: Path, errors: list[str]) -> None:
+    seed_root = repo_root / "autoresearch" / "fixtures" / "live-seeds"
+    if not seed_root.exists():
+        return
+
+    for raw_path in sorted(seed_root.glob("*/raw.json")):
+        raw_label = _rel_label(repo_root, raw_path)
+        raw = _load_json(raw_path, raw_label, errors)
+        if not isinstance(raw, dict):
+            continue
+
+        metadata = raw.get("harness_metadata")
+        if not isinstance(metadata, dict) or metadata.get("kind") != "seed-workspace":
+            continue
+
+        manifest_ref = metadata.get("workspace_manifest_path")
+        if not _non_empty_string(manifest_ref):
+            errors.append(f"{raw_label}: seed-workspace requires workspace_manifest_path")
+            continue
+
+        manifest_path = _resolve_repo_path(repo_root, manifest_ref)
+        manifest_label = _rel_label(repo_root, manifest_path)
+        manifest = _load_json(manifest_path, manifest_label, errors)
+        if not isinstance(manifest, dict):
+            continue
+
+        workspace_ref = manifest.get("workspace")
+        if not _non_empty_string(workspace_ref):
+            errors.append(f"{manifest_label}: seed workspace manifest requires workspace")
+            continue
+
+        workspace_path = _resolve_repo_path(repo_root, workspace_ref)
+        if not workspace_path.is_dir():
+            errors.append(
+                f"{manifest_label}: workspace does not resolve to a directory: {workspace_ref}"
+            )
+
+
 def _read_text(path: Path, label: str, errors: list[str]) -> str | None:
     try:
         return path.read_text(encoding="utf-8")
     except FileNotFoundError:
         errors.append(f"{label}: file not found")
         return None
+
+
+def _resolve_repo_path(repo_root: Path, value: str) -> Path:
+    path = Path(value)
+    if path.is_absolute():
+        return path
+    return repo_root / path
+
+
+def _rel_label(repo_root: Path, path: Path) -> str:
+    try:
+        return path.relative_to(repo_root).as_posix()
+    except ValueError:
+        return str(path)
 
 
 def _ids_from_text(text: str | None, pattern: str) -> set[str]:

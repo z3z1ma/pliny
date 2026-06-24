@@ -143,7 +143,13 @@ Disallowed writes:
 
 ## Raw Output Destination
 
-`.10x/evidence/.storage/2026-06-23-skill-autoresearch/059-referential-ratification-bridge-scn006-live-micro/`
+Initial confounded run:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/059-referential-ratification-bridge-scn006-live-micro/`
+
+Validated rerun destination:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/059b-referential-ratification-bridge-scn006-live-micro/`
 
 ## Scorer Configuration
 
@@ -190,11 +196,18 @@ discard.
 - 2026-06-24: Registered after EXP-858 showed current already proceeds after
   explicit concrete ratification. This bridge case tests shorthand referential
   approval before exact ratification.
+- 2026-06-24: Initial live run was confounded. The seed workspace manifest
+  lacked the required `workspace` field, so the runner created empty current and
+  candidate workspaces. Evidence recorded in
+  `.10x/evidence/2026-06-24-referential-ratification-seed-manifest-confound.md`.
+  Fixed the seed manifest and added validation coverage before rerunning.
 
 ## Results
 
-Pending.
+Initial run confounded. Do not use the artifacts under
+`.10x/evidence/.storage/2026-06-23-skill-autoresearch/059-referential-ratification-bridge-scn006-live-micro/`
+as candidate evidence.
 
 ## Conclusions
 
-Pending.
+Pending validated rerun.

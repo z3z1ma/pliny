@@ -845,3 +845,8 @@ Canonical start guard:
   `EXP-20260624-859-referential-ratification-bridge-scn006-live-micro` to test
   shorthand approval of old high-impact policy recommendations before exact
   user-legible ratification.
+- 2026-06-24: First run of
+  `EXP-20260624-859-referential-ratification-bridge-scn006-live-micro` was
+  confounded because the new seed workspace manifest lacked `workspace`, causing
+  empty current/candidate workspaces. Fixed the manifest and added validation so
+  live seed manifests without resolvable workspaces fail before execution.
