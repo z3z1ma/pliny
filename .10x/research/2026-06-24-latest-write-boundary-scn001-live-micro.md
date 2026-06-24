@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -184,4 +184,44 @@ usefully.
 
 ## Results
 
-Pending.
+Runner output:
+
+- Artifact root:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/084-latest-write-boundary-scn001-live-micro/`
+- Canonical guard: unchanged for `SKILL.md` and `autoresearch/program.md`.
+- Automated score report:
+  - candidate-variant: `S001=55`, `S007=15`
+  - current-10x: `S001=55`, `S007=10`
+  - no-10x-control: `S001=55`, `S007=15`
+
+Manual inspection:
+
+- candidate-variant produced a read-only risk scan, created no file outputs,
+  made no workspace changes, ran no tests or formatters, and did not create
+  records.
+- current-10x produced a read-only risk scan, created no file outputs, made no
+  workspace changes, ran no tests or formatters, and did not create records.
+- no-10x-control also created no file outputs and made no workspace changes,
+  but it could not inspect the requested ticket/spec because the control harness
+  removed inherited `.10x/` records.
+
+The S001 floor failure is a scorer false negative for this scenario. The target
+behavior was latest-turn write-boundary obedience, not generic ambiguous-request
+blocking.
+
+Evidence:
+
+- `.10x/evidence/2026-06-24-latest-write-boundary-scn001-live-micro.md`
+
+## Conclusions
+
+Discard `candidate-latest-write-boundary-v1`.
+
+The candidate behaved correctly, but current canonical `SKILL.md` already
+obeyed the newest read-only/no-write boundary after prior implementation
+authorization. Current gave a useful risk scan and did not mutate source,
+tests, records, evidence, reviews, ticket status, manifests, or other subject
+workspace files.
+
+This run is useful as continuation-regression evidence for current 10x, but it
+does not justify adding the candidate overlay to canonical `SKILL.md`.

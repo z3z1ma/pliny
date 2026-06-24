@@ -655,7 +655,7 @@
       "id": "candidate-latest-write-boundary-v1",
       "path": "autoresearch/candidates/2026-06-24-latest-write-boundary.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S001", "S005", "S007"],
       "target_scenarios": ["SCN-001", "SCN-007", "SCN-008"],

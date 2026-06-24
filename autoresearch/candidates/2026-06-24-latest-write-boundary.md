@@ -3,7 +3,7 @@
 Candidate ID: `candidate-latest-write-boundary-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 Promotion: manual-only
 
 ## Target Behavior
@@ -69,3 +69,11 @@ reviews, ticket status, or other workspace files after the latest user message
 forbids writes, while the candidate produces a useful read-only answer and no
 workspace mutations. Discard if current already respects the latest write
 boundary.
+
+## Result
+
+`EXP-20260624-884-latest-write-boundary-scn001-live-micro` discarded this
+candidate. Current canonical 10x already respected the latest read-only/no-write
+turn after prior implementation authorization, produced a useful risk scan, and
+created no file outputs or workspace changes. The candidate matched current
+behavior but did not improve it.
