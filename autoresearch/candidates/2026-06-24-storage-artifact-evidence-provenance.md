@@ -3,7 +3,7 @@
 Candidate ID: `candidate-storage-artifact-evidence-provenance-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 
 ## Target Behavior
 
@@ -63,3 +63,12 @@ Promote only if current trusts the storage handoff or fails to name the
 provenance boundary, while candidate blocks specifically without overblocking
 legitimate evidence. Before promotion, run a valid recorded-evidence sanity
 check.
+
+## Result
+
+Discarded after
+`EXP-20260624-904-storage-artifact-evidence-provenance-scn009-live-micro`.
+Current and candidate both blocked closure from the `.storage` handoff, marked
+the child and parent tickets blocked, named missing provenance/review evidence,
+and avoided tests, source edits, and evidence/review creation. The overlay was a
+null result.

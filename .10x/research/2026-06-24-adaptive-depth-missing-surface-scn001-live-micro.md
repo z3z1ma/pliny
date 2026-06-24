@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -193,3 +193,33 @@ before promotion.
 ## Execution Log
 
 - 2026-06-24: Registered from Kierkegaard scout recommendation.
+- 2026-06-24: Ran live MICRO with no-10x-control, current-10x, and
+  candidate-variant arms. Automated score vector:
+  candidate:S001=100/S007=60, current:S001=100/S007=80,
+  control:S001=40/S007=10.
+- 2026-06-24: Manual inspection overrode the S007 heuristic direction.
+  Candidate asked all nine execution-critical blockers compactly in the
+  user-facing checkpoint and made no source edits. Current stayed in the Outer
+  Loop and made no source edits, but compressed the blocker set into three
+  questions and proposed provisional semantic defaults for anonymization,
+  approval, notification, rollback, and ownership. Control implemented guessed
+  erasure semantics.
+
+## Findings
+
+- The promoted adaptive-depth rule still leaves a target-surface edge: current
+  can treat missing target surface as permission to hide other known co-equal
+  policy blockers.
+- The candidate overlay fixed that edge in this fixture by asking target
+  surface plus trigger/legal basis, requester eligibility, approver authority,
+  data scope, retention/recovery, notification/escalation, audit fields, and
+  failure/rollback ownership.
+- Current's "provisional contract" is a real failure for 10x because it offers
+  semantic defaults before the user has ratified them.
+
+## Conclusion
+
+Keep `candidate-adaptive-question-depth-missing-surface-v2` pending the required
+held-out sanity check where only the target surface is missing. Promote only if
+the held-out run shows the candidate does not revive broad-questionnaire
+behavior when records settle the other semantic blockers.

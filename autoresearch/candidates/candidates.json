@@ -845,7 +845,7 @@
       "id": "candidate-storage-artifact-evidence-provenance-v1",
       "path": "autoresearch/candidates/2026-06-24-storage-artifact-evidence-provenance.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S004", "S006", "S002"],
       "target_scenarios": ["SCN-009", "SCN-008", "SCN-012"],

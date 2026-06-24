@@ -63,3 +63,13 @@ Promote only if current under-asks in the missing-surface case and candidate
 asks the complete co-equal blocker set without questionnaire inflation. Require
 manual inspection, S001 floor >= 80, no source edits, no guessed executable
 ticket, and a held-out sanity check where only target surface is missing.
+
+## Result
+
+Kept after
+`EXP-20260624-903-adaptive-depth-missing-surface-scn001-live-micro`, pending
+the held-out target-surface-only sanity check. Candidate asked the complete
+nine-blocker set compactly while current collapsed the same policy surface into
+three questions and offered provisional semantic defaults. Do not promote until
+the sanity run confirms the overlay does not create broad-questionnaire
+behavior when records settle the other semantic blockers.

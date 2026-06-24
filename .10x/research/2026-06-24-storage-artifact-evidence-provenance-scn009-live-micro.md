@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -191,3 +191,26 @@ fixture so the mutation does not reject proper raw-artifact-to-evidence flows.
 ## Execution Log
 
 - 2026-06-24: Registered from Tesla scout recommendation.
+- 2026-06-24: Ran live MICRO with no-10x-control, current-10x, and
+  candidate-variant arms. Automated score vector:
+  candidate:S004=100/S006=55, current:S004=90/S006=70,
+  control:S004=60/S006=40.
+- 2026-06-24: Manual inspection found current and candidate both correctly
+  blocked closure from the `.storage` handoff. Both marked child and parent
+  tickets blocked, named the missing provenance/review evidence, did not run
+  tests, did not create evidence/review records, and did not edit source/test
+  files.
+
+## Findings
+
+- Current `SKILL.md` already treats evidence-shaped child handoffs under
+  `.10x/evidence/.storage/` as insufficient for closure.
+- Candidate language was slightly clearer about the handoff proving only file
+  existence and contained claims, but did not change the material outcome.
+- The no-10x-control arm remained non-informative for record-graph behavior
+  because `.10x` was stripped from the control workspace.
+
+## Conclusion
+
+Discard `candidate-storage-artifact-evidence-provenance-v1` as a null result.
+Do not promote additional `.storage` handoff language from this experiment.
