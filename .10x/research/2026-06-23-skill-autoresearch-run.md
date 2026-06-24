@@ -839,3 +839,9 @@ Canonical start guard:
   blocker, and avoided source edits. Candidate added a ratification evidence
   record, but current already passed the target behavior. Discarded
   `candidate-explicit-policy-ratification-proceeds-v1` as null versus current.
+- 2026-06-24: Added
+  `candidate-referential-ratification-confirmation-v1`, created the
+  `referential-ratification-bridge` live seed, and registered
+  `EXP-20260624-859-referential-ratification-bridge-scn006-live-micro` to test
+  shorthand approval of old high-impact policy recommendations before exact
+  user-legible ratification.

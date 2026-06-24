@@ -410,6 +410,16 @@
       "target_scores": ["S003", "S007", "S002"],
       "target_scenarios": ["SCN-006", "SCN-009", "SCN-003"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-referential-ratification-confirmation-v1",
+      "path": "autoresearch/candidates/2026-06-24-referential-ratification-confirmation.md",
+      "target": "SKILL.md",
+      "status": "active",
+      "created": "2026-06-24",
+      "target_scores": ["S001", "S007", "S003"],
+      "target_scenarios": ["SCN-006", "SCN-001", "SCN-003"],
+      "promotion": "manual-only"
     }
   ]
 }
