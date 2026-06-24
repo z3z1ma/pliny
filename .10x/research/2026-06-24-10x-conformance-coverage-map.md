@@ -106,6 +106,11 @@ is registered as the inverse of the prior thin-index case. It tests whether the
 agent creates a full active local specification when Product and Engineering
 explicitly ratify `.10x` as the canonical implementation contract.
 
+Human-voice update:
+`EXP-20260624-923-confused-account-closure-convergence-scn001-live-micro` is
+registered to test confused/contradictory user convergence after the lifecycle
+side-effect and frustrated-useful-pushback promotions.
+
 Priority 1: conformance foundation.
 
 1. Real subagent clear child ticket: parent creates parent/child records,
