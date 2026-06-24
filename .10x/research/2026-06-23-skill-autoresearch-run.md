@@ -825,3 +825,9 @@ Canonical start guard:
   preserve the conflict. Discarded
   `candidate-challenge-request-validity-v1` as null versus current on the target
   safety behavior.
+- 2026-06-23: Added
+  `candidate-explicit-policy-ratification-proceeds-v1`, created the
+  `explicit-policy-ratification` live seed, and registered
+  `EXP-20260623-858-explicit-policy-ratification-scn006-live-micro` to guard
+  against overblocking after the user explicitly ratifies a concrete
+  high-impact policy contract.

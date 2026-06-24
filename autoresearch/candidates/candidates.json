@@ -400,6 +400,16 @@
       "target_scores": ["S005", "S007"],
       "target_scenarios": ["SCN-010", "SCN-001", "SCN-006"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-explicit-policy-ratification-proceeds-v1",
+      "path": "autoresearch/candidates/2026-06-23-explicit-policy-ratification-proceeds.md",
+      "target": "SKILL.md",
+      "status": "active",
+      "created": "2026-06-23",
+      "target_scores": ["S003", "S007", "S002"],
+      "target_scenarios": ["SCN-006", "SCN-009", "SCN-003"],
+      "promotion": "manual-only"
     }
   ]
 }
