@@ -686,3 +686,7 @@ Canonical start guard:
   a final-answer-only follow-up. Candidate blocked closure because the follow-up
   was explicitly unowned and durable tracking was forbidden. Promoted
   `candidate-mentioned-follow-up-owner-v1` into `SKILL.md`.
+- 2026-06-23: Added `candidate-subagent-claim-reconciliation-v1`, created the
+  `subagent-claim-reconciliation` live seed, and registered
+  `EXP-20260623-849-subagent-claim-reconciliation-scn009-live-micro` to test
+  parent reconciliation of supported and unsupported child-summary claims.
