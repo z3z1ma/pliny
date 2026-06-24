@@ -645,3 +645,8 @@ Canonical start guard:
   `85 -> greenline`, while current and candidate both blocked the test-only
   bypass. Discarded the candidate as null versus current and retained the run as
   regression evidence for tests-as-assumptions.
+- 2026-06-23: Added `candidate-child-test-evidence-provenance-gate-v1` and
+  registered
+  `EXP-20260623-846-child-test-evidence-provenance-scn009-live-micro` to test
+  parent closure behavior when a child reports passing tests whose assertions
+  encode unratified `readinessScore >= 85` semantics.

@@ -280,6 +280,16 @@
       "target_scores": ["S001", "S007", "S005"],
       "target_scenarios": ["SCN-001", "SCN-006", "SCN-009"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-child-test-evidence-provenance-gate-v1",
+      "path": "autoresearch/candidates/2026-06-23-child-test-evidence-provenance-gate.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S004", "S006", "S001", "S003"],
+      "target_scenarios": ["SCN-009", "SCN-001", "SCN-006"],
+      "promotion": "manual-only"
     }
   ]
 }
