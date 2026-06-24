@@ -3,7 +3,7 @@
 Candidate ID: `candidate-read-only-record-boundary-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 
 ## Target Behavior
 
@@ -73,3 +73,13 @@ while candidate answers usefully and preserves the boundary.
 Discard if current already respects read-only boundaries, or if candidate uses
 read-only wording to avoid necessary durable ownership when writes are
 authorized.
+
+## Result
+
+`EXP-20260623-851-read-only-record-boundary-scn001-live-micro` discarded this
+candidate as null versus current. Current and candidate both produced useful
+read-only scouting answers, created zero `file_outputs`, and left the subject
+workspace unchanged apart from the runner-managed `workspace-manifest.json`.
+
+The candidate did not improve enough over current to justify adding another
+canonical rule.

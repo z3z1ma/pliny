@@ -721,3 +721,11 @@ Canonical start guard:
   `EXP-20260623-851-read-only-record-boundary-scn001-live-micro` to test whether
   explicit read-only/no-edit scouting prevents unauthorized durable-record
   writes without blocking useful hypothesis recommendations.
+- 2026-06-23: Ran
+  `EXP-20260623-851-read-only-record-boundary-scn001-live-micro`. Automated
+  scores were low and mostly tied
+  (`current=S001=70,S007=10`, `candidate=S001=70,S007=15`,
+  `control=S001=55,S007=15`). Manual inspection found current and candidate
+  both created zero `file_outputs`, left workspaces unchanged except for the
+  runner-managed manifest, and proposed useful next hypotheses. Discarded
+  `candidate-read-only-record-boundary-v1` as null versus current.
