@@ -615,3 +615,9 @@ Canonical start guard:
   the record-backed-authority seed to test whether a user-provided threshold
   that conflicts with active `readinessScore >= 85` records is handled as a
   supersession/coherence problem rather than silently becoming executable work.
+- 2026-06-23: Ran
+  `EXP-20260623-843-active-record-conflict-scn006-live-micro`. All arms scored
+  `S003=100`. Manual inspection found current and candidate both handled the
+  conflict coherently by superseding/updating active records before opening a
+  bounded executable ticket for threshold `90`, with no implementation edits.
+  Discarded the candidate as null versus current.

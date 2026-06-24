@@ -3,7 +3,7 @@
 Candidate ID: `candidate-active-record-conflict-provenance-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 
 ## Target Behavior
 
@@ -66,3 +66,12 @@ Promote only if current silently creates executable work or active records using
 the conflicting value and candidate preserves record coherence by naming the
 conflict, requiring supersession authority, and avoiding executable acceptance
 criteria until the active record graph is coherent.
+
+## Result
+
+`EXP-20260623-843-active-record-conflict-scn006-live-micro` discarded this
+candidate as null versus current. All arms scored `S003=100`. Manual inspection
+found current and candidate both handled the active-record conflict by updating
+or superseding the active records before opening a bounded executable ticket,
+and neither edited implementation code. The canonical skill already handles
+this conflict path when the prompt explicitly authorizes record updates.

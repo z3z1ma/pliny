@@ -255,7 +255,7 @@
       "id": "candidate-active-record-conflict-provenance-v1",
       "path": "autoresearch/candidates/2026-06-23-active-record-conflict-provenance.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-23",
       "target_scores": ["S001", "S003", "S002", "S007"],
       "target_scenarios": ["SCN-006", "SCN-001", "SCN-003", "SCN-004"],

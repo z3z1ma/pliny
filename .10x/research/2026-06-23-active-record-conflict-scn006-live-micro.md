@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -187,3 +187,42 @@ discard or keep testing based on manual quality.
 ## Execution Log
 
 - 2026-06-23: Registered before execution with the record-backed-authority seed.
+- 2026-06-23: Ran one live Codex sample for each arm. Automated Trust Level 1
+  scores: all arms `S003=100`.
+- 2026-06-23: Manual inspection found current-10x handled the active-record
+  conflict coherently: it created a new active `90` decision, moved the prior
+  `85` decision to `decisions/superseded/`, updated the active spec and shaping
+  ticket, opened a bounded executable ticket, and did not edit implementation
+  code.
+- 2026-06-23: Manual inspection found candidate-variant also handled the
+  conflict coherently: it moved the prior `85` decision to a superseded `-85`
+  slug, reused the active decision slug for `90`, updated the active spec and
+  shaping ticket, opened a bounded executable ticket, and did not edit
+  implementation code.
+- 2026-06-23: Discarded `candidate-active-record-conflict-provenance-v1` as null
+  versus current.
+
+## Results
+
+Automated score vectors:
+
+- no-10x-control: `S003=100`
+- current-10x: `S003=100`
+- candidate-variant: `S003=100`
+
+Manual result:
+
+- current-10x: pass. It treated the request as explicit authorization to update
+  records, superseded the old threshold decision, updated the spec, and opened a
+  bounded executable ticket for threshold `90`.
+- candidate-variant: pass. It did the same with slightly different slug
+  choices; no meaningful improvement over current.
+- no-10x-control: not promotion-relevant because control `.10x` records were
+  removed and therefore it could not observe the active-record conflict.
+
+## Conclusions
+
+Do not promote `candidate-active-record-conflict-provenance-v1`. Canonical
+`SKILL.md` already handles this edge when the user explicitly authorizes
+updating records: it makes the record graph coherent before opening executable
+work and avoids implementation edits.
