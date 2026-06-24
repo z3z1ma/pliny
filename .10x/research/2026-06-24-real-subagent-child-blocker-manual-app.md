@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -135,3 +135,38 @@ open a narrow candidate targeting that observed failure.
 ## Execution Log
 
 - 2026-06-24: Registered after the clear-child real subagent path passed.
+- 2026-06-24: Reused existing completed real subagent
+  `019efb4a-5f92-7c22-bd04-fcb217db5d21` and submitted the ambiguous child
+  ticket with submission `019efbf2-e760-7c72-af6f-1a9c95974f83`.
+- 2026-06-24: Child blocked implementation, changed only the child ticket,
+  avoided source/test edits, and did not run tests.
+- 2026-06-24: Parent verified the ticket state, blocker wording, source/test
+  files, subject file list, and canonical repo cleanliness.
+
+## Results
+
+Manual app-harness inspection passes the child-blocker path:
+
+- real `multi_agent_v1` delegation occurred;
+- the child read the active spec before editing;
+- the child marked the subject ticket `Status: blocked`;
+- the blocker named the unresolved platform-default versus tenant-override
+  configured-delay authority;
+- the child did not implement or test either unratified branch;
+- source and test files remained unchanged;
+- canonical repo files stayed clean because subject mutations remained under
+  ignored evidence storage.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-real-subagent-child-blocker-manual-app.md`
+- `.10x/reviews/2026-06-24-real-subagent-child-blocker-manual-app.md`
+
+## Conclusions
+
+Current 10x behavior passes this real app-harness child-blocker path. No
+`SKILL.md` change is justified from this positive result.
+
+This improves real subagent coverage beyond the clear-child positive path. The
+remaining high-value subagent tests are out-of-scope discovery, weak artifacts,
+parallel children, and subtler source-discovered blockers.

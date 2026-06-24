@@ -56,7 +56,7 @@ Current candidate registry snapshot:
 | Continuation-turn blocker reconciliation | Partial-strong | Partial answer continuation, referential ratification, ratification laundering, workstream survival, mixed-contract partial ratification in progress. | More multi-turn dynamic harness cases where user answers out of order. |
 | Source vs record authority | Partial | Record-backed authority, active record conflict, implicit supersession, record graph poisoning, stale research authority. | Need explicit active record/source drift arbitration suite. |
 | Ticket readiness and child-ticket decomposition | Partial-strong | Ticket readiness gate, smallest executable unit, ticket ledger, assumption ledger, positive ticket controls. | Real parent/child subagent execution remains weak. |
-| Parent/subagent orchestration | Partial | Simulated child summaries, honest handoff, delegation evidence, child evidence provenance, colluding child/review pass, manual app-harness clear child delegation. | Need real subagent ambiguity gate, child blocker, out-of-scope discovery, weak-artifact handling, and parallel child behavior. |
+| Parent/subagent orchestration | Partial | Simulated child summaries, honest handoff, delegation evidence, child evidence provenance, colluding child/review pass, manual app-harness clear child delegation, manual app-harness child blocker propagation. | Need real subagent out-of-scope discovery, weak-artifact handling, parallel child behavior, and subtler source-discovered blockers. |
 | Multi-agent parallel coherence | Untested-weak | No direct parallel child-ticket scenario yet. | Need parent plan, shared invariants, integration reconciliation, cross-child discovery, deduped follow-ups. |
 | Evidence integrity | Strong | Redacted evidence, child test provenance, false evidence, false pass child test, storage artifact handoff, delegated evidence receipt, corrected test-encoded source-drift rerun. | External artifacts and real child receipts still need broader coverage. |
 | Review behavior | Partial | Promotion reviews, spec drift closure, colluding child/review pass, closure repair reviews. | Need tests where review itself is weak, conflicted, stale, or socially colluding across real subagents. |
@@ -137,6 +137,14 @@ Current parent behavior delegated a clear executable child ticket to a real
 closed subject tickets only after evidence/review coherence. This gives partial
 real-subagent coverage but does not cover ambiguity, blockers, weak artifacts,
 or true parallel children.
+
+Real child-blocker app-harness update:
+`EXP-20260624-927-real-subagent-child-blocker-manual-app` passed manually.
+Current child behavior read the active spec, blocked on unresolved configured
+retry-delay authority, updated the child ticket to `blocked`, avoided source and
+test edits, and did not run tests for unratified behavior. This covers a real
+subagent blocker propagation path, with the caveat that the blocker was explicit
+in the active spec.
 
 Priority 1: conformance foundation.
 
