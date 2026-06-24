@@ -436,3 +436,7 @@ Canonical start guard:
   Future raw `file_outputs` now contain changed files only while manifests keep
   full `post_run_files`; older raw artifacts are filtered by seed/prior paths in
   S002 scoring.
+- 2026-06-23: Added `candidate-independent-blocker-completeness-v1`, tracked
+  seed fixture `autoresearch/fixtures/live-seeds/independent-blocker-completeness/`,
+  and registered
+  `EXP-20260623-830-independent-blocker-completeness-scn001-live-micro`.
