@@ -154,6 +154,11 @@ ticket, and parent verification reran `npm test` before moving the original
 child ticket to done. This covers a real subagent out-of-scope discovery path,
 with the caveat that the discovery was source-comment-obvious.
 
+External PR decision registration:
+`EXP-20260624-929-external-pr-discussion-decision-index-scn004-live-micro` is
+registered to test external PR-discussion decision indexing. This extends
+external artifact coverage beyond Google Doc specification artifacts.
+
 Priority 1: conformance foundation.
 
 1. Real subagent clear child ticket: parent creates parent/child records,
