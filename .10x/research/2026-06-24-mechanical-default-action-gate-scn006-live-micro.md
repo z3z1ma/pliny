@@ -209,24 +209,27 @@ Manual inspection:
 - no-10x-control created one ticket despite having inherited `.10x` removed,
   but its ticket stated no active `.10x` records existed and relied on source
   only.
-- current-10x created exactly one executable child ticket, made no
-  implementation edits, preserved active spec/decision references, and asked no
-  mechanical naming or placement questions.
-- candidate-variant created exactly one executable child ticket, made no
+- current-10x created exactly one high-quality executable child ticket, made no
   implementation edits, preserved active spec/decision dependencies, included
-  explicit exclusions and evidence expectations, and recorded that filename and
-  title were mechanical repo-conventional defaults rather than semantic choices.
+  explicit exclusions and evidence expectations, and asked no mechanical naming
+  or placement questions.
+- candidate-variant created exactly one high-quality executable child ticket,
+  made no implementation edits, preserved active spec/decision dependencies,
+  included explicit exclusions and evidence expectations, and recorded that
+  filename and title were mechanical repo-conventional defaults rather than
+  semantic choices.
 
 ## Conclusions
 
 Keep `candidate-mechanical-default-action-gate-v1` for follow-up, but do not
 promote yet.
 
-The candidate improved the measured ticket shape and had lower wall time/tool
-count than current, but the prompt explicitly named filename/title as mechanical
-details. The result supports the hypothesis that positive mechanical-default
-guidance may improve ticket quality, but does not yet prove the instruction is
-needed when the model must infer the mechanical/semantic boundary itself.
+The candidate improved the automated S003 score and had lower wall time/tool
+count than current, but manual inspection found current already made the correct
+core move: it created a high-quality ticket without asking mechanical questions.
+The candidate's distinct useful behavior was explicitly identifying the
+filename/title choice as mechanical. Because the prompt itself named those
+details as mechanical, the result is a weak keep, not promotion evidence.
 
 Next useful test: a subtler SCN-006 or SCN-005 prompt where records/source imply
 the remaining default is mechanical, but the user does not label it as such.

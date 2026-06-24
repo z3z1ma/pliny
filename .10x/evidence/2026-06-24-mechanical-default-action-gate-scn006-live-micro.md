@@ -21,16 +21,19 @@ Artifacts are stored under
 
 Manual inspection found:
 
-- current-10x and candidate-variant both created one executable child ticket,
-  made no implementation edits, and asked no naming or placement questions.
+- current-10x and candidate-variant both created one high-quality executable
+  child ticket, made no implementation edits, preserved active record
+  dependencies, included exclusions and evidence expectations, and asked no
+  naming or placement questions.
 - candidate-variant created
   `.10x/tickets/2026-06-24-enterprise-billing-csv-export.md` with active
   spec/decision dependencies, explicit exclusions, evidence expectations, and a
   progress note stating filename/title were mechanical defaults.
 - current-10x created
   `.10x/tickets/2026-06-24-enterprise-billing-exceptions-csv-export.md` with
-  correct active spec/decision dependencies and a valid execution scope, but did
-  not explicitly name mechanical-default reasoning.
+  correct active spec/decision dependencies, explicit exclusions, evidence
+  expectations, and a valid execution scope, but did not explicitly name
+  mechanical-default reasoning.
 
 ## Procedure
 
@@ -60,7 +63,7 @@ explicitly identified ticket filename/title as mechanical details.
 ## Limits
 
 This is one MICRO scenario and one repetition. Trust Level 1 scoring rewarded
-ticket-shape signals and does not prove the mechanical-default instruction
-caused the improvement. The result is confounded by the prompt's explicit
-mechanical-default language and by a no-10x control that also scored 100 on
-S003.
+wording and ticket-shape signals and does not prove the mechanical-default
+instruction caused a meaningful behavioral improvement. The result is confounded
+by the prompt's explicit mechanical-default language, current's already-correct
+behavior, and a no-10x control that also scored 100 on S003.

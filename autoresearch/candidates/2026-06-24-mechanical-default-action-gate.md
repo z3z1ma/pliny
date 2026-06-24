@@ -83,13 +83,13 @@ Automated first-pass scoring:
 - current: `S003=85`
 - control: `S003=100`
 
-Manual inspection found current and candidate both created one executable child
-ticket, made no implementation edits, and asked no naming or placement
-questions. Candidate's ticket was materially stronger: it preserved active
-decision/spec dependencies, included explicit exclusions, evidence expectations,
-and stated that filename/title were mechanical defaults. Current also created a
-valid ticket but did not name mechanical-default reasoning and scored lower on
-boundary/non-goal signals.
+Manual inspection found current and candidate both created one high-quality
+executable child ticket, made no implementation edits, preserved active
+decision/spec dependencies, included exclusions and evidence expectations, and
+asked no naming or placement questions. Candidate's distinct advantage was
+explicitly recording that filename/title were mechanical defaults; the automated
+`S003=100` versus current `S003=85` appears partly driven by wording and ticket
+shape rather than a major behavioral difference.
 
 Do not promote from this result alone. The prompt explicitly told the subject
 that filename/title were mechanical, so the candidate needs a subtler follow-up
