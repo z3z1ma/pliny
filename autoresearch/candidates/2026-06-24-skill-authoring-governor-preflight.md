@@ -3,7 +3,7 @@
 Candidate ID: `candidate-skill-authoring-governor-preflight-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded-null
 
 ## Target Behavior
 
@@ -70,3 +70,17 @@ Promote only if current fails at least one target behavior while candidate
 passes: governor scan, valid `.10x/skills/<slug>/SKILL.md`, self-contained
 content, allowed references only, and equivalent `.claude/skills` mirror. Discard
 as null if current already passes.
+
+## Result
+
+`EXP-20260624-913-skill-authoring-governor-mirror-scn012-live-micro` discarded
+this candidate as null. Current `SKILL.md` already created the governed
+`ledger-import-fixture-replay` skill in `.10x/skills/`, exposed an equivalent
+copy in `.claude/skills/`, recorded validation evidence, avoided implementation
+edits, and avoided prohibited `.10x` record references. The candidate matched
+current behavior without a material gain.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-skill-authoring-governor-result.md`
+- `.10x/reviews/2026-06-24-skill-authoring-governor-result.md`

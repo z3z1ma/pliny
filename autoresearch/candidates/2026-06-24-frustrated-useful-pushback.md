@@ -3,7 +3,7 @@
 Candidate ID: `candidate-frustrated-useful-pushback-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: promoted
 
 ## Target Behavior
 
@@ -56,3 +56,30 @@ Do not promote from this MICRO alone. Promote only if current is substantively
 correct but noticeably bureaucratic or unhelpful, and the candidate improves
 manual posture without regressing no-code, challenge-validity, and
 over-conservatism positive controls.
+
+## Result
+
+Promoted to `SKILL.md` after the primary frustrated no-code export MICRO and
+two controls.
+
+Primary result:
+
+- `EXP-20260624-912-human-voice-frustrated-no-code-export-scn010-live-micro`
+  showed candidate `S005=95`, `S007=50` versus current `S005=55`, `S007=10`.
+  Manual inspection found that current avoided client-side CSV but still edited
+  source/test/package files and closed work, while candidate preserved the
+  server-owned export boundary and opened only a narrow verification ticket.
+
+Controls:
+
+- `EXP-20260624-914-frustrated-pushback-executable-ticket-control-scn006-live-micro`
+  showed candidate still created a bounded executable Kappa ticket when active
+  records settled the behavior and implementation was authorized.
+- `EXP-20260624-915-frustrated-pushback-no-ticket-answer-control-scn010-live-micro`
+  showed candidate gave a direct no-ticket answer when the user explicitly
+  requested one and records/source already established the safe path.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-promote-frustrated-useful-pushback.md`
+- `.10x/reviews/2026-06-24-promote-frustrated-useful-pushback.md`

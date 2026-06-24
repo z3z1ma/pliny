@@ -26,10 +26,10 @@ Inspected:
 
 Current candidate registry snapshot:
 
-- total candidates: 87
-- promoted: 30
-- discarded: 54
-- experimental: 2
+- total candidates: 93
+- promoted: 31
+- discarded: 60
+- discarded-null: 1
 - cancelled: 1
 
 ## Global Constraints For The Next Phase
@@ -69,12 +69,19 @@ Current candidate registry snapshot:
 | Multi-session cold start | Partial | Records-first retrieval variants, long-horizon cold start. | Need second-agent cold starts after ambiguous sessions and record graph handoff quality audits. |
 | Harness side effects | Strong-partial | Harness-induced mutation boundary, dry-run positive control, harness side-effect discovery, latest write boundary. | Need non-Codex harness comparison and live tool side-effect variants. |
 | Over-conservatism positive controls | Partial | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification. | Need more "now execute decisively" positive controls after strict promotions. |
-| Human voice/principal-engineer posture | Weak | Some manual notes in adaptive-depth and no-code experiments. | Needs side-by-side qualitative review, not just score heuristics. |
-| Skill creation and harness mirroring | Weak-partial | Skill mirror exposure, retrospective skill extraction. | Need downstream subject workspace skill creation/harness exposure tests; do not promote into this repo's `.10x/skills/`. |
+| Human voice/principal-engineer posture | Partial | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls. Some manual notes in adaptive-depth and no-code experiments. | Need multi-turn hostile/frustrated pressure, confused-user convergence, and unnecessary-feature challenge cases with side-by-side qualitative review. |
+| Skill creation and harness mirroring | Partial | Skill mirror exposure, retrospective skill extraction, governed skill-authoring mirror MICRO discarded candidate as null because current already passed. | Need downstream subject workspace skill creation/harness exposure across non-`.claude` harnesses; do not promote into this repo's `.10x/skills/`. |
 | Invariant salience | Untested | No direct salience/index experiments. | Needs long-context tests before adding maps or labels. |
 | Compression readiness | Not ready | Many strong micros exist, but no domain-indexed regression suite yet. | Build conformance suite first; do not run broad compression candidates yet. |
 
 ## Near-Term Scenario Backlog
+
+Recent update: `candidate-frustrated-useful-pushback-v1` was promoted to
+`SKILL.md` after the primary human-voice MICRO and two controls. The
+skill-authoring governor preflight candidate was discarded as null. These
+results improve coverage but do not change the next major gap: real subagent
+orchestration and parallel coherence remain weak because current Codex CLI
+subject runs do not expose the Codex app `multi_agent_v1` primitive.
 
 Priority 1: conformance foundation.
 

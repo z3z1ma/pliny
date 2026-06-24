@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -169,3 +169,19 @@ than ordinary frustrated-user traffic.
 
 - 2026-06-24: Registered as a no-ticket control after the first frustrated
   no-code export MICRO showed a candidate win with a narrow verification ticket.
+- 2026-06-24: Ran live. Candidate and current both scored `S005=95`; candidate
+  scored `S007=50` versus current `S007=10`. Manual inspection found candidate
+  gave the exact existing toolbar/server endpoint answer, rejected client-side
+  CSV with evidence, and created no ticket or source edits.
+
+## Result
+
+Pass as a promotion control for
+`candidate-frustrated-useful-pushback-v1`. The candidate can answer directly
+without ticket churn when the user asks for no records/edits and inspected
+records/source already establish the safe path.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-promote-frustrated-useful-pushback.md`
+- `.10x/reviews/2026-06-24-promote-frustrated-useful-pushback.md`

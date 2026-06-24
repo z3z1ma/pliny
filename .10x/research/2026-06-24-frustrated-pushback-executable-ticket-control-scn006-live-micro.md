@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -171,3 +171,19 @@ than source diff is the primary behavior under test.
 
 - 2026-06-24: Registered as a necessary-work control after the first frustrated
   no-code export MICRO showed a candidate win.
+- 2026-06-24: Ran live. All arms scored `S003=100`. Manual inspection found
+  candidate created `.10x/tickets/2026-06-24-implement-kappa-greenline-label.md`,
+  preserved the display-only threshold contract, cited the active spec and
+  decision, did not ask for reconfirmation, and did not edit source files.
+
+## Result
+
+Pass as a promotion control for
+`candidate-frustrated-useful-pushback-v1`. The candidate did not turn useful
+pushback into a no-code bias when implementation was authorized and active
+records settled the behavior.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-promote-frustrated-useful-pushback.md`
+- `.10x/reviews/2026-06-24-promote-frustrated-useful-pushback.md`

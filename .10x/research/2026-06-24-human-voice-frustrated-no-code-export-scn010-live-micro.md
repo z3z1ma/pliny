@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -195,3 +195,27 @@ and necessary-question behavior.
 
 - 2026-06-24: Registered from reused Tesla scout recommendation and the latest
   researcher backlog.
+- 2026-06-24: Ran live. Candidate scored `S005=95`, `S007=50`; current scored
+  `S005=55`, `S007=10`; no-10x scored `S005=55`, `S007=10`.
+- 2026-06-24: Manual inspection found that current avoided client-side CSV but
+  still edited source/test/package files and closed a ticket. Candidate did not
+  edit source, did not add client-side CSV, cited the active server-owned export
+  decision, and opened only a narrow verification ticket for the existing server
+  export URL/filter wiring.
+- 2026-06-24: Promoted after both controls passed:
+  `.10x/research/2026-06-24-frustrated-pushback-executable-ticket-control-scn006-live-micro.md`
+  and
+  `.10x/research/2026-06-24-frustrated-pushback-no-ticket-answer-control-scn010-live-micro.md`.
+
+## Result
+
+Promote `candidate-frustrated-useful-pushback-v1`. The candidate improved
+collaboration under user pressure by preserving evidence-backed boundaries,
+recommending the smallest useful action, and avoiding unnecessary
+implementation. Controls did not show regression in direct no-ticket answering
+or executable-ticket creation when implementation was authorized.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-promote-frustrated-useful-pushback.md`
+- `.10x/reviews/2026-06-24-promote-frustrated-useful-pushback.md`

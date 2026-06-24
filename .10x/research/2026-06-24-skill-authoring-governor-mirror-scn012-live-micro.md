@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -202,3 +202,22 @@ cause speculative mirrors.
 
 - 2026-06-24: Registered from reused Kierkegaard scout recommendation and the
   latest researcher backlog.
+- 2026-06-24: Ran live. Automated first-pass scores tied current and candidate
+  at `S002=85` and `S006=85`; no-10x scored `S002=80` and `S006=30`.
+- 2026-06-24: Manual inspection found current and candidate both satisfied the
+  skill-writing governor target behavior: exact slug, `.10x` source skill,
+  `.claude` exposure, byte-equivalent mirror validation, no prohibited `.10x`
+  record references, and no implementation edits. Discarded
+  `candidate-skill-authoring-governor-preflight-v1` as null.
+
+## Result
+
+Discard `candidate-skill-authoring-governor-preflight-v1`. Current `SKILL.md`
+already passes this governed skill-authoring MICRO. The run adds conformance
+evidence for skill creation and harness mirroring, but it does not justify a
+canonical `SKILL.md` change.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-skill-authoring-governor-result.md`
+- `.10x/reviews/2026-06-24-skill-authoring-governor-result.md`
