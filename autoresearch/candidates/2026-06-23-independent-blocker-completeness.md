@@ -3,7 +3,7 @@
 Candidate ID: `candidate-independent-blocker-completeness-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: testing
+Status: discarded
 Promotion: manual-only
 
 ## Target Behavior
@@ -64,3 +64,10 @@ Secondary scenario:
 
 This candidate cannot be promoted without live evidence, manual inspection,
 held-out checks, and review.
+
+## Result
+
+`EXP-20260623-830-independent-blocker-completeness-scn001-live-micro` discarded
+this candidate. Candidate and current both scored `S001=100;S007=90` and both
+asked exactly the three current blockers. Current `SKILL.md` already satisfied
+the target behavior, so no promotion is warranted.

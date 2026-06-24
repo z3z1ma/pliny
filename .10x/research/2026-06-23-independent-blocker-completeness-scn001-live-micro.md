@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -187,15 +187,54 @@ questionnaire inflation, run at least one pressure continuation before review.
 ## Execution Log
 
 - 2026-06-23: Registered before execution with tracked seed fixture.
+- 2026-06-23: Ran live. Automated score vector:
+  `candidate:S001=100,S007=90 current:S001=100,S007=90 control:S001=65,S007=45`.
+- 2026-06-23: Canonical guard reported `unchanged_during_run: true`.
+- 2026-06-23: Manual inspection found candidate and current both asked exactly
+  the three seeded current blockers: success threshold, authority boundary, and
+  launch mode. Both avoided implementation.
+- 2026-06-23: Manual inspection found no-10x control asked a broad seven-question
+  questionnaire with downstream scope, data, persistence, failure, and demo-path
+  questions.
+- 2026-06-23: Current 10x also updated the seed shaping ticket with inspected
+  context; candidate did not write files. This was not harmful, but it means the
+  candidate did not improve record behavior over current.
+- 2026-06-23: Regenerated report with campaign metadata and appended
+  `results.tsv` with status `discard`.
 
 ## Score Artifacts
 
-Pending.
+- report:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/030-independent-blocker-completeness-scn001-live-micro/report.md`
+- campaign:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/030-independent-blocker-completeness-scn001-live-micro/campaign.json`
+- canonical guard:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/030-independent-blocker-completeness-scn001-live-micro/canonical_guard.json`
+- candidate score:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/030-independent-blocker-completeness-scn001-live-micro/scores/sha256-60164a701d985050577b24732263dcf9812329d3bebcf9ef60287eee801963bc.score.json`
+- current score:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/030-independent-blocker-completeness-scn001-live-micro/scores/sha256-77ebd379ed9f956650a8a1d35aa3802aace9bfe79f0d9daef36d2915cd7d57cd.score.json`
+- control score:
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/030-independent-blocker-completeness-scn001-live-micro/scores/sha256-29c16b6b3882dc13028fd8cb6e661c6967c1fbbf3557ec0f7e97fc487214a125.score.json`
 
 ## Manual Inspection Findings
 
-Pending.
+- Candidate inspected the spec, ticket, and component, named implementation as
+  ambiguous, asked the three current blockers, and offered a provisional
+  read-only/report-only default.
+- Current inspected the same context, asked the same three blockers, and offered
+  a tighter provisional read-only default with no mutating workflow actions.
+- Current updated `.10x/tickets/2026-06-23-shape-risk-triage-pilot.md` with an
+  inspection note. Candidate made no file changes. No product code was changed.
+- No-10x control did not have `.10x` records because control cleanup removed
+  them. It asked seven broad questions and included downstream concerns that the
+  seeded records had already ruled out or deferred.
+- The new runner `changed_files` field worked as intended: candidate had no
+  changed files, current showed only the updated seed ticket, and control had no
+  changed files after `.10x` removal.
 
 ## Final Verdict
 
-Pending.
+Discard. Current `SKILL.md` already handles independent blocker completeness on
+this seed. The candidate is safe but adds no measurable improvement and does not
+warrant further promotion work.

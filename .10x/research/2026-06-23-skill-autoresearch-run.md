@@ -440,3 +440,9 @@ Canonical start guard:
   seed fixture `autoresearch/fixtures/live-seeds/independent-blocker-completeness/`,
   and registered
   `EXP-20260623-830-independent-blocker-completeness-scn001-live-micro`.
+- 2026-06-23: Ran
+  `EXP-20260623-830-independent-blocker-completeness-scn001-live-micro`.
+  Candidate and current tied at `S001=100;S007=90` and both asked the three
+  current independent blockers without downstream spread. No-10x control asked a
+  broad seven-question questionnaire. Logged status `discard` because current
+  `SKILL.md` already satisfies the behavior.
