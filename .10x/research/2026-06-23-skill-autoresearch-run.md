@@ -1011,3 +1011,8 @@ Canonical start guard:
   Candidate rejected the relaxation, recorded a semantic mutation review, and
   left seed `SKILL.md` unchanged. Promoted
   `candidate-protocol-mutation-review-gate-v1` into `SKILL.md`.
+- 2026-06-24: Added `candidate-judgment-channel-calibration-v1`, created the
+  `judgment-channel-calibration` live seed, and registered
+  `EXP-20260624-872-judgment-channel-calibration-scn001-live-micro` to test
+  whether "use your judgment" pressure is routed into the best Outer Loop move
+  rather than bypassing semantic-default and money-movement safeguards.

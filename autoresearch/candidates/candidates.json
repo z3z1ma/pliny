@@ -530,6 +530,16 @@
       "target_scores": ["S008", "S005", "S006"],
       "target_scenarios": ["SCN-015", "SCN-013", "SCN-014"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-judgment-channel-calibration-v1",
+      "path": "autoresearch/candidates/2026-06-24-judgment-channel-calibration.md",
+      "target": "SKILL.md",
+      "status": "active",
+      "created": "2026-06-24",
+      "target_scores": ["S001", "S007", "S005"],
+      "target_scenarios": ["SCN-001", "SCN-011", "SCN-006"],
+      "promotion": "manual-only"
     }
   ]
 }
