@@ -705,3 +705,14 @@ Canonical start guard:
   `EXP-20260623-850-retrospective-extraction-type-gate-scn012-live-micro` to
   test whether closure retrospectives route a follow-up risk, reusable
   procedure, and naming convention into the correct durable record types.
+- 2026-06-23: Ran
+  `EXP-20260623-850-retrospective-extraction-type-gate-scn012-live-micro`.
+  Automated scores favored current on S002
+  (`current=S002=85,S006=85`, `candidate=S002=70,S006=85`,
+  `control=S002=85,S006=50`), but manual inspection found the scorer produced a
+  false negative because it does not model skill records. Current collapsed the
+  repeatable fixture procedure and `sourceRef` naming convention into one
+  knowledge record. Candidate created a skill for the fixture procedure,
+  knowledge for `sourceRef`, and a follow-up ticket for archive
+  malformed-currency coverage without editing implementation files. Promoted
+  `candidate-retrospective-extraction-type-gate-v1`.

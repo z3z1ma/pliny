@@ -3,7 +3,7 @@
 Candidate ID: `candidate-retrospective-extraction-type-gate-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: experimental
+Status: promoted
 
 ## Target Behavior
 
@@ -75,3 +75,17 @@ retrospective capture.
 
 Discard if current already extracts the durable learning, or if candidate
 creates low-value generic records that future agents could not use.
+
+## Result
+
+`EXP-20260623-850-retrospective-extraction-type-gate-scn012-live-micro`
+promoted this candidate. Current 10x closed correctly and preserved the
+follow-up risk, but collapsed the repeatable Ledger fixture procedure and the
+`sourceRef` naming convention into one knowledge record. Candidate created the
+expected typed durable owners: a skill for the fixture procedure, a knowledge
+record for the naming convention, and an open follow-up ticket for archive
+malformed-currency coverage.
+
+The Trust Level 1 scorer undercounted the candidate because SCN-012 scoring
+does not currently model `.10x/skills/` records. Manual inspection overrode the
+S002 floor failure.

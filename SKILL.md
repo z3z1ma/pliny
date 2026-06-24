@@ -538,6 +538,10 @@ After satisfying the final criteria of any major work, review the entire executi
 - Distill useful, repeatable, step-by-step operational workflows into `skills`.
 - Open explicit follow-up tickets for unaddressed technical debt, hidden dependencies, discovered risks, or downstream requirements.
 
+Classify each retrospective observation by the form future agents need before recording it. Conceptual facts, vocabulary, conventions, and reusable judgment belong in knowledge. Repeatable operational procedures belong in skills. Unfinished work, technical debt, downstream requirements, and bugs belong in follow-up tickets. Systemic instruction gaps belong in the applicable always-on instruction set. Observations that would be mentioned but do not warrant durable action require a brief recorded no-action rationale.
+
+Do not satisfy a procedure, convention, or instruction-gap lesson by opening a generic follow-up ticket. Use the record type that preserves the learning in the form future agents will need.
+
 The retrospective also authorizes refinement of core runtime constraints. When the execution window exposes a systemic instruction gap, update `AGENTS.md` or the applicable always-on instruction set. Such updates are expected so the same class of mistake does not recur.
 
 Closure means the records agree, the evidence supports the acceptance criteria, review risk is handled, execution friction has been distilled, and the system has learned from the work.

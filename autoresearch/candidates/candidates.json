@@ -325,7 +325,7 @@
       "id": "candidate-retrospective-extraction-type-gate-v1",
       "path": "autoresearch/candidates/2026-06-23-retrospective-extraction-type-gate.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "promoted",
       "created": "2026-06-23",
       "target_scores": ["S008", "S002", "S006"],
       "target_scenarios": ["SCN-012", "SCN-009", "SCN-008"],

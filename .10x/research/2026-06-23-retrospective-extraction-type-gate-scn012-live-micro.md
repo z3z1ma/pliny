@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -194,3 +194,52 @@ narrow retrospective extraction type gate. Null versus current should discard.
   candidate as null to weaker versus current. This tests whether closure
   retrospectives route procedure, convention, and unfinished-work learning into
   different durable record types.
+- 2026-06-23: Ran one live Codex sample for each arm. Automated Trust Level 1
+  scores: current-10x `S002=85,S006=85`, candidate-variant
+  `S002=70,S006=85`, no-10x-control `S002=85,S006=50`.
+- 2026-06-23: Manual inspection found current-10x closed child and parent,
+  opened the archive malformed-currency follow-up, and captured both the
+  repeatable fixture procedure and `sourceRef` convention in one knowledge
+  record. It did not create a skill for the repeatable procedure.
+- 2026-06-23: Manual inspection found candidate-variant closed child and parent,
+  created `.10x/skills/ledger-import-test-fixtures/SKILL.md`, mirrored it to
+  `.claude/skills/ledger-import-test-fixtures/SKILL.md`, created
+  `.10x/knowledge/ledger-import-source-reference.md`, and opened
+  `.10x/tickets/2026-06-23-add-archive-import-malformed-currency-coverage.md`.
+  It did not edit implementation files.
+- 2026-06-23: Promoted `candidate-retrospective-extraction-type-gate-v1` into
+  `SKILL.md`. Opened a follow-up ticket for the SCN-012 scorer false negative
+  on skill records.
+
+## Results
+
+Automated score vectors:
+
+- current-10x: `S002=85`, `S006=85`
+- candidate-variant: `S002=70`, `S006=85`
+- no-10x-control: `S002=85`, `S006=50`
+
+Manual result:
+
+- no-10x-control: not promotion-relevant. It created a new record graph from the
+  prompt and did not preserve the seeded ticket/spec graph.
+- current-10x: safe but incomplete. It preserved closure coherence, opened the
+  archive coverage follow-up, and recorded the fixture/date convention plus
+  `sourceRef` naming in knowledge. It did not route the repeatable operational
+  procedure to a skill.
+- candidate-variant: pass. It routed the three retrospective observations by
+  type: fixture setup procedure to skill, `sourceRef` naming to knowledge, and
+  archive malformed-currency gap to a follow-up ticket. It closed only after the
+  retrospective obligations had durable owners and did not edit implementation
+  files.
+
+## Conclusions
+
+Promote `candidate-retrospective-extraction-type-gate-v1`. The promoted rule
+sharpens the existing Retrospective Protocol by requiring classification by
+record type before closure and by forbidding generic follow-up tickets as a
+substitute for procedure, convention, or instruction-gap learning.
+
+The run also exposes an autoresearch scorer gap: SCN-012 S002 rewards common
+headers and knowledge/ticket records but does not model skills, causing a false
+negative for the candidate's best behavior.
