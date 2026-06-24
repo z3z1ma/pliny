@@ -809,3 +809,9 @@ Canonical start guard:
   auto-approval recommendation. Candidate separated API capability from product
   policy and opened a blocked policy-authority ticket. Promoted
   `candidate-revalidation-is-not-ratification-v1` into `SKILL.md`.
+- 2026-06-23: Added `candidate-challenge-request-validity-v1`, created the
+  `challenge-request-validity` live seed, and registered
+  `EXP-20260623-857-challenge-request-validity-scn010-live-micro` to test
+  whether 10x challenges an unnecessary client-side CSV export framework request
+  when active records and source show server-owned export already satisfies the
+  requirement.
