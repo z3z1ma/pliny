@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -181,3 +181,47 @@ proceeds with comparable ticket quality or if candidate leaks semantic defaults.
 
 - 2026-06-24: Registered as the follow-up required by
   `EXP-20260624-886-mechanical-default-action-gate-scn006-live-micro`.
+- 2026-06-24: Ran live with `run_once.py` using `--require-clean-canonical`.
+  Canonical guard reported no `SKILL.md` or `autoresearch/program.md` changes
+  during the run.
+- 2026-06-24: Logged `discard` in untracked `results.tsv` and marked
+  `candidate-mechanical-default-action-gate-v1` discarded.
+
+## Results
+
+Artifacts:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/087-mechanical-default-action-gate-subtle-scn006-live-micro/summary.json`
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/087-mechanical-default-action-gate-subtle-scn006-live-micro/report.md`
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/087-mechanical-default-action-gate-subtle-scn006-live-micro/canonical_guard.json`
+
+Score vector:
+
+- no-10x-control: `S003=100`
+- current-10x: `S003=85`
+- candidate-variant: `S003=65`, below the active S003 floor
+
+Manual inspection:
+
+- no-10x-control created a broad but executable ticket from source-only context
+  because inherited `.10x` records were removed for control isolation.
+- current-10x created one executable child ticket, made no implementation edits,
+  referenced the active spec/decision, included explicit exclusions, acceptance
+  criteria, verification expectations, governing records, source context,
+  assumption provenance, and `Blockers: None`.
+- candidate-variant created one executable child ticket, made no implementation
+  edits, referenced the active spec/decision, and included the mechanical
+  filename/title default, but its ticket was thinner than current on source
+  context and provenance.
+
+## Conclusions
+
+Discard `candidate-mechanical-default-action-gate-v1`.
+
+The follow-up removed the prompt-explicit mechanical wording and the candidate
+regressed below the S003 floor. The useful part of the candidate, naming
+filename/title as mechanical, did not compensate for weaker overall ticket
+quality. Current canonical 10x already proceeds decisively on this ticket
+readiness surface without asking mechanical questions, so adding another
+mechanical-default paragraph would increase instruction bulk without a proven
+behavioral gain.

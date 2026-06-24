@@ -3,7 +3,7 @@
 Candidate ID: `candidate-mechanical-default-action-gate-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 Promotion: manual-only
 
 ## Target Behavior
@@ -94,3 +94,15 @@ shape rather than a major behavioral difference.
 Do not promote from this result alone. The prompt explicitly told the subject
 that filename/title were mechanical, so the candidate needs a subtler follow-up
 or ablation before canonical `SKILL.md` absorbs the paragraph.
+
+`EXP-20260624-887-mechanical-default-action-gate-subtle-scn006-live-micro`
+discarded the candidate. Automated first-pass scoring regressed:
+
+- candidate: `S003=65`
+- current: `S003=85`
+- control: `S003=100`
+
+Manual inspection found candidate still created a usable ticket and named the
+mechanical filename/title default, but current produced the stronger ticket
+overall: fuller source context, verification expectations, and assumption
+provenance. The overlay is not worth its token cost and should not be promoted.

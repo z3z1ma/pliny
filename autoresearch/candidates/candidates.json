@@ -675,7 +675,7 @@
       "id": "candidate-mechanical-default-action-gate-v1",
       "path": "autoresearch/candidates/2026-06-24-mechanical-default-action-gate.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S003", "S005", "S007"],
       "target_scenarios": ["SCN-006", "SCN-005", "SCN-010"],
