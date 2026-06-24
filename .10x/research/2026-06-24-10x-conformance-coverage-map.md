@@ -115,6 +115,11 @@ but under-exposed the unratified `closed` lifecycle state compared with the
 duplicate-current arm. Treat this as a residual voice consistency risk, not a
 promotion signal yet.
 
+Candidate follow-up:
+`candidate-confused-user-convergence-contract-v1` and
+`EXP-20260624-924-confused-user-convergence-contract-scn001-live-micro` are
+registered to test a narrow confused/contradictory request convergence rule.
+
 Priority 1: conformance foundation.
 
 1. Real subagent clear child ticket: parent creates parent/child records,
