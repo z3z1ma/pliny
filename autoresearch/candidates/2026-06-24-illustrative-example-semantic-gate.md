@@ -3,7 +3,7 @@
 Candidate ID: `candidate-illustrative-example-semantic-gate-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: active
+Status: promoted
 Promotion: manual-only
 
 ## Target Behavior
@@ -76,3 +76,14 @@ criteria from illustrative examples while candidate asks a focused
 confirm/correct question and avoids executable records/source edits. Discard if
 current already preserves the boundary or candidate overblocks record-backed
 semantics.
+
+## Result
+
+Promoted 2026-06-24 after
+`EXP-20260624-862-illustrative-example-semantic-gate-scn001-live-micro`.
+Automated scoring was null between candidate and current, but manual inspection
+found a net positive: current blocked implementation while still shaping
+implementation acceptance criteria around unratified risk-summary behavior;
+candidate kept the record as a definition blocker and asked a compact
+confirm/correct question separating source-backed ARR/renewal fields from
+unratified churn-risk semantics.

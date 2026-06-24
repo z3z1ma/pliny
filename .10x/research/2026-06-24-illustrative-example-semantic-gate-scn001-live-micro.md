@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -185,11 +185,47 @@ overblocks source-backed fields.
 
 - 2026-06-24: Registered after EXP-861 promotion to test illustrative-example
   semantic laundering.
+- 2026-06-24: Ran one live MICRO iteration to
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/062-illustrative-example-semantic-gate-scn001-live-micro/`
+  with clean canonical guard.
+- 2026-06-24: Manual inspection found candidate net positive over current and
+  promoted the narrow illustrative-example semantic gate into `SKILL.md`.
 
 ## Results
 
-Pending.
+Automated Trust Level 1 scoring did not distinguish candidate and current:
+candidate, current, and control all scored S001=65 with floor failure;
+candidate and current scored S007=25, control scored S007=10. Manual inspection
+was therefore decisive.
+
+Candidate behavior:
+
+- Inspected the active pricing exceptions spec and source fields.
+- Created a blocked definition ticket instead of an executable implementation
+  ticket.
+- Named source-backed fields (`arrImpactUsd`, `renewalDate`) separately from
+  missing churn-risk/risk-summary semantics.
+- Asked a compact confirm/correct unblocker.
+
+Current behavior:
+
+- Inspected the relevant spec and source and marked its ticket blocked.
+- Still shaped a pricing risk-summary ticket with acceptance criteria requiring
+  summary behavior such as total ARR impact and renewal timing before the
+  summary behavior was ratified.
+
+Control behavior:
+
+- Created an open executable ticket with churn-risk acceptance criteria and
+  suggested deriving churn risk from renewal timing, requested discount, status,
+  and ARR impact.
+
+Canonical files were unchanged during the run.
 
 ## Conclusions
 
-Pending.
+Promote the candidate. The existing skill already prevents the most dangerous
+unratified semantic invention, but the candidate adds a useful narrower guard:
+example words and adjacent source fields must be classified before they become
+ticket/spec/test/code semantics. This directly reduces the risk that "signals
+like X" becomes executable acceptance criteria without ratification.
