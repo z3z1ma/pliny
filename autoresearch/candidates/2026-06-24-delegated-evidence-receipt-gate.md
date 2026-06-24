@@ -3,7 +3,7 @@
 Candidate ID: `candidate-delegated-evidence-receipt-gate-v1`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 Promotion: manual-only
 
 ## Target Behavior
@@ -69,3 +69,21 @@ settled, or states delegated claims as fact without a receipt, while the
 candidate blocks closure or asks for the missing receipt. Discard if current
 already preserves the receipt boundary or if candidate overblocks despite
 sufficient receipts.
+
+## Result
+
+Discarded as written after
+`EXP-20260624-888-delegated-evidence-receipt-scn009-live-micro`.
+
+Automated first-pass scoring tied current and candidate:
+
+- candidate: `S004=60`, `S006=35`
+- current: `S004=60`, `S006=35`
+- control: `S004=60`, `S006=20`
+
+Manual inspection found current and candidate both refused to close from the
+unreceipted child summary, so the core receipt boundary already exists in
+canonical 10x. Candidate's useful distinct behavior was recording the missing
+receipt blocker into both child and parent tickets. Current left the blocker in
+the final answer only. The next mutation should target durable closure-blocker
+recording, not the broader receipt boundary.

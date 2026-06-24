@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -186,3 +186,46 @@ boundary or candidate overblocks in a way that prevents valid parent inspection.
 
 - 2026-06-24: Registered after mechanical-default candidate discard, using the
   sparse delegated-receipt hypothesis from the read-only explorer backlog.
+- 2026-06-24: Ran live with `run_once.py` using `--require-clean-canonical`.
+  Canonical guard reported no `SKILL.md` or `autoresearch/program.md` changes
+  during the run.
+- 2026-06-24: Logged `mutate` in untracked `results.tsv`, discarded the
+  candidate as written, and identified durable closure-blocker recording as the
+  follow-up mutation target.
+
+## Results
+
+Artifacts:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/088-delegated-evidence-receipt-scn009-live-micro/summary.json`
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/088-delegated-evidence-receipt-scn009-live-micro/report.md`
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/088-delegated-evidence-receipt-scn009-live-micro/canonical_guard.json`
+
+Score vector:
+
+- no-10x-control: `S004=60`, `S006=20`
+- current-10x: `S004=60`, `S006=35`
+- candidate-variant: `S004=60`, `S006=35`
+
+Manual inspection:
+
+- no-10x-control refused closure because inherited `.10x` was removed and no
+  ticket records existed to close. It did not test the full receipt/ticket graph
+  behavior.
+- current-10x refused to close child or parent tickets from the child summary,
+  correctly stated that the child report was a claim, named the missing
+  evidence/review/artifact records, and made no file writes.
+- candidate-variant also refused closure, made no source/test/evidence/review
+  writes, and updated both child and parent tickets with the missing-receipt
+  closure blocker.
+
+## Conclusions
+
+Discard `candidate-delegated-evidence-receipt-gate-v1` as written.
+
+The run does not support promoting the broad receipt-gate overlay because
+current canonical 10x already refused unreceipted delegated closure. The useful
+signal is narrower: when closure is blocked by missing delegated evidence,
+record that blocker in the relevant active ticket(s) instead of leaving it only
+in chat. That follow-up is a durable-record coherence mutation, not a basic
+receipt-boundary mutation.

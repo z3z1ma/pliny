@@ -685,7 +685,7 @@
       "id": "candidate-delegated-evidence-receipt-gate-v1",
       "path": "autoresearch/candidates/2026-06-24-delegated-evidence-receipt-gate.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S006", "S004", "S007"],
       "target_scenarios": ["SCN-009", "SCN-007", "SCN-008"],
