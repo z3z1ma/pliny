@@ -100,6 +100,12 @@ headers, preserved historical mentions, and avoided source/test changes. Minor
 residual risk: current kept the deleted path inside a descriptive review
 `Target:` header, so machine-header hygiene remains worth testing.
 
+Rename lifecycle registration:
+`EXP-20260624-925-record-rename-reference-repair-scn004-live-micro` is
+registered to test active spec renaming, live reference repair, and historical
+path preservation. This directly targets the machine-header hygiene and
+mechanical record-maintenance gap left by the deletion MICRO.
+
 External artifact positive-control update:
 `EXP-20260624-922-external-local-spec-canonical-positive-control-scn004-live-micro`
 passed manually for current `SKILL.md`. Current created a full active local
