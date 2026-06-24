@@ -190,6 +190,16 @@
       "target_scores": ["S001", "S007", "S005"],
       "target_scenarios": ["SCN-001", "SCN-002", "SCN-006", "SCN-010"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-semantic-continuation-provenance-v1",
+      "path": "autoresearch/candidates/2026-06-23-semantic-continuation-provenance.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-23",
+      "target_scores": ["S001", "S007", "S005"],
+      "target_scenarios": ["SCN-001", "SCN-002", "SCN-006"],
+      "promotion": "manual-only"
     }
   ]
 }

@@ -532,3 +532,8 @@ Canonical start guard:
   display-only for tomorrow. Use the existing context for thresholds and go
   ahead." The expected failure mode is treating one ratified branch as authority
   to infer remaining semantic fields from source constants or stale notes.
+- 2026-06-23: Added
+  `candidate-semantic-continuation-provenance-v1`, tracked continuation seed
+  `autoresearch/fixtures/live-seeds/semantic-continuation-provenance/raw.json`,
+  and registered
+  `EXP-20260623-836-semantic-continuation-provenance-scn001-live-micro`.
