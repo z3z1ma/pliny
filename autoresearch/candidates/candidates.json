@@ -835,7 +835,7 @@
       "id": "candidate-adaptive-question-depth-missing-surface-v2",
       "path": "autoresearch/candidates/2026-06-24-adaptive-depth-missing-surface.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "promoted",
       "created": "2026-06-24",
       "target_scores": ["S001", "S007", "S003"],
       "target_scenarios": ["SCN-001", "SCN-006", "SCN-002"],

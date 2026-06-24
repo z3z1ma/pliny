@@ -219,7 +219,9 @@ before promotion.
 
 ## Conclusion
 
-Keep `candidate-adaptive-question-depth-missing-surface-v2` pending the required
-held-out sanity check where only the target surface is missing. Promote only if
-the held-out run shows the candidate does not revive broad-questionnaire
-behavior when records settle the other semantic blockers.
+Promote `candidate-adaptive-question-depth-missing-surface-v2`.
+
+The required held-out sanity check
+`EXP-20260624-905-adaptive-depth-target-surface-only-scn001-live-micro` passed:
+candidate asked only the remaining target surface/workflow blocker when records
+settled the other semantic policy questions.

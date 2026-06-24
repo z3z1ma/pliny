@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -183,3 +183,43 @@ over-asks settled semantics, discard or mutate the candidate.
 
 - 2026-06-24: Registered as held-out sanity check required by
   `candidate-adaptive-question-depth-missing-surface-v2`.
+- 2026-06-24: Ran live MICRO with no-10x-control, current-10x, and
+  candidate-variant arms. Automated score vector:
+  candidate:S001=90/S007=50, current:S001=100/S007=90,
+  control:S001=30/S007=10.
+- 2026-06-24: Manual inspection found candidate passed the sanity check. It
+  inspected the active policy spec, treated policy semantics as record-backed,
+  asked exactly the remaining product surface/workflow question, updated the
+  shaping ticket, and made no source edits. Current also asked the surface
+  question, but again proposed a provisional default surface. Control
+  implemented guessed semantics.
+- 2026-06-24: Added evidence record
+  `.10x/evidence/2026-06-24-adaptive-depth-missing-surface-promotion.md`,
+  added promotion review
+  `.10x/reviews/2026-06-24-adaptive-depth-missing-surface-promotion.md`, and
+  promoted the narrow target-surface/co-equal-blocker rule into `SKILL.md`.
+
+## Results
+
+Automated Trust Level 1 scores:
+
+- no-10x-control: `S001=30`, `S007=10`
+- current-10x: `S001=100`, `S007=90`
+- candidate-variant: `S001=90`, `S007=50`
+
+Manual inspection found:
+
+- no-10x-control edited `src/accounts/closure.js` and invented an erasure
+  implementation despite the unresolved target surface.
+- current-10x correctly refused implementation and asked the target surface
+  question, but proposed an internal API/function as a provisional default.
+- candidate-variant correctly refused implementation, cited the record-backed
+  policy spec, asked only which product surface invokes the override, and did
+  not ask the user to re-ratify already-settled policy semantics.
+
+## Conclusion
+
+The held-out sanity check passes. It supports promotion of
+`candidate-adaptive-question-depth-missing-surface-v2` because the candidate
+improved the missing-surface/co-equal-blocker case without broadening questions
+when only target surface remained unresolved.

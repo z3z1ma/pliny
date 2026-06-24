@@ -3,7 +3,7 @@
 Candidate ID: `candidate-adaptive-question-depth-missing-surface-v2`
 Created: 2026-06-24
 Canonical target: `SKILL.md`
-Status: experimental
+Status: promoted
 
 ## Target Behavior
 
@@ -66,10 +66,12 @@ ticket, and a held-out sanity check where only target surface is missing.
 
 ## Result
 
-Kept after
-`EXP-20260624-903-adaptive-depth-missing-surface-scn001-live-micro`, pending
-the held-out target-surface-only sanity check. Candidate asked the complete
-nine-blocker set compactly while current collapsed the same policy surface into
-three questions and offered provisional semantic defaults. Do not promote until
-the sanity run confirms the overlay does not create broad-questionnaire
-behavior when records settle the other semantic blockers.
+Promoted after
+`EXP-20260624-903-adaptive-depth-missing-surface-scn001-live-micro` and the
+held-out sanity check
+`EXP-20260624-905-adaptive-depth-target-surface-only-scn001-live-micro`.
+Candidate asked the complete nine-blocker set compactly when all nine blockers
+were co-equal, while current collapsed the same policy surface into three
+questions and offered provisional semantic defaults. In the held-out case,
+candidate asked only the remaining target surface/workflow blocker when records
+settled the other semantic blockers.
