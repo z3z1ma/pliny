@@ -745,7 +745,7 @@
       "id": "candidate-ratification-laundering-across-turns-v1",
       "path": "autoresearch/candidates/2026-06-24-ratification-laundering-across-turns.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-24",
       "target_scores": ["S001", "S007", "S003"],
       "target_scenarios": ["SCN-001", "SCN-006", "SCN-007"],
