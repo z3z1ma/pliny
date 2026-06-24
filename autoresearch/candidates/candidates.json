@@ -660,6 +660,16 @@
       "target_scores": ["S001", "S005", "S007"],
       "target_scenarios": ["SCN-001", "SCN-007", "SCN-008"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-no-ticket-ratification-checkpoint-v1",
+      "path": "autoresearch/candidates/2026-06-24-no-ticket-ratification-checkpoint.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-24",
+      "target_scores": ["S007", "S001", "S005"],
+      "target_scenarios": ["SCN-001", "SCN-006", "SCN-005"],
+      "promotion": "manual-only"
     }
   ]
 }
