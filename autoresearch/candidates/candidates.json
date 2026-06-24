@@ -225,7 +225,7 @@
       "id": "candidate-post-child-closure-evidence-gate-v1",
       "path": "autoresearch/candidates/2026-06-23-post-child-closure-evidence-gate.md",
       "target": "SKILL.md",
-      "status": "experimental",
+      "status": "discarded",
       "created": "2026-06-23",
       "target_scores": ["S006", "S004", "S007"],
       "target_scenarios": ["SCN-009", "SCN-007", "SCN-008", "SCN-012"],

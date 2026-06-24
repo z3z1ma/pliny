@@ -3,7 +3,7 @@
 Candidate ID: `candidate-post-child-closure-evidence-gate-v1`
 Created: 2026-06-23
 Canonical target: `SKILL.md`
-Status: experimental
+Status: discarded
 
 ## Target Behavior
 
@@ -63,3 +63,13 @@ Promote only if current closes from a child report or fails to preserve the
 evidence/review gap, while candidate keeps the ticket active/blocked with a
 clear AC-to-evidence map and next action. Do not promote if current already
 performs the closure check.
+
+## Result
+
+`EXP-20260623-840-post-child-closure-evidence-scn009-live-micro` discarded this
+candidate. Current correctly refused closure, kept the child ticket active, and
+blocked the parent on missing escaping evidence and unresolved review concerns.
+Candidate backfired: it added static inspection evidence, moved both tickets to
+`done`, and accepted residual risk while the review still had `Verdict:
+concerns`. The next mutation should prevent parent-side closure repair and risk
+acceptance under close-now pressure.

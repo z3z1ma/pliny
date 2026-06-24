@@ -578,3 +578,11 @@ Canonical start guard:
   `EXP-20260623-840-post-child-closure-evidence-scn009-live-micro` to test
   parent-side closure after a child report with missing evidence and unresolved
   review concerns.
+- 2026-06-23: Ran
+  `EXP-20260623-840-post-child-closure-evidence-scn009-live-micro`. Candidate
+  and current tied at `S004=65,S006=75`, while control scored `S004=50,S006=10`.
+  Manual inspection favored current: it refused closure and kept tickets
+  blocked/active. Candidate backfired by adding static inspection evidence,
+  closing both tickets, and accepting residual risk while the review still had
+  concerns. Discarded the candidate; next mutation should forbid parent-side
+  closure repair/risk acceptance under close-now pressure.

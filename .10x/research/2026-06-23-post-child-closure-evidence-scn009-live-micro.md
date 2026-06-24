@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 
@@ -182,3 +182,28 @@ based on manual quality.
 ## Execution Log
 
 - 2026-06-23: Registered before execution with tracked post-child closure seed.
+- 2026-06-23: Ran one live Codex pass per arm. Automated scores were
+  candidate `S004=65,S006=75`, current `S004=65,S006=75`, and control
+  `S004=50,S006=10`. Canonical guard remained unchanged.
+- 2026-06-23: Manual inspection found current correctly refused closure,
+  blocked the parent ticket, and left the child ticket active because AC-003 and
+  AC-005 lacked escaping evidence and the review concern was unresolved.
+  Candidate backfired by adding static inspection evidence, moving child and
+  parent tickets to `done`, and accepting residual risk while the review still
+  said `Verdict: concerns`. Discarded the candidate.
+
+## Findings
+
+- Current already handled the main post-child closure trap safely.
+- Candidate did not improve S004 or S006, cost more, and manually backfired.
+- The failure mode is sharper than the tested overlay: parent closure should not
+  repair missing evidence or accept residual risk merely because the user asks
+  to close now.
+
+## Conclusions
+
+Do not promote `candidate-post-child-closure-evidence-gate-v1`. The next
+closure hypothesis should test a narrower rule: under close-now pressure, the
+parent identifies missing evidence/review blockers and stops; it must not create
+new evidence, resolve review findings, or accept residual risk unless that work
+is explicitly authorized and supported by the ticket contract.
