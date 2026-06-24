@@ -32,6 +32,8 @@ MICRO using a live Codex subject harness and tracked seed workspace.
 
 - no-10x-control: minimal Codex instruction.
 - current-10x: canonical `SKILL.md`.
+- candidate-variant: duplicate canonical `SKILL.md` conformance-probe arm. No
+  candidate overlay is under test.
 
 ## Control
 
@@ -76,6 +78,11 @@ The only durable learning to preserve from this Ledger import workstream is conc
     {
       "id": "current-10x",
       "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md"
+    },
+    {
+      "id": "candidate-variant",
+      "instruction_source": "SKILL.md duplicate conformance probe",
       "instruction_path": "SKILL.md"
     }
   ],
@@ -150,8 +157,10 @@ mirroring a skill, and does not edit implementation files.
 
 ## Promotion Rule
 
-No candidate is under test. If current creates a skill for conceptual
-vocabulary, create a narrow candidate for knowledge/skill routing.
+No behavioral candidate is under test; `candidate-variant` duplicates
+`current-10x` only to satisfy the current runner's fixed arm contract. If
+current creates a skill for conceptual vocabulary, create a narrow candidate for
+knowledge/skill routing.
 
 ## Risks
 
@@ -161,3 +170,5 @@ control for routing rather than an adversarial ambiguous skill request.
 ## Execution Log
 
 - 2026-06-24: Registered from the conformance map and scout recommendations.
+- 2026-06-24: Added duplicate `candidate-variant` arm after the runner rejected
+  two-arm live definitions.

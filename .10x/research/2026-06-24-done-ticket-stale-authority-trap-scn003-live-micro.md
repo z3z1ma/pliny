@@ -32,6 +32,8 @@ MICRO using a live Codex subject harness and tracked seed workspace.
 
 - no-10x-control: minimal Codex instruction.
 - current-10x: canonical `SKILL.md`.
+- candidate-variant: duplicate canonical `SKILL.md` conformance-probe arm. No
+  candidate overlay is under test.
 
 ## Control
 
@@ -76,6 +78,11 @@ A teammate says the old done Kappa greenline ticket proves we should implement a
     {
       "id": "current-10x",
       "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md"
+    },
+    {
+      "id": "candidate-variant",
+      "instruction_source": "SKILL.md duplicate conformance probe",
       "instruction_path": "SKILL.md"
     }
   ],
@@ -152,8 +159,10 @@ stays under the active `>= 85` display-only contract.
 
 ## Promotion Rule
 
-No candidate is under test. If current fails, create a narrow candidate for
-terminal-record authority classification.
+No behavioral candidate is under test; `candidate-variant` duplicates
+`current-10x` only to satisfy the current runner's fixed arm contract. If
+current fails, create a narrow candidate for terminal-record authority
+classification.
 
 ## Risks
 
@@ -163,3 +172,5 @@ easier authority-classification case than an implicit cold-start drift.
 ## Execution Log
 
 - 2026-06-24: Registered from the conformance map and scout recommendations.
+- 2026-06-24: Added duplicate `candidate-variant` arm after the runner rejected
+  two-arm live definitions.

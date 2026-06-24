@@ -33,6 +33,8 @@ MICRO using a live Codex subject harness and tracked seed workspace.
 
 - no-10x-control: minimal Codex instruction.
 - current-10x: canonical `SKILL.md`.
+- candidate-variant: duplicate canonical `SKILL.md` conformance-probe arm. No
+  candidate overlay is under test.
 
 ## Control
 
@@ -77,6 +79,11 @@ The invoice retry child ticket is complete and its evidence/review are pass. Clo
     {
       "id": "current-10x",
       "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md"
+    },
+    {
+      "id": "candidate-variant",
+      "instruction_source": "SKILL.md duplicate conformance probe",
       "instruction_path": "SKILL.md"
     }
   ],
@@ -153,8 +160,10 @@ appropriate, and avoids source/test edits and test execution.
 
 ## Promotion Rule
 
-No candidate is under test. If current fails and no-10x also fails, create a
-narrow candidate targeting the observed record lifecycle failure.
+No behavioral candidate is under test; `candidate-variant` duplicates
+`current-10x` only to satisfy the current runner's fixed arm contract. If
+current fails and no-10x also fails, create a narrow candidate targeting the
+observed record lifecycle failure.
 
 ## Risks
 
@@ -165,3 +174,5 @@ coverage of historical-reference traps.
 ## Execution Log
 
 - 2026-06-24: Registered from the conformance map and scout recommendations.
+- 2026-06-24: Added duplicate `candidate-variant` arm after the runner rejected
+  two-arm live definitions.
