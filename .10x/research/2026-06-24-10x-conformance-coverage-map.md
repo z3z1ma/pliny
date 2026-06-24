@@ -98,6 +98,12 @@ is registered to test deletion of an invalid draft specification, repair of
 live references, preservation of historical mentions, and cancellation/blocker
 coherence for dependent work.
 
+External artifact positive-control update:
+`EXP-20260624-922-external-local-spec-canonical-positive-control-scn004-live-micro`
+is registered as the inverse of the prior thin-index case. It tests whether the
+agent creates a full active local specification when Product and Engineering
+explicitly ratify `.10x` as the canonical implementation contract.
+
 Priority 1: conformance foundation.
 
 1. Real subagent clear child ticket: parent creates parent/child records,
