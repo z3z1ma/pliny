@@ -621,3 +621,8 @@ Canonical start guard:
   conflict coherently by superseding/updating active records before opening a
   bounded executable ticket for threshold `90`, with no implementation edits.
   Discarded the candidate as null versus current.
+- 2026-06-23: Added `candidate-implicit-record-supersession-gate-v1` and
+  registered `EXP-20260623-844-implicit-record-supersession-scn006-live-micro`
+  as the harder active-record conflict test: the prompt asks for threshold `90`
+  and says not to ask questions, but does not explicitly authorize updating or
+  superseding active records.
