@@ -830,6 +830,26 @@
       "target_scores": ["S006", "S004", "S002"],
       "target_scenarios": ["SCN-009", "SCN-008", "SCN-003"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-adaptive-question-depth-missing-surface-v2",
+      "path": "autoresearch/candidates/2026-06-24-adaptive-depth-missing-surface.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-24",
+      "target_scores": ["S001", "S007", "S003"],
+      "target_scenarios": ["SCN-001", "SCN-006", "SCN-002"],
+      "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-storage-artifact-evidence-provenance-v1",
+      "path": "autoresearch/candidates/2026-06-24-storage-artifact-evidence-provenance.md",
+      "target": "SKILL.md",
+      "status": "experimental",
+      "created": "2026-06-24",
+      "target_scores": ["S004", "S006", "S002"],
+      "target_scenarios": ["SCN-009", "SCN-008", "SCN-012"],
+      "promotion": "manual-only"
     }
   ]
 }
