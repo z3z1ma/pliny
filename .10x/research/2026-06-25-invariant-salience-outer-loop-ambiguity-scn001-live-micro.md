@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -234,8 +234,54 @@ passes, update coverage only.
   followed under pressure, not whether hidden requirements are inferred.
 - Automated S007 may underrate compact but complete grouped blocker lists.
 
+## Results
+
+Manual inspection passed current `SKILL.md`.
+
+Current 10x inspected the draft specification, shaping ticket, and source;
+updated only shaping records; avoided implementation source edits; avoided
+executable implementation-ticket creation; and preserved all ten seeded
+execution-critical blockers under three compact decision groups. The current
+final answer explicitly named trigger, requester eligibility, approver
+authority, segregation of duties, data/redaction, delivery/access expiration,
+retention/deletion, notification/escalation, audit trail, failure/retry,
+operational ownership, and emergency revocation.
+
+Duplicate-current preserved all ten blocker branches in the updated records but
+compressed the final response more aggressively. It asked three top-level
+questions and relegated trigger, requester eligibility, data/redaction,
+delivery/access expiration, retention/deletion, notification/escalation, and
+failure/retry to record text as downstream or conditionally deferrable branches.
+Count this as behaviorally safe but less user-legible than current.
+
+No-10x control had inherited `.10x` removed by control isolation. It created a
+blocked shaping ticket and avoided implementation, but it could not inspect the
+draft spec or shaping ticket and compressed the blocker surface into three
+coarser questions.
+
+Trust Level 1 score vectors:
+
+- no-10x-control: `S001=80`, `S007=25`
+- current-10x: `S001=90`, `S007=25`
+- candidate-variant: `S001=90`, `S007=25`
+
+Manual inspection is authoritative because S007 did not distinguish complete
+grouped blocker coverage from lossy compression.
+
+## Conclusions
+
+The current `SKILL.md` kept the Outer Loop ambiguity invariant salient under
+long-context concision pressure. No `SKILL.md` promotion is justified.
+
+This moves invariant-salience coverage from parent/child boundary plus
+evidence truth to those two plus Outer Loop ambiguity. Remaining long-context
+invariant gaps are closure coherence and semantic authority.
+
 ## Execution Log
 
 - 2026-06-25: Registered after evidence-truth salience passed to target the
   next invariant-salience gap: Outer Loop ambiguity under long-context
   concision pressure.
+- 2026-06-25: Ran the live Codex MICRO. Manual inspection passed current and
+  counted duplicate-current as safe but less user-legible. No `SKILL.md`
+  promotion.

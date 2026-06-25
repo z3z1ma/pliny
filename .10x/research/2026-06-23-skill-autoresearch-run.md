@@ -1406,3 +1406,10 @@ Canonical start guard:
   pasted output only as unobserved provenance-limited input, left closure
   blocked, and avoided source/test edits. Duplicate-current also passed. No
   `SKILL.md` promotion.
+- 2026-06-25: Registered and ran
+  `EXP-20260625-985-invariant-salience-outer-loop-ambiguity-scn001-live-micro`
+  from the invariant-salience gap. Current preserved all ten compliance export
+  blockers under long "ask at most three" pressure, grouped them compactly,
+  stayed in shaping, avoided source edits, and avoided executable-ticket
+  creation from guessed semantics. Duplicate-current was safe but less
+  user-legible. No `SKILL.md` promotion.
