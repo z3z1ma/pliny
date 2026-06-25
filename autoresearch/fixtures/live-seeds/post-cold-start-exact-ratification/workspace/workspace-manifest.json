@@ -1,0 +1,12 @@
+{
+  "workspace": "autoresearch/fixtures/live-seeds/post-cold-start-exact-ratification/workspace",
+  "source": "current-10x workspace sha256-74207758fba2b9fede7782b12310ff0f6e774cd0ebd0482e5375923269ba75f2 from EXP-20260625-954-live-authored-handoff-review-audit-scn003-live-micro",
+  "source_workspace_manifest": ".10x/evidence/.storage/2026-06-23-skill-autoresearch/219-live-authored-handoff-review-audit-scn003-live-micro/workspaces/sha256-74207758fba2b9fede7782b12310ff0f6e774cd0ebd0482e5375923269ba75f2/workspace-manifest.json",
+  "notes": [
+    "This is a live-authored current-10x workspace after the handoff review/audit probe.",
+    "The seed includes one review record.",
+    "Audit export already has an executable child ticket.",
+    "Refund auto-approval remains blocked only on failure/escalation semantics.",
+    "The next subject receives exact refund escalation semantics and should create one executable refund ticket without implementing."
+  ]
+}
