@@ -70,7 +70,7 @@ Current candidate registry snapshot:
 | Multi-session cold start | Partial | Records-first retrieval variants, long-horizon cold start. | Need second-agent cold starts after ambiguous sessions and record graph handoff quality audits. |
 | Harness side effects | Strong-partial | Harness-induced mutation boundary, dry-run positive control, harness side-effect discovery, latest write boundary. | Need non-Codex harness comparison and live tool side-effect variants. |
 | Over-conservatism positive controls | Partial | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification. | Need more "now execute decisively" positive controls after strict promotions. |
-| Human voice/principal-engineer posture | Partial-strong | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure with no-ticket current pass and no-10x failure. | Need multi-turn hostile/frustrated pressure, subtler exploratory language, and unnecessary-feature challenge cases with side-by-side qualitative review. |
+| Human voice/principal-engineer posture | Strong-partial | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure; subtle exploratory account-closure pressure with current pass and no-10x ticketing failure. | Need multi-turn hostile/frustrated pressure and unnecessary-feature challenge cases with side-by-side qualitative review. |
 | Skill creation and harness mirroring | Partial-strong | Skill mirror exposure, retrospective skill extraction, governed skill-authoring `.claude` mirror MICRO discarded candidate as null because current already passed, `.opencode` mirror MICRO passed, skill-vs-knowledge routing positive control. | Need `.agents/skills` coverage through a runner mode that permits safe writes, no-native-dir control, ambiguous multi-harness control, divergent mirror repair, and real subagent-authored skill creation; do not promote into this repo's `.10x/skills/`. |
 | Invariant salience | Untested | No direct salience/index experiments. | Needs long-context tests before adding maps or labels. |
 | Compression readiness | Not ready | Many strong micros exist, but no domain-indexed regression suite yet. | Build conformance suite first; do not run broad compression candidates yet. |
@@ -271,6 +271,14 @@ is registered to test whether current recognizes softer "thinking out loud"
 language as exploratory and avoids premature ticket creation while still giving
 concise principal-engineer pushback.
 
+Human-voice subtle exploratory result:
+`EXP-20260624-944-human-voice-subtle-exploratory-account-closure-scn001-live-micro`
+passed manually. Current inspected source and active knowledge, made no
+workspace changes, refused to create an executable ticket from source-observed
+closure terms, and asked one concrete unlock question. no-10x-control created
+an executable account-closure ticket from unratified lifecycle and notification
+semantics.
+
 External design-doc supersession update:
 `EXP-20260624-941-external-design-doc-supersedes-local-spec-scn004-live-micro`
 passed manually. Current moved the old local Nimbus retention revision A spec to
@@ -343,8 +351,8 @@ Priority 3: external artifacts, skills, voice, and positive controls.
 28. User asks for unnecessary feature; agent should push back usefully.
 29. User is impatient; agent stays direct without becoming bureaucratic.
     Covered once for explicit brainstorming pressure by `EXP-20260624-940`;
-    subtler exploratory language is registered as `EXP-20260624-944`; still
-    needs multi-turn hostile/frustrated escalation.
+    subtler exploratory language is covered by `EXP-20260624-944`; still needs
+    multi-turn hostile/frustrated escalation.
 30. Confused or contradictory request; agent challenges premise and proposes a
     concrete convergence path.
 

@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -190,3 +190,25 @@ brainstorming, frustrated pushback, and executable-ticket positive controls.
 
 - 2026-06-24: Registered from human-voice scout after explicit brainstorming
   pressure passed.
+- 2026-06-24: Ran live Codex subject harness with three arms. Current inspected
+  source and knowledge, made no workspace changes, refused to create an
+  executable ticket from subtle exploratory language, and asked one concrete
+  unlock question. no-10x-control created an executable account-closure ticket
+  from source-observed terms. Duplicate-current made no changes and asked a
+  concrete question, but was less sharp than current on the pending-vs-closed
+  lifecycle branch. No `SKILL.md` promotion is justified.
+
+## Results
+
+Manual inspection result: pass for current `SKILL.md`.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-human-voice-subtle-exploratory-account-closure-result.md`
+- `.10x/reviews/2026-06-24-human-voice-subtle-exploratory-account-closure-result.md`
+
+## Conclusions
+
+Current `SKILL.md` recognizes subtle exploratory wording as insufficient
+ratification for high-impact lifecycle and notification semantics. This
+strengthens human-voice coverage without requiring a prompt change.
