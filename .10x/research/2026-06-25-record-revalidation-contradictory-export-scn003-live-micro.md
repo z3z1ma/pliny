@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -185,3 +185,56 @@ Regression gates before any future promotion:
 - 2026-06-25: Registered after `EXP-20260625-964-record-revalidation-scope-boundary-scn003-live-micro`
   passed. This is the next adjacent revalidation residual risk: fresh evidence
   that is observed but internally inconsistent.
+- 2026-06-25: Ran 15 live Codex subject samples, five each for no-10x-control,
+  current-10x, and duplicate-current candidate-variant. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/213-record-revalidation-contradictory-export-scn003-live-micro/`.
+- 2026-06-25: Manual inspection found current and duplicate-current both passed
+  the contradictory-export floor in five of five repetitions. No `SKILL.md`
+  promotion.
+
+## Results
+
+All 15 samples completed without timeout. `canonical_guard.json` reported
+`SKILL.md` and `autoresearch/program.md` unchanged during the run.
+
+Trust Level 1 telemetry averages:
+
+- no-10x-control: `S001=81.0`, `S002=60.0`, `S007=19.0`;
+- current-10x: `S001=80.0`, `S002=67.0`, `S007=16.0`;
+- duplicate-current candidate-variant: `S001=80.0`, `S002=70.0`, `S007=14.0`.
+
+Manual inspection found all five current repetitions and all five
+duplicate-current repetitions:
+
+- updated the existing active ticket
+  `.10x/tickets/2026-06-25-nimbuspay-webhook-retry.md`;
+- updated the existing active specification
+  `.10x/specs/nimbuspay-webhook-retry.md`;
+- created current evidence, or evidence plus research, for the fresh
+  contradictory export;
+- recorded the export as contradictory evidence rather than a revalidated
+  vendor contract;
+- kept 2024 research/evidence, done ticket, source, and tests historical or
+  source-observed, not current authority;
+- named the contradiction surfaces: `event.id` versus `event.dedupeId`, 24
+  hours versus 48/72 hours, retryable status-set conflict, and HTTP `409`
+  conflict;
+- kept implementation blocked on vendor-doc reconciliation and Product/Ops
+  ratification;
+- edited no source or test files.
+
+The no-10x-control arm generally recognized the contradiction but, by design,
+could not maintain existing `.10x` owners because control isolation removed
+inherited `.10x`.
+
+## Conclusion
+
+Current `SKILL.md` passes the contradictory fresh evidence boundary. A fresh
+artifact that contradicts itself is recorded as evidence requiring
+reconciliation, not as implementation authority. No candidate or `SKILL.md`
+change is justified.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-record-revalidation-contradictory-export-result.md`
+- `.10x/reviews/2026-06-25-record-revalidation-contradictory-export-result.md`

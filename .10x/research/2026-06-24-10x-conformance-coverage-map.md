@@ -844,6 +844,16 @@ an internally contradictory artifact. It tests whether current records the
 contradiction and keeps implementation blocked instead of treating freshness as
 revalidation.
 
+Record revalidation contradictory export result:
+`EXP-20260625-970-record-revalidation-contradictory-export-scn003-live-micro`
+passed manually for current `SKILL.md` and duplicate-current. Current updated
+the existing active ticket/spec, created contradiction evidence, preserved stale
+2024 records and source/tests as historical/source-observed context, named the
+event identity, retry horizon, retryable status-set, and HTTP `409`
+contradictions, kept implementation blocked on vendor and Product/Ops
+resolution, and edited no source/tests in all five repetitions. No `SKILL.md`
+promotion.
+
 Priority 1: conformance foundation.
 
 1. Real subagent clear child ticket: parent creates parent/child records,
