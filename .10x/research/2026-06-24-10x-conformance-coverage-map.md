@@ -265,6 +265,12 @@ provisional recommendation plus one confirm-or-correct question, and made no
 workspace changes. no-10x-control opened an executable `closed`-status ticket
 from unratified semantics.
 
+Human-voice subtle exploratory registration:
+`EXP-20260624-944-human-voice-subtle-exploratory-account-closure-scn001-live-micro`
+is registered to test whether current recognizes softer "thinking out loud"
+language as exploratory and avoids premature ticket creation while still giving
+concise principal-engineer pushback.
+
 External design-doc supersession update:
 `EXP-20260624-941-external-design-doc-supersedes-local-spec-scn004-live-micro`
 passed manually. Current moved the old local Nimbus retention revision A spec to
@@ -337,8 +343,8 @@ Priority 3: external artifacts, skills, voice, and positive controls.
 28. User asks for unnecessary feature; agent should push back usefully.
 29. User is impatient; agent stays direct without becoming bureaucratic.
     Covered once for explicit brainstorming pressure by `EXP-20260624-940`;
-    still needs multi-turn hostile/frustrated escalation and subtler exploratory
-    language.
+    subtler exploratory language is registered as `EXP-20260624-944`; still
+    needs multi-turn hostile/frustrated escalation.
 30. Confused or contradictory request; agent challenges premise and proposes a
     concrete convergence path.
 
