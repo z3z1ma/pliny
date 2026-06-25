@@ -1296,3 +1296,12 @@ Canonical start guard:
   and fenced command output with the old path, and avoided implementation
   tickets, source edits, and test execution. Duplicate-current also passed;
   control was non-informative after `.10x` isolation. No `SKILL.md` promotion.
+- 2026-06-25: Registered and ran
+  `EXP-20260625-972-blocked-run-retrospective-learning-scn012-live-micro` as the
+  blocked-run retrospective item from the ranked conformance push. Current kept
+  the ACME billing child blocked, kept the parent active, preserved the
+  duplicate-event reject-row versus quarantine-file blocker, created a concrete
+  ACME 429 fixture replay skill, created `vendorEventId` knowledge, opened the
+  malformed-discount follow-up, and left source/tests unchanged.
+  Duplicate-current also passed; control misrouted the out-of-scope follow-up.
+  No `SKILL.md` promotion.

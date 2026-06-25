@@ -1,0 +1,11 @@
+{
+  "status": 429,
+  "headers": {
+    "Date": "Tue, 31 Mar 2026 12:00:00 GMT",
+    "Retry-After": "45"
+  },
+  "body": {
+    "error": "rate_limited",
+    "message": "Retry after 45 seconds"
+  }
+}
