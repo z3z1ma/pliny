@@ -1195,3 +1195,10 @@ Canonical start guard:
   executable child ticket; and left source/test files unchanged. Control scored
   S003 `100` but could not exercise inherited record graph reconstruction
   because `.10x` was intentionally stripped. No `SKILL.md` promotion.
+- 2026-06-24: Registered and ran
+  `EXP-20260624-959-real-subagent-parent-direct-implementation-pressure-manual-app`
+  as a manual app-harness parent-boundary case. A reused app agent acting as
+  the pressured parent refused direct implementation of an already-open child
+  ticket, updated only the subject parent ticket progress log, left source/test
+  files unchanged, left the child ticket open for subagent execution, and did
+  not run tests for unperformed work. No `SKILL.md` promotion.
