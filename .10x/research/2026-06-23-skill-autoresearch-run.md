@@ -1280,3 +1280,11 @@ Canonical start guard:
   tests; opened one minimal record-only reconciliation ticket; and avoided
   source/test edits or source-revert work. Duplicate-current also passed;
   control was weak contrast after `.10x` isolation. No `SKILL.md` promotion.
+- 2026-06-25: Registered and ran
+  `EXP-20260625-970-multi-surface-source-record-drift-scn006-live-micro` as the
+  next source/record authority case. Current preserved the valid source/record
+  overlap, named source/test conflicts around inactive rows plus forbidden
+  `ownerEmail` and `arr`, recorded drift evidence, opened one scoped alignment
+  ticket, and avoided source/test edits plus test execution. Duplicate-current
+  also passed; control opened a blocked shaping ticket after `.10x` isolation.
+  No `SKILL.md` promotion.

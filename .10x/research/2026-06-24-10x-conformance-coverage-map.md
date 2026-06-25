@@ -57,9 +57,9 @@ Current candidate registry snapshot:
 | Domain | Coverage | Existing coverage signals | Main gaps |
 | --- | --- | --- | --- |
 | Outer Loop ambiguity handling | Strong | Upstream blockers, concise blockers, adaptive question depth, missing-surface depth, dry-run ambiguity, lifecycle side effects, no-ticket checkpoints. | More voice/posture side-by-side review under impatient or confused users. |
-| Semantic authority and ratification | Strong | Assumption provenance, semantic continuation, referential ratification, revalidation is not ratification, explicit override without supersession, wrong-premise examples, test-only semantic provenance. | Source/record drift arbitration remains separate and under-tested. |
+| Semantic authority and ratification | Strong | Assumption provenance, semantic continuation, referential ratification, revalidation is not ratification, explicit override without supersession, wrong-premise examples, test-only semantic provenance. | Source/record drift is tracked separately; remaining upside is multi-turn ratification under out-of-order answers and pressure. |
 | Continuation-turn blocker reconciliation | Partial-strong | Partial answer continuation, referential ratification, ratification laundering, workstream survival, mixed-contract partial ratification in progress. | More multi-turn dynamic harness cases where user answers out of order. |
-| Source vs record authority | Strong | Record-backed authority, active record conflict, implicit supersession, record graph poisoning, stale research authority, active spec/source drift, terminal ticket/evidence authority, unprompted stale terminal record, cold-start terminal continuation, source-backed stale active-spec arbitration, and subtler source-backed stale active-spec arbitration without direct stale-record hints. | Need harder multi-surface drift with partial agreement and weaker provenance, not more single-surface stale-spec cases. |
+| Source vs record authority | Strong | Record-backed authority, active record conflict, implicit supersession, record graph poisoning, stale research authority, active spec/source drift, terminal ticket/evidence authority, unprompted stale terminal record, cold-start terminal continuation, source-backed stale active-spec arbitration, subtler source-backed stale active-spec arbitration without direct stale-record hints, and multi-surface partial-agreement source/test drift. | Need weaker-provenance multi-surface drift or conflicting active-record authority, not more single-surface stale-spec cases. |
 | Ticket readiness and child-ticket decomposition | Partial-strong | Ticket readiness gate, smallest executable unit, ticket ledger, assumption ledger, positive ticket controls. | Real parent/child subagent execution remains weak. |
 | Parent/subagent orchestration | Partial-strong | Simulated child summaries, honest handoff, delegation evidence, child evidence provenance, colluding child/review pass, manual app-harness clear child delegation, manual app-harness child blocker propagation, manual app-harness out-of-scope discovery, real weak-child-artifact blocking, and parent-direct-implementation pressure refusal. | Need subtler source-discovered blockers and weak/colluding real review artifacts. |
 | Multi-agent parallel coherence | Strong-manual | Real positive parallel shared-invariant app harness, real negative parallel invariant-drift app harness, real sibling evidence-invalidation app harness, real source-discovered spec ambiguity affecting both children, and real parallel follow-up deduplication at parent closure. | Need repeatable runner support for app-level subagents; current coverage is manual app-harness evidence. |
@@ -345,6 +345,16 @@ old spec was stale. It opened one minimal record-only reconciliation ticket and
 avoided source/test edits or source-revert work. This closes the main
 single-surface source-backed stale-record gap; further value should come from
 multi-surface or weaker-provenance drift scenarios.
+
+Multi-surface source/record drift result:
+`EXP-20260625-970-multi-surface-source-record-drift-scn006-live-micro` passed
+manually for current `SKILL.md`. Current inspected active privacy records, prior
+evidence, source, and tests; preserved the valid overlap with source behavior;
+named the conflicts around inactive rows plus forbidden `ownerEmail` and `arr`;
+recorded bounded drift evidence; opened one scoped source/test alignment ticket;
+and avoided source/test edits. This covers the first multi-surface
+partial-agreement drift case. The next source/record authority variant should
+weaken the evidence or introduce conflicting active records.
 
 External PR decision registration:
 `EXP-20260624-929-external-pr-discussion-decision-index-scn004-live-micro` is
