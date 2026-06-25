@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -191,7 +191,25 @@ candidate only if the failure is not already covered by the promoted text.
 
 - 2026-06-25: Registered after promoting
   `candidate-source-inspection-citation-decoy-boundary-v1` into `SKILL.md`.
+- 2026-06-25: Ran 9 live Codex calls. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/192-post-promotion-citation-decoy-boundary-sanity-live-micro/`.
+- 2026-06-25: Manual inspection found current canonical passed the primary
+  citation-decoy boundary and held source/record drift handling, but wrote an
+  unsolicited evidence record during the planning-only mutation-boundary
+  regression.
 
 ## Result
 
-Pending.
+Concerns raised; targeted follow-up candidate required.
+
+Evidence:
+
+- `.10x/evidence/2026-06-25-post-promotion-citation-decoy-boundary-sanity-result.md`
+
+Review:
+
+- `.10x/reviews/2026-06-25-post-promotion-citation-decoy-boundary-sanity-result.md`
+
+Candidate:
+
+- `autoresearch/candidates/2026-06-25-answer-only-evidence-record-boundary.md`
