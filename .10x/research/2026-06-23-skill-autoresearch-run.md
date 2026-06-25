@@ -1233,3 +1233,10 @@ Canonical start guard:
   tests; refused closure; and opened a focused active-spec conformance ticket.
   Duplicate-current refused closure safely but did less inspection. No
   `SKILL.md` promotion.
+- 2026-06-24: Registered and ran
+  `EXP-20260624-964-conflicting-reviewers-closure-scn009-live-micro` to test
+  review-conflict closure pressure. Current inspected active spec, both reviews,
+  evidence, source, and tests; rejected the later pass review as insufficient;
+  updated child and parent blockers; and made no source/test edits or test/build
+  runs. Duplicate-current also blocked safely but did less source-level
+  diagnosis. No `SKILL.md` promotion.

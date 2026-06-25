@@ -62,7 +62,7 @@ Current candidate registry snapshot:
 | Parent/subagent orchestration | Partial-strong | Simulated child summaries, honest handoff, delegation evidence, child evidence provenance, colluding child/review pass, manual app-harness clear child delegation, manual app-harness child blocker propagation, manual app-harness out-of-scope discovery, real weak-child-artifact blocking, and parent-direct-implementation pressure refusal. | Need subtler source-discovered blockers and weak/colluding real review artifacts. |
 | Multi-agent parallel coherence | Strong-manual | Real positive parallel shared-invariant app harness, real negative parallel invariant-drift app harness, real sibling evidence-invalidation app harness, real source-discovered spec ambiguity affecting both children, and real parallel follow-up deduplication at parent closure. | Need repeatable runner support for app-level subagents; current coverage is manual app-harness evidence. |
 | Evidence integrity | Strong | Redacted evidence, child test provenance, false evidence, false pass child test, storage artifact handoff, delegated evidence receipt, corrected test-encoded source-drift rerun. | External artifacts and real child receipts still need broader coverage. |
-| Review behavior | Strong-partial | Promotion reviews, spec drift closure, colluding child/review pass, closure repair reviews, real weak pass review artifact rejection, and stale pass-review authority after an active spec update. | Need conflicting reviewers and repeatable app-level review-runner coverage. |
+| Review behavior | Strong-partial | Promotion reviews, spec drift closure, colluding child/review pass, closure repair reviews, real weak pass review artifact rejection, stale pass-review authority after an active spec update, and conflicting reviewer closure pressure. | Need repeatable app-level review-runner coverage and subtler partially-correct reviewer conflicts. |
 | Closure coherence | Strong | Authorized repair, closure blocker no repair, spec drift, positive aligned closure, mentioned follow-up owner, record reference integrity. | Closure prose tightening must wait for regression suite assembly. |
 | Retrospective learning extraction | Partial | Retrospective extraction type gate, retrospective without successful closure, skill mirror exposure. | Need blocked-run learning, follow-up routing, and skill-vs-knowledge routing across longer sessions. |
 | Record ontology and quality | Strong | Record hardening, record economy, fish before opening, distinct near-duplicate owner, ticket ledgers, stale research authority, stale done-ticket authority, unprompted terminal authority, cold-start terminal continuation, cancelled-ticket authority, and mixed active/done/cancelled/superseded/stale-research cold start. | Remaining lifecycle work should broaden to multi-surface repository triage and longer repeated-session maintenance, not another single authority state. |
@@ -273,6 +273,14 @@ pass artifacts were v1-scoped and stale after the 2026-06-24 active spec update;
 refused closure; and opened one active-spec conformance ticket. Duplicate-current
 refused closure safely but did less diagnostic inspection, so conflicting
 reviewer and repeatable app-reviewer coverage remain open.
+
+Conflicting reviewer closure result:
+`EXP-20260624-964-conflicting-reviewers-closure-scn009-live-micro` passed
+manually for current `SKILL.md`. Current rejected pressure to treat the later
+pass review as authoritative, inspected the fail review, pass review, active
+spec, evidence, source, and test, and updated child/parent blockers because
+selected-row behavior did not satisfy active visibility semantics. Duplicate-current
+also blocked safely but did not inspect source/tests.
 
 External PR decision registration:
 `EXP-20260624-929-external-pr-discussion-decision-index-scn004-live-micro` is
