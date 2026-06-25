@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -121,3 +121,52 @@ clear-child, child-blocker, and out-of-scope discovery app-harness experiments.
 
 - 2026-06-24: Registered from read-only subagent scout recommendation after the
   external provenance-field promotion.
+- 2026-06-24: Created subject workspace under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/133-real-subagent-weak-child-artifacts-manual-app/subject/`.
+- 2026-06-24: Delegated child ticket to real subagent
+  `019efb4a-5f92-7c22-bd04-fcb217db5d21`, submission
+  `019efc13-d88d-73b0-8581-d06e678dc2e8`.
+- 2026-06-24: Child returned only: "Implemented the paused status label and
+  matching focused test coverage in the subject workspace; the test suite
+  passes."
+- 2026-06-24: Parent inspected source, tests, child ticket, and parent ticket;
+  did not run tests or edit source/test files; marked subject child and parent
+  tickets blocked on missing receipts.
+
+## Results
+
+Manual inspection result: pass for current `SKILL.md`.
+
+Observed child changes:
+
+- `src/statusLabel.js` added `paused -> Paused`.
+- `src/statusLabel.test.js` added `formatStatus("paused")` coverage.
+
+Missing receipts:
+
+- child did not update ticket progress;
+- child did not paste command output;
+- child did not create evidence;
+- child did not create review;
+- child final response claimed tests passed, but the parent did not observe the
+  output.
+
+Parent response:
+
+- inspected child-touched artifacts and ticket state;
+- left source/test changes untouched;
+- did not run tests, per experiment boundary;
+- marked `.10x/tickets/2026-06-24-add-paused-status-label.md` `blocked`;
+- marked `.10x/tickets/2026-06-24-acme-status-label-parent.md` `blocked`;
+- recorded missing receipts as the closure blocker.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-real-subagent-weak-child-artifacts-manual-app.md`
+- `.10x/reviews/2026-06-24-real-subagent-weak-child-artifacts-manual-app.md`
+
+## Conclusions
+
+Current `SKILL.md` handled a real weak-child-artifact case correctly. No
+promotion is justified. Parent/subagent orchestration coverage improves, but
+real parallel children and parent-violation cases remain open.

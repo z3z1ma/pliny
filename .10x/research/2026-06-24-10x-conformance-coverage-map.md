@@ -160,6 +160,12 @@ Real weak-child-artifact app-harness registration:
 test whether the parent refuses closure when a real child returns only prose
 success without ticket progress, evidence, review, or command output.
 
+Real weak-child-artifact app-harness result:
+`EXP-20260624-933-real-subagent-weak-child-artifacts-manual-app` passed manually.
+Current delegated to a real child, inspected source/tests/tickets after the
+child returned a prose-only success claim, refused closure, and marked both
+subject tickets blocked on missing receipts. No SKILL promotion is justified.
+
 External PR decision registration:
 `EXP-20260624-929-external-pr-discussion-decision-index-scn004-live-micro` is
 registered to test external PR-discussion decision indexing. This extends
