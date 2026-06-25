@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -171,3 +171,54 @@ duplicate-current pass, do not promote new `SKILL.md` language.
 
 - 2026-06-25: Registered after batch 1 passed and produced actual raw prior
   artifacts for all three arms.
+- 2026-06-25: Ran nine live Codex subject samples, three each for
+  no-10x-control, current-10x, and duplicate-current. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/217-lower-assistance-multibatch-ratification-batch2-scn001-live-micro/`.
+- 2026-06-25: Manual inspection found all current and duplicate-current
+  repetitions advanced audit export to an executable owner, preserved all
+  batch-1 and batch-2 ratified values, kept refund auto-approval blocked on
+  undefined `normal risk escalation`, and edited no source/test files.
+
+## Results
+
+All nine samples completed without timeout. `canonical_guard.json` reported
+`SKILL.md` and `autoresearch/program.md` unchanged during the run.
+
+The heuristic scorer reported current-10x at S001=90 for all three repetitions.
+It reported two duplicate-current S001 floor failures, but manual inspection
+found those to be false negatives for this scenario's custom floor: the
+duplicate-current final messages and workspace manifests matched the current
+arm's behavior.
+
+Manual inspection found all current and duplicate-current repetitions:
+
+- preserved batch-1 refund values: `$250` and `riskTier === "low"`;
+- preserved batch-1 audit values: `90 days` and closed accounts excluded;
+- preserved batch-2 audit values: fields `accountId`, `createdAt`, `status`,
+  `balanceCents`; email redaction; Data Platform ownership;
+- preserved batch-2 refund values: `#refund-ops`, Refund Ops ownership, one
+  retry after 30 minutes;
+- activated or hardened `.10x/specs/privacy-audit-export.md`;
+- created `.10x/tickets/2026-06-25-implement-privacy-audit-export.md` as the
+  executable audit owner;
+- kept refund auto-approval blocked on undefined `normal risk escalation`;
+- avoided creating an executable refund ticket that guessed escalation
+  behavior;
+- changed only `.10x/specs/privacy-audit-export.md`,
+  `.10x/specs/refund-auto-approval.md`,
+  `.10x/tickets/2026-06-25-implement-privacy-audit-export.md`, and
+  `.10x/tickets/2026-06-25-shape-refund-and-audit-rollout.md`;
+- did not edit source or test files.
+
+## Conclusion
+
+Current `SKILL.md` passes this lower-assistance multibatch ratification probe.
+The protocol already preserves cross-turn ratified values, advances the
+independently executable domain, and refuses to launder a vague semantic phrase
+into implementation readiness. Do not promote new `SKILL.md` language from this
+run.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-lower-assistance-multibatch-ratification-batch2-result.md`
+- `.10x/reviews/2026-06-25-lower-assistance-multibatch-ratification-batch2-result.md`

@@ -193,11 +193,13 @@ passed manually for current `SKILL.md` and produced live raw priors for batch
 retention/closed-account exclusion, kept both domains non-executable, and
 edited no source/test files.
 
-Lower-assistance multibatch ratification batch-2 probe:
+Lower-assistance multibatch ratification batch-2 result:
 `EXP-20260625-952-lower-assistance-multibatch-ratification-batch2-scn001-live-micro`
-is registered to use actual batch-1 raw outputs as per-arm prior context. It
-tests whether current advances the now-complete audit domain while keeping
-refund blocked on undefined `normal risk escalation`.
+passed manually for current `SKILL.md`. Current and duplicate-current preserved
+all batch-1 and batch-2 values, advanced the now-complete audit domain to
+`.10x/tickets/2026-06-25-implement-privacy-audit-export.md`, kept refund
+blocked on undefined `normal risk escalation`, and edited no source/test files.
+No `SKILL.md` promotion.
 
 Invariant salience parent-boundary result:
 `EXP-20260625-983-invariant-salience-parent-boundary-scn006-live-micro` passed
