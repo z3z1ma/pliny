@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-autoresearch-calibration-campaign.md, .10x/research/2026-06-23-first-autoresearch-calibration-campaign.md
+Relates-To: .10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md, .10x/research/2026-06-23-first-autoresearch-calibration-campaign.md
 
 # First Autoresearch Calibration Campaign Evidence
 
@@ -89,10 +89,10 @@ Manual inspection observations:
 
 Follow-up tickets opened:
 
-- `.10x/tickets/2026-06-23-design-real-autoresearch-candidate.md`
-- `.10x/tickets/2026-06-23-calibrate-autoresearch-scorer-trust.md`
-- `.10x/tickets/2026-06-23-broaden-codex-live-harness-isolation.md`
-- `.10x/tickets/2026-06-23-propagate-campaign-statuses-to-reports.md`
+- `.10x/tickets/done/2026-06-23-design-real-autoresearch-candidate.md`
+- `.10x/tickets/done/2026-06-23-calibrate-autoresearch-scorer-trust.md`
+- `.10x/tickets/done/2026-06-23-broaden-codex-live-harness-isolation.md`
+- `.10x/tickets/done/2026-06-23-propagate-campaign-statuses-to-reports.md`
 
 ## Procedure
 
@@ -113,12 +113,12 @@ Follow-up tickets opened:
 
 This supports:
 
-- `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md#AC-001`
-- `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md#AC-002`
-- `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md#AC-003`
-- `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md#AC-004`
-- `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md#AC-005`
-- `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md#AC-006`
+- `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md#AC-001`
+- `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md#AC-002`
+- `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md#AC-003`
+- `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md#AC-004`
+- `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md#AC-005`
+- `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md#AC-006`
 - `.10x/specs/10x-autoresearch-loop.md#REQ-002`
 - `.10x/specs/10x-autoresearch-loop.md#REQ-007`
 - `.10x/specs/10x-autoresearch-loop.md#REQ-012`

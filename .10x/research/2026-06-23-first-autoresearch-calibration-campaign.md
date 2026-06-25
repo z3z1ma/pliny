@@ -16,7 +16,7 @@ Registered runner experiments:
 ## Driver
 
 Bounded child-ticket executor for
-`.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md`.
+`.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md`.
 
 ## Question Or Hypothesis
 
@@ -261,7 +261,7 @@ Allowed writes:
 - `.10x/research/2026-06-23-first-autoresearch-calibration-campaign.md`
 - `.10x/evidence/2026-06-23-first-autoresearch-calibration-campaign.md`
 - `.10x/reviews/2026-06-23-first-autoresearch-calibration-campaign.md`
-- `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md` progress notes
+- `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md` progress notes
 - `.10x/tickets/YYYY-MM-DD-*.md` follow-up tickets discovered during calibration
 - `.10x/evidence/.storage/2026-06-23-first-autoresearch-calibration-campaign/`
 

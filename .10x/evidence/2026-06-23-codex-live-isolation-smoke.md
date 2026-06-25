@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-codex-live-isolation-smoke.md, .10x/evidence/2026-06-23-autoresearch-codex-full-harness.md
+Relates-To: .10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md, .10x/evidence/2026-06-23-autoresearch-codex-full-harness.md
 
 # Codex Live No-10x Isolation Smoke
 
@@ -111,11 +111,11 @@ that the smoke does not prove complete user/plugin/skill isolation.
 
 This supports:
 
-- `.10x/tickets/2026-06-23-codex-live-isolation-smoke.md#AC-001`
-- `.10x/tickets/2026-06-23-codex-live-isolation-smoke.md#AC-002`
-- `.10x/tickets/2026-06-23-codex-live-isolation-smoke.md#AC-003`
-- `.10x/tickets/2026-06-23-codex-live-isolation-smoke.md#AC-004`
-- `.10x/tickets/2026-06-23-codex-live-isolation-smoke.md#AC-005`
+- `.10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md#AC-001`
+- `.10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md#AC-002`
+- `.10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md#AC-003`
+- `.10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md#AC-004`
+- `.10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md#AC-005`
 
 The observation supports the narrow claim that one live Codex exec command, run
 from an empty generated workspace with no project instruction files and with
@@ -140,4 +140,4 @@ This evidence does not show that:
 - Any no-10x control comparison is clean enough for promotion decisions.
 
 Stronger CODEX_HOME isolation is tracked in
-`.10x/tickets/2026-06-23-codex-home-isolation.md`.
+`.10x/tickets/done/2026-06-23-codex-home-isolation.md`.

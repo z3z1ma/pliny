@@ -1,8 +1,8 @@
 Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
-Parent: .10x/tickets/2026-06-23-implement-autoresearch-loop.md
-Depends-On: .10x/tickets/2026-06-23-autoresearch-codex-full-harness.md, .10x/tickets/2026-06-23-autoresearch-reporting.md
+Parent: .10x/tickets/done/2026-06-23-implement-autoresearch-loop.md
+Depends-On: .10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md, .10x/tickets/done/2026-06-23-autoresearch-reporting.md
 
 # Run First Autoresearch Calibration Campaign
 
@@ -68,10 +68,10 @@ Excluded:
   `.10x/reviews/2026-06-23-first-autoresearch-calibration-campaign.md`.
   Verdict is null/confounded for candidate improvement because candidate reused
   current `SKILL.md` and identical pass fixtures. Follow-ups opened:
-  `.10x/tickets/2026-06-23-design-real-autoresearch-candidate.md`,
-  `.10x/tickets/2026-06-23-calibrate-autoresearch-scorer-trust.md`,
-  `.10x/tickets/2026-06-23-broaden-codex-live-harness-isolation.md`, and
-  `.10x/tickets/2026-06-23-propagate-campaign-statuses-to-reports.md`.
+  `.10x/tickets/done/2026-06-23-design-real-autoresearch-candidate.md`,
+  `.10x/tickets/done/2026-06-23-calibrate-autoresearch-scorer-trust.md`,
+  `.10x/tickets/done/2026-06-23-broaden-codex-live-harness-isolation.md`, and
+  `.10x/tickets/done/2026-06-23-propagate-campaign-statuses-to-reports.md`.
 - 2026-06-23: Parent verification completed. Evidence and review records support
   AC-001 through AC-006 within the ticket's calibration scope. Status set to
   done; promotion-grade gaps are tracked in follow-up tickets and deferred by

@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-autoresearch-micro-runner.md, .10x/evidence/2026-06-23-autoresearch-score-coverage.md
+Relates-To: .10x/tickets/done/2026-06-23-autoresearch-micro-runner.md, .10x/evidence/2026-06-23-autoresearch-score-coverage.md
 
 # Autoresearch MICRO Runner Validation
 
@@ -84,7 +84,7 @@ reason: Prevent project-level 10x instructions from contaminating the no-10x con
 ```
 
 An ASCII source scan over `autoresearch/`,
-`.10x/tickets/2026-06-23-autoresearch-micro-runner.md`, and the validation
+`.10x/tickets/done/2026-06-23-autoresearch-micro-runner.md`, and the validation
 storage directory, excluding generated `__pycache__` directories, produced no
 output.
 
@@ -105,11 +105,11 @@ output.
 
 This supports:
 
-- `.10x/tickets/2026-06-23-autoresearch-micro-runner.md#AC-001`
-- `.10x/tickets/2026-06-23-autoresearch-micro-runner.md#AC-002`
-- `.10x/tickets/2026-06-23-autoresearch-micro-runner.md#AC-003`
-- `.10x/tickets/2026-06-23-autoresearch-micro-runner.md#AC-004`
-- `.10x/tickets/2026-06-23-autoresearch-micro-runner.md#AC-005`
+- `.10x/tickets/done/2026-06-23-autoresearch-micro-runner.md#AC-001`
+- `.10x/tickets/done/2026-06-23-autoresearch-micro-runner.md#AC-002`
+- `.10x/tickets/done/2026-06-23-autoresearch-micro-runner.md#AC-003`
+- `.10x/tickets/done/2026-06-23-autoresearch-micro-runner.md#AC-004`
+- `.10x/tickets/done/2026-06-23-autoresearch-micro-runner.md#AC-005`
 
 The observations support that the first MICRO runner can plan registered
 experiments, report planned arms/scenarios/repetitions/cache keys/budget limits,

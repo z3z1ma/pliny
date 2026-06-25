@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-autoresearch-reporting.md, .10x/evidence/2026-06-23-autoresearch-score-coverage.md
+Relates-To: .10x/tickets/done/2026-06-23-autoresearch-reporting.md, .10x/evidence/2026-06-23-autoresearch-score-coverage.md
 
 # Autoresearch Reporting Validation
 
@@ -92,7 +92,7 @@ scores.S008.backfire True
 
 An ASCII source scan over `autoresearch/report.py`,
 `autoresearch/tests/test_report.py`, `autoresearch/README.md`, and
-`.10x/tickets/2026-06-23-autoresearch-reporting.md` produced no output.
+`.10x/tickets/done/2026-06-23-autoresearch-reporting.md` produced no output.
 
 ## Procedure
 
@@ -114,10 +114,10 @@ An ASCII source scan over `autoresearch/report.py`,
 
 This supports:
 
-- `.10x/tickets/2026-06-23-autoresearch-reporting.md#AC-001`
-- `.10x/tickets/2026-06-23-autoresearch-reporting.md#AC-002`
-- `.10x/tickets/2026-06-23-autoresearch-reporting.md#AC-003`
-- `.10x/tickets/2026-06-23-autoresearch-reporting.md#AC-004`
+- `.10x/tickets/done/2026-06-23-autoresearch-reporting.md#AC-001`
+- `.10x/tickets/done/2026-06-23-autoresearch-reporting.md#AC-002`
+- `.10x/tickets/done/2026-06-23-autoresearch-reporting.md#AC-003`
+- `.10x/tickets/done/2026-06-23-autoresearch-reporting.md#AC-004`
 
 The observations support that `autoresearch/report.py` consumes saved
 `*.score.json` artifacts, emits readable Markdown, preserves component score

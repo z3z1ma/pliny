@@ -1,8 +1,8 @@
 Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
-Parent: .10x/tickets/2026-06-23-implement-autoresearch-loop.md
-Depends-On: .10x/tickets/2026-06-23-autoresearch-score-coverage.md
+Parent: .10x/tickets/done/2026-06-23-implement-autoresearch-loop.md
+Depends-On: .10x/tickets/done/2026-06-23-autoresearch-score-coverage.md
 
 # Implement MICRO Runner
 
@@ -42,7 +42,7 @@ Excluded:
 Read scope:
 
 - `.10x/tickets/2026-06-23-autoresearch-micro-runner.md`
-- `.10x/tickets/2026-06-23-autoresearch-score-coverage.md`
+- `.10x/tickets/done/2026-06-23-autoresearch-score-coverage.md`
 - `.10x/specs/10x-autoresearch-loop.md`
 - `.10x/decisions/autoresearch-initial-implementation-defaults.md`
 - `autoresearch/offline_score.py`
@@ -116,4 +116,4 @@ Worker output expectations:
 
 ## Blockers
 
-Unblocked by completed `.10x/tickets/2026-06-23-autoresearch-score-coverage.md`.
+Unblocked by completed `.10x/tickets/done/2026-06-23-autoresearch-score-coverage.md`.

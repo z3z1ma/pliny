@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Target: .10x/tickets/2026-06-23-simplify-autoresearch-program-loop.md
+Target: .10x/tickets/done/2026-06-23-simplify-autoresearch-program-loop.md
 Verdict: pass
 
 # Simplify Autoresearch Program Loop Review
@@ -14,7 +14,7 @@ The corrective simplification in:
 - `autoresearch/run_once.py`
 - `autoresearch/README.md`
 - deleted controller modules/templates/tests
-- `.10x/tickets/2026-06-23-simplify-autoresearch-program-loop.md`
+- `.10x/tickets/done/2026-06-23-simplify-autoresearch-program-loop.md`
 
 ## Findings
 

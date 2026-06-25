@@ -1,8 +1,8 @@
 Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
-Parent: .10x/tickets/2026-06-23-implement-autoresearch-loop.md
-Depends-On: .10x/tickets/2026-06-23-autoresearch-score-coverage.md
+Parent: .10x/tickets/done/2026-06-23-implement-autoresearch-loop.md
+Depends-On: .10x/tickets/done/2026-06-23-autoresearch-score-coverage.md
 
 # Generate Autoresearch Reports
 

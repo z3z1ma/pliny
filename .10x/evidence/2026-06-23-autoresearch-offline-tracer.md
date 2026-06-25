@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-autoresearch-offline-tracer.md, .10x/evidence/2026-06-23-autoresearch-contract-validator.md
+Relates-To: .10x/tickets/done/2026-06-23-autoresearch-offline-tracer.md, .10x/evidence/2026-06-23-autoresearch-contract-validator.md
 
 # Autoresearch Offline Tracer Validation
 
@@ -53,7 +53,7 @@ An ASCII source scan excluding generated `__pycache__` directories produced no
 output:
 
 ```text
-LC_ALL=C find autoresearch .10x/tickets/2026-06-23-autoresearch-offline-tracer.md -path '*/__pycache__' -prune -o -type f -print0 | xargs -0 grep -n '[^ -~]' || true
+LC_ALL=C find autoresearch .10x/tickets/done/2026-06-23-autoresearch-offline-tracer.md -path '*/__pycache__' -prune -o -type f -print0 | xargs -0 grep -n '[^ -~]' || true
 ```
 
 ## Procedure
@@ -71,11 +71,11 @@ LC_ALL=C find autoresearch .10x/tickets/2026-06-23-autoresearch-offline-tracer.m
 
 This supports:
 
-- `.10x/tickets/2026-06-23-autoresearch-offline-tracer.md#AC-001`
-- `.10x/tickets/2026-06-23-autoresearch-offline-tracer.md#AC-002`
-- `.10x/tickets/2026-06-23-autoresearch-offline-tracer.md#AC-003`
-- `.10x/tickets/2026-06-23-autoresearch-offline-tracer.md#AC-004`
-- `.10x/tickets/2026-06-23-autoresearch-offline-tracer.md#AC-005`
+- `.10x/tickets/done/2026-06-23-autoresearch-offline-tracer.md#AC-001`
+- `.10x/tickets/done/2026-06-23-autoresearch-offline-tracer.md#AC-002`
+- `.10x/tickets/done/2026-06-23-autoresearch-offline-tracer.md#AC-003`
+- `.10x/tickets/done/2026-06-23-autoresearch-offline-tracer.md#AC-004`
+- `.10x/tickets/done/2026-06-23-autoresearch-offline-tracer.md#AC-005`
 
 The observations support that the offline tracer reads saved fixtures, emits
 score artifacts, differentiates pass/fail fixtures for the targeted scores, uses

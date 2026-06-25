@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-codex-home-isolation.md, .10x/evidence/2026-06-23-codex-live-isolation-smoke.md
+Relates-To: .10x/tickets/done/2026-06-23-codex-home-isolation.md, .10x/evidence/2026-06-23-codex-live-isolation-smoke.md
 
 # Codex Home Isolation Validation
 
@@ -101,7 +101,7 @@ manifest_present_suppressed []
 
 A source-only ASCII scan over `autoresearch/run_full_codex.py`,
 `autoresearch/tests/test_run_full_codex.py`,
-`.10x/tickets/2026-06-23-codex-home-isolation.md`, and
+`.10x/tickets/done/2026-06-23-codex-home-isolation.md`, and
 `.10x/research/2026-06-23-codex-home-isolation.md` produced no output.
 
 ## Procedure
@@ -125,11 +125,11 @@ A source-only ASCII scan over `autoresearch/run_full_codex.py`,
 
 This supports:
 
-- `.10x/tickets/2026-06-23-codex-home-isolation.md#AC-001`
-- `.10x/tickets/2026-06-23-codex-home-isolation.md#AC-002`
-- `.10x/tickets/2026-06-23-codex-home-isolation.md#AC-003`
-- `.10x/tickets/2026-06-23-codex-home-isolation.md#AC-004`
-- `.10x/tickets/2026-06-23-codex-home-isolation.md#AC-005`
+- `.10x/tickets/done/2026-06-23-codex-home-isolation.md#AC-001`
+- `.10x/tickets/done/2026-06-23-codex-home-isolation.md#AC-002`
+- `.10x/tickets/done/2026-06-23-codex-home-isolation.md#AC-003`
+- `.10x/tickets/done/2026-06-23-codex-home-isolation.md#AC-004`
+- `.10x/tickets/done/2026-06-23-codex-home-isolation.md#AC-005`
 
 The observations support recommending authenticated operator `CODEX_HOME` plus
 `--disable plugins` and `--ignore-user-config` for no-10x Codex control plans.

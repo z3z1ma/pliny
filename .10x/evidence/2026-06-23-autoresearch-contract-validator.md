@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-autoresearch-contract-validator.md, .10x/tickets/2026-06-23-autoresearch-static-contracts.md
+Relates-To: .10x/tickets/done/2026-06-23-autoresearch-contract-validator.md, .10x/tickets/done/2026-06-23-autoresearch-static-contracts.md
 
 # Autoresearch Contract Validator Validation
 
@@ -38,7 +38,7 @@ An ASCII scan over source files, excluding generated `__pycache__` directories,
 produced no output:
 
 ```text
-LC_ALL=C find autoresearch .10x/tickets/2026-06-23-autoresearch-contract-validator.md -path '*/__pycache__' -prune -o -type f -print0 | xargs -0 grep -n '[^ -~]' || true
+LC_ALL=C find autoresearch .10x/tickets/done/2026-06-23-autoresearch-contract-validator.md -path '*/__pycache__' -prune -o -type f -print0 | xargs -0 grep -n '[^ -~]' || true
 ```
 
 ## Procedure
@@ -54,10 +54,10 @@ LC_ALL=C find autoresearch .10x/tickets/2026-06-23-autoresearch-contract-validat
 
 This supports:
 
-- `.10x/tickets/2026-06-23-autoresearch-contract-validator.md#AC-001`
-- `.10x/tickets/2026-06-23-autoresearch-contract-validator.md#AC-002`
-- `.10x/tickets/2026-06-23-autoresearch-contract-validator.md#AC-003`
-- `.10x/tickets/2026-06-23-autoresearch-contract-validator.md#AC-004`
+- `.10x/tickets/done/2026-06-23-autoresearch-contract-validator.md#AC-001`
+- `.10x/tickets/done/2026-06-23-autoresearch-contract-validator.md#AC-002`
+- `.10x/tickets/done/2026-06-23-autoresearch-contract-validator.md#AC-003`
+- `.10x/tickets/done/2026-06-23-autoresearch-contract-validator.md#AC-004`
 
 The observation supports that the validator is executable, documented, stdlib-only
 in source imports, validates the checked-in static contracts, and has negative

@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-design-real-autoresearch-candidate.md
+Relates-To: .10x/tickets/done/2026-06-23-design-real-autoresearch-candidate.md
 
 # Real Autoresearch Candidate Artifacts
 
@@ -50,10 +50,10 @@ human promotion decision.
 
 This supports:
 
-- `.10x/tickets/2026-06-23-design-real-autoresearch-candidate.md#AC-001`
-- `.10x/tickets/2026-06-23-design-real-autoresearch-candidate.md#AC-002`
-- `.10x/tickets/2026-06-23-design-real-autoresearch-candidate.md#AC-003`
-- `.10x/tickets/2026-06-23-design-real-autoresearch-candidate.md#AC-004`
+- `.10x/tickets/done/2026-06-23-design-real-autoresearch-candidate.md#AC-001`
+- `.10x/tickets/done/2026-06-23-design-real-autoresearch-candidate.md#AC-002`
+- `.10x/tickets/done/2026-06-23-design-real-autoresearch-candidate.md#AC-003`
+- `.10x/tickets/done/2026-06-23-design-real-autoresearch-candidate.md#AC-004`
 
 This challenges any claim that autoresearch is still limited to a null
 placeholder candidate artifact.

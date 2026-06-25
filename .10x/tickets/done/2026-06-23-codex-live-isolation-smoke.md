@@ -1,8 +1,8 @@
 Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
-Parent: .10x/tickets/2026-06-23-implement-autoresearch-loop.md
-Depends-On: .10x/tickets/2026-06-23-autoresearch-codex-full-harness.md
+Parent: .10x/tickets/done/2026-06-23-implement-autoresearch-loop.md
+Depends-On: .10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md
 
 # Validate Live Codex No-10x Isolation Smoke
 
@@ -51,7 +51,7 @@ Excluded:
 ## Progress And Notes
 
 - 2026-06-23: Ticket opened during parent reconciliation of
-  `.10x/tickets/2026-06-23-autoresearch-codex-full-harness.md`. The first Codex
+  `.10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md`. The first Codex
   FULL harness slice represented and smoke-checked no-10x isolation but did not
   invoke live Codex, so actual `--ignore-user-config` behavior remains unproven.
 - 2026-06-23: Worker ran one live no-10x Codex smoke in generated workspace
@@ -83,7 +83,7 @@ Excluded:
 - 2026-06-23: Parent verification completed. Evidence recorded at
   `.10x/evidence/2026-06-23-codex-live-isolation-smoke.md`; AC-001 through
   AC-005 are satisfied for the one-sample smoke scope. Follow-up
-  `.10x/tickets/2026-06-23-codex-home-isolation.md` tracks stronger CODEX_HOME
+  `.10x/tickets/done/2026-06-23-codex-home-isolation.md` tracks stronger CODEX_HOME
   plugin/skill isolation.
 
 ## Blockers

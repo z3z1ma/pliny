@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-calibrate-autoresearch-scorer-trust.md
+Relates-To: .10x/tickets/done/2026-06-23-calibrate-autoresearch-scorer-trust.md
 
 # Autoresearch Scorer Calibration Evidence
 
@@ -63,10 +63,10 @@ OK
 
 This supports:
 
-- `.10x/tickets/2026-06-23-calibrate-autoresearch-scorer-trust.md#AC-001`
-- `.10x/tickets/2026-06-23-calibrate-autoresearch-scorer-trust.md#AC-002`
-- `.10x/tickets/2026-06-23-calibrate-autoresearch-scorer-trust.md#AC-003`
-- `.10x/tickets/2026-06-23-calibrate-autoresearch-scorer-trust.md#AC-005`
+- `.10x/tickets/done/2026-06-23-calibrate-autoresearch-scorer-trust.md#AC-001`
+- `.10x/tickets/done/2026-06-23-calibrate-autoresearch-scorer-trust.md#AC-002`
+- `.10x/tickets/done/2026-06-23-calibrate-autoresearch-scorer-trust.md#AC-003`
+- `.10x/tickets/done/2026-06-23-calibrate-autoresearch-scorer-trust.md#AC-005`
 
 This challenges any move to Trust Level 2 or 3 based only on the current small
 fixture-bound label set.

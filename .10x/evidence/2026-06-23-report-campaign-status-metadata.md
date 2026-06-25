@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-propagate-campaign-statuses-to-reports.md
+Relates-To: .10x/tickets/done/2026-06-23-propagate-campaign-statuses-to-reports.md
 
 # Report Campaign Status Metadata
 
@@ -54,10 +54,10 @@ campaign metadata is supplied, no campaign section is rendered.
 
 This supports:
 
-- `.10x/tickets/2026-06-23-propagate-campaign-statuses-to-reports.md#AC-001`
-- `.10x/tickets/2026-06-23-propagate-campaign-statuses-to-reports.md#AC-002`
-- `.10x/tickets/2026-06-23-propagate-campaign-statuses-to-reports.md#AC-003`
-- `.10x/tickets/2026-06-23-propagate-campaign-statuses-to-reports.md#AC-004`
+- `.10x/tickets/done/2026-06-23-propagate-campaign-statuses-to-reports.md#AC-001`
+- `.10x/tickets/done/2026-06-23-propagate-campaign-statuses-to-reports.md#AC-002`
+- `.10x/tickets/done/2026-06-23-propagate-campaign-statuses-to-reports.md#AC-003`
+- `.10x/tickets/done/2026-06-23-propagate-campaign-statuses-to-reports.md#AC-004`
 
 This challenges the prior first calibration report behavior where campaign-level
 null/confounded status was visible only in `.10x/` prose records.

@@ -12,7 +12,7 @@ copying secrets into benchmark artifacts?
 
 ## Sources And Methods
 
-- Read `.10x/tickets/2026-06-23-codex-home-isolation.md`.
+- Read `.10x/tickets/done/2026-06-23-codex-home-isolation.md`.
 - Read `.10x/evidence/2026-06-23-codex-live-isolation-smoke.md`.
 - Read `.10x/evidence/2026-06-23-autoresearch-codex-full-harness.md`.
 - Inspected `autoresearch/run_full_codex.py` and

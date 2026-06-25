@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-broaden-codex-live-harness-isolation.md
+Relates-To: .10x/tickets/done/2026-06-23-broaden-codex-live-harness-isolation.md
 
 # Codex Isolation Battery Evidence
 
@@ -70,10 +70,10 @@ OK
 
 This supports:
 
-- `.10x/tickets/2026-06-23-broaden-codex-live-harness-isolation.md#AC-001`
-- `.10x/tickets/2026-06-23-broaden-codex-live-harness-isolation.md#AC-002`
-- `.10x/tickets/2026-06-23-broaden-codex-live-harness-isolation.md#AC-003`
-- `.10x/tickets/2026-06-23-broaden-codex-live-harness-isolation.md#AC-004`
+- `.10x/tickets/done/2026-06-23-broaden-codex-live-harness-isolation.md#AC-001`
+- `.10x/tickets/done/2026-06-23-broaden-codex-live-harness-isolation.md#AC-002`
+- `.10x/tickets/done/2026-06-23-broaden-codex-live-harness-isolation.md#AC-003`
+- `.10x/tickets/done/2026-06-23-broaden-codex-live-harness-isolation.md#AC-004`
 
 This challenges the prior limitation that Codex live isolation evidence covered
 only one tiny smoke.

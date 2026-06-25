@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-simplify-autoresearch-program-loop.md, .10x/decisions/autoresearch-program-owned-loop.md
+Relates-To: .10x/tickets/done/2026-06-23-simplify-autoresearch-program-loop.md, .10x/decisions/autoresearch-program-owned-loop.md
 
 # Simplify Autoresearch Around Program-Owned Loop Evidence
 
@@ -95,7 +95,7 @@ OK
 
 1. Read the current README, runner implementations, tests, prior long-run
    records, and Karpathy's `program.md` example.
-2. Opened `.10x/tickets/2026-06-23-simplify-autoresearch-program-loop.md`.
+2. Opened `.10x/tickets/done/2026-06-23-simplify-autoresearch-program-loop.md`.
 3. Added `autoresearch/program.md`.
 4. Added `autoresearch/run_once.py` and focused tests.
 5. Deleted Python-owned controller modules, templates, tests, and stale long-run
@@ -109,7 +109,7 @@ OK
 ## What This Supports Or Challenges
 
 This supports all acceptance criteria in
-`.10x/tickets/2026-06-23-simplify-autoresearch-program-loop.md`.
+`.10x/tickets/done/2026-06-23-simplify-autoresearch-program-loop.md`.
 
 It supports the architectural claim that 10x autoresearch is now centered on a
 human-owned program plus one-shot experiment execution, with the LLM reasoning

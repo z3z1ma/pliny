@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-autoresearch-score-coverage.md, .10x/evidence/2026-06-23-autoresearch-offline-tracer.md
+Relates-To: .10x/tickets/done/2026-06-23-autoresearch-score-coverage.md, .10x/evidence/2026-06-23-autoresearch-offline-tracer.md
 
 # Autoresearch Offline Score Coverage Validation
 
@@ -108,7 +108,7 @@ An ASCII source scan excluding generated `__pycache__` directories produced no
 output:
 
 ```text
-LC_ALL=C find autoresearch .10x/tickets/2026-06-23-autoresearch-score-coverage.md -path '*/__pycache__' -prune -o -type f -print0 | xargs -0 grep -n '[^ -~]' || true
+LC_ALL=C find autoresearch .10x/tickets/done/2026-06-23-autoresearch-score-coverage.md -path '*/__pycache__' -prune -o -type f -print0 | xargs -0 grep -n '[^ -~]' || true
 ```
 
 ## Procedure
@@ -127,11 +127,11 @@ LC_ALL=C find autoresearch .10x/tickets/2026-06-23-autoresearch-score-coverage.m
 
 This supports:
 
-- `.10x/tickets/2026-06-23-autoresearch-score-coverage.md#AC-001`
-- `.10x/tickets/2026-06-23-autoresearch-score-coverage.md#AC-002`
-- `.10x/tickets/2026-06-23-autoresearch-score-coverage.md#AC-003`
-- `.10x/tickets/2026-06-23-autoresearch-score-coverage.md#AC-004`
-- `.10x/tickets/2026-06-23-autoresearch-score-coverage.md#AC-005`
+- `.10x/tickets/done/2026-06-23-autoresearch-score-coverage.md#AC-001`
+- `.10x/tickets/done/2026-06-23-autoresearch-score-coverage.md#AC-002`
+- `.10x/tickets/done/2026-06-23-autoresearch-score-coverage.md#AC-003`
+- `.10x/tickets/done/2026-06-23-autoresearch-score-coverage.md#AC-004`
+- `.10x/tickets/done/2026-06-23-autoresearch-score-coverage.md#AC-005`
 
 The observations support that every initial scenario has at least one saved
 fixture, S001-S006 have supported first-pass offline scoring, S007 and S008 are

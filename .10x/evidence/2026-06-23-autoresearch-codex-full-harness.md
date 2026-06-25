@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-autoresearch-codex-full-harness.md, .10x/evidence/2026-06-23-autoresearch-micro-runner.md
+Relates-To: .10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md, .10x/evidence/2026-06-23-autoresearch-micro-runner.md
 
 # Autoresearch Codex FULL Harness Validation
 
@@ -140,11 +140,11 @@ storage directory produced no output.
 
 This supports:
 
-- `.10x/tickets/2026-06-23-autoresearch-codex-full-harness.md#AC-001`
-- `.10x/tickets/2026-06-23-autoresearch-codex-full-harness.md#AC-002`
-- `.10x/tickets/2026-06-23-autoresearch-codex-full-harness.md#AC-003`
-- `.10x/tickets/2026-06-23-autoresearch-codex-full-harness.md#AC-004`
-- `.10x/tickets/2026-06-23-autoresearch-codex-full-harness.md#AC-005`
+- `.10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md#AC-001`
+- `.10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md#AC-002`
+- `.10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md#AC-003`
+- `.10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md#AC-004`
+- `.10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md#AC-005`
 
 The observations support that the first Codex FULL harness slice can plan
 registered FULL runs, enforce the accepted 20-run/36-hour/3-hour-per-run budget
@@ -172,4 +172,4 @@ This evidence does not show that:
 - Any promotion decision is justified.
 
 Follow-up live isolation validation is tracked in
-`.10x/tickets/2026-06-23-codex-live-isolation-smoke.md`.
+`.10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md`.

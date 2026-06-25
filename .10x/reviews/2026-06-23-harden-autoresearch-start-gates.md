@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Target: .10x/tickets/2026-06-23-harden-autoresearch-start-gates.md
+Target: .10x/tickets/done/2026-06-23-harden-autoresearch-start-gates.md
 Verdict: pass
 
 # Harden Autoresearch Start Gates Review

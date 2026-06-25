@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-harden-autoresearch-start-gates.md
+Relates-To: .10x/tickets/done/2026-06-23-harden-autoresearch-start-gates.md
 
 # Harden Autoresearch Start Gates Evidence
 
@@ -108,7 +108,7 @@ OK
 ## What This Supports Or Challenges
 
 This supports all acceptance criteria in
-`.10x/tickets/2026-06-23-harden-autoresearch-start-gates.md`.
+`.10x/tickets/done/2026-06-23-harden-autoresearch-start-gates.md`.
 
 It supports raising operational safety confidence close to 99% once the setup is
 committed and the real multiday run uses `--require-clean-canonical` on every

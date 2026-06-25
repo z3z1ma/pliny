@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/2026-06-23-autoresearch-static-contracts.md, .10x/specs/10x-autoresearch-loop.md
+Relates-To: .10x/tickets/done/2026-06-23-autoresearch-static-contracts.md, .10x/specs/10x-autoresearch-loop.md
 
 # Autoresearch Static Contracts Validation
 
@@ -52,7 +52,7 @@ missing_acceptance_fields none
 ASCII scan command produced no output:
 
 ```text
-LC_ALL=C grep -R -n '[^ -~]' autoresearch .10x/tickets/2026-06-23-autoresearch-static-contracts.md || true
+LC_ALL=C grep -R -n '[^ -~]' autoresearch .10x/tickets/done/2026-06-23-autoresearch-static-contracts.md || true
 ```
 
 Manual inspection found:
@@ -81,12 +81,12 @@ Manual inspection found:
 
 This supports:
 
-- `.10x/tickets/2026-06-23-autoresearch-static-contracts.md#AC-001`
-- `.10x/tickets/2026-06-23-autoresearch-static-contracts.md#AC-002`
-- `.10x/tickets/2026-06-23-autoresearch-static-contracts.md#AC-003`
-- `.10x/tickets/2026-06-23-autoresearch-static-contracts.md#AC-004`
-- `.10x/tickets/2026-06-23-autoresearch-static-contracts.md#AC-005`
-- `.10x/tickets/2026-06-23-autoresearch-static-contracts.md#AC-006`
+- `.10x/tickets/done/2026-06-23-autoresearch-static-contracts.md#AC-001`
+- `.10x/tickets/done/2026-06-23-autoresearch-static-contracts.md#AC-002`
+- `.10x/tickets/done/2026-06-23-autoresearch-static-contracts.md#AC-003`
+- `.10x/tickets/done/2026-06-23-autoresearch-static-contracts.md#AC-004`
+- `.10x/tickets/done/2026-06-23-autoresearch-static-contracts.md#AC-005`
+- `.10x/tickets/done/2026-06-23-autoresearch-static-contracts.md#AC-006`
 
 The observation supports static contract shape and coverage. It does not itself
 accept the ticket; ticket closure remains a separate judgment.

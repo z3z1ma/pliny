@@ -1,7 +1,7 @@
 Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
-Parent: .10x/tickets/2026-06-23-autoresearch-calibration-campaign.md
+Parent: .10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md
 Depends-On: .10x/specs/10x-autoresearch-loop.md
 
 ## Scope

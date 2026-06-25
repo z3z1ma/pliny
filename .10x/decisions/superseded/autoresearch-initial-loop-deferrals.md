@@ -24,10 +24,10 @@ campaign-scale live Codex isolation.
 
 Relevant follow-up tickets:
 
-- `.10x/tickets/2026-06-23-design-real-autoresearch-candidate.md`
-- `.10x/tickets/2026-06-23-calibrate-autoresearch-scorer-trust.md`
-- `.10x/tickets/2026-06-23-broaden-codex-live-harness-isolation.md`
-- `.10x/tickets/2026-06-23-propagate-campaign-statuses-to-reports.md`
+- `.10x/tickets/done/2026-06-23-design-real-autoresearch-candidate.md`
+- `.10x/tickets/done/2026-06-23-calibrate-autoresearch-scorer-trust.md`
+- `.10x/tickets/done/2026-06-23-broaden-codex-live-harness-isolation.md`
+- `.10x/tickets/done/2026-06-23-propagate-campaign-statuses-to-reports.md`
 
 ## Decision
 

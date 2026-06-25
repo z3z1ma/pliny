@@ -1,7 +1,7 @@
 Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
-Parent: .10x/tickets/2026-06-23-implement-autoresearch-loop.md
+Parent: .10x/tickets/done/2026-06-23-implement-autoresearch-loop.md
 Depends-On: .10x/tickets/2026-06-23-autoresearch-micro-runner.md
 
 # Integrate Codex FULL Harness
@@ -76,7 +76,7 @@ Excluded:
   `.10x/evidence/2026-06-23-autoresearch-codex-full-harness.md`; acceptance
   criteria AC-001 through AC-005 are satisfied within the dry-run and
   fixture-smoke scope. Follow-up live control-isolation validation is tracked in
-  `.10x/tickets/2026-06-23-codex-live-isolation-smoke.md`.
+  `.10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md`.
 
 ## Blockers
 

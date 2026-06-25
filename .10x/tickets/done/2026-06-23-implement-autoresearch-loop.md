@@ -34,16 +34,16 @@ Excluded:
 
 ## Child Tickets
 
-- `.10x/tickets/2026-06-23-autoresearch-static-contracts.md`
-- `.10x/tickets/2026-06-23-autoresearch-contract-validator.md`
-- `.10x/tickets/2026-06-23-autoresearch-offline-tracer.md`
-- `.10x/tickets/2026-06-23-autoresearch-score-coverage.md`
+- `.10x/tickets/done/2026-06-23-autoresearch-static-contracts.md`
+- `.10x/tickets/done/2026-06-23-autoresearch-contract-validator.md`
+- `.10x/tickets/done/2026-06-23-autoresearch-offline-tracer.md`
+- `.10x/tickets/done/2026-06-23-autoresearch-score-coverage.md`
 - `.10x/tickets/2026-06-23-autoresearch-micro-runner.md`
-- `.10x/tickets/2026-06-23-autoresearch-reporting.md`
-- `.10x/tickets/2026-06-23-autoresearch-codex-full-harness.md`
-- `.10x/tickets/2026-06-23-codex-live-isolation-smoke.md`
-- `.10x/tickets/2026-06-23-codex-home-isolation.md`
-- `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md`
+- `.10x/tickets/done/2026-06-23-autoresearch-reporting.md`
+- `.10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md`
+- `.10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md`
+- `.10x/tickets/done/2026-06-23-codex-home-isolation.md`
+- `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md`
 
 ## Acceptance Criteria
 
@@ -63,42 +63,42 @@ Excluded:
   control, and budget defaults.
 - 2026-06-23: Static contract child ticket completed with evidence at
   `.10x/evidence/2026-06-23-autoresearch-static-contracts.md`. Next child:
-  `.10x/tickets/2026-06-23-autoresearch-contract-validator.md`.
+  `.10x/tickets/done/2026-06-23-autoresearch-contract-validator.md`.
 - 2026-06-23: Contract validator child ticket completed with evidence at
   `.10x/evidence/2026-06-23-autoresearch-contract-validator.md`. Next child:
-  `.10x/tickets/2026-06-23-autoresearch-offline-tracer.md`.
+  `.10x/tickets/done/2026-06-23-autoresearch-offline-tracer.md`.
 - 2026-06-23: Offline tracer child ticket completed with evidence at
   `.10x/evidence/2026-06-23-autoresearch-offline-tracer.md`. Next child:
-  `.10x/tickets/2026-06-23-autoresearch-score-coverage.md`.
+  `.10x/tickets/done/2026-06-23-autoresearch-score-coverage.md`.
 - 2026-06-23: Score coverage child ticket completed with evidence at
   `.10x/evidence/2026-06-23-autoresearch-score-coverage.md`. Next child tickets
   now unblocked: `.10x/tickets/2026-06-23-autoresearch-micro-runner.md` and
-  `.10x/tickets/2026-06-23-autoresearch-reporting.md`.
+  `.10x/tickets/done/2026-06-23-autoresearch-reporting.md`.
 - 2026-06-23: MICRO runner child ticket completed with evidence at
   `.10x/evidence/2026-06-23-autoresearch-micro-runner.md`. Next child tickets
-  now unblocked: `.10x/tickets/2026-06-23-autoresearch-reporting.md` and
-  `.10x/tickets/2026-06-23-autoresearch-codex-full-harness.md`.
+  now unblocked: `.10x/tickets/done/2026-06-23-autoresearch-reporting.md` and
+  `.10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md`.
 - 2026-06-23: Reporting child ticket completed with evidence at
   `.10x/evidence/2026-06-23-autoresearch-reporting.md`. Remaining implementation
-  children: `.10x/tickets/2026-06-23-autoresearch-codex-full-harness.md` and
-  `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md`.
+  children: `.10x/tickets/done/2026-06-23-autoresearch-codex-full-harness.md` and
+  `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md`.
 - 2026-06-23: Codex FULL dry-run/fixture-smoke harness child ticket completed
   with evidence at
   `.10x/evidence/2026-06-23-autoresearch-codex-full-harness.md`. Follow-up
-  ticket `.10x/tickets/2026-06-23-codex-live-isolation-smoke.md` opened because
+  ticket `.10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md` opened because
   live Codex no-10x isolation is represented but not proven. Remaining children:
-  `.10x/tickets/2026-06-23-codex-live-isolation-smoke.md` and
-  `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md`.
+  `.10x/tickets/done/2026-06-23-codex-live-isolation-smoke.md` and
+  `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md`.
 - 2026-06-23: Live Codex no-10x isolation smoke completed with evidence at
   `.10x/evidence/2026-06-23-codex-live-isolation-smoke.md`. Follow-up
-  `.10x/tickets/2026-06-23-codex-home-isolation.md` opened because
+  `.10x/tickets/done/2026-06-23-codex-home-isolation.md` opened because
   `--ignore-user-config` did not prevent CODEX_HOME plugin/skill loader
   warnings. Remaining children:
-  `.10x/tickets/2026-06-23-codex-home-isolation.md` and
-  `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md`.
+  `.10x/tickets/done/2026-06-23-codex-home-isolation.md` and
+  `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md`.
 - 2026-06-23: Codex home isolation child ticket completed with evidence at
   `.10x/evidence/2026-06-23-codex-home-isolation.md`. Remaining child:
-  `.10x/tickets/2026-06-23-autoresearch-calibration-campaign.md`.
+  `.10x/tickets/done/2026-06-23-autoresearch-calibration-campaign.md`.
 - 2026-06-23: First calibration campaign child ticket completed with evidence at
   `.10x/evidence/2026-06-23-first-autoresearch-calibration-campaign.md` and
   review at
