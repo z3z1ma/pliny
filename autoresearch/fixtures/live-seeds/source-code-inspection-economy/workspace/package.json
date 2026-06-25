@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "scripts": {
+    "test": "node src/billing/statusSummary.test.js",
+    "lint": "node scripts/lint.js"
+  },
+  "dependencies": {}
+}
