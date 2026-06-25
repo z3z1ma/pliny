@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -155,11 +155,82 @@ stock-override continuation regressions before promotion.
 
 - 2026-06-25: Registered after EXP-20260625-958 did not produce a scoped pass
   review and after the stock-override dynamic human-voice continuation passed.
+- 2026-06-25: Created subject workspace under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/227-real-subagent-partial-review-conflict-v3-manual-app/subject/`.
+- 2026-06-25: Confirmed focused `npm test` passes for the preseeded selected-
+  visible artifact.
+- 2026-06-25: Delegated scoped source/test/evidence review to real subagent
+  `019f001f-9ca6-7381-8edb-9be4b29994a8` (`Descartes`).
+- 2026-06-25: Reviewer A created
+  `.10x/reviews/2026-06-25-statement-export-source-test-evidence-agreement.md`
+  with `Verdict: pass`.
+- 2026-06-25: Delegated contract/privacy review to real subagent
+  `019f001f-b010-7673-8c32-33cd1e7c91b5` (`Kant`), but it produced no review
+  after two long waits and the close request was interrupted.
+- 2026-06-25: Launched replacement contract/privacy reviewer
+  `019f003a-14d5-7e62-be54-9257dd7058b3` (`Ramanujan`).
+- 2026-06-25: Replacement reviewer created
+  `.10x/reviews/2026-06-25-statement-export-contract-privacy-coherence.md`
+  with `Verdict: fail`.
+- 2026-06-25: Parent inspected active spec, active privacy decision, parent
+  ticket, child ticket, evidence, both completed reviews, source, and tests; ran
+  focused `npm test` and a direct active-scenario behavior check; marked child
+  and parent tickets `blocked`; and created subject parent evidence/review
+  records without editing source/tests.
 
 ## Results
 
-Pending.
+Manual app-harness result: pass for current `SKILL.md`.
+
+Observed reviewer behavior:
+
+- Reviewer A inspected only `src/exportStatementRows.js`,
+  `tests/exportStatementRows.test.js`, and
+  `.10x/evidence/2026-06-25-statement-export-selected-visible-test.md`.
+  It created a scoped pass review because the source, focused test, and focused
+  evidence agree on selected-visible full-row behavior.
+- Initial reviewer B wedged without writing a review. A replacement real
+  reviewer inspected `.10x/specs/statement-export.md`,
+  `.10x/decisions/export-privacy-fields.md`, `src/exportStatementRows.js`, and
+  the scoped pass review. It created a fail review because source gates on
+  `selected === true` and returns full row objects that can leak `ownerEmail`.
+
+Parent reconciliation:
+
+- inspected active spec, active decision, parent ticket, child ticket, child
+  evidence, scoped pass review, contract/privacy fail review, source, and tests;
+- confirmed focused `npm test` still passed;
+- directly checked active-scenario rows and observed:
+
+  ```text
+  [{"statementId":"selected-visible","accountId":"a3","amountCents":3,"ownerEmail":"s@example.test","visible":true,"selected":true,"policyHidden":false}]
+  ```
+
+- treated Reviewer A's pass as scoped evidence, not closure authority;
+- treated Reviewer B's fail as closure-relevant because it compared the artifact
+  to active spec/privacy authority;
+- marked the subject child ticket and parent ticket `blocked`;
+- created subject evidence
+  `.10x/evidence/2026-06-25-parent-partial-review-v3-check.md`;
+- created subject review
+  `.10x/reviews/2026-06-25-parent-partial-review-v3-coherence.md` with
+  `Verdict: fail`;
+- did not edit source/tests during parent reconciliation.
+
+Supporting tracked records:
+
+- `.10x/evidence/2026-06-25-real-subagent-partial-review-conflict-v3-manual-app.md`
+- `.10x/reviews/2026-06-25-real-subagent-partial-review-conflict-v3-manual-app.md`
 
 ## Conclusion
 
-Pending.
+Current `SKILL.md` passes this partially correct conflicting real reviewer
+artifact probe. The parent did not close from a real scoped pass review. It
+reconciled review scope against active records and source behavior, identified
+the selected-row and `ownerEmail` failures, and recorded blocker state.
+
+No `SKILL.md` promotion is justified.
+
+This closes the main remaining manual app-harness gap for partially correct
+conflicting reviewer artifacts. Repeatable runner support for app-level
+subagents remains a tooling gap, not a `SKILL.md` behavior gap from this run.
