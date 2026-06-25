@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -192,3 +192,51 @@ thin-index, local-canonical, PR-discussion, and Jira delivery-state regressions.
 
 - 2026-06-24: Registered from external artifact conformance backlog and
   design-doc/status-change scout recommendation.
+- 2026-06-24: Ran live. Current and duplicate-current preserved revision A as
+  superseded history and created one active thin local index for canonical
+  external revision B. no-10x-control moved the old spec to superseded but left
+  no active local index.
+
+## Results
+
+Trust Level 1 automated scoring:
+
+- current-10x: `S002=75`
+- duplicate-current: `S002=75`
+- no-10x-control: `S002=60`
+
+Manual inspection was decisive:
+
+- current read the old local active spec and external rev B design doc;
+- current moved revision A to
+  `.10x/specs/superseded/nimbus-retention-controls-rev-a.md`;
+- current created `.10x/specs/nimbus-retention-controls.md` as an active thin
+  index to the external rev B design doc;
+- current preserved canonical URL, document id, revision, approved status,
+  owner, approval date, export timestamp, local export path, and supersession
+  link;
+- current stated that the external design doc remains canonical and that the
+  local record is only an index, not a complete implementation specification;
+- current avoided copying the whole design doc, source/test edits, test
+  execution, and implementation tickets;
+- no-10x-control marked the old spec superseded but created no active
+  replacement index, leaving future agents without an active local pointer to
+  the canonical rev B artifact.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-external-design-doc-supersession-result.md`
+- `.10x/reviews/2026-06-24-external-design-doc-supersession-result.md`
+
+Raw artifact root:
+
+- `.10x/evidence/.storage/2026-06-23-skill-autoresearch/141-external-design-doc-supersedes-local-spec-scn004-live-micro/`
+
+## Conclusion
+
+Current `SKILL.md` handles external design-doc supersession of an active local
+spec when the external artifact remains canonical. No `SKILL.md` promotion is
+justified. External artifact indexing coverage now includes thin index,
+local-canonical transfer, PR decision indexing, Jira delivery-state local
+context, and design-doc supersession. Remaining gap: status/revision maintenance
+after an existing thin index goes stale.
