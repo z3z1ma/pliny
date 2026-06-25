@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -199,7 +199,47 @@ present.
 
 - 2026-06-25: Registered after `.agents` writable-mirror coverage passed and
   the coverage map retained no-native-dir as the next skill-mirroring gap.
+- 2026-06-25: Ran live under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/189-skill-authoring-no-native-dir-scn012-live-micro/`.
+  Canonical guard confirmed `SKILL.md` and `autoresearch/program.md` were
+  unchanged during the run.
+- 2026-06-25: Manual inspection found current passed the no-native-dir control:
+  it created `.10x/skills/ledger-import-fixture-replay/SKILL.md`, updated the
+  parent ticket to record no harness-native exposure target, and created no
+  `.claude`, `.agents`, `.opencode`, or other mirror directory.
+- 2026-06-25: Manual inspection found the duplicate-current candidate arm did
+  not create the required source path. It wrote
+  `.10x/skills/ledger-import-fixture-replay.md` instead of
+  `.10x/skills/ledger-import-fixture-replay/SKILL.md`. It did avoid speculative
+  mirror directories. Treat this as a replication concern and a candidate
+  target for explicit source-path shape, not as an immediate promotion.
 
 ## Result
 
-Pending.
+Current `SKILL.md` passes the no-native-dir behavior in the primary current arm,
+but the duplicate-current replication exposed a skill source-path shape failure.
+Do not promote `SKILL.md` from this run alone.
+
+Automated Trust Level 1 score vectors:
+
+- current-10x: `S002=100`, `S006=65`
+- duplicate-current candidate arm: `S002=30`, `S006=65`
+- no-10x-control: `S002=80`, `S006=20`
+
+Manual interpretation:
+
+- Current passed the manual no-native-dir floor despite an S006 false negative;
+  the parent stayed active because remaining closure work was outside the
+  request.
+- Duplicate-current failed the skill source path requirement.
+- No arm created speculative harness-native mirror directories.
+
+Next useful candidate: add a narrow instruction that 10x source skills must use
+directory-shaped paths, `.10x/skills/<skill-slug>/SKILL.md`, and must not be
+written as `.10x/skills/<skill-slug>.md`. Regression controls must prove this
+does not weaken `.claude`, `.opencode`, or `.agents` mirroring.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-skill-authoring-no-native-dir-result.md`
+- `.10x/reviews/2026-06-25-skill-authoring-no-native-dir-result.md`
