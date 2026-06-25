@@ -3,7 +3,7 @@
 Candidate ID: `candidate-shell-native-mechanical-workflow-economy-v1`
 Created: 2026-06-25
 Canonical target: `SKILL.md`
-Status: active
+Status: promoted
 Promotion: manual-only
 
 ## Target Behavior
@@ -117,4 +117,21 @@ economy.
 
 ## Result
 
-Pending.
+Promoted after
+`EXP-20260625-706-shell-native-mechanical-workflow-candidate-batch-live-micro`.
+
+Evidence:
+
+- `.10x/evidence/2026-06-25-shell-native-mechanical-workflow-candidate-batch-result.md`
+
+Review:
+
+- `.10x/reviews/2026-06-25-shell-native-mechanical-workflow-candidate-batch-result.md`
+
+Promotion rationale:
+
+- improved SCN-009 operation quality over current by inducing direct move plus
+  bounded shell-native literal rewrite without prompt assistance;
+- held SCN-004 historical-reference preservation;
+- held SCN-001 Outer Loop mutation boundary;
+- held SCN-005 record quality and no-duplicate-ticket behavior.

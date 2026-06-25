@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -216,3 +216,20 @@ the candidate. Correctness and invariant preservation outrank tool economy.
 - 2026-06-25: Registered after EXP-705 showed current post-promotion behavior
   was graph-correct but still mechanically weak on repeated live-reference
   updates.
+- 2026-06-25: Ran all 12 planned live Codex calls. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/183-shell-native-mechanical-workflow-candidate-batch-live-micro/`.
+- 2026-06-25: Manual inspection found candidate improved SCN-009 mechanical
+  workflow, preserved SCN-004 historical references, preserved SCN-001 mutation
+  boundaries, and held SCN-005 record routing quality.
+
+## Result
+
+Promote `candidate-shell-native-mechanical-workflow-economy-v1`.
+
+Evidence:
+
+- `.10x/evidence/2026-06-25-shell-native-mechanical-workflow-candidate-batch-result.md`
+
+Review:
+
+- `.10x/reviews/2026-06-25-shell-native-mechanical-workflow-candidate-batch-result.md`

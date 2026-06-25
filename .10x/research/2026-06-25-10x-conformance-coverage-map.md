@@ -64,7 +64,7 @@ safety remain less settled.
 | Retrospective learning extraction | Strong but scenario-limited | `.10x/evidence/2026-06-25-blocked-run-retrospective-learning-result.md`; `.10x/evidence/2026-06-25-lower-assistance-blocked-retrospective-result.md`; retrospective extraction promotions | Need failed or blocked work across multiple turns where durable operational knowledge emerges before closure. |
 | Record ontology and record quality | Strong | repository triage record quality; skill record identity/source path; record graph mechanical maintenance; ambiguous historical reference repair | Need longer lifecycle tests: reopen related work after done ticket, supersede ADR, reuse stale research, cancel and later re-scope. |
 | Record graph maintenance mechanics | Strong after promotion | `.10x/evidence/2026-06-25-record-maintenance-economy-regression-batch-result.md`; `.10x/reviews/2026-06-25-record-maintenance-economy-regression-batch-result.md`; `.10x/evidence/2026-06-25-control-fixture-record-graph-preservation-result.md`; `.10x/evidence/2026-06-25-evidence-source-drift-conformance-sanity-batch-result.md` | Control fixture preservation is sanity-checked. Need broader workflow-economy tests beyond record graph reference repair. |
-| Shell-native mechanical workflow economy | Partial | `.10x/evidence/2026-06-25-record-maintenance-economy-regression-batch-result.md`; promoted narrow mechanical record/file maintenance rule in `SKILL.md`; `.10x/evidence/2026-06-25-post-promotion-lower-assistance-mechanical-workflow-result.md` | Post-promotion current is graph-correct and uses `rg`/direct `mv`, but still uses assistant-side edits for repeated live-reference updates. Need a broader candidate that makes shell-native inspection and bounded mechanical transformations a general 10x behavior while preserving semantic-edit safeguards. |
+| Shell-native mechanical workflow economy | Strong but harness-limited | `.10x/evidence/2026-06-25-record-maintenance-economy-regression-batch-result.md`; promoted narrow mechanical record/file maintenance rule in `SKILL.md`; `.10x/evidence/2026-06-25-post-promotion-lower-assistance-mechanical-workflow-result.md`; `.10x/evidence/2026-06-25-shell-native-mechanical-workflow-candidate-batch-result.md` | Broader Codex CLI candidate passed mechanical-maintenance, historical-reference, mutation-boundary, and record-triage regressions. Need post-promotion sanity and non-Codex harness checks. |
 | Minimalism, no-code, deletion | Partial | invalid request/no-ticket economy; deletion-oriented candidates; human voice unnecessary override | Need more direct no-code positive controls where config, deletion, docs, or refusal satisfies the real goal. |
 | External artifact indexing | Strong | `.10x/evidence/2026-06-25-external-artifact-status-dependent-repair-result.md`; external artifact provenance fields promoted; thin-index learnings | Need Jira/Linear, PR discussion, and external document status-change variants beyond Google Doc-like fixtures. |
 | Multi-session cold start | Partial | live-authored payout cold start; noisy cold-start runs; post-cold-start exact ratification | Need long-horizon cold start with only `.10x/` plus code after a prior ambiguous session and no chat history. |
@@ -164,9 +164,9 @@ continue.
 39. Blocked run discovers durable operational procedure but cannot close.
 40. Long-context invariant salience case where a late detailed rule conflicts
    with a compact summary.
-41. Broader shell-native workflow candidate and regression batch after
-   `.10x/evidence/2026-06-25-post-promotion-lower-assistance-mechanical-workflow-result.md`
-   showed current still relies on assistant-side repeated reference edits.
+41. Post-promotion shell-native workflow sanity after
+   `.10x/evidence/2026-06-25-shell-native-mechanical-workflow-candidate-batch-result.md`
+   promoted the broader mechanical tool economy rule.
 
 ## Conclusions
 
@@ -177,9 +177,10 @@ Near-term autoresearch should be a ranked conformance push:
 3. Continue source/record drift and false-evidence provenance tests.
 4. Keep post-promotion positive controls running so strictness does not become
    bureaucracy.
-5. Design and test a broader shell-native mechanical workflow candidate.
-   Scenario prompts must not explicitly prescribe bash, `rg`, one-liners, or
-   mechanical workflows; the behavior should arise from 10x itself.
+5. Run post-promotion sanity for the broader shell-native mechanical workflow
+   rule. Scenario prompts must not explicitly prescribe bash, `rg`,
+   one-liners, or mechanical workflows; the behavior should arise from 10x
+   itself.
 6. Defer compression until the coverage gate above is materially satisfied.
 
 The next concrete run should target subagent orchestration if app-level

@@ -611,6 +611,36 @@ than you were when you started.
 
 When engaged in writing code, act as a ruthlessly efficient senior developer. Efficiency means writing the absolute minimum amount of software required to solve the immediate problem. The best code is the code that never needs to be written.
 
+## Mechanical Tool Economy
+
+When a shell or repository-native command interface is available, use it for
+inspection, enumeration, and established mechanical transformations.
+
+Prefer shell-native discovery and validation over repetitive assistant-side
+read/find loops. Use `rg --files`, `rg -n`, `find`, `git status`, `git diff`,
+and targeted `sed -n` or equivalent commands to inspect file sets and verify
+results.
+
+Prefer direct filesystem operations and bounded literal rewrites over
+assistant-side multi-file edit loops when the transformation is established,
+repeated, and mechanical: moves, renames, status/header changes, path updates,
+and exact string replacements across a known file set.
+
+Before a bounded mechanical rewrite, enumerate the exact target files and the
+exact literal being changed. Exclude generated or binary files, historical
+prose, fenced logs, append-only progress history, semantic text, and any context
+where the replacement could change meaning. After the rewrite, validate with
+`rg` or equivalent and inspect the resulting diff.
+
+Use deliberate assistant-side edits for semantic changes, ambiguous references,
+small single-file edits where a command would be less clear, or any text that
+requires line-by-line judgment.
+
+This is an efficiency rule only. It never authorizes implementation before the
+Outer Loop exit condition, mutation outside the write boundary, destructive
+commands, skipped evidence, blind rewrites, or treating command output as proof
+beyond what was actually observed.
+
 ## 1. The Execution Ladder
 
 Evaluate every technical choice against this ladder. Stop at the first rung that satisfies the requirement:
