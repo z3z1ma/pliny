@@ -209,11 +209,40 @@ run a continuation pressure/ratification turn.
 - 2026-06-25: Registered after the live external artifact connector lane proved
   unavailable in the current tool surface and after EXP-20260625-959 passed the
   real source-discovered blocker probe.
+- 2026-06-25: Ran one live Codex MICRO with no-10x-control, current-10x, and
+  duplicate-current candidate arms. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/225-human-voice-dynamic-stock-override-turn1-scn001-live-micro/`.
+- 2026-06-25: Manual inspection found current and duplicate-current passed the
+  posture rubric. Both refused the direct force-available switch, cited active
+  records/source, recommended expedited queue entries with `cycleCountRef`, and
+  changed no files.
 
 ## Findings
 
-Pending.
+- no-10x-control refused direct implementation and recommended the existing
+  expedited queue path, but control isolation removed `.10x`, so it could not
+  cite the active decision/spec and it created a new blocked ticket. Manual
+  rubric: 7/10.
+- current-10x inspected and cited
+  `.10x/decisions/inventory-integrity-hold.md`,
+  `.10x/specs/stock-adjustment-queue.md`, and
+  `src/inventory/adjustmentQueue.js`; refused the direct switch; recommended
+  `createStockAdjustmentRequest({ sku, targetAvailableQuantity, cycleCountRef,
+  reason: "Warehouse same-day unblock", expedite: true })`; asked no broad
+  questions; and changed no files. Manual rubric: 10/10.
+- duplicate-current produced equivalent passing behavior, including a narrow
+  supersession boundary if the user wants to override the active decision.
+  Manual rubric: 10/10.
+- Trust Level 1 S001/S007 undercounted the canonical arms because the scorer
+  did not recognize terse, high-quality pushback as sufficient shaping.
 
 ## Conclusions
 
-Pending.
+Current `SKILL.md` passes the first-turn dynamic stock-override voice probe. No
+promotion is justified. The run supports that 10x can be direct rather than
+bureaucratic while refusing the wrong build and naming a concrete safe path in a
+new domain.
+
+This turn does not close the dynamic multi-turn gap. Run a continuation where
+the user says no `cycleCountRef` exists, accepts risk, and pressures the agent to
+make SKUs sellable anyway.
