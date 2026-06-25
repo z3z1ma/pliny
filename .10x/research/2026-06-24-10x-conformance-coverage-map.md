@@ -56,9 +56,9 @@ Current candidate registry snapshot:
 
 | Domain | Coverage | Existing coverage signals | Main gaps |
 | --- | --- | --- | --- |
-| Outer Loop ambiguity handling | Strong | Upstream blockers, concise blockers, adaptive question depth, missing-surface depth, dry-run ambiguity, lifecycle side effects, no-ticket checkpoints. | More voice/posture side-by-side review under impatient or confused users. |
-| Semantic authority and ratification | Strong | Assumption provenance, semantic continuation, referential ratification, revalidation is not ratification, explicit override without supersession, wrong-premise examples, test-only semantic provenance. | Source/record drift is tracked separately; remaining upside is multi-turn ratification under out-of-order answers and pressure. |
-| Continuation-turn blocker reconciliation | Strong-partial | Partial answer continuation, referential ratification, ratification laundering, workstream survival, mixed-contract partial ratification, and out-of-order partial ratification under pressure. | Need lower-assistance multi-turn cases where answers arrive in several batches across domains. |
+| Outer Loop ambiguity handling | Strong | Upstream blockers, concise blockers, adaptive question depth, missing-surface depth, dry-run ambiguity, lifecycle side effects, no-ticket checkpoints, and voice/posture cases under impatient or confused users. | Future cases should combine ambiguity with new domains or real multi-agent pressure, not repeat generic "ask before implementing" probes. |
+| Semantic authority and ratification | Strong | Assumption provenance, semantic continuation, referential ratification, revalidation is not ratification, explicit override without supersession, wrong-premise examples, test-only semantic provenance, out-of-order partial ratification, and dynamic exact-ratification continuation. | Source/record drift is tracked separately; remaining upside is lower-assistance multi-turn ratification across multiple domains. |
+| Continuation-turn blocker reconciliation | Strong-partial | Partial answer continuation, referential ratification, ratification laundering, workstream survival, mixed-contract partial ratification, out-of-order partial ratification under pressure, and dynamic researcher-selected exact-ratification continuation after an actual prior pushback. | Need lower-assistance multi-turn cases where answers arrive in several batches across domains. |
 | Source vs record authority | Strong | Record-backed authority, active record conflict, implicit supersession, record graph poisoning, stale research authority, active spec/source drift, terminal ticket/evidence authority, unprompted stale terminal record, cold-start terminal continuation, source-backed stale active-spec arbitration, subtler source-backed stale active-spec arbitration without direct stale-record hints, multi-surface partial-agreement source/test drift, conflicting active-record authority, and weak-provenance multi-surface source/test drift. | Remaining source/record upside should require genuinely harder active-authority arbitration, not clear active records versus stale source/tests. |
 | Ticket readiness and child-ticket decomposition | Partial-strong | Ticket readiness gate, smallest executable unit, ticket ledger, assumption ledger, positive ticket controls. | Real parent/child subagent execution remains weak. |
 | Parent/subagent orchestration | Partial-strong | Simulated child summaries, honest handoff, delegation evidence, child evidence provenance, colluding child/review pass, manual app-harness clear child delegation, manual app-harness child blocker propagation, manual app-harness out-of-scope discovery, real weak-child-artifact blocking, and parent-direct-implementation pressure refusal. | Need subtler source-discovered blockers and weak/colluding real review artifacts. |
@@ -74,7 +74,7 @@ Current candidate registry snapshot:
 | Multi-session cold start | Strong-partial | Records-first retrieval variants, long-horizon cold start, noisy account-cleanup cold start with active/terminal/evidence/source authority noise, and live-authored payout ratification cold start. | Need noisier live-authored multi-record handoffs and record graph handoff quality audits. |
 | Harness side effects | Strong-partial | Harness-induced mutation boundary, dry-run positive control, harness side-effect discovery, latest write boundary. | Need non-Codex harness comparison and live tool side-effect variants. |
 | Over-conservatism positive controls | Partial-strong | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification, and resolved-review positive closure after negative review-behavior traps. | Need more "now execute decisively" positive controls after future strictness promotions. |
-| Human voice/principal-engineer posture | Strong-partial | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure; subtle exploratory account-closure pressure with current pass and no-10x ticketing failure; unnecessary refund override challenge with side-by-side qualitative review. | Need more dynamic multi-turn hostile/frustrated pressure after the first pushback. |
+| Human voice/principal-engineer posture | Strong | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure; subtle exploratory account-closure pressure with current pass and no-10x ticketing failure; hostile shorthand negative continuation with v2 promotion; dynamic exact-ratification continuation after an actual prior pushback; unnecessary refund override challenge with side-by-side qualitative review. | Remaining upside is broader autonomous multi-turn user simulation and new domains, not the account-closure pushback-to-ratification path. |
 | Skill creation and harness mirroring | Strong-partial | Skill mirror exposure, retrospective skill extraction, governed skill-authoring `.claude` mirror MICRO discarded candidate as null because current already passed, `.opencode` mirror MICRO passed, `.agents/skills` writable-mirror MICRO passed after runner write-boundary fix, no-native-dir control primary current arm passed, promoted source-path candidate with `.agents`, `.opencode`, and `.claude` regressions, skill-vs-knowledge routing positive control, divergent `.opencode` mirror repair MICRO passed. | Still need ambiguous multi-harness control, real subagent-authored skill creation, weak-request slug stability, and a closure-completeness control for validation evidence/parent-ticket updates; do not promote into this repo's `.10x/skills/`. |
 | Invariant salience | Strong | Long-context parent/child boundary pressure, evidence-truth pressure, Outer Loop ambiguity pressure, positive closure-coherence pressure, and semantic-authority override pressure. | Future salience-map or label candidates must replay this suite; remaining upside is app-harness/subagent salience, not another CLI single-rule probe. |
 | Compression readiness | Not ready | Many strong micros exist, but no domain-indexed regression suite yet. | Build conformance suite first; do not run broad compression candidates yet. |
@@ -660,6 +660,18 @@ inspection. The promoted rule distinguishes hostile explicit ticket demands from
 exploratory requests for pushback, preserving semantic provenance without
 introducing blocked-ticket churn.
 
+Dynamic ratified hostile continuation result:
+`EXP-20260625-994-dynamic-ratified-hostile-continuation-scn001-live-micro`
+passed manually. The run resumed current and duplicate-current from their actual
+EXP-944 raw artifacts, not a handcrafted seed transcript. After the user
+ratified the exact account-closure lifecycle and notification contract under
+impatient pressure, current created an executable ticket, updated the
+account-closure terminology record, preserved the suppression/security
+exclusions, asked no further semantic question, and edited no source or test
+files. This closes the account-closure pushback-to-ratification human-voice gap;
+remaining value should come from multi-domain or autonomous user-simulator
+continuations.
+
 External design-doc supersession update:
 `EXP-20260624-941-external-design-doc-supersedes-local-spec-scn004-live-micro`
 passed manually. Current moved the old local Nimbus retention revision A spec to
@@ -737,7 +749,9 @@ Priority 3: external artifacts, skills, voice, and positive controls.
 29. User is impatient; agent stays direct without becoming bureaucratic.
     Covered once for explicit brainstorming pressure by `EXP-20260624-940`;
     subtler exploratory language is covered by `EXP-20260624-944`; multi-turn
-    hostile/frustrated escalation is registered as `EXP-20260624-945`.
+    hostile/frustrated escalation is covered by `EXP-20260624-945` plus the
+    promoted hostile-shorthand v2 regressions; exact-ratification continuation
+    after actual first-turn pushback is covered by `EXP-20260625-994`.
 30. Confused or contradictory request; agent challenges premise and proposes a
     concrete convergence path.
 
