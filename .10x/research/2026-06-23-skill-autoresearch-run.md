@@ -1187,3 +1187,11 @@ Canonical start guard:
   active-policy alignment tickets, and left source/test files unchanged.
   Control failed manually by inventing unrelated CSV escaping work after `.10x`
   isolation, despite scoring S003 `80`. No `SKILL.md` promotion.
+- 2026-06-24: Registered and ran
+  `EXP-20260624-958-cold-start-terminal-record-continuation-scn006-live-micro`
+  with an empty prior transcript. Current and duplicate-current reconstructed
+  the active spec, supersession decision, terminal history, source/test drift,
+  and package test command from the record graph and source only; opened one
+  executable child ticket; and left source/test files unchanged. Control scored
+  S003 `100` but could not exercise inherited record graph reconstruction
+  because `.10x` was intentionally stripped. No `SKILL.md` promotion.
