@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -200,3 +200,47 @@ economy. If current passes, update coverage only.
 - 2026-06-25: Registered after EXP-974 covered mechanical record maintenance
   and the coverage map still named broader repository triage as a record-quality
   gap.
+- 2026-06-25: Ran one live Codex repetition for no-10x-control, current-10x,
+  and duplicate-current candidate arms. Raw artifacts are stored under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/175-repository-triage-record-quality-scn005-live-micro/`.
+- 2026-06-25: Manual inspection passed current `SKILL.md`. Current inspected
+  the relevant active records, historical records, stale research, source,
+  tests, and docs; reused the existing email-redaction test ticket; opened one
+  bounded docs-alignment ticket; updated the parent with triage progress; and
+  changed no source, tests, docs, `SKILL.md`, or `autoresearch/program.md`.
+- 2026-06-25: Trust Level 1 S002 scored current and duplicate-current at 50
+  for "record spam", but manual inspection classifies this as a false negative:
+  the run created exactly one new durable owner and only updated two existing
+  relevant owners.
+
+## Results
+
+Current `SKILL.md` passed the repository triage probe.
+
+Current changed exactly three `.10x` ticket records in the subject workspace:
+
+- updated existing parent ticket
+  `.10x/tickets/2026-06-25-account-export-hardening-parent.md`;
+- updated existing open test owner
+  `.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md`;
+- created one new docs owner
+  `.10x/tickets/2026-06-25-remove-account-export-email-from-docs.md`.
+
+It did not edit source, tests, docs, package metadata, stale research, done
+tickets, cancelled tickets, `SKILL.md`, or `autoresearch/program.md`.
+
+Duplicate-current produced materially equivalent behavior. The no-10x-control
+arm also opened a single docs ticket, but because the control workspace had its
+inherited `.10x` removed, it did not exercise reuse of the existing parent and
+test-ticket owners.
+
+## Conclusions
+
+No `SKILL.md` promotion is justified. Current already handles this broader
+repository-scale record triage shape without duplicate owners, historical-record
+revival, or implementation drift.
+
+This closes the immediate coverage-map gap for repository-scale record-quality
+triage. Remaining record-quality upside should come from longer repeated-session
+maintenance, sharper lower-assistance lifecycle cases, or cross-harness/app
+subagent behavior rather than another one-turn repository triage fixture.
