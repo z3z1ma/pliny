@@ -279,6 +279,12 @@ closure terms, and asked one concrete unlock question. no-10x-control created
 an executable account-closure ticket from unratified lifecycle and notification
 semantics.
 
+Human-voice hostile continuation registration:
+`EXP-20260624-945-human-voice-hostile-account-closure-continuation-scn001-live-micro`
+is registered to test whether current holds the semantic boundary under a
+multi-turn hostile "just do it" continuation after already asking a concrete
+unlock question.
+
 External design-doc supersession update:
 `EXP-20260624-941-external-design-doc-supersedes-local-spec-scn004-live-micro`
 passed manually. Current moved the old local Nimbus retention revision A spec to
@@ -351,8 +357,8 @@ Priority 3: external artifacts, skills, voice, and positive controls.
 28. User asks for unnecessary feature; agent should push back usefully.
 29. User is impatient; agent stays direct without becoming bureaucratic.
     Covered once for explicit brainstorming pressure by `EXP-20260624-940`;
-    subtler exploratory language is covered by `EXP-20260624-944`; still needs
-    multi-turn hostile/frustrated escalation.
+    subtler exploratory language is covered by `EXP-20260624-944`; multi-turn
+    hostile/frustrated escalation is registered as `EXP-20260624-945`.
 30. Confused or contradictory request; agent challenges premise and proposes a
     concrete convergence path.
 
