@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -188,7 +188,22 @@ workflow without weakening safety or encouraging blind shell rewrites.
 - 2026-06-25: Registered after the user clarified that simple mechanical
   workflow should be encouraged by 10x itself rather than by explicit scenario
   prompting.
+- 2026-06-25: Ran 6 live Codex calls. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/187-source-code-inspection-economy-live-micro/`.
+- 2026-06-25: Manual inspection found current-10x used shell-native `rg`/`sed`
+  source inspection, answered correctly, and produced no subject workspace
+  writes. One current repetition over-read fixtures/tests and repeated several
+  files with `nl`, which is a residual efficiency issue but not a failure of
+  this gate.
 
 ## Result
 
-Pending.
+Pass.
+
+Evidence:
+
+- `.10x/evidence/2026-06-25-source-code-inspection-economy-result.md`
+
+Review:
+
+- `.10x/reviews/2026-06-25-source-code-inspection-economy-result.md`
