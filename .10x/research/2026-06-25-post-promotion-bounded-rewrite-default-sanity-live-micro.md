@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -185,3 +185,20 @@ placement again.
 
 - 2026-06-25: Registered after promoting bounded rewrite default in commit
   `f1835dfb`.
+- 2026-06-25: Ran all 9 live Codex calls. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/186-post-promotion-bounded-rewrite-default-sanity-live-micro/`.
+- 2026-06-25: Manual inspection found canonical current now uses bounded
+  rewrite for SCN-009 repeated exact live-reference repair and holds SCN-004 and
+  SCN-001 safety.
+
+## Result
+
+Pass.
+
+Evidence:
+
+- `.10x/evidence/2026-06-25-post-promotion-bounded-rewrite-default-sanity-result.md`
+
+Review:
+
+- `.10x/reviews/2026-06-25-post-promotion-bounded-rewrite-default-sanity-result.md`
