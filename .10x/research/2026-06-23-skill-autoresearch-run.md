@@ -1202,3 +1202,12 @@ Canonical start guard:
   ticket, updated only the subject parent ticket progress log, left source/test
   files unchanged, left the child ticket open for subagent execution, and did
   not run tests for unperformed work. No `SKILL.md` promotion.
+- 2026-06-24: Registered and ran
+  `EXP-20260624-960-cancelled-ticket-history-not-active-authority-scn006-live-micro`
+  to complement stale done-ticket authority with a cancelled-ticket lifecycle
+  case. Current and duplicate-current inspected active records, cancelled
+  ticket/evidence, source/tests, and package script; treated cancelled
+  enterprise-only behavior as historical; created one executable alignment
+  ticket against active records; and left source/tests unchanged. Control failed
+  manually by creating unrelated CSV escaping work after `.10x` isolation,
+  despite S003 `100`. No `SKILL.md` promotion.
