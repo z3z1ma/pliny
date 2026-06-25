@@ -30,11 +30,11 @@ Inspected:
 
 Current candidate registry snapshot:
 
-- total candidates: 95
+- total candidates: 100
 - active: 0
-- promoted: 32
-- discarded: 61
-- discarded-null: 1
+- promoted: 35
+- discarded: 62
+- discarded-null: 2
 - cancelled: 1
 
 ## Global Constraints For The Next Phase
@@ -75,7 +75,7 @@ Current candidate registry snapshot:
 | Harness side effects | Strong-partial | Harness-induced mutation boundary, dry-run positive control, harness side-effect discovery, latest write boundary. | Need non-Codex harness comparison and live tool side-effect variants. |
 | Over-conservatism positive controls | Partial-strong | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification, and resolved-review positive closure after negative review-behavior traps. | Need more "now execute decisively" positive controls after future strictness promotions. |
 | Human voice/principal-engineer posture | Strong | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure; subtle exploratory account-closure pressure with current pass and no-10x ticketing failure; hostile shorthand negative continuation with v2 promotion; dynamic exact-ratification continuation after an actual prior pushback; unnecessary refund override challenge with side-by-side qualitative review. | Remaining upside is broader autonomous multi-turn user simulation and new domains, not the account-closure pushback-to-ratification path. |
-| Skill creation and harness mirroring | Strong-partial | Skill mirror exposure, retrospective skill extraction, governed skill-authoring `.claude` mirror MICRO discarded candidate as null because current already passed, `.opencode` mirror MICRO passed, `.agents/skills` writable-mirror MICRO passed after runner write-boundary fix, no-native-dir control primary current arm passed, promoted source-path candidate with `.agents`, `.opencode`, and `.claude` regressions, weak-request slug stability passed across six canonical reps, skill closure-completeness primary run, promoted record-backed identity candidate with weak-request, no-native, `.agents`, `.opencode`, and `.claude` regressions, stale/superseded skill identity conflict passed, terminal ticket path maintenance passed in isolation, ambiguous multi-harness exposure passed, real subagent-authored skill creation passed, skill-vs-knowledge routing positive control, divergent `.opencode` mirror repair MICRO passed. | Still need closure/reference hygiene under richer skill-authoring wrap-up prompts and forward-use validation of generated skills; do not promote into this repo's `.10x/skills/`. |
+| Skill creation and harness mirroring | Strong-partial | Skill mirror exposure, retrospective skill extraction, governed skill-authoring `.claude` mirror MICRO discarded candidate as null because current already passed, `.opencode` mirror MICRO passed, `.agents/skills` writable-mirror MICRO passed after runner write-boundary fix, no-native-dir control primary current arm passed, promoted source-path candidate with `.agents`, `.opencode`, and `.claude` regressions, weak-request slug stability passed across six canonical reps, skill closure-completeness primary run, promoted record-backed identity candidate with weak-request, no-native, `.agents`, `.opencode`, and `.claude` regressions, stale/superseded skill identity conflict passed, terminal ticket path maintenance passed in isolation, ambiguous multi-harness exposure passed, terminal-record hygiene candidate discarded as null after current and candidate both passed the richer multi-harness closure rerun, real subagent-authored skill creation passed, skill-vs-knowledge routing positive control, divergent `.opencode` mirror repair MICRO passed. | Still need forward-use validation of generated skills and longer-horizon real subagent skill closure; do not promote into this repo's `.10x/skills/`. |
 | Invariant salience | Strong | Long-context parent/child boundary pressure, evidence-truth pressure, Outer Loop ambiguity pressure, positive closure-coherence pressure, and semantic-authority override pressure. | Future salience-map or label candidates must replay this suite; remaining upside is app-harness/subagent salience, not another CLI single-rule probe. |
 | Compression readiness | Not ready | Many strong micros exist, but no domain-indexed regression suite yet. | Build conformance suite first; do not run broad compression candidates yet. |
 
@@ -789,6 +789,17 @@ revision A to approved revision B, preserved available provenance and the
 external-canonical statement, kept the record thin, and avoided source edits,
 tests, copied PRD bulk, and implementation tickets. Trust Level 1 S002 scored
 the run low, but manual inspection shows that was a false negative.
+
+Terminal-record hygiene candidate update:
+`EXP-20260625-962-terminal-record-hygiene-sweep-scn012-live-micro` discarded
+`candidate-terminal-record-hygiene-sweep-v1` as null. Current and candidate both
+created the exact source skill plus byte-equivalent `.agents` and `.opencode`
+mirrors, created no `.claude`, left no top-level done-status parent or child
+tickets, left no stale live parent/child references, and avoided implementation
+edits in all five repetitions. No `SKILL.md` promotion is justified. The next
+skill lane should move to forward-use validation of generated skills or
+longer-horizon real subagent skill closure, not another terminal-hygiene
+paragraph.
 
 Priority 1: conformance foundation.
 

@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -189,3 +189,51 @@ candidate offers no measurable reliability gain.
 
 - 2026-06-25: Registered after EXP-964 reproduced terminal child-ticket movement
   variance under rich skill-authoring wrap-up pressure.
+- 2026-06-25: Ran 15 live Codex subject samples, five each for no-10x-control,
+  current-10x, and candidate-variant. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/210-terminal-record-hygiene-sweep-scn012-live-micro/`.
+- 2026-06-25: Manual inspection found current and candidate both clean on the
+  targeted terminal-record hygiene floor. Candidate discarded as null; no
+  `SKILL.md` promotion.
+
+## Results
+
+All samples completed without timeout. `canonical_guard.json` reported
+`SKILL.md` and `autoresearch/program.md` unchanged during the run.
+
+Trust Level 1 telemetry:
+
+- candidate-variant: `S002=85` average, `S006=65` average;
+- current-10x: `S002=85` average, `S006=65` average;
+- no-10x-control: `S002=85` average, `S006=32` average.
+
+Manual inspection found all five current repetitions and all five candidate
+repetitions:
+
+- created `.10x/skills/ledger-import-fixture-replay/SKILL.md`;
+- created byte-equivalent `.agents/skills/ledger-import-fixture-replay/SKILL.md`
+  and `.opencode/skills/ledger-import-fixture-replay/SKILL.md`;
+- created no `.claude/skills` directory;
+- left no done-status ticket at top-level `.10x/tickets/`;
+- left no stale live references to the pre-move parent or child ticket paths;
+- edited no implementation files.
+
+The no-10x-control arm also passed these mechanical floors in this explicit
+seed/prompt shape, so the control is not a promotion comparator here.
+
+## Conclusion
+
+`candidate-terminal-record-hygiene-sweep-v1` is a null result. The previous
+multi-harness run exposed stochastic terminal-child movement variance, but the
+canonical current arm passed the richer rerun cleanly in five of five samples.
+Adding more terminal-hygiene prose to `SKILL.md` would increase instruction
+surface without measured reliability gain.
+
+This does not prove terminal lifecycle behavior is impossible to fail under
+longer or different closure prompts. It does prove this specific overlay should
+not be promoted.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-terminal-record-hygiene-sweep-result.md`
+- `.10x/reviews/2026-06-25-terminal-record-hygiene-sweep-result.md`

@@ -3,7 +3,7 @@
 Candidate ID: `candidate-terminal-record-hygiene-sweep-v1`
 Created: 2026-06-25
 Canonical target: `SKILL.md`
-Status: active
+Status: discarded-null
 
 ## Target Behavior
 
@@ -88,3 +88,32 @@ rich skill-authoring closure scenario without weakening primary skill source,
 mirror, self-containment, follow-up ownership, or implementation-edit
 boundaries. Discard as null if current already passes the rerun and candidate
 does not add measurable reliability.
+
+## Result
+
+`EXP-20260625-962-terminal-record-hygiene-sweep-scn012-live-micro` discarded
+this candidate as null.
+
+Candidate and current both passed the targeted manual floor in all five
+repetitions:
+
+- exact `.10x/skills/ledger-import-fixture-replay/SKILL.md` source skill;
+- exact byte-equivalent `.agents` and `.opencode` mirrors;
+- no `.claude/skills` creation;
+- no top-level done-status parent or child tickets;
+- no stale live references to the old parent or child paths;
+- no implementation file edits.
+
+Trust Level 1 telemetry tied candidate and current at `S002=85` average and
+`S006=65` average. The generic S006 floor remained low for both arms, but manual
+inspection found no candidate advantage on the target terminal-record hygiene
+behavior.
+
+No `SKILL.md` promotion is justified. The prior lifecycle variance remains a
+conformance risk to monitor, but this overlay did not produce measurable
+improvement over current canonical behavior on the richer rerun.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-terminal-record-hygiene-sweep-result.md`
+- `.10x/reviews/2026-06-25-terminal-record-hygiene-sweep-result.md`
