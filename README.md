@@ -5,7 +5,7 @@
 <h1 align="center">10x</h1>
 
 <p align="center">
-  <em>The engineering discipline that makes developers 10x — subsequently hill-climbed through billions of tokens of autonomous experimentation.</em>
+  <em>The engineering discipline that makes your [AI] developer 10x — hill-climbed through billions of tokens of autonomous experimentation.</em>
 </p>
 
 <p align="center">
