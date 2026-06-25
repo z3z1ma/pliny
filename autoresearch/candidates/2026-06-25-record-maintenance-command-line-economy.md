@@ -91,3 +91,28 @@ or misses references in the lower-assistance record-maintenance scenario while
 candidate uses economical mechanics and preserves historical/ambiguous context.
 Do not promote for wording preferences, small token-cost differences, or a
 candidate that is merely more explicit while current is already efficient.
+
+## Result
+
+`EXP-20260625-700-lower-assistance-record-maintenance-workflow-scn009-live-micro`
+is promising but not promotable alone.
+
+Manual inspection found current `SKILL.md` passed graph correctness but did not
+consistently use command-line economy: both current repetitions used
+assistant-side file-change edits for repeated reference updates, and one current
+repetition did not show direct `mv` in command events for the ticket move.
+
+Candidate used direct `mv` and bounded `perl -0pi` literal replacement over the
+live-reference file set in both repetitions, preserved the historical research
+record, and patched ambiguous/stale parent or review prose deliberately.
+
+Required before promotion:
+
+- ambiguous historical-reference repair regression;
+- closure/reference-repair regression;
+- semantic or source-edit boundary regression if the first two pass.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-lower-assistance-record-maintenance-workflow-result.md`
+- `.10x/reviews/2026-06-25-lower-assistance-record-maintenance-workflow-result.md`

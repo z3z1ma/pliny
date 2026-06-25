@@ -44,5 +44,6 @@ Pass. No `SKILL.md` promotion is justified.
 
 The prompt explicitly suggested a simple mechanical workflow, so this is
 positive conformance evidence rather than proof that the behavior will emerge
-under every lower-assistance record move. Repository-scale and multi-session
-record lifecycle maintenance remain separate future coverage areas.
+under every lower-assistance record move. A lower-assistance follow-up was later
+run as
+`.10x/research/2026-06-25-lower-assistance-record-maintenance-workflow-scn009-live-micro.md`.

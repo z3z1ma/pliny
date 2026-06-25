@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -209,3 +209,67 @@ behavior.
 - 2026-06-25: Registered in direct response to the prompt-assistance concern in
   EXP-974. The key question is whether command-line economy comes from 10x
   itself rather than from scenario wording.
+- 2026-06-25: Ran two live Codex repetitions for no-10x-control, current-10x,
+  and candidate-variant arms. Raw artifacts are stored under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/176-lower-assistance-record-maintenance-workflow-scn009-live-micro/`.
+- 2026-06-25: Manual inspection found current `SKILL.md` passed correctness but
+  did not consistently satisfy operation quality. Current repaired the graph in
+  both repetitions, but used assistant-side file-change edits for repeated live
+  reference updates in both repetitions, and one repetition appears to have
+  performed the ticket move through file-change rather than direct `mv`.
+- 2026-06-25: Manual inspection found candidate improved the core mechanical
+  workflow. Candidate used direct `mv` plus a bounded `perl` literal rewrite
+  for live-reference files in both repetitions, excluded the historical research
+  record, and then patched ambiguous or stale prose deliberately.
+
+## Results
+
+Current `SKILL.md`:
+
+- moved the ticket to
+  `.10x/tickets/done/2026-06-25-align-payout-export-csv.md` in both
+  repetitions;
+- repaired live references in spec, parent ticket, evidence, review, and
+  knowledge records;
+- preserved historical old-path mentions in the maintenance research record;
+- avoided source edits, tests, implementation tickets, `SKILL.md`, and
+  `autoresearch/program.md`;
+- did not consistently use shell-native mechanics for the repeated reference
+  maintenance.
+
+Candidate:
+
+- performed the move with `mv` and repeated literal reference repair with
+  bounded `perl -0pi` replacements in both repetitions;
+- preserved the historical research record;
+- detected and deliberately patched stale or ambiguous parent/review prose after
+  the mechanical replacement;
+- avoided source edits, tests, implementation tickets, `SKILL.md`, and
+  `autoresearch/program.md`.
+
+No-10x-control changed no workspace files because the control environment
+suppressed inherited `.10x`; it is not meaningful for this record-maintenance
+verdict.
+
+Trust Level 1 scoring gave current and candidate S004=65/S006=45 in all
+canonical arms. Manual inspection overrides those false negatives because the
+scorer cannot classify terminal path maintenance plus preserved historical
+old-path references.
+
+## Conclusions
+
+Current `SKILL.md` is correct but mechanically inconsistent on the
+lower-assistance version of this task. The user concern is valid: without an
+explicit scenario hint, current can fall back to repetitive assistant-side
+file-change edits for dense record maintenance.
+
+`candidate-record-maintenance-command-line-economy-v1` is promising and should
+advance to regression testing. It should not be promoted from this run alone
+because the new rule encourages mechanical rewrite, which must prove it does
+not corrupt ambiguous historical references, closure repairs, or semantic
+content.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-lower-assistance-record-maintenance-workflow-result.md`
+- `.10x/reviews/2026-06-25-lower-assistance-record-maintenance-workflow-result.md`

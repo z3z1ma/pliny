@@ -83,5 +83,5 @@ need for a new `SKILL.md` instruction about mechanical record maintenance.
 This proves one dense terminal-ticket move fixture under Codex CLI. It does not
 prove repository-scale path repair, multi-day repeated maintenance, or
 non-Codex harness behavior. The prompt explicitly encouraged simple mechanical
-workflow, so a lower-assistance follow-up may still be useful later if this
-behavior regresses.
+workflow; a lower-assistance follow-up was later run as
+`.10x/research/2026-06-25-lower-assistance-record-maintenance-workflow-scn009-live-micro.md`.
