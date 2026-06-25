@@ -1332,3 +1332,20 @@ Canonical start guard:
   child's blocked selected-semantics conflict, marked the parent blocked,
   repaired the parent reference to the moved CSV done ticket, and avoided source
   or test edits for the blocked sibling. No `SKILL.md` promotion.
+- 2026-06-25: Registered and ran
+  `EXP-20260625-976-out-of-order-partial-ratification-scn001-live-micro` from
+  the continuation-turn blocker reconciliation gap. Current preserved concrete
+  out-of-order ratifications, created a blocked non-executable payout retry
+  ticket, and kept "same handling as usual" unresolved because records/source
+  did not define failure/escalation behavior. Duplicate-current also passed with
+  a richer knowledge update; no-10x-control created an open ticket and laundered
+  the vague phrase into contract text. No `SKILL.md` promotion.
+- 2026-06-25: Registered and ran
+  `EXP-20260625-977-noisy-account-cleanup-cold-start-scn003-live-micro` from the
+  multi-session cold-start gap. Current recovered active account cleanup
+  authority, active blocked shaping state, settled 90-day/inactive-trial
+  criteria, historical 30-day evidence limits, and Legal/Data next action
+  without asking for prior chat or editing files. Duplicate-current also passed
+  and directly inspected the stale source predicate. Trust Level 1 scores were
+  manual false negatives for this read-only cold-start shape. No `SKILL.md`
+  promotion.

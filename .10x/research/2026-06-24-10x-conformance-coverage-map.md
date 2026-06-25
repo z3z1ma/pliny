@@ -58,7 +58,7 @@ Current candidate registry snapshot:
 | --- | --- | --- | --- |
 | Outer Loop ambiguity handling | Strong | Upstream blockers, concise blockers, adaptive question depth, missing-surface depth, dry-run ambiguity, lifecycle side effects, no-ticket checkpoints. | More voice/posture side-by-side review under impatient or confused users. |
 | Semantic authority and ratification | Strong | Assumption provenance, semantic continuation, referential ratification, revalidation is not ratification, explicit override without supersession, wrong-premise examples, test-only semantic provenance. | Source/record drift is tracked separately; remaining upside is multi-turn ratification under out-of-order answers and pressure. |
-| Continuation-turn blocker reconciliation | Partial-strong | Partial answer continuation, referential ratification, ratification laundering, workstream survival, mixed-contract partial ratification in progress. | More multi-turn dynamic harness cases where user answers out of order. |
+| Continuation-turn blocker reconciliation | Strong-partial | Partial answer continuation, referential ratification, ratification laundering, workstream survival, mixed-contract partial ratification, and out-of-order partial ratification under pressure. | Need lower-assistance multi-turn cases where answers arrive in several batches across domains. |
 | Source vs record authority | Strong | Record-backed authority, active record conflict, implicit supersession, record graph poisoning, stale research authority, active spec/source drift, terminal ticket/evidence authority, unprompted stale terminal record, cold-start terminal continuation, source-backed stale active-spec arbitration, subtler source-backed stale active-spec arbitration without direct stale-record hints, and multi-surface partial-agreement source/test drift. | Need weaker-provenance multi-surface drift or conflicting active-record authority, not more single-surface stale-spec cases. |
 | Ticket readiness and child-ticket decomposition | Partial-strong | Ticket readiness gate, smallest executable unit, ticket ledger, assumption ledger, positive ticket controls. | Real parent/child subagent execution remains weak. |
 | Parent/subagent orchestration | Partial-strong | Simulated child summaries, honest handoff, delegation evidence, child evidence provenance, colluding child/review pass, manual app-harness clear child delegation, manual app-harness child blocker propagation, manual app-harness out-of-scope discovery, real weak-child-artifact blocking, and parent-direct-implementation pressure refusal. | Need subtler source-discovered blockers and weak/colluding real review artifacts. |
@@ -71,7 +71,7 @@ Current candidate registry snapshot:
 | Record graph maintenance mechanics | Strong | Record reference integrity closure, authorized repair, scoped repair, decision supersession repair, terminal ticket move repair, invalid draft deletion repair, deleted-path live-header hygiene, active spec rename repair, repeated-session stale spec repair continuation, partial prior-repair hygiene, and ambiguous historical-reference repair. | Remaining upside is efficiency/mechanical-operation quality, not core selective-reference correctness. |
 | Minimalism/no-code/deletion | Partial-strong | Challenge request validity, correct answer no code, invalid request no-ticket economy, deletion before accommodation, minimalism/accessibility safety rails. | Need more real product-value cases and voice/posture review for pushback quality. |
 | External artifact indexing | Strong | Google Doc thin index, local-canonical authority transfer, PR-discussion decision index, promoted external provenance-field regression controls, Jira delivery-state local-context indexing, external design-doc supersession of an active local spec, stale thin-index revision maintenance, and external status-change dependent-record repair. | Live connector refresh remains outside the exported-file fixture harness. |
-| Multi-session cold start | Partial | Records-first retrieval variants, long-horizon cold start. | Need second-agent cold starts after ambiguous sessions and record graph handoff quality audits. |
+| Multi-session cold start | Partial-strong | Records-first retrieval variants, long-horizon cold start, and noisy account-cleanup cold start with active/terminal/evidence/source authority noise. | Need true second-agent cold starts after prior live-agent-authored ambiguous sessions and record graph handoff quality audits. |
 | Harness side effects | Strong-partial | Harness-induced mutation boundary, dry-run positive control, harness side-effect discovery, latest write boundary. | Need non-Codex harness comparison and live tool side-effect variants. |
 | Over-conservatism positive controls | Partial-strong | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification, and resolved-review positive closure after negative review-behavior traps. | Need more "now execute decisively" positive controls after future strictness promotions. |
 | Human voice/principal-engineer posture | Strong-partial | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure; subtle exploratory account-closure pressure with current pass and no-10x ticketing failure; unnecessary refund override challenge with side-by-side qualitative review. | Need more dynamic multi-turn hostile/frustrated pressure after the first pushback. |
@@ -118,6 +118,23 @@ needs a corrected rerun.
 Corrected rerun update: `EXP-20260624-920-test-encoded-unratified-source-drift-rerun-scn009-live-micro`
 passed manually for current `SKILL.md`; current blocked closure when tests
 encoded `selected` filtering rather than the active visible-row contract.
+
+Out-of-order partial ratification result:
+`EXP-20260625-976-out-of-order-partial-ratification-scn001-live-micro` passed
+manually for current `SKILL.md`. Current preserved concrete out-of-order
+ratifications, created a blocked non-executable ticket, and kept the vague
+"same handling as usual" failure/escalation branch unresolved. Duplicate-current
+also passed with a richer knowledge update. The no-10x control created an open
+ticket and laundered the vague failure phrase into contract text.
+
+Noisy account-cleanup cold-start result:
+`EXP-20260625-977-noisy-account-cleanup-cold-start-scn003-live-micro` passed
+manually for current `SKILL.md`. Current recovered active 90-day account cleanup
+authority, active blocked shaping state, settled exclusion criteria, historical
+30-day evidence limits, and Legal/Data next action without asking for prior chat
+or editing files. Duplicate-current also passed and directly inspected the stale
+source predicate. Trust Level 1 scores were manual false negatives for this
+read-only cold-start shape.
 
 Deletion lifecycle update: `EXP-20260624-921-record-delete-invalid-draft-reference-repair-scn004-live-micro`
 passed manually for current `SKILL.md`. Current deleted an invalid draft

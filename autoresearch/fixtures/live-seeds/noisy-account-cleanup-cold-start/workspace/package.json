@@ -1,0 +1,5 @@
+{
+  "name": "noisy-account-cleanup-cold-start-seed",
+  "private": true,
+  "type": "module"
+}
