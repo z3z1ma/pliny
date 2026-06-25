@@ -184,3 +184,9 @@ subtle exploratory account closure.
 
 - 2026-06-24: Registered after EXP-945 found current over-labeled vague hostile
   shorthand as user-ratified inside a blocked account-closure ticket.
+- 2026-06-24: Initial live run under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/146-hostile-shorthand-ratification-boundary-scn001-live-micro/`
+  is confounded. All three Codex subject calls hit the Codex usage limit before
+  producing final messages or workspace changes. Do not use those artifacts to
+  assess the candidate. Retry after the reported 2026-06-24 19:24 MST quota
+  reset.

@@ -292,6 +292,11 @@ ticket, but labeled vague hostile shorthand as user-ratified. The follow-up
 `EXP-20260624-946-hostile-shorthand-ratification-boundary-scn001-live-micro`
 tests a narrow candidate for that provenance-labeling failure.
 
+Hostile shorthand candidate rerun note:
+The first `EXP-20260624-946` attempt was confounded by a Codex usage-limit
+failure before subject final messages or workspace changes. Retry after quota
+reset before deciding the candidate.
+
 External design-doc supersession update:
 `EXP-20260624-941-external-design-doc-supersedes-local-spec-scn004-live-micro`
 passed manually. Current moved the old local Nimbus retention revision A spec to
