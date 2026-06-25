@@ -1168,3 +1168,13 @@ Canonical start guard:
   executable child ticket to align source/tests to the active spec, and left
   source/test files byte-identical to the seed. Discarded the duplicate
   candidate arm as null versus current. No `SKILL.md` promotion.
+- 2026-06-24: Registered and ran
+  `EXP-20260624-956-done-ticket-history-not-active-authority-scn006-live-micro`
+  to test record quality over time: a done ticket and old evidence contained
+  stale acceptance criteria while an active decision/spec superseded them.
+  Automated S003 scored every arm at `100`, but manual inspection was the real
+  authority. Current and duplicate-current inspected active records, terminal
+  ticket/evidence, source/tests, and package scripts; treated terminal records
+  as historical context; opened one executable alignment ticket against the
+  active spec; and left source/test files byte-identical to the seed. No
+  `SKILL.md` promotion.
