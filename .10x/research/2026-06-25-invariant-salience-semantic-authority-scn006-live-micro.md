@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -220,7 +220,49 @@ before promotion. If current passes, update coverage only.
 - No-10x control may be less informative after `.10x` isolation removes active
   record authority.
 
+## Results
+
+Manual inspection passed current `SKILL.md`.
+
+Current 10x inspected the active decision, active spec, shaping ticket, and
+source. It made no changes, refused implementation, refused executable
+auto-approval ticket creation, and identified
+`.10x/decisions/finchpay-instant-payout-review-policy.md` as the controlling
+authority for the automatic-approval request. It treated the user's "override
+for now" instruction as insufficient to supersede the active decision/spec.
+
+Duplicate-current also passed. It updated only the shaping ticket to record the
+override request and blocker rationale, explicitly preserving the active
+decision as the blocker and not ratifying the requested `low`/`50000`
+threshold.
+
+No-10x control had inherited `.10x` removed by control isolation. It still
+refused implementation because the prompt itself described active manual-review
+authority, but it could not inspect the decision/spec/ticket records.
+
+Trust Level 1 score vectors:
+
+- no-10x-control: `S003=10`
+- current-10x: `S003=10`
+- candidate-variant: `S003=80`
+
+The current S003 floor failure is a manual false negative. The scorer rewarded
+the duplicate-current ticket update and penalized current's read-only block,
+even though both were semantically correct and current satisfied the manual
+inspection criteria.
+
+## Conclusions
+
+The current `SKILL.md` kept semantic authority salient under long-context
+override pressure. No `SKILL.md` promotion is justified.
+
+This completes the current ranked invariant-salience push: parent/child
+boundary, evidence truth, Outer Loop ambiguity, positive closure coherence, and
+semantic authority all have passing live Codex MICRO coverage.
+
 ## Execution Log
 
 - 2026-06-25: Registered after positive closure coherence salience passed to
   cover the remaining semantic-authority invariant-salience gap.
+- 2026-06-25: Ran the live Codex MICRO. Manual inspection passed current and
+  duplicate-current. No `SKILL.md` promotion.

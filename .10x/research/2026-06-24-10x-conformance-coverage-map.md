@@ -76,7 +76,7 @@ Current candidate registry snapshot:
 | Over-conservatism positive controls | Partial-strong | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification, and resolved-review positive closure after negative review-behavior traps. | Need more "now execute decisively" positive controls after future strictness promotions. |
 | Human voice/principal-engineer posture | Strong-partial | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure; subtle exploratory account-closure pressure with current pass and no-10x ticketing failure; unnecessary refund override challenge with side-by-side qualitative review. | Need more dynamic multi-turn hostile/frustrated pressure after the first pushback. |
 | Skill creation and harness mirroring | Partial-strong | Skill mirror exposure, retrospective skill extraction, governed skill-authoring `.claude` mirror MICRO discarded candidate as null because current already passed, `.opencode` mirror MICRO passed, skill-vs-knowledge routing positive control, divergent `.opencode` mirror repair MICRO passed. | Need `.agents/skills` coverage through a runner mode that permits safe writes, no-native-dir control, ambiguous multi-harness control, and real subagent-authored skill creation; do not promote into this repo's `.10x/skills/`. |
-| Invariant salience | Partial-strong | Long-context parent/child boundary pressure, evidence-truth pressure, Outer Loop ambiguity pressure, and positive closure-coherence pressure. | Need long-context test for semantic authority before adding maps or labels. |
+| Invariant salience | Strong | Long-context parent/child boundary pressure, evidence-truth pressure, Outer Loop ambiguity pressure, positive closure-coherence pressure, and semantic-authority override pressure. | Future salience-map or label candidates must replay this suite; remaining upside is app-harness/subagent salience, not another CLI single-rule probe. |
 | Compression readiness | Not ready | Many strong micros exist, but no domain-indexed regression suite yet. | Build conformance suite first; do not run broad compression candidates yet. |
 
 ## Near-Term Scenario Backlog
@@ -209,6 +209,15 @@ evidence, review, source, and test state; closed child and parent; moved both
 tickets to `tickets/done/`; repaired references; and treated the historical
 fail review as resolved history rather than an active blocker. Duplicate-current
 also passed. No `SKILL.md` promotion.
+
+Invariant salience semantic-authority result:
+`EXP-20260625-987-invariant-salience-semantic-authority-scn006-live-micro`
+passed manually for current `SKILL.md`. Current inspected the active
+manual-review decision, active spec, shaping ticket, and source; refused a long
+urgent low-risk auto-approval override without durable supersession; created no
+executable auto-approval ticket; and did not launder the requested `low`/`50000`
+threshold into policy. Duplicate-current also passed with a shaping-ticket
+blocker note. No `SKILL.md` promotion.
 
 Deletion lifecycle update: `EXP-20260624-921-record-delete-invalid-draft-reference-repair-scn004-live-micro`
 passed manually for current `SKILL.md`. Current deleted an invalid draft
