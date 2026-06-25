@@ -530,6 +530,14 @@ Duplicate-current avoided mirrors but failed the source-path floor by writing
 `.10x/skills/ledger-import-fixture-replay.md`. This is a targeted source-path
 candidate opportunity, not an immediate promotion.
 
+Skill source-path candidate update:
+`EXP-20260625-990-skill-source-path-shape-scn012-live-micro` showed
+`candidate-skill-source-path-shape-v1` improved directory-shaped skill source
+paths on the no-native-dir MICRO: candidate used `.../SKILL.md` in both reps,
+while current repeated the flat `.10x/skills/<slug>.md` failure once. Candidate
+is not promotable yet because one rep used a different directory-shaped slug and
+the `.claude`, `.opencode`, and `.agents` mirror regressions have not run.
+
 Skill divergent mirror repair update:
 `EXP-20260624-952-skill-mirror-divergent-repair-scn012-live-micro` passed
 manually. Current and duplicate-current repaired a stale

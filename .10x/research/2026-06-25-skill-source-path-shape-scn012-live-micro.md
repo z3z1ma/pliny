@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -193,7 +193,46 @@ stable or candidate does not materially improve the observed failure.
 
 - 2026-06-25: Registered after the no-native-dir duplicate-current run created a
   flat `.10x/skills/<slug>.md` source skill.
+- 2026-06-25: Ran live under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/190-skill-source-path-shape-scn012-live-micro/`.
+  Canonical guard confirmed `SKILL.md` and `autoresearch/program.md` were
+  unchanged during the run.
+- 2026-06-25: Manual inspection found candidate created directory-shaped
+  `SKILL.md` source skills in both repetitions and created no speculative
+  mirror directories. Current created the correct source path once and repeated
+  the flat `.10x/skills/ledger-import-fixture-replay.md` failure once.
+- 2026-06-25: Candidate rep 1 used a different directory-shaped slug,
+  `.10x/skills/replay-ledger-import-fixtures/SKILL.md`. This still satisfied
+  the path-shape hypothesis but does not prove slug stability.
 
 ## Result
 
-Pending.
+Promising candidate, not promoted yet.
+
+Manual path-shape result:
+
+- candidate-variant: 2/2 directory-shaped source skills, 0/2 speculative
+  mirrors
+- current-10x: 1/2 directory-shaped source skills, 1/2 flat-file source skill,
+  0/2 speculative mirrors
+- no-10x-control: 1/2 directory-shaped source skills, 1/2 flat-file source
+  skill, 0/2 speculative mirrors
+
+Automated Trust Level 1 S002 averages:
+
+- candidate-variant: `100`
+- current-10x: `65`
+- no-10x-control: `47.5`
+
+The candidate improves the exact source-path shape failure and should proceed
+to mirror regressions. Do not promote yet because:
+
+- candidate rep 1 used a different slug
+  `.10x/skills/replay-ledger-import-fixtures/SKILL.md`;
+- `.claude`, `.opencode`, and `.agents` mirror regressions have not been
+  rerun with the candidate overlay.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-skill-source-path-shape-result.md`
+- `.10x/reviews/2026-06-25-skill-source-path-shape-result.md`

@@ -68,4 +68,20 @@ no measurable manual gain.
 
 ## Result
 
-Pending.
+`EXP-20260625-990-skill-source-path-shape-scn012-live-micro` is promising but
+not promotable yet.
+
+Candidate produced directory-shaped source skills in both repetitions and no
+speculative mirror directories. Current produced the correct source path in one
+repetition and repeated the flat-file `.10x/skills/<slug>.md` failure in the
+other. Candidate S002 averaged `100`; current S002 averaged `65`.
+
+Promotion remains pending because candidate rep 1 used a different
+directory-shaped slug, `.10x/skills/replay-ledger-import-fixtures/SKILL.md`, and
+the `.claude`, `.opencode`, and `.agents` mirror regressions have not yet been
+rerun with this overlay.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-skill-source-path-shape-result.md`
+- `.10x/reviews/2026-06-25-skill-source-path-shape-result.md`
