@@ -43,9 +43,9 @@ Current corpus shape:
 
 The suite is no longer sparse. The remaining risk is unevenness: semantic
 authority, ratification, closure, skill path shape, and record mechanics have
-many targeted runs, while broad conformance, real subagent orchestration,
-parallel coherence, long-horizon cold start, and compression safety remain less
-settled.
+many targeted runs, while broad conformance, repeatable real subagent
+orchestration, parallel coherence, long-horizon cold start, and compression
+safety remain less settled.
 
 ## Coverage Matrix
 
@@ -55,8 +55,8 @@ settled.
 | Semantic authority and ratification | Strong | `.10x/evidence/2026-06-25-conflicting-active-tax-export-authority-result.md`; `.10x/evidence/2026-06-25-post-cold-start-exact-ratification-result.md`; `.10x/evidence/2026-06-25-record-revalidation-contradictory-export-result.md`; assumption-provenance and ratification candidates promoted | Continue positive controls so the protocol remains decisive once authority is concrete. |
 | Continuation-turn blocker reconciliation | Partial | `.10x/evidence/2026-06-25-dynamic-ratified-hostile-continuation-result.md`; `.10x/evidence/2026-06-25-out-of-order-partial-ratification-result.md`; partial-answer continuation promotions | Need richer live multi-turn harness support where answer order is not scripted and the reasoning engine decides when the turn is complete. |
 | Source vs record authority | Strong but narrow | `.10x/evidence/2026-06-25-multi-surface-source-record-drift-result.md`; `.10x/evidence/2026-06-25-weak-provenance-multi-surface-drift-result.md`; `.10x/evidence/2026-06-25-conflicting-active-tax-export-authority-result.md` | Need source/test-encoded behavior drift, active decision vs implementation drift, and harmless non-material drift positive controls. |
-| Ticket readiness and child-ticket decomposition | Partial | ticket-readiness, smallest-executable-unit, ticket ledger, and upstream blocker promotions; invariant salience parent-boundary run | Need real subagent handoff tests where the parent creates executable child tickets and does not implement them. |
-| Parent/subagent orchestration | Partial | `.10x/evidence/2026-06-25-real-subagent-source-discovered-blocker-manual-app.md`; `.10x/evidence/2026-06-25-real-subagent-colluding-review-manual-app.md`; `.10x/evidence/2026-06-25-real-parallel-child-partial-blocker-manual-app.md` | Tooling has been unstable. Need repeatable real-subagent runs for clear child ticket, ambiguous request, child blocker, weak receipts, and parent-direct-implementation violation. |
+| Ticket readiness and child-ticket decomposition | Partial, improving | ticket-readiness, smallest-executable-unit, ticket ledger, and upstream blocker promotions; invariant salience parent-boundary run; `.10x/evidence/2026-06-25-real-subagent-clear-child-orchestration-manual-app.md` | Basic clear-child real handoff now has a positive-control pass. Need less-assisted and repeat-copy variants where the parent creates executable child tickets and does not implement them. |
+| Parent/subagent orchestration | Partial, improving | `.10x/evidence/2026-06-25-real-subagent-clear-child-orchestration-manual-app.md`; `.10x/evidence/2026-06-25-real-subagent-source-discovered-blocker-manual-app.md`; `.10x/evidence/2026-06-25-real-subagent-colluding-review-manual-app.md`; `.10x/evidence/2026-06-25-real-parallel-child-partial-blocker-manual-app.md` | Tooling has been unstable. Need repeatable real-subagent runs for less-assisted clear child ticket, ambiguous request, weak receipts, and parent-direct-implementation violation. |
 | Multi-agent parallel coherence | Weak | One manual app run: `.10x/evidence/2026-06-25-real-parallel-child-partial-blocker-manual-app.md`; discarded candidate `autoresearch/candidates/2026-06-24-parallel-child-integration-reconciliation.md` | Need multi-child scenarios with shared specs, conflicting child discoveries, parent reconciliation, and deduplicated follow-ups. |
 | Evidence integrity | Strong | invariant evidence-truth run; child/delegated evidence provenance candidates; closure evidence matrix; `.10x/evidence/2026-06-25-live-authored-handoff-review-audit-result.md` | False-evidence candidate was discarded; still need renewed scenarios for user-pasted output, evidence-shaped files, and unobserved child summaries after recent promotions. |
 | Review behavior | Partial | real subagent colluding review pass; live-authored handoff audit; review records for every promoted candidate | Need adversarial review of larger diffs and explicit tests where social agreement between child and reviewer conflicts with artifacts. |
@@ -97,6 +97,8 @@ continue.
 
 1. Real subagent clear child ticket: parent creates a parent plan and bounded
    child ticket, delegates, reviews, records evidence, and closes coherently.
+   First positive-control pass:
+   `.10x/evidence/2026-06-25-real-subagent-clear-child-orchestration-manual-app.md`.
 2. Real subagent ambiguous request: parent refuses to delegate until
    execution-critical semantics are clear.
 3. Real subagent child blocker: child discovers ambiguity, marks blocked, and

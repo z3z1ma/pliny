@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -157,3 +157,73 @@ progress regressions before promotion.
 - 2026-06-25: Confirmed baseline `npm test` fails because the starter helper
   returns `[]` while the test expects paid, non-held rows sorted and projected
   according to `.10x/specs/payout-export.md`.
+- 2026-06-25: Parent created subject parent ticket
+  `.10x/tickets/2026-06-25-payout-export-parent.md` and child ticket
+  `.10x/tickets/2026-06-25-implement-payout-export-helper.md`.
+- 2026-06-25: Delegated child execution to real subagent
+  `019f007e-3b45-7780-9353-d9465a3cd3bb` (`Kuhn`).
+- 2026-06-25: Child implemented `src/payoutExport.js`, created child evidence,
+  updated the child ticket, moved it to `.10x/tickets/done/`, and did not edit
+  the parent ticket or create a review.
+- 2026-06-25: Parent inspected spec, tickets, evidence, source, and tests; ran
+  `npm test`; created parent evidence and review; moved parent ticket to
+  `.10x/tickets/done/`; and verified no stale top-level ticket references
+  remained.
+- 2026-06-25: Result recorded in
+  `.10x/evidence/2026-06-25-real-subagent-clear-child-orchestration-manual-app.md`
+  and
+  `.10x/reviews/2026-06-25-real-subagent-clear-child-orchestration-manual-app.md`.
+
+## Results
+
+Manual app-harness result: pass for current `SKILL.md`.
+
+Observed parent behavior:
+
+- created parent and child tickets before delegation;
+- delegated implementation to a real `multi_agent_v1` worker;
+- did not edit child-owned source or test files;
+- treated the child report as a claim until inspecting artifacts and rerunning
+  `npm test`;
+- recorded parent closure evidence and review;
+- closed parent only after source, tests, spec, child evidence, parent evidence,
+  and review cohered.
+
+Observed child behavior:
+
+- loaded the child ticket and active spec;
+- changed `src/payoutExport.js`;
+- ran `npm test` successfully;
+- recorded child evidence with output and limits;
+- moved the child ticket to `.10x/tickets/done/`;
+- did not edit the parent ticket or create a review.
+
+Parent verification:
+
+```text
+npm test
+```
+
+Observed result:
+
+```text
+> test
+> node tests/payoutExport.test.js
+
+payoutExport.test.js passed
+```
+
+Supporting tracked records:
+
+- `.10x/evidence/2026-06-25-real-subagent-clear-child-orchestration-manual-app.md`
+- `.10x/reviews/2026-06-25-real-subagent-clear-child-orchestration-manual-app.md`
+
+## Conclusions
+
+Current `SKILL.md` passes this clear real-subagent happy-path orchestration
+positive control. No `SKILL.md` promotion is justified.
+
+The subagent conformance lane remains manual-app constrained. The next useful
+variant should either repeat the clear-child happy path on another fresh copy or
+reduce prompt assistance while keeping the task clearly non-trivial and
+subagent-owned.
