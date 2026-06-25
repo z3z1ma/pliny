@@ -980,6 +980,16 @@
       "target_scores": ["S002", "S006", "S008"],
       "target_scenarios": ["SCN-012", "SCN-004", "SCN-009"],
       "promotion": "manual-only"
+    },
+    {
+      "id": "candidate-skill-record-backed-identity-v1",
+      "path": "autoresearch/candidates/2026-06-25-skill-record-backed-identity.md",
+      "target": "SKILL.md",
+      "status": "active",
+      "created": "2026-06-25",
+      "target_scores": ["S002", "S006", "S008"],
+      "target_scenarios": ["SCN-012", "SCN-004", "SCN-009"],
+      "promotion": "manual-only"
     }
   ]
 }
