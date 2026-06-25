@@ -71,7 +71,7 @@ Current candidate registry snapshot:
 | Record graph maintenance mechanics | Strong | Record reference integrity closure, authorized repair, scoped repair, decision supersession repair, terminal ticket move repair, invalid draft deletion repair, deleted-path live-header hygiene, active spec rename repair, repeated-session stale spec repair continuation, partial prior-repair hygiene, and ambiguous historical-reference repair. | Remaining upside is efficiency/mechanical-operation quality, not core selective-reference correctness. |
 | Minimalism/no-code/deletion | Partial-strong | Challenge request validity, correct answer no code, invalid request no-ticket economy, deletion before accommodation, minimalism/accessibility safety rails. | Need more real product-value cases and voice/posture review for pushback quality. |
 | External artifact indexing | Strong | Google Doc thin index, local-canonical authority transfer, PR-discussion decision index, promoted external provenance-field regression controls, Jira delivery-state local-context indexing, external design-doc supersession of an active local spec, stale thin-index revision maintenance, and external status-change dependent-record repair. | Live connector refresh remains outside the exported-file fixture harness. |
-| Multi-session cold start | Strong | Records-first retrieval variants, long-horizon cold start, noisy account-cleanup cold start with active/terminal/evidence/source authority noise, live-authored payout ratification cold start, record revalidation scope boundary, and noisy live-authored multi-record handoff passed. | Live-authored handoff review/audit is registered next; remaining gap after that is post-cold-start exact-ratification positive controls. |
+| Multi-session cold start | Strong | Records-first retrieval variants, long-horizon cold start, noisy account-cleanup cold start with active/terminal/evidence/source authority noise, live-authored payout ratification cold start, record revalidation scope boundary, noisy live-authored multi-record handoff, and live-authored handoff review/audit passed. | Remaining gap is post-cold-start exact-ratification positive controls. |
 | Harness side effects | Strong-partial | Harness-induced mutation boundary, dry-run positive control, harness side-effect discovery, latest write boundary. | Need non-Codex harness comparison and live tool side-effect variants. |
 | Over-conservatism positive controls | Partial-strong | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification, and resolved-review positive closure after negative review-behavior traps. | Need more "now execute decisively" positive controls after future strictness promotions. |
 | Human voice/principal-engineer posture | Strong | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure; subtle exploratory account-closure pressure with current pass and no-10x ticketing failure; hostile shorthand negative continuation with v2 promotion; dynamic exact-ratification continuation after an actual prior pushback; unnecessary refund override challenge with side-by-side qualitative review. | Remaining upside is broader autonomous multi-turn user simulation and new domains, not the account-closure pushback-to-ratification path. |
@@ -209,11 +209,14 @@ executable, kept refund blocked on undefined `normal risk escalation`, rejected
 payout records/source as cross-domain noise, and changed only the existing
 shaping ticket. No `SKILL.md` promotion.
 
-Live-authored handoff review/audit probe:
+Live-authored handoff review/audit result:
 `EXP-20260625-954-live-authored-handoff-review-audit-scn003-live-micro` is
-registered to reuse a current-10x workspace from the noisy cold-start run and
-test whether a fresh reviewer can audit handoff quality without implementing,
-closing tickets, or creating duplicate owners.
+passed manually for current `SKILL.md`. Current and duplicate-current created
+exactly one review record, preserved refund/audit owners and settled values,
+kept audit executable, kept refund blocked on undefined `normal risk
+escalation`, rejected payout records/source as cross-domain noise, and avoided
+source/test/spec/ticket edits, closure, implementation, or duplicate owners. No
+`SKILL.md` promotion.
 
 Invariant salience parent-boundary result:
 `EXP-20260625-983-invariant-salience-parent-boundary-scn006-live-micro` passed

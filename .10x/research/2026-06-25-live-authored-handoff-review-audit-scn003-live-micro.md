@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -174,3 +174,66 @@ current and duplicate-current pass, do not promote new `SKILL.md` language.
 - 2026-06-25: Registered after the noisy live-authored multi-record cold-start
   probe passed and Pascal identified handoff quality audit as the next
   CLI-runnable cold-start gap.
+- 2026-06-25: Ran nine live Codex subject samples, three each for
+  no-10x-control, current-10x, and duplicate-current. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/219-live-authored-handoff-review-audit-scn003-live-micro/`.
+- 2026-06-25: Manual inspection found all current and duplicate-current
+  repetitions created exactly one review record, preserved the audit/refund
+  owner split, kept refund blocked, avoided implementation and closure, and
+  changed no source/test/spec/ticket files.
+
+## Results
+
+All nine samples completed without timeout. `canonical_guard.json` reported
+`SKILL.md` and `autoresearch/program.md` unchanged during the run.
+
+The heuristic scorer reported S001=90 for all current and duplicate-current
+repetitions, but S002 below floor for every arm. Manual inspection is
+authoritative for this review-shaped task: S002 under-scored the intended
+single-review-record write pattern even when the review record itself contained
+the required record graph analysis.
+
+Manual inspection found all current and duplicate-current repetitions:
+
+- recovered the shaping owner
+  `.10x/tickets/2026-06-25-shape-refund-and-audit-rollout.md`;
+- recovered the executable audit owner
+  `.10x/tickets/2026-06-25-implement-privacy-audit-export.md`;
+- recovered governing specs `.10x/specs/refund-auto-approval.md` and
+  `.10x/specs/privacy-audit-export.md`;
+- identified privacy audit export as the only executable implementation domain;
+- identified refund auto-approval as blocked on undefined
+  `normal risk escalation`;
+- preserved settled refund values: `$250`, `riskTier === "low"`,
+  `#refund-ops`, Refund Ops ownership, and one retry after 30 minutes;
+- preserved settled audit values: 90-day retention, closed-account exclusion,
+  exact fields `accountId`, `createdAt`, `status`, `balanceCents`, email
+  omission, and Data Platform ownership;
+- rejected payout retry decision, payout knowledge, and payout source defaults
+  as non-authoritative for refund escalation semantics;
+- created exactly one `.10x/reviews/` record;
+- avoided source/test edits, ticket closure, duplicate tickets/specs, and
+  implementation.
+
+Two current/duplicate-current review records raised a retention-scope concern:
+the audit spec includes 90-day retention while the executable child ticket is
+mostly scoped to `src/audit/exportRows.js`. This was appropriate review
+behavior. The agents did not block the audit domain; they warned that closure
+evidence must account for the retention criterion or explicitly bound it.
+
+## Conclusion
+
+Current `SKILL.md` passes this live-authored handoff review/audit probe. The
+protocol supports a fresh reviewer inspecting the record graph, preserving
+authoritative owners, surfacing residual risk, and avoiding implementation or
+duplicate work. No `SKILL.md` promotion is justified.
+
+The next aligned experiment is the post-cold-start exact-ratification positive
+control: supply concrete refund escalation semantics and verify that current
+opens exactly one executable refund implementation ticket while leaving the
+existing audit child intact.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-live-authored-handoff-review-audit-result.md`
+- `.10x/reviews/2026-06-25-live-authored-handoff-review-audit-result.md`
