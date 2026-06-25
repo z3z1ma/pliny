@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260625-seed-skill-authoring-multi-harness-exposure",
+  "scenario_id": "SCN-012",
+  "variant_id": "seed",
+  "rep": 0,
+  "model": "seed",
+  "harness": "seed",
+  "instruction_digest": "sha256:seed",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "Have the child executor finish the Ledger import preview ticket."
+    },
+    {
+      "role": "assistant",
+      "content": "Child executor reports completion. Evidence and review pass for the Ledger import preview scope. During the work it discovered three retrospective items: stable ledger import tests require tracked CSV files plus a frozen posting date after two failed inline fixture attempts; the settled domain name is sourceRef rather than externalId; archive import still lacks malformed-currency coverage and is outside this ticket. Active knowledge names the durable skill identity as ledger-import-fixture-replay. The workspace contains two harness-native skills directories, `.agents/skills/` and `.opencode/skills/`, and no `.claude/skills/` directory."
+    }
+  ],
+  "tool_invocations": [],
+  "file_outputs": [],
+  "command_outputs": [],
+  "raw_artifact_refs": [
+    "autoresearch/fixtures/live-seeds/skill-authoring-multi-harness-exposure/workspace/workspace-manifest.json"
+  ],
+  "wall_seconds": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "harness_metadata": {
+    "kind": "seed-workspace",
+    "workspace_manifest_path": "autoresearch/fixtures/live-seeds/skill-authoring-multi-harness-exposure/workspace/workspace-manifest.json"
+  }
+}
