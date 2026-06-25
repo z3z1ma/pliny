@@ -1288,3 +1288,11 @@ Canonical start guard:
   ticket, and avoided source/test edits plus test execution. Duplicate-current
   also passed; control opened a blocked shaping ticket after `.10x` isolation.
   No `SKILL.md` promotion.
+- 2026-06-25: Registered and ran
+  `EXP-20260625-971-ambiguous-historical-reference-repair-scn004-live-micro` as
+  the record graph maintenance item from the ranked conformance push. Current
+  moved an active spec to the ratified durable path, updated live headers/body
+  references plus a superseded record's live pointer, preserved historical prose
+  and fenced command output with the old path, and avoided implementation
+  tickets, source edits, and test execution. Duplicate-current also passed;
+  control was non-informative after `.10x` isolation. No `SKILL.md` promotion.
