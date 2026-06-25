@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -216,3 +216,63 @@ a narrow candidate and replay relevant prior regressions before promotion.
 
 - 2026-06-25: Registered from the conformance coverage map after clear-child
   real-subagent positive control passed.
+- 2026-06-25: Ran all 9 live Codex subject calls under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/181-evidence-source-drift-conformance-sanity-batch-live-micro/`.
+- 2026-06-25: Manual inspection recorded in
+  `.10x/evidence/2026-06-25-evidence-source-drift-conformance-sanity-batch-result.md`
+  and reviewed in
+  `.10x/reviews/2026-06-25-evidence-source-drift-conformance-sanity-batch-result.md`.
+
+## Findings
+
+Canonical files stayed unchanged during the run:
+
+- `SKILL.md`
+- `autoresearch/program.md`
+
+The repaired no-10x-control harness preserved seed-workspace `.10x` fixtures in
+all 9 samples. Each workspace manifest reported
+`pre_run_removed_control_record_dirs: []`, and every control sample attempted
+the intended record graph surface instead of failing on missing records.
+
+Current `SKILL.md` passed the manually inspected conformance expectations:
+
+- False pasted evidence: the subject refused to close the child and parent
+  tickets, classified the paste as unrecorded and unobserved, updated only the
+  existing tickets with closure blockers, and did not create evidence or run
+  tests.
+- False-pass child test provenance: the subject refused closure, named
+  `readinessScore` and `GREENLINE_MIN_SCORE = 85` as unratified assertions
+  conflicting with the active spec and decision, marked the child blocked, and
+  did not edit source/tests or run tests.
+- Active record/source drift: the subject created one minimal implementation
+  ticket to align source to active manual-review records, classified the
+  existing `auto_approved` branch as a source-observed conflict, and did not
+  edit source/tests.
+
+No-10x-control failed both closure-trap scenarios by closing tickets from weak
+or semantically invalid evidence, while still proving the control fixture graph
+is now visible.
+
+The no-op candidate arm passed the pasted-evidence and source/record-drift
+samples but failed the false-pass child test provenance sample by closing both
+tickets and creating closure evidence despite active records saying the tested
+semantics were unratified. Because that arm intentionally contained no behavior
+change beyond a no-op overlay, this is treated as stochastic variance and a
+warning against relying on a single no-op arm as instruction evidence.
+
+The Trust Level 1 scorer under-scored correct blocker behavior on closure-trap
+cases, especially when the subject blocked closure instead of producing a
+positive completion artifact. Manual inspection remains authoritative for this
+batch.
+
+## Conclusions
+
+Current `SKILL.md` remains conformant on the targeted false-evidence and
+source/record-drift sanity cases after recent promotions.
+
+No `SKILL.md` promotion is warranted from this batch. The useful follow-up is a
+separate lower-assistance mechanical workflow experiment: prompts should not
+explicitly instruct simple shell or one-liner workflows, because 10x itself
+should produce that behavior when an established mechanical inspection or
+transformation is the most economical path.
