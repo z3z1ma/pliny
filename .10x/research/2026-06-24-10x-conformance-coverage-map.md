@@ -64,7 +64,7 @@ Current candidate registry snapshot:
 | Closure coherence | Strong | Authorized repair, closure blocker no repair, spec drift, positive aligned closure, mentioned follow-up owner, record reference integrity. | Closure prose tightening must wait for regression suite assembly. |
 | Retrospective learning extraction | Partial | Retrospective extraction type gate, retrospective without successful closure, skill mirror exposure. | Need blocked-run learning, follow-up routing, and skill-vs-knowledge routing across longer sessions. |
 | Record ontology and quality | Partial | Record hardening, record economy, fish before opening, distinct near-duplicate owner, ticket ledgers, stale research authority, stale done-ticket authority MICRO. | Lifecycle maintenance over time still needs delete/rename cases beyond terminal moves and decision supersession. |
-| Record graph maintenance mechanics | Partial-strong | Record reference integrity closure, authorized repair, scoped repair, decision supersession repair, terminal ticket move repair, invalid draft deletion repair, active spec rename repair. | Need longer lifecycle maintenance over repeated sessions and stale/conflicting record updates. |
+| Record graph maintenance mechanics | Partial-strong | Record reference integrity closure, authorized repair, scoped repair, decision supersession repair, terminal ticket move repair, invalid draft deletion repair, deleted-path live-header hygiene, active spec rename repair. | Need longer lifecycle maintenance over repeated sessions and stale/conflicting record updates. |
 | Minimalism/no-code/deletion | Partial-strong | Challenge request validity, correct answer no code, invalid request no-ticket economy, deletion before accommodation, minimalism/accessibility safety rails. | Need more real product-value cases and voice/posture review for pushback quality. |
 | External artifact indexing | Partial-strong | Google Doc thin index, local-canonical authority transfer, PR-discussion decision index, and promoted external provenance-field regression controls. | Need Jira/Linear delivery-state index, external design-doc supersession, and external artifact status-change cases. |
 | Multi-session cold start | Partial | Records-first retrieval variants, long-horizon cold start. | Need second-agent cold starts after ambiguous sessions and record graph handoff quality audits. |
@@ -226,6 +226,13 @@ manually. Current read the seeded `.opencode` skill-writing governor, created a
 valid `.10x` source skill, mirrored byte-equivalent content to
 `.opencode/skills`, recorded validation evidence, avoided speculative `.claude`
 or `.agents` mirrors, and avoided implementation edits.
+
+Record header hygiene update:
+`EXP-20260624-938-record-delete-machine-header-hygiene-scn004-live-micro` passed
+manually. Current deleted the invalid draft spec, cancelled and moved the
+dependent ticket, cleared the deleted path from live `Depends-On`, `Relates-To`,
+`Target`, and `Parent` headers, preserved historical mentions, and avoided
+source/test changes. No `SKILL.md` promotion is justified.
 
 Priority 1: conformance foundation.
 

@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -190,3 +190,26 @@ candidate and rerun with a historical-prose preservation regression.
 - 2026-06-24: Registered from the residual risk in
   `.10x/research/2026-06-24-record-delete-invalid-draft-reference-repair-scn004-live-micro.md`
   and the record-graph scout recommendation.
+- 2026-06-24: Ran live under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/138-record-delete-machine-header-hygiene-scn004-live-micro/`.
+  Automated Trust Level 1 scores were low for all arms (`S002=30` for
+  current and duplicate-current, `S002=15` for no-10x-control), but manual
+  inspection found current and duplicate-current passed the stricter
+  deleted-path header-hygiene behavior.
+
+## Result
+
+Current `SKILL.md` passes this stricter deleted-path live-header hygiene MICRO.
+Current and duplicate-current deleted `.10x/specs/zeus-webhook-retry.md`,
+cancelled and moved the dependent ticket, cleared the deleted path from live
+`Depends-On`, `Relates-To`, `Target`, and `Parent` headers, preserved historical
+body/fenced-output mentions, avoided source/test edits, and did not run tests.
+
+No canonical `SKILL.md` promotion is justified. This run instead strengthens
+record graph lifecycle conformance evidence and exposes another case where the
+offline scorer underestimates successful record maintenance.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-record-delete-machine-header-hygiene-result.md`
+- `.10x/reviews/2026-06-24-record-delete-machine-header-hygiene-result.md`
