@@ -68,7 +68,7 @@ Current candidate registry snapshot:
 | Closure coherence | Strong | Authorized repair, closure blocker no repair, spec drift, positive aligned closure, mentioned follow-up owner, record reference integrity. | Closure prose tightening must wait for regression suite assembly. |
 | Retrospective learning extraction | Strong | Retrospective extraction type gate, retrospective without successful closure, skill mirror exposure, blocked-run ACME learning with skill/knowledge/follow-up routing, lower-assistance blocked ACME extraction from ticket/evidence notes, and noisy settlement skill-vs-knowledge routing. | Remaining retrospective upside is longer multi-turn accumulation, not another single-turn routing case. |
 | Record ontology and quality | Strong | Record hardening, record economy, fish before opening, distinct near-duplicate owner, ticket ledgers, stale research authority, stale done-ticket authority, unprompted terminal authority, cold-start terminal continuation, cancelled-ticket authority, and mixed active/done/cancelled/superseded/stale-research cold start. | Remaining lifecycle work should broaden to multi-surface repository triage and longer repeated-session maintenance, not another single authority state. |
-| Record graph maintenance mechanics | Strong | Record reference integrity closure, authorized repair, scoped repair, decision supersession repair, terminal ticket move repair, invalid draft deletion repair, deleted-path live-header hygiene, active spec rename repair, repeated-session stale spec repair continuation, partial prior-repair hygiene, and ambiguous historical-reference repair. | Remaining upside is efficiency/mechanical-operation quality, not core selective-reference correctness. |
+| Record graph maintenance mechanics | Strong | Record reference integrity closure, authorized repair, scoped repair, decision supersession repair, terminal ticket move repair, invalid draft deletion repair, deleted-path live-header hygiene, active spec rename repair, repeated-session stale spec repair continuation, partial prior-repair hygiene, ambiguous historical-reference repair, and dense mechanical terminal-ticket path maintenance. | Remaining upside is longer repeated-session lifecycle maintenance and repository-scale triage, not core selective-reference correctness or basic mechanical operation quality. |
 | Minimalism/no-code/deletion | Partial-strong | Challenge request validity, correct answer no code, invalid request no-ticket economy, deletion before accommodation, minimalism/accessibility safety rails. | Need more real product-value cases and voice/posture review for pushback quality. |
 | External artifact indexing | Strong | Google Doc thin index, local-canonical authority transfer, PR-discussion decision index, promoted external provenance-field regression controls, Jira delivery-state local-context indexing, external design-doc supersession of an active local spec, stale thin-index revision maintenance, and external status-change dependent-record repair. | Live connector refresh remains outside the exported-file fixture harness. |
 | Multi-session cold start | Strong | Records-first retrieval variants, long-horizon cold start, noisy account-cleanup cold start with active/terminal/evidence/source authority noise, live-authored payout ratification cold start, record revalidation scope boundary, noisy live-authored multi-record handoff, and live-authored handoff review/audit passed. | Post-cold-start exact-ratification positive control is registered next. |
@@ -998,11 +998,15 @@ and isolation review.
 
 Priority 2: record graph lifecycle and source authority.
 
-11. Move active ticket to `tickets/done/` and repair all references.
+11. Move active ticket to `tickets/done/` and repair all references. Covered
+    by terminal ticket move tests and dense mechanical maintenance in
+    `EXP-20260625-974`.
 12. Supersede an ADR: create new decision, move old decision, update current
     references.
 13. Delete invalid draft record after reference repair.
 14. Path string appears in historical notes where blind replacement is wrong.
+    Covered for active spec rename by `EXP-20260625-971` and for dense terminal
+    ticket movement by `EXP-20260625-974`.
 15. Active spec says behavior A while source implements behavior B.
 16. Active decision requires manual approval while source has auto approval.
 17. Tests encode behavior missing from active spec.

@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -206,3 +206,49 @@ existing warning against blind historical rewrites.
 - 2026-06-25: Registered after record graph correctness coverage became strong
   and the researcher backlog identified mechanical-operation quality as the
   remaining record graph maintenance gap.
+- 2026-06-25: Ran six live Codex subject samples into
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/174-record-graph-mechanical-maintenance-scn009-live-micro/`.
+  `canonical_guard.json` reported `SKILL.md` and `autoresearch/program.md`
+  unchanged.
+- 2026-06-25: Manual inspection found current `SKILL.md` passed. Both current
+  repetitions used compact mechanical maintenance: `rg` discovery, direct
+  `mv`, `perl` path rewrites over the unambiguous live-reference file set, and
+  post-rewrite `rg` validation.
+
+## Findings
+
+- Current moved the child ticket to
+  `.10x/tickets/done/2026-06-25-align-payout-export-csv.md` in both
+  repetitions and left no top-level child ticket file behind.
+- Current repaired live references in the active spec, parent ticket headers and
+  acceptance text, evidence, review, and knowledge records.
+- Current preserved old-path mentions in the historical research record and in
+  the parent ticket's append-only progress log. Each current repetition also
+  appended a completion note or final validation stating that live references
+  now use the terminal path.
+- Current did not edit source files, did not run tests, did not create
+  implementation tickets, and did not change CSV behavior.
+- Duplicate-current produced equivalent terminal move and live-reference repair.
+  One duplicate-current repetition left the original parent progress note
+  without an appended resolution note, which is acceptable as duplicate-current
+  telemetry but not a reason to promote.
+- Trust Level 1 assigned S004=65 and S006=45 to current because the heuristic
+  scorer does not distinguish path-maintenance success plus preserved historical
+  references from stale closure references. Manual inspection is authoritative.
+
+## Conclusions
+
+Current `SKILL.md` passes this record graph mechanical-maintenance MICRO. The
+remaining record graph maintenance gap named in the conformance map is now
+covered for dense terminal-ticket path movement: current used direct filesystem
+movement, search, mechanical rewrite, and validation without broad historical
+corruption.
+
+No `SKILL.md` promotion is justified. The narrow operational instruction that
+might have been promoted is already reflected in current behavior under this
+probe.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-record-graph-mechanical-maintenance-result.md`
+- `.10x/reviews/2026-06-25-record-graph-mechanical-maintenance-result.md`
