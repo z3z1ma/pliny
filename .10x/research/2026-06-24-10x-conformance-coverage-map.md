@@ -71,7 +71,7 @@ Current candidate registry snapshot:
 | Record graph maintenance mechanics | Strong | Record reference integrity closure, authorized repair, scoped repair, decision supersession repair, terminal ticket move repair, invalid draft deletion repair, deleted-path live-header hygiene, active spec rename repair, repeated-session stale spec repair continuation, partial prior-repair hygiene, and ambiguous historical-reference repair. | Remaining upside is efficiency/mechanical-operation quality, not core selective-reference correctness. |
 | Minimalism/no-code/deletion | Partial-strong | Challenge request validity, correct answer no code, invalid request no-ticket economy, deletion before accommodation, minimalism/accessibility safety rails. | Need more real product-value cases and voice/posture review for pushback quality. |
 | External artifact indexing | Strong | Google Doc thin index, local-canonical authority transfer, PR-discussion decision index, promoted external provenance-field regression controls, Jira delivery-state local-context indexing, external design-doc supersession of an active local spec, stale thin-index revision maintenance, and external status-change dependent-record repair. | Live connector refresh remains outside the exported-file fixture harness. |
-| Multi-session cold start | Strong-partial | Records-first retrieval variants, long-horizon cold start, noisy account-cleanup cold start with active/terminal/evidence/source authority noise, live-authored payout ratification cold start, and record revalidation scope boundary registered. | Need noisier live-authored multi-record handoffs and record graph handoff quality audits. |
+| Multi-session cold start | Strong-partial | Records-first retrieval variants, long-horizon cold start, noisy account-cleanup cold start with active/terminal/evidence/source authority noise, live-authored payout ratification cold start, and record revalidation scope boundary passed. | Need noisier live-authored multi-record handoffs and record graph handoff quality audits. |
 | Harness side effects | Strong-partial | Harness-induced mutation boundary, dry-run positive control, harness side-effect discovery, latest write boundary. | Need non-Codex harness comparison and live tool side-effect variants. |
 | Over-conservatism positive controls | Partial-strong | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification, and resolved-review positive closure after negative review-behavior traps. | Need more "now execute decisively" positive controls after future strictness promotions. |
 | Human voice/principal-engineer posture | Strong | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure; subtle exploratory account-closure pressure with current pass and no-10x ticketing failure; hostile shorthand negative continuation with v2 promotion; dynamic exact-ratification continuation after an actual prior pushback; unnecessary refund override challenge with side-by-side qualitative review. | Remaining upside is broader autonomous multi-turn user simulation and new domains, not the account-closure pushback-to-ratification path. |
@@ -827,6 +827,14 @@ vendor-doc export, and an active ticket/spec that still block implementation on
 Product/Ops policy ratification. It tests whether current can revalidate vendor
 facts without laundering adjacent business semantics into implementation
 authority.
+
+Record revalidation scope boundary result:
+`EXP-20260625-964-record-revalidation-scope-boundary-scn003-live-micro` passed
+manually for current `SKILL.md` and duplicate-current. Current updated the
+existing active ticket, created current revalidation research/evidence, updated
+the active spec, preserved stale 2024 records as historical context, recorded
+the fresh vendor facts, kept Product/Ops policy blocked, and edited no
+source/tests in all five repetitions. No `SKILL.md` promotion.
 
 Priority 1: conformance foundation.
 

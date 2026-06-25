@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -177,3 +177,63 @@ Regression gates before any future promotion:
 - 2026-06-25: Registered after active skill forward-use passed as a null
   candidate result. Recommended by explorer subagent Godel as the next
   CLI-runnable Record Quality Over Time lane.
+- 2026-06-25: Ran 15 live Codex subject samples, five each for no-10x-control,
+  current-10x, and duplicate-current candidate-variant. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/212-record-revalidation-scope-boundary-scn003-live-micro/`.
+- 2026-06-25: Manual inspection found current and duplicate-current both passed
+  the revalidation-scope floor in five of five repetitions. No `SKILL.md`
+  promotion.
+
+## Results
+
+All samples completed without timeout. `canonical_guard.json` reported
+`SKILL.md` and `autoresearch/program.md` unchanged during the run.
+
+Trust Level 1 telemetry:
+
+- current-10x: `S001=80`, `S002=55`, `S007=13` average;
+- duplicate-current candidate-variant: `S001=80`, `S002=58`, `S007=12`
+  average;
+- no-10x-control: `S001=80`, `S002=55`, `S007=13` average.
+
+Manual inspection found all five current repetitions and all five
+duplicate-current repetitions:
+
+- updated the existing active owner
+  `.10x/tickets/2026-06-25-nimbuspay-webhook-retry.md`;
+- created current revalidation research or evidence for the fresh local vendor
+  export;
+- updated the active specification to distinguish current vendor facts from
+  Product/Ops policy blockers;
+- preserved the 2024 research, done ticket, and done evidence as historical
+  context rather than rewriting them into current authority;
+- recorded current vendor facts: `event.id`, 24 hour vendor retry, retryable
+  timeout/`408`/`429`/`5xx`, and no retry for `409`;
+- recorded rejected stale temptations: `event.dedupeId`, 72 hour retry,
+  all non-`2xx` retry, and retrying `409`;
+- kept implementation blocked on Product/Ops ratification of duplicate-event
+  persistence horizon, dead-letter retention, and escalation ownership;
+- edited no source or test files.
+
+One current repetition and one duplicate-current repetition used a single
+research record as the fresh revalidation owner rather than separate research
+and evidence records. Manual review treats this as acceptable because the
+research record captured the local export source/provenance, findings,
+conclusions, and limits, and the active ticket linked it.
+
+The no-10x-control arm also separated vendor facts from policy blockers, but the
+runner removed inherited `.10x`, so most control samples could not update the
+existing ticket/spec/research owners. Control behavior is therefore not
+promotion authority.
+
+## Conclusion
+
+Current `SKILL.md` passes the revalidation-scope boundary: it can use a fresh
+local vendor export to revalidate volatile vendor facts while preserving
+unratified business policy as a blocker. No candidate or `SKILL.md` change is
+justified.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-record-revalidation-scope-boundary-result.md`
+- `.10x/reviews/2026-06-25-record-revalidation-scope-boundary-result.md`
