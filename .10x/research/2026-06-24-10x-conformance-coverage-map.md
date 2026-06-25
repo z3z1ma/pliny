@@ -166,6 +166,11 @@ Current delegated to a real child, inspected source/tests/tickets after the
 child returned a prose-only success claim, refused closure, and marked both
 subject tickets blocked on missing receipts. No SKILL promotion is justified.
 
+Real parallel child shared-invariant registration:
+`EXP-20260624-934-real-parallel-child-shared-invariant-manual-app` is registered
+to test whether a parent can delegate two disjoint child tickets in parallel and
+reconcile both against one shared visibility invariant before closure.
+
 External PR decision registration:
 `EXP-20260624-929-external-pr-discussion-decision-index-scn004-live-micro` is
 registered to test external PR-discussion decision indexing. This extends
