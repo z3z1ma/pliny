@@ -422,6 +422,16 @@
       "promotion": "manual-only"
     },
     {
+      "id": "candidate-hostile-shorthand-ratification-boundary-v1",
+      "path": "autoresearch/candidates/2026-06-24-hostile-shorthand-ratification-boundary.md",
+      "target": "SKILL.md",
+      "status": "active",
+      "created": "2026-06-24",
+      "target_scores": ["S001", "S003", "S007"],
+      "target_scenarios": ["SCN-001", "SCN-006"],
+      "promotion": "manual-only"
+    },
+    {
       "id": "candidate-invalid-request-no-ticket-economy-v1",
       "path": "autoresearch/candidates/2026-06-24-invalid-request-no-ticket-economy.md",
       "target": "SKILL.md",
