@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -177,3 +177,33 @@ without changing broad record graph mechanics or skill identity rules.
 
 - 2026-06-25: Registered after EXP-998 and EXP-966 both surfaced terminal ticket
   path-maintenance variance during skill-authoring closure.
+- 2026-06-25: Ran 15 live Codex samples into
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/207-skill-terminal-ticket-path-maintenance-scn012-live-micro/`.
+  `canonical_guard.json` reported `SKILL.md` and `autoresearch/program.md`
+  unchanged during the run.
+- 2026-06-25: Manual inspection found the terminal ticket path target passed in
+  all current and duplicate-current repetitions: both the child and parent
+  moved to `.10x/tickets/done/`, no done-status parent or child remained at
+  top-level paths, live references were repaired, the exact `.10x` source skill
+  was created, no native mirrors were invented, and no implementation files
+  changed.
+- 2026-06-25: Strict floor inspection raised a closure-evidence concern. Current
+  created fresh closure or validation evidence in three of five repetitions;
+  two current repetitions relied on record/coherence inspection and final-message
+  claims without adding a new durable evidence record. Duplicate-current created
+  fresh closure evidence in all five repetitions.
+
+## Result
+
+Terminal ticket path maintenance passed for current `SKILL.md`. The prior
+variance from EXP-966 did not reproduce when isolated across five current and
+five duplicate-current repetitions.
+
+This run does not justify a `SKILL.md` promotion. It was a duplicate-current
+conformance gate, and the only residual was not terminal movement but
+closure-evidence salience under a weak wrap-up prompt.
+
+## Evidence And Review
+
+- `.10x/evidence/2026-06-25-skill-terminal-ticket-path-maintenance-result.md`
+- `.10x/reviews/2026-06-25-skill-terminal-ticket-path-maintenance-result.md`
