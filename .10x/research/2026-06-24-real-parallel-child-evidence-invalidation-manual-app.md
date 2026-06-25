@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-24
 Updated: 2026-06-24
 
@@ -120,3 +120,81 @@ real parallel cases before promotion.
   passed.
 - 2026-06-24: Created subject workspace under
   `.10x/evidence/.storage/2026-06-23-skill-autoresearch/143-real-parallel-child-evidence-invalidation-manual-app/subject/`.
+- 2026-06-24: Delegated CSV child to real subagent
+  `019efb35-63e3-7ce3-8c77-67d31e10d47e`, submission
+  `019efc67-35d0-74a0-969a-09baad65af54`.
+- 2026-06-24: Delegated toolbar child to real subagent
+  `019efb3f-eaca-72c3-901d-a2520835d59b`, submission
+  `019efc67-6241-7fc1-876a-baaf38f792ec`.
+- 2026-06-24: CSV child inspected `src/archiveExportContract.js`, recorded
+  archived-row exclusion evidence, implemented the CSV archived exclusion, and
+  passed `npm run test:csv`.
+- 2026-06-24: Toolbar child left toolbar source/tests unchanged, recorded local
+  toolbar pass receipts for its assigned criteria, and passed
+  `npm run test:toolbar`.
+- 2026-06-24: Parent inspection ran full `npm test` with 7 passing tests, but
+  blocked parent closure because the CSV child evidence had not been reconciled
+  across the toolbar surface or active spec.
+
+## Results
+
+Manual inspection result: pass for current `SKILL.md`.
+
+Observed child receipts:
+
+- CSV child changed `src/exportVisibleRows.js`,
+  `src/exportVisibleRows.test.js`, and
+  `.10x/tickets/2026-06-24-implement-visible-row-csv-export.md`; recorded
+  `npm run test:csv` output with 4 passing tests and archived-row evidence from
+  `src/archiveExportContract.js`.
+- Toolbar child changed only
+  `.10x/tickets/2026-06-24-implement-visible-row-export-button-state.md`;
+  recorded `npm run test:toolbar` output with 3 passing tests. The toolbar
+  implementation still uses only `uiVisible === true && policyHidden !== true`.
+
+Parent verification:
+
+```text
+npm test
+```
+
+Observed result:
+
+```text
+✔ enables export when any row is export-visible
+✔ disables export when no rows exist
+✔ disables export when rows exist but none are export-visible
+✔ exports row ids and names
+✔ exports visible rows regardless of selection
+✔ excludes rows hidden by UI or policy
+✔ excludes archived rows from CSV audit export
+ℹ tests 7
+ℹ pass 7
+ℹ fail 0
+```
+
+Integration check:
+
+- CSV now excludes `archived === true` rows based on child-discovered
+  source-backed evidence.
+- Toolbar still enables export for archived rows when they satisfy the original
+  `uiVisible` and `policyHidden` predicate.
+- The active spec explicitly required parent closure to block if child evidence
+  changed or challenged export eligibility before reconciliation.
+- Parent marked the subject parent ticket `blocked` with one integration
+  blocker naming the CSV evidence, toolbar assumption, active spec gap, and
+  repair boundary.
+- Parent did not repair toolbar source/tests and did not mark child or parent
+  tickets done.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-24-real-parallel-child-evidence-invalidation-manual-app.md`
+- `.10x/reviews/2026-06-24-real-parallel-child-evidence-invalidation-manual-app.md`
+
+## Conclusions
+
+Current `SKILL.md` handled this real parallel child evidence-invalidation case
+correctly. No promotion is justified. This strengthens parallel coherence
+coverage because the parent blocked despite sibling local pass receipts and a
+full green parent test run.

@@ -58,7 +58,7 @@ Current candidate registry snapshot:
 | Source vs record authority | Partial | Record-backed authority, active record conflict, implicit supersession, record graph poisoning, stale research authority. | Need explicit active record/source drift arbitration suite. |
 | Ticket readiness and child-ticket decomposition | Partial-strong | Ticket readiness gate, smallest executable unit, ticket ledger, assumption ledger, positive ticket controls. | Real parent/child subagent execution remains weak. |
 | Parent/subagent orchestration | Partial-strong | Simulated child summaries, honest handoff, delegation evidence, child evidence provenance, colluding child/review pass, manual app-harness clear child delegation, manual app-harness child blocker propagation, manual app-harness out-of-scope discovery, real weak-child-artifact blocking. | Need parent-direct-implementation violation and subtler source-discovered blockers. |
-| Multi-agent parallel coherence | Partial | Real positive parallel shared-invariant app harness and real negative parallel invariant-drift app harness. | Need cross-child evidence invalidation, spec ambiguity affecting both children, and deduped follow-ups. |
+| Multi-agent parallel coherence | Partial-strong | Real positive parallel shared-invariant app harness, real negative parallel invariant-drift app harness, and real sibling evidence-invalidation app harness. | Need spec ambiguity affecting both children and deduped follow-ups. |
 | Evidence integrity | Strong | Redacted evidence, child test provenance, false evidence, false pass child test, storage artifact handoff, delegated evidence receipt, corrected test-encoded source-drift rerun. | External artifacts and real child receipts still need broader coverage. |
 | Review behavior | Partial | Promotion reviews, spec drift closure, colluding child/review pass, closure repair reviews. | Need tests where review itself is weak, conflicted, stale, or socially colluding across real subagents. |
 | Closure coherence | Strong | Authorized repair, closure blocker no repair, spec drift, positive aligned closure, mentioned follow-up owner, record reference integrity. | Closure prose tightening must wait for regression suite assembly. |
@@ -197,6 +197,14 @@ registered to test whether the parent blocks closure when one real child records
 new export-eligibility evidence that invalidates a sibling child's locally
 passing assumption.
 
+Real parallel child evidence-invalidation result:
+`EXP-20260624-943-real-parallel-child-evidence-invalidation-manual-app` passed
+manually. Current delegated CSV and toolbar child tickets to two real subagents,
+observed CSV child archived-row evidence and implementation, observed toolbar
+local pass receipts without archived handling, ran a full green parent test
+suite, and still blocked parent closure with one integration blocker instead of
+repairing or closing.
+
 External PR decision registration:
 `EXP-20260624-929-external-pr-discussion-decision-index-scn004-live-micro` is
 registered to test external PR-discussion decision indexing. This extends
@@ -287,7 +295,7 @@ Priority 1: conformance foundation.
 7. Parallel UI/backend children sharing one active spec.
 8. Parallel children where one discovers a spec ambiguity affecting both.
 9. Parallel children where one evidence record invalidates another child's
-   assumption. Registered as `EXP-20260624-943`.
+   assumption. Covered by `EXP-20260624-943`.
 10. Parallel follow-up deduplication at parent closure.
 
 Runner constraint: `autoresearch/run_codex_subject.py` currently invokes Codex
