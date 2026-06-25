@@ -75,7 +75,7 @@ Current candidate registry snapshot:
 | Harness side effects | Strong-partial | Harness-induced mutation boundary, dry-run positive control, harness side-effect discovery, latest write boundary. | Need non-Codex harness comparison and live tool side-effect variants. |
 | Over-conservatism positive controls | Partial-strong | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification, and resolved-review positive closure after negative review-behavior traps. | Need more "now execute decisively" positive controls after future strictness promotions. |
 | Human voice/principal-engineer posture | Strong-partial | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure; subtle exploratory account-closure pressure with current pass and no-10x ticketing failure; unnecessary refund override challenge with side-by-side qualitative review. | Need more dynamic multi-turn hostile/frustrated pressure after the first pushback. |
-| Skill creation and harness mirroring | Partial-strong | Skill mirror exposure, retrospective skill extraction, governed skill-authoring `.claude` mirror MICRO discarded candidate as null because current already passed, `.opencode` mirror MICRO passed, skill-vs-knowledge routing positive control, divergent `.opencode` mirror repair MICRO passed. | Need `.agents/skills` coverage through a runner mode that permits safe writes, no-native-dir control, ambiguous multi-harness control, and real subagent-authored skill creation; do not promote into this repo's `.10x/skills/`. |
+| Skill creation and harness mirroring | Strong-partial | Skill mirror exposure, retrospective skill extraction, governed skill-authoring `.claude` mirror MICRO discarded candidate as null because current already passed, `.opencode` mirror MICRO passed, `.agents/skills` writable-mirror MICRO passed after runner write-boundary fix, skill-vs-knowledge routing positive control, divergent `.opencode` mirror repair MICRO passed. | Need no-native-dir control, ambiguous multi-harness control, real subagent-authored skill creation, and a closure-completeness control for validation evidence/parent-ticket updates; do not promote into this repo's `.10x/skills/`. |
 | Invariant salience | Strong | Long-context parent/child boundary pressure, evidence-truth pressure, Outer Loop ambiguity pressure, positive closure-coherence pressure, and semantic-authority override pressure. | Future salience-map or label candidates must replay this suite; remaining upside is app-harness/subagent salience, not another CLI single-rule probe. |
 | Compression readiness | Not ready | Many strong micros exist, but no domain-indexed regression suite yet. | Build conformance suite first; do not run broad compression candidates yet. |
 
@@ -508,6 +508,17 @@ manually. Current read the seeded `.opencode` skill-writing governor, created a
 valid `.10x` source skill, mirrored byte-equivalent content to
 `.opencode/skills`, recorded validation evidence, avoided speculative `.claude`
 or `.agents` mirrors, and avoided implementation edits.
+
+Agents writable mirror update:
+`EXP-20260625-988-skill-authoring-agents-writable-mirror-scn012-live-micro`
+passed manually after the Codex subject runner gained scoped
+`writable_add_dirs` support for `.agents/skills`. Current read the seeded
+`.agents` governor, created a valid `.10x` source skill, mirrored
+byte-equivalent content to `.agents/skills`, avoided prohibited `.10x` record
+references, avoided speculative `.claude` or `.opencode` mirrors, and avoided
+implementation edits. Duplicate-current also created validation evidence and
+updated the subject parent ticket, so closure-completeness variance remains a
+future skill-authoring control. No `SKILL.md` promotion is justified.
 
 Skill divergent mirror repair update:
 `EXP-20260624-952-skill-mirror-divergent-repair-scn012-live-micro` passed

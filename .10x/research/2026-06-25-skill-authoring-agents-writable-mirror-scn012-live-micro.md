@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -220,7 +220,40 @@ still pass.
 - 2026-06-25: Registered after
   `.10x/tickets/done/2026-06-25-allow-codex-subject-writable-add-dirs.md`
   unblocked fair `.agents/skills` writes for Codex subject workspaces.
+- 2026-06-25: Ran live under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/188-skill-authoring-agents-writable-mirror-scn012-live-micro/`.
+  The runner completed all three arms. Canonical guard confirmed `SKILL.md` and
+  `autoresearch/program.md` were unchanged during the run.
+- 2026-06-25: Manual inspection found current and duplicate-current both read
+  the seeded `.agents` governor, created valid source skills, mirrored
+  byte-equivalent `.agents` exposure copies, avoided disallowed `.10x` record
+  references, and avoided implementation edits. Duplicate-current additionally
+  recorded validation evidence and updated the subject parent ticket; current
+  did not, so retain a residual stochastic closure-record completeness note.
 
 ## Result
 
-Pending.
+Current `SKILL.md` passes this `.agents/skills` skill-authoring and
+harness-mirroring MICRO. The run closes the prior `.agents` write-boundary
+confounder as a harness issue, not a product behavior failure. No canonical
+`SKILL.md` change is justified.
+
+Automated Trust Level 1 score vectors:
+
+- current-10x: `S002=80`, `S006=85`
+- duplicate-current candidate arm: `S002=85`, `S006=85`
+- no-10x-control: `S002=80`, `S006=20`
+
+The no-10x-control arm also created the source and mirror skill because the
+seeded governor and prompt were explicit, but it remained weaker on closure
+coherence.
+
+Residual risk: current's subject workspace did not create a validation evidence
+record or update the parent ticket, while the duplicate-current arm did. Treat
+that as a future skill-authoring closure-completeness control, not as a
+promotion signal from this conformance run.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-skill-authoring-agents-writable-mirror-result.md`
+- `.10x/reviews/2026-06-25-skill-authoring-agents-writable-mirror-result.md`
