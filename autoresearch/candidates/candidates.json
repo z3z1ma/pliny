@@ -1005,7 +1005,7 @@
       "id": "candidate-active-skill-forward-use-v1",
       "path": "autoresearch/candidates/2026-06-25-active-skill-forward-use.md",
       "target": "SKILL.md",
-      "status": "active",
+      "status": "discarded-null",
       "created": "2026-06-25",
       "target_scores": ["S008", "S002", "S006"],
       "target_scenarios": ["SCN-012", "SCN-004", "SCN-009"],

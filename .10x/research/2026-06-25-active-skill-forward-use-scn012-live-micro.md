@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -175,3 +175,55 @@ uses the skill consistently.
 - 2026-06-25: Registered after EXP-962 discarded terminal-record hygiene as a
   null result and the coverage map identified forward-use validation of
   generated skills as the next CLI-runnable gap.
+- 2026-06-25: Ran 15 live Codex subject samples, five each for no-10x-control,
+  current-10x, and candidate-variant. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/211-active-skill-forward-use-scn012-live-micro/`.
+- 2026-06-25: Manual inspection found current and candidate both clean on the
+  targeted active-skill forward-use floor. Candidate discarded as null; no
+  `SKILL.md` promotion.
+
+## Results
+
+All samples completed without timeout. `canonical_guard.json` reported
+`SKILL.md` and `autoresearch/program.md` unchanged during the run.
+
+Trust Level 1 telemetry:
+
+- candidate-variant: `S002=45` average, `S006=45` average;
+- current-10x: `S002=45` average, `S006=45` average;
+- no-10x-control: `S002=45` average, `S006=30` average.
+
+Manual inspection found all five current repetitions and all five candidate
+repetitions:
+
+- created one `.10x/evidence/` record for fixture replay;
+- used the existing active skill or existing tracked fixture procedure;
+- ran the fixture replay command with `testdata/ledger/import-preview.csv` and
+  posting date `2026-01-15`;
+- recorded `LEDGER-001`, `LEDGER-002`, `12345`, `-678`, and `2026-01-15`;
+- updated the verification ticket or moved it to `tickets/done/`;
+- avoided `externalId` in changed evidence/ticket files;
+- edited no implementation, fixture, script, or skill files.
+
+The no-10x-control arm also used the `.agents` skill exposure and recorded
+evidence, but because the runner removed `.10x` for control, it lacked the
+existing verification ticket and source `.10x` skill context. It is therefore a
+useful harness-shape observation but not promotion authority.
+
+One candidate repetition moved the verification ticket to `tickets/done/`. All
+other current and candidate repetitions left the ticket open with progress
+evidence. The prompt asked to verify and record evidence against the open
+ticket, not explicitly to close it, so this difference is not treated as a
+candidate win.
+
+## Conclusion
+
+`candidate-active-skill-forward-use-v1` is a null result. Current canonical
+`SKILL.md` already supports forward use of an active operational skill in this
+subject workspace. Adding an explicit skill-use paragraph would increase prompt
+surface without measured reliability gain.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-active-skill-forward-use-result.md`
+- `.10x/reviews/2026-06-25-active-skill-forward-use-result.md`

@@ -3,7 +3,7 @@
 Candidate ID: `candidate-active-skill-forward-use-v1`
 Created: 2026-06-25
 Canonical target: `SKILL.md`
-Status: active
+Status: discarded-null
 
 ## Target Behavior
 
@@ -71,3 +71,34 @@ Promote only if current ignores or underuses an applicable active skill and the
 candidate reliably executes the skill's procedure and validation without
 weakening active-record authority, evidence integrity, or minimalism. Discard as
 null if current already finds and uses the active skill.
+
+## Result
+
+`EXP-20260625-963-active-skill-forward-use-scn012-live-micro` discarded this
+candidate as null.
+
+Current `SKILL.md` already passed the forward-use floor in all five
+repetitions:
+
+- used the existing Ledger import fixture replay skill or existing tracked
+  fixture procedure;
+- ran the fixture replay command with `testdata/ledger/import-preview.csv` and
+  posting date `2026-01-15`;
+- recorded evidence containing the observed command/output and limits;
+- validated `LEDGER-001`, `LEDGER-002`, `12345`, `-678`, and `2026-01-15`;
+- updated the open verification ticket;
+- avoided `externalId`, inline CSV construction, wall-clock date dependence,
+  and implementation/fixture/script/skill edits.
+
+Candidate also passed all five repetitions but did not improve the target
+behavior. One candidate repetition moved the ticket to `tickets/done/`, while
+the other four candidate repetitions and all five current repetitions left the
+ticket open with progress evidence. That closure variance is not evidence for
+this forward-use overlay.
+
+No `SKILL.md` promotion is justified.
+
+Supporting records:
+
+- `.10x/evidence/2026-06-25-active-skill-forward-use-result.md`
+- `.10x/reviews/2026-06-25-active-skill-forward-use-result.md`

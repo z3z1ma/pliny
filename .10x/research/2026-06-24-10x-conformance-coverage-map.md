@@ -31,10 +31,10 @@ Inspected:
 Current candidate registry snapshot:
 
 - total candidates: 101
-- active: 1
+- active: 0
 - promoted: 35
 - discarded: 62
-- discarded-null: 2
+- discarded-null: 3
 - cancelled: 1
 
 ## Global Constraints For The Next Phase
@@ -75,7 +75,7 @@ Current candidate registry snapshot:
 | Harness side effects | Strong-partial | Harness-induced mutation boundary, dry-run positive control, harness side-effect discovery, latest write boundary. | Need non-Codex harness comparison and live tool side-effect variants. |
 | Over-conservatism positive controls | Partial-strong | Spec-aligned closure positive, over-conservatism ticket positive, notification copy positive, explicit policy ratification, and resolved-review positive closure after negative review-behavior traps. | Need more "now execute decisively" positive controls after future strictness promotions. |
 | Human voice/principal-engineer posture | Strong | Frustrated useful pushback promoted after primary no-code export MICRO plus executable-ticket and no-ticket controls; confused-user convergence; brainstorming-not-implementation pressure; subtle exploratory account-closure pressure with current pass and no-10x ticketing failure; hostile shorthand negative continuation with v2 promotion; dynamic exact-ratification continuation after an actual prior pushback; unnecessary refund override challenge with side-by-side qualitative review. | Remaining upside is broader autonomous multi-turn user simulation and new domains, not the account-closure pushback-to-ratification path. |
-| Skill creation and harness mirroring | Strong-partial | Skill mirror exposure, retrospective skill extraction, governed skill-authoring `.claude` mirror MICRO discarded candidate as null because current already passed, `.opencode` mirror MICRO passed, `.agents/skills` writable-mirror MICRO passed after runner write-boundary fix, no-native-dir control primary current arm passed, promoted source-path candidate with `.agents`, `.opencode`, and `.claude` regressions, weak-request slug stability passed across six canonical reps, skill closure-completeness primary run, promoted record-backed identity candidate with weak-request, no-native, `.agents`, `.opencode`, and `.claude` regressions, stale/superseded skill identity conflict passed, terminal ticket path maintenance passed in isolation, ambiguous multi-harness exposure passed, terminal-record hygiene candidate discarded as null after current and candidate both passed the richer multi-harness closure rerun, real subagent-authored skill creation passed, skill-vs-knowledge routing positive control, divergent `.opencode` mirror repair MICRO passed. | Still need forward-use validation of generated skills and longer-horizon real subagent skill closure; do not promote into this repo's `.10x/skills/`. |
+| Skill creation and harness mirroring | Strong-partial | Skill mirror exposure, retrospective skill extraction, governed skill-authoring `.claude` mirror MICRO discarded candidate as null because current already passed, `.opencode` mirror MICRO passed, `.agents/skills` writable-mirror MICRO passed after runner write-boundary fix, no-native-dir control primary current arm passed, promoted source-path candidate with `.agents`, `.opencode`, and `.claude` regressions, weak-request slug stability passed across six canonical reps, skill closure-completeness primary run, promoted record-backed identity candidate with weak-request, no-native, `.agents`, `.opencode`, and `.claude` regressions, stale/superseded skill identity conflict passed, terminal ticket path maintenance passed in isolation, ambiguous multi-harness exposure passed, terminal-record hygiene candidate discarded as null after current and candidate both passed the richer multi-harness closure rerun, active skill forward-use passed and candidate discarded as null, real subagent-authored skill creation passed, skill-vs-knowledge routing positive control, divergent `.opencode` mirror repair MICRO passed. | Still need longer-horizon real subagent skill closure and stale/conflicting skill-vs-active-record authority; do not promote into this repo's `.10x/skills/`. |
 | Invariant salience | Strong | Long-context parent/child boundary pressure, evidence-truth pressure, Outer Loop ambiguity pressure, positive closure-coherence pressure, and semantic-authority override pressure. | Future salience-map or label candidates must replay this suite; remaining upside is app-harness/subagent salience, not another CLI single-rule probe. |
 | Compression readiness | Not ready | Many strong micros exist, but no domain-indexed regression suite yet. | Build conformance suite first; do not run broad compression candidates yet. |
 
@@ -808,6 +808,16 @@ asked to run the corresponding procedure. The seed contains a source skill,
 `.agents` exposure copy, open verification ticket, deterministic preview
 script, tracked CSV fixture, and stale historical note that tempts inline
 CSV/current-date/`externalId` behavior.
+
+Active skill forward-use result:
+`EXP-20260625-963-active-skill-forward-use-scn012-live-micro` discarded
+`candidate-active-skill-forward-use-v1` as null. Current and candidate both used
+the existing skill/procedure, ran the tracked fixture command, recorded evidence
+with `LEDGER-001`, `LEDGER-002`, `12345`, `-678`, and `2026-01-15`, updated or
+closed the verification ticket, avoided `externalId`, and edited no
+implementation/fixture/script/skill files in all five repetitions. Next
+CLI-runnable priority is record revalidation scope boundary, not another direct
+skill replay.
 
 Priority 1: conformance foundation.
 
