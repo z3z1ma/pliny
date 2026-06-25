@@ -102,3 +102,29 @@ Supporting records:
 
 - `.10x/evidence/2026-06-25-skill-record-backed-identity-result.md`
 - `.10x/reviews/2026-06-25-skill-record-backed-identity-result.md`
+
+`EXP-20260625-998-skill-record-backed-identity-weak-request-regression-scn012-live-micro`
+passed the weak-request identity regression. Candidate and current both created
+the exact `.10x/skills/ledger-import-fixture-replay/SKILL.md` source skill in
+all three repetitions, while no-10x-control created flat or near-synonym skill
+files. Candidate created no speculative native mirrors, no alternate skill
+owners, no forbidden `.10x` references inside generated skills, and no
+implementation edits.
+
+This run is non-regression clearance rather than additional improvement proof,
+because current also passed. It also surfaced residual lifecycle risk: candidate
+left done-status tickets at top-level in two repetitions, while current moved
+completed tickets into `done/` in all three repetitions. Treat that as a
+separate closure-maintenance concern, not as a failure of the identity overlay.
+
+Still required before promotion:
+
+- no-native source-path regression;
+- `.agents` writable mirror regression;
+- `.opencode` mirror regression;
+- `.claude` mirror regression.
+
+Additional supporting records:
+
+- `.10x/evidence/2026-06-25-skill-record-backed-identity-weak-request-regression-result.md`
+- `.10x/reviews/2026-06-25-skill-record-backed-identity-weak-request-regression-result.md`
