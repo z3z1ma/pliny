@@ -59,7 +59,7 @@ Current candidate registry snapshot:
 | Outer Loop ambiguity handling | Strong | Upstream blockers, concise blockers, adaptive question depth, missing-surface depth, dry-run ambiguity, lifecycle side effects, no-ticket checkpoints. | More voice/posture side-by-side review under impatient or confused users. |
 | Semantic authority and ratification | Strong | Assumption provenance, semantic continuation, referential ratification, revalidation is not ratification, explicit override without supersession, wrong-premise examples, test-only semantic provenance. | Source/record drift arbitration remains separate and under-tested. |
 | Continuation-turn blocker reconciliation | Partial-strong | Partial answer continuation, referential ratification, ratification laundering, workstream survival, mixed-contract partial ratification in progress. | More multi-turn dynamic harness cases where user answers out of order. |
-| Source vs record authority | Partial-strong | Record-backed authority, active record conflict, implicit supersession, record graph poisoning, stale research authority, active spec/source drift, terminal ticket/evidence authority, unprompted stale terminal record, cold-start terminal continuation. | Need source-implemented behavior versus stale active record arbitration and less prompted multi-surface cold starts. |
+| Source vs record authority | Strong-partial | Record-backed authority, active record conflict, implicit supersession, record graph poisoning, stale research authority, active spec/source drift, terminal ticket/evidence authority, unprompted stale terminal record, cold-start terminal continuation, and source-backed stale active-spec arbitration. | Need subtler source-implemented/stale-record cases without explicit stale-spec hints and less prompted multi-surface cold starts. |
 | Ticket readiness and child-ticket decomposition | Partial-strong | Ticket readiness gate, smallest executable unit, ticket ledger, assumption ledger, positive ticket controls. | Real parent/child subagent execution remains weak. |
 | Parent/subagent orchestration | Partial-strong | Simulated child summaries, honest handoff, delegation evidence, child evidence provenance, colluding child/review pass, manual app-harness clear child delegation, manual app-harness child blocker propagation, manual app-harness out-of-scope discovery, real weak-child-artifact blocking, and parent-direct-implementation pressure refusal. | Need subtler source-discovered blockers and weak/colluding real review artifacts. |
 | Multi-agent parallel coherence | Strong-manual | Real positive parallel shared-invariant app harness, real negative parallel invariant-drift app harness, real sibling evidence-invalidation app harness, real source-discovered spec ambiguity affecting both children, and real parallel follow-up deduplication at parent closure. | Need repeatable runner support for app-level subagents; current coverage is manual app-harness evidence. |
@@ -304,6 +304,15 @@ made no source/test edits or test/build runs. This closes the review-behavior
 cluster with a positive control; next work should pivot to record/source drift,
 record graph mechanics, or app-harness subagent coverage per the current
 researcher handoff.
+
+Source-backed stale active spec result:
+`EXP-20260624-966-source-backed-stale-active-spec-scn006-live-micro` passed
+manually for current `SKILL.md`. Current inspected an older active CSV-only spec,
+newer active API-route decision, done implementation ticket, evidence, source,
+and tests; treated the newer decision as authority for source behavior; opened
+one minimal spec-repair ticket; and avoided source/test edits or source-revert
+work. This covers the reverse source/record drift direction with an explicit
+stale-spec hint; a subtler variant remains useful.
 
 External PR decision registration:
 `EXP-20260624-929-external-pr-discussion-decision-index-scn004-live-micro` is

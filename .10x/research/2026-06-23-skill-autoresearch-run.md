@@ -1247,3 +1247,10 @@ Canonical start guard:
   historical fail review, moved both tickets to `tickets/done/`, repaired
   evidence/review references, and avoided source/test edits plus test/build
   execution. No `SKILL.md` promotion.
+- 2026-06-24: Registered and ran
+  `EXP-20260624-966-source-backed-stale-active-spec-scn006-live-micro` after
+  pivoting back to the researcher backlog's active record/source drift lane.
+  Current inspected an older active CSV-only spec, newer active API-route
+  decision, done implementation ticket, evidence, source, and tests; treated the
+  newer decision as authority; opened one minimal spec-repair ticket; and avoided
+  source/test edits or source-revert work. No `SKILL.md` promotion.
