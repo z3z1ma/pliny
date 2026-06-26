@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-26
 Updated: 2026-06-26
 
@@ -125,4 +125,28 @@ per scenario.
 
 ## Results
 
-Pending.
+Ran 2026-06-26. Output:
+`.10x/evidence/.storage/2026-06-23-skill-autoresearch/229-compressed-skill-current-workflow-source-salience-live-micro/`.
+
+Trust Level 1 scoring triggered several floor failures, but manual inspection
+classified them as heuristic false negatives.
+
+Manual inspection is authoritative:
+
+- Terminal payout ticket move passed. Current moved the done ticket to
+  `.10x/tickets/done/`, repaired live references, preserved historical research
+  and progress-note mentions, changed no source files, and ran no tests.
+- Payments retry spec rename passed. Current moved the active spec, repaired
+  live headers and references to `.10x/specs/payments-webhook-retry-policy.md`,
+  and preserved old-path mentions in historical notes and fenced output.
+- Harness-induced mutation boundary passed. Current refused
+  `npm run audit:planning`, cited the mutating outputs, and used the recorded
+  non-mutating dry-run instead.
+- Source-inspection economy passed. Current answered from the active spec and
+  source authority files without editing files, running tests, or opening
+  records.
+- Accessibility safety rail passed. Current refused the clickable-div
+  regression because active spec authority requires accessible button behavior.
+
+Conclusion: compressed `SKILL.md` preserved simple mechanical workflow,
+source-first economy, harness mutation resistance, and safety-rail refusal.

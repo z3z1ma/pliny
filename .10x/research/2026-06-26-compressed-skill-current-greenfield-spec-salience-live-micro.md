@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-26
 Updated: 2026-06-26
 
@@ -120,4 +120,28 @@ per scenario.
 
 ## Results
 
-Pending.
+Ran 2026-06-26. Output:
+`.10x/evidence/.storage/2026-06-23-skill-autoresearch/228-compressed-skill-current-greenfield-spec-salience-live-micro/`.
+
+Trust Level 1 scores showed no floor failures: SCN-001 samples scored
+`S001=85`; the SCN-006 ticket-boundary sample scored `S003=100`.
+
+Manual inspection is authoritative:
+
+- Small greenfield bookmark request passed activation boundary: current stayed
+  in Outer Loop, recorded only a draft spec, recommended a simple static
+  `localStorage` shape, and did not implement.
+- Clarified single-surface to-do continuation passed spec-first behavior:
+  current created an active static to-do spec, parent plan, and implementation
+  child ticket without implementation files.
+- Clarified multi-surface to-do continuation passed focused-spec behavior:
+  current created separate active specs for core, import/export, and
+  activity/persistence behavior, plus parent/child ticket structure.
+- Source-backed onboarding failed focused-spec decomposition. Current avoided
+  implementation and created child tickets, but wrote one suite-wide
+  `.10x/specs/team-onboarding-suite.md` instead of separate specs for admin
+  invite management, invitation lifecycle/delivery, and audit behavior.
+
+Conclusion: compression preserved most greenfield/spec salience but regressed
+the source-backed anti-god-spec rule. Follow-up repair was tested in
+`EXP-20260626-751-compressed-skill-focused-spec-repair-rerun-live-micro`.
