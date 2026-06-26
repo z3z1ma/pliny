@@ -37,9 +37,9 @@ Current corpus shape:
 
 - `autoresearch/candidates`: 42 promoted, 63 discarded, 4 discarded-null, 1
   cancelled.
-- `.10x/research`: 253 done, 12 active, 1 open.
-- `.10x/evidence`: 262 recorded.
-- `.10x/reviews`: 180 recorded.
+- `.10x/research`: 254 done, 12 active, 1 open.
+- `.10x/evidence`: 263 recorded.
+- `.10x/reviews`: 181 recorded.
 
 The suite is no longer sparse. The remaining risk is unevenness: semantic
 authority, ratification, closure, skill path shape, and record mechanics have
@@ -51,7 +51,7 @@ safety remain less settled.
 
 | Domain | Coverage | Existing support | Gaps |
 | --- | --- | --- | --- |
-| Protocol activation and scale | Strong for Codex small-greenfield boundary, varied greenfield phrasings, pressure phrasings, exact trivial-edit sanity, one-line code-edit sanity, and formatting-only sanity; partial across harnesses | `.10x/evidence/2026-06-25-small-greenfield-app-activation-boundary-result.md`; `.10x/evidence/2026-06-25-scaled-down-always-on-activation-candidate-batch-result.md`; `.10x/evidence/2026-06-25-post-promotion-scaled-down-activation-sanity-result.md`; `.10x/evidence/2026-06-25-exact-trivial-edit-after-activation-sanity-result.md`; `.10x/evidence/2026-06-25-greenfield-activation-phrasing-result.md`; `.10x/evidence/2026-06-25-one-line-code-edit-after-activation-sanity-result.md`; `.10x/evidence/2026-06-25-greenfield-pressure-activation-result.md`; `.10x/evidence/2026-06-25-formatting-edit-after-activation-sanity-result.md`; `.10x/evidence/2026-06-25-feature-category-shorthand-ratification-result.md`; `.10x/evidence/2026-06-25-dynamic-small-greenfield-continuation-result.md`; `.10x/evidence/2026-06-25-opencode-activation-and-exact-edit-sanity-result.md`; promoted scaled-down activation and feature-category shorthand rules in `SKILL.md`; README alignment after the small-greenfield failure | Current canonical now treats vague small greenfield product creation as non-trivial and always-on across app, CLI, local-tool, and explicit pressure phrasing while preserving no-code, executable-ticket, exact typo-edit, exact one-line source-edit, exact formatting-only controls, and one manual OpenCode greenfield sanity pass. Multi-turn partial ratification after shaping now has targeted coverage for shorthand-covered slots, including a continuation derived from actual first-turn subject questions. Need Claude Code, oh-my-pi, broader OpenCode, and dynamic multi-turn non-Codex harness checks. |
+| Protocol activation and scale | Strong for Codex small-greenfield boundary, varied greenfield phrasings, named-app phrasings, pressure phrasings, exact trivial-edit sanity, one-line code-edit sanity, and formatting-only sanity; partial across harnesses | `.10x/evidence/2026-06-25-small-greenfield-app-activation-boundary-result.md`; `.10x/evidence/2026-06-25-scaled-down-always-on-activation-candidate-batch-result.md`; `.10x/evidence/2026-06-25-post-promotion-scaled-down-activation-sanity-result.md`; `.10x/evidence/2026-06-25-exact-trivial-edit-after-activation-sanity-result.md`; `.10x/evidence/2026-06-25-greenfield-activation-phrasing-result.md`; `.10x/evidence/2026-06-25-generic-named-app-activation-result.md`; `.10x/evidence/2026-06-25-one-line-code-edit-after-activation-sanity-result.md`; `.10x/evidence/2026-06-25-greenfield-pressure-activation-result.md`; `.10x/evidence/2026-06-25-formatting-edit-after-activation-sanity-result.md`; `.10x/evidence/2026-06-25-feature-category-shorthand-ratification-result.md`; `.10x/evidence/2026-06-25-dynamic-small-greenfield-continuation-result.md`; `.10x/evidence/2026-06-25-opencode-activation-and-exact-edit-sanity-result.md`; promoted scaled-down activation and feature-category shorthand rules in `SKILL.md`; README alignment after the small-greenfield failure | Current canonical now treats vague small greenfield product creation as non-trivial and always-on across app, CLI, local-tool, explicit pressure phrasing, and generic named-app prompts including the reported `Create a to-do app` shape, while preserving no-code, executable-ticket, exact typo-edit, exact one-line source-edit, exact formatting-only controls, and one manual OpenCode greenfield sanity pass. Multi-turn partial ratification after shaping now has targeted coverage for shorthand-covered slots, including a continuation derived from actual first-turn subject questions. Need Claude Code, oh-my-pi, broader OpenCode, and dynamic multi-turn non-Codex harness checks. |
 | Outer Loop ambiguity handling | Strong | `.10x/evidence/2026-06-25-dynamic-ratified-hostile-continuation-result.md`; `.10x/evidence/2026-06-25-lower-assistance-multibatch-ratification-batch1-result.md`; `.10x/evidence/2026-06-25-lower-assistance-multibatch-ratification-batch2-result.md`; `.10x/evidence/2026-06-25-dynamic-small-greenfield-continuation-result.md`; adaptive question-depth promotions | Need more true dynamic multi-turn follow-up where subject questions vary more widely and the harness/reasoner supplies arm-specific answers. |
 | Semantic authority and ratification | Strong | `.10x/evidence/2026-06-25-conflicting-active-tax-export-authority-result.md`; `.10x/evidence/2026-06-25-post-cold-start-exact-ratification-result.md`; `.10x/evidence/2026-06-25-record-revalidation-contradictory-export-result.md`; `.10x/evidence/2026-06-25-feature-category-shorthand-ratification-result.md`; assumption-provenance and ratification candidates promoted | Continue positive controls so the protocol remains decisive once authority is concrete. |
 | Continuation-turn blocker reconciliation | Partial-strong | `.10x/evidence/2026-06-25-dynamic-ratified-hostile-continuation-result.md`; `.10x/evidence/2026-06-25-out-of-order-partial-ratification-result.md`; `.10x/evidence/2026-06-25-feature-category-shorthand-ratification-result.md`; `.10x/evidence/2026-06-25-dynamic-small-greenfield-continuation-result.md`; partial-answer continuation and feature-category shorthand promotions | Need richer live multi-turn harness support where answer order varies by arm and the reasoning engine decides when the turn is complete across more than two turns. |
@@ -169,10 +169,11 @@ continue.
    and bounded source inspection without record-maintenance path rewrites.
 42. Further multi-turn ratification after greenfield shaping checkpoints where
    the user confirms some, but not all, proposed defaults. Initial
-   feature-category shorthand coverage passed, and a researcher-derived dynamic
-   continuation from actual first-turn questions passed. Remaining gap is a
-   broader dynamic user simulator across more than two turns and arm-specific
-   divergent question order.
+   feature-category shorthand coverage passed, a researcher-derived dynamic
+   continuation from actual first-turn questions passed, and generic named-app
+   activation passed while producing rich provisional defaults. Remaining gap
+   is a broader dynamic user simulator across more than two turns and
+   arm-specific divergent question order.
 43. Non-Codex activation sanity checks for greenfield ambiguity and exact
    mechanical edits. OpenCode has one manual pass for a vague small greenfield
    app and exact one-line edit; remaining coverage should target Claude Code,
