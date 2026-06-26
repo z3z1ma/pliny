@@ -26,6 +26,7 @@ SCENARIOS_PATH = REPO_ROOT / "autoresearch" / "catalogs" / "scenarios.json"
 MARKDOWN_DEFINITION_START = "<!-- codex-subject-runner-definition:start -->"
 MARKDOWN_DEFINITION_END = "<!-- codex-subject-runner-definition:end -->"
 DEFAULT_ARMS = ("no-10x-control", "current-10x", "candidate-variant")
+EVALUATION_ONLY_FIELD = "evaluation_only"
 SUPPRESSED_INSTRUCTION_FILES = [
     "AGENTS.md",
     "CLAUDE.md",
@@ -570,17 +571,26 @@ def _validate_definition_shape(definition: dict[str, Any]) -> None:
 
 def _planned_arms(definition: dict[str, Any], repo_root: Path) -> list[dict[str, Any]]:
     by_id = {}
+    arm_order = []
     for arm in definition["arms"]:
         if not isinstance(arm, dict) or not arm.get("id"):
             raise ExperimentError("each arm must be an object with id")
+        if arm["id"] in by_id:
+            raise ExperimentError(f"duplicate arm id: {arm['id']}")
         by_id[arm["id"]] = arm
+        arm_order.append(arm["id"])
 
-    missing = [arm_id for arm_id in DEFAULT_ARMS if arm_id not in by_id]
-    if missing:
-        raise ExperimentError("live subject definitions must include arms: " + ", ".join(missing))
+    evaluation_only = bool(definition.get(EVALUATION_ONLY_FIELD))
+    if evaluation_only:
+        planned_arm_ids = arm_order
+    else:
+        missing = [arm_id for arm_id in DEFAULT_ARMS if arm_id not in by_id]
+        if missing:
+            raise ExperimentError("live subject definitions must include arms: " + ", ".join(missing))
+        planned_arm_ids = list(DEFAULT_ARMS)
 
     planned = []
-    for arm_id in DEFAULT_ARMS:
+    for arm_id in planned_arm_ids:
         arm = by_id[arm_id]
         instruction_text = _instruction_text(arm, repo_root)
         planned.append(

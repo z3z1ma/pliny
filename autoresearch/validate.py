@@ -12,6 +12,7 @@ from typing import Any
 EXPECTED_SCORE_IDS = tuple(f"S{i:03d}" for i in range(1, 10))
 EXPECTED_SCENARIO_IDS = tuple(f"SCN-{i:03d}" for i in range(1, 16))
 FALLBACK_REQUIREMENT_IDS = tuple(f"REQ-{i:03d}" for i in range(1, 23))
+SKILL_BODY_CHAR_BUDGET = 40_000
 
 SCORE_REQUIRED_TEXT = (
     "id",
@@ -163,6 +164,7 @@ def validate_contracts(root: str | Path) -> ValidationResult:
         _validate_skill_improvement_split(split_data, scenario_ids, errors)
 
     _validate_live_seed_workspaces(repo_root, errors)
+    _validate_skill_size_budget(repo_root, errors)
 
     return ValidationResult(errors)
 
@@ -231,6 +233,27 @@ def _read_text(path: Path, label: str, errors: list[str]) -> str | None:
     except FileNotFoundError:
         errors.append(f"{label}: file not found")
         return None
+
+
+def _validate_skill_size_budget(repo_root: Path, errors: list[str]) -> None:
+    skill_text = _read_text(repo_root / "SKILL.md", "SKILL.md", errors)
+    if skill_text is None:
+        return
+    body_chars = skill_body_char_count(skill_text)
+    if body_chars > SKILL_BODY_CHAR_BUDGET:
+        errors.append(
+            "SKILL.md: body character count "
+            f"{body_chars} exceeds budget {SKILL_BODY_CHAR_BUDGET}"
+        )
+
+
+def skill_body_char_count(text: str) -> int:
+    lines = text.splitlines(keepends=True)
+    if lines and lines[0].strip() == "---":
+        for index, line in enumerate(lines[1:], start=1):
+            if line.strip() == "---":
+                return len("".join(lines[index + 1 :]))
+    return len(text)
 
 
 def _resolve_repo_path(repo_root: Path, value: str) -> Path:

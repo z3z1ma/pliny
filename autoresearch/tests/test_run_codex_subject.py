@@ -215,6 +215,29 @@ class CodexSubjectRunnerTest(unittest.TestCase):
         with self.assertRaises(run_codex_subject.ExperimentError):
             run_codex_subject.build_plan(definition, repo_root=REPO_ROOT)
 
+    def test_evaluation_only_allows_single_current_arm(self):
+        definition = _definition()
+        definition["evaluation_only"] = True
+        definition["arms"] = [
+            {
+                "id": "current-10x",
+                "instruction_source": "test current",
+                "instruction_text": "Current-only salience check.",
+            }
+        ]
+        definition["budget"]["max_harness_runs"] = 1
+
+        with tempfile.TemporaryDirectory() as tmp:
+            plan = run_codex_subject.build_plan(
+                definition,
+                repo_root=REPO_ROOT,
+                out_dir=Path(tmp),
+            )
+
+        self.assertEqual(1, plan["live_codex_calls"])
+        self.assertEqual(["current-10x"], [arm["id"] for arm in plan["arms"]])
+        self.assertEqual(["current-10x"], [sample["variant_id"] for sample in plan["samples"]])
+
     def test_timeout_writes_scoreable_artifact_instead_of_hanging(self):
         definition = _definition()
         definition["budget"]["timeout_seconds_per_run"] = 1

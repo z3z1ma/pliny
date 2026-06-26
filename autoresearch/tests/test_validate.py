@@ -127,6 +127,36 @@ class ValidateContractsTest(unittest.TestCase):
             result.errors,
         )
 
+    def test_skill_size_budget_excludes_frontmatter(self):
+        with copied_contract_root() as root:
+            (root / "SKILL.md").write_text(
+                "---\n"
+                "name: huge-frontmatter\n"
+                "description: test\n"
+                + ("x" * 50000)
+                + "\n---\n"
+                + ("y" * validate.SKILL_BODY_CHAR_BUDGET),
+                encoding="utf-8",
+            )
+
+            result = validate.validate_contracts(root)
+
+        self.assertEqual([], result.errors)
+
+    def test_skill_size_budget_rejects_large_body(self):
+        with copied_contract_root() as root:
+            (root / "SKILL.md").write_text(
+                "---\nname: test\n---\n" + ("x" * (validate.SKILL_BODY_CHAR_BUDGET + 1)),
+                encoding="utf-8",
+            )
+
+            result = validate.validate_contracts(root)
+
+        self.assertIn(
+            "SKILL.md: body character count 40001 exceeds budget 40000",
+            result.errors,
+        )
+
 
 class copied_contract_root:
     def __enter__(self):
@@ -143,6 +173,7 @@ class copied_contract_root:
             REPO_ROOT / ".10x" / "specs" / "10x-autoresearch-loop.md",
             spec_target / "10x-autoresearch-loop.md",
         )
+        shutil.copy2(REPO_ROOT / "SKILL.md", root / "SKILL.md")
         return root
 
     def __exit__(self, exc_type, exc, tb):
