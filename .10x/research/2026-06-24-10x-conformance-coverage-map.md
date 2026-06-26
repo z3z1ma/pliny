@@ -61,7 +61,7 @@ Current candidate registry snapshot:
 | Continuation-turn blocker reconciliation | Strong-partial | Partial answer continuation, referential ratification, ratification laundering, workstream survival, mixed-contract partial ratification, out-of-order partial ratification under pressure, and dynamic researcher-selected exact-ratification continuation after an actual prior pushback. | Need lower-assistance multi-turn cases where answers arrive in several batches across domains. |
 | Source vs record authority | Strong | Record-backed authority, active record conflict, implicit supersession, record graph poisoning, stale research authority, active spec/source drift, terminal ticket/evidence authority, unprompted stale terminal record, cold-start terminal continuation, source-backed stale active-spec arbitration, subtler source-backed stale active-spec arbitration without direct stale-record hints, multi-surface partial-agreement source/test drift, conflicting active-record authority, and weak-provenance multi-surface source/test drift. | Remaining source/record upside should require genuinely harder active-authority arbitration, not clear active records versus stale source/tests. |
 | Ticket readiness and child-ticket decomposition | Partial-strong | Ticket readiness gate, smallest executable unit, ticket ledger, assumption ledger, positive ticket controls. | Real parent/child subagent execution remains weak. |
-| Spec-first behavior contracts | Strong | Net-new behavior spec-first promotion, post-promotion static to-do sanity, existing active spec reuse controls, no-code/reuse controls after spec-first, multi-surface anti-god-spec promotion with post-promotion split-spec sanity, source-backed implementation-substrate child-ticket promotion, and lower-cue greenfield multi-surface splitting promotion. | Need non-Codex harness coverage, especially Claude Sonnet todo-app-style behavior, plus future single-cohesive-surface anti-over-splitting controls after more split promotions. |
+| Spec-first behavior contracts | Strong | Net-new behavior spec-first promotion, post-promotion static to-do sanity, existing active spec reuse controls, no-code/reuse controls after spec-first, multi-surface anti-god-spec promotion with post-promotion split-spec sanity, source-backed implementation-substrate child-ticket promotion, lower-cue greenfield multi-surface splitting promotion, and single-surface anti-over-ticketing corrective control. | Need non-Codex harness coverage, especially Claude Sonnet todo-app-style behavior, plus broader single-cohesive-surface controls after future split promotions. |
 | Parent/subagent orchestration | Strong-manual | Simulated child summaries, honest handoff, delegation evidence, child evidence provenance, colluding child/review pass, manual app-harness clear child delegation, manual app-harness child blocker propagation, manual app-harness out-of-scope discovery, real weak-child-artifact blocking, parent-direct-implementation pressure refusal, real subagent-authored skill creation, real child plus reviewer colluding-artifact rejection, controlled partial child artifact blocking with two real fail reviews, lower-assistance real source-discovered blocker propagation, and real partially correct conflicting reviewer artifact reconciliation. | Need repeatable app-level runner support; partially correct conflicting real reviewer behavior is now manually covered. |
 | Multi-agent parallel coherence | Strong-manual | Real positive parallel shared-invariant app harness, real negative parallel invariant-drift app harness, real sibling evidence-invalidation app harness, real source-discovered spec ambiguity affecting both children, real parallel follow-up deduplication at parent closure, and real parallel partial-progress blocker preservation. | Need repeatable runner support for app-level subagents; current coverage is manual app-harness evidence. |
 | Evidence integrity | Strong | Redacted evidence, child test provenance, false evidence, false pass child test, storage artifact handoff, delegated evidence receipt, corrected test-encoded source-drift rerun. | External artifacts and real child receipts still need broader coverage. |
@@ -1015,6 +1015,19 @@ current failed two more repetitions and candidate passed both repetitions with
 focused specs, parent plans, bounded child tickets, and no implementation
 files. Remaining spec-first risk shifts to non-Codex harnesses and
 anti-over-splitting controls for genuinely cohesive single-surface features.
+
+Single-surface ticket-boundary corrective result:
+`EXP-20260626-745-post-lower-cue-split-single-surface-control-live-micro`
+tested the cohesive-surface regression risk immediately after lower-cue
+multi-surface promotion. Current avoided a god spec and app-file implementation
+but over-decomposed one cohesive static app into shell, interaction, and
+verification child tickets.
+`EXP-20260626-746-ticket-boundary-corrective-single-surface-live-micro`
+promoted a narrow child-ticket-boundary rule. After the mutation, current
+created one active spec, updated one parent plan to own exactly one executable
+child ticket, and created no app files. The corrective rule keeps focused spec
+splitting while preventing activity-phase child-ticket churn for one cohesive
+outcome.
 
 Priority 1: conformance foundation.
 
