@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-25
 Updated: 2026-06-25
 
@@ -197,7 +197,20 @@ Do not promote if durable memory weakens.
 
 - 2026-06-25: Registered after EXP-715 exposed an unsolicited evidence-record
   write during planning-only mutation-boundary inspection.
+- 2026-06-25: Ran 9 live Codex calls. Raw artifacts are under
+  `.10x/evidence/.storage/2026-06-23-skill-autoresearch/193-answer-only-evidence-record-boundary-candidate-batch-live-micro/`.
+- 2026-06-25: Manual inspection found candidate safe on SCN-001, SCN-006, and
+  SCN-012, but current also avoided the SCN-001 evidence-record write in this
+  batch, making promotion differential inconclusive.
 
 ## Result
 
-Pending.
+Concerns raised; keep candidate active pending repeat primary stress.
+
+Evidence:
+
+- `.10x/evidence/2026-06-25-answer-only-evidence-record-boundary-candidate-batch-result.md`
+
+Review:
+
+- `.10x/reviews/2026-06-25-answer-only-evidence-record-boundary-candidate-batch-result.md`

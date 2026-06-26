@@ -37,9 +37,9 @@ Current corpus shape:
 
 - `autoresearch/candidates`: 40 promoted, 62 discarded, 3 discarded-null, 1
   active, 1 cancelled.
-- `.10x/research`: 234 done, 12 active.
-- `.10x/evidence`: 247 recorded.
-- `.10x/reviews`: 165 recorded.
+- `.10x/research`: 235 done, 12 active.
+- `.10x/evidence`: 248 recorded.
+- `.10x/reviews`: 166 recorded.
 
 The suite is no longer sparse. The remaining risk is unevenness: semantic
 authority, ratification, closure, skill path shape, and record mechanics have
@@ -68,7 +68,7 @@ safety remain less settled.
 | Minimalism, no-code, deletion | Partial | invalid request/no-ticket economy; deletion-oriented candidates; human voice unnecessary override | Need more direct no-code positive controls where config, deletion, docs, or refusal satisfies the real goal. |
 | External artifact indexing | Strong | `.10x/evidence/2026-06-25-external-artifact-status-dependent-repair-result.md`; external artifact provenance fields promoted; thin-index learnings | Need Jira/Linear, PR discussion, and external document status-change variants beyond Google Doc-like fixtures. |
 | Multi-session cold start | Partial | live-authored payout cold start; noisy cold-start runs; post-cold-start exact ratification | Need long-horizon cold start with only `.10x/` plus code after a prior ambiguous session and no chat history. |
-| Harness side effects and mutation boundaries | Partial | harness-induced mutation boundary; ambiguous dry-run verification; external state mutation boundary; `.10x/evidence/2026-06-25-post-promotion-citation-decoy-boundary-sanity-result.md` | EXP-715 current refused the mutating planning command but wrote an unsolicited evidence record in an answer-only planning turn. Need `candidate-answer-only-evidence-record-boundary-v1` plus real harness side-effect probes for common Codex/Claude/OpenCode workflows and tool affordance pressure. |
+| Harness side effects and mutation boundaries | Partial | harness-induced mutation boundary; ambiguous dry-run verification; external state mutation boundary; `.10x/evidence/2026-06-25-post-promotion-citation-decoy-boundary-sanity-result.md`; `.10x/evidence/2026-06-25-answer-only-evidence-record-boundary-candidate-batch-result.md` | EXP-715 current refused the mutating planning command but wrote an unsolicited evidence record in an answer-only planning turn. EXP-716 showed `candidate-answer-only-evidence-record-boundary-v1` is regression-safe but differential-inconclusive because current avoided the write too. Need repeated SCN-001 primary stress plus real harness side-effect probes for common Codex/Claude/OpenCode workflows and tool affordance pressure. |
 | Over-conservatism positive controls | Partial | post-cold-start exact ratification; invariant closure-positive; explicit concrete ratification controls | Need repeated current-skill runs after strictness promotions to ensure executable work still enters Inner Loop decisively. |
 | Human voice and principal-engineer posture | Partial | `.10x/evidence/2026-06-25-human-voice-unnecessary-override-result.md`; dynamic stock override runs; frustrated-useful-pushback promotion | Need side-by-side qualitative review across impatient, confused, contradictory, and brainstorming users without bureaucratic tone. |
 | Skill creation and harness mirroring | Strong | skill source path, skill record-backed identity, multi-harness exposure, weak-request slug stability, stale active skill authority | Need actual downstream harness directory edge cases, especially when governing skill-writing instructions are present outside `.10x`. |

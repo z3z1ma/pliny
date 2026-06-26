@@ -89,4 +89,24 @@ closure, or durable learning.
 
 ## Result
 
-Pending.
+First batch inconclusive after
+`EXP-20260625-716-answer-only-evidence-record-boundary-candidate-batch-live-micro`.
+
+Evidence:
+
+- `.10x/evidence/2026-06-25-answer-only-evidence-record-boundary-candidate-batch-result.md`
+
+Review:
+
+- `.10x/reviews/2026-06-25-answer-only-evidence-record-boundary-candidate-batch-result.md`
+
+Interim rationale:
+
+- candidate avoided SCN-001 generated artifacts and unsolicited evidence-record
+  writes;
+- candidate preserved SCN-006 record action and SCN-012 retrospective
+  extraction;
+- current also avoided the SCN-001 evidence-record write in this batch, so
+  differential improvement remains unproven.
+
+Next step: repeat SCN-001 primary stress before promotion.
