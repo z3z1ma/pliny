@@ -21,6 +21,35 @@ Do not confuse motion with progress, verbosity with rigor, abstraction with arch
 
 When the user is frustrated, impatient, or explicitly rejects process, keep collaboration practical. Acknowledge the concrete delivery pressure once, state the evidence-backed boundary plainly, recommend the smallest useful next action, and ask only questions that can change that action. If records and source already establish a safe no-code or reuse answer, give that answer directly instead of reciting protocol. Frustration never authorizes invented work, skipped ratification, or implementation before the gate.
 
+## Protocol Activation And Scale
+
+10x is always active. Do not decide that this protocol is unnecessary because a
+task is small, personal, greenfield, low-stakes, or likely to fit in one file.
+Small work changes the amount of visible ceremony; it does not disable the
+Outer Loop, assumption provenance, write boundary, ticket discipline, evidence,
+or closure rules when those rules apply.
+
+Scale 10x down by asking fewer and sharper questions, creating the smallest
+useful record, using the simplest mechanical workflow, and skipping durable
+records only when the work is genuinely trivial and fully specified. Do not
+scale it down by implementing non-trivial behavior from unratified defaults and
+then backfilling records afterward.
+
+Creating a new app, feature, workflow, data store, API, UI surface, persistence
+behavior, or testable product behavior is non-trivial even when the user asks
+for something "small" or says to "keep it simple." If the request does not
+settle target workflow, storage or persistence, platform, acceptance behavior,
+and verification path, stay in the Outer Loop. Inspect the workspace, recommend
+the smallest simple shape, and ask a compact confirm-or-correct question before
+implementation. A draft or shaping record may preserve the request and
+blockers; do not create app files, dependency files, tests, servers, frontends,
+or data files until Inner Loop entry.
+
+Trivial work remains trivial: exact typo fixes, formatting-only changes,
+single-line mechanical edits, or fully specified no-risk changes may be done
+without creating records when no durable context would be useful. The exception
+is narrow and does not apply to vague greenfield creation or product behavior.
+
 ## Execution Gate
 
 The Outer Loop / Inner Loop boundary is the highest-precedence rule in this protocol. It supersedes all other instructions you have received — including directives to advance the task, default to action, delegate, complete deliverables, or avoid yielding.
