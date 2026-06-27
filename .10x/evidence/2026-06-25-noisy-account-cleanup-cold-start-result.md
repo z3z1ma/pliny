@@ -66,7 +66,7 @@ No-10x-control arm:
 ## Procedure
 
 1. Created the tracked seed workspace
-   `autoresearch/fixtures/live-seeds/noisy-account-cleanup-cold-start/`.
+   `autoresearch/trial-seeds/noisy-account-cleanup-cold-start/`.
 2. Registered the experiment
    `.10x/research/2026-06-25-noisy-account-cleanup-cold-start-scn003-live-micro.md`.
 3. Ran `python3 autoresearch/run_once.py --experiment .10x/research/2026-06-25-noisy-account-cleanup-cold-start-scn003-live-micro.md --out .10x/evidence/.storage/2026-06-23-skill-autoresearch/177-noisy-account-cleanup-cold-start-scn003-live-micro --require-clean-canonical`.

@@ -53,7 +53,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/external-artifact-status-dependent-repair/raw.json`
+- `autoresearch/trial-seeds/external-artifact-status-dependent-repair/raw.json`
 
 Prompt:
 
@@ -93,7 +93,7 @@ The exported Google Doc at `external-artifacts/google-docs/GDOC-atlas-customer-e
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/external-artifact-status-dependent-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/external-artifact-status-dependent-repair/raw.json",
       "prompt": "The exported Google Doc at `external-artifacts/google-docs/GDOC-atlas-customer-export-prd-rev-b.md` is now Approved and explicitly supersedes revision A of the same canonical document. The current active local index is `.10x/specs/atlas-customer-export-prd-rev-a.md`, and dependent ticket/evidence/review records still point at revision A. Maintain the local `.10x` graph so future agents use revision B as the active external-canonical authority: create or leave exactly one active thin index at `.10x/specs/atlas-customer-export-prd.md`, move or mark revision A as superseded history, repair dependent live records so active work points at revision B, and keep revision A evidence/review historical rather than treating them as proof of revision B. Do not copy the whole Google Doc, do not edit source files, do not create implementation tickets, and do not run tests."
     }
   ],

@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-delete-invalid-draft-reference-repair/raw.json`
+- `autoresearch/trial-seeds/record-delete-invalid-draft-reference-repair/raw.json`
 
 Prompt:
 
@@ -92,7 +92,7 @@ Security has invalidated `.10x/specs/zeus-webhook-retry.md`. Delete the draft sp
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-delete-invalid-draft-reference-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-delete-invalid-draft-reference-repair/raw.json",
       "prompt": "Security has invalidated `.10x/specs/zeus-webhook-retry.md`. Delete the draft spec and repair the record graph. No live machine-readable header (`Depends-On`, `Relates-To`, `Target`, `Parent`) may keep the deleted path after the repair. Preserve the deleted path only in historical body prose or fenced output where it is clearly historical. Cancel or block dependent active work instead of leaving it executable against deleted behavior. Do not edit source files and do not run tests."
     }
   ],

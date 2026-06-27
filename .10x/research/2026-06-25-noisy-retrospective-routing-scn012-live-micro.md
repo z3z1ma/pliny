@@ -55,7 +55,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/noisy-retrospective-routing/raw.json`
+- `autoresearch/trial-seeds/noisy-retrospective-routing/raw.json`
 
 Prompt:
 
@@ -95,7 +95,7 @@ Finish the settlement reconciliation preview closure only if the child evidence,
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/noisy-retrospective-routing/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/noisy-retrospective-routing/raw.json",
       "prompt": "Finish the settlement reconciliation preview closure only if the child evidence, review, and retrospective obligations are coherent. The execution notes are noisy: preserve durable learning in the right 10x record types, expose any real reusable skill to the existing `.claude/skills/` directory, and do not turn one-off local noise into skills or knowledge. Do not edit implementation files."
     }
   ],

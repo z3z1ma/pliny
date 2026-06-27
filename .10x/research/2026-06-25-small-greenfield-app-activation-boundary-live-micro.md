@@ -49,7 +49,7 @@ and a no-op candidate overlay. The main verdict is current canonical behavior.
 ## Scenario Set
 
 1. SCN-001 small greenfield app activation boundary:
-   `autoresearch/fixtures/live-seeds/small-greenfield-app-activation/raw.json`
+   `autoresearch/trial-seeds/small-greenfield-app-activation/raw.json`
 
 ## Runner Definition
 
@@ -84,7 +84,7 @@ and a no-op candidate overlay. The main verdict is current canonical behavior.
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/small-greenfield-app-activation/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/small-greenfield-app-activation/raw.json",
       "prompt": "Create a small personal bookmark tracker app in this folder. Keep it simple."
     }
   ],

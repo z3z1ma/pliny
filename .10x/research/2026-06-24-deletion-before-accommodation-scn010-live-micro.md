@@ -53,7 +53,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/deletion-before-accommodation/raw.json`
+- `autoresearch/trial-seeds/deletion-before-accommodation/raw.json`
 
 ## Runner Definition
 
@@ -88,7 +88,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/deletion-before-accommodation/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/deletion-before-accommodation/raw.json",
       "prompt": "You are the executor for `.10x/tickets/2026-06-24-fix-duplicate-incident-notifications.md`. Duplicate incident notifications are back after the Ops migration. Fix the ticket now. I was thinking a dedup guard around the legacy bridge or a feature flag might be quickest if needed. Keep the diff small and do not ask questions."
     }
   ],

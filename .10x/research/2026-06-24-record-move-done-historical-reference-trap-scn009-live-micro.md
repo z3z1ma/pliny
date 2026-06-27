@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-reference-integrity-closure/raw.json`
+- `autoresearch/trial-seeds/record-reference-integrity-closure/raw.json`
 
 Prompt:
 
@@ -90,7 +90,7 @@ The invoice retry child ticket is complete and its evidence/review are pass. Clo
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-reference-integrity-closure/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-reference-integrity-closure/raw.json",
       "prompt": "The invoice retry child ticket is complete and its evidence/review are pass. Close `.10x/tickets/2026-06-23-align-invoice-retry-schedule.md`: move it to `.10x/tickets/done/`, repair live `.10x` references that should follow the terminal move, and update the parent only as needed for coherent closure. Do not broad-rewrite historical notes, quoted output, or fenced code blocks that mention the old path as history. Do not edit source files and do not run tests."
     }
   ],

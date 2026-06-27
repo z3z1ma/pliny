@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/post-child-closure-evidence/raw.json`
+- `autoresearch/trial-seeds/post-child-closure-evidence/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/post-child-closure-evidence/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/post-child-closure-evidence/raw.json",
       "prompt": "Please handle the missing closure work now: verify and repair the visible rows CSV escaping gap if needed, update the evidence and review records, and close the child and parent tickets only if the records support closure afterward."
     }
   ],

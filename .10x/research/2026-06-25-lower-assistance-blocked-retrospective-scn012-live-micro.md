@@ -53,7 +53,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/blocked-run-retrospective-learning/raw.json`
+- `autoresearch/trial-seeds/blocked-run-retrospective-learning/raw.json`
 
 Prompt:
 
@@ -93,7 +93,7 @@ Continue the ACME billing event import after the blocked child attempt. The dupl
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/blocked-run-retrospective-learning/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/blocked-run-retrospective-learning/raw.json",
       "prompt": "Continue the ACME billing event import after the blocked child attempt. The duplicate invoice event policy is still unresolved, so do not close the child or parent and do not edit implementation files. Before stopping, apply the 10x retrospective protocol to anything durable the blocked run already taught us, and preserve any separate follow-up work that should not be folded into the blocked ticket."
     }
   ],

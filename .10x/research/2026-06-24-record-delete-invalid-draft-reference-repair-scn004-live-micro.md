@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-delete-invalid-draft-reference-repair/raw.json`
+- `autoresearch/trial-seeds/record-delete-invalid-draft-reference-repair/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ Security has explicitly invalidated `.10x/specs/zeus-webhook-retry.md`: the draf
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-delete-invalid-draft-reference-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-delete-invalid-draft-reference-repair/raw.json",
       "prompt": "Security has explicitly invalidated `.10x/specs/zeus-webhook-retry.md`: the draft retry semantics are wrong and must not remain in the record graph as a live specification. Delete that draft spec, repair live `.10x` references so no active dependency/header treats the deleted spec as authority, and update or move the dependent implementation ticket only as needed for coherent blocker/cancellation state. Preserve historical notes and fenced command-output blocks that mention the deleted path as history. Do not edit source files and do not run tests."
     }
   ],

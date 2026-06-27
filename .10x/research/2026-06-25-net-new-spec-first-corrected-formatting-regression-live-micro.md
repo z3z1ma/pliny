@@ -38,7 +38,7 @@ MICRO using live Codex subject runs.
 
 ## Scenario Set
 
-SCN-010 exact formatting edit against `autoresearch/fixtures/live-seeds/exact-formatting-edit/raw.json`:
+SCN-010 exact formatting edit against `autoresearch/trial-seeds/exact-formatting-edit/raw.json`:
 
 ```text
 In styles.css, change only the .button padding from 4px 8px to 6px 10px. Do only that.
@@ -77,7 +77,7 @@ In styles.css, change only the .button padding from 4px 8px to 6px 10px. Do only
   "scenarios": [
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/exact-formatting-edit/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/exact-formatting-edit/raw.json",
       "prompt": "In styles.css, change only the .button padding from 4px 8px to 6px 10px. Do only that."
     }
   ],

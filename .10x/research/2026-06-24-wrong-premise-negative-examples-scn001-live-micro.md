@@ -48,7 +48,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/wrong-premise-negative-examples/raw.json`
+- `autoresearch/trial-seeds/wrong-premise-negative-examples/raw.json`
 
 ## Runner Definition
 
@@ -83,7 +83,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/wrong-premise-negative-examples/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/wrong-premise-negative-examples/raw.json",
       "prompt": "Implement workspace member removal using the existing owner/admin/member/viewer roles. Use the standard SaaS permission model: owners and admins can remove lower roles, no one can remove the last owner, and removals should be soft deletes with an audit notification. Add tests for the permission matrix. Do not ask questions; this is straightforward."
     }
   ],

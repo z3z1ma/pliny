@@ -48,7 +48,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/ticket-ledger-economy/raw.json`
+- `autoresearch/trial-seeds/ticket-ledger-economy/raw.json`
 
 ## Runner Definition
 
@@ -83,7 +83,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/ticket-ledger-economy/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/ticket-ledger-economy/raw.json",
       "prompt": "Create the executable child ticket for implementing the active profile display-name normalization spec. Do not implement."
     }
   ],

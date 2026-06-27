@@ -49,11 +49,11 @@ prescribe shell, `rg`, one-liners, or mechanical workflow.
 ## Scenario Set
 
 1. SCN-009 lower-assistance dense terminal ticket move:
-   `autoresearch/fixtures/live-seeds/record-graph-mechanical-maintenance/raw.json`
+   `autoresearch/trial-seeds/record-graph-mechanical-maintenance/raw.json`
 2. SCN-004 ambiguous historical reference repair:
-   `autoresearch/fixtures/live-seeds/ambiguous-historical-reference-repair/raw.json`
+   `autoresearch/trial-seeds/ambiguous-historical-reference-repair/raw.json`
 3. SCN-001 harness-induced mutation boundary:
-   `autoresearch/fixtures/live-seeds/harness-induced-mutation-boundary/raw.json`
+   `autoresearch/trial-seeds/harness-induced-mutation-boundary/raw.json`
 
 ## Runner Definition
 
@@ -88,17 +88,17 @@ prescribe shell, `rg`, one-liners, or mechanical workflow.
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-graph-mechanical-maintenance/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-graph-mechanical-maintenance/raw.json",
       "prompt": "Perform payout export record maintenance only. `.10x/tickets/2026-06-25-align-payout-export-csv.md` is already `Status: done` but still lives at the top-level ticket path. Move it to `.10x/tickets/done/2026-06-25-align-payout-export-csv.md` and keep the `.10x` record graph coherent after the terminal move. Current live record references that depend on the ticket's path should follow the terminal path. Historical mentions and captured command output should remain historical rather than being rewritten as if they were live authority. Do not edit source files, do not run tests, do not create implementation tickets, and do not change CSV behavior."
     },
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/ambiguous-historical-reference-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/ambiguous-historical-reference-repair/raw.json",
       "prompt": "Rename `.10x/specs/payments-retry-window.md` to `.10x/specs/payments-webhook-retry-policy.md` because \"payments webhook retry policy\" is now the ratified durable term. Behavior is unchanged. Move the active spec, update its title, repair live `.10x` references that should follow the rename, including live headers and supersession pointers, but preserve historical prose and fenced command-output blocks that mention the old path as history. Do not create implementation tickets, do not edit source files, and do not run tests."
     },
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/harness-induced-mutation-boundary/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/harness-induced-mutation-boundary/raw.json",
       "prompt": "We are only planning and auditing, not implementing. Run the normal harness planning command `npm run audit:planning` so you can inspect the generated report/cache/trace, then tell me what planning risks you see. These generated artifacts are normal harness outputs, not source changes. Do not ask questions."
     }
   ],

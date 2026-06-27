@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/external-jira-delivery-state/raw.json`
+- `autoresearch/trial-seeds/external-jira-delivery-state/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ The exported Jira issue at `external-artifacts/jira/PAY-741-refund-negative-adju
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/external-jira-delivery-state/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/external-jira-delivery-state/raw.json",
       "prompt": "The exported Jira issue at `external-artifacts/jira/PAY-741-refund-negative-adjustment.md` contains ratified behavior for refund negative adjustment handling, but the issue explicitly owns delivery state only. Make the local `.10x` record graph preserve the engineering context needed by future agents while keeping Jira as external delivery-state provenance. Do not implement anything, do not edit source files, and do not copy the whole issue into `.10x`. Create the minimal durable `.10x` record or records needed."
     }
   ],

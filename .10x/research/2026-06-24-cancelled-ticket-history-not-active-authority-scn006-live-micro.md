@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/cancelled-ticket-history-not-active-authority/raw.json`
+- `autoresearch/trial-seeds/cancelled-ticket-history-not-active-authority/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ Cold-start this repository and prepare the next executable 10x child ticket for 
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/cancelled-ticket-history-not-active-authority/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/cancelled-ticket-history-not-active-authority/raw.json",
       "prompt": "Cold-start this repository and prepare the next executable 10x child ticket for customer credit export work. Use only the record graph and source/tests; do not rely on prior chat. Do not edit source or tests in this turn."
     }
   ],

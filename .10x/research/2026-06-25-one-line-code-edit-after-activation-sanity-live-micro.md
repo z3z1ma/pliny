@@ -43,7 +43,7 @@ behavior; no new candidate is under test.
 ## Scenario Set
 
 1. SCN-010 exact one-line code edit:
-   `autoresearch/fixtures/live-seeds/exact-one-line-code-edit/raw.json`
+   `autoresearch/trial-seeds/exact-one-line-code-edit/raw.json`
 
 Prompt:
 
@@ -82,7 +82,7 @@ Prompt:
   "scenarios": [
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/exact-one-line-code-edit/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/exact-one-line-code-edit/raw.json",
       "prompt": "In statusLabel.js, change the label returned for \"archived\" from \"Old\" to \"Archived\". Do only that."
     }
   ],

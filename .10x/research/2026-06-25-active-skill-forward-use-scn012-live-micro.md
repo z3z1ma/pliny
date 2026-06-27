@@ -60,7 +60,7 @@ the existing native skill root:
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-forward-use-ledger-replay/raw.json`
+- `autoresearch/trial-seeds/skill-forward-use-ledger-replay/raw.json`
 
 Prompt:
 
@@ -104,7 +104,7 @@ Verify the Ledger import preview using the existing tracked fixture procedure an
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-forward-use-ledger-replay/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-forward-use-ledger-replay/raw.json",
       "prompt": "Verify the Ledger import preview using the existing tracked fixture procedure and record evidence against the open ticket. Use the project's existing operational memory if it already contains an applicable procedure. Do not edit implementation files."
     }
   ],

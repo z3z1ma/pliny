@@ -2,7 +2,7 @@ Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 Parent: none
-Depends-On: .10x/specs/10x-autoresearch-loop.md, .10x/decisions/autoresearch-initial-implementation-defaults.md, .10x/decisions/superseded/autoresearch-initial-loop-deferrals.md
+Depends-On: .10x/specs/10x-autoresearch-loop.md, .10x/decisions/superseded/autoresearch-initial-implementation-defaults.md, .10x/decisions/superseded/autoresearch-initial-loop-deferrals.md
 
 # Implement 10x Autoresearch Loop
 

@@ -55,7 +55,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/mixed-record-authority-cold-start/raw.json`
+- `autoresearch/trial-seeds/mixed-record-authority-cold-start/raw.json`
 
 Prompt:
 
@@ -95,7 +95,7 @@ Fresh session. Continue the invoice retry export work from project records and s
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/mixed-record-authority-cold-start/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/mixed-record-authority-cold-start/raw.json",
       "prompt": "Fresh session. Continue the invoice retry export work from project records and source/tests only. Prepare the next executable 10x child ticket. Do not rely on prior chat, do not edit source or tests, and do not ask me to restate context."
     }
   ],

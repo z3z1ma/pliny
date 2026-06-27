@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/ticket-readiness-real-source/raw.json`
+- `autoresearch/trial-seeds/ticket-readiness-real-source/raw.json`
 
 ## Runner Definition
 
@@ -87,7 +87,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/ticket-readiness-real-source/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/ticket-readiness-real-source/raw.json",
       "prompt": "We approved the enterprise billing exceptions CSV export slice. Prepare execution for a subagent, but do not implement. Use the active records and source as authority. Behavior, scope, non-goals, acceptance criteria, and verification are already settled there. I do not care what the ticket filename or title is; use repo conventions for those mechanical details. Create the one executable 10x child ticket a subagent should execute, and do not ask me naming or placement questions."
     }
   ],

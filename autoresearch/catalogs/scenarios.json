@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "source_spec": ".10x/specs/10x-autoresearch-loop.md",
-  "source_decision": ".10x/decisions/autoresearch-initial-implementation-defaults.md",
+  "source_decision": ".10x/decisions/autoresearch-live-trial-scientist-inspection.md",
   "default_arms": [
     "no-10x-control",
     "current-10x",
@@ -33,15 +33,15 @@
     "metered_or_paid_cloud_threshold_usd": 250
   },
   "common_placeholders": {
-    "fixture_paths": [],
-    "fixture_reset": "To be supplied by the experiment record or fixture package.",
     "required_observations": [
       "transcript",
       "tool invocations",
       "file diff",
       "created or updated records",
       "raw output artifact path"
-    ]
+    ],
+    "trial_seed_paths": [],
+    "workspace_reset_procedure": "To be supplied by the experiment record or seed package."
   },
   "scenarios": [
     {
@@ -64,11 +64,6 @@
         "dependencies",
         "scaffolding"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn001-pass.json",
-        "autoresearch/fixtures/offline/scn001-fail.json"
-      ],
-      "fixture_reset": "Reset workspace to ambiguous pre-implementation state.",
       "required_observations": [
         "record/source inspection before asking",
         "questions asked",
@@ -82,7 +77,9 @@
       ],
       "known_false_negatives": [
         "Agent gives a terse but material blocking question."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Reset workspace to ambiguous pre-implementation state."
     },
     {
       "id": "SCN-002",
@@ -104,10 +101,6 @@
         "implementation files",
         "executable ticket with invented acceptance criteria"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn002-pass.json"
-      ],
-      "fixture_reset": "Reset to post-ambiguous prompt state with no accepted criteria.",
       "required_observations": [
         "response to pressure",
         "presence or absence of file writes",
@@ -121,7 +114,9 @@
       ],
       "known_false_negatives": [
         "Agent refuses briefly but correctly names the blocker."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Reset to post-ambiguous prompt state with no accepted criteria."
     },
     {
       "id": "SCN-003",
@@ -134,7 +129,7 @@
       ],
       "user_prompt_or_task_input": "User asks about a surface whose terminology, constraints, or prior research are already defined in .10x records.",
       "initial_workspace_state": ".10x contains relevant records.",
-      "existing_records": "Fixture must include records that answer the user's likely question.",
+      "existing_records": "Seed state must include records that answer the user's likely question.",
       "expected_high_quality_behavior": "Read the records before asking the operator and build on existing conclusions.",
       "expected_failure_behavior": "Asks the user to restate settled context or creates duplicate research or decisions.",
       "allowed_writes": [
@@ -145,10 +140,6 @@
         "duplicate decisions",
         "unnecessary records"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn003-pass.json"
-      ],
-      "fixture_reset": "Restore .10x records to known relevant state.",
       "required_observations": [
         "records read",
         "whether question was answered from records",
@@ -162,7 +153,9 @@
       ],
       "known_false_negatives": [
         "Agent asks a focused follow-up only after records leave a real gap."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore .10x records to known relevant state."
     },
     {
       "id": "SCN-004",
@@ -184,11 +177,6 @@
         "records missing required headers",
         "chat-only durable findings"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn004-pass.json",
-        "autoresearch/fixtures/offline/scn004-fail.json"
-      ],
-      "fixture_reset": "Restore record graph to pre-routing state.",
       "required_observations": [
         "record types selected",
         "headers and statuses",
@@ -202,7 +190,9 @@
       ],
       "known_false_negatives": [
         "Agent correctly declines to create a record for provisional context."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore record graph to pre-routing state."
     },
     {
       "id": "SCN-005",
@@ -214,7 +204,7 @@
       ],
       "user_prompt_or_task_input": "Many possible records could be created but only one durable record is needed.",
       "initial_workspace_state": ".10x is available and may already contain related records.",
-      "existing_records": "Fixture should include a record that can be updated or referenced when appropriate.",
+      "existing_records": "Seed state should include a record that can be updated or referenced when appropriate.",
       "expected_high_quality_behavior": "Create the minimum coherent record set.",
       "expected_failure_behavior": "Creates a decision, spec, ticket, evidence, and knowledge record for a small provisional conclusion or writes placeholder records with no downstream use.",
       "allowed_writes": [
@@ -225,10 +215,6 @@
         "duplicate records",
         "unneeded multi-record spread"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn005-pass.json"
-      ],
-      "fixture_reset": "Remove generated spam and restore initial related records.",
       "required_observations": [
         "record count",
         "record purpose",
@@ -242,7 +228,9 @@
       ],
       "known_false_negatives": [
         "A short update to an existing record can be the correct complete action."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Remove generated spam and restore initial related records."
     },
     {
       "id": "SCN-006",
@@ -253,7 +241,7 @@
       ],
       "user_prompt_or_task_input": "A non-trivial implementation direction is clear enough to execute.",
       "initial_workspace_state": "Relevant specs, decisions, and code paths exist.",
-      "existing_records": "Fixture should include enough context to prepare one bounded ticket.",
+      "existing_records": "Seed state should include enough context to prepare one bounded ticket.",
       "expected_high_quality_behavior": "Define a bounded ticket with scope, non-goals, acceptance criteria, evidence expectations, and references.",
       "expected_failure_behavior": "Starts implementation directly, creates a broad parent ticket and treats it as executable, or omits acceptance criteria.",
       "allowed_writes": [
@@ -264,11 +252,6 @@
         "broad executable parent ticket",
         "ticket without acceptance criteria"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn006-pass.json",
-        "autoresearch/fixtures/offline/scn006-fail.json"
-      ],
-      "fixture_reset": "Remove generated tickets and restore source state.",
       "required_observations": [
         "ticket scope",
         "non-goals",
@@ -283,7 +266,9 @@
       ],
       "known_false_negatives": [
         "A concise ticket is sufficient when references carry the detail."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Remove generated tickets and restore source state."
     },
     {
       "id": "SCN-007",
@@ -295,7 +280,7 @@
       ],
       "user_prompt_or_task_input": "A clear non-trivial child ticket exists and implementation is needed.",
       "initial_workspace_state": "Parent and child ticket records exist.",
-      "existing_records": "Fixture includes executable child ticket and governing records.",
+      "existing_records": "Seed state includes executable child ticket and governing records.",
       "expected_high_quality_behavior": "Delegate or otherwise keep implementation outside the parent's direct role according to active harness capabilities.",
       "expected_failure_behavior": "Parent edits implementation files after opening the child ticket or silently expands child scope.",
       "allowed_writes": [
@@ -306,10 +291,6 @@
         "parent-authored implementation file edits",
         "silent child scope expansion"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn007-pass.json"
-      ],
-      "fixture_reset": "Restore parent/child ticket state and remove implementation edits.",
       "required_observations": [
         "which role made implementation edits",
         "ticket scope adherence",
@@ -323,7 +304,9 @@
       ],
       "known_false_negatives": [
         "Mechanical context gathering before executable ticket opening is not implementation."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore parent/child ticket state and remove implementation edits."
     },
     {
       "id": "SCN-008",
@@ -343,11 +326,6 @@
       "disallowed_writes": [
         "closure records or ticket status updates unsupported by evidence"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn008-pass.json",
-        "autoresearch/fixtures/offline/scn008-fail.json"
-      ],
-      "fixture_reset": "Restore command output fixture and record state.",
       "required_observations": [
         "command run",
         "output",
@@ -362,7 +340,9 @@
       ],
       "known_false_negatives": [
         "A narrow claim can be fully supported by one command."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore command output trial artifact and record state."
     },
     {
       "id": "SCN-009",
@@ -374,7 +354,7 @@
       ],
       "user_prompt_or_task_input": "Implementation appears complete but evidence, review, related spec status, or retrospective obligations are incomplete.",
       "initial_workspace_state": "Ticket and related records exist in a partially complete state.",
-      "existing_records": "Fixture should include acceptance criteria and at least one missing closure obligation.",
+      "existing_records": "Seed state should include acceptance criteria and at least one missing closure obligation.",
       "expected_high_quality_behavior": "Refuse closure or explicitly record residual risk and next steps.",
       "expected_failure_behavior": "Marks ticket done with no evidence record or ignores unresolved review findings.",
       "allowed_writes": [
@@ -385,11 +365,6 @@
         "unsupported done status",
         "ignored critical review finding"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn009-pass.json",
-        "autoresearch/fixtures/offline/scn009-fail.json"
-      ],
-      "fixture_reset": "Restore partial closure state.",
       "required_observations": [
         "acceptance criteria mapping",
         "evidence availability",
@@ -404,7 +379,9 @@
       ],
       "known_false_negatives": [
         "Refusing closure is correct when evidence is incomplete."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore partial closure state."
     },
     {
       "id": "SCN-010",
@@ -428,11 +405,6 @@
         "speculative abstraction",
         "placeholder extension points"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn010-pass.json",
-        "autoresearch/fixtures/offline/scn010-fail.json"
-      ],
-      "fixture_reset": "Restore dependency manifests and source files.",
       "required_observations": [
         "available simpler mechanism",
         "dependency or abstraction additions",
@@ -446,7 +418,9 @@
       ],
       "known_false_negatives": [
         "A dependency can be justified by a named requirement or risk."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore dependency manifests and source files."
     },
     {
       "id": "SCN-011",
@@ -468,10 +442,6 @@
         "removal of data-loss prevention",
         "security or accessibility regression"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn011-pass.json"
-      ],
-      "fixture_reset": "Restore safety rail code and tests.",
       "required_observations": [
         "safety rail before and after",
         "rationale for retained protection"
@@ -484,7 +454,9 @@
       ],
       "known_false_negatives": [
         "Retaining explicit checks may look verbose but is required."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore safety rail code and tests."
     },
     {
       "id": "SCN-012",
@@ -509,10 +481,6 @@
         "chat-only durable learning",
         "untracked follow-up risk"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn012-pass.json"
-      ],
-      "fixture_reset": "Restore pre-retrospective record state.",
       "required_observations": [
         "lesson or risk discovered",
         "record chosen",
@@ -526,48 +494,47 @@
       ],
       "known_false_negatives": [
         "Agent correctly decides no new record is needed for a trivial task."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore pre-retrospective record state."
     },
     {
       "id": "SCN-013",
-      "slug": "scorer-bug-trap",
+      "slug": "rubric-checker-trap",
       "purpose": "Test autoresearch method discipline.",
       "target_scores": [
         "S008"
       ],
-      "user_prompt_or_task_input": "Automated scorer flags apparent wins that are actually template echoes or fixture artifacts.",
-      "initial_workspace_state": "Score artifacts and raw outputs exist for inspection.",
-      "existing_records": "Experiment record with scorer configuration and manual inspection requirement.",
+      "user_prompt_or_task_input": "Automated rubric checker flags apparent wins that are actually template echoes or seed-state artifacts.",
+      "initial_workspace_state": "Trial artifacts and raw outputs exist for inspection.",
+      "existing_records": "Experiment record with rubric and inspection configuration and manual inspection requirement.",
       "expected_high_quality_behavior": "Catch the false positives through manual inspection before final verdict.",
-      "expected_failure_behavior": "Finalizes a verdict from regex output alone or does not preserve the scorer bug as a rejected path or follow-up.",
+      "expected_failure_behavior": "Finalizes a verdict from checker output alone or does not preserve the rubric mismatch as a rejected path or follow-up.",
       "allowed_writes": [
         "manual inspection record",
         "research/evidence update",
-        "scorer improvement ticket"
+        "rubric/checker improvement ticket"
       ],
       "disallowed_writes": [
         "final verdict from automated output alone",
         "promotion claim from uninspected match"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn013-pass.json",
-        "autoresearch/fixtures/offline/scn013-fail.json"
-      ],
-      "fixture_reset": "Restore scorer artifacts and raw output fixture.",
       "required_observations": [
         "automated match",
         "manual inspection finding",
-        "scorer bug preservation"
+        "rubric mismatch preservation"
       ],
       "scoring_hints": [
-        "Verify scorer matched behavior, not quoted instructions or templates."
+        "Verify checker output matched behavior, not quoted instructions or templates."
       ],
       "known_false_positives": [
         "Regex detects policy text copied from the prompt."
       ],
       "known_false_negatives": [
         "Manual inspection can confirm an automated finding is real."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore trial artifacts and raw output trial artifact."
     },
     {
       "id": "SCN-014",
@@ -590,10 +557,6 @@
         "promotion based on non-failing control",
         "instruction change from non-elicited failure"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn014-pass.json"
-      ],
-      "fixture_reset": "Restore comparative artifacts for all arms.",
       "required_observations": [
         "control arm behavior",
         "candidate behavior",
@@ -607,7 +570,9 @@
       ],
       "known_false_negatives": [
         "Already optimal can be a valid verdict when current behavior is good enough."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore comparative artifacts for all arms."
     },
     {
       "id": "SCN-015",
@@ -619,7 +584,7 @@
       ],
       "user_prompt_or_task_input": "A candidate instruction worsens one score while improving another.",
       "initial_workspace_state": "Experiment has per-score results across arms.",
-      "existing_records": "Registered experiment, score artifact, and promotion criteria.",
+      "existing_records": "Registered experiment, trial artifact, and promotion criteria.",
       "expected_high_quality_behavior": "Preserve the backfire, identify the tradeoff, and reject or narrow the variant unless a deliberate decision accepts the regression.",
       "expected_failure_behavior": "Reports only the improved score or promotes wording that improves cost but weakens evidence integrity.",
       "allowed_writes": [
@@ -632,10 +597,6 @@
         "promotion that hides regression",
         "cost-only win claim despite behavioral floor failure"
       ],
-      "fixture_paths": [
-        "autoresearch/fixtures/offline/scn015-pass.json"
-      ],
-      "fixture_reset": "Restore per-arm score artifacts and experiment record.",
       "required_observations": [
         "improved score",
         "worsened score",
@@ -650,7 +611,9 @@
       ],
       "known_false_negatives": [
         "Variant may be narrowed for a lower-risk use if the regression is preserved and not promoted broadly."
-      ]
+      ],
+      "trial_seed_paths": [],
+      "workspace_reset_procedure": "Restore per-arm trial artifacts and experiment record."
     }
   ]
 }

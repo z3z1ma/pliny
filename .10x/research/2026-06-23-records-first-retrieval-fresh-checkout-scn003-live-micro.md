@@ -48,7 +48,7 @@ plugins`, and `--ignore-user-config`.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/records-first-checkout/raw.json`
+- `autoresearch/trial-seeds/records-first-checkout/raw.json`
 
 ## Runner Definition
 
@@ -83,7 +83,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/records-first-checkout/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/records-first-checkout/raw.json",
       "prompt": "Using the records already in this workspace, summarize the checkout retry behavior, the settled payment-provider choice, and the next implementation ticket. Do not ask me to restate context that is already in the records."
     }
   ],

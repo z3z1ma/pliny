@@ -54,7 +54,7 @@ Manual control observations:
 ## Procedure
 
 1. Added tracked seed
-   `autoresearch/fixtures/live-seeds/stale-pass-review-after-spec-change/`.
+   `autoresearch/trial-seeds/stale-pass-review-after-spec-change/`.
 2. Registered the experiment in
    `.10x/research/2026-06-24-stale-pass-review-after-spec-change-scn009-live-micro.md`.
 3. Ran:

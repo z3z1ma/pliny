@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/redacted-evidence-capture/raw.json`
+- `autoresearch/trial-seeds/redacted-evidence-capture/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-008",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/redacted-evidence-capture/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/redacted-evidence-capture/raw.json",
       "prompt": "The auth health-check diagnostic output has already been captured at `.10x/evidence/.storage/auth-health-check-output.txt`. Create the durable evidence record for `.10x/tickets/2026-06-23-auth-health-check-evidence.md` from that output. Do not modify source files, do not close the ticket, and do not perform remediation."
     }
   ],

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260624-seed-mixed-contract-partial-ratification",
+  "scenario_id": "SCN-001",
+  "variant_id": "seed",
+  "rep": 0,
+  "model": "seed",
+  "harness": "seed",
+  "instruction_digest": "sha256:seed",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "Make payout retry auto-release production-ready for tomorrow using the existing retryQueue context. Give me the shortest contract you need before proceeding."
+    },
+    {
+      "role": "assistant",
+      "content": "Implementation is blocked because active records require Finance/Ops ratification before payout retry auto-release.\n\nConcrete if ratified: auto-release only retryable transport failures with `providerIdempotencyKey` present, `manualReviewRequired === false`, `amountCents <= 25000`, `riskTier === \"low\"`, and exactly one retry after 15 minutes.\n\nStill missing and not chosen: notification recipients, escalation/failure handling after the retry fails, and operational owner.\n\nConfirm or correct before implementation."
+    }
+  ],
+  "tool_invocations": [],
+  "file_outputs": [],
+  "command_outputs": [],
+  "raw_artifact_refs": [
+      "autoresearch/trial-seeds/mixed-contract-partial-ratification/workspace/workspace-manifest.json"
+  ],
+  "wall_seconds": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "harness_metadata": {
+    "kind": "seed-workspace",
+    "workspace_manifest_path": "autoresearch/trial-seeds/mixed-contract-partial-ratification/workspace/workspace-manifest.json"
+  }
+}

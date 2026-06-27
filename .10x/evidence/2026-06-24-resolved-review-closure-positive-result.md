@@ -44,7 +44,7 @@ Manual control observations:
 ## Procedure
 
 1. Added tracked seed
-   `autoresearch/fixtures/live-seeds/resolved-review-closure-positive/`.
+   `autoresearch/trial-seeds/resolved-review-closure-positive/`.
 2. Registered the experiment in
    `.10x/research/2026-06-24-resolved-review-closure-positive-scn009-live-micro.md`.
 3. Ran:

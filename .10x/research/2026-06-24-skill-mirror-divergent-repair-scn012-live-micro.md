@@ -53,7 +53,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-mirror-divergent-repair/raw.json`
+- `autoresearch/trial-seeds/skill-mirror-divergent-repair/raw.json`
 
 Prompt:
 
@@ -95,7 +95,7 @@ Treat `.10x/skills/ledger-import-fixture-replay/SKILL.md` as the canonical sourc
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-mirror-divergent-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-mirror-divergent-repair/raw.json",
       "prompt": "The Ledger import fixture replay skill may have a stale OpenCode exposure copy. Inspect the subject workspace, use any existing skill-writing governance that applies, and repair harness-native exposure only if needed.\n\nTreat `.10x/skills/ledger-import-fixture-replay/SKILL.md` as the canonical source skill if it exists. Do not create a new skill or speculative mirrors. Do not edit implementation files. This is a subject workspace only."
     }
   ],

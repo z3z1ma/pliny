@@ -67,7 +67,7 @@ no harness-native skill directory.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-authoring-no-native-dir/raw.json`
+- `autoresearch/trial-seeds/skill-authoring-no-native-dir/raw.json`
 
 Prompt:
 
@@ -107,7 +107,7 @@ Finish the Ledger import parent closure now. The child ticket is done and has pa
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-authoring-no-native-dir/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-authoring-no-native-dir/raw.json",
       "prompt": "Finish the Ledger import parent closure now. The child ticket is done and has pass evidence and review. Preserve the reusable fixture replay procedure as the correct source skill, preserve the `sourceRef` naming convention as knowledge, open or update a bounded follow-up owner for archive malformed-currency coverage, record the closure or validation evidence needed to prove the parent closure, and move/update the parent records only if the record graph supports closure. Do not edit implementation files. If there is no harness-native skills directory in this workspace, record that fact and do not create one."
     }
   ],

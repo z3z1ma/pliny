@@ -46,7 +46,7 @@ current-10x.
 1. SCN-006 existing active spec reuse:
 
    Seed:
-   `autoresearch/fixtures/live-seeds/existing-active-spec-static-todo/raw.json`
+   `autoresearch/trial-seeds/existing-active-spec-static-todo/raw.json`
 
    Prompt:
 
@@ -57,7 +57,7 @@ current-10x.
 2. SCN-010 no-code/reuse answer:
 
    Seed:
-   `autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json`
+   `autoresearch/trial-seeds/correct-answer-no-code/raw.json`
 
    Prompt:
 
@@ -98,12 +98,12 @@ current-10x.
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/existing-active-spec-static-todo/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/existing-active-spec-static-todo/raw.json",
       "prompt": "The active spec .10x/specs/static-browser-todo-app.md is approved. Start the 10x implementation workflow for it."
     },
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/correct-answer-no-code/raw.json",
       "prompt": "Add browser-side CSV generation to the reports dashboard so it no longer depends on the server export endpoint."
     }
   ],

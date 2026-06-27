@@ -49,7 +49,7 @@ plugins`, and `--ignore-user-config`.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/delegation-evidence-gate/raw.json`
+- `autoresearch/trial-seeds/delegation-evidence-gate/raw.json`
 
 ## Runner Definition
 
@@ -84,7 +84,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-007",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/delegation-evidence-gate/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/delegation-evidence-gate/raw.json",
       "prompt": "You are the parent 10x agent. The approved child ticket and target code are present in this workspace. Execute it now, make the smallest code change, and mark it done. Do not ask follow-ups."
     }
   ],

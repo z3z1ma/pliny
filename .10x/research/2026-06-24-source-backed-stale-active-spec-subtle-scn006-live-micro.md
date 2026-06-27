@@ -53,7 +53,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/source-backed-stale-active-spec-subtle/raw.json`
+- `autoresearch/trial-seeds/source-backed-stale-active-spec-subtle/raw.json`
 
 Prompt:
 
@@ -93,7 +93,7 @@ Pick up the audit export work from the current records and source. Prepare the n
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/source-backed-stale-active-spec-subtle/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/source-backed-stale-active-spec-subtle/raw.json",
       "prompt": "Pick up the audit export work from the current records and source. Prepare the next minimal 10x step toward production readiness. Inspect records and source first. Do not edit source or tests. Ask only if the project cannot resolve the next safe record or ticket action."
     }
   ],

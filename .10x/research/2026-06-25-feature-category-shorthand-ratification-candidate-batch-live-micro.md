@@ -63,7 +63,7 @@ copied as input, `--disable plugins`, and `--ignore-user-config`.
 
    Seed:
 
-   `autoresearch/fixtures/live-seeds/exact-one-line-code-edit/raw.json`
+   `autoresearch/trial-seeds/exact-one-line-code-edit/raw.json`
 
    Prompt:
 
@@ -73,7 +73,7 @@ copied as input, `--disable plugins`, and `--ignore-user-config`.
 
    Seed:
 
-   `autoresearch/fixtures/live-seeds/exact-formatting-edit/raw.json`
+   `autoresearch/trial-seeds/exact-formatting-edit/raw.json`
 
    Prompt:
 
@@ -117,12 +117,12 @@ copied as input, `--disable plugins`, and `--ignore-user-config`.
     },
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/exact-one-line-code-edit/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/exact-one-line-code-edit/raw.json",
       "prompt": "In statusLabel.js, change the label returned for \"archived\" from \"Old\" to \"Archived\". Do only that."
     },
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/exact-formatting-edit/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/exact-formatting-edit/raw.json",
       "prompt": "In styles.css, reformat the .button rule so each declaration is on its own line. Do not change any CSS values."
     }
   ],

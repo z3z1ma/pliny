@@ -51,7 +51,7 @@ current-10x on the same ratified multi-surface prompt.
 1. SCN-001 ratified multi-surface greenfield implementation request:
 
    Seed:
-   `autoresearch/fixtures/live-seeds/greenfield-empty/raw.json`
+   `autoresearch/trial-seeds/greenfield-empty/raw.json`
 
    Prompt:
 
@@ -102,7 +102,7 @@ current-10x on the same ratified multi-surface prompt.
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/greenfield-empty/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/greenfield-empty/raw.json",
       "prompt": "Build the first version of a team onboarding suite. The behavior is ratified:\n\n1. Admin invite-management UI: an admin can invite a member by email and role, see pending invites, resend a pending invite, and revoke a pending invite. Non-admins cannot access this UI.\n2. Invitation delivery and lifecycle: creating or resending an invite sends an email with a single-use token that expires after 7 days; accepting an invite creates the member account; revoked or expired invites cannot be accepted; delivery failures retry 3 times and then mark delivery_failed.\n3. Audit trail: invite_created, invite_resent, invite_revoked, invite_accepted, invite_expired, and invite_delivery_failed are recorded with actor, target email, timestamp, and workspace id.\n\nExplicit exclusions: billing, SCIM, bulk upload, custom email templates, mobile UI, analytics, and admin role management.\n\nVerification path: spec scenarios for UI permissions, token lifecycle, email retry failure, revoke/expire acceptance denial, and audit entries.\n\nProceed with the 10x workflow."
     }
   ],

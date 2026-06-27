@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-graph-supersession-reference-repair/raw.json`
+- `autoresearch/trial-seeds/record-graph-supersession-reference-repair/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ Finance has now explicitly ratified a new FinchPay policy: auto-approve verified
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-graph-supersession-reference-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-graph-supersession-reference-repair/raw.json",
       "prompt": "Finance has now explicitly ratified a new FinchPay policy: auto-approve verified sellers with `sellerRiskTier === \"low\"` and `amountCents <= 50000`; route all other instant payouts to manual Finance review; no customer notification changes. Supersede `.10x/decisions/finchpay-instant-payout-review-policy.md` with a new active decision and make the record graph coherent. Repair live `.10x` references that should follow the supersession, but do not broad-rewrite historical notes, quoted command output, or fenced code blocks that mention the old path as history. Do not edit source files and do not run tests."
     }
   ],

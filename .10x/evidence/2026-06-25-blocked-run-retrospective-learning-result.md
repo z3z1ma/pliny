@@ -51,7 +51,7 @@ S002=50 and S006=50.
 ## Procedure
 
 1. Created the seed workspace under
-   `autoresearch/fixtures/live-seeds/blocked-run-retrospective-learning/`.
+   `autoresearch/trial-seeds/blocked-run-retrospective-learning/`.
 2. Registered
    `.10x/research/2026-06-25-blocked-run-retrospective-learning-scn012-live-micro.md`.
 3. Ran:

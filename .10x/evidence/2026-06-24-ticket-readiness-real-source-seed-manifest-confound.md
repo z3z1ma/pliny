@@ -26,7 +26,7 @@ Inspection showed the seed workspace manifest contained:
 The runner and validator resolved `workspace` relative to the canonical repo
 root, not relative to the manifest directory. As a result, the subject workspace
 included the whole 10x repository instead of only
-`autoresearch/fixtures/live-seeds/ticket-readiness-real-source/workspace`.
+`autoresearch/trial-seeds/ticket-readiness-real-source/workspace`.
 
 ## Procedure
 

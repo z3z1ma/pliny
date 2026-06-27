@@ -58,7 +58,7 @@ record graph.
 ## Procedure
 
 1. Created the tracked seed workspace
-   `autoresearch/fixtures/live-seeds/noisy-retrospective-routing/`.
+   `autoresearch/trial-seeds/noisy-retrospective-routing/`.
 2. Registered the experiment
    `.10x/research/2026-06-25-noisy-retrospective-routing-scn012-live-micro.md`.
 3. Ran `python3 autoresearch/run_once.py --experiment .10x/research/2026-06-25-noisy-retrospective-routing-scn012-live-micro.md --out .10x/evidence/.storage/2026-06-23-skill-autoresearch/182-noisy-retrospective-routing-scn012-live-micro --require-clean-canonical`.

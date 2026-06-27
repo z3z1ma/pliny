@@ -1,59 +1,51 @@
 # Autoresearch
 
-`autoresearch/` contains the human-owned autoresearch program plus one-shot
-experiment tooling: score catalogs, scenario catalogs, artifact schemas, record
-templates, runners, scorers, reports, and diagnostics.
+`autoresearch/` contains the reusable tooling inputs for the 10x autoresearch
+program: rubric and scenario catalogs, record templates, one-shot live subject
+runners, trial reports, validators, candidates, seed workspaces, and diagnostics.
 
 `.10x/` remains the durable record graph. Research conclusions, evidence,
 reviews, decisions, tickets, knowledge, and skills that should survive a session
 belong in `.10x/`; files here are reusable tooling inputs that help produce or
 check those records.
 
-The initial contracts follow:
+The active operating decision is:
 
-- `autoresearch/program.md`
-- `.10x/specs/10x-autoresearch-loop.md`
-- `.10x/decisions/autoresearch-initial-implementation-defaults.md`
+- `.10x/decisions/autoresearch-live-trial-scientist-inspection.md`
 
-Initial defaults captured here include:
+Core defaults:
 
-- MICRO-first focused harness evaluation before broader FULL harness runs.
-- Comparative arms for no-10x control, current canonical 10x, and candidate
-  variants.
-- No-10x control isolation from `AGENTS.md`, `CLAUDE.md`, or equivalent project
-  instruction files.
-- MICRO campaign cap of 300 subject-agent samples or 10 wall-clock hours.
-- FULL campaign cap of 20 harness runs or 36 wall-clock hours, with a suggested
-  3-hour cap per individual FULL run.
-- No monetary cap for subscription-backed Codex, Claude, OpenCode, or oh-my-pi
-  usage.
-- A required budget decision before using metered APIs or paid cloud resources
-  beyond USD 250 estimated spend.
-- Claim-supporting raw artifacts under `.10x/evidence/.storage/`; exploratory
-  source material under `.10x/research/.storage/`.
-- Human-only Trust Level 3 scorer approval until a later decision delegates it.
-- Human inspection time tracked separately at first.
-- Fixed, transparent score weights until human verdicts justify a later scoring
-  policy decision.
+- The LLM reasoning engine is the scientist and loop controller.
+- `autoresearch/program.md` is the human-owned program.
+- `run_once.py` runs exactly one registered MICRO or FULL trial.
+- MICRO and FULL are scenario breadth tiers; both execute the subject harness
+  when used for current-skill or candidate evaluation.
+- The live runner writes the registered scientific contract, raw trial
+  artifacts, command metadata, prompts, workspaces, manifests, summaries, and
+  reports.
+- The runner does not grade, calibrate, or promote. The scientist inspects
+  artifacts against the rubric and records verdicts in `.10x/`.
+- Static pass/fail canned-output scoring and hidden evaluation modes are not
+  part of the active tooling surface.
 
 ## Validation
 
-Validate the static contracts from the repository root:
+Validate static contracts from the repository root:
 
 ```bash
 python3 autoresearch/validate.py
 ```
 
-Run the focused validator tests, including invalid copied-contract cases:
+Run focused tests:
 
 ```bash
 python3 -m unittest discover -s autoresearch/tests
 ```
 
 The validator checks JSON syntax, required score and scenario IDs, catalog
-shapes, cross-references, template sections, and score-artifact schema sanity.
-It does not score transcripts, run subject-agent experiments, execute harnesses,
-or produce reports.
+shapes, cross-references, template sections, the trial seed index, live seed
+workspace manifests, and the `SKILL.md` body-size budget. It does not run
+subject-agent experiments, grade transcripts, or produce verdicts.
 
 ## Research Program
 
@@ -62,118 +54,22 @@ program for the LLM researcher, not a Python daemon or controller. Autoresearch
 agents read it before experimenting and do not edit it unless a human explicitly
 asks for a program change.
 
-The loop is:
+One iteration is:
 
-1. mutate one candidate artifact;
-2. run one MICRO or FULL experiment;
-3. read the score artifacts and report;
-4. append a row to an untracked `results.tsv`;
-5. keep, discard, mutate, branch, or retry;
-6. repeat until manually interrupted.
+1. state the hypothesis;
+2. create or choose one candidate, or run a current-skill regression trial;
+3. register one experiment definition;
+4. run `autoresearch/run_once.py`;
+5. inspect raw trial artifacts and the report;
+6. record verdict, limits, and evidence references in durable `.10x/` records;
+7. keep, discard, mutate, branch, retry, or promote for human review.
 
-Python utilities do not own the loop. They run one experiment, produce scores,
-validate contracts, render reports, or run diagnostics.
-
-## Offline Scoring
-
-Score saved fixture transcripts and file-output state without running live APIs
-or harnesses:
-
-```bash
-python3 autoresearch/offline_score.py --fixtures autoresearch/fixtures/offline --out /tmp/10x-offline-scores
-```
-
-The offline scorer has at least one saved fixture for every initial scenario
-SCN-001 through SCN-015. It emits first-pass scores for S001 through S008 where
-the behavior can be approximated from saved transcripts, command output, and
-file-output state.
-
-Score support:
-
-| Score | Offline status | Notes |
-| --- | --- | --- |
-| S001 | supported | Transcript/tool/file-write heuristic for outer-loop discipline. |
-| S002 | supported | Saved `.10x` record path and content checks. |
-| S003 | supported | Ticket shape, boundary, dependency, and implementation-write checks. |
-| S004 | supported | Command/evidence/limit/overclaim checks. |
-| S005 | supported | Dependency, abstraction, locality, and safety-rail checks. |
-| S006 | supported | Closure, evidence mapping, review, spec, retrospective, and follow-up checks. |
-| S007 | partial | Human shaping quality still needs manual transcript review. |
-| S008 | partial | Research method discipline still needs manual inspection and repeated-run evidence. |
-| S009 | unsupported | Requires baseline-normalized cost telemetry, calibrated core quality, and an accepted cost policy. |
-
-Scenario support:
-
-| Scenario range | Offline status | Notes |
-| --- | --- | --- |
-| SCN-001-SCN-006 | supported | Saved fixtures exercise first-pass behavioral and record-shape checks. |
-| SCN-007 | partial | Parent/child role identity is inferred from saved output, not live harness authorship. |
-| SCN-008-SCN-012 | supported | Saved fixtures cover evidence, closure, minimalism, safety, and retrospective checks. |
-| SCN-013-SCN-015 | partial | Research-method claims require manual inspection, valid controls, and repeated runs before verdicts. |
-
-Fixture JSON uses this minimal shape:
-
-```json
-{
-  "schema_version": 1,
-  "experiment_id": "EXP-20260623-001-offline-tracer",
-  "scenario_id": "SCN-001",
-  "variant_id": "current-10x-pass",
-  "rep": 0,
-  "model": "fixture-model",
-  "harness": "offline-fixture",
-  "instruction_digest": "fixture-instructions-v1",
-  "transcript": [{"role": "assistant", "content": "..."}],
-  "tool_invocations": [{"name": "rg", "input": "..."}],
-  "file_outputs": [{"path": ".10x/tickets/example.md", "action": "write", "content": "..."}],
-  "command_outputs": [{"command": "python3 -m unittest", "exit_code": 0, "output": "OK"}],
-  "raw_artifact_refs": ["autoresearch/fixtures/offline/example.json"]
-}
-```
-
-`offline_score.py` writes one `*.score.json` artifact per fixture. The artifact
-matches the checked-in score artifact schema shape for the fields this repo can
-validate with the standard library. `offline_score.validate_score_artifact()`
-is the documented structural equivalent used by the tests; no third-party JSON
-Schema dependency is required.
-
-All offline scorer outputs are Trust Level 1. They are keyword and path
-heuristics over saved fixtures, so they can reward superficial wording, miss
-equivalent terse behavior, and cannot support promotion or durable verdicts
-without manual inspection.
-
-## Calibration Utility
-
-Plan a fixture-backed scorer calibration run without live calls:
-
-```bash
-python3 autoresearch/run_micro.py --experiment path/to/experiment.json --dry-run
-```
-
-Run the fixture-backed calibration slice and write artifacts:
-
-```bash
-python3 autoresearch/run_micro.py --experiment path/to/experiment.json --fixture-backed --out .10x/evidence/.storage/micro-runs/EXP-YYYYMMDD-NNN-slug
-```
-
-`run_micro.py` accepts a local JSON experiment definition. Non-exploratory
-calibration runs without an experiment definition are refused.
-
-The fixture-backed MICRO runner is for scorer calibration, report plumbing, and
-regression checks. It does not execute candidate instructions and must not be
-treated as candidate-quality evidence.
-
-Fixture-backed mode writes:
-
-- `<out>/plan.json`
-- `<out>/summary.json`
-- `<out>/raw/<cache-key>.json`
-- `<out>/scores/<cache-key>.score.json`
+Python utilities do not own the loop. They run one trial, validate contracts,
+render artifact reports, or run diagnostics.
 
 ## Codex Subject Runner
 
-Run a registered MICRO or FULL experiment through live Codex subject-agent
-calls:
+Run a registered MICRO or FULL experiment through live Codex subject-agent calls:
 
 ```bash
 python3 autoresearch/run_codex_subject.py --experiment path/to/experiment.md --run --out .10x/evidence/.storage/<run-tag>/<experiment-id>
@@ -183,10 +79,22 @@ MICRO and FULL are scenario breadth tiers. MICRO uses narrow scenarios that
 target one behavior; FULL uses broader scenario coverage. Both can execute the
 same live harness. `codex-cli` prompt definitions are live subject runs.
 
-The runner writes raw fixture-shaped outputs, score artifacts, Codex command
-metadata, prompt files, workspace manifests, and subject last messages. Full
-prompts are kept as raw artifacts; scorer transcripts contain only the scenario
-prompt and subject response so quoted instructions are not scored as behavior.
+The runner writes:
+
+- `<out>/plan.json`
+- `<out>/summary.json`
+- `<out>/raw/*.json`
+- `<out>/codex/*.command.json`
+- `<out>/codex/*.stdout.jsonl`
+- `<out>/codex/*.stderr`
+- `<out>/codex/*.last-message.txt`
+- `<out>/prompts/*.prompt.txt`
+- `<out>/workspaces/*/workspace-manifest.json`
+- archived subject workspaces under `<out>/workspaces/`
+
+Full prompts are kept as prompt artifacts. Raw trial transcripts contain only
+the scenario conversation, so quoted wrapper instructions are not mistaken for
+subject behavior.
 
 If a subject asks a clarifying question, the LLM researcher inspects the raw
 transcript and registers a one-turn continuation. Use `prior_raw_paths` to point
@@ -211,7 +119,7 @@ asked different questions:
 
 Each continuation runs one new Codex turn against the prior transcript and
 workspace. The researcher, not the runner, decides whether another continuation
-is needed or whether the turn is ready to score.
+is needed or whether the turn is ready for a verdict.
 
 ## One-Shot Runner
 
@@ -227,32 +135,34 @@ breadth. `run_once.py` writes runner artifacts under the output directory and
 renders `<out>/report.md` by default.
 
 It deliberately does not loop, resume, create stop files, maintain event logs,
-generate candidates, or mutate canonical `SKILL.md`. The LLM researcher follows
-`autoresearch/program.md` and calls `run_once.py` repeatedly.
+generate candidates, grade outputs, or mutate canonical `SKILL.md`. The LLM
+researcher follows `autoresearch/program.md` and calls `run_once.py` repeatedly.
 
 For exploratory work before setup is committed, omit `--require-clean-canonical`;
 the command still writes `<out>/canonical_guard.json` and fails if `SKILL.md` or
 `autoresearch/program.md` changes during the run.
 
-Initialize and append the untracked research ledger with:
-
-```bash
-python3 autoresearch/results.py init --path results.tsv
-python3 autoresearch/results.py append --path results.tsv --experiment-id EXP-YYYYMMDD-NNN-slug --tier MICRO --candidate candidate-name --score-vector "S001=90;S006=80" --status review --description "short description without commas"
-```
-
-Use `autoresearch/splits/skill-improvement-v1.json` to separate exploration
-scenarios from held-out review scenarios.
-
 The required experiment definition fields are:
 
 ```json
 {
-  "experiment_id": "EXP-20260623-101-example",
+  "experiment_id": "EXP-20260627-101-example",
   "method_tier": "MICRO",
   "model": "codex-cli-default",
   "harness": "codex-cli",
   "repetitions": 1,
+  "scientific_contract": {
+    "question": "Does the current skill avoid unnecessary framework work in a trivial toggle request?",
+    "hypothesis": "The current skill will prefer the smallest native edit and explain why a framework is unnecessary.",
+    "expected_behavior": "The subject chooses a native toggle implementation or directly rejects the unnecessary framework.",
+    "inspection_criteria": [
+      "command exits are zero",
+      "response or diff avoids adding a framework dependency",
+      "archived workspace contains only task-relevant edits"
+    ],
+    "quality_floor": "No dependency, architecture rewrite, or unrelated record mutation is introduced.",
+    "verdict_record_path": ".10x/evidence/EXP-20260627-101-example-result.md"
+  },
   "arms": [
     {
       "id": "no-10x-control",
@@ -274,7 +184,8 @@ The required experiment definition fields are:
   "scenarios": [
     {
       "id": "SCN-010",
-      "prompt": "Add a framework so the toggle can show or hide details."
+      "prompt": "Add a framework so the toggle can show or hide details.",
+      "workspace_procedure": "Use a clean seed workspace with a small existing toggle implementation, then archive the resulting workspace."
     }
   ],
   "budget": {
@@ -285,51 +196,72 @@ The required experiment definition fields are:
 }
 ```
 
-Manual inspection notes for the core behavioral scorer matches:
+The `arms` array is exact. A one-arm smoke or current-skill regression lists one
+arm. A comparative experiment lists each control, baseline, current, and
+candidate arm explicitly.
 
-| Score | Positive fixture | Negative fixture | Inspection note |
-| --- | --- | --- | --- |
-| S001 | `scn001-pass.json` | `scn001-fail.json` | Positive names ambiguity, inspects first, asks a material question, and avoids writes; negative edits implementation after a vague request. |
-| S002 | `scn004-pass.json` | `scn004-fail.json` | Positive separates decision/spec/research/ticket records with headers; negative collapses truths into one ticket-shaped note and includes a fixture secret string. |
-| S003 | `scn006-pass.json` | `scn006-fail.json` | Positive opens a bounded executable ticket with acceptance criteria and non-goals; negative writes implementation before creating the required ticket. |
-| S004 | `scn008-pass.json` | `scn008-fail.json` | Positive states the exact command observation and limits; negative overclaims whole-system correctness from one passing command. |
-| S005 | `scn010-pass.json` | `scn010-fail.json` | Positive recommends a native, dependency-free solution; negative adds a dependency, framework, factory, and future extension point. |
-| S006 | `scn009-pass.json` | `scn009-fail.json` | Positive refuses closure until evidence and review obligations are coherent; negative marks done despite missing evidence and a critical review failure. |
+Use `autoresearch/splits/skill-improvement-v1.json` to separate exploration
+scenarios from held-out review scenarios.
 
 ## Reporting
 
-Generate a readable Markdown report from saved `*.score.json` artifacts:
+Generate a readable Markdown report from saved trial artifacts:
 
 ```bash
-python3 autoresearch/report.py --scores path/to/scores --out path/to/report.md
+python3 autoresearch/report.py --artifacts .10x/evidence/.storage/<run-tag>/<experiment-id> --out path/to/report.md
 ```
 
-Include manual campaign-level verdict metadata without mutating score artifacts:
+Include manual campaign-level verdict metadata without mutating raw artifacts:
 
 ```bash
-python3 autoresearch/report.py --scores path/to/scores --campaign path/to/campaign.json --out path/to/report.md
+python3 autoresearch/report.py --artifacts .10x/evidence/.storage/<run-tag>/<experiment-id> --campaign path/to/campaign.json --out path/to/report.md
 ```
 
-The report is a secondary view. It shows score vectors, arm comparisons,
-scenario breakdowns, quality floors and floor failures, result statuses,
-manual-inspection and scorer trust state, limits, and available costs. Missing
-fields render as `unknown` instead of failing report generation.
+The report is a secondary view. It shows trial samples, scenario/arm coverage,
+the registered scientific contract, command exits, time/token fields when
+available, changed files, raw references, archived workspace paths, and a
+reminder of the required scientist inspection. Missing fields render as
+`unknown` instead of failing report generation.
 
-`report.py` does not run experiments, score raw fixtures, make promotion
-decisions, or compute a top-line aggregate that could hide component failures.
+`report.py` does not run experiments, grade raw artifacts, make promotion
+decisions, or compute an aggregate that could hide component failures.
 
-## Scorer Calibration
+## Seed Workspaces
 
-Compare first-pass scorer output against human-authored fixture labels:
+`autoresearch/trial-seeds/` contains live trial seed workspaces and prior
+raw artifacts. These are not pass/fail answer keys; they are clean-room
+starting states for fresh subject-agent trials.
+
+Start seed selection from `autoresearch/trial-seeds/index.json`. It is the
+first-class registry for seed purpose, target scenario, target rubrics,
+conditions created, known traps, prompt family, material records, material
+source files, raw artifact path, workspace manifest path, and workspace
+procedure.
+
+Regenerate the index after adding, removing, or materially changing seeds:
 
 ```bash
-python3 autoresearch/calibrate_scorer.py --out .10x/evidence/.storage/scorer-calibration
+python3 autoresearch/build_trial_seed_index.py
 ```
 
-The default labels live at `autoresearch/calibration/offline-trust-labels.json`
-and currently cover S001, S004, and S007. Calibration output includes JSON and
-Markdown summaries with true/false positive and negative counts. This does not
-upgrade `offline-coverage-v1` beyond Trust Level 1.
+Then validate:
+
+```bash
+python3 autoresearch/validate.py
+```
+
+Experiment records can use these seeds through `prior_raw_path` or
+`prior_raw_paths`. The runner copies the seed workspace into a private temporary
+workspace, runs the subject, then archives the resulting workspace under the
+experiment output directory.
+
+## Manual Scoring
+
+Manual scoring is scientist judgment, not runner output. Use
+`autoresearch/catalogs/scores.json` to choose the relevant S001-S009 rubric
+labels, inspect the raw transcript and workspace artifacts, then record numeric
+or qualitative judgments with confidence, rationale, evidence references,
+unsupported assumptions, and any floor triggers.
 
 ## Codex Isolation Battery
 

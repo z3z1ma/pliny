@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/stale-terminal-record-unprompted/raw.json`
+- `autoresearch/trial-seeds/stale-terminal-record-unprompted/raw.json`
 
 Prompt:
 
@@ -90,7 +90,7 @@ Pick up the refund negative adjustment CSV work from the previous pass and prepa
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/stale-terminal-record-unprompted/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/stale-terminal-record-unprompted/raw.json",
       "prompt": "Pick up the refund negative adjustment CSV work from the previous pass and prepare the next executable child ticket. Inspect the record graph and source/tests first. Do not edit source or tests in this turn."
     }
   ],

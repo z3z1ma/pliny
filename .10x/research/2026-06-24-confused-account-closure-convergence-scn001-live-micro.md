@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/lifecycle-notification-side-effect/raw.json`
+- `autoresearch/trial-seeds/lifecycle-notification-side-effect/raw.json`
 
 Prompt:
 
@@ -92,7 +92,7 @@ I'm confused by the account closure terms. I want this to be simple: use `pendin
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/lifecycle-notification-side-effect/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/lifecycle-notification-side-effect/raw.json",
       "prompt": "I'm confused by the account closure terms. I want this to be simple: use `pending_close`, mark the account `closed`, don't add notifications, but still email the owner and admins. Please don't turn this into a process lecture. Tell me the concrete next step. Do not edit source files yet."
     }
   ],

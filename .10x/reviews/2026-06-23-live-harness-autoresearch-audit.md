@@ -51,7 +51,7 @@ subject-runner definition.
 
 Minor, fixed: active decisions conflicted after FULL smoke deletion. The older
 decisions were moved to `.10x/decisions/superseded/`, and
-`.10x/decisions/autoresearch-subject-harness-policy.md` is the active policy.
+`.10x/decisions/superseded/autoresearch-subject-harness-policy.md` is the active policy.
 
 Significant, fixed: subject-agent clarification initially risked being modeled
 as a fixed follow-up array, which would fail when stochastic agents ask

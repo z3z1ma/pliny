@@ -55,7 +55,7 @@ workspace copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/repository-triage-record-quality/raw.json`
+- `autoresearch/trial-seeds/repository-triage-record-quality/raw.json`
 
 Prompt:
 
@@ -95,7 +95,7 @@ Fresh session. Triage account export hardening from this workspace's `.10x` reco
   "scenarios": [
     {
       "id": "SCN-005",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/repository-triage-record-quality/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/repository-triage-record-quality/raw.json",
       "prompt": "Fresh session. Triage account export hardening from this workspace's `.10x` records, source, tests, and docs. Route only real gaps to durable owners. If an existing record already owns a gap, reuse or update it instead of opening a duplicate. If a real gap is uncovered, open the smallest bounded ticket for that gap. Keep done, cancelled, and stale research records historical unless current active records make them relevant. Do not edit source, tests, or docs. Do not ask for prior chat."
     }
   ],

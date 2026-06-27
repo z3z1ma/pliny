@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/parallel-child-integration-reconciliation/raw.json`
+- `autoresearch/trial-seeds/parallel-child-integration-reconciliation/raw.json`
 
 Prompt:
 
@@ -95,7 +95,7 @@ Close the parent only if the active spec, source, tests, evidence, and reviews a
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/parallel-child-integration-reconciliation/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/parallel-child-integration-reconciliation/raw.json",
       "prompt": "You are the parent coordinator for the visible-row export integration ticket. The fixture contains two parallel child tickets: one for CSV row inclusion and one for export-button enabled state. Both child tickets report complete and have pass evidence and pass reviews.\n\nClose the parent only if the active spec, source, tests, evidence, and reviews are coherent across both child surfaces. Do not edit source or tests and do not run commands; inspect the records/files and update only the smallest 10x record needed for closure or blocker state."
     }
   ],

@@ -44,7 +44,7 @@ Automated current-10x score highlights:
 ## Procedure
 
 1. Registered the exact one-line code edit seed workspace under
-   `autoresearch/fixtures/live-seeds/exact-one-line-code-edit/`.
+   `autoresearch/trial-seeds/exact-one-line-code-edit/`.
 2. Registered the MICRO experiment in
    `.10x/research/2026-06-25-one-line-code-edit-after-activation-sanity-live-micro.md`.
 3. Validated contracts with `python3 autoresearch/validate.py`.

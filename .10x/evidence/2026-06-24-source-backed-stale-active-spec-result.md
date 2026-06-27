@@ -46,7 +46,7 @@ Manual control observations:
 ## Procedure
 
 1. Added tracked seed
-   `autoresearch/fixtures/live-seeds/source-backed-stale-active-spec/`.
+   `autoresearch/trial-seeds/source-backed-stale-active-spec/`.
 2. Registered the experiment in
    `.10x/research/2026-06-24-source-backed-stale-active-spec-scn006-live-micro.md`.
 3. Ran:

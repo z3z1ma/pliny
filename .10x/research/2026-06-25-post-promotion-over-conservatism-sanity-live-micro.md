@@ -51,7 +51,7 @@ across repeated samples.
 ## Scenario Set
 
 1. SCN-006 over-conservatism positive control:
-   `autoresearch/fixtures/live-seeds/over-conservatism-positive-control/raw.json`
+   `autoresearch/trial-seeds/over-conservatism-positive-control/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ across repeated samples.
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/over-conservatism-positive-control/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/over-conservatism-positive-control/raw.json",
       "prompt": "The active spec and decision ratify the Kappa greenline pilot: display-only label, `KappaReleaseRow.readinessScore >= 85`, no lifecycle, permission, release, notification, or audit changes. Implementation is authorized. Create the smallest executable implementation ticket for this work. Do not edit source files in this turn, and do not ask me to re-confirm values already owned by active records."
     }
   ],

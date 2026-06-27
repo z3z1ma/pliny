@@ -42,7 +42,7 @@ did not cross-apply payout semantics into the refund ticket or spec.
 ## Procedure
 
 1. Copied a reviewed current-10x handoff workspace into
-   `autoresearch/fixtures/live-seeds/post-cold-start-exact-ratification/`.
+   `autoresearch/trial-seeds/post-cold-start-exact-ratification/`.
 2. Registered
    `.10x/research/2026-06-25-post-cold-start-exact-ratification-scn006-live-micro.md`.
 3. Ran:

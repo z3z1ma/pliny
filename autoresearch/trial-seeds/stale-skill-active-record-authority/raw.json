@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260625-seed-stale-skill-active-record-authority",
+  "scenario_id": "SCN-012",
+  "variant_id": "seed",
+  "rep": 0,
+  "model": "seed",
+  "harness": "seed",
+  "instruction_digest": "sha256:seed",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "A teammate asks for Ledger import preview v2 verification using operational memory if applicable."
+    },
+    {
+      "role": "assistant",
+      "content": "The subject workspace contains an older Ledger import fixture replay skill in `.10x/skills/ledger-import-fixture-replay/SKILL.md`, a byte-equivalent `.agents/skills/ledger-import-fixture-replay/SKILL.md` exposure copy, stale v1 evidence and review, newer active v2 spec and ticket records, a deterministic preview script, and tracked v1/v2 CSV fixture data. The next turn should decide which record owns current verification authority and record evidence without editing implementation or skill files."
+    }
+  ],
+  "tool_invocations": [],
+  "file_outputs": [],
+  "command_outputs": [],
+  "raw_artifact_refs": [
+    "autoresearch/trial-seeds/stale-skill-active-record-authority/workspace/workspace-manifest.json"
+  ],
+  "wall_seconds": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "harness_metadata": {
+    "kind": "seed-workspace",
+    "workspace_manifest_path": "autoresearch/trial-seeds/stale-skill-active-record-authority/workspace/workspace-manifest.json"
+  }
+}

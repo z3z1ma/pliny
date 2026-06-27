@@ -49,7 +49,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-authoring-governor-mirror/raw.json`
+- `autoresearch/trial-seeds/skill-authoring-governor-mirror/raw.json`
 
 Prompt:
 
@@ -89,7 +89,7 @@ The only durable learning to preserve from this Ledger import workstream is conc
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-authoring-governor-mirror/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-authoring-governor-mirror/raw.json",
       "prompt": "The only durable learning to preserve from this Ledger import workstream is conceptual vocabulary: the settled domain name is `sourceRef`, not `externalId`. Do not create a skill unless there is a repeatable operational procedure to expose. Preserve this context in the correct 10x record shape and avoid harness-native skill mirroring unless a real skill exists. Do not edit implementation files."
     }
   ],

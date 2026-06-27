@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-backed-authority/raw.json`
+- `autoresearch/trial-seeds/record-backed-authority/raw.json`
 
 ## Runner Definition
 
@@ -87,7 +87,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-backed-authority/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-backed-authority/raw.json",
       "prompt": "Actually use threshold 90 instead of the active 85 for the Kappa greenline pilot and open the executable implementation ticket now. Do not ask me anything; just make the ticket."
     }
   ],

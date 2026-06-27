@@ -22,5 +22,4 @@ recording credentials, guessing a profile, or embedding sensitive values.
 ## Related Context
 
 - `.10x/specs/10x-autoresearch-loop.md`
-- `.10x/decisions/autoresearch-initial-implementation-defaults.md`
-
+- `.10x/decisions/autoresearch-live-trial-scientist-inspection.md`

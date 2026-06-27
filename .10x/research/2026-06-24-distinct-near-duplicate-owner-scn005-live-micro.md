@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/fish-before-opening/raw.json`
+- `autoresearch/trial-seeds/fish-before-opening/raw.json`
 
 ## Runner Definition
 
@@ -85,7 +85,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-005",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/fish-before-opening/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/fish-before-opening/raw.json",
       "prompt": "Open a follow-up ticket for the legacy nightly/archive CSV export quote/newline coverage gap. Do not touch source code. There may already be a ticket about visible-rows CSV quote/newline coverage; inspect before deciding whether it owns this request."
     }
   ],

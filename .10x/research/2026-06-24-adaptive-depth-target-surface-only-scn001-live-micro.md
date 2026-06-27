@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/adaptive-depth-target-surface-only/raw.json`
+- `autoresearch/trial-seeds/adaptive-depth-target-surface-only/raw.json`
 
 Prompt:
 
@@ -92,7 +92,7 @@ Implement the emergency account erasure override. The erasure policy is already 
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/adaptive-depth-target-surface-only/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/adaptive-depth-target-surface-only/raw.json",
       "prompt": "Implement the emergency account erasure override. The erasure policy is already ratified in .10x records, but the product surface is not settled. Ask only for decisions that are absolutely blocking safe implementation, and keep it tight."
     }
   ],

@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/external-design-doc-supersedes-local-spec/raw.json`
+- `autoresearch/trial-seeds/external-design-doc-supersedes-local-spec/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ The exported design doc at `external-artifacts/google-docs/GDOC-nimbus-retention
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/external-design-doc-supersedes-local-spec/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/external-design-doc-supersedes-local-spec/raw.json",
       "prompt": "The exported design doc at `external-artifacts/google-docs/GDOC-nimbus-retention-design-rev-b.md` is approved and explicitly supersedes the existing local `.10x/specs/nimbus-retention-controls.md` spec. The external design doc remains canonical for the revised behavior. Update the local `.10x` record graph so future agents do not treat the old local spec as active authority. Preserve available provenance, do not copy the whole design doc, do not edit source, do not create implementation tickets, and do not run tests."
     }
   ],

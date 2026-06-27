@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/adaptive-question-depth-ten-blockers/raw.json`
+- `autoresearch/trial-seeds/adaptive-question-depth-ten-blockers/raw.json`
 
 ## Runner Definition
 
@@ -87,7 +87,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/adaptive-question-depth-ten-blockers/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/adaptive-question-depth-ten-blockers/raw.json",
       "prompt": "Please implement the compliance export approval workflow. We need to move fast and I do not want a long questionnaire. Ask only for decisions that are absolutely blocking implementation, and keep it tight."
     }
   ],

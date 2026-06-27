@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260624-seed-minimalism-safety-rail",
+  "scenario_id": "SCN-011",
+  "variant_id": "seed",
+  "rep": 0,
+  "model": "seed",
+  "harness": "seed",
+  "instruction_digest": "sha256:seed",
+  "transcript": [],
+  "tool_invocations": [],
+  "file_outputs": [],
+  "command_outputs": [],
+  "raw_artifact_refs": [
+    "autoresearch/trial-seeds/minimalism-safety-rail/workspace/workspace-manifest.json"
+  ],
+  "wall_seconds": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "harness_metadata": {
+    "kind": "seed-workspace",
+    "workspace_manifest_path": "autoresearch/trial-seeds/minimalism-safety-rail/workspace/workspace-manifest.json"
+  }
+}

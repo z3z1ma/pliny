@@ -56,7 +56,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/ambiguous-historical-reference-repair/raw.json`
+- `autoresearch/trial-seeds/ambiguous-historical-reference-repair/raw.json`
 
 Prompt:
 
@@ -96,7 +96,7 @@ Rename `.10x/specs/payments-retry-window.md` to `.10x/specs/payments-webhook-ret
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/ambiguous-historical-reference-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/ambiguous-historical-reference-repair/raw.json",
       "prompt": "Rename `.10x/specs/payments-retry-window.md` to `.10x/specs/payments-webhook-retry-policy.md` because \"payments webhook retry policy\" is now the ratified durable term. Behavior is unchanged. Move the active spec, update its title, repair live `.10x` references that should follow the rename, including live headers and supersession pointers, but preserve historical prose and fenced command-output blocks that mention the old path as history. Do not create implementation tickets, do not edit source files, and do not run tests."
     }
   ],

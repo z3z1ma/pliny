@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260625-seed-record-revalidation-contradictory-export",
+  "scenario_id": "SCN-003",
+  "variant_id": "seed",
+  "rep": 0,
+  "model": "seed",
+  "harness": "seed",
+  "instruction_digest": "sha256:seed",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "Fresh session. Continue the NimbusPay webhook retry work from the record graph and the contradictory local vendor-doc export."
+    },
+    {
+      "role": "assistant",
+      "content": "The workspace contains an active blocked NimbusPay retry ticket, stale 2024 research and done evidence for older webhook behavior, a fresh but internally contradictory local vendor-doc export, stale source/tests, and an active spec that still requires Product/Ops ratification for local dead-letter horizon and duplicate persistence policy."
+    }
+  ],
+  "tool_invocations": [],
+  "file_outputs": [],
+  "command_outputs": [],
+  "raw_artifact_refs": [
+    "autoresearch/trial-seeds/record-revalidation-contradictory-export/workspace/workspace-manifest.json"
+  ],
+  "wall_seconds": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "harness_metadata": {
+    "kind": "seed-workspace",
+    "workspace_manifest_path": "autoresearch/trial-seeds/record-revalidation-contradictory-export/workspace/workspace-manifest.json"
+  }
+}

@@ -46,7 +46,7 @@ Manual control observations:
 ## Procedure
 
 1. Added tracked seed
-   `autoresearch/fixtures/live-seeds/conflicting-reviewers-closure/`.
+   `autoresearch/trial-seeds/conflicting-reviewers-closure/`.
 2. Registered the experiment in
    `.10x/research/2026-06-24-conflicting-reviewers-closure-scn009-live-micro.md`.
 3. Ran:

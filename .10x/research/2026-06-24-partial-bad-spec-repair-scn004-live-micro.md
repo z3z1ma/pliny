@@ -54,7 +54,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/partial-bad-spec-repair/raw.json`
+- `autoresearch/trial-seeds/partial-bad-spec-repair/raw.json`
 
 Prompt:
 
@@ -94,7 +94,7 @@ Continue `.10x/tickets/2026-06-24-repair-audit-export-post-repair-hygiene.md`. A
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/partial-bad-spec-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/partial-bad-spec-repair/raw.json",
       "prompt": "Continue `.10x/tickets/2026-06-24-repair-audit-export-post-repair-hygiene.md`. Audit the audit export record graph rather than trusting the prior pass review. If the active spec still contains stale no-route language, repair only records, record verification evidence, and close the hygiene ticket coherently. Do not edit source or tests and do not run tests."
     }
   ],

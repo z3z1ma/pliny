@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/done/2026-06-23-dynamic-subject-continuations.md, .10x/decisions/autoresearch-subject-harness-policy.md
+Relates-To: .10x/tickets/done/2026-06-23-dynamic-subject-continuations.md, .10x/decisions/superseded/autoresearch-subject-harness-policy.md
 
 # Dynamic Subject Continuation Support
 
@@ -68,7 +68,7 @@ resulting score artifacts, and confirms the public plan omits full prompts.
    arm, score validation, and plan redaction.
 4. Updated `autoresearch/program.md`, `autoresearch/README.md`,
    `autoresearch/templates/experiment.md`, and
-   `.10x/decisions/autoresearch-subject-harness-policy.md`.
+   `.10x/decisions/superseded/autoresearch-subject-harness-policy.md`.
 5. Ran the full autoresearch test suite, contract validator, and canonical
    snapshot command.
 

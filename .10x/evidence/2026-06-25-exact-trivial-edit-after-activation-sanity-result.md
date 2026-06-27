@@ -46,7 +46,7 @@ Automated current-10x score highlights:
 ## Procedure
 
 1. Registered the exact trivial edit seed workspace under
-   `autoresearch/fixtures/live-seeds/exact-trivial-edit/`.
+   `autoresearch/trial-seeds/exact-trivial-edit/`.
 2. Registered the MICRO experiment in
    `.10x/research/2026-06-25-exact-trivial-edit-after-activation-sanity-live-micro.md`.
 3. Validated contracts with `python3 autoresearch/validate.py`.

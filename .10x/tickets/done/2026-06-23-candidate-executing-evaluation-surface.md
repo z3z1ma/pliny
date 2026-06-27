@@ -2,7 +2,7 @@ Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 Parent: none
-Depends-On: .10x/research/2026-06-23-skill-autoresearch-run.md, .10x/evidence/2026-06-23-closure-evidence-matrix-micro.md, .10x/evidence/2026-06-23-smallest-executable-unit-gate-micro.md, .10x/decisions/autoresearch-subject-harness-policy.md
+Depends-On: .10x/research/2026-06-23-skill-autoresearch-run.md, .10x/evidence/2026-06-23-closure-evidence-matrix-micro.md, .10x/evidence/2026-06-23-smallest-executable-unit-gate-micro.md, .10x/decisions/superseded/autoresearch-subject-harness-policy.md
 
 # Add Candidate-Executing Evaluation Surface
 
@@ -80,7 +80,7 @@ Excluded:
   real harness when measuring behavior. `run_once.py` is live-only;
   fixture-backed calibration is separate from the one-shot iteration path.
   Decision recorded at
-  `.10x/decisions/autoresearch-subject-harness-policy.md`.
+  `.10x/decisions/superseded/autoresearch-subject-harness-policy.md`.
 - 2026-06-23: Ran live Codex MICRO experiment
   `EXP-20260623-803-smallest-executable-unit-live-subject` at
   `.10x/evidence/.storage/2026-06-23-skill-autoresearch/004-smallest-executable-unit-micro-codex/`.

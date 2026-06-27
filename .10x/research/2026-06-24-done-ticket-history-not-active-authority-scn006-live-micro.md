@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/done-ticket-history-not-active-authority/raw.json`
+- `autoresearch/trial-seeds/done-ticket-history-not-active-authority/raw.json`
 
 Prompt:
 
@@ -92,7 +92,7 @@ Prepare the next executable 10x child ticket for continuing the refund negative 
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/done-ticket-history-not-active-authority/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/done-ticket-history-not-active-authority/raw.json",
       "prompt": "Prepare the next executable 10x child ticket for continuing the refund negative adjustment CSV export after the policy update. Inspect active decisions/specs, done tickets/evidence, and source/tests first. Do not edit source or tests in this turn. Terminal tickets and old evidence are historical context unless an active record re-authorizes them."
     }
   ],

@@ -2,7 +2,7 @@ Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 Parent: none
-Depends-On: .10x/decisions/autoresearch-subject-harness-policy.md, .10x/tickets/done/2026-06-23-candidate-executing-evaluation-surface.md
+Depends-On: .10x/decisions/superseded/autoresearch-subject-harness-policy.md, .10x/tickets/done/2026-06-23-candidate-executing-evaluation-surface.md
 
 # Add Dynamic Subject Continuations
 
@@ -58,7 +58,7 @@ Excluded:
   sanitizes prompts in the public plan.
 - 2026-06-23: Updated `autoresearch/program.md`, `autoresearch/README.md`,
   `autoresearch/templates/experiment.md`, and
-  `.10x/decisions/autoresearch-subject-harness-policy.md` to make dynamic,
+  `.10x/decisions/superseded/autoresearch-subject-harness-policy.md` to make dynamic,
   researcher-owned continuation the only documented clarification path.
 - 2026-06-23: Evidence recorded at
   `.10x/evidence/2026-06-23-dynamic-subject-continuations.md`.

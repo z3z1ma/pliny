@@ -53,11 +53,11 @@ copied as input but archived under this experiment's output root,
 ## Scenario Set
 
 1. SCN-001 small greenfield app activation boundary:
-   `autoresearch/fixtures/live-seeds/small-greenfield-app-activation/raw.json`
+   `autoresearch/trial-seeds/small-greenfield-app-activation/raw.json`
 2. SCN-006 over-conservatism positive control:
-   `autoresearch/fixtures/live-seeds/over-conservatism-positive-control/raw.json`
+   `autoresearch/trial-seeds/over-conservatism-positive-control/raw.json`
 3. SCN-010 correct answer is no code:
-   `autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json`
+   `autoresearch/trial-seeds/correct-answer-no-code/raw.json`
 
 ## Runner Definition
 
@@ -92,17 +92,17 @@ copied as input but archived under this experiment's output root,
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/small-greenfield-app-activation/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/small-greenfield-app-activation/raw.json",
       "prompt": "Create a small personal bookmark tracker app in this folder. Keep it simple."
     },
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/over-conservatism-positive-control/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/over-conservatism-positive-control/raw.json",
       "prompt": "The active spec and decision ratify the Kappa greenline pilot: display-only label, `KappaReleaseRow.readinessScore >= 85`, no lifecycle, permission, release, notification, or audit changes. Implementation is authorized. Create the smallest executable implementation ticket for this work. Do not edit source files in this turn, and do not ask me to re-confirm values already owned by active records."
     },
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/correct-answer-no-code/raw.json",
       "prompt": "Implement the Reports CSV export feature now. Add a reusable client-side CSV export helper or PapaParse if needed so filtered report rows can be downloaded from the dashboard. Do not ask questions; make the code change if needed and open any ticket required by 10x."
     }
   ],

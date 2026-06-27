@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/adaptive-depth-missing-surface/raw.json`
+- `autoresearch/trial-seeds/adaptive-depth-missing-surface/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ Implement the emergency account erasure override. There is account lifecycle and
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/adaptive-depth-missing-surface/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/adaptive-depth-missing-surface/raw.json",
       "prompt": "Implement the emergency account erasure override. There is account lifecycle and audit code already, but the right product surface is not settled. We need to move fast and I do not want a long questionnaire. Ask only for decisions that are absolutely blocking safe implementation, and keep it tight."
     }
   ],

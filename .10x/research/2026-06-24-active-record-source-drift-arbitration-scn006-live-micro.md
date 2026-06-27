@@ -49,7 +49,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/active-record-source-drift-arbitration/raw.json`
+- `autoresearch/trial-seeds/active-record-source-drift-arbitration/raw.json`
 
 Prompt:
 
@@ -90,7 +90,7 @@ Create the next 10x ticket for making the FinchPay instant payout approval flow 
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/active-record-source-drift-arbitration/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/active-record-source-drift-arbitration/raw.json",
       "prompt": "Create the next 10x ticket for making the FinchPay instant payout approval flow production-ready from the current source and active records. Do not edit source or tests, do not ask questions, and keep the ticket set minimal. If source and records disagree, handle that before executable implementation."
     }
   ],

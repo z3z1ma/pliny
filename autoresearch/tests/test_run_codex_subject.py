@@ -5,14 +5,14 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from autoresearch import offline_score, run_codex_subject
+from autoresearch import run_codex_subject
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 class CodexSubjectRunnerTest(unittest.TestCase):
-    def test_plan_records_live_subject_samples_without_fixture_paths(self):
+    def test_plan_records_live_subject_samples_without_score_artifacts(self):
         with tempfile.TemporaryDirectory() as tmp:
             plan = run_codex_subject.build_plan(
                 _definition(),
@@ -26,7 +26,7 @@ class CodexSubjectRunnerTest(unittest.TestCase):
         for sample in plan["samples"]:
             self.assertEqual(1, sample["live_codex_calls"])
             self.assertEqual(180.0, sample["timeout_seconds"])
-            self.assertNotIn("fixture_path", sample)
+            self.assertNotIn("planned_score_artifact_path", sample)
             self.assertIn("--disable", sample["planned_codex_argv"])
             self.assertIn("--ignore-user-config", sample["planned_codex_argv"])
             self.assertIn("scenario_prompt", sample)
@@ -70,7 +70,7 @@ class CodexSubjectRunnerTest(unittest.TestCase):
                 with self.assertRaises(run_codex_subject.ExperimentError):
                     run_codex_subject.build_plan(definition, repo_root=REPO_ROOT)
 
-    def test_live_run_writes_scoreable_raw_outputs_without_instruction_contamination(self):
+    def test_live_run_writes_trial_outputs_without_instruction_contamination(self):
         with tempfile.TemporaryDirectory() as tmp:
             with mock.patch("subprocess.run", side_effect=_fake_run):
                 summary = run_codex_subject.run_live(
@@ -81,14 +81,14 @@ class CodexSubjectRunnerTest(unittest.TestCase):
 
             output_root = Path(tmp)
             raw_paths = sorted((output_root / "raw").glob("*.json"))
-            score_paths = sorted((output_root / "scores").glob("*.score.json"))
             command_paths = sorted((output_root / "codex").glob("*.command.json"))
             manifests = sorted((output_root / "workspaces").glob("*/workspace-manifest.json"))
 
             self.assertEqual(3, summary["samples_written"])
             self.assertEqual(3, summary["live_codex_calls"])
+            self.assertNotIn("score_artifact_dir", summary)
             self.assertEqual(3, len(raw_paths))
-            self.assertEqual(3, len(score_paths))
+            self.assertFalse((output_root / "scores").exists())
             self.assertEqual(3, len(command_paths))
             self.assertEqual(3, len(manifests))
 
@@ -107,11 +107,12 @@ class CodexSubjectRunnerTest(unittest.TestCase):
                     "command_execution",
                     raw["tool_invocations"][0]["item"]["type"],
                 )
-                artifact = offline_score.score_fixture(raw_path)
-                self.assertEqual([], offline_score.validate_score_artifact(artifact))
-                limits = artifact["limits"]
-                self.assertTrue(any("previously captured live harness outputs" in item for item in limits))
-                self.assertFalse(any("Does not run live APIs" in item for item in limits))
+                self.assertNotIn("scores", raw)
+                self.assertIn(str(raw_path), raw["raw_artifact_refs"])
+                self.assertIn(
+                    "not promotion authority",
+                    raw["harness_metadata"]["promotion_limit"],
+                )
 
             no_10x_manifest = json.loads(
                 next(
@@ -208,16 +209,24 @@ class CodexSubjectRunnerTest(unittest.TestCase):
 
         self.assertEqual([[], [], []], visible_sibling_markers)
 
-    def test_missing_default_arm_is_rejected(self):
+    def test_runner_uses_exactly_the_listed_arms(self):
         definition = _definition()
         definition["arms"] = definition["arms"][:2]
 
-        with self.assertRaises(run_codex_subject.ExperimentError):
-            run_codex_subject.build_plan(definition, repo_root=REPO_ROOT)
+        plan = run_codex_subject.build_plan(definition, repo_root=REPO_ROOT)
 
-    def test_evaluation_only_allows_single_current_arm(self):
+        self.assertEqual(2, plan["live_codex_calls"])
+        self.assertEqual(
+            ["no-10x-control", "current-10x"],
+            [arm["id"] for arm in plan["arms"]],
+        )
+        self.assertEqual(
+            ["no-10x-control", "current-10x"],
+            [sample["variant_id"] for sample in plan["samples"]],
+        )
+
+    def test_single_current_arm_smoke_run_needs_no_special_mode(self):
         definition = _definition()
-        definition["evaluation_only"] = True
         definition["arms"] = [
             {
                 "id": "current-10x",
@@ -238,7 +247,28 @@ class CodexSubjectRunnerTest(unittest.TestCase):
         self.assertEqual(["current-10x"], [arm["id"] for arm in plan["arms"]])
         self.assertEqual(["current-10x"], [sample["variant_id"] for sample in plan["samples"]])
 
-    def test_timeout_writes_scoreable_artifact_instead_of_hanging(self):
+    def test_evaluation_only_field_is_rejected(self):
+        definition = _definition()
+        definition["evaluation_only"] = True
+
+        with self.assertRaisesRegex(run_codex_subject.ExperimentError, "evaluation_only is retired"):
+            run_codex_subject.build_plan(definition, repo_root=REPO_ROOT)
+
+    def test_scientific_contract_is_required(self):
+        definition = _definition()
+        del definition["scientific_contract"]
+
+        with self.assertRaisesRegex(run_codex_subject.ExperimentError, "scientific_contract"):
+            run_codex_subject.build_plan(definition, repo_root=REPO_ROOT)
+
+    def test_budget_is_required(self):
+        definition = _definition()
+        del definition["budget"]
+
+        with self.assertRaisesRegex(run_codex_subject.ExperimentError, "budget"):
+            run_codex_subject.build_plan(definition, repo_root=REPO_ROOT)
+
+    def test_timeout_writes_trial_artifact_instead_of_hanging(self):
         definition = _definition()
         definition["budget"]["timeout_seconds_per_run"] = 1
 
@@ -252,12 +282,11 @@ class CodexSubjectRunnerTest(unittest.TestCase):
 
             raw_path = sorted((Path(tmp) / "raw").glob("*.json"))[0]
             raw = json.loads(raw_path.read_text(encoding="utf-8"))
-            artifact = offline_score.score_fixture(raw_path)
 
         self.assertEqual(3, summary["samples_written"])
         self.assertTrue(raw["timed_out"])
         self.assertEqual(124, raw["command_outputs"][0]["exit_code"])
-        self.assertEqual([], offline_score.validate_score_artifact(artifact))
+        self.assertNotIn("scores", raw)
 
     def test_continuation_uses_prior_raw_artifact_and_records_combined_transcript(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -290,7 +319,6 @@ class CodexSubjectRunnerTest(unittest.TestCase):
 
             raw_paths = sorted((root / "out" / "raw").glob("*.json"))
             raws = [json.loads(raw_path.read_text(encoding="utf-8")) for raw_path in raw_paths]
-            artifacts = [offline_score.score_fixture(raw_path) for raw_path in raw_paths]
             plan = json.loads((root / "out" / "plan.json").read_text(encoding="utf-8"))
             manifests = [
                 json.loads(path.read_text(encoding="utf-8"))
@@ -301,7 +329,7 @@ class CodexSubjectRunnerTest(unittest.TestCase):
         self.assertEqual(3, summary["live_codex_calls"])
         self.assertEqual(3, len(raws))
         self.assertEqual(3, len(manifests))
-        for raw, artifact in zip(raws, artifacts):
+        for raw in raws:
             self.assertEqual(1, raw["live_codex_calls"])
             self.assertEqual(1, raw["harness_metadata"]["prior_turn_count"])
             self.assertIn(str(root / "workspace-"), raw["harness_metadata"]["seed_workspace_dir"])
@@ -311,7 +339,7 @@ class CodexSubjectRunnerTest(unittest.TestCase):
             self.assertIn(raw["variant_id"], raw["transcript"][2]["content"])
             self.assertIn("show archived widgets", raw["transcript"][2]["content"])
             self.assertIn("Now that behavior is specified", raw["transcript"][3]["content"])
-            self.assertEqual([], offline_score.validate_score_artifact(artifact))
+            self.assertNotIn("scores", raw)
 
         for manifest in manifests:
             self.assertIn(str(root / "out" / "workspaces"), manifest["workspace"])
@@ -471,7 +499,7 @@ class CodexSubjectRunnerTest(unittest.TestCase):
         self.assertEqual([], raw_outputs["current-10x"])
         self.assertEqual([], raw_outputs["candidate-variant"])
 
-    def test_no_10x_control_preserves_fixture_record_graph_task_surface(self):
+    def test_no_10x_control_preserves_seed_record_graph_task_surface(self):
         observed_record_graphs = {}
 
         def fake_run(argv, stdout, stderr, text, timeout=None):
@@ -547,6 +575,18 @@ def _definition():
         "model": "codex-test-model",
         "harness": "codex-cli",
         "repetitions": 1,
+        "scientific_contract": {
+            "question": "Can the subject prefer a smaller native change?",
+            "hypothesis": "The current instructions avoid unnecessary framework work.",
+            "expected_behavior": "The subject recommends the smaller native solution and names the tradeoff.",
+            "inspection_criteria": [
+                "command exits are zero",
+                "response names the smaller native solution",
+                "no score artifacts are emitted",
+            ],
+            "quality_floor": "No dependency or speculative abstraction is added.",
+            "verdict_record_path": ".10x/evidence/unit-test-codex-subject.md",
+        },
         "arms": [
             {
                 "id": "no-10x-control",
@@ -568,9 +608,14 @@ def _definition():
             {
                 "id": "SCN-010",
                 "prompt": "Add a framework so the toggle can show or hide details.",
+                "workspace_procedure": "Empty temporary workspace for unit tests.",
             }
         ],
-        "budget": {"estimated_wall_seconds_per_run": 180, "timeout_seconds_per_run": 180},
+        "budget": {
+            "max_harness_runs": 3,
+            "estimated_wall_seconds_per_run": 180,
+            "timeout_seconds_per_run": 180,
+        },
     }
 
 

@@ -52,7 +52,7 @@ arbitration; it nevertheless blocked safely from source-only provenance.
 ## Procedure
 
 1. Created the tracked seed workspace
-   `autoresearch/fixtures/live-seeds/weak-provenance-multi-surface-drift/`.
+   `autoresearch/trial-seeds/weak-provenance-multi-surface-drift/`.
 2. Registered the experiment
    `.10x/research/2026-06-25-weak-provenance-multi-surface-drift-scn006-live-micro.md`.
 3. Ran `python3 autoresearch/run_once.py --experiment .10x/research/2026-06-25-weak-provenance-multi-surface-drift-scn006-live-micro.md --out .10x/evidence/.storage/2026-06-23-skill-autoresearch/180-weak-provenance-multi-surface-drift-scn006-live-micro --require-clean-canonical`.

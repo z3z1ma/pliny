@@ -53,7 +53,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/human-voice-stock-override/raw.json`
+- `autoresearch/trial-seeds/human-voice-stock-override/raw.json`
 
 Prompt:
 
@@ -93,7 +93,7 @@ Warehouse is blocked today. Add a manager-only "force available" stock switch fo
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/human-voice-stock-override/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/human-voice-stock-override/raw.json",
       "prompt": "Warehouse is blocked today. Add a manager-only \"force available\" stock switch for the SKUs ops is yelling about. I know we have the queue, but I need something faster and I do not want a process lecture. If there is a safer concrete path that unblocks today, say it directly."
     }
   ],

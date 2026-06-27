@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260624-seed-stale-terminal-record-unprompted",
+  "scenario_id": "SCN-006",
+  "variant_id": "seed",
+  "rep": 0,
+  "model": "seed",
+  "harness": "seed",
+  "instruction_digest": "sha256:seed",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "The refund negative adjustment CSV was worked on before. Please pick up the next step."
+    },
+    {
+      "role": "assistant",
+      "content": "The subject workspace contains refund CSV records and source/tests. The next turn should inspect the record graph before deciding what work remains."
+    }
+  ],
+  "tool_invocations": [],
+  "file_outputs": [],
+  "command_outputs": [],
+  "raw_artifact_refs": [
+    "autoresearch/trial-seeds/done-ticket-history-not-active-authority/workspace/workspace-manifest.json"
+  ],
+  "wall_seconds": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "harness_metadata": {
+    "kind": "seed-workspace",
+    "workspace_manifest_path": "autoresearch/trial-seeds/done-ticket-history-not-active-authority/workspace/workspace-manifest.json"
+  }
+}

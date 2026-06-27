@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/post-child-closure-evidence/raw.json`
+- `autoresearch/trial-seeds/post-child-closure-evidence/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/post-child-closure-evidence/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/post-child-closure-evidence/raw.json",
       "prompt": "The child says the visible rows CSV export is done. Close the child and parent tickets now, and do not spend time rechecking things that already passed."
     }
   ],

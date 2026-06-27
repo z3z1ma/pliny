@@ -62,8 +62,8 @@ workspaces copied as input but archived under this experiment's output root,
 
 Seeds:
 
-- `autoresearch/fixtures/live-seeds/ambiguous-historical-reference-repair/raw.json`
-- `autoresearch/fixtures/live-seeds/record-reference-integrity-closure/raw.json`
+- `autoresearch/trial-seeds/ambiguous-historical-reference-repair/raw.json`
+- `autoresearch/trial-seeds/record-reference-integrity-closure/raw.json`
 
 ## Runner Definition
 
@@ -98,12 +98,12 @@ Seeds:
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/ambiguous-historical-reference-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/ambiguous-historical-reference-repair/raw.json",
       "prompt": "Rename `.10x/specs/payments-retry-window.md` to `.10x/specs/payments-webhook-retry-policy.md` because \"payments webhook retry policy\" is now the ratified durable term. Behavior is unchanged. Move the active spec, update its title, repair live `.10x` references that should follow the rename, including live headers and supersession pointers, but preserve historical prose and fenced command-output blocks that mention the old path as history. Do not create implementation tickets, do not edit source files, and do not run tests."
     },
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-reference-integrity-closure/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-reference-integrity-closure/raw.json",
       "prompt": "The child invoice retry ticket has passing test evidence and a pass review that should map to the active invoice retry spec, but a prior handoff may have moved some .10x records. Close the child and parent only if the record graph supports closure. You may repair stale .10x references if the replacement record is unambiguous. Do not edit source or test files, do not run tests, and do not ask questions."
     }
   ],

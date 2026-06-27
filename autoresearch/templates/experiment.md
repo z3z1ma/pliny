@@ -25,7 +25,11 @@ Why this behavior matters to 10x.
 MINE, MICRO, or FULL. Use MINE before MICRO and MICRO before FULL whenever the
 cheaper tier can honestly answer the question.
 
-## Variants
+## Arms
+
+List the exact ordered arms to run. A one-arm current-skill regression lists one
+arm. A comparative experiment lists every control, baseline, current, and
+candidate arm explicitly.
 
 - no-10x-control:
 - current-10x:
@@ -41,9 +45,17 @@ equivalent files are suppressed.
 
 List scenario IDs and live prompts for subject-agent execution.
 
+Choose seeds from `autoresearch/trial-seeds/index.json`; copy `raw_path` into
+`prior_raw_path` and copy `workspace_procedure` into the runner definition.
+
 For a continuation after subject-agent questions, list the prior raw artifact
 for each arm and the next user message for that arm. Do not use fixed follow-up
 arrays; the LLM researcher decides each next turn after reading the transcript.
+
+## Scientific Contract
+
+Register the question, hypothesis, expected behavior, inspection criteria,
+quality floor, and verdict record path before execution.
 
 ## Runner Definition
 
@@ -62,6 +74,18 @@ the scenario isolates one behavior.
   "model": "codex-cli-default",
   "harness": "codex-cli",
   "repetitions": 1,
+  "scientific_contract": {
+    "question": "Does the current skill avoid unnecessary framework work in a trivial toggle request?",
+    "hypothesis": "The current skill will prefer the smallest native edit and explain why a framework is unnecessary.",
+    "expected_behavior": "The subject chooses a native toggle implementation or directly rejects the unnecessary framework.",
+    "inspection_criteria": [
+      "command exits are zero",
+      "response or diff avoids adding a framework dependency",
+      "archived workspace contains only task-relevant edits"
+    ],
+    "quality_floor": "No dependency, architecture rewrite, or unrelated record mutation is introduced.",
+    "verdict_record_path": ".10x/evidence/EXP-YYYYMMDD-NNN-short-slug-result.md"
+  },
   "arms": [
     {
       "id": "no-10x-control",
@@ -83,7 +107,8 @@ the scenario isolates one behavior.
   "scenarios": [
     {
       "id": "SCN-010",
-      "prompt": "Add a framework so the toggle can show or hide details."
+      "prompt": "Add a framework so the toggle can show or hide details.",
+      "workspace_procedure": "Use a clean seed workspace with a small existing toggle implementation, then archive the resulting workspace."
     }
   ],
   "budget": {
@@ -134,17 +159,21 @@ preliminary unless an accepted exception applies.
 
 ## Prediction
 
-Expected score movement, expected failure elicitation, and what would count as
+Expected rubric movement, expected failure elicitation, and what would count as
 backfire.
 
-## Metrics To Score
+## Rubric Criteria
 
-Score IDs and any active floors.
+Score IDs or plain-language rubric criteria and any active floors. Use
+`autoresearch/catalogs/scores.json` for the manual scoring rubric. The runner
+does not emit a verdict; the scientist inspects the artifacts against these
+criteria and records confidence, rationale, evidence references, unsupported
+assumptions, and floor triggers.
 
 ## Quality Floors
 
-List active floors that apply to the experiment and whether they are draft,
-calibration, or accepted gates.
+List active floors that apply to the experiment and whether they are draft or
+accepted gates.
 
 ## Budget And Stop Conditions
 
@@ -168,16 +197,17 @@ Allowed and disallowed write paths. Include raw artifact destinations.
 Claim-supporting raw artifacts belong under `.10x/evidence/.storage/`.
 Exploratory source material belongs under `.10x/research/.storage/`.
 
-## Scorer Configuration
+## Rubric And Inspection Configuration
 
-Declare scorer IDs, trust levels, inputs, outputs, known false positives, known
-false negatives, confidence labels, and manual inspection requirements.
+Declare score IDs or rubric criteria, required observations, known false
+positives, known false negatives, confidence labels, and manual inspection
+requirements.
 
 ## Manual Inspection Requirement
 
-State what must be inspected and whether inspection is full or sampled. Promotion
-supporting claims require manual inspection until a Trust Level 3 policy is
-accepted by human authority or an accepted governance decision.
+State what must be inspected and whether inspection is full or sampled.
+Promotion-supporting claims require manual inspection unless an accepted
+governance decision delegates that authority.
 
 ## Promotion Criteria
 
@@ -187,7 +217,7 @@ spec or decision updates required before promotion.
 
 ## Known Risks And Confounders
 
-Known scorer limitations, fixture limits, harness contamination risks,
+Known rubric limits, seed-state limits, harness contamination risks,
 instruction contamination risks, privacy risks, and expected false positives or
 false negatives.
 
@@ -196,14 +226,15 @@ false negatives.
 Append commands, tool invocations, outputs, artifact paths, failures, retries,
 deviations from plan, spend or time if tracked, and current status.
 
-## Score Artifacts
+## Trial Artifacts
 
-Link score JSON, score summaries, raw outputs, and cost summaries.
+Link summary JSON, plan JSON, raw outputs, command metadata, prompts, workspace
+manifests, archived workspaces, and cost or token summaries.
 
 ## Manual Inspection Findings
 
-Record inspection observations, scorer bugs, surprising results, controls that
-failed to fail, backfires, and limits.
+Record inspection observations, rubric mismatches, surprising results, controls
+that failed to fail, backfires, and limits.
 
 ## Final Verdict
 

@@ -29,6 +29,17 @@ class ValidateContractsTest(unittest.TestCase):
 
         self.assertIn("scores.json: missing score IDs: S009", result.errors)
 
+    def test_retired_top_line_score_policy_fails_validation(self):
+        with copied_contract_root() as root:
+            scores_path = root / "autoresearch" / "catalogs" / "scores.json"
+            data = json.loads(scores_path.read_text(encoding="utf-8"))
+            data["shared_rules"]["top_line_rule"] = "retired aggregate"
+            scores_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+
+            result = validate.validate_contracts(root)
+
+        self.assertIn("scores.json:shared_rules: top_line_rule is retired", result.errors)
+
     def test_missing_scenario_id_fails_validation(self):
         with copied_contract_root() as root:
             scenarios_path = root / "autoresearch" / "catalogs" / "scenarios.json"
@@ -65,8 +76,7 @@ class ValidateContractsTest(unittest.TestCase):
             manifest_path = (
                 root
                 / "autoresearch"
-                / "fixtures"
-                / "live-seeds"
+                / "trial-seeds"
                 / "explicit-policy-ratification"
                 / "workspace"
                 / "workspace-manifest.json"
@@ -80,7 +90,7 @@ class ValidateContractsTest(unittest.TestCase):
             result = validate.validate_contracts(root)
 
         self.assertIn(
-            "autoresearch/fixtures/live-seeds/explicit-policy-ratification/workspace/workspace-manifest.json: seed workspace manifest requires workspace",
+            "autoresearch/trial-seeds/explicit-policy-ratification/workspace/workspace-manifest.json: seed workspace manifest requires workspace",
             result.errors,
         )
 
@@ -89,8 +99,7 @@ class ValidateContractsTest(unittest.TestCase):
             manifest_path = (
                 root
                 / "autoresearch"
-                / "fixtures"
-                / "live-seeds"
+                / "trial-seeds"
                 / "explicit-policy-ratification"
                 / "workspace"
                 / "workspace-manifest.json"
@@ -109,8 +118,7 @@ class ValidateContractsTest(unittest.TestCase):
             manifest_path = (
                 root
                 / "autoresearch"
-                / "fixtures"
-                / "live-seeds"
+                / "trial-seeds"
                 / "explicit-policy-ratification"
                 / "workspace"
                 / "workspace-manifest.json"
@@ -123,9 +131,20 @@ class ValidateContractsTest(unittest.TestCase):
             result = validate.validate_contracts(root)
 
         self.assertIn(
-            "autoresearch/fixtures/live-seeds/explicit-policy-ratification/workspace/workspace-manifest.json: resolved workspace must contain its workspace manifest",
+            "autoresearch/trial-seeds/explicit-policy-ratification/workspace/workspace-manifest.json: resolved workspace must contain its workspace manifest",
             result.errors,
         )
+
+    def test_trial_seed_index_must_cover_existing_seed(self):
+        with copied_contract_root() as root:
+            index_path = root / "autoresearch" / "trial-seeds" / "index.json"
+            data = json.loads(index_path.read_text(encoding="utf-8"))
+            data["seeds"] = []
+            index_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+
+            result = validate.validate_contracts(root)
+
+        self.assertIn("trial-seeds/index.json: seeds must be a non-empty list", result.errors)
 
     def test_skill_size_budget_excludes_frontmatter(self):
         with copied_contract_root() as root:
@@ -165,8 +184,21 @@ class copied_contract_root:
         source = REPO_ROOT / "autoresearch"
         target = root / "autoresearch"
         target.mkdir()
-        for child in ("catalogs", "schemas", "templates", "splits", "fixtures"):
+        for child in ("catalogs", "templates", "splits"):
             shutil.copytree(source / child, target / child)
+        seed_source = (
+            source
+            / "trial-seeds"
+            / "explicit-policy-ratification"
+        )
+        seed_target = (
+            target
+            / "trial-seeds"
+            / "explicit-policy-ratification"
+        )
+        shutil.copytree(seed_source, seed_target)
+        shutil.copy2(source / "trial-seeds" / "index.json", target / "trial-seeds" / "index.json")
+        self._keep_only_explicit_policy_seed(target / "trial-seeds" / "index.json")
         spec_target = root / ".10x" / "specs"
         spec_target.mkdir(parents=True)
         shutil.copy2(
@@ -178,6 +210,18 @@ class copied_contract_root:
 
     def __exit__(self, exc_type, exc, tb):
         self._tmp.cleanup()
+
+    @staticmethod
+    def _keep_only_explicit_policy_seed(index_path: Path) -> None:
+        data = json.loads(index_path.read_text(encoding="utf-8"))
+        data["seeds"] = [
+            seed for seed in data["seeds"] if seed["id"] == "explicit-policy-ratification"
+        ]
+        for scenario in data.get("scenario_selection_guide", []):
+            scenario["seed_count"] = (
+                1 if scenario["scenario_id"] == "SCN-006" else 0
+            )
+        index_path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

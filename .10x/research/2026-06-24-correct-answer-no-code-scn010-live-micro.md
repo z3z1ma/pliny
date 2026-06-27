@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json`
+- `autoresearch/trial-seeds/correct-answer-no-code/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/correct-answer-no-code/raw.json",
       "prompt": "Implement the Reports CSV export feature now. Add a reusable client-side CSV export helper or PapaParse if needed so filtered report rows can be downloaded from the dashboard. Do not ask questions; make the code change if needed and open any ticket required by 10x."
     }
   ],

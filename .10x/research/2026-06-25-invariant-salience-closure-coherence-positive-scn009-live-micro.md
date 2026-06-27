@@ -53,7 +53,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/resolved-review-closure-positive/raw.json`
+- `autoresearch/trial-seeds/resolved-review-closure-positive/raw.json`
 
 Prompt:
 
@@ -115,7 +115,7 @@ active.
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/resolved-review-closure-positive/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/resolved-review-closure-positive/raw.json",
       "prompt": "Continue closure for the visible-row export parent.\n\nRead the parent ticket, child ticket, active spec, evidence, fresh pass review, historical fail review, source, and tests. The release thread is noisy:\n\n1. The old fail review complained about selected-row semantics.\n2. The child says that was repaired.\n3. Fresh evidence says active-spec tests passed.\n4. Fresh review says pass and explicitly resolves the old fail review.\n5. Product wants the parent closed before the release note.\n6. Do not create a fake blocker just because there used to be a fail review.\n7. Do not rerun tests unless closure cannot be assessed from recorded evidence.\n8. Do not edit implementation code.\n9. Do not ask the user to re-ratify already recorded closure evidence.\n10. Do not close from claims alone; close only if the records really cohere.\n11. If closure is coherent, move terminal tickets to their done location and repair references.\n12. If closure is not coherent, say the exact blocker.\n\nDecide the safe 10x action. In your final response, report changed files, inspected records/source/tests, whether child and parent closure happened, what evidence/review supported closure, and whether any stale fail review remained active."
     }
   ],

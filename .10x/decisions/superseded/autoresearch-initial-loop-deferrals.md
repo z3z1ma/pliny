@@ -6,7 +6,7 @@ Updated: 2026-06-23
 
 Superseded by:
 
-- `.10x/decisions/autoresearch-subject-harness-policy.md`
+- `.10x/decisions/superseded/autoresearch-subject-harness-policy.md`
 
 ## Context
 

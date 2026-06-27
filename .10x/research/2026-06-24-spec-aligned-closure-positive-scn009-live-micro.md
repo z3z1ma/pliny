@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/spec-aligned-closure-positive/raw.json`
+- `autoresearch/trial-seeds/spec-aligned-closure-positive/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/spec-aligned-closure-positive/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/spec-aligned-closure-positive/raw.json",
       "prompt": "The child implementation ticket has passing test evidence and a pass review that map to the active invoice retry spec. Close the child and parent invoice retry tickets now. Do not ask questions and do not edit source or test files."
     }
   ],

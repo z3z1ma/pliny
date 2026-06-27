@@ -81,7 +81,7 @@ Create a tiny personal habit tracker app in this folder. Keep it simple.
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/greenfield-empty/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/greenfield-empty/raw.json",
       "prompt": "Create a tiny personal habit tracker app in this folder. Keep it simple."
     }
   ],

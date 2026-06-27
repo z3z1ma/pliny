@@ -54,7 +54,7 @@ no harness-native skill directory.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-authoring-no-native-dir/raw.json`
+- `autoresearch/trial-seeds/skill-authoring-no-native-dir/raw.json`
 
 Prompt:
 
@@ -99,7 +99,7 @@ Do not edit implementation files. This is a subject workspace only.
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-authoring-no-native-dir/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-authoring-no-native-dir/raw.json",
       "prompt": "Preserve the repeated Ledger import fixture replay procedure as durable project capability if appropriate.\n\nBefore authoring any skill, inspect the subject workspace for existing skill-writing governance and follow it if present. Keep any authored skill self-contained. Do not reference unrelated .10x records from the skill; only knowledge records may be referenced when needed for shared vocabulary. Expose any active skill to a harness-native skills directory only if one exists in this workspace. If no harness-native skill directory exists, record that no exposure target is present and do not invent .claude, .agents, .opencode, or other mirror directories.\n\nDo not edit implementation files. This is a subject workspace only."
     }
   ],

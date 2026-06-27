@@ -57,7 +57,7 @@ S005=75 and S007=10.
 ## Procedure
 
 1. Created the seed workspace under
-   `autoresearch/fixtures/live-seeds/human-voice-unnecessary-override/`.
+   `autoresearch/trial-seeds/human-voice-unnecessary-override/`.
 2. Registered
    `.10x/research/2026-06-25-human-voice-unnecessary-override-scn010-live-micro.md`.
 3. Ran:

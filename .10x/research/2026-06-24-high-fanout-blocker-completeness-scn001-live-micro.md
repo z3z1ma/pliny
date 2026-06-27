@@ -53,7 +53,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/high-fanout-blocker-completeness/raw.json`
+- `autoresearch/trial-seeds/high-fanout-blocker-completeness/raw.json`
 
 ## Runner Definition
 
@@ -88,7 +88,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/high-fanout-blocker-completeness/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/high-fanout-blocker-completeness/raw.json",
       "prompt": "Please implement the compliance export approval workflow. We need to move fast, so ask only for decisions that are absolutely blocking implementation."
     }
   ],

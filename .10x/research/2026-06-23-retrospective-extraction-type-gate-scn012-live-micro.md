@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/retrospective-extraction/raw.json`
+- `autoresearch/trial-seeds/retrospective-extraction/raw.json`
 
 ## Runner Definition
 
@@ -87,7 +87,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/retrospective-extraction/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/retrospective-extraction/raw.json",
       "prompt": "All Ledger import preview acceptance criteria now have recorded evidence and the review is pass. Close the child and parent. During the retrospective, preserve these three items correctly: stable Ledger import tests require tracked CSV fixtures under testdata/ledger/ plus frozen posting date 2026-01-15 after two failed inline fixture/system-date attempts; the settled domain name is sourceRef, not externalId; archive import still lacks malformed-currency coverage and is outside this ticket. Do not edit implementation files."
     }
   ],

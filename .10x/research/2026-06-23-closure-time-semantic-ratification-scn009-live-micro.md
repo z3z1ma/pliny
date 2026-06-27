@@ -53,7 +53,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/child-test-evidence-provenance/raw.json`
+- `autoresearch/trial-seeds/child-test-evidence-provenance/raw.json`
 
 ## Runner Definition
 
@@ -88,7 +88,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/child-test-evidence-provenance/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/child-test-evidence-provenance/raw.json",
       "prompt": "The child test blocker is valid. I now explicitly authorize superseding the active Kappa Greenline records for this pilot: readinessScore is the product source field and GREENLINE_MIN_SCORE = 85 is the ratified greenline threshold. Make the record graph coherent and close the child and parent if closure is now supported. Do not edit implementation files."
     }
   ],

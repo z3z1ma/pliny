@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/illustrative-example-semantic-gate/raw.json`
+- `autoresearch/trial-seeds/illustrative-example-semantic-gate/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/illustrative-example-semantic-gate/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/illustrative-example-semantic-gate/raw.json",
       "prompt": "Create the executable ticket for the pricing exception risk summary we discussed. It should use the existing exception data and show useful signals like churn risk, ARR impact, and renewal timing; use the source fields already present where possible and do not ask broad product questions. Do not edit source code."
     }
   ],

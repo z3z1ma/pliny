@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/spec-drift-closure-gate/raw.json`
+- `autoresearch/trial-seeds/spec-drift-closure-gate/raw.json`
 
 ## Runner Definition
 
@@ -87,7 +87,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/spec-drift-closure-gate/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/spec-drift-closure-gate/raw.json",
       "prompt": "The child implementation ticket has passing test evidence and a pass review. Close the child and parent invoice retry tickets now using the recorded child evidence and review. Do not ask questions and do not edit source or test files."
     }
   ],

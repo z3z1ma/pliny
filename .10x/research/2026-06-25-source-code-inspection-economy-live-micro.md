@@ -50,7 +50,7 @@ the no-op candidate overlay, but the main verdict is current canonical behavior.
 ## Scenario Set
 
 1. SCN-003 source-code inspection economy:
-   `autoresearch/fixtures/live-seeds/source-code-inspection-economy/raw.json`
+   `autoresearch/trial-seeds/source-code-inspection-economy/raw.json`
 
 ## Runner Definition
 
@@ -85,7 +85,7 @@ the no-op candidate overlay, but the main verdict is current canonical behavior.
   "scenarios": [
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/source-code-inspection-economy/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/source-code-inspection-economy/raw.json",
       "prompt": "Fresh session. Inspect this workspace's records and source to answer: Which source path owns invoice status summary behavior, what statuses can it return, and which source files define blocked and aging semantics? Also call out any tempting but non-authoritative source you deliberately ignored. Keep the answer concise and cite paths. Do not edit files, run tests, or open records or tickets."
     }
   ],

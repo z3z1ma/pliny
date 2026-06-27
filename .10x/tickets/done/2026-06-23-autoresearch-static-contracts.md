@@ -2,7 +2,7 @@ Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 Parent: .10x/tickets/done/2026-06-23-implement-autoresearch-loop.md
-Depends-On: .10x/specs/10x-autoresearch-loop.md, .10x/decisions/autoresearch-initial-implementation-defaults.md
+Depends-On: .10x/specs/10x-autoresearch-loop.md, .10x/decisions/superseded/autoresearch-initial-implementation-defaults.md
 
 # Create Autoresearch Static Contracts
 
@@ -27,7 +27,7 @@ Included:
 - Represent required experiment-record fields from REQ-002.
 - Represent scorer trust levels and required scorer metadata from REQ-009.
 - Represent budget defaults and no-10x control isolation notes from
-  `.10x/decisions/autoresearch-initial-implementation-defaults.md`.
+  `.10x/decisions/superseded/autoresearch-initial-implementation-defaults.md`.
 - Use plain Markdown and JSON; no runtime dependencies.
 
 Excluded:
@@ -41,7 +41,7 @@ Read scope:
 
 - `.10x/tickets/done/2026-06-23-autoresearch-static-contracts.md`
 - `.10x/specs/10x-autoresearch-loop.md`
-- `.10x/decisions/autoresearch-initial-implementation-defaults.md`
+- `.10x/decisions/superseded/autoresearch-initial-implementation-defaults.md`
 
 Write scope:
 

@@ -67,7 +67,7 @@ Canonical start guard:
 - Follow-up ticket completed for the uncovered evaluation gap:
   `.10x/tickets/done/2026-06-23-candidate-executing-evaluation-surface.md`.
 - Architecture correction recorded at
-  `.10x/decisions/autoresearch-subject-harness-policy.md`: optimization
+  `.10x/decisions/superseded/autoresearch-subject-harness-policy.md`: optimization
   requires live subject-harness execution through `run_once.py`; fixture-backed
   calibration is separate from the one-shot iteration path.
 - Live Codex MICRO for `candidate-smallest-executable-unit-gate-v1` executed
@@ -449,7 +449,7 @@ Canonical start guard:
   explicit citation wording in the prompt. Logged status `keep`; next required
   confidence step is a fresh-record retrieval test.
 - 2026-06-23: Added tracked seed fixture
-  `autoresearch/fixtures/live-seeds/records-first-checkout/` and registered
+  `autoresearch/trial-seeds/records-first-checkout/` and registered
   `EXP-20260623-828-records-first-retrieval-fresh-checkout-scn003-live-micro`
   as the fresh-record retrieval generalization check.
 - 2026-06-23: Ran
@@ -459,7 +459,7 @@ Canonical start guard:
   a plausible generic checkout retry answer. Logged status `mutate`; the next
   SCN-003 seed must use opaque record content that cannot be guessed.
 - 2026-06-23: Added tracked opaque seed fixture
-  `autoresearch/fixtures/live-seeds/records-first-opaque/` and registered
+  `autoresearch/trial-seeds/records-first-opaque/` and registered
   `EXP-20260623-829-records-first-retrieval-opaque-scn003-live-micro`.
 - 2026-06-23: Ran
   `EXP-20260623-829-records-first-retrieval-opaque-scn003-live-micro`. Manual
@@ -479,7 +479,7 @@ Canonical start guard:
   full `post_run_files`; older raw artifacts are filtered by seed/prior paths in
   S002 scoring.
 - 2026-06-23: Added `candidate-independent-blocker-completeness-v1`, tracked
-  seed fixture `autoresearch/fixtures/live-seeds/independent-blocker-completeness/`,
+  seed fixture `autoresearch/trial-seeds/independent-blocker-completeness/`,
   and registered
   `EXP-20260623-830-independent-blocker-completeness-scn001-live-micro`.
 - 2026-06-23: Ran
@@ -489,7 +489,7 @@ Canonical start guard:
   broad seven-question questionnaire. Logged status `discard` because current
   `SKILL.md` already satisfies the behavior.
 - 2026-06-23: Added `candidate-answerability-gated-blockers-v1`, tracked seed
-  fixture `autoresearch/fixtures/live-seeds/answerability-gated-blockers/`, and
+  fixture `autoresearch/trial-seeds/answerability-gated-blockers/`, and
   registered
   `EXP-20260623-831-answerability-gated-blockers-scn001-live-micro`.
 - 2026-06-23: Ran
@@ -499,7 +499,7 @@ Canonical start guard:
   Logged status `mutate` because the candidate's provisional success-threshold
   default made it less safe than the automated score suggests.
 - 2026-06-23: Added `candidate-delegation-evidence-gate-v1`, tracked seed
-  fixture `autoresearch/fixtures/live-seeds/delegation-evidence-gate/`, and
+  fixture `autoresearch/trial-seeds/delegation-evidence-gate/`, and
   registered
   `EXP-20260623-832-delegation-evidence-gate-scn007-live-code-micro`.
 - 2026-06-23: Ran
@@ -510,7 +510,7 @@ Canonical start guard:
 - 2026-06-23: Added
   `candidate-partial-answer-continuation-exit-gate-v1`,
   `candidate-assumption-provenance-gate-v1`, tracked seed fixture
-  `autoresearch/fixtures/live-seeds/assumption-provenance-gate/`, and
+  `autoresearch/trial-seeds/assumption-provenance-gate/`, and
   registered
   `EXP-20260623-833-partial-answer-continuation-exit-gate-scn001-live-micro`
   plus `EXP-20260623-834-assumption-provenance-gate-scn001-live-micro`.
@@ -525,7 +525,7 @@ Canonical start guard:
   `S001=30,S007=10`. Logged status `keep` for held-out semantic-ratification
   testing.
 - 2026-06-23: Added tracked held-out seed fixture
-  `autoresearch/fixtures/live-seeds/assumption-provenance-greenline/` and
+  `autoresearch/trial-seeds/assumption-provenance-greenline/` and
   registered
   `EXP-20260623-835-assumption-provenance-greenline-scn001-live-micro` to test
   whether source names and stale ticket notes are treated as insufficient
@@ -545,7 +545,7 @@ Canonical start guard:
   to infer remaining semantic fields from source constants or stale notes.
 - 2026-06-23: Added
   `candidate-semantic-continuation-provenance-v1`, tracked continuation seed
-  `autoresearch/fixtures/live-seeds/semantic-continuation-provenance/raw.json`,
+  `autoresearch/trial-seeds/semantic-continuation-provenance/raw.json`,
   and registered
   `EXP-20260623-836-semantic-continuation-provenance-scn001-live-micro`.
 - 2026-06-23: Ran
@@ -559,7 +559,7 @@ Canonical start guard:
   semantic question. Promoted the narrow continuation-provenance rule into
   `SKILL.md`.
 - 2026-06-23: Added `candidate-record-hardening-gate-v1`, tracked continuation
-  seed `autoresearch/fixtures/live-seeds/record-hardening-gate/raw.json`, and
+  seed `autoresearch/trial-seeds/record-hardening-gate/raw.json`, and
   registered `EXP-20260623-837-record-hardening-gate-scn006-live-micro` to test
   whether agents launder unratified source-field/threshold semantics into active
   specs, decisions, or executable-ticket acceptance criteria.
@@ -572,7 +572,7 @@ Canonical start guard:
   narrow record-hardening gate into `SKILL.md`.
 - 2026-06-23: Added `candidate-record-backed-authority-progress-v1`, tracked
   positive-control seed
-  `autoresearch/fixtures/live-seeds/record-backed-authority/raw.json`, and
+  `autoresearch/trial-seeds/record-backed-authority/raw.json`, and
   registered `EXP-20260623-838-record-backed-authority-scn006-live-micro` to
   test whether recent provenance gates overblock values explicitly owned by
   active records.
@@ -584,7 +584,7 @@ Canonical start guard:
   edits. Discarded the candidate as null versus current; retained the run as a
   regression guard against overblocking.
 - 2026-06-23: Added `candidate-post-child-closure-evidence-gate-v1`, tracked
-  seed `autoresearch/fixtures/live-seeds/post-child-closure-evidence/raw.json`,
+  seed `autoresearch/trial-seeds/post-child-closure-evidence/raw.json`,
   and registered
   `EXP-20260623-840-post-child-closure-evidence-scn009-live-micro` to test
   parent-side closure after a child report with missing evidence and unresolved

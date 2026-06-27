@@ -59,7 +59,7 @@ No-10x-control arm:
 ## Procedure
 
 1. Registered the continuation experiment against
-   `autoresearch/fixtures/live-seeds/ratification-laundering-across-turns/raw.json`.
+   `autoresearch/trial-seeds/ratification-laundering-across-turns/raw.json`.
 2. Ran `python3 autoresearch/run_once.py --experiment .10x/research/2026-06-25-out-of-order-partial-ratification-scn001-live-micro.md --out .10x/evidence/.storage/2026-06-23-skill-autoresearch/176-out-of-order-partial-ratification-scn001-live-micro --require-clean-canonical`.
 3. Read `report.md`, `canonical_guard.json`, raw transcripts, workspace
    manifests, and created ticket files.

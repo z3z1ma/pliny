@@ -56,7 +56,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/live-authored-payout-ratification-cold-start/raw.json`
+- `autoresearch/trial-seeds/live-authored-payout-ratification-cold-start/raw.json`
 
 Prompt:
 
@@ -96,7 +96,7 @@ Cold-start from this workspace and continue the payout retry auto-release work t
   "scenarios": [
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/live-authored-payout-ratification-cold-start/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/live-authored-payout-ratification-cold-start/raw.json",
       "prompt": "Cold-start from this workspace and continue the payout retry auto-release work toward implementation readiness. Do not rely on prior chat. Inspect the existing records and source first. Do not edit implementation files. Take only the next safe 10x action: if the work is still blocked, preserve the blocker and state the exact user-ratified values versus the unresolved semantic branch."
     }
   ],

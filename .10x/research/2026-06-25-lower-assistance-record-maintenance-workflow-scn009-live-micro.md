@@ -61,7 +61,7 @@ for the record-maintenance verdict because control isolation removes the seed
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-graph-mechanical-maintenance/raw.json`
+- `autoresearch/trial-seeds/record-graph-mechanical-maintenance/raw.json`
 
 Prompt:
 
@@ -102,7 +102,7 @@ Perform payout export record maintenance only. `.10x/tickets/2026-06-25-align-pa
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-graph-mechanical-maintenance/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-graph-mechanical-maintenance/raw.json",
       "prompt": "Perform payout export record maintenance only. `.10x/tickets/2026-06-25-align-payout-export-csv.md` is already `Status: done` but still lives at the top-level ticket path. Move it to `.10x/tickets/done/2026-06-25-align-payout-export-csv.md` and keep the `.10x` record graph coherent after the terminal move. Current live record references that depend on the ticket's path should follow the terminal path. Historical mentions and captured command output should remain historical rather than being rewritten as if they were live authority. Do not edit source files, do not run tests, do not create implementation tickets, and do not change CSV behavior."
     }
   ],

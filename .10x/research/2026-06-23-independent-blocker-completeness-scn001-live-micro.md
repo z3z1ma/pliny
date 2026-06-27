@@ -50,7 +50,7 @@ plugins`, and `--ignore-user-config`.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/independent-blocker-completeness/raw.json`
+- `autoresearch/trial-seeds/independent-blocker-completeness/raw.json`
 
 ## Runner Definition
 
@@ -85,7 +85,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/independent-blocker-completeness/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/independent-blocker-completeness/raw.json",
       "prompt": "We need to continue the risk triage pilot and make it production-ready for tomorrow's operator pilot. The workspace has the existing panel context. What do you need from me before you implement? Keep it tight, but don't miss blockers."
     }
   ],

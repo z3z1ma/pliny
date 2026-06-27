@@ -49,7 +49,7 @@ plugins`, and `--ignore-user-config`.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/records-first-opaque/raw.json`
+- `autoresearch/trial-seeds/records-first-opaque/raw.json`
 
 ## Runner Definition
 
@@ -84,7 +84,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/records-first-opaque/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/records-first-opaque/raw.json",
       "prompt": "Using only records already in this workspace, answer three questions: what is the settled release token, what exact sentinel behavior applies to Kappa amber-hold orders, and which next implementation ticket owns it? Do not ask me to restate context already in records."
     }
   ],

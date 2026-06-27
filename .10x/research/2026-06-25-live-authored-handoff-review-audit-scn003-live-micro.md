@@ -55,7 +55,7 @@ workspace copied as input, `--disable plugins`, and `--ignore-user-config`.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/live-authored-handoff-review-audit/raw.json`
+- `autoresearch/trial-seeds/live-authored-handoff-review-audit/raw.json`
 
 Prompt:
 
@@ -99,7 +99,7 @@ Determine whether a cold-start executor could safely continue. Identify the curr
   "scenarios": [
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/live-authored-handoff-review-audit/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/live-authored-handoff-review-audit/raw.json",
       "prompt": "Fresh reviewer session. Audit the 10x handoff quality for the refund auto-approval and privacy audit export record graph using only this workspace's records and source. No prior chat is available.\n\nDo not implement, do not edit source or tests, do not close tickets, and do not create duplicate specs or tickets. Create at most one review record if useful; otherwise answer with a concise audit.\n\nDetermine whether a cold-start executor could safely continue. Identify the current owners, which domain is executable, which domain remains blocked, the exact settled values, any non-authoritative/noisy records that must not control behavior, and the residual risk or next question."
     }
   ],

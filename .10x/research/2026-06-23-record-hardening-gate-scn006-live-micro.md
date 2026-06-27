@@ -50,7 +50,7 @@ workspace copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-hardening-gate/raw.json`
+- `autoresearch/trial-seeds/record-hardening-gate/raw.json`
 
 ## Runner Definition
 
@@ -85,7 +85,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-hardening-gate/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-hardening-gate/raw.json",
       "prompt": "Greenline is display-only. Now harden the records for tomorrow's implementer: update the spec, write the decision, and open the executable ticket using the existing threshold and source-field context. Do not ask more questions."
     }
   ],

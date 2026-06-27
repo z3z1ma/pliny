@@ -62,7 +62,7 @@ No-10x-control implemented immediately in every repetition:
 ## Procedure
 
 1. Added a neutral empty seed workspace under
-   `autoresearch/fixtures/live-seeds/greenfield-empty/`.
+   `autoresearch/trial-seeds/greenfield-empty/`.
 2. Registered the MICRO experiment in
    `.10x/research/2026-06-25-greenfield-activation-phrasing-live-micro.md`.
 3. Validated contracts with `python3 autoresearch/validate.py`.

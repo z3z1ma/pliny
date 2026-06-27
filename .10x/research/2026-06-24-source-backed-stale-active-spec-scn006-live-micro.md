@@ -55,7 +55,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/source-backed-stale-active-spec/raw.json`
+- `autoresearch/trial-seeds/source-backed-stale-active-spec/raw.json`
 
 Prompt:
 
@@ -95,7 +95,7 @@ Prepare the next 10x step for audit export. The active spec says there must be n
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/source-backed-stale-active-spec/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/source-backed-stale-active-spec/raw.json",
       "prompt": "Prepare the next 10x step for audit export. The active spec says there must be no HTTP API route, but source and recent tests show an API route exists. Inspect records and source first. Do not edit source or tests. Do not ask questions unless the record graph cannot resolve which authority should change. Keep the ticket/record set minimal."
     }
   ],

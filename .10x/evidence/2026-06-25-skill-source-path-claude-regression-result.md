@@ -50,7 +50,7 @@ before and after the run.
 
 The run used the registered EXP-993 research definition and the seeded Claude
 workspace fixture at
-`autoresearch/fixtures/live-seeds/skill-authoring-governor-mirror/raw.json`.
+`autoresearch/trial-seeds/skill-authoring-governor-mirror/raw.json`.
 Manual inspection checked the saved raw transcript, saved workspace file list,
 source skill body, mirror body, byte comparison, prohibited-reference search,
 directory tree, and canonical guard.

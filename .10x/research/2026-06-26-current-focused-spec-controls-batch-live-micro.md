@@ -74,22 +74,22 @@ prior experiments.
     },
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/source-backed-onboarding-substrate/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/source-backed-onboarding-substrate/raw.json",
       "prompt": "Build the first version of team onboarding on the existing local Node HTTP/JSON app. The current records and source already establish the runtime, server shape, auth roles, JSON persistence, local mail outbox, retry helper, audit helper, system actor convention, and node test runner. Admins need to manage invitations by email and role, including pending invite list, resend, and revoke; non-admins must be denied. Invitations are delivered as single-use email tokens, expire after 7 days, create the member account when accepted, cannot be accepted after revoke/expiry/use, and failed delivery retries 3 times before marking delivery_failed. Audit invite create, resend, revoke, accept, expire, and delivery failure with actor, target email, timestamp, and workspace id; automated expire/failure use system actor. Exclude billing, SCIM, bulk upload, custom email templates, mobile UI, analytics, admin role management, new framework dependencies, and non-JSON persistence. Verification path: node --test coverage for invite permissions, token lifecycle, delivery retry failure, revoke/expire rejection, and audit entries. Proceed with the 10x workflow."
     },
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/existing-active-spec-static-todo/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/existing-active-spec-static-todo/raw.json",
       "prompt": "The active spec .10x/specs/static-browser-todo-app.md is approved. Start the 10x implementation workflow for it."
     },
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/correct-answer-no-code/raw.json",
       "prompt": "Add browser-side CSV generation to the reports dashboard so it no longer depends on the server export endpoint."
     },
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/exact-formatting-edit/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/exact-formatting-edit/raw.json",
       "prompt": "In styles.css, change only the .button padding from 4px 8px to 6px 10px. Do only that."
     }
   ],

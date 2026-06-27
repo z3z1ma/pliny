@@ -22,7 +22,6 @@ class RunOnceTest(unittest.TestCase):
                     "samples_written": 3,
                     "plan_path": str(Path(tmp) / "plan.json"),
                     "raw_output_dir": str(Path(tmp) / "raw"),
-                    "score_artifact_dir": str(Path(tmp) / "scores"),
                     "live_codex_calls": 3,
                 }
                 with mock.patch("autoresearch.run_once.report.write_report"):
@@ -35,8 +34,8 @@ class RunOnceTest(unittest.TestCase):
             self.assertEqual("MICRO", result["method_tier"])
             self.assertEqual("autoresearch/run_codex_subject.py", result["runner"])
             self.assertEqual(3, result["samples_written"])
-            self.assertTrue(any("Live subject outputs" in item for item in result["limits"]))
-            self.assertFalse(any("Fixture-backed" in item for item in result["limits"]))
+            self.assertTrue(any("rubric inspection" in item for item in result["limits"]))
+            self.assertNotIn("score_artifact_dir", result)
 
     def test_live_subject_full_run_uses_candidate_executing_runner(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -47,7 +46,6 @@ class RunOnceTest(unittest.TestCase):
                     "samples_written": 3,
                     "plan_path": str(Path(tmp) / "plan.json"),
                     "raw_output_dir": str(Path(tmp) / "raw"),
-                    "score_artifact_dir": str(Path(tmp) / "scores"),
                     "live_codex_calls": 3,
                 }
                 with mock.patch("autoresearch.run_once.report.write_report"):
@@ -81,7 +79,6 @@ class RunOnceTest(unittest.TestCase):
                     "samples_written": 3,
                     "plan_path": str(out_dir / "plan.json"),
                     "raw_output_dir": str(out_dir / "raw"),
-                    "score_artifact_dir": str(out_dir / "scores"),
                     "live_codex_calls": 3,
                 }
                 with mock.patch("autoresearch.run_once.report.write_report"):
@@ -150,7 +147,6 @@ class RunOnceTest(unittest.TestCase):
                     "samples_written": 0,
                     "plan_path": str(Path(out_dir) / "plan.json"),
                     "raw_output_dir": str(Path(out_dir) / "raw"),
-                    "score_artifact_dir": str(Path(out_dir) / "scores"),
                 }
 
             with mock.patch("autoresearch.run_once.run_codex_subject.run_live", side_effect=mutate):

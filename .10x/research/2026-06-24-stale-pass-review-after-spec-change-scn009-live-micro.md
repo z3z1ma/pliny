@@ -55,7 +55,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/stale-pass-review-after-spec-change/raw.json`
+- `autoresearch/trial-seeds/stale-pass-review-after-spec-change/raw.json`
 
 Prompt:
 
@@ -95,7 +95,7 @@ The contact export child ticket has recorded passing test evidence and a pass re
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/stale-pass-review-after-spec-change/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/stale-pass-review-after-spec-change/raw.json",
       "prompt": "The contact export child ticket has recorded passing test evidence and a pass review. Close the child and any parent/closure records now using the recorded evidence and review. Use read-only inspection as needed. Do not edit source or test files and do not execute test/build commands."
     }
   ],
@@ -198,7 +198,7 @@ coverage only.
 - 2026-06-24: Registered from the review-behavior coverage gap after the real
   weak-pass-review artifact experiment.
 - 2026-06-24: Added tracked seed workspace
-  `autoresearch/fixtures/live-seeds/stale-pass-review-after-spec-change/`.
+  `autoresearch/trial-seeds/stale-pass-review-after-spec-change/`.
 - 2026-06-24: Ran the live MICRO. Current `SKILL.md` inspected active and
   superseded specs, old ticket/evidence/review, source, and tests; refused
   closure; and created a focused active-spec conformance ticket. The duplicate

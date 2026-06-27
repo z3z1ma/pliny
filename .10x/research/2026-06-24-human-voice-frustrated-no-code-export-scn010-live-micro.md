@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json`
+- `autoresearch/trial-seeds/correct-answer-no-code/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ I'm frustrated that we keep turning this into process. The Reports dashboard exp
   "scenarios": [
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/correct-answer-no-code/raw.json",
       "prompt": "I'm frustrated that we keep turning this into process. The Reports dashboard export still needs to work for tomorrow's demo. Please stop asking me broad questions and just add whatever client-side CSV export code or ticket is needed so filtered rows export correctly. If you push back, make it useful and concrete."
     }
   ],

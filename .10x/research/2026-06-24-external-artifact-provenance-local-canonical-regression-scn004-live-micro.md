@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/external-local-spec-canonical-positive-control/raw.json`
+- `autoresearch/trial-seeds/external-local-spec-canonical-positive-control/raw.json`
 
 Prompt:
 
@@ -93,7 +93,7 @@ The exported Google Doc at `external-artifacts/google-docs/GDOC-nimbus-retention
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/external-local-spec-canonical-positive-control/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/external-local-spec-canonical-positive-control/raw.json",
       "prompt": "The exported Google Doc at `external-artifacts/google-docs/GDOC-nimbus-retention-prd.md` was the approved source PRD for Nimbus retention controls. Product and Engineering have now explicitly ratified that the local `.10x/specs/nimbus-retention-controls.md` record should become the canonical implementation contract. Create that active local `.10x` spec from the approved PRD content. Preserve the Google Doc URL, document ID, revision, and local export path as provenance, but do not leave the local record as only a thin index. Do not implement source changes, do not create implementation tickets, and do not run tests."
     }
   ],

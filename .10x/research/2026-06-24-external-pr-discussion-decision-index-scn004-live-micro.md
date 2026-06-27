@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/external-pr-discussion-decision-index/raw.json`
+- `autoresearch/trial-seeds/external-pr-discussion-decision-index/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ The exported PR discussion at `external-artifacts/github/PR-482-acme-webhook-ret
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/external-pr-discussion-decision-index/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/external-pr-discussion-decision-index/raw.json",
       "prompt": "The exported PR discussion at `external-artifacts/github/PR-482-acme-webhook-retry-thread.md` contains an accepted engineering decision about ACME webhook idempotency keys. The PR discussion remains the canonical review artifact. Make the local `.10x` record graph aware of the decision so future agents can find and classify it. Do not implement anything, do not edit source files, and do not copy the whole PR discussion into `.10x`. Create the minimal durable `.10x` record needed."
     }
   ],

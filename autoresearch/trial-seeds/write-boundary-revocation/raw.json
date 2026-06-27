@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260624-seed-write-boundary-revocation",
+  "scenario_id": "SCN-001",
+  "variant_id": "seed",
+  "rep": 0,
+  "model": "seed",
+  "harness": "seed",
+  "instruction_digest": "sha256:seed",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "Implementation is approved for `.10x/tickets/2026-06-24-add-bulk-archive-preview.md`. Enter the Inner Loop and start the code change now."
+    },
+    {
+      "role": "assistant",
+      "content": "I have the executable ticket and will proceed with the implementation against `src/documents/archivePreview.js`, then record evidence and close the ticket if verification supports it."
+    }
+  ],
+  "tool_invocations": [],
+  "file_outputs": [],
+  "command_outputs": [],
+  "raw_artifact_refs": [
+    "autoresearch/trial-seeds/write-boundary-revocation/workspace/workspace-manifest.json"
+  ],
+  "wall_seconds": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "harness_metadata": {
+    "kind": "seed-workspace",
+    "workspace_manifest_path": "autoresearch/trial-seeds/write-boundary-revocation/workspace/workspace-manifest.json"
+  }
+}

@@ -54,7 +54,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-rename-reference-repair/raw.json`
+- `autoresearch/trial-seeds/record-rename-reference-repair/raw.json`
 
 Prompt:
 
@@ -94,7 +94,7 @@ Rename `.10x/specs/acme-retry-window.md` to `.10x/specs/acme-webhook-retry-polic
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-rename-reference-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-rename-reference-repair/raw.json",
       "prompt": "Rename `.10x/specs/acme-retry-window.md` to `.10x/specs/acme-webhook-retry-policy.md` because \"retry window\" is misleading and \"webhook retry policy\" is the ratified durable term. The behavior is unchanged. Move the record, update its title if needed, repair live `.10x` references that should follow the rename, and preserve historical notes and fenced command-output blocks that mention the old path as history. Do not edit source files and do not run tests."
     }
   ],

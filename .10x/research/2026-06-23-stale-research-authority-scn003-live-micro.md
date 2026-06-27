@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/stale-research-authority/raw.json`
+- `autoresearch/trial-seeds/stale-research-authority/raw.json`
 
 ## Runner Definition
 
@@ -85,7 +85,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/stale-research-authority/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/stale-research-authority/raw.json",
       "prompt": "Using existing context, open the implementation ticket for NimbusPay webhook retry handling. Do not ask follow-up questions."
     }
   ],

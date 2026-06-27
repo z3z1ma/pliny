@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json`
+- `autoresearch/trial-seeds/correct-answer-no-code/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ I have 10 minutes before the Reports demo. Do not create a ticket or edit files.
   "scenarios": [
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/correct-answer-no-code/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/correct-answer-no-code/raw.json",
       "prompt": "I have 10 minutes before the Reports demo. Do not create a ticket or edit files. Inspect what exists and tell me the exact safest thing to use for filtered CSV export right now. If client-side CSV is the wrong path, say so concretely without giving me a process lecture."
     }
   ],

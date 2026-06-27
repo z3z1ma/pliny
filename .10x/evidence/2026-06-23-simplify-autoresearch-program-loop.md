@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-23
 Updated: 2026-06-23
-Relates-To: .10x/tickets/done/2026-06-23-simplify-autoresearch-program-loop.md, .10x/decisions/autoresearch-program-owned-loop.md
+Relates-To: .10x/tickets/done/2026-06-23-simplify-autoresearch-program-loop.md, .10x/decisions/superseded/autoresearch-program-owned-loop.md
 
 # Simplify Autoresearch Around Program-Owned Loop Evidence
 
@@ -12,7 +12,7 @@ New core files:
 - `autoresearch/program.md`
 - `autoresearch/run_once.py`
 - `autoresearch/tests/test_run_once.py`
-- `.10x/decisions/autoresearch-program-owned-loop.md`
+- `.10x/decisions/superseded/autoresearch-program-owned-loop.md`
 
 Deleted controller files:
 

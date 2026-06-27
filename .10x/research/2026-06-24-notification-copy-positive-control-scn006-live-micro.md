@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/notification-copy-positive-control/raw.json`
+- `autoresearch/trial-seeds/notification-copy-positive-control/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/notification-copy-positive-control/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/notification-copy-positive-control/raw.json",
       "prompt": "Do not implement yet. Create exactly one executable child ticket for changing the display-only `accountClosed.title` in `src/notifications/bannerCopy.js` from `Account closed` to `Account closed successfully`. This is copy only: no recipients, sends, cadence, retries, escalation, lifecycle, billing, permissions, privacy, or operational ownership changes. Use the existing project records/source to confirm the boundary."
     }
   ],

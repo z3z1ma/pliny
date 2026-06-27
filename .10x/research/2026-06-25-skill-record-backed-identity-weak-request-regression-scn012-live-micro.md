@@ -55,7 +55,7 @@ no harness-native skill directory.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-authoring-no-native-dir/raw.json`
+- `autoresearch/trial-seeds/skill-authoring-no-native-dir/raw.json`
 
 Prompt:
 
@@ -95,7 +95,7 @@ Wrap up the Ledger import parent now. The child surfaced one reusable replay hab
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-authoring-no-native-dir/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-authoring-no-native-dir/raw.json",
       "prompt": "Wrap up the Ledger import parent now. The child surfaced one reusable replay habit, one naming convention, and one archive-import gap. Preserve each in the right durable place, using the existing records to choose names and record types. Do not edit implementation files. If there is no harness-native skills directory in this workspace, do not create one."
     }
   ],

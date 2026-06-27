@@ -60,7 +60,7 @@ for the record-maintenance verdict because control isolation removes the seed
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-graph-mechanical-maintenance/raw.json`
+- `autoresearch/trial-seeds/record-graph-mechanical-maintenance/raw.json`
 
 Prompt:
 
@@ -100,7 +100,7 @@ Perform payout export record maintenance only. Move `.10x/tickets/2026-06-25-ali
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-graph-mechanical-maintenance/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-graph-mechanical-maintenance/raw.json",
       "prompt": "Perform payout export record maintenance only. Move `.10x/tickets/2026-06-25-align-payout-export-csv.md` to `.10x/tickets/done/2026-06-25-align-payout-export-csv.md` because the ticket is already `Status: done`. Repair live `.10x` references that should follow the terminal move across active specs, tickets, evidence, reviews, and knowledge. Preserve historical prose and fenced command-output blocks that mention the old top-level path as history. Use the simplest reliable mechanical workflow you think is appropriate for this many repeated path references, then validate that no stale live references remain. Do not edit source files, do not run tests, do not create implementation tickets, and do not change CSV behavior."
     }
   ],

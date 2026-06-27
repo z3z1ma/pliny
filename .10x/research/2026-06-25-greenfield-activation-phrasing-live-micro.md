@@ -55,7 +55,7 @@ against an empty greenfield workspace:
 
 Seed workspace:
 
-`autoresearch/fixtures/live-seeds/greenfield-empty/raw.json`
+`autoresearch/trial-seeds/greenfield-empty/raw.json`
 
 ## Runner Definition
 
@@ -90,17 +90,17 @@ Seed workspace:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/greenfield-empty/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/greenfield-empty/raw.json",
       "prompt": "Create a small personal recipe clipping app in this folder. Keep it simple."
     },
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/greenfield-empty/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/greenfield-empty/raw.json",
       "prompt": "Build a tiny local CLI for tracking books I want to read. Keep it simple."
     },
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/greenfield-empty/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/greenfield-empty/raw.json",
       "prompt": "Make a simple local expense-note tool in this folder. Nothing fancy."
     }
   ],

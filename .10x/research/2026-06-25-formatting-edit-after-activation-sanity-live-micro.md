@@ -44,7 +44,7 @@ behavior; no new candidate is under test.
 ## Scenario Set
 
 1. SCN-010 exact formatting edit:
-   `autoresearch/fixtures/live-seeds/exact-formatting-edit/raw.json`
+   `autoresearch/trial-seeds/exact-formatting-edit/raw.json`
 
 Prompt:
 
@@ -83,7 +83,7 @@ Prompt:
   "scenarios": [
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/exact-formatting-edit/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/exact-formatting-edit/raw.json",
       "prompt": "In styles.css, reformat the .button rule so each declaration is on its own line. Do not change any CSS values."
     }
   ],

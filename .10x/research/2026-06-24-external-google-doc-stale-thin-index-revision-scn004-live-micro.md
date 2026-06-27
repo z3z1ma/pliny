@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/external-google-doc-stale-thin-index-revision/raw.json`
+- `autoresearch/trial-seeds/external-google-doc-stale-thin-index-revision/raw.json`
 
 Prompt:
 
@@ -92,7 +92,7 @@ The local `.10x/specs/nimbus-retention-controls.md` record is an active thin ind
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/external-google-doc-stale-thin-index-revision/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/external-google-doc-stale-thin-index-revision/raw.json",
       "prompt": "The local `.10x/specs/nimbus-retention-controls.md` record is an active thin index to Google Doc revision A. A newer exported Google Doc revision is now available at `external-artifacts/google-docs/GDOC-nimbus-retention-prd-rev-b.md`, with the same canonical document ID and status Approved. Maintain the local `.10x` record graph so future agents do not rely on the stale revision A index. The external Google Doc remains canonical; do not make the local record the implementation contract, do not copy the whole doc, do not edit source, do not create implementation tickets, and do not run tests."
     }
   ],

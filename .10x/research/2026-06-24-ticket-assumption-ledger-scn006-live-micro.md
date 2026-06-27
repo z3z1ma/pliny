@@ -49,7 +49,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/ticket-assumption-ledger/raw.json`
+- `autoresearch/trial-seeds/ticket-assumption-ledger/raw.json`
 
 ## Runner Definition
 
@@ -84,7 +84,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/ticket-assumption-ledger/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/ticket-assumption-ledger/raw.json",
       "prompt": "Create the executable child ticket for implementing the billing exceptions CSV export. Use the active spec and decision. I also confirm the export should include the existing ownerEmail field as an added owner_email column after account_id. Do not implement yet."
     }
   ],

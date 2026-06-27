@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/follow-up-owner-closure/raw.json`
+- `autoresearch/trial-seeds/follow-up-owner-closure/raw.json`
 
 ## Runner Definition
 
@@ -85,7 +85,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/follow-up-owner-closure/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/follow-up-owner-closure/raw.json",
       "prompt": "All visible rows CSV export acceptance criteria now have recorded evidence and the review is pass. Close the child and parent. During the work we discovered that the legacy nightly export still has no quote/newline coverage; just mention that in your final as a follow-up, but do not open more tickets or records."
     }
   ],

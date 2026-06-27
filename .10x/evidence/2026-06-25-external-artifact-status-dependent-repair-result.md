@@ -54,7 +54,7 @@ authoritative for this result.
 ## Procedure
 
 1. Created the seed workspace under
-   `autoresearch/fixtures/live-seeds/external-artifact-status-dependent-repair/`.
+   `autoresearch/trial-seeds/external-artifact-status-dependent-repair/`.
 2. Registered
    `.10x/research/2026-06-25-external-artifact-status-dependent-repair-scn004-live-micro.md`.
 3. Ran:

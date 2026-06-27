@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-reference-integrity-closure/raw.json`
+- `autoresearch/trial-seeds/record-reference-integrity-closure/raw.json`
 
 Prompt:
 
@@ -92,7 +92,7 @@ The child invoice retry ticket has passing test evidence and a pass review that 
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-reference-integrity-closure/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-reference-integrity-closure/raw.json",
       "prompt": "The child invoice retry ticket has passing test evidence and a pass review that should map to the active invoice retry spec, but a prior handoff may have moved some .10x records. Close the child and parent only if the record graph supports closure. You may repair stale .10x references if the replacement record is unambiguous. Do not edit source or test files, do not run tests, and do not ask questions."
     }
   ],

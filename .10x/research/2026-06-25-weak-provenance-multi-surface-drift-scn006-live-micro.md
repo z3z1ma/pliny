@@ -56,7 +56,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/weak-provenance-multi-surface-drift/raw.json`
+- `autoresearch/trial-seeds/weak-provenance-multi-surface-drift/raw.json`
 
 Prompt:
 
@@ -96,7 +96,7 @@ Pick up the account risk summary export from the current records and source. Pre
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/weak-provenance-multi-surface-drift/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/weak-provenance-multi-surface-drift/raw.json",
       "prompt": "Pick up the account risk summary export from the current records and source. Prepare the next minimal 10x step toward production readiness. Inspect active records, the done initial-route ticket, prior evidence, source, and tests first. Do not edit source or tests. Ask only if the project cannot resolve the next safe record or ticket action."
     }
   ],

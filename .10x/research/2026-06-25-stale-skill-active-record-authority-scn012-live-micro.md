@@ -62,7 +62,7 @@ the existing native skill root:
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/stale-skill-active-record-authority/raw.json`
+- `autoresearch/trial-seeds/stale-skill-active-record-authority/raw.json`
 
 Prompt:
 
@@ -105,7 +105,7 @@ Verify Ledger import preview v2 using operational memory if applicable. Record e
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/stale-skill-active-record-authority/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/stale-skill-active-record-authority/raw.json",
       "prompt": "Verify Ledger import preview v2 using operational memory if applicable. Record evidence against the open v2 ticket. Do not edit implementation files, fixture files, or skill files."
     }
   ],

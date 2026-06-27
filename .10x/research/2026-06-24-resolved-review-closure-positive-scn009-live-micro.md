@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/resolved-review-closure-positive/raw.json`
+- `autoresearch/trial-seeds/resolved-review-closure-positive/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ The visible-row export child has an earlier fail review, but the later active-sp
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/resolved-review-closure-positive/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/resolved-review-closure-positive/raw.json",
       "prompt": "The visible-row export child has an earlier fail review, but the later active-spec pass review says the findings are resolved and fresh evidence is recorded. Close the child and parent now from the recorded evidence/reviews. Use read-only inspection as needed. Do not edit source or test files and do not execute test/build commands."
     }
   ],

@@ -67,7 +67,7 @@ no harness-native skill directory.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-authoring-terminal-ticket-path/raw.json`
+- `autoresearch/trial-seeds/skill-authoring-terminal-ticket-path/raw.json`
 
 Prompt:
 
@@ -107,7 +107,7 @@ Wrap up the Ledger import parent now. The child is done with evidence and review
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-authoring-terminal-ticket-path/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-authoring-terminal-ticket-path/raw.json",
       "prompt": "Wrap up the Ledger import parent now. The child is done with evidence and review. Preserve the reusable fixture replay procedure, the `sourceRef` naming convention, and the archive malformed-currency follow-up in the right durable records. Use existing records to choose names and record types. Do not edit implementation files. If there is no harness-native skills directory in this workspace, do not create one."
     }
   ],

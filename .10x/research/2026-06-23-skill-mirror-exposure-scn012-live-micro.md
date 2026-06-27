@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-mirror-exposure/raw.json`
+- `autoresearch/trial-seeds/skill-mirror-exposure/raw.json`
 
 ## Runner Definition
 
@@ -87,7 +87,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-mirror-exposure/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-mirror-exposure/raw.json",
       "prompt": "Finish closure for `.10x/tickets/2026-06-23-ledger-import-parent.md`. The child evidence and review pass. Preserve the retrospective fixture procedure, `sourceRef` naming convention, and archive malformed-currency follow-up in the correct durable record types. The workspace has an existing harness-native skills directory at `.claude/skills/`. Do not modify source files."
     }
   ],

@@ -97,7 +97,6 @@ def run_once(
         "summary_path": str(output_root / "summary.json"),
         "plan_path": runner_summary.get("plan_path"),
         "raw_output_dir": runner_summary.get("raw_output_dir"),
-        "score_artifact_dir": runner_summary.get("score_artifact_dir"),
         "report_path": str(report_path) if report_path else None,
         "canonical_guard_path": str(guard_path) if guard_path else None,
         "samples_written": runner_summary.get("samples_written"),
@@ -151,12 +150,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _uses_live_codex_subject(definition: dict[str, Any]) -> bool:
-    if str(definition.get("harness", "")).lower() != "codex-cli":
-        return False
-    for scenario in definition.get("scenarios", []):
-        if isinstance(scenario, dict) and scenario.get("fixtures"):
-            return False
-    return True
+    return str(definition.get("harness", "")).lower() == "codex-cli"
 
 
 def _limits_for_runner(runner_summary: dict[str, Any]) -> list[str]:
@@ -167,7 +161,7 @@ def _limits_for_runner(runner_summary: dict[str, Any]) -> list[str]:
     if runner_summary.get("mode") == "live":
         limits.extend(
             [
-                "Live subject outputs are candidate-quality evidence, but scores remain Trust Level 1 offline scoring until manually inspected.",
+                "Live subject outputs are trial evidence; the LLM researcher performs rubric inspection outside the runner.",
                 "Codex system context and authenticated home state are outside complete runner control; inspect workspace manifests and command artifacts.",
             ]
         )

@@ -67,17 +67,17 @@ experiments.
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-graph-poisoning/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-graph-poisoning/raw.json",
       "prompt": "Open the executable implementation ticket for the Kappa greenline pilot from the durable record graph. Do not edit implementation files. Do not ask me threshold or lifecycle questions; choose the current durable authority and make the ticket cold-start ready."
     },
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/external-artifact-status-dependent-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/external-artifact-status-dependent-repair/raw.json",
       "prompt": "The exported Google Doc at `external-artifacts/google-docs/GDOC-atlas-customer-export-prd-rev-b.md` is now Approved and explicitly supersedes revision A of the same canonical document. The current active local index is `.10x/specs/atlas-customer-export-prd-rev-a.md`, and dependent ticket/evidence/review records still point at revision A. Maintain the local `.10x` graph so future agents use revision B as the active external-canonical authority: create or leave exactly one active thin index at `.10x/specs/atlas-customer-export-prd.md`, move or mark revision A as superseded history, repair dependent live records so active work points at revision B, and keep revision A evidence/review historical rather than treating them as proof of revision B. Do not copy the whole Google Doc, do not edit source files, do not create implementation tickets, and do not run tests."
     },
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/external-design-doc-supersedes-local-spec/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/external-design-doc-supersedes-local-spec/raw.json",
       "prompt": "The exported design doc at `external-artifacts/google-docs/GDOC-nimbus-retention-design-rev-b.md` is approved and explicitly supersedes the existing local `.10x/specs/nimbus-retention-controls.md` spec. The external design doc remains canonical for the revised behavior. Update the local `.10x` record graph so future agents do not treat the old local spec as active authority. Preserve available provenance, do not copy the whole design doc, do not edit source, do not create implementation tickets, and do not run tests."
     }
   ],

@@ -1,7 +1,7 @@
 Status: recorded
 Created: 2026-06-24
 Updated: 2026-06-24
-Relates-To: .10x/research/2026-06-24-referential-ratification-bridge-scn006-live-micro.md, autoresearch/fixtures/live-seeds/referential-ratification-bridge/raw.json
+Relates-To: .10x/research/2026-06-24-referential-ratification-bridge-scn006-live-micro.md, autoresearch/trial-seeds/referential-ratification-bridge/raw.json
 
 # Referential Ratification Seed Manifest Confound
 
@@ -17,7 +17,7 @@ seed records and vendor docs.
 
 The run plan showed `planned_seed_workspace_dir: null` for all arms. The seed
 `raw.json` pointed to
-`autoresearch/fixtures/live-seeds/referential-ratification-bridge/workspace/workspace-manifest.json`,
+`autoresearch/trial-seeds/referential-ratification-bridge/workspace/workspace-manifest.json`,
 but that manifest contained only `kind` and no `workspace` field. The runner
 requires the manifest `workspace` field to locate and copy the seed workspace.
 
@@ -28,7 +28,7 @@ Inspected:
 - `.10x/evidence/.storage/2026-06-23-skill-autoresearch/059-referential-ratification-bridge-scn006-live-micro/plan.json`
 - `.10x/evidence/.storage/2026-06-23-skill-autoresearch/059-referential-ratification-bridge-scn006-live-micro/workspaces/*/workspace-manifest.json`
 - `autoresearch/run_codex_subject.py`
-- `autoresearch/fixtures/live-seeds/referential-ratification-bridge/workspace/workspace-manifest.json`
+- `autoresearch/trial-seeds/referential-ratification-bridge/workspace/workspace-manifest.json`
 
 ## What This Supports Or Challenges
 

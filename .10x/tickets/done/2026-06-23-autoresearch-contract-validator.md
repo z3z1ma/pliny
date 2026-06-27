@@ -39,7 +39,7 @@ Read scope:
 - `.10x/tickets/done/2026-06-23-autoresearch-contract-validator.md`
 - `.10x/tickets/done/2026-06-23-autoresearch-static-contracts.md`
 - `.10x/specs/10x-autoresearch-loop.md`
-- `.10x/decisions/autoresearch-initial-implementation-defaults.md`
+- `.10x/decisions/superseded/autoresearch-initial-implementation-defaults.md`
 - `autoresearch/README.md`
 - `autoresearch/catalogs/scores.json`
 - `autoresearch/catalogs/scenarios.json`

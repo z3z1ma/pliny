@@ -54,7 +54,7 @@ no harness-native skill directory.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-authoring-no-native-dir/raw.json`
+- `autoresearch/trial-seeds/skill-authoring-no-native-dir/raw.json`
 
 Prompt:
 
@@ -99,7 +99,7 @@ Do not edit implementation files. If there is no harness-native skills directory
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-authoring-no-native-dir/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-authoring-no-native-dir/raw.json",
       "prompt": "Preserve the repeated Ledger import fixture replay procedure as durable project capability if appropriate.\n\nUse the existing records to choose the correct skill identity and record type. Keep any authored skill self-contained. Do not reference unrelated .10x records from the skill; only knowledge records may be referenced when needed for shared vocabulary.\n\nDo not edit implementation files. If there is no harness-native skills directory in this workspace, do not create one. This is a subject workspace only."
     }
   ],

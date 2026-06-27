@@ -64,7 +64,7 @@ workspace copied as input, `--disable plugins`, and `--ignore-user-config`.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/noisy-live-authored-multi-record-cold-start/raw.json`
+- `autoresearch/trial-seeds/noisy-live-authored-multi-record-cold-start/raw.json`
 
 Prompt:
 
@@ -106,7 +106,7 @@ First identify the current owning record or records for refund and audit. Then t
   "scenarios": [
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/noisy-live-authored-multi-record-cold-start/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/noisy-live-authored-multi-record-cold-start/raw.json",
       "prompt": "Fresh session. Continue the refund auto-approval and privacy audit export handoff using only this workspace's records and source. No prior chat is available. Do not edit implementation or test files, do not create duplicate specs or tickets, and do not implement.\n\nFirst identify the current owning record or records for refund and audit. Then take only the next safe 10x action: if a domain is ready, state the existing executable owner and why; if a domain is blocked, preserve the blocker in the existing owner and return the exact settled values, the non-authoritative or noisy records you rejected, and the one remaining semantic question needed to proceed."
     }
   ],

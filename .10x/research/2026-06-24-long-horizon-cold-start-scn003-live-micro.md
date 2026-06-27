@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/long-horizon-cold-start/raw.json`
+- `autoresearch/trial-seeds/long-horizon-cold-start/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ Fresh session. Continue the payout retry auto-release work from project records 
   "scenarios": [
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/long-horizon-cold-start/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/long-horizon-cold-start/raw.json",
       "prompt": "Fresh session. Continue the payout retry auto-release work from project records only. I do not have the prior chat available. Do not edit files, do not ask me to restate the earlier session, and do not browse. Return the settled facts, unresolved blockers, and the next safe action."
     }
   ],

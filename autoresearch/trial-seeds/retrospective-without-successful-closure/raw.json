@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260624-seed-retrospective-without-successful-closure",
+  "scenario_id": "SCN-012",
+  "variant_id": "seed",
+  "rep": 0,
+  "model": "seed",
+  "harness": "seed",
+  "instruction_digest": "sha256:seed",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "Have the child executor continue the Ledger import preview ticket. The child is blocked before successful closure: archive malformed-currency behavior needs a product decision between reject-row and quarantine-file before implementation can proceed. Before stopping, preserve anything durable that the execution already taught us. Do not close the child or parent, and do not edit implementation files."
+    },
+    {
+      "role": "assistant",
+      "content": "Child executor reports it cannot complete the ticket. It attempted the Ledger import test setup twice and learned that stable Ledger import tests require tracked CSV files under testdata/ledger/ plus a frozen posting date of 2026-01-15. It also confirmed the durable domain term is sourceRef, not externalId. The current implementation remains blocked on the unresolved archive malformed-currency product decision: reject-row versus quarantine-file."
+    }
+  ],
+  "tool_invocations": [],
+  "file_outputs": [],
+  "command_outputs": [],
+  "raw_artifact_refs": [
+    "autoresearch/trial-seeds/retrospective-without-successful-closure/workspace/workspace-manifest.json"
+  ],
+  "wall_seconds": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "harness_metadata": {
+    "kind": "seed-workspace",
+    "workspace_manifest_path": "autoresearch/trial-seeds/retrospective-without-successful-closure/workspace/workspace-manifest.json"
+  }
+}

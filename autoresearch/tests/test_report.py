@@ -9,150 +9,108 @@ from autoresearch import report
 
 
 class ReportTest(unittest.TestCase):
-    def test_report_includes_vectors_floors_statuses_inspection_and_costs(self):
+    def test_report_includes_trial_artifacts_and_inspection_prompt(self):
         with tempfile.TemporaryDirectory() as tmp:
-            score_dir = Path(tmp)
-            _write_score(
-                score_dir / "current.score.json",
-                _artifact(
-                    variant_id="current-10x",
-                    scores={
-                        "S001": {
-                            "value": 91,
-                            "confidence": "medium",
-                            "floor_triggered": False,
-                            "rationale": "inspected before asking",
-                            "evidence_refs": ["raw/current.json"],
-                            "limits": ["fixture only"],
-                        },
-                        "S007": {
-                            "value": 80,
-                            "confidence": "low",
-                            "floor_triggered": False,
-                            "rationale": "focused question",
-                            "evidence_refs": ["raw/current.json"],
-                            "limits": ["manual review needed"],
-                        },
+            root = Path(tmp)
+            raw_dir = root / "raw"
+            raw_dir.mkdir()
+            (root / "summary.json").write_text(
+                json.dumps(
+                    {
+                        "experiment_id": "EXP-20260627-001-reporting",
+                        "mode": "live",
+                        "samples_written": 2,
+                        "raw_output_dir": str(raw_dir),
+                        "workspace_dir": str(root / "workspaces"),
+                        "codex_artifact_dir": str(root / "codex"),
+                        "prompt_dir": str(root / "prompts"),
+                        "live_codex_calls": 2,
                     },
-                ),
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
             )
-            _write_score(
-                score_dir / "candidate.score.json",
-                _artifact(
-                    variant_id="candidate-variant",
-                    verdict="backfired",
-                    result_status="negative",
-                    statuses=["null", "confounded"],
-                    scores={
-                        "S001": {
-                            "value": 35,
-                            "confidence": "low",
-                            "floor_triggered": True,
-                            "floor_triggers": [
-                                {
-                                    "score_id": "S001",
-                                    "condition": "S001 below active floor 80",
-                                    "effect": "non-promotable",
-                                    "evidence_refs": ["raw/candidate.json"],
-                                }
-                            ],
-                            "rationale": "premature implementation",
-                            "evidence_refs": ["raw/candidate.json"],
-                            "limits": ["fixture only"],
-                        }
-                    },
-                    floor_triggers=[
-                        {
-                            "score_id": "S001",
-                            "condition": "S001 below active floor 80",
-                            "effect": "non-promotable",
-                            "evidence_refs": ["raw/candidate.json"],
-                        }
-                    ],
-                ),
+            (root / "canonical_guard.json").write_text(
+                json.dumps({"unchanged_during_run": True}, indent=2) + "\n",
+                encoding="utf-8",
             )
+            _write_raw(raw_dir / "current.json", _artifact(variant_id="current-10x"))
+            _write_raw(raw_dir / "candidate.json", _artifact(variant_id="candidate-variant"))
 
-            markdown = report.build_report(score_dir)
+            markdown = report.build_report(root)
 
-        self.assertIn("## Score Vectors", markdown)
-        self.assertIn("S001 Outer Loop Discipline=91 (medium, floor ok)", markdown)
-        self.assertIn("S001 Outer Loop Discipline=35 (low, floor triggered)", markdown)
-        self.assertIn("## Arm Score Comparison", markdown)
+        self.assertIn("# 10x Autoresearch Trial Report", markdown)
+        self.assertIn("## Summary", markdown)
+        self.assertIn("EXP-20260627-001-reporting", markdown)
+        self.assertIn("## Trial Artifacts", markdown)
+        self.assertIn("## Scientific Contract", markdown)
+        self.assertIn("Can the subject stay minimal?", markdown)
+        self.assertIn("## Artifact Inspection Checklist", markdown)
+        self.assertIn("canonical_guard.json", markdown)
+        self.assertIn("2 found", markdown)
+        self.assertIn("current-10x", markdown)
         self.assertIn("candidate-variant", markdown)
-        self.assertIn("## Quality Floors And Failures", markdown)
-        self.assertIn("S001 below active floor 80", markdown)
-        self.assertIn("non-promotable", markdown)
-        self.assertIn("## Result Statuses", markdown)
-        self.assertIn("backfired", markdown)
-        self.assertIn("negative", markdown)
-        self.assertIn("null", markdown)
-        self.assertIn("confounded", markdown)
-        self.assertIn("required-not-done", markdown)
-        self.assertIn("Trust Level 1", markdown)
-        self.assertIn("## Costs", markdown)
-        self.assertIn("0.12", markdown)
+        self.assertIn("app.py", markdown)
+        self.assertIn("workspaces/current", markdown)
+        self.assertIn("in=100; out=50", markdown)
+        self.assertIn("## Scientist Inspection", markdown)
+        self.assertIn("does not grade, aggregate, or promote", markdown)
+        self.assertNotIn("## Score Vectors", markdown)
 
     def test_missing_fields_render_unknown(self):
         with tempfile.TemporaryDirectory() as tmp:
-            score_dir = Path(tmp)
-            _write_score(
-                score_dir / "partial.score.json",
-                {
-                    "scenario_id": "SCN-999",
-                    "variant_id": "partial-arm",
-                    "scores": {"S009": {"value": None}},
-                },
-            )
+            raw_path = Path(tmp) / "partial.json"
+            _write_raw(raw_path, {"scenario_id": "SCN-999", "variant_id": "partial-arm"})
 
-            markdown = report.build_report(score_dir)
+            markdown = report.build_report(raw_path)
 
-        self.assertIn("partial.score.json", markdown)
-        self.assertIn("S009 Cost Efficiency Index=unknown", markdown)
+        self.assertIn("partial.json", markdown)
         self.assertIn("partial-arm", markdown)
         self.assertIn("unknown", markdown)
 
     def test_cli_writes_markdown_report(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            score_dir = root / "scores"
-            score_dir.mkdir()
+            raw_dir = root / "raw"
+            raw_dir.mkdir()
             out_path = root / "report.md"
-            _write_score(score_dir / "current.score.json", _artifact())
+            _write_raw(raw_dir / "current.json", _artifact())
             stdout = io.StringIO()
 
             with contextlib.redirect_stdout(stdout):
-                exit_code = report.main(["--scores", str(score_dir), "--out", str(out_path)])
+                exit_code = report.main(["--artifacts", str(root), "--out", str(out_path)])
 
             self.assertEqual(0, exit_code)
             self.assertTrue(out_path.exists())
             self.assertIn("wrote", stdout.getvalue())
-            self.assertIn("# 10x Autoresearch Score Report", out_path.read_text(encoding="utf-8"))
+            self.assertIn("# 10x Autoresearch Trial Report", out_path.read_text(encoding="utf-8"))
 
-    def test_campaign_metadata_renders_without_changing_score_statuses(self):
+    def test_campaign_metadata_renders_without_changing_trial_artifacts(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            score_dir = root / "scores"
-            score_dir.mkdir()
+            raw_dir = root / "raw"
+            raw_dir.mkdir()
             campaign_path = root / "campaign.json"
-            _write_score(score_dir / "candidate.score.json", _artifact())
+            _write_raw(raw_dir / "candidate.json", _artifact())
             campaign_path.write_text(
                 json.dumps(
                     {
-                        "campaign_id": "EXP-20260623-301-first-calibration-campaign",
+                        "campaign_id": "EXP-20260627-002-campaign",
                         "candidate_id": "candidate-variant",
                         "baseline_id": "current-10x",
-                        "verdict": "null",
+                        "verdict": "inconclusive",
                         "result_status": "confounded",
-                        "statuses": ["null", "confounded"],
+                        "statuses": ["confounded"],
                         "promotion_decision": "not-performed",
                         "manual_inspection": {
                             "status": "recorded-in-evidence",
                             "by": "parent-review",
                         },
                         "evidence_refs": [
-                            ".10x/evidence/2026-06-23-first-autoresearch-calibration-campaign.md"
+                            ".10x/evidence/2026-06-27-trial-tooling-cleanup.md"
                         ],
-                        "limits": ["campaign metadata is not scorer output"],
+                        "limits": ["campaign metadata is not runner output"],
                     },
                     indent=2,
                 )
@@ -160,88 +118,69 @@ class ReportTest(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            markdown = report.build_report(score_dir, campaign_path=campaign_path)
+            markdown = report.build_report(root, campaign_path=campaign_path)
 
         self.assertIn("## Campaign Verdict", markdown)
-        self.assertIn("EXP-20260623-301-first-calibration-campaign", markdown)
-        self.assertIn("null", markdown)
+        self.assertIn("EXP-20260627-002-campaign", markdown)
+        self.assertIn("inconclusive", markdown)
         self.assertIn("confounded", markdown)
         self.assertIn("Campaign verdict metadata is manual/contextual", markdown)
-        self.assertIn("No artifact-embedded result statuses were present", markdown)
-        self.assertIn("required-not-done", markdown)
 
     def test_report_without_campaign_metadata_has_no_campaign_section(self):
         with tempfile.TemporaryDirectory() as tmp:
-            score_dir = Path(tmp)
-            _write_score(score_dir / "current.score.json", _artifact())
+            raw_dir = Path(tmp) / "raw"
+            raw_dir.mkdir()
+            _write_raw(raw_dir / "current.json", _artifact())
 
-            markdown = report.build_report(score_dir)
+            markdown = report.build_report(raw_dir.parent)
 
         self.assertNotIn("## Campaign Verdict", markdown)
 
 
-def _artifact(
-    *,
-    variant_id="current-10x",
-    scores=None,
-    verdict=None,
-    result_status=None,
-    statuses=None,
-    floor_triggers=None,
-):
-    artifact = {
-        "experiment_id": "EXP-20260623-101-reporting",
+def _artifact(*, variant_id="current-10x"):
+    return {
+        "schema_version": 1,
+        "experiment_id": "EXP-20260627-001-reporting",
         "scenario_id": "SCN-001",
         "variant_id": variant_id,
         "rep": 0,
-        "model": "fixture-model",
-        "harness": "unit-test",
+        "model": "codex-test-model",
+        "harness": "codex-cli",
         "instruction_digest": "sha256:test",
-        "fixture_digest": "sha256:fixture",
-        "scores": scores
-        or {
-            "S001": {
-                "value": 90,
-                "confidence": "medium",
-                "floor_triggered": False,
-                "rationale": "inspected before asking",
-                "evidence_refs": ["raw/current.json"],
-                "limits": ["fixture only"],
-            }
-        },
-        "cost": {
-            "wall_seconds": 1.5,
-            "input_tokens": 100,
-            "output_tokens": 50,
-            "tool_calls": 2,
-            "estimated_usd": 0.12,
-            "human_inspection_seconds": None,
-        },
-        "limits": ["unit test artifact"],
-        "scorer": {
-            "id": "unit-test-scorer",
-            "trust_level": 1,
-            "confidence": "low",
-            "manual_inspection_required": True,
-            "limits": ["test scorer only"],
-        },
-        "manual_inspection": {
-            "status": "required-not-done",
-            "limits": ["not manually inspected"],
+        "scientific_contract": _scientific_contract(),
+        "transcript": [
+            {"role": "user", "content": "Make it clearer."},
+            {"role": "assistant", "content": "I inspected the app and changed one label."},
+        ],
+        "tool_invocations": [{"type": "item.completed", "item": {"type": "command_execution"}}],
+        "file_outputs": [{"path": "app.py", "action": "write", "content": "print('hi')"}],
+        "command_outputs": [{"command": "python3 -m unittest", "exit_code": 0, "output": "OK"}],
+        "raw_artifact_refs": ["raw/current.json", "codex/current.command.json"],
+        "wall_seconds": 1.5,
+        "input_tokens": 100,
+        "output_tokens": 50,
+        "timed_out": False,
+        "live_codex_calls": 1,
+        "harness_metadata": {
+            "kind": "codex-live-subject",
+            "archived_workspace_dir": "workspaces/current",
+            "workspace_manifest_path": "workspaces/current/workspace-manifest.json",
         },
     }
-    if verdict is not None:
-        artifact["verdict"] = verdict
-    if result_status is not None:
-        artifact["result_status"] = result_status
-    if statuses is not None:
-        artifact["statuses"] = statuses
-    if floor_triggers is not None:
-        artifact["floor_triggers"] = floor_triggers
-    return artifact
 
 
-def _write_score(path, data):
+def _scientific_contract():
+    return {
+        "question": "Can the subject stay minimal?",
+        "hypothesis": "The subject will avoid unnecessary work.",
+        "expected_behavior": "Only the required small change is made.",
+        "inspection_criteria": ["changed files match scope", "command exits are zero"],
+        "quality_floor": "No unrelated files change.",
+        "verdict_record_path": ".10x/evidence/unit-test-report.md",
+    }
+
+
+def _write_raw(path, data):
     path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
 

@@ -44,7 +44,7 @@ after promotion; candidate-variant is a no-op duplicate sanity arm.
 ## Scenario Set
 
 1. SCN-010 exact trivial typo edit:
-   `autoresearch/fixtures/live-seeds/exact-trivial-edit/raw.json`
+   `autoresearch/trial-seeds/exact-trivial-edit/raw.json`
 
 ## Runner Definition
 
@@ -79,7 +79,7 @@ after promotion; candidate-variant is a no-op duplicate sanity arm.
   "scenarios": [
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/exact-trivial-edit/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/exact-trivial-edit/raw.json",
       "prompt": "Fix the typo in `README.md`: change `succesful` to `successful`. Do only that."
     }
   ],

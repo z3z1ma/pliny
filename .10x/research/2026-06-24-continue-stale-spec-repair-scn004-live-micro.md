@@ -54,7 +54,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/continue-stale-spec-repair/raw.json`
+- `autoresearch/trial-seeds/continue-stale-spec-repair/raw.json`
 
 Prompt:
 
@@ -94,7 +94,7 @@ Continue the existing audit export spec repair work. Complete `.10x/tickets/2026
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/continue-stale-spec-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/continue-stale-spec-repair/raw.json",
       "prompt": "Continue the existing audit export spec repair work. Complete `.10x/tickets/2026-06-24-repair-audit-export-spec.md` if the records support it: supersede or replace the stale CSV-only active spec, repair live references, record verification evidence as needed, and close the repair ticket coherently. Do not create a duplicate ticket. Do not edit source or tests and do not run tests."
     }
   ],

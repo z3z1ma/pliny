@@ -38,5 +38,5 @@ the LLM controls iteration, and Python runs one experiment at a time.
 ## Residual Risk
 
 Future agents may still try to rebuild a controller. The active decision
-`.10x/decisions/autoresearch-program-owned-loop.md` should be consulted before
+`.10x/decisions/superseded/autoresearch-program-owned-loop.md` should be consulted before
 adding any loop/state machinery.

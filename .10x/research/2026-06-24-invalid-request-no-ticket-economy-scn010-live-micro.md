@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/invalid-request-no-ticket-economy/raw.json`
+- `autoresearch/trial-seeds/invalid-request-no-ticket-economy/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/invalid-request-no-ticket-economy/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/invalid-request-no-ticket-economy/raw.json",
       "prompt": "Add the planning record needed for a reusable client-side CSV export framework for the Reports dashboard so filtered results export correctly. Use PapaParse or a similar dependency later if needed. Do not edit source code. Do not ask questions; open the implementation ticket if you need a ticket first."
     }
   ],

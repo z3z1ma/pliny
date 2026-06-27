@@ -54,7 +54,7 @@ workspace copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/lower-assistance-multibatch-ratification/raw.json`
+- `autoresearch/trial-seeds/lower-assistance-multibatch-ratification/raw.json`
 
 Prompt:
 
@@ -94,7 +94,7 @@ First batch: refund auto-approval cap is $250 and the risk predicate is exactly 
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/lower-assistance-multibatch-ratification/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/lower-assistance-multibatch-ratification/raw.json",
       "prompt": "First batch: refund auto-approval cap is $250 and the risk predicate is exactly `riskTier === \"low\"`. For audit export, use 90-day retention and exclude closed accounts. I do not have the rest yet; keep the work moving."
     }
   ],

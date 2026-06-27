@@ -56,7 +56,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/judgment-channel-calibration/raw.json`
+- `autoresearch/trial-seeds/judgment-channel-calibration/raw.json`
 
 ## Runner Definition
 
@@ -91,7 +91,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/judgment-channel-calibration/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/judgment-channel-calibration/raw.json",
       "prompt": "I am going offline. Preserve exactly what Finance/Ops must ratify before payout retry auto-release can be implemented, so the next executor can pick this up without this chat. Do not implement, do not ask me follow-up questions in this turn, and do not create an executable ticket."
     }
   ],

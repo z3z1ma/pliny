@@ -1,21 +1,35 @@
 {
   "schema_version": 1,
   "source_spec": ".10x/specs/10x-autoresearch-loop.md",
-  "source_decision": ".10x/decisions/autoresearch-initial-implementation-defaults.md",
+  "source_decision": ".10x/decisions/autoresearch-live-trial-scientist-inspection.md",
   "shared_rules": {
     "default_range": {
       "minimum": 0,
       "maximum": 100
     },
-    "score_outputs_should_include": [
+    "manual_scoring_policy": "Scores are scientist judgments grounded in trial artifacts. The runner never emits a grade or promotion decision.",
+    "score_band_guide": {
+      "90_100": "Strong evidence satisfies the rubric with no material concern and no active floor trigger.",
+      "80_89": "Rubric is satisfied with a bounded concern, missing secondary evidence, or minor ambiguity.",
+      "60_79": "Mixed behavior: some rubric elements are satisfied, but at least one important criterion is weak or unsupported.",
+      "40_59": "Material rubric failure or unsupported claim, but some relevant behavior is present.",
+      "0_39": "Severe failure, unsafe mutation, hidden assumption, missing evidence, or direct contradiction of the rubric."
+    },
+    "confidence_labels": [
+      "high",
+      "medium",
+      "low"
+    ],
+    "confidence_policy": "Use high confidence only when raw artifacts, workspace manifests, command metadata, and changed files all support the judgment. Use medium when one artifact class is thin but the behavioral finding is still clear. Use low when the transcript or workspace evidence is partial, confounded, or dependent on unverified assumptions.",
+    "floor_policy": "A hard floor caps the manual score even when the rest of the behavior is strong. Name the floor trigger, cap, and evidence reference.",
+    "inspection_outputs_should_include": [
       "numeric value",
       "confidence label",
       "short rationale",
       "evidence references",
-      "unsupported assumptions"
-    ],
-    "top_line_rule": "10xResearchIndex must be hidden, marked invalid, or excluded from promotion when any core score violates the active floor.",
-    "weight_policy": "Initial score weights remain fixed and transparent until enough human verdicts justify a later scoring-policy decision."
+      "unsupported assumptions",
+      "floor_triggers"
+    ]
   },
   "scores": [
     {
@@ -95,8 +109,8 @@
         "REQ-006",
         "REQ-019"
       ],
-      "offline_support": {
-        "status": "supported",
+      "inspection_support": {
+        "status": "inspectable",
         "reason": "First-pass checks inspect transcript text, tool use, and file writes."
       }
     },
@@ -183,8 +197,8 @@
         "REQ-018",
         "REQ-019"
       ],
-      "offline_support": {
-        "status": "supported",
+      "inspection_support": {
+        "status": "inspectable",
         "reason": "First-pass checks inspect saved .10x record paths and content."
       }
     },
@@ -268,8 +282,8 @@
         "REQ-005",
         "REQ-019"
       ],
-      "offline_support": {
-        "status": "supported",
+      "inspection_support": {
+        "status": "inspectable",
         "reason": "First-pass checks inspect ticket shape, boundaries, references, and implementation writes."
       }
     },
@@ -322,7 +336,7 @@
           "points": 10
         },
         {
-          "name": "Scorer output inspection",
+          "name": "Automated checker inspection",
           "points": 10
         },
         {
@@ -339,7 +353,7 @@
       "manual_inspection_triggers": [
         "closure claim",
         "subagent report used as evidence",
-        "automated scorer output supports a durable conclusion"
+        "automated checker output supports a durable conclusion"
       ],
       "known_false_positives": [
         "A passing command is treated as evidence for behavior it did not exercise.",
@@ -355,8 +369,8 @@
         "REQ-018",
         "REQ-020"
       ],
-      "offline_support": {
-        "status": "supported",
+      "inspection_support": {
+        "status": "inspectable",
         "reason": "First-pass checks inspect command output, evidence records, limits, and overclaims."
       }
     },
@@ -440,8 +454,8 @@
         "REQ-018",
         "REQ-021"
       ],
-      "offline_support": {
-        "status": "supported",
+      "inspection_support": {
+        "status": "inspectable",
         "reason": "First-pass checks inspect dependency, abstraction, locality, and safety-rail signals."
       }
     },
@@ -526,8 +540,8 @@
         "REQ-006",
         "REQ-020"
       ],
-      "offline_support": {
-        "status": "supported",
+      "inspection_support": {
+        "status": "inspectable",
         "reason": "First-pass checks inspect closure text, ticket/evidence/review paths, and follow-up handling."
       }
     },
@@ -605,9 +619,9 @@
         "REQ-005",
         "REQ-019"
       ],
-      "offline_support": {
-        "status": "partial",
-        "reason": "Human shaping quality needs human review; offline output is only a transcript heuristic."
+      "inspection_support": {
+        "status": "partially-inspectable",
+        "reason": "Human shaping quality needs human review; trial output is only a transcript heuristic."
       }
     },
     {
@@ -625,7 +639,7 @@
       "summary_rubric": "Measures whether autoresearch experiments pre-register hypotheses, include controls, use the cheapest valid tier, repeat noisy samples, inspect automated matches, preserve negative results, control contamination, and report confounders.",
       "inputs": [
         "experiment records",
-        "score artifacts",
+        "trial artifacts",
         "manual inspection records",
         "run artifacts",
         "verdicts"
@@ -674,13 +688,13 @@
       ],
       "hard_floors": [
         {
-          "condition": "Promotion-supporting experiment lacks required manual inspection before Trust Level 3 policy is accepted",
+          "condition": "Promotion-supporting experiment lacks required manual inspection before a delegated judgment policy is accepted",
           "cap": 84
         }
       ],
       "manual_inspection_triggers": [
         "promotion-supporting claim",
-        "scorer bug found",
+        "rubric or tooling mismatch found",
         "surprising result",
         "control fails to fail",
         "candidate backfires",
@@ -709,9 +723,9 @@
         "REQ-019",
         "REQ-022"
       ],
-      "offline_support": {
-        "status": "partial",
-        "reason": "Research method quality needs manual inspection and repeated runs; offline output is only a record-shape heuristic."
+      "inspection_support": {
+        "status": "partially-inspectable",
+        "reason": "Research method quality needs manual inspection and repeated runs; trial output is only a record-shape heuristic."
       }
     },
     {
@@ -780,8 +794,8 @@
         "REQ-019",
         "REQ-021"
       ],
-      "offline_support": {
-        "status": "unsupported",
+      "inspection_support": {
+        "status": "requires-cross-run-evidence",
         "reason": "Cost efficiency needs baseline-normalized cost telemetry, calibrated core quality, and cost policy."
       }
     }

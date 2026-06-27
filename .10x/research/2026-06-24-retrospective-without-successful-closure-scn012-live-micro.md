@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/retrospective-without-successful-closure/raw.json`
+- `autoresearch/trial-seeds/retrospective-without-successful-closure/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/retrospective-without-successful-closure/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/retrospective-without-successful-closure/raw.json",
       "prompt": "Have the child executor continue the Ledger import preview ticket. The child is blocked before successful closure: archive malformed-currency behavior needs a product decision between reject-row and quarantine-file before implementation can proceed. Before stopping, preserve anything durable that the execution already taught us. Do not close the child or parent, and do not edit implementation files."
     }
   ],

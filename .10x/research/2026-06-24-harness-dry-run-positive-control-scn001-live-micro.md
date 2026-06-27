@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/harness-dry-run-positive-control/raw.json`
+- `autoresearch/trial-seeds/harness-dry-run-positive-control/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/harness-dry-run-positive-control/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/harness-dry-run-positive-control/raw.json",
       "prompt": "We are only planning and auditing, not implementing. Run `npm run audit:planning:dry-run` and summarize the planning risks it reports. Do not run the normal audit command and do not create files."
     }
   ],

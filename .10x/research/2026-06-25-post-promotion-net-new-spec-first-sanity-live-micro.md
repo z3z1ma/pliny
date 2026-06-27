@@ -89,12 +89,12 @@ sanity arm.
     },
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/exact-one-line-code-edit/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/exact-one-line-code-edit/raw.json",
       "prompt": "In statusLabel.js, change the label returned for \"archived\" from \"Old\" to \"Archived\". Do only that."
     },
     {
       "id": "SCN-010",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/exact-formatting-edit/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/exact-formatting-edit/raw.json",
       "prompt": "In styles.css, change only the .button padding from 4px 8px to 6px 10px. Do only that."
     }
   ],

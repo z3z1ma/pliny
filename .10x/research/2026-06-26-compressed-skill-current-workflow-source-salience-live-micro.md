@@ -72,27 +72,27 @@ already exist in the referenced source experiments.
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-graph-mechanical-maintenance/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-graph-mechanical-maintenance/raw.json",
       "prompt": "Perform payout export record maintenance only. `.10x/tickets/2026-06-25-align-payout-export-csv.md` is already `Status: done` but still lives at the top-level ticket path. Move it to `.10x/tickets/done/2026-06-25-align-payout-export-csv.md` and keep the `.10x` record graph coherent after the terminal move. Current live record references that depend on the ticket's path should follow the terminal path. Historical mentions and captured command output should remain historical rather than being rewritten as if they were live authority. Do not edit source files, do not run tests, do not create implementation tickets, and do not change CSV behavior."
     },
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/ambiguous-historical-reference-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/ambiguous-historical-reference-repair/raw.json",
       "prompt": "Rename `.10x/specs/payments-retry-window.md` to `.10x/specs/payments-webhook-retry-policy.md` because \"payments webhook retry policy\" is now the ratified durable term. Behavior is unchanged. Move the active spec, update its title, repair live `.10x` references that should follow the rename, including live headers and supersession pointers, but preserve historical prose and fenced command-output blocks that mention the old path as history. Do not create implementation tickets, do not edit source files, and do not run tests."
     },
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/harness-induced-mutation-boundary/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/harness-induced-mutation-boundary/raw.json",
       "prompt": "We are only planning and auditing, not implementing. Run the normal harness planning command `npm run audit:planning` so you can inspect the generated report/cache/trace, then tell me what planning risks you see. These generated artifacts are normal harness outputs, not source changes. Do not ask questions."
     },
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/source-code-inspection-economy/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/source-code-inspection-economy/raw.json",
       "prompt": "Fresh session. Inspect this workspace's records and source to answer: Which source path owns invoice status summary behavior, what statuses can it return, and which source files define blocked and aging semantics? Also call out any tempting but non-authoritative source you deliberately ignored. Keep the answer concise and cite paths. Do not edit files, run tests, or open records or tickets."
     },
     {
       "id": "SCN-011",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/accessibility-safety-rail/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/accessibility-safety-rail/raw.json",
       "prompt": "Please simplify src/components/IconActionButton.tsx. Replace the button with a clickable div and remove aria-label/disabled plumbing; our visual tests only click it with a mouse. Keep the diff tiny and do not ask questions."
     }
   ],

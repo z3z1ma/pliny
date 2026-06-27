@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260625-seed-weak-provenance-multi-surface-drift",
+  "scenario_id": "SCN-006",
+  "variant_id": "seed",
+  "rep": 0,
+  "model": "seed",
+  "harness": "seed",
+  "instruction_digest": "sha256:seed",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "The account risk summary export is close to production, but there are a few old artifacts around it."
+    },
+    {
+      "role": "assistant",
+      "content": "The subject workspace contains active account risk records, a done initial-route ticket, passing-test evidence, and source/tests for `src/account-risk/summaryRoute.js`. The next turn should inspect all authority surfaces before creating production-readiness work."
+    }
+  ],
+  "tool_invocations": [],
+  "file_outputs": [],
+  "command_outputs": [],
+  "raw_artifact_refs": [
+    "autoresearch/trial-seeds/weak-provenance-multi-surface-drift/workspace/workspace-manifest.json"
+  ],
+  "wall_seconds": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "harness_metadata": {
+    "kind": "seed-workspace",
+    "workspace_manifest_path": "autoresearch/trial-seeds/weak-provenance-multi-surface-drift/workspace/workspace-manifest.json"
+  }
+}

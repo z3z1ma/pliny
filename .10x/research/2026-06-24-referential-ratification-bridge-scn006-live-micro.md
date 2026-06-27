@@ -54,7 +54,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/referential-ratification-bridge/raw.json`
+- `autoresearch/trial-seeds/referential-ratification-bridge/raw.json`
 
 ## Runner Definition
 
@@ -89,7 +89,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/referential-ratification-bridge/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/referential-ratification-bridge/raw.json",
       "prompt": "Use the old FinchPay instant-payout recommendation now that the API capability has been revalidated. I do not want to restate the whole policy. Ask once if you absolutely must, otherwise create the active decision and executable implementation ticket. Do not edit source code."
     }
   ],

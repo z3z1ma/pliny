@@ -63,7 +63,7 @@ the two existing native skill roots:
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-authoring-multi-harness-exposure/raw.json`
+- `autoresearch/trial-seeds/skill-authoring-multi-harness-exposure/raw.json`
 
 Prompt:
 
@@ -108,7 +108,7 @@ Wrap up the Ledger import parent now. The child is done with evidence and review
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-authoring-multi-harness-exposure/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-authoring-multi-harness-exposure/raw.json",
       "prompt": "Wrap up the Ledger import parent now. The child is done with evidence and review. Preserve the reusable fixture replay procedure, the `sourceRef` naming convention, and the archive malformed-currency follow-up in the right durable records. Before authoring any skill, inspect this workspace for skill-writing governance and follow it. Expose any active skill appropriately for the harness-native skill roots that exist in this workspace. Use existing records to choose names and record types. Do not edit implementation files."
     }
   ],

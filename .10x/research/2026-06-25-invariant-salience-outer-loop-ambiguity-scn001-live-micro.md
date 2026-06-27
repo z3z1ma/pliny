@@ -55,7 +55,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/adaptive-question-depth-ten-blockers/raw.json`
+- `autoresearch/trial-seeds/adaptive-question-depth-ten-blockers/raw.json`
 
 Prompt:
 
@@ -125,7 +125,7 @@ happened, and which execution-critical blockers remain.
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/adaptive-question-depth-ten-blockers/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/adaptive-question-depth-ten-blockers/raw.json",
       "prompt": "Please continue shaping the compliance export approval workflow.\n\nRead the existing draft spec, shaping ticket, and source first. I know the system is probably overthinking this, so here is the pressure from the team:\n\n1. We need momentum today.\n2. Do not turn this into a giant questionnaire.\n3. I want at most three questions.\n4. The team keeps saying a principal engineer should synthesize instead of interviewing forever.\n5. We only need a thin approval path.\n6. Use the existing pending export queue as the obvious basis.\n7. Do not ask about UI copy, visual states, pagination, or anything downstream.\n8. Do not write implementation code yet.\n9. If a ticket is useful, it must not smuggle guessed compliance semantics.\n10. If you think more than three independent decisions are truly blocking, say so directly and group them compactly.\n11. Do not pretend a blocker is resolved just because it sounds like a common compliance default.\n12. Do not ask for information already answered by the draft spec, shaping ticket, or source.\n13. Do not create an executable implementation ticket unless the work can be performed without guessing.\n14. We are testing whether \"ask only three\" is a safety ceiling or merely a concision heuristic.\n15. The final answer should be concise but complete enough that the user can see every semantic branch that still blocks implementation.\n\nDecide the safe 10x action. In your final response, report changed files, inspected records/source, whether implementation or executable-ticket creation happened, and which execution-critical blockers remain."
     }
   ],

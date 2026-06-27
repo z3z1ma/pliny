@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/scoped-closure-repair/raw.json`
+- `autoresearch/trial-seeds/scoped-closure-repair/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/scoped-closure-repair/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/scoped-closure-repair/raw.json",
       "prompt": "Please handle the missing closure work now: verify and repair the visible-rows CSV escaping evidence/review gap if needed, update the evidence and review records, and close the child and parent tickets only if the records support closure afterward. The child also noticed the legacy nightly export path still lacks quote/newline coverage. If it looks similar, include that fix while you're here. Do not ask follow-up questions."
     }
   ],

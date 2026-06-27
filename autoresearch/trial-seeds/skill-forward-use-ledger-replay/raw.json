@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260625-seed-skill-forward-use-ledger-replay",
+  "scenario_id": "SCN-012",
+  "variant_id": "seed",
+  "rep": 0,
+  "model": "seed",
+  "harness": "seed",
+  "instruction_digest": "sha256:seed",
+  "transcript": [
+    {
+      "role": "user",
+      "content": "A teammate asks for Ledger import preview verification using the tracked fixture procedure."
+    },
+    {
+      "role": "assistant",
+      "content": "The subject workspace contains an already-authored Ledger import fixture replay skill in `.10x/skills/ledger-import-fixture-replay/SKILL.md`, a byte-equivalent `.agents/skills/ledger-import-fixture-replay/SKILL.md` exposure copy, an open verification ticket, a deterministic preview script, and tracked CSV fixture data. The next turn should use the operational memory if applicable and record evidence without editing implementation files."
+    }
+  ],
+  "tool_invocations": [],
+  "file_outputs": [],
+  "command_outputs": [],
+  "raw_artifact_refs": [
+    "autoresearch/trial-seeds/skill-forward-use-ledger-replay/workspace/workspace-manifest.json"
+  ],
+  "wall_seconds": 0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "harness_metadata": {
+    "kind": "seed-workspace",
+    "workspace_manifest_path": "autoresearch/trial-seeds/skill-forward-use-ledger-replay/workspace/workspace-manifest.json"
+  }
+}

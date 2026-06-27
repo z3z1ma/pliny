@@ -39,13 +39,13 @@ SCENARIO_REQUIRED_TEXT = (
     "existing_records",
     "expected_high_quality_behavior",
     "expected_failure_behavior",
-    "fixture_reset",
+    "workspace_reset_procedure",
 )
 SCENARIO_REQUIRED_LISTS = (
     "target_scores",
     "allowed_writes",
     "disallowed_writes",
-    "fixture_paths",
+    "trial_seed_paths",
     "required_observations",
     "scoring_hints",
     "known_false_positives",
@@ -57,25 +57,26 @@ EXPERIMENT_TEMPLATE_SECTIONS = (
     "Question Or Hypothesis",
     "Motivation",
     "Method Tier",
-    "Variants",
+    "Arms",
     "Control",
     "Scenario Set",
+    "Scientific Contract",
     "Subject Agent And Model",
     "Harness Target",
     "Scenario And Workspace Procedure",
     "Repetition Count",
     "Prediction",
-    "Metrics To Score",
+    "Rubric Criteria",
     "Quality Floors",
     "Budget And Stop Conditions",
     "Write Boundary",
     "Raw Output Destination",
-    "Scorer Configuration",
+    "Rubric And Inspection Configuration",
     "Manual Inspection Requirement",
     "Promotion Criteria",
     "Known Risks And Confounders",
     "Execution Log",
-    "Score Artifacts",
+    "Trial Artifacts",
     "Manual Inspection Findings",
     "Final Verdict",
 )
@@ -88,11 +89,11 @@ MANUAL_INSPECTION_SECTIONS = (
     "Conclusion And Limits",
 )
 MANUAL_INSPECTION_CHECKS = (
-    "scorer matched subject behavior",
+    "rubric judgment matches subject behavior",
     "scenario included the inputs",
     "control actually elicited",
     "candidate did not improve by silently narrowing scope",
-    "score rationale points to real output",
+    "judgment rationale points to real output",
     "No high-severity failure",
 )
 
@@ -121,31 +122,26 @@ def validate_contracts(root: str | Path) -> ValidationResult:
 
     scores_path = repo_root / "autoresearch" / "catalogs" / "scores.json"
     scenarios_path = repo_root / "autoresearch" / "catalogs" / "scenarios.json"
-    schema_path = (
-        repo_root / "autoresearch" / "schemas" / "score-artifact.schema.json"
-    )
     experiment_path = repo_root / "autoresearch" / "templates" / "experiment.md"
     manual_path = (
         repo_root / "autoresearch" / "templates" / "manual-inspection.md"
     )
     split_path = repo_root / "autoresearch" / "splits" / "skill-improvement-v1.json"
+    seed_index_path = repo_root / "autoresearch" / "trial-seeds" / "index.json"
 
     scores_data = _load_json(scores_path, "scores.json", errors)
     scenarios_data = _load_json(scenarios_path, "scenarios.json", errors)
-    schema_data = _load_json(schema_path, "score-artifact.schema.json", errors)
 
     score_ids: set[str] = set()
     if isinstance(scores_data, dict):
         _validate_contract_sources("scores.json", scores_data, errors)
+        _validate_score_shared_rules(scores_data, errors)
         score_ids = _validate_scores(scores_data, requirement_ids, errors)
 
     scenario_ids: set[str] = set()
     if isinstance(scenarios_data, dict):
         _validate_contract_sources("scenarios.json", scenarios_data, errors)
         scenario_ids = _validate_scenarios(scenarios_data, score_ids, errors)
-
-    if isinstance(schema_data, dict):
-        _validate_score_artifact_schema(schema_data, errors)
 
     experiment_text = _read_text(
         experiment_path, "templates/experiment.md", errors
@@ -164,6 +160,17 @@ def validate_contracts(root: str | Path) -> ValidationResult:
         _validate_skill_improvement_split(split_data, scenario_ids, errors)
 
     _validate_live_seed_workspaces(repo_root, errors)
+    seed_index_data = _load_json(
+        seed_index_path, "trial-seeds/index.json", errors
+    )
+    if isinstance(seed_index_data, dict):
+        _validate_trial_seed_index(
+            repo_root,
+            seed_index_data,
+            scenario_ids,
+            score_ids,
+            errors,
+        )
     _validate_skill_size_budget(repo_root, errors)
 
     return ValidationResult(errors)
@@ -180,7 +187,7 @@ def _load_json(path: Path, label: str, errors: list[str]) -> Any | None:
 
 
 def _validate_live_seed_workspaces(repo_root: Path, errors: list[str]) -> None:
-    seed_root = repo_root / "autoresearch" / "fixtures" / "live-seeds"
+    seed_root = repo_root / "autoresearch" / "trial-seeds"
     if not seed_root.exists():
         return
 
@@ -225,6 +232,102 @@ def _validate_live_seed_workspaces(repo_root: Path, errors: list[str]) -> None:
             errors.append(
                 f"{manifest_label}: resolved workspace must contain its workspace manifest"
             )
+
+
+def _validate_trial_seed_index(
+    repo_root: Path,
+    data: dict[str, Any],
+    scenario_ids: set[str],
+    score_ids: set[str],
+    errors: list[str],
+) -> None:
+    label = "trial-seeds/index.json"
+    if data.get("schema_version") != 1:
+        errors.append(f"{label}: schema_version must be 1")
+    if data.get("source_scenarios") != "autoresearch/catalogs/scenarios.json":
+        errors.append(f"{label}: source_scenarios must point to scenarios catalog")
+    if data.get("source_scores") != "autoresearch/catalogs/scores.json":
+        errors.append(f"{label}: source_scores must point to scores catalog")
+    if not isinstance(data.get("selection_protocol"), list) or not data["selection_protocol"]:
+        errors.append(f"{label}: selection_protocol must be a non-empty list")
+
+    seed_root = repo_root / "autoresearch" / "trial-seeds"
+    actual_seed_ids = {
+        path.name
+        for path in seed_root.iterdir()
+        if path.is_dir() and (path / "raw.json").exists()
+    }
+    seeds = data.get("seeds")
+    if not isinstance(seeds, list) or not seeds:
+        errors.append(f"{label}: seeds must be a non-empty list")
+        return
+
+    indexed_ids: set[str] = set()
+    for index, seed in enumerate(seeds):
+        if not isinstance(seed, dict):
+            errors.append(f"{label}: seeds[{index}] must be an object")
+            continue
+        seed_id = seed.get("id")
+        seed_label = f"{label}:{seed_id or index}"
+        if not _non_empty_string(seed_id):
+            errors.append(f"{seed_label}: id must be a non-empty string")
+            continue
+        if seed_id in indexed_ids:
+            errors.append(f"{label}: duplicate seed id {seed_id}")
+        indexed_ids.add(seed_id)
+
+        scenario_id = seed.get("scenario_id")
+        if scenario_id not in scenario_ids:
+            errors.append(f"{seed_label}: unknown scenario_id {scenario_id}")
+        for score_id in seed.get("target_scores", []):
+            if score_id not in score_ids:
+                errors.append(f"{seed_label}: unknown target score {score_id}")
+
+        for field in (
+            "condition_summary",
+            "experiment_use",
+            "suggested_prompt_family",
+            "expected_high_quality_behavior",
+            "expected_failure_behavior",
+            "raw_path",
+            "workspace_manifest_path",
+            "workspace_path",
+            "workspace_procedure",
+        ):
+            if not _non_empty_string(seed.get(field)):
+                errors.append(f"{seed_label}: {field} must be a non-empty string")
+        for field in (
+            "target_scores",
+            "conditions_created",
+            "known_traps",
+            "quality_floor_signals",
+            "material_records",
+            "material_source_files",
+        ):
+            if not isinstance(seed.get(field), list):
+                errors.append(f"{seed_label}: {field} must be a list")
+
+        raw_path = _resolve_repo_path(repo_root, str(seed.get("raw_path", "")))
+        manifest_path = _resolve_repo_path(
+            repo_root,
+            str(seed.get("workspace_manifest_path", "")),
+        )
+        workspace_path = _resolve_repo_path(repo_root, str(seed.get("workspace_path", "")))
+        if not raw_path.exists():
+            errors.append(f"{seed_label}: raw_path does not exist")
+        if not manifest_path.exists():
+            errors.append(f"{seed_label}: workspace_manifest_path does not exist")
+        if not workspace_path.is_dir():
+            errors.append(f"{seed_label}: workspace_path does not exist")
+        if raw_path.exists() and raw_path.parent.name != seed_id:
+            errors.append(f"{seed_label}: raw_path must live under the seed directory")
+
+    missing = sorted(actual_seed_ids - indexed_ids)
+    extra = sorted(indexed_ids - actual_seed_ids)
+    if missing:
+        errors.append(f"{label}: missing seed index entries: {', '.join(missing)}")
+    if extra:
+        errors.append(f"{label}: seed index entries without raw seed: {', '.join(extra)}")
 
 
 def _read_text(path: Path, label: str, errors: list[str]) -> str | None:
@@ -299,7 +402,7 @@ def _validate_contract_sources(
         errors.append(f"{label}: source_spec must point to the active spec")
     if (
         data.get("source_decision")
-        != ".10x/decisions/autoresearch-initial-implementation-defaults.md"
+        != ".10x/decisions/autoresearch-live-trial-scientist-inspection.md"
     ):
         errors.append(f"{label}: source_decision must point to the active decision")
 
@@ -371,6 +474,35 @@ def _validate_scores(
                     )
 
     return score_ids
+
+
+def _validate_score_shared_rules(data: dict[str, Any], errors: list[str]) -> None:
+    label = "scores.json:shared_rules"
+    shared = data.get("shared_rules")
+    if not isinstance(shared, dict):
+        errors.append(f"{label}: shared_rules must be an object")
+        return
+    if "top_line_rule" in shared:
+        errors.append(f"{label}: top_line_rule is retired")
+    for field in (
+        "manual_scoring_policy",
+        "confidence_policy",
+        "floor_policy",
+    ):
+        if not _non_empty_string(shared.get(field)):
+            errors.append(f"{label}: {field} must be a non-empty string")
+    if not isinstance(shared.get("score_band_guide"), dict) or not shared["score_band_guide"]:
+        errors.append(f"{label}: score_band_guide must be a non-empty object")
+    labels = shared.get("confidence_labels")
+    if not isinstance(labels, list) or not all(_non_empty_string(item) for item in labels):
+        errors.append(f"{label}: confidence_labels must be a list of non-empty strings")
+    required_outputs = shared.get("inspection_outputs_should_include")
+    if not isinstance(required_outputs, list):
+        errors.append(f"{label}: inspection_outputs_should_include must be a list")
+    else:
+        for required in ("evidence references", "unsupported assumptions", "floor_triggers"):
+            if required not in required_outputs:
+                errors.append(f"{label}: inspection outputs must include {required}")
 
 
 def _validate_sub_scores(
@@ -476,153 +608,6 @@ def _validate_id_set(
     return found_set
 
 
-def _validate_score_artifact_schema(
-    data: dict[str, Any], errors: list[str]
-) -> None:
-    label = "score-artifact.schema.json"
-    if data.get("$schema") != "https://json-schema.org/draft/2020-12/schema":
-        errors.append(f"{label}: $schema must be draft 2020-12")
-    if data.get("type") != "object":
-        errors.append(f"{label}: root type must be object")
-    if data.get("additionalProperties") is not False:
-        errors.append(f"{label}: root additionalProperties must be false")
-
-    required = data.get("required")
-    properties = data.get("properties")
-    if not isinstance(required, list):
-        errors.append(f"{label}: required must be a list")
-        required = []
-    if not isinstance(properties, dict):
-        errors.append(f"{label}: properties must be an object")
-        properties = {}
-
-    for field in (
-        "experiment_id",
-        "scenario_id",
-        "variant_id",
-        "rep",
-        "model",
-        "harness",
-        "instruction_digest",
-        "fixture_digest",
-        "scores",
-        "cost",
-        "limits",
-        "scorer",
-    ):
-        if field not in required:
-            errors.append(f"{label}: required must include {field}")
-        if field not in properties:
-            errors.append(f"{label}: properties must define {field}")
-
-    _validate_schema_pattern(
-        label,
-        "properties.scores.propertyNames.pattern",
-        _nested_get(properties, ("scores", "propertyNames", "pattern")),
-        EXPECTED_SCORE_IDS,
-        "S010",
-        errors,
-    )
-    _validate_schema_pattern(
-        label,
-        "properties.scenario_id.pattern",
-        _nested_get(properties, ("scenario_id", "pattern")),
-        EXPECTED_SCENARIO_IDS,
-        None,
-        errors,
-    )
-
-    defs = data.get("$defs")
-    if not isinstance(defs, dict):
-        errors.append(f"{label}: $defs must be an object")
-        defs = {}
-    for name in ("confidence", "evidence_ref", "floor_trigger", "score"):
-        if name not in defs:
-            errors.append(f"{label}: $defs must include {name}")
-
-    for ref in _collect_refs(data):
-        if not ref.startswith("#/$defs/"):
-            errors.append(f"{label}: unsupported $ref {ref}")
-            continue
-        ref_name = ref.removeprefix("#/$defs/")
-        if ref_name not in defs:
-            errors.append(f"{label}: unresolved $ref {ref}")
-
-    score_def = defs.get("score", {})
-    if isinstance(score_def, dict):
-        score_required = score_def.get("required", [])
-        for field in (
-            "value",
-            "confidence",
-            "floor_triggered",
-            "rationale",
-            "evidence_refs",
-            "limits",
-        ):
-            if field not in score_required:
-                errors.append(f"{label}: $defs.score.required must include {field}")
-
-    scorer = properties.get("scorer", {})
-    if isinstance(scorer, dict):
-        scorer_required = scorer.get("required", [])
-        for field in (
-            "id",
-            "trust_level",
-            "inputs",
-            "outputs",
-            "known_false_positives",
-            "known_false_negatives",
-            "confidence",
-            "manual_inspection_required",
-            "manual_inspection_requirement",
-            "limits",
-        ):
-            if field not in scorer_required:
-                errors.append(f"{label}: scorer.required must include {field}")
-
-
-def _validate_schema_pattern(
-    label: str,
-    field: str,
-    pattern: Any,
-    accepted: tuple[str, ...],
-    rejected: str | None,
-    errors: list[str],
-) -> None:
-    if not isinstance(pattern, str):
-        errors.append(f"{label}: {field} must be a string")
-        return
-    compiled = re.compile(pattern)
-    for value in accepted:
-        if not compiled.fullmatch(value):
-            errors.append(f"{label}: {field} does not accept {value}")
-    if rejected is not None and compiled.fullmatch(rejected):
-        errors.append(f"{label}: {field} unexpectedly accepts {rejected}")
-
-
-def _nested_get(value: Any, keys: tuple[str, ...]) -> Any:
-    current = value
-    for key in keys:
-        if not isinstance(current, dict):
-            return None
-        current = current.get(key)
-    return current
-
-
-def _collect_refs(value: Any) -> list[str]:
-    refs: list[str] = []
-    if isinstance(value, dict):
-        for key, child in value.items():
-            if key == "$ref" and isinstance(child, str):
-                refs.append(child)
-            else:
-                refs.extend(_collect_refs(child))
-    elif isinstance(value, list):
-        for child in value:
-            refs.extend(_collect_refs(child))
-    return refs
-
-
 def _validate_experiment_template(text: str, errors: list[str]) -> None:
     label = "templates/experiment.md"
     _validate_common_headers(label, text, errors)
@@ -634,7 +619,28 @@ def _validate_experiment_template(text: str, errors: list[str]) -> None:
             errors.append(f"{label}: missing method tier {field}")
     for field in ("no-10x-control", "current-10x", "candidate-variant"):
         if field not in text:
-            errors.append(f"{label}: missing default arm {field}")
+            errors.append(f"{label}: missing example arm {field}")
+    for field in (
+        "scientific_contract",
+        "question",
+        "hypothesis",
+        "expected_behavior",
+        "inspection_criteria",
+        "quality_floor",
+        "verdict_record_path",
+        "workspace_procedure",
+        "max_harness_runs",
+        "estimated_wall_seconds_per_run",
+        "timeout_seconds_per_run",
+    ):
+        if field not in text:
+            errors.append(f"{label}: missing runner definition field {field}")
+    if "exact ordered arms" not in text:
+        errors.append(f"{label}: must state that the arms list is exact")
+    if "autoresearch/trial-seeds/index.json" not in text:
+        errors.append(f"{label}: must point scientists to the trial seed index")
+    if "autoresearch/catalogs/scores.json" not in text:
+        errors.append(f"{label}: must point scientists to the manual scoring rubric")
 
 
 def _validate_manual_inspection_template(text: str, errors: list[str]) -> None:

@@ -55,7 +55,7 @@ workspace copied as input, `--disable plugins`, and `--ignore-user-config`.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/post-cold-start-exact-ratification/raw.json`
+- `autoresearch/trial-seeds/post-cold-start-exact-ratification/raw.json`
 
 Prompt:
 
@@ -99,7 +99,7 @@ If this resolves the remaining refund blocker, update the existing refund record
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/post-cold-start-exact-ratification/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/post-cold-start-exact-ratification/raw.json",
       "prompt": "Fresh continuation. Use only this workspace's records and source. No prior chat is available.\n\nFinal refund escalation semantics: after the one 30-minute retry fails or cannot be attempted, set `manualReviewRequired=true`, set `failureReason` to `risk_escalation`, send an internal escalation notice to `#refund-risk`, Risk Ops owns the follow-up, and send no customer notification. Successful auto-approved refunds still notify `#refund-ops` and remain owned by Refund Ops.\n\nIf this resolves the remaining refund blocker, update the existing refund records and create exactly one executable refund implementation ticket. Do not edit implementation files or tests. Do not duplicate the existing audit ticket or audit spec."
     }
   ],

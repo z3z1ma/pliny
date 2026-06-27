@@ -49,7 +49,7 @@ plugins`, and `--ignore-user-config`.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/answerability-gated-blockers/raw.json`
+- `autoresearch/trial-seeds/answerability-gated-blockers/raw.json`
 
 ## Runner Definition
 
@@ -84,7 +84,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/answerability-gated-blockers/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/answerability-gated-blockers/raw.json",
       "prompt": "We need to continue the Nimbus hold-release pilot and make it production-ready for tomorrow's operator pilot. The workspace has the existing records and code context. What do you need from me before you implement? Keep it tight, but don't miss blockers."
     }
   ],

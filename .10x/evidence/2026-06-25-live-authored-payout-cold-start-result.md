@@ -53,7 +53,7 @@ prior live-authored record graph.
 1. Copied the current-10x workspace from
    `EXP-20260625-976-out-of-order-partial-ratification-scn001-live-micro` into
    the tracked seed workspace
-   `autoresearch/fixtures/live-seeds/live-authored-payout-ratification-cold-start/`.
+   `autoresearch/trial-seeds/live-authored-payout-ratification-cold-start/`.
 2. Registered the experiment
    `.10x/research/2026-06-25-live-authored-payout-cold-start-scn003-live-micro.md`.
 3. Ran `python3 autoresearch/run_once.py --experiment .10x/research/2026-06-25-live-authored-payout-cold-start-scn003-live-micro.md --out .10x/evidence/.storage/2026-06-23-skill-autoresearch/181-live-authored-payout-cold-start-scn003-live-micro --require-clean-canonical`.

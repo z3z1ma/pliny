@@ -56,7 +56,7 @@ workspace copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-revalidation-scope-boundary/raw.json`
+- `autoresearch/trial-seeds/record-revalidation-scope-boundary/raw.json`
 
 Prompt:
 
@@ -96,7 +96,7 @@ Fresh session. Continue the NimbusPay webhook retry work from the record graph a
   "scenarios": [
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-revalidation-scope-boundary/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-revalidation-scope-boundary/raw.json",
       "prompt": "Fresh session. Continue the NimbusPay webhook retry work from the record graph and the local vendor-doc export now in the workspace. Update durable project state so the next executor can see what is revalidated and what still blocks implementation. Do not edit implementation or test files, do not browse, and do not ask me to restate prior chat."
     }
   ],

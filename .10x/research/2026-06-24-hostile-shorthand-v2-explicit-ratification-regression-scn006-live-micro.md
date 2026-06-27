@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/explicit-policy-ratification/raw.json`
+- `autoresearch/trial-seeds/explicit-policy-ratification/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ Accepted. I ratify exactly this FinchPay instant payout policy: use the revalida
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/explicit-policy-ratification/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/explicit-policy-ratification/raw.json",
       "prompt": "Accepted. I ratify exactly this FinchPay instant payout policy: use the revalidated FinchPay instant payout API; auto-approve instant payouts up to and including $500 only for verified sellers with zero chargebacks in the prior 90 days; route every other instant payout request to Compliance Ops manual review; do not change customer notification behavior; Compliance Ops owns manual review operations. Create the active decision and executable implementation ticket. Do not edit source code."
     }
   ],

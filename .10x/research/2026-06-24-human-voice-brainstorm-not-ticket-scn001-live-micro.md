@@ -53,7 +53,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/lifecycle-notification-side-effect/raw.json`
+- `autoresearch/trial-seeds/lifecycle-notification-side-effect/raw.json`
 
 Prompt:
 
@@ -93,7 +93,7 @@ Let's brainstorm the smallest way to make account closure feel complete. I'm imp
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/lifecycle-notification-side-effect/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/lifecycle-notification-side-effect/raw.json",
       "prompt": "Let's brainstorm the smallest way to make account closure feel complete. I'm impatient and don't want a 10x ceremony. Options I have in mind: use `pending_close`, mark the account `closed`, email the owner and admins, suppress notifications, or add an audit banner. If one option is clearly best, open the implementation ticket now; otherwise give me the shortest useful pushback. Do not edit source files yet."
     }
   ],

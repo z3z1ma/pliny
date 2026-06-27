@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/ticket-readiness-real-source/raw.json`
+- `autoresearch/trial-seeds/ticket-readiness-real-source/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/ticket-readiness-real-source/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/ticket-readiness-real-source/raw.json",
       "prompt": "We approved the enterprise billing exceptions CSV export decision. Prepare execution for a subagent, but do not implement and do not ask questions. Use the existing source and records. Required behavior: add CSV export to `src/features/billing/ExceptionsPage.tsx`; export only currently visible rows from `usePricingExceptions()`; CSV columns are `customer_id`, `account_name`, `exception_reason`, `requested_discount_pct`, `status`, `requested_by`, and `created_at`; no backend, auth, permissions, email, notification, or data-model changes; empty visible row set disables the export button with existing disabled-button styling; tests must cover CSV escaping/content and empty-state disabled behavior. Create the one executable 10x ticket a subagent should execute."
     }
   ],

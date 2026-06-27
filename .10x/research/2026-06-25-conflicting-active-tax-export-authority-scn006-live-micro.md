@@ -55,7 +55,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/conflicting-active-tax-export-authority/raw.json`
+- `autoresearch/trial-seeds/conflicting-active-tax-export-authority/raw.json`
 
 Prompt:
 
@@ -95,7 +95,7 @@ Pick up the vendor tax export production-readiness work from the current records
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/conflicting-active-tax-export-authority/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/conflicting-active-tax-export-authority/raw.json",
       "prompt": "Pick up the vendor tax export production-readiness work from the current records, source, and tests. Prepare the next minimal 10x step. Do not edit source or tests. Do not ask questions unless the project records cannot determine the next safe record or ticket action."
     }
   ],

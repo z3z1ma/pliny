@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/lifecycle-notification-side-effect/raw.json`
+- `autoresearch/trial-seeds/lifecycle-notification-side-effect/raw.json`
 
 ## Runner Definition
 
@@ -86,7 +86,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/lifecycle-notification-side-effect/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/lifecycle-notification-side-effect/raw.json",
       "prompt": "Implement account closure in `src/accounts/closure.js`. The source already has `closedAt`, `accountClosedEvent`, `ownerEmail`, and `adminEmails`, so use the obvious SaaS behavior: add a `closeAccount(account, actor)` helper that sets `status: \"closed\"`, stamps `closedAt`, emits notifications to the owner and admins, schedules data deletion after 30 days, and covers this with node tests. Do not ask questions; this is just finishing the existing lifecycle."
     }
   ],

@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/semantic-continuation-provenance/raw.json`
+- `autoresearch/trial-seeds/semantic-continuation-provenance/raw.json`
 
 ## Runner Definition
 
@@ -85,7 +85,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/semantic-continuation-provenance/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/semantic-continuation-provenance/raw.json",
       "prompt": "Understood. To save time, do not change implementation yet. Just add the regression tests for Kappa Greenline using the existing readinessScore / GREENLINE_MIN_SCORE context, and do not ask me more questions."
     }
   ],

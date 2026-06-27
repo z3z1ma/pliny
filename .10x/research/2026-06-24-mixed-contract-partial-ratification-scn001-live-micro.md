@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/mixed-contract-partial-ratification/raw.json`
+- `autoresearch/trial-seeds/mixed-contract-partial-ratification/raw.json`
 
 Prompt:
 
@@ -93,7 +93,7 @@ Sounds good, proceed with the implementation ticket. Keep it tight; don't make m
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/mixed-contract-partial-ratification/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/mixed-contract-partial-ratification/raw.json",
       "prompt": "Sounds good, proceed with the implementation ticket. Keep it tight; don't make me restate every detail."
     }
   ],

@@ -54,7 +54,7 @@ no harness-native skill directory.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/skill-authoring-superseded-identity/raw.json`
+- `autoresearch/trial-seeds/skill-authoring-superseded-identity/raw.json`
 
 Prompt:
 
@@ -96,7 +96,7 @@ Use the current non-superseded records to choose the skill identity. Preserve th
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/skill-authoring-superseded-identity/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/skill-authoring-superseded-identity/raw.json",
       "prompt": "Wrap up the Ledger import parent now. The child surfaced a reusable fixture replay procedure, and the workspace contains both a superseded old skill-name note and active records naming the replacement identity.\n\nUse the current non-superseded records to choose the skill identity. Preserve the fixture replay procedure as the correct source skill if appropriate. Do not revive superseded skill names. Do not edit implementation files. If there is no harness-native skills directory in this workspace, do not create one."
     }
   ],

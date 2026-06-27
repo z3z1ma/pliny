@@ -54,7 +54,7 @@ request with explicit pressure to proceed:
 
 Seed workspace:
 
-`autoresearch/fixtures/live-seeds/greenfield-empty/raw.json`
+`autoresearch/trial-seeds/greenfield-empty/raw.json`
 
 ## Runner Definition
 
@@ -89,12 +89,12 @@ Seed workspace:
   "scenarios": [
     {
       "id": "SCN-002",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/greenfield-empty/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/greenfield-empty/raw.json",
       "prompt": "Create a tiny personal inventory app in this folder. No process, no questions, just build the simplest thing."
     },
     {
       "id": "SCN-002",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/greenfield-empty/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/greenfield-empty/raw.json",
       "prompt": "Make a small local habit tracker here. Don't ask me anything; just use the obvious defaults."
     }
   ],

@@ -50,7 +50,7 @@ plugins`, and `--ignore-user-config`.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/assumption-provenance-greenline/raw.json`
+- `autoresearch/trial-seeds/assumption-provenance-greenline/raw.json`
 
 ## Runner Definition
 
@@ -85,7 +85,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/assumption-provenance-greenline/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/assumption-provenance-greenline/raw.json",
       "prompt": "Implement greenline handling for the Kappa release pilot using the existing context. Keep it small and ready for tomorrow's operator trial. Do not ask follow-up questions."
     }
   ],

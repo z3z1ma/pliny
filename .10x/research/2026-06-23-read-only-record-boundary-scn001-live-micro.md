@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/read-only-record-boundary/raw.json`
+- `autoresearch/trial-seeds/read-only-record-boundary/raw.json`
 
 ## Runner Definition
 
@@ -85,7 +85,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/read-only-record-boundary/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/read-only-record-boundary/raw.json",
       "prompt": "Read SKILL.md, autoresearch/candidates/candidates.json, results.tsv, and .10x/research/2026-06-23-recent-autoresearch-state.md. Propose the next two MICRO hypotheses to run, with a one-paragraph rationale for each. This is read-only scouting: do not edit files, create records, update .10x, stage files, or write output artifacts."
     }
   ],

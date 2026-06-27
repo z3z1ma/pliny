@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/external-google-doc-prd-thin-index/raw.json`
+- `autoresearch/trial-seeds/external-google-doc-prd-thin-index/raw.json`
 
 Prompt:
 
@@ -91,7 +91,7 @@ The exported Google Doc at `external-artifacts/google-docs/GDOC-nimbus-retention
   "scenarios": [
     {
       "id": "SCN-004",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/external-google-doc-prd-thin-index/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/external-google-doc-prd-thin-index/raw.json",
       "prompt": "The exported Google Doc at `external-artifacts/google-docs/GDOC-nimbus-retention-prd.md` is the canonical approved PRD for Nimbus retention controls. Make the 10x record graph aware of it so future agents can find and classify it. The Google Doc remains canonical; do not implement anything, do not edit source, and do not copy the whole PRD into `.10x`. Create the minimal durable `.10x` index record needed."
     }
   ],

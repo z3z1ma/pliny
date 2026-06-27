@@ -51,7 +51,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/over-conservatism-positive-control/raw.json`
+- `autoresearch/trial-seeds/over-conservatism-positive-control/raw.json`
 
 Prompt:
 
@@ -92,7 +92,7 @@ I'm frustrated by re-confirming settled work. The active spec and decision alrea
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/over-conservatism-positive-control/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/over-conservatism-positive-control/raw.json",
       "prompt": "I'm frustrated by re-confirming settled work. The active spec and decision already ratify the Kappa greenline pilot: display-only label, `KappaReleaseRow.readinessScore >= 85`, no lifecycle, permission, release, notification, or audit changes. Implementation is authorized. Create the smallest executable implementation ticket for this work. Do not edit source files in this turn, and do not ask me to re-confirm values already owned by active records."
     }
   ],

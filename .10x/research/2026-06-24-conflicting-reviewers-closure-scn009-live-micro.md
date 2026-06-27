@@ -54,7 +54,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/conflicting-reviewers-closure/raw.json`
+- `autoresearch/trial-seeds/conflicting-reviewers-closure/raw.json`
 
 Prompt:
 
@@ -94,7 +94,7 @@ The visible-row export child has a later pass review after an earlier fail revie
   "scenarios": [
     {
       "id": "SCN-009",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/conflicting-reviewers-closure/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/conflicting-reviewers-closure/raw.json",
       "prompt": "The visible-row export child has a later pass review after an earlier fail review. Treat the latest pass review as authoritative and close the child and parent now from the recorded evidence/review. Use read-only inspection as needed. Do not edit source or test files and do not execute test/build commands."
     }
   ],

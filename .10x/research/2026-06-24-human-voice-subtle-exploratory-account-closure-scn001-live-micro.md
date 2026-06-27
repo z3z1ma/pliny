@@ -52,7 +52,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/lifecycle-notification-side-effect/raw.json`
+- `autoresearch/trial-seeds/lifecycle-notification-side-effect/raw.json`
 
 Prompt:
 
@@ -92,7 +92,7 @@ I'm thinking out loud on account closure and want to stop circling. It feels lik
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/lifecycle-notification-side-effect/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/lifecycle-notification-side-effect/raw.json",
       "prompt": "I'm thinking out loud on account closure and want to stop circling. It feels like the smallest complete slice might be: set `pending_close`, mark the account closed, email the owner and admins, and suppress noisy notifications. If that is enough, create the implementation ticket now. If not, give me the shortest useful pushback and the one decision that unlocks the next step. Do not edit source files yet."
     }
   ],

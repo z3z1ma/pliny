@@ -54,7 +54,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/blocked-run-retrospective-learning/raw.json`
+- `autoresearch/trial-seeds/blocked-run-retrospective-learning/raw.json`
 
 Prompt:
 
@@ -94,7 +94,7 @@ Have the child executor continue the ACME billing event import ticket. The child
   "scenarios": [
     {
       "id": "SCN-012",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/blocked-run-retrospective-learning/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/blocked-run-retrospective-learning/raw.json",
       "prompt": "Have the child executor continue the ACME billing event import ticket. The child is blocked before successful closure: duplicate invoice event behavior needs a product decision between reject-row and quarantine-file before implementation can proceed. Before stopping, preserve anything durable the execution already taught us, including the ACME 429 fixture replay procedure, `vendorEventId` vocabulary, and any out-of-scope follow-up risk. Do not close the child or parent, and do not edit implementation files."
     }
   ],

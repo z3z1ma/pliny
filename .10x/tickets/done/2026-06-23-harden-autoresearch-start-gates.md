@@ -2,7 +2,7 @@ Status: done
 Created: 2026-06-23
 Updated: 2026-06-23
 Parent: none
-Depends-On: .10x/decisions/autoresearch-program-owned-loop.md, .10x/tickets/done/2026-06-23-simplify-autoresearch-program-loop.md
+Depends-On: .10x/decisions/superseded/autoresearch-program-owned-loop.md, .10x/tickets/done/2026-06-23-simplify-autoresearch-program-loop.md
 
 # Harden Autoresearch Start Gates
 

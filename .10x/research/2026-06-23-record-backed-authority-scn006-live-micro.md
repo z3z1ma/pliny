@@ -50,7 +50,7 @@ copied as input but archived under this experiment's output root,
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/record-backed-authority/raw.json`
+- `autoresearch/trial-seeds/record-backed-authority/raw.json`
 
 ## Runner Definition
 
@@ -85,7 +85,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-006",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/record-backed-authority/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/record-backed-authority/raw.json",
       "prompt": "Use the active Kappa greenline records to harden the records and open the executable ticket for tomorrow's implementer. Do not ask me to re-ratify values the active records already own."
     }
   ],

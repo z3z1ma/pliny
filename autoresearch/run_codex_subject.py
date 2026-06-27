@@ -14,19 +14,18 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
-try:
-    from autoresearch import offline_score
-except ImportError:  # pragma: no cover - supports direct script execution.
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from autoresearch import offline_score
-
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SCENARIOS_PATH = REPO_ROOT / "autoresearch" / "catalogs" / "scenarios.json"
 MARKDOWN_DEFINITION_START = "<!-- codex-subject-runner-definition:start -->"
 MARKDOWN_DEFINITION_END = "<!-- codex-subject-runner-definition:end -->"
-DEFAULT_ARMS = ("no-10x-control", "current-10x", "candidate-variant")
-EVALUATION_ONLY_FIELD = "evaluation_only"
+SCIENTIFIC_CONTRACT_REQUIRED_TEXT = (
+    "question",
+    "hypothesis",
+    "expected_behavior",
+    "quality_floor",
+    "verdict_record_path",
+)
 SUPPRESSED_INSTRUCTION_FILES = [
     "AGENTS.md",
     "CLAUDE.md",
@@ -67,6 +66,7 @@ def build_plan(
     _validate_definition_shape(definition)
 
     scenario_by_id = {scenario["id"]: scenario for scenario in catalog["scenarios"]}
+    scientific_contract = _scientific_contract(definition)
     arms = _planned_arms(definition, repo_root)
     scenarios = _planned_scenarios(definition, scenario_by_id)
     repetitions = _positive_int(definition.get("repetitions"), "repetitions")
@@ -98,7 +98,6 @@ def build_plan(
                 seed_workspace_kind = prior_context.get("workspace_kind")
                 workspace_dir = artifact_dirs["workspaces"] / stem
                 raw_path = artifact_dirs["raw"] / f"{stem}.json"
-                score_path = artifact_dirs["scores"] / f"{stem}.score.json"
                 command_path = artifact_dirs["codex"] / f"{stem}.command.json"
                 stdout_path = artifact_dirs["codex"] / f"{stem}.stdout.jsonl"
                 stderr_path = artifact_dirs["codex"] / f"{stem}.stderr"
@@ -124,6 +123,7 @@ def build_plan(
                         "model": definition["model"],
                         "harness": definition["harness"],
                         "harness_kind": "codex-live-subject",
+                        "scientific_contract": scientific_contract,
                         "instruction_source": arm["instruction_source"],
                         "instruction_path": arm.get("instruction_path"),
                         "base_instruction_path": arm.get("base_instruction_path"),
@@ -139,7 +139,6 @@ def build_plan(
                         "prompt_path": str(prompt_path),
                         "planned_workspace_dir": str(workspace_dir),
                         "planned_raw_output_path": str(raw_path),
-                        "planned_score_artifact_path": str(score_path),
                         "planned_command_path": str(command_path),
                         "planned_stdout_jsonl_path": str(stdout_path),
                         "planned_stderr_path": str(stderr_path),
@@ -163,6 +162,7 @@ def build_plan(
         "model": definition["model"],
         "harness": definition["harness"],
         "harness_kind": "codex-live-subject",
+        "scientific_contract": scientific_contract,
         "arms": arms,
         "scenarios": scenarios,
         "repetitions": repetitions,
@@ -228,13 +228,14 @@ def run_live(
         "mode": "live",
         "samples_written": len(written_samples),
         "raw_output_dir": plan["artifact_dirs"]["raw"],
-        "score_artifact_dir": plan["artifact_dirs"]["scores"],
         "workspace_dir": plan["artifact_dirs"]["workspaces"],
         "codex_artifact_dir": plan["artifact_dirs"]["codex"],
+        "prompt_dir": plan["artifact_dirs"]["prompts"],
         "plan_path": str(plan_path),
         "live_codex_calls": sum(sample["live_codex_calls"] for sample in written_samples),
         "promotion_decision": "not-performed",
         "budget": plan["budget"],
+        "scientific_contract": plan["scientific_contract"],
         "limits": plan["limits"],
     }
     (output_root / "summary.json").write_text(
@@ -274,7 +275,6 @@ def main(argv: list[str] | None = None) -> int:
 def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
     archive_workspace = Path(sample["planned_workspace_dir"])
     raw_path = Path(sample["planned_raw_output_path"])
-    score_path = Path(sample["planned_score_artifact_path"])
     command_path = Path(sample["planned_command_path"])
     stdout_path = Path(sample["planned_stdout_jsonl_path"])
     stderr_path = Path(sample["planned_stderr_path"])
@@ -287,7 +287,6 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
     )
 
     raw_path.parent.mkdir(parents=True, exist_ok=True)
-    score_path.parent.mkdir(parents=True, exist_ok=True)
     command_path.parent.mkdir(parents=True, exist_ok=True)
     prompt_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -455,7 +454,7 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
     }
     archive_manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
-    raw_fixture = {
+    raw_trial = {
         "schema_version": 1,
         "experiment_id": sample["experiment_id"],
         "scenario_id": sample["scenario_id"],
@@ -464,6 +463,7 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
         "model": sample["model"],
         "harness": sample["harness"],
         "instruction_digest": sample["instruction_digest"],
+        "scientific_contract": sample["scientific_contract"],
         "transcript": transcript,
         "tool_invocations": tool_invocations,
         "file_outputs": changed_file_outputs,
@@ -480,6 +480,7 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
             "instruction_source": sample["instruction_source"],
             "instruction_path": sample.get("instruction_path"),
             "base_instruction_path": sample.get("base_instruction_path"),
+            "archived_workspace_dir": str(archive_workspace),
             "workspace_manifest_path": str(archive_manifest_path),
             "prior_raw_path": sample.get("prior_raw_path"),
             "seed_workspace_dir": str(seed_workspace) if seed_workspace else None,
@@ -503,13 +504,7 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
             "promotion_limit": "Live subject output is candidate-quality evidence, not promotion authority.",
         },
     }
-    raw_path.write_text(json.dumps(raw_fixture, indent=2) + "\n", encoding="utf-8")
-
-    score_artifact = offline_score.score_fixture(raw_path)
-    errors = offline_score.validate_score_artifact(score_artifact)
-    if errors:
-        raise ExperimentError(f"{raw_path}: invalid score artifact: {'; '.join(errors)}")
-    score_path.write_text(json.dumps(score_artifact, indent=2) + "\n", encoding="utf-8")
+    raw_path.write_text(json.dumps(raw_trial, indent=2) + "\n", encoding="utf-8")
 
     sample = dict(sample)
     sample.update(
@@ -522,7 +517,6 @@ def _run_sample(sample: dict[str, Any], *, repo_root: Path) -> dict[str, Any]:
             "workspace_manifest_path": str(archive_manifest_path),
             "turns": sample["planned_turns"],
             "raw_output_path": str(raw_path),
-            "score_artifact_path": str(score_path),
             "live_codex_calls": (len(transcript) - len(prior_transcript)) // 2,
             "prior_raw_path": sample.get("prior_raw_path"),
             "seed_workspace_dir": str(seed_workspace) if seed_workspace else None,
@@ -555,7 +549,15 @@ def _load_markdown_definition(text: str) -> dict[str, Any]:
 
 
 def _validate_definition_shape(definition: dict[str, Any]) -> None:
-    required = ("experiment_id", "method_tier", "model", "harness", "arms", "scenarios")
+    required = (
+        "experiment_id",
+        "method_tier",
+        "model",
+        "harness",
+        "arms",
+        "scenarios",
+        "budget",
+    )
     for field in required:
         if field not in definition:
             raise ExperimentError(f"experiment definition missing {field}")
@@ -563,10 +565,74 @@ def _validate_definition_shape(definition: dict[str, Any]) -> None:
         raise ExperimentError("run_codex_subject only supports method_tier MICRO or FULL")
     if "codex" not in str(definition["harness"]).lower():
         raise ExperimentError("run_codex_subject requires a Codex harness")
+    if "evaluation_only" in definition:
+        raise ExperimentError(
+            "evaluation_only is retired; list exactly the arms this experiment should run"
+        )
     if not isinstance(definition["arms"], list) or not definition["arms"]:
         raise ExperimentError("arms must be a non-empty list")
     if not isinstance(definition["scenarios"], list) or not definition["scenarios"]:
         raise ExperimentError("scenarios must be a non-empty list")
+    _scientific_contract(definition)
+    _validate_scenario_definitions(definition["scenarios"])
+    _validate_budget_definition(definition["budget"])
+
+
+def _scientific_contract(definition: dict[str, Any]) -> dict[str, Any]:
+    contract = definition.get("scientific_contract")
+    if not isinstance(contract, dict):
+        raise ExperimentError("experiment definition missing scientific_contract")
+    for field in SCIENTIFIC_CONTRACT_REQUIRED_TEXT:
+        if not isinstance(contract.get(field), str) or not contract[field].strip():
+            raise ExperimentError(f"scientific_contract.{field} must be a non-empty string")
+    criteria = contract.get("inspection_criteria")
+    if not isinstance(criteria, list) or not criteria:
+        raise ExperimentError("scientific_contract.inspection_criteria must be a non-empty list")
+    if not all(isinstance(item, str) and item.strip() for item in criteria):
+        raise ExperimentError("scientific_contract.inspection_criteria entries must be non-empty strings")
+    return {
+        "question": contract["question"],
+        "hypothesis": contract["hypothesis"],
+        "expected_behavior": contract["expected_behavior"],
+        "inspection_criteria": list(criteria),
+        "quality_floor": contract["quality_floor"],
+        "verdict_record_path": contract["verdict_record_path"],
+    }
+
+
+def _validate_scenario_definitions(scenarios: list[Any]) -> None:
+    for index, scenario in enumerate(scenarios):
+        if isinstance(scenario, str):
+            raise ExperimentError(
+                f"scenarios[{index}] must be an object with explicit prompt and seed provenance"
+            )
+        if not isinstance(scenario, dict):
+            raise ExperimentError(f"scenarios[{index}] must be an object")
+        if not scenario.get("prompt") and not scenario.get("prompts_by_arm"):
+            raise ExperimentError(f"scenarios[{index}] must include prompt or prompts_by_arm")
+        if not (
+            scenario.get("prior_raw_path")
+            or scenario.get("prior_raw_paths")
+            or scenario.get("workspace_procedure")
+        ):
+            raise ExperimentError(
+                f"scenarios[{index}] must include prior_raw_path, prior_raw_paths, or workspace_procedure"
+            )
+
+
+def _validate_budget_definition(budget: Any) -> None:
+    if not isinstance(budget, dict):
+        raise ExperimentError("budget must be an object")
+    required = (
+        "max_harness_runs",
+        "estimated_wall_seconds_per_run",
+        "timeout_seconds_per_run",
+    )
+    for field in required:
+        if field not in budget:
+            raise ExperimentError(f"budget.{field} is required")
+        if not isinstance(budget[field], (int, float)) or budget[field] <= 0:
+            raise ExperimentError(f"budget.{field} must be a positive number")
 
 
 def _planned_arms(definition: dict[str, Any], repo_root: Path) -> list[dict[str, Any]]:
@@ -580,17 +646,8 @@ def _planned_arms(definition: dict[str, Any], repo_root: Path) -> list[dict[str,
         by_id[arm["id"]] = arm
         arm_order.append(arm["id"])
 
-    evaluation_only = bool(definition.get(EVALUATION_ONLY_FIELD))
-    if evaluation_only:
-        planned_arm_ids = arm_order
-    else:
-        missing = [arm_id for arm_id in DEFAULT_ARMS if arm_id not in by_id]
-        if missing:
-            raise ExperimentError("live subject definitions must include arms: " + ", ".join(missing))
-        planned_arm_ids = list(DEFAULT_ARMS)
-
     planned = []
-    for arm_id in planned_arm_ids:
+    for arm_id in arm_order:
         arm = by_id[arm_id]
         instruction_text = _instruction_text(arm, repo_root)
         planned.append(
@@ -630,8 +687,6 @@ def _planned_scenarios(
 ) -> list[dict[str, Any]]:
     scenarios = []
     for scenario in definition["scenarios"]:
-        if isinstance(scenario, str):
-            scenario = {"id": scenario}
         if not isinstance(scenario, dict) or not scenario.get("id"):
             raise ExperimentError("each scenario must be an object with id")
         scenario_id = scenario["id"]
@@ -649,6 +704,7 @@ def _planned_scenarios(
                 "prompts_by_arm": scenario.get("prompts_by_arm"),
                 "prior_raw_path": _prior_raw_path(scenario, None),
                 "prior_raw_paths": scenario.get("prior_raw_paths"),
+                "workspace_procedure": scenario.get("workspace_procedure"),
             }
         )
     return scenarios
@@ -866,7 +922,7 @@ def _control_isolation() -> dict[str, Any]:
         "codex_args": ["--disable", "plugins", "--ignore-user-config"],
         "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
         "instruction_strategy": "Pass current and candidate instructions explicitly in the prompt; no-10x receives minimal instructions.",
-        "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; fixture seed-workspace .10x records remain available when they are the task surface.",
+        "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; seed-workspace .10x records remain available when they are the task surface.",
         "limitation": "Codex system context and authenticated home remain outside this runner's control.",
     }
 
@@ -891,7 +947,6 @@ def _writable_add_dirs(definition: dict[str, Any]) -> list[str]:
 def _artifact_dirs(root: Path) -> dict[str, Path]:
     return {
         "raw": root / "raw",
-        "scores": root / "scores",
         "workspaces": root / "workspaces",
         "codex": root / "codex",
         "prompts": root / "prompts",
@@ -1067,7 +1122,7 @@ def _command_output(stderr: str, stdout_path: Path) -> str:
 
 def _limits() -> list[str]:
     return [
-        "This runner executes candidate instructions but still uses Trust Level 1 offline scoring.",
+        "This runner records live trial artifacts; the LLM researcher performs rubric inspection outside the runner.",
         "Codex system context and authenticated home remain outside this runner's control.",
         "Manual inspection is required before promotion or durable verdicts.",
         "The runner executes one registered experiment and does not loop or generate candidates.",

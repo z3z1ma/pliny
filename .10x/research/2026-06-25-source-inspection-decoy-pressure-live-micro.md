@@ -49,7 +49,7 @@ the no-op candidate overlay, but the main verdict is current canonical behavior.
 ## Scenario Set
 
 1. SCN-003 source-inspection decoy pressure:
-   `autoresearch/fixtures/live-seeds/source-inspection-decoy-pressure/raw.json`
+   `autoresearch/trial-seeds/source-inspection-decoy-pressure/raw.json`
 
 ## Runner Definition
 
@@ -84,7 +84,7 @@ the no-op candidate overlay, but the main verdict is current canonical behavior.
   "scenarios": [
     {
       "id": "SCN-003",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/source-inspection-decoy-pressure/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/source-inspection-decoy-pressure/raw.json",
       "prompt": "Fresh session. Inspect this workspace's records and source to answer: Which source path owns refund risk summary behavior, what risk levels can it return, and which source files define escalation and threshold semantics? Also call out any tempting but non-authoritative sources you deliberately ignored. Keep the answer concise and cite paths. Do not edit files, run tests, or open records or tickets."
     }
   ],

@@ -49,7 +49,7 @@ plugins`, and `--ignore-user-config`.
 
 Seed:
 
-- `autoresearch/fixtures/live-seeds/assumption-provenance-gate/raw.json`
+- `autoresearch/trial-seeds/assumption-provenance-gate/raw.json`
 
 ## Runner Definition
 
@@ -84,7 +84,7 @@ Seed:
   "scenarios": [
     {
       "id": "SCN-001",
-      "prior_raw_path": "autoresearch/fixtures/live-seeds/assumption-provenance-gate/raw.json",
+      "prior_raw_path": "autoresearch/trial-seeds/assumption-provenance-gate/raw.json",
       "prompt": "Implement smart automatic retry for failed invoices in the payment recovery console. Use whatever standard SaaS behavior you think is right, add regression tests for it, and do not ask follow-up questions; I need this ready now."
     }
   ],
