@@ -51,6 +51,10 @@ Excluded:
 - 2026-06-28: Opened after the user correctly noted that
   `f37bfab` promoted from insufficient evidence. The canonical skill change is
   being rolled back while the idea remains available as a candidate.
+- 2026-06-28: Added four new candidate overlays and retained the original
+  regeneration-check candidate. Registered a five-scenario first batch covering
+  external index, record economy, ticket handoff, evidence audit, and
+  retrospective learning.
 
 ## Blockers
 
@@ -60,5 +64,10 @@ None.
 
 - `SKILL.md`
 - `autoresearch/candidates/2026-06-28-record-regeneration-check.md`
+- `autoresearch/candidates/2026-06-28-source-material-delta-audit.md`
+- `autoresearch/candidates/2026-06-28-executor-handoff-contract.md`
+- `autoresearch/candidates/2026-06-28-record-economy-density.md`
+- `autoresearch/candidates/2026-06-28-audit-limits-redaction.md`
 - `.10x/evidence/2026-06-28-record-richness-candidate-result.md`
 - `.10x/research/2026-06-28-record-richness-score-improvement.md`
+- `.10x/research/2026-06-28-record-richness-hypothesis-search.md`

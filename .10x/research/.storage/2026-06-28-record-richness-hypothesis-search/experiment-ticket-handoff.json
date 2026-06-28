@@ -1,0 +1,37 @@
+{
+  "experiment_id": "EXP-20260628-s010-ticket-handoff",
+  "method_tier": "MICRO",
+  "driver": "LLM scientist",
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "repetitions": 1,
+  "scientific_contract": {
+    "question": "Which S010 candidate best creates a cold-start executable ticket from mixed active and terminal record authority?",
+    "hypothesis": "Executor-handoff should improve ticket actionability and evidence expectations; source-material-delta should better preserve authority boundaries.",
+    "expected_behavior": "Subject creates a bounded executable ticket for bringing invoice retry export source/tests into alignment with active policy/spec while treating superseded, done, and cancelled records as history.",
+    "inspection_criteria": [
+      "Ticket references active decision and spec, not superseded or terminal records as authority.",
+      "Ticket states source drift: current code uses delinquent and enterprise filtering while active spec requires overdue, production, retryEligible, non-cancelled, no enterprise filter.",
+      "Ticket includes explicit exclusions, first source/tests to inspect, edge cases, evidence expectations, and blockers if required data is missing.",
+      "No implementation edits occur."
+    ],
+    "quality_floor": "Any implementation edit, terminal-record authority mistake, missing acceptance criteria, or ticket that omits the known source drift caps the candidate.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+  },
+  "arms": [
+    {"id": "current-10x", "instruction_source": "SKILL.md", "instruction_path": "SKILL.md"},
+    {"id": "candidate-record-regeneration-check", "instruction_source": "SKILL.md plus candidate", "base_instruction_path": "SKILL.md", "instruction_path": "autoresearch/candidates/2026-06-28-record-regeneration-check.md"},
+    {"id": "candidate-source-material-delta-audit", "instruction_source": "SKILL.md plus candidate", "base_instruction_path": "SKILL.md", "instruction_path": "autoresearch/candidates/2026-06-28-source-material-delta-audit.md"},
+    {"id": "candidate-executor-handoff-contract", "instruction_source": "SKILL.md plus candidate", "base_instruction_path": "SKILL.md", "instruction_path": "autoresearch/candidates/2026-06-28-executor-handoff-contract.md"},
+    {"id": "candidate-record-economy-density", "instruction_source": "SKILL.md plus candidate", "base_instruction_path": "SKILL.md", "instruction_path": "autoresearch/candidates/2026-06-28-record-economy-density.md"},
+    {"id": "candidate-audit-limits-redaction", "instruction_source": "SKILL.md plus candidate", "base_instruction_path": "SKILL.md", "instruction_path": "autoresearch/candidates/2026-06-28-audit-limits-redaction.md"}
+  ],
+  "scenarios": [
+    {
+      "id": "SCN-006",
+      "prior_raw_path": "autoresearch/trial-seeds/mixed-record-authority-cold-start/raw.json",
+      "prompt": "Please create the executable implementation ticket needed to bring invoice retry export behavior into alignment with the current active records. Do not implement code."
+    }
+  ],
+  "budget": {"max_harness_runs": 6, "estimated_wall_seconds_per_run": 180, "timeout_seconds_per_run": 600}
+}

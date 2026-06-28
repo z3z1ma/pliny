@@ -19,18 +19,33 @@ future promotion.
 
 ## Hypothesis Space
 
-Pending holistic inspection of `SKILL.md`, but candidate families should include
-at least:
+Holistic inspection of `SKILL.md` suggests record richness can be influenced at
+several points, not only by a cold-start regeneration checklist:
 
 - Record regeneration framing: ensure a future agent can reconstruct the work
-  from records alone.
+  from records alone. Candidate:
+  `autoresearch/candidates/2026-06-28-record-regeneration-check.md`.
 - Source-to-record losslessness: compare record content against source, chat,
-  and artifacts to avoid dropping available material facts.
+  and artifacts to avoid dropping available material facts. Candidate:
+  `autoresearch/candidates/2026-06-28-source-material-delta-audit.md`.
 - Executor handoff contract: make tickets/specs optimized for a cold executor's
-  next action and verification path.
+  next action and verification path. Candidate:
+  `autoresearch/candidates/2026-06-28-executor-handoff-contract.md`.
+- Economy/density guard: prevent both thin records and record spam. Candidate:
+  `autoresearch/candidates/2026-06-28-record-economy-density.md`.
 - Evidence/research auditability: preserve procedures, observations, limits,
-  redactions, and null results without overclaiming.
-- Economy guard: prevent both thin records and record spam.
+  redactions, and null results without overclaiming. Candidate:
+  `autoresearch/candidates/2026-06-28-audit-limits-redaction.md`.
+
+Overlay character costs:
+
+| Candidate | Overlay chars |
+| --- | ---: |
+| record-regeneration-check | 796 |
+| source-material-delta-audit | 697 |
+| executor-handoff-contract | 566 |
+| record-economy-density | 520 |
+| audit-limits-redaction | 444 |
 
 ## Sources And Methods
 
@@ -41,6 +56,26 @@ at least:
   `.10x/research/.storage/2026-06-28-record-richness-hypothesis-search/`.
 - Preserve raw outputs under
   `.10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/`.
+
+Registered first-batch experiments:
+
+- `experiment-external-index.json`: `SCN-004`, external canonical PRD index.
+- `experiment-record-economy.json`: `SCN-005`, account-export docs/test record
+  economy.
+- `experiment-ticket-handoff.json`: `SCN-006`, mixed active/terminal authority
+  ticket handoff.
+- `experiment-evidence-audit.json`: `SCN-008`, redacted evidence capture.
+- `experiment-retrospective-learning.json`: `SCN-012`, retrospective learning
+  versus noisy notes.
+
+Self-check questions before scoring:
+
+- Did a candidate improve the record, or merely make it longer?
+- Did it preserve material facts available in source/chat/artifacts?
+- Did it create unnecessary record spread?
+- Did it protect semantic authority and blockers?
+- Did it improve cold-start actionability enough to justify added characters?
+- Did it regress existing S001/S002/S004/S005/S006 behavior?
 
 ## Findings
 
