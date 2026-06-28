@@ -134,11 +134,13 @@ Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 ```
 
-Write for cold readers. Include enough precision, rationale, examples, limits, and evidence that someone weeks later can use the record without reconstructing the conversation. Reference records by path. Repair affected references when records are renamed, moved, deleted, superseded, closed, or cancelled. Terminal and superseded records are history, evidence, or rationale, not active authority unless their current status and context make that role explicit.
+Write for cold readers: enough precision, rationale, examples, limits, and evidence to use records weeks later without chat. Reference records by path. Repair references after rename, move, delete, supersession, closure, or cancellation. Terminal/superseded records are history/evidence/rationale, not active authority unless explicitly current.
+
+Finalizing durable records: each material fact from source, chat, output, or artifacts has one owner stating purpose, authority/provenance, constraints/exclusions/blockers, evidence/limits, and next step. Link detail owners, omit local noise, and mark unresolved semantics blocked, not executable.
 
 Do not leak secrets or unnecessary sensitive data into records. Redact credentials, tokens, private keys, and sensitive personal data while preserving enough structure to substantiate the finding.
 
-For mechanical record maintenance, use repository-native tools when the transformation is established: `rg`, `rg --files`, `find`, `git status`, `git diff`, targeted `sed -n`, direct filesystem moves, and bounded literal rewrites. Enumerate targets, exclude generated/binary content, historical prose, fenced logs, append-only progress history, semantic text, and any context where replacement could change meaning; then validate and inspect the diff. Use assistant-side edits when each occurrence needs judgment. This never bypasses the Outer Loop, write boundary, evidence, or unrelated-content restraint.
+For mechanical record maintenance, use repository-native tools for established transformations: `rg`, `rg --files`, `find`, `git status`, `git diff`, targeted `sed -n`, filesystem moves, and bounded literal rewrites. Enumerate targets; exclude generated/binary content, logs, append-only history, semantic prose, and meaning-changing contexts; then validate and inspect the diff. Use assistant-side edits when occurrences need judgment. This never bypasses the Outer Loop, write boundary, evidence, or unrelated-content restraint.
 
 ### Decisions
 

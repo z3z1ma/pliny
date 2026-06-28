@@ -1,0 +1,41 @@
+{
+  "experiment_id": "EXP-20260628-s010-external-index",
+  "mode": "live",
+  "samples_written": 6,
+  "raw_output_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/raw",
+  "workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/workspaces",
+  "harness_artifact_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/codex",
+  "prompt_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/prompts",
+  "plan_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/plan.json",
+  "harness": "codex-cli",
+  "harness_kind": "codex-live-subject",
+  "live_subject_calls": 6,
+  "promotion_decision": "not-performed",
+  "budget": {
+    "planned_harness_runs": 6,
+    "max_harness_runs": 6,
+    "estimated_wall_seconds_per_run": 180.0,
+    "timeout_seconds_per_run": 600.0,
+    "planned_wall_clock_hours": 0.3,
+    "max_wall_clock_hours": 10.0
+  },
+  "scientific_contract": {
+    "question": "Which S010 candidate best preserves rich cold-start context when indexing an approved external canonical PRD?",
+    "hypothesis": "Source-material-delta and record-regeneration candidates should create the richest external-canonical index without copying the full PRD, while economy-density should avoid unnecessary record spread.",
+    "expected_behavior": "Subject creates the minimum appropriate .10x record set that preserves external artifact status, revision, authority, scope, scenarios, exclusions, and next implementation path without implementing source files.",
+    "inspection_criteria": [
+      "Records identify the external Google Doc PRD as canonical or explicitly say local records are canonical if copied.",
+      "Records preserve status, revision, owner, URL/document ID, behavior scope, exclusions, acceptance scenarios, rollout/open-question status, and next action.",
+      "Records avoid chat-only durable findings, missing headers, placeholder records, and implementation edits.",
+      "Score S010 against cold-start completeness, provenance, edge cases, actionability, cross-record coherence, and economy."
+    ],
+    "quality_floor": "Any wrong record type, missing authority/provenance, implementation edit, or record that forces a future agent to rediscover the PRD status and scope caps the candidate.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+  },
+  "limits": [
+    "This runner records live trial artifacts; the LLM researcher performs rubric inspection outside the runner.",
+    "Manual inspection is required before promotion or durable verdicts.",
+    "The runner executes one registered experiment and does not loop or generate candidates.",
+    "Codex built-in system context and authenticated home remain outside this runner's control; non-empty arm instructions use developer_instructions."
+  ]
+}

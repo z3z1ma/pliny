@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-28
 Updated: 2026-06-28
 
@@ -97,8 +97,24 @@ Self-check questions before scoring:
 
 ## Findings
 
-Pending.
+- The canonical skill already scored high on record quality; the useful target
+  was consistency and uplift per added character, not a large rescue.
+- The original `record-regeneration-check` candidate did not justify promotion:
+  it added 796 overlay characters and did not materially outperform current 10x.
+- `source-material-delta-audit` produced the richest retrospective/source-loss
+  artifacts but was verbose and slow.
+- `executor-handoff-contract` was strongest on ticket handoff and small record
+  economy, but its benefit was narrower than its wording.
+- `audit-limits-redaction` was valuable for evidence redaction and conservative
+  external-source blocking, but weaker on retrospective closure.
+- The synthesized `cold-start-record-handoff-check` candidate captured most of
+  the useful behavior in 457 overlay characters.
 
 ## Conclusions
 
-Pending.
+Promote `autoresearch/candidates/2026-06-28-cold-start-record-handoff-check.md`
+to canonical `SKILL.md`.
+
+Do not promote the original record-regeneration candidate or the broader
+first-batch candidates as written. Retain them as evidence of hypothesis search
+and possible future variants if later seeds expose narrower gaps.

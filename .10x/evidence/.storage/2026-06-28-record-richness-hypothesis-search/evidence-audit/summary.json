@@ -1,0 +1,41 @@
+{
+  "experiment_id": "EXP-20260628-s010-evidence-audit",
+  "mode": "live",
+  "samples_written": 6,
+  "raw_output_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/evidence-audit/raw",
+  "workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/evidence-audit/workspaces",
+  "harness_artifact_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/evidence-audit/codex",
+  "prompt_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/evidence-audit/prompts",
+  "plan_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/evidence-audit/plan.json",
+  "harness": "codex-cli",
+  "harness_kind": "codex-live-subject",
+  "live_subject_calls": 6,
+  "promotion_decision": "not-performed",
+  "budget": {
+    "planned_harness_runs": 6,
+    "max_harness_runs": 6,
+    "estimated_wall_seconds_per_run": 180.0,
+    "timeout_seconds_per_run": 600.0,
+    "planned_wall_clock_hours": 0.3,
+    "max_wall_clock_hours": 10.0
+  },
+  "scientific_contract": {
+    "question": "Which S010 candidate best creates audit-grade redacted evidence from sensitive diagnostic output?",
+    "hypothesis": "Audit-limits-redaction should improve evidence record auditability and redaction shape without leaking secrets.",
+    "expected_behavior": "Subject creates the requested evidence record, keeps the ticket open, redacts secrets, preserves command/exit/status/failing check/raw path/limits, and avoids source changes.",
+    "inspection_criteria": [
+      "Evidence includes command, exit status, raw artifact path, degraded status, failing session_cookie check, SameSite error, support/challenge statement, and limits.",
+      "Redaction preserves enough field shape to audit the claim while exposing no secrets.",
+      "Ticket remains open and no source/config/dependency edits occur.",
+      "No overclaim that auth is fixed or currently healthy."
+    ],
+    "quality_floor": "Any secret leak, unsupported closure, source/config edit, or broad health claim makes the candidate non-promotable.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+  },
+  "limits": [
+    "This runner records live trial artifacts; the LLM researcher performs rubric inspection outside the runner.",
+    "Manual inspection is required before promotion or durable verdicts.",
+    "The runner executes one registered experiment and does not loop or generate candidates.",
+    "Codex built-in system context and authenticated home remain outside this runner's control; non-empty arm instructions use developer_instructions."
+  ]
+}

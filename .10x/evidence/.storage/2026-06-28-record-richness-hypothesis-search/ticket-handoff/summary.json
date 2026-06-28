@@ -1,0 +1,41 @@
+{
+  "experiment_id": "EXP-20260628-s010-ticket-handoff",
+  "mode": "live",
+  "samples_written": 6,
+  "raw_output_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/ticket-handoff/raw",
+  "workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/ticket-handoff/workspaces",
+  "harness_artifact_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/ticket-handoff/codex",
+  "prompt_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/ticket-handoff/prompts",
+  "plan_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/ticket-handoff/plan.json",
+  "harness": "codex-cli",
+  "harness_kind": "codex-live-subject",
+  "live_subject_calls": 6,
+  "promotion_decision": "not-performed",
+  "budget": {
+    "planned_harness_runs": 6,
+    "max_harness_runs": 6,
+    "estimated_wall_seconds_per_run": 180.0,
+    "timeout_seconds_per_run": 600.0,
+    "planned_wall_clock_hours": 0.3,
+    "max_wall_clock_hours": 10.0
+  },
+  "scientific_contract": {
+    "question": "Which S010 candidate best creates a cold-start executable ticket from mixed active and terminal record authority?",
+    "hypothesis": "Executor-handoff should improve ticket actionability and evidence expectations; source-material-delta should better preserve authority boundaries.",
+    "expected_behavior": "Subject creates a bounded executable ticket for bringing invoice retry export source/tests into alignment with active policy/spec while treating superseded, done, and cancelled records as history.",
+    "inspection_criteria": [
+      "Ticket references active decision and spec, not superseded or terminal records as authority.",
+      "Ticket states source drift: current code uses delinquent and enterprise filtering while active spec requires overdue, production, retryEligible, non-cancelled, no enterprise filter.",
+      "Ticket includes explicit exclusions, first source/tests to inspect, edge cases, evidence expectations, and blockers if required data is missing.",
+      "No implementation edits occur."
+    ],
+    "quality_floor": "Any implementation edit, terminal-record authority mistake, missing acceptance criteria, or ticket that omits the known source drift caps the candidate.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+  },
+  "limits": [
+    "This runner records live trial artifacts; the LLM researcher performs rubric inspection outside the runner.",
+    "Manual inspection is required before promotion or durable verdicts.",
+    "The runner executes one registered experiment and does not loop or generate candidates.",
+    "Codex built-in system context and authenticated home remain outside this runner's control; non-empty arm instructions use developer_instructions."
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260628-s010-v2-record-economy",
+  "scenario_id": "SCN-005",
+  "variant_id": "candidate-cold-start-record-handoff-check",
+  "rep": 0,
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "instruction_digest": "sha256:da4f51853724ea91884af6d338aa3c67d68234e86d18ef25eef9cc7b39479fee",
+  "scientific_contract": {
+    "question": "Does the compact cold-start record handoff candidate improve record economy versus current 10x?",
+    "hypothesis": "The compact candidate should create a distinct docs-gap owner only when needed while preserving source/spec/test provenance.",
+    "expected_behavior": "Subject inspects account export records/source/tests/docs, avoids duplicate or placeholder records, and creates or updates only the durable owner needed for the operator documentation email-column gap.",
+    "inspection_criteria": [
+      "Subject does not reopen cancelled or done history as active authority.",
+      "Subject does not create a spread of placeholder records.",
+      "Any new or updated record names the docs gap, active governing spec, existing test ticket, explicit exclusions, source/docs/test provenance, and next action.",
+      "No source implementation or docs edits occur."
+    ],
+    "quality_floor": "Duplicate tickets, placeholder records, implementation/docs edits, or a terse record that omits why the docs gap is distinct from the email-redaction test make the candidate non-promotable.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+  },
+  "transcript": [
+    {
+      "role": "user",
+      "content": "Inspect the current account export records, source, tests, and docs. Decide whether the stale operator docs that still list email need a durable owner distinct from the existing email-redaction test ticket. Create or update only the minimum coherent 10x record(s), and do not edit source or docs."
+    },
+    {
+      "role": "assistant",
+      "content": "Yes, the stale operator docs need a durable owner distinct from the existing email-redaction test ticket.\n\nI created [2026-06-28-align-account-export-operator-docs.md](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-yitck0wn/workspace/.10x/tickets/2026-06-28-align-account-export-operator-docs.md) and updated the parent routing note in [2026-06-25-account-export-hardening-parent.md](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-yitck0wn/workspace/.10x/tickets/2026-06-25-account-export-hardening-parent.md).\n\nReason: the active spec requires operator docs not to list `email`, while the existing email-redaction ticket explicitly excludes operator documentation updates. I did not edit source, tests, or docs. No tests were run because this was record-only triage."
+    }
+  ],
+  "tool_invocations": [
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_3",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'git status --short'",
+        "aggregated_output": "fatal: not a git repository (or any parent up to mount point /mnt)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n",
+        "exit_code": 128,
+        "status": "failed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_1",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x -maxdepth 3 -type f | sort'",
+        "aggregated_output": ".10x/evidence/2026-06-24-account-export-visible-filter-tests.md\n.10x/research/2025-12-01-account-export-vendor-row-limit.md\n.10x/specs/account-export-csv.md\n.10x/tickets/2026-06-25-account-export-hardening-parent.md\n.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md\n.10x/tickets/cancelled/2026-06-23-build-legacy-account-export-adapter.md\n.10x/tickets/done/2026-06-24-add-account-export-visible-filter.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_2",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"pwd && rg --files -g '\"'!*node_modules*'\"' -g '\"'!*.png'\"' -g '\"'!*.jpg'\"' -g '\"'!*.jpeg'\"' -g '\"'!*.gif'\"'\"",
+        "aggregated_output": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-yitck0wn/workspace\npackage.json\nworkspace-manifest.json\ndocs/account-export.md\nsrc/accountExport.js\nsrc/accountExport.test.js\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_7",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' .10x/specs/account-export-csv.md\"",
+        "aggregated_output": "Status: active\nCreated: 2026-06-25\nUpdated: 2026-06-25\n\n# Account Export CSV\n\n## Purpose And Scope\n\nDefines the current account export CSV contract for operator downloads.\n\n## Behavior\n\n- Include accounts where `isVisible === true`.\n- Exclude accounts where `isTest === true`.\n- Emit exactly `accountId`, `status`, and `balanceCents`.\n- Do not emit or document email addresses.\n\n## Acceptance Criteria\n\n- Source emits exactly `accountId`, `status`, and `balanceCents`.\n- Tests prove hidden accounts and test accounts are excluded.\n- Tests prove email is not emitted even when source rows include `email`.\n- Operator docs do not list email as an exported column.\n\n## Constraints\n\nDo not revive the cancelled legacy adapter. Do not use stale vendor row-limit\nresearch as current authority without revalidation.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_8",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' docs/account-export.md\"",
+        "aggregated_output": "# Account Export\n\nThe CSV export includes visible accounts. Current operator documentation still\nlists these columns:\n\n- accountId\n- status\n- balanceCents\n- email\n\nThe `email` column was from the legacy adapter and should not be described for\nthe current export contract.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_6",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/tickets/2026-06-25-add-account-export-email-redaction-test.md\"",
+        "aggregated_output": "Status: open\nCreated: 2026-06-25\nUpdated: 2026-06-25\nParent: .10x/tickets/2026-06-25-account-export-hardening-parent.md\nDepends-On: .10x/specs/account-export-csv.md\n\n# Add Account Export Email Redaction Test\n\n## Scope\n\nAdd a focused regression test proving account export output never includes\n`email` even when input account rows include email addresses.\n\nExplicitly excluded:\n\n- operator documentation updates;\n- source behavior changes unless the test exposes a failure;\n- legacy adapter revival;\n- vendor row-limit changes.\n\n## Acceptance Criteria\n\n- Test fixture includes an input account with `email`.\n- Assertion proves output objects include only `accountId`, `status`, and\n  `balanceCents`.\n- `npm test` passes.\n\n## Progress And Notes\n\n- 2026-06-25: Opened after reviewing the active account export spec.\n\n## Blockers\n\n- None.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_5",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' .10x/tickets/2026-06-25-account-export-hardening-parent.md\"",
+        "aggregated_output": "Status: active\nCreated: 2026-06-25\nUpdated: 2026-06-25\nParent:\nDepends-On: .10x/specs/account-export-csv.md\n\n# Account Export Hardening Parent\n\n## Scope\n\nCoordinate remaining record-backed account export hardening after the visible\nfilter child completed.\n\nExplicitly excluded:\n\n- legacy adapter revival;\n- vendor row-limit changes;\n- new export columns;\n- source edits before child tickets are executable.\n\n## Acceptance Criteria\n\n- Existing visible-filter work remains terminal and historical.\n- Existing email redaction test gap is owned by the current test ticket.\n- Any uncovered operator documentation gap has a bounded owner.\n- Cancelled and stale historical records are not treated as active authority.\n\n## Progress And Notes\n\n- 2026-06-25: Visible filter child completed.\n- 2026-06-25: Email redaction test coverage remains open.\n\n## Blockers\n\n- Repository triage must route documentation and test gaps without duplicate\n  tickets.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_14",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,180p' .10x/tickets/cancelled/2026-06-23-build-legacy-account-export-adapter.md\"",
+        "aggregated_output": "Status: cancelled\nCreated: 2026-06-23\nUpdated: 2026-06-24\nParent:\nDepends-On:\n\n# Build Legacy Account Export Adapter\n\n## Scope\n\nBuild a compatibility adapter that preserved the legacy `email` export column.\n\n## Acceptance Criteria\n\n- Legacy consumers can read the old column shape.\n\n## Progress And Notes\n\n- 2026-06-24: Cancelled after the active account export contract removed email\n  from current export behavior and docs.\n\n## Blockers\n\n- Cancelled. This ticket is historical context only.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_10",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' src/accountExport.js\"",
+        "aggregated_output": "const ACCOUNT_EXPORT_COLUMNS = [\"accountId\", \"status\", \"balanceCents\"];\n\nfunction buildAccountExportRows(accounts) {\n  return accounts\n    .filter((account) => account.isVisible && !account.isTest)\n    .map((account) => ({\n      accountId: account.accountId,\n      status: account.status,\n      balanceCents: account.balanceCents,\n    }));\n}\n\nmodule.exports = {\n  ACCOUNT_EXPORT_COLUMNS,\n  buildAccountExportRows,\n};\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_11",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' src/accountExport.test.js\"",
+        "aggregated_output": "const assert = require(\"node:assert/strict\");\nconst { buildAccountExportRows } = require(\"./accountExport\");\n\nconst rows = buildAccountExportRows([\n  {\n    accountId: \"a1\",\n    status: \"active\",\n    balanceCents: 1200,\n    email: \"visible@example.test\",\n    isVisible: true,\n    isTest: false,\n  },\n  {\n    accountId: \"a2\",\n    status: \"active\",\n    balanceCents: 3400,\n    email: \"hidden@example.test\",\n    isVisible: false,\n    isTest: false,\n  },\n  {\n    accountId: \"a3\",\n    status: \"test\",\n    balanceCents: 5600,\n    email: \"test@example.test\",\n    isVisible: true,\n    isTest: true,\n  },\n]);\n\nassert.deepEqual(rows, [\n  {\n    accountId: \"a1\",\n    status: \"active\",\n    balanceCents: 1200,\n  },\n]);\n\nconsole.log(\"accountExport.test.js passed\");\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_12",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/evidence/2026-06-24-account-export-visible-filter-tests.md\"",
+        "aggregated_output": "Status: recorded\nCreated: 2026-06-24\nUpdated: 2026-06-24\nRelates-To: .10x/tickets/done/2026-06-24-add-account-export-visible-filter.md\n\n# Account Export Visible Filter Tests\n\n## What Was Observed\n\n`npm test` passed after visible-account filtering was added.\n\n## Procedure\n\nThe child executor ran `npm test` from the workspace root.\n\n## What This Supports Or Challenges\n\nThis supports the done visible-filter child ticket. It does not close current\nemail redaction test coverage or documentation alignment gaps.\n\n## Limits\n\nThe test output did not include an explicit email redaction assertion.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_13",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/tickets/done/2026-06-24-add-account-export-visible-filter.md\"",
+        "aggregated_output": "Status: done\nCreated: 2026-06-24\nUpdated: 2026-06-24\nParent: .10x/tickets/2026-06-25-account-export-hardening-parent.md\nDepends-On: .10x/specs/account-export-csv.md\n\n# Add Account Export Visible Filter\n\n## Scope\n\nAdd visible-account filtering to account export.\n\n## Acceptance Criteria\n\n- Hidden accounts are excluded.\n- Test accounts are excluded.\n- Existing export columns are preserved.\n\n## Progress And Notes\n\n- 2026-06-24: Completed with evidence in\n  `.10x/evidence/2026-06-24-account-export-visible-filter-tests.md`.\n\n## Blockers\n\n- None.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_17",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' package.json\"",
+        "aggregated_output": "{\n  \"scripts\": {\n    \"test\": \"node src/accountExport.test.js\"\n  }\n}\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_18",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' workspace-manifest.json\"",
+        "aggregated_output": "{\n  \"workspace\": \"autoresearch/trial-seeds/repository-triage-record-quality/workspace\"\n}\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_16",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'rg -n \"email|operator documentation|operator docs|account export|Account Export|docs\" .10x docs src package.json workspace-manifest.json'",
+        "aggregated_output": "docs/account-export.md:1:# Account Export\ndocs/account-export.md:3:The CSV export includes visible accounts. Current operator documentation still\ndocs/account-export.md:9:- email\ndocs/account-export.md:11:The `email` column was from the legacy adapter and should not be described for\nsrc/accountExport.test.js:9:    email: \"visible@example.test\",\nsrc/accountExport.test.js:17:    email: \"hidden@example.test\",\nsrc/accountExport.test.js:25:    email: \"test@example.test\",\n.10x/tickets/2026-06-25-account-export-hardening-parent.md:7:# Account Export Hardening Parent\n.10x/tickets/2026-06-25-account-export-hardening-parent.md:11:Coordinate remaining record-backed account export hardening after the visible\n.10x/tickets/2026-06-25-account-export-hardening-parent.md:24:- Existing email redaction test gap is owned by the current test ticket.\n.10x/tickets/2026-06-25-account-export-hardening-parent.md:25:- Any uncovered operator documentation gap has a bounded owner.\n.10x/evidence/2026-06-24-account-export-visible-filter-tests.md:6:# Account Export Visible Filter Tests\n.10x/evidence/2026-06-24-account-export-visible-filter-tests.md:19:email redaction test coverage or documentation alignment gaps.\n.10x/evidence/2026-06-24-account-export-visible-filter-tests.md:23:The test output did not include an explicit email redaction assertion.\n.10x/research/2025-12-01-account-export-vendor-row-limit.md:5:# Account Export Vendor Row Limit\n.10x/research/2025-12-01-account-export-vendor-row-limit.md:21:This research is stale. Revalidate before using it for current account export\n.10x/specs/account-export-csv.md:5:# Account Export CSV\n.10x/specs/account-export-csv.md:9:Defines the current account export CSV contract for operator downloads.\n.10x/specs/account-export-csv.md:16:- Do not emit or document email addresses.\n.10x/specs/account-export-csv.md:22:- Tests prove email is not emitted even when source rows include `email`.\n.10x/specs/account-export-csv.md:23:- Operator docs do not list email as an exported column.\n.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md:7:# Add Account Export Email Redaction Test\n.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md:11:Add a focused regression test proving account export output never includes\n.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md:12:`email` even when input account rows include email addresses.\n.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md:16:- operator documentation updates;\n.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md:23:- Test fixture includes an input account with `email`.\n.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md:30:- 2026-06-25: Opened after reviewing the active account export spec.\n.10x/tickets/cancelled/2026-06-23-build-legacy-account-export-adapter.md:7:# Build Legacy Account Export Adapter\n.10x/tickets/cancelled/2026-06-23-build-legacy-account-export-adapter.md:11:Build a compatibility adapter that preserved the legacy `email` export column.\n.10x/tickets/cancelled/2026-06-23-build-legacy-account-export-adapter.md:19:- 2026-06-24: Cancelled after the active account export contract removed email\n.10x/tickets/cancelled/2026-06-23-build-legacy-account-export-adapter.md:20:  from current export behavior and docs.\n.10x/tickets/done/2026-06-24-add-account-export-visible-filter.md:7:# Add Account Export Visible Filter\n.10x/tickets/done/2026-06-24-add-account-export-visible-filter.md:11:Add visible-account filtering to account export.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_20",
+        "type": "file_change",
+        "changes": [
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-yitck0wn/workspace/.10x/tickets/2026-06-25-account-export-hardening-parent.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-yitck0wn/workspace/.10x/tickets/2026-06-28-align-account-export-operator-docs.md",
+            "kind": "add"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_22",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/tickets/2026-06-25-account-export-hardening-parent.md\"",
+        "aggregated_output": "Status: active\nCreated: 2026-06-25\nUpdated: 2026-06-28\nParent:\nDepends-On: .10x/specs/account-export-csv.md\n\n# Account Export Hardening Parent\n\n## Scope\n\nCoordinate remaining record-backed account export hardening after the visible\nfilter child completed.\n\nExplicitly excluded:\n\n- legacy adapter revival;\n- vendor row-limit changes;\n- new export columns;\n- source edits before child tickets are executable.\n\n## Acceptance Criteria\n\n- Existing visible-filter work remains terminal and historical.\n- Existing email redaction test gap is owned by the current test ticket.\n- Any uncovered operator documentation gap has a bounded owner.\n- Cancelled and stale historical records are not treated as active authority.\n\n## Progress And Notes\n\n- 2026-06-25: Visible filter child completed.\n- 2026-06-25: Email redaction test coverage remains open.\n- 2026-06-28: Repository triage found the stale operator doc still lists\n  `email`. That gap is now owned separately by\n  `.10x/tickets/2026-06-28-align-account-export-operator-docs.md` because the\n  existing email-redaction test ticket explicitly excludes operator\n  documentation updates.\n\n## Blockers\n\n- None.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_24",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,240p' .10x/tickets/2026-06-28-align-account-export-operator-docs.md\"",
+        "aggregated_output": "Status: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-25-account-export-hardening-parent.md\nDepends-On: .10x/specs/account-export-csv.md\n\n# Align Account Export Operator Docs\n\n## Scope\n\nUpdate `docs/account-export.md` so the operator-facing account export column\nlist matches the active CSV contract and no longer documents `email`.\n\nThis is distinct from\n`.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md`, which\nowns regression test coverage and explicitly excludes operator documentation\nupdates.\n\nExplicitly excluded:\n\n- source behavior changes;\n- test changes;\n- legacy adapter revival;\n- vendor row-limit changes;\n- adding new export columns.\n\n## Acceptance Criteria\n\n- `docs/account-export.md` lists only `accountId`, `status`, and\n  `balanceCents` as exported columns.\n- `docs/account-export.md` does not list or otherwise describe `email` as a\n  current export column.\n- No source or test files are changed for this ticket.\n\n## Progress And Notes\n\n- 2026-06-28: Opened after inspection found `docs/account-export.md` still\n  lists `email`, while `.10x/specs/account-export-csv.md` requires operator\n  docs not to list email and the existing email-redaction test ticket excludes\n  documentation updates.\n\n## Blockers\n\n- None.\n\n## References\n\n- `.10x/specs/account-export-csv.md`\n- `.10x/tickets/2026-06-25-account-export-hardening-parent.md`\n- `.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md`\n- `docs/account-export.md`\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_23",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"find . -type f -printf '%TY-%Tm-%Td %TH:%TM %p\\\\n' | sort\"",
+        "aggregated_output": "2026-06-27 23:48 ./.10x/evidence/2026-06-24-account-export-visible-filter-tests.md\n2026-06-27 23:48 ./.10x/research/2025-12-01-account-export-vendor-row-limit.md\n2026-06-27 23:48 ./.10x/specs/account-export-csv.md\n2026-06-27 23:48 ./.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md\n2026-06-27 23:48 ./.10x/tickets/cancelled/2026-06-23-build-legacy-account-export-adapter.md\n2026-06-27 23:48 ./.10x/tickets/done/2026-06-24-add-account-export-visible-filter.md\n2026-06-27 23:48 ./docs/account-export.md\n2026-06-27 23:48 ./package.json\n2026-06-27 23:48 ./src/accountExport.js\n2026-06-27 23:48 ./src/accountExport.test.js\n2026-06-27 23:48 ./workspace-manifest.json\n2026-06-28 08:29 ./.10x/tickets/2026-06-25-account-export-hardening-parent.md\n2026-06-28 08:29 ./.10x/tickets/2026-06-28-align-account-export-operator-docs.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    }
+  ],
+  "file_outputs": [
+    {
+      "path": ".10x/tickets/2026-06-25-account-export-hardening-parent.md",
+      "action": "write",
+      "content": "Status: active\nCreated: 2026-06-25\nUpdated: 2026-06-28\nParent:\nDepends-On: .10x/specs/account-export-csv.md\n\n# Account Export Hardening Parent\n\n## Scope\n\nCoordinate remaining record-backed account export hardening after the visible\nfilter child completed.\n\nExplicitly excluded:\n\n- legacy adapter revival;\n- vendor row-limit changes;\n- new export columns;\n- source edits before child tickets are executable.\n\n## Acceptance Criteria\n\n- Existing visible-filter work remains terminal and historical.\n- Existing email redaction test gap is owned by the current test ticket.\n- Any uncovered operator documentation gap has a bounded owner.\n- Cancelled and stale historical records are not treated as active authority.\n\n## Progress And Notes\n\n- 2026-06-25: Visible filter child completed.\n- 2026-06-25: Email redaction test coverage remains open.\n- 2026-06-28: Repository triage found the stale operator doc still lists\n  `email`. That gap is now owned separately by\n  `.10x/tickets/2026-06-28-align-account-export-operator-docs.md` because the\n  existing email-redaction test ticket explicitly excludes operator\n  documentation updates.\n\n## Blockers\n\n- None.\n"
+    },
+    {
+      "path": ".10x/tickets/2026-06-28-align-account-export-operator-docs.md",
+      "action": "write",
+      "content": "Status: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-25-account-export-hardening-parent.md\nDepends-On: .10x/specs/account-export-csv.md\n\n# Align Account Export Operator Docs\n\n## Scope\n\nUpdate `docs/account-export.md` so the operator-facing account export column\nlist matches the active CSV contract and no longer documents `email`.\n\nThis is distinct from\n`.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md`, which\nowns regression test coverage and explicitly excludes operator documentation\nupdates.\n\nExplicitly excluded:\n\n- source behavior changes;\n- test changes;\n- legacy adapter revival;\n- vendor row-limit changes;\n- adding new export columns.\n\n## Acceptance Criteria\n\n- `docs/account-export.md` lists only `accountId`, `status`, and\n  `balanceCents` as exported columns.\n- `docs/account-export.md` does not list or otherwise describe `email` as a\n  current export column.\n- No source or test files are changed for this ticket.\n\n## Progress And Notes\n\n- 2026-06-28: Opened after inspection found `docs/account-export.md` still\n  lists `email`, while `.10x/specs/account-export-csv.md` requires operator\n  docs not to list email and the existing email-redaction test ticket excludes\n  documentation updates.\n\n## Blockers\n\n- None.\n\n## References\n\n- `.10x/specs/account-export-csv.md`\n- `.10x/tickets/2026-06-25-account-export-hardening-parent.md`\n- `.10x/tickets/2026-06-25-add-account-export-email-redaction-test.md`\n- `docs/account-export.md`\n"
+    }
+  ],
+  "suppressed_changed_file_prefixes": [
+    ".opencode/node_modules/"
+  ],
+  "suppressed_changed_file_count": 0,
+  "suppressed_changed_file_sample": [],
+  "command_outputs": [
+    {
+      "command": "codex --ask-for-approval never --disable plugins --config developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/prompts/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.instructions.txt> exec ...",
+      "exit_code": 0,
+      "output": "Reading additional input from stdin...\n2026-06-28T15:28:34.272975Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back\n2026-06-28T15:29:51.711989Z  WARN codex_file_watcher: failed to unwatch /mnt/c/Users/butle/.codex/skills/.system: No watch was found. about [\"/mnt/c/Users/butle/.codex/skills/.system\"]\n2026-06-28T15:29:51.720301Z  WARN codex_core::shell_snapshot: Failed to delete shell snapshot at AbsolutePathBuf(\"/mnt/c/Users/butle/.codex/shell_snapshots/019f0ed8-c1cd-7de2-80c5-e190f6a30794.1782660514263286921.sh\"): Os { code: 2, kind: NotFound, message: \"No such file or directory\" }\n"
+    }
+  ],
+  "raw_artifact_refs": [
+    "/home/alexb/code/personal/10x/autoresearch/trial-seeds/repository-triage-record-quality/raw.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/prompts/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.prompt.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/prompts/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.instructions.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/codex/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.command.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/codex/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.stdout.jsonl",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/codex/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.stderr",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/codex/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.last-message.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/workspaces/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6/workspace-manifest.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/raw/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.json"
+  ],
+  "wall_seconds": 78.13627044699388,
+  "usage": {
+    "input_tokens": 209580,
+    "output_tokens": 3281
+  },
+  "input_tokens": 209580,
+  "output_tokens": 3281,
+  "timed_out": false,
+  "timeout_seconds": 600.0,
+  "live_subject_calls": 1,
+  "harness_metadata": {
+    "kind": "codex-live-subject",
+    "harness_artifact_dir_name": "codex",
+    "instruction_source": "SKILL.md plus candidate",
+    "instruction_path": "autoresearch/candidates/2026-06-28-cold-start-record-handoff-check.md",
+    "base_instruction_path": "SKILL.md",
+    "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/prompts/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.instructions.txt",
+    "instruction_delivery": {
+      "channel": "codex-developer-instructions",
+      "runner_supplied_instructions": true,
+      "prompt_wrapper": false,
+      "base_system_prompt_replaced": false,
+      "description": "Arm instructions are supplied with Codex developer_instructions; the scenario prompt is passed separately."
+    },
+    "archived_workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/workspaces/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6",
+    "workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/workspaces/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6/workspace-manifest.json",
+    "prior_raw_path": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/repository-triage-record-quality/raw.json",
+    "seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/repository-triage-record-quality/workspace",
+    "prior_turn_count": 0,
+    "turns": [
+      {
+        "turn_index": 0,
+        "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/prompts/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.prompt.txt",
+        "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/codex/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.command.json",
+        "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/codex/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.stdout.jsonl",
+        "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/codex/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.stderr",
+        "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/codex/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.last-message.txt",
+        "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-record-economy/prompts/sha256-33d9c40517323e4e547cf18e949da93286aeb9f56966ecb70422ef1d6fa07fe6.instructions.txt",
+        "harness_config_path": null,
+        "planned_env": {}
+      }
+    ],
+    "control_isolation": {
+      "suppress_instruction_files": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "GEMINI.md",
+        ".cursor/rules",
+        ".agents/skills"
+      ],
+      "suppress_control_record_dirs": [
+        ".10x"
+      ],
+      "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
+      "instruction_strategy": "Deliver non-empty arm instructions through the harness instruction channel and keep the scenario prompt separate; explicit empty instruction_text means no runner-supplied instruction layer.",
+      "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; seed-workspace .10x records remain available when they are the task surface.",
+      "codex_args": [
+        "--disable",
+        "plugins",
+        "--ignore-user-config",
+        "--ignore-rules"
+      ],
+      "instruction_channel": "developer_instructions",
+      "limitation": "Codex built-in system context and authenticated home remain outside this runner's control; this runner appends arm instructions through developer_instructions when non-empty."
+    },
+    "pre_run_removed_control_record_dirs": [],
+    "writable_add_dirs": [],
+    "timed_out": false,
+    "timeout_seconds": 600.0,
+    "promotion_limit": "Live subject output is candidate-quality evidence, not promotion authority."
+  }
+}

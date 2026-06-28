@@ -1,0 +1,484 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260628-s010-external-index",
+  "scenario_id": "SCN-004",
+  "variant_id": "candidate-audit-limits-redaction",
+  "rep": 0,
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "instruction_digest": "sha256:51b105a236552e2ca8efd06be4bb954ebc366087076aa7f18dab00bc3e3da0b8",
+  "scientific_contract": {
+    "question": "Which S010 candidate best preserves rich cold-start context when indexing an approved external canonical PRD?",
+    "hypothesis": "Source-material-delta and record-regeneration candidates should create the richest external-canonical index without copying the full PRD, while economy-density should avoid unnecessary record spread.",
+    "expected_behavior": "Subject creates the minimum appropriate .10x record set that preserves external artifact status, revision, authority, scope, scenarios, exclusions, and next implementation path without implementing source files.",
+    "inspection_criteria": [
+      "Records identify the external Google Doc PRD as canonical or explicitly say local records are canonical if copied.",
+      "Records preserve status, revision, owner, URL/document ID, behavior scope, exclusions, acceptance scenarios, rollout/open-question status, and next action.",
+      "Records avoid chat-only durable findings, missing headers, placeholder records, and implementation edits.",
+      "Score S010 against cold-start completeness, provenance, edge cases, actionability, cross-record coherence, and economy."
+    ],
+    "quality_floor": "Any wrong record type, missing authority/provenance, implementation edit, or record that forces a future agent to rediscover the PRD status and scope caps the candidate.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+  },
+  "transcript": [
+    {
+      "role": "user",
+      "content": "The approved Nimbus Retention Controls Google Doc PRD is canonical for implementation planning. Create the durable 10x record or records a future agent needs to implement from it without reading this chat. Do not implement code."
+    },
+    {
+      "role": "assistant",
+      "content": "Created the durable 10x planning graph for Nimbus Retention Controls. No code was implemented.\n\nKey records:\n- [canonical PRD index](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/knowledge/nimbus-retention-canonical-prd.md)\n- [implementation plan](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md)\n- Active specs for settings/access, enforcement, audit log, and rollout under `.10x/specs/`\n- Blocked child implementation tickets under `.10x/tickets/`\n- [planning inspection evidence](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md)\n\nI marked the child tickets `blocked` because this workspace snapshot contains the PRD export but no application source. The source-survey ticket owns that blocker and defines what a future agent must inspect before implementation. I also tried `git status`, but this workspace is not a Git repository."
+    }
+  ],
+  "tool_invocations": [
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_1",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"pwd && rg --files -g '.10x/**' -g '\"'!*node_modules*'\"' -g '\"'!*.git*'\"'\"",
+        "aggregated_output": "",
+        "exit_code": 1,
+        "status": "failed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_2",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'rg -n \"Nimbus|Retention|Google Doc|PRD|canonical|retention\" . .10x 2>/dev/null'",
+        "aggregated_output": "./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:1:# Nimbus Retention Controls PRD\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:3:Canonical URL: https://docs.google.com/document/d/GDOC-nimbus-retention-prd\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:4:Document ID: GDOC-nimbus-retention-prd\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:12:Nimbus accounts need configurable retention controls so enterprise\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:14:This PRD is the canonical approved product contract for the first release.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:18:The first release covers organization-level audit-event retention settings for\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:23:- Administrators can choose 30, 90, 180, or 365 day audit-event retention.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:25:- Reducing the retention window does not immediately delete historical events.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:26:- Shortened retention applies on the next nightly retention enforcement job.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:27:- Increasing the retention window preserves existing events that have not\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:30:  retention setting.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:37:- Per-user retention settings.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:38:- Data export retention.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:40:- Retention controls for non-enterprise workspaces.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:44:Given an enterprise workspace with no explicit retention setting, when an\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:45:administrator opens retention controls, then the displayed value is 180 days.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:47:Given an administrator changes retention from 180 days to 90 days, when the\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:52:then the user can view neither the control nor the underlying retention value.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:54:Given retention is increased from 90 days to 365 days, when events older than 90\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:57:Given the nightly job runs, when an event is older than the active retention\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:62:- Only enterprise administrators can read or change the retention setting.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:63:- The allowed retention values are exactly 30, 90, 180, and 365 days.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:65:- Every successful retention change creates an audit-log entry.\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:66:- Shortened retention is enforced by the next nightly retention job, not inline\n./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md:78:None. This PRD is approved for implementation as written.\n",
+        "exit_code": 2,
+        "status": "failed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_5",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x -maxdepth 3 -type f | sort'",
+        "aggregated_output": "find: \u2018.10x\u2019: No such file or directory\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_4",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' external-artifacts/google-docs/GDOC-nimbus-retention-prd.md\"",
+        "aggregated_output": "# Nimbus Retention Controls PRD\n\nCanonical URL: https://docs.google.com/document/d/GDOC-nimbus-retention-prd\nDocument ID: GDOC-nimbus-retention-prd\nRevision: rev-2026-06-24-a\nStatus: Approved\nOwner: Product Platform\nApproved: 2026-06-24\n\n## Purpose\n\nNimbus accounts need configurable retention controls so enterprise\nadministrators can choose how long workspace audit events remain queryable.\nThis PRD is the canonical approved product contract for the first release.\n\n## Scope\n\nThe first release covers organization-level audit-event retention settings for\npaid enterprise workspaces.\n\nIncluded behavior:\n\n- Administrators can choose 30, 90, 180, or 365 day audit-event retention.\n- The default for newly created enterprise workspaces is 180 days.\n- Reducing the retention window does not immediately delete historical events.\n- Shortened retention applies on the next nightly retention enforcement job.\n- Increasing the retention window preserves existing events that have not\n  already expired.\n- Workspace members without administrator permission cannot view or change the\n  retention setting.\n- The audit log shows who changed the setting, the previous value, the new\n  value, and the timestamp.\n\nExcluded behavior:\n\n- Legal hold workflows.\n- Per-user retention settings.\n- Data export retention.\n- Billing plan changes.\n- Retention controls for non-enterprise workspaces.\n\n## Scenarios\n\nGiven an enterprise workspace with no explicit retention setting, when an\nadministrator opens retention controls, then the displayed value is 180 days.\n\nGiven an administrator changes retention from 180 days to 90 days, when the\nchange is saved, then future nightly enforcement uses 90 days and an audit-log\nentry records the change.\n\nGiven a non-administrator opens the same settings page, when the page renders,\nthen the user can view neither the control nor the underlying retention value.\n\nGiven retention is increased from 90 days to 365 days, when events older than 90\ndays have already been deleted, then those deleted events are not recreated.\n\nGiven the nightly job runs, when an event is older than the active retention\nwindow and no legal hold exists, then the event is eligible for deletion.\n\n## Acceptance Criteria\n\n- Only enterprise administrators can read or change the retention setting.\n- The allowed retention values are exactly 30, 90, 180, and 365 days.\n- New enterprise workspaces default to 180 days.\n- Every successful retention change creates an audit-log entry.\n- Shortened retention is enforced by the next nightly retention job, not inline\n  during the settings update.\n- The implementation does not add legal hold behavior in this release.\n\n## Rollout\n\nShip behind the existing enterprise settings feature flag. Enable for internal\nenterprise workspaces first, then for ten design partners, then for all\nenterprise workspaces after seven days without severity-one incidents.\n\n## Open Questions\n\nNone. This PRD is approved for implementation as written.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_6",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"find . -maxdepth 3 -type f \\\\( -name 'AGENTS.md' -o -name 'package.json' -o -name 'pyproject.toml' -o -name 'README*' \\\\) | sort\"",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_8",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"find . -maxdepth 4 -type f | sort | sed -n '1,200p'\"",
+        "aggregated_output": "./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md\n./workspace-manifest.json\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_9",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find . -maxdepth 3 -type d | sort'",
+        "aggregated_output": ".\n./.agents\n./.codex\n./.git\n./external-artifacts\n./external-artifacts/google-docs\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_11",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'mkdir -p .10x/specs .10x/tickets .10x/tickets/done .10x/tickets/cancelled .10x/decisions .10x/decisions/superseded .10x/research/.storage .10x/research/superseded .10x/evidence/.storage .10x/reviews .10x/knowledge .10x/skills'",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_13",
+        "type": "file_change",
+        "changes": [
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/knowledge/nimbus-retention-canonical-prd.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/specs/nimbus-retention-audit-log.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/specs/nimbus-retention-enforcement.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/specs/nimbus-retention-rollout.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/specs/nimbus-retention-settings-access.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-audit-log.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-enforcement.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-rollout.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-settings-access.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-source-survey.md",
+            "kind": "add"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_17",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'git diff -- .10x external-artifacts workspace-manifest.json'",
+        "aggregated_output": "warning: Not a git repository. Use --no-index to compare two paths outside a working tree\nusage: git diff --no-index [<options>] <path> <path>\n\nDiff output format options\n    -p, --patch           generate patch\n    -s, --no-patch        suppress diff output\n    -u                    generate patch\n    -U, --unified[=<n>]   generate diffs with <n> lines context\n    -W, --[no-]function-context\n                          generate diffs with <n> lines context\n    --raw                 generate the diff in raw format\n    --patch-with-raw      synonym for '-p --raw'\n    --patch-with-stat     synonym for '-p --stat'\n    --numstat             machine friendly --stat\n    --shortstat           output only the last line of --stat\n    -X, --dirstat[=<param1,param2>...]\n                          output the distribution of relative amount of changes for each sub-directory\n    --cumulative          synonym for --dirstat=cumulative\n    --dirstat-by-file[=<param1,param2>...]\n                          synonym for --dirstat=files,param1,param2...\n    --check               warn if changes introduce conflict markers or whitespace errors\n    --summary             condensed summary such as creations, renames and mode changes\n    --name-only           show only names of changed files\n    --name-status         show only names and status of changed files\n    --stat[=<width>[,<name-width>[,<count>]]]\n                          generate diffstat\n    --stat-width <width>  generate diffstat with a given width\n    --stat-name-width <width>\n                          generate diffstat with a given name width\n    --stat-graph-width <width>\n                          generate diffstat with a given graph width\n    --stat-count <count>  generate diffstat with limited lines\n    --[no-]compact-summary\n                          generate compact summary in diffstat\n    --binary              output a binary diff that can be applied\n    --[no-]full-index     show full pre- and post-image object names on the \"index\" lines\n    --[no-]color[=<when>] show colored diff\n    --ws-error-highlight <kind>\n                          highlight whitespace errors in the 'context', 'old' or 'new' lines in the diff\n    -z                    do not munge pathnames and use NULs as output field terminators in --raw or --numstat\n    --[no-]abbrev[=<n>]   use <n> digits to display object names\n    --src-prefix <prefix> show the given source prefix instead of \"a/\"\n    --dst-prefix <prefix> show the given destination prefix instead of \"b/\"\n    --line-prefix <prefix>\n                          prepend an additional prefix to every line of output\n    --no-prefix           do not show any source or destination prefix\n    --default-prefix      use default prefixes a/ and b/\n    --inter-hunk-context <n>\n                          show context between diff hunks up to the specified number of lines\n    --output-indicator-new <char>\n                          specify the character to indicate a new line instead of '+'\n    --output-indicator-old <char>\n                          specify the character to indicate an old line instead of '-'\n    --output-indicator-context <char>\n                          specify the character to indicate a context instead of ' '\n\nDiff rename options\n    -B, --break-rewrites[=<n>[/<m>]]\n                          break complete rewrite changes into pairs of delete and create\n    -M, --find-renames[=<n>]\n                          detect renames\n    -D, --irreversible-delete\n                          omit the preimage for deletes\n    -C, --find-copies[=<n>]\n                          detect copies\n    --[no-]find-copies-harder\n                          use unmodified files as source to find copies\n    --no-renames          disable rename detection\n    --[no-]rename-empty   use empty blobs as rename source\n    --[no-]follow         continue listing the history of a file beyond renames\n    -l <n>                prevent rename/copy detection if the number of rename/copy targets exceeds given limit\n\nDiff algorithm options\n    --minimal             produce the smallest possible diff\n    -w, --ignore-all-space\n                          ignore whitespace when comparing lines\n    -b, --ignore-space-change\n                          ignore changes in amount of whitespace\n    --ignore-space-at-eol ignore changes in whitespace at EOL\n    --ignore-cr-at-eol    ignore carrier-return at the end of line\n    --ignore-blank-lines  ignore changes whose lines are all blank\n    -I, --[no-]ignore-matching-lines <regex>\n                          ignore changes whose all lines match <regex>\n    --[no-]indent-heuristic\n                          heuristic to shift diff hunk boundaries for easy reading\n    --patience            generate diff using the \"patience diff\" algorithm\n    --histogram           generate diff using the \"histogram diff\" algorithm\n    --diff-algorithm <algorithm>\n                          choose a diff algorithm\n    --anchored <text>     generate diff using the \"anchored diff\" algorithm\n    --word-diff[=<mode>]  show word diff, using <mode> to delimit changed words\n    --word-diff-regex <regex>\n                          use <regex> to decide what a word is\n    --color-words[=<regex>]\n                          equivalent to --word-diff=color --word-diff-regex=<regex>\n    --[no-]color-moved[=<mode>]\n                          moved lines of code are colored differently\n    --[no-]color-moved-ws <mode>\n                          how white spaces are ignored in --color-moved\n\nOther diff options\n    --[no-]relative[=<prefix>]\n                          when run from subdir, exclude changes outside and show relative paths\n    -a, --[no-]text       treat all files as text\n    -R                    swap two inputs, reverse the diff\n    --[no-]exit-code      exit with 1 if there were differences, 0 otherwise\n    --[no-]quiet          disable all output of the program\n    --[no-]ext-diff       allow an external diff helper to be executed\n    --[no-]textconv       run external text conversion filters when comparing binary files\n    --ignore-submodules[=<when>]\n                          ignore changes to submodules in the diff generation\n    --submodule[=<format>]\n                          specify how differences in submodules are shown\n    --ita-invisible-in-index\n                          hide 'git add -N' entries from the index\n    --ita-visible-in-index\n                          treat 'git add -N' entries as real in the index\n    -S <string>           look for differences that change the number of occurrences of the specified string\n    -G <regex>            look for differences that change the number of occurrences of the specified regex\n    --pickaxe-all         show all changes in the changeset with -S or -G\n    --pickaxe-regex       treat <string> in -S as extended POSIX regular expression\n    -O <file>             control the order in which files appear in the output\n    --rotate-to <path>    show the change in the specified path first\n    --skip-to <path>      skip the output to the specified path\n    --find-object <object-id>\n                          look for differences that change the number of occurrences of the specified object\n    --diff-filter [(A|C|D|M|R|T|U|X|B)...[*]]\n                          select files by diff type\n    --output <file>       output to a specific file\n\n",
+        "exit_code": 129,
+        "status": "failed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_15",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x -type f | sort'",
+        "aggregated_output": ".10x/knowledge/nimbus-retention-canonical-prd.md\n.10x/specs/nimbus-retention-audit-log.md\n.10x/specs/nimbus-retention-enforcement.md\n.10x/specs/nimbus-retention-rollout.md\n.10x/specs/nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_16",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'rg -n \"TODO|TBD|None for planning|Application source is not present|GDOC-nimbus|Depends-On|Status:\" .10x'",
+        "aggregated_output": ".10x/tickets/2026-06-28-nimbus-retention-settings-access.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n.10x/specs/nimbus-retention-settings-access.md:1:Status: active\n.10x/specs/nimbus-retention-settings-access.md:11:Canonical source: Google Doc `GDOC-nimbus-retention-prd`, revision `rev-2026-06-24-a`, indexed at `.10x/knowledge/nimbus-retention-canonical-prd.md`.\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:5:Depends-On: None\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:34:Application source is not present in the current workspace snapshot. This ticket remains open until source is available.\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:38:- 2026-06-28: Planning record created from canonical PRD. Current workspace inspection found only `external-artifacts/google-docs/GDOC-nimbus-retention-prd.md` and `workspace-manifest.json` as project files.\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md, .10x/tickets/2026-06-28-nimbus-retention-enforcement.md, .10x/tickets/2026-06-28-nimbus-retention-audit-log.md\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md:13:- Google Doc URL: `https://docs.google.com/document/d/GDOC-nimbus-retention-prd`\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md:14:- Document ID: `GDOC-nimbus-retention-prd`\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md:16:- Local export inspected: `external-artifacts/google-docs/GDOC-nimbus-retention-prd.md`\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md:57:None for planning. Implementation is blocked until application source is present or accessible and the source survey ticket identifies concrete implementation files and verification commands.\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n.10x/knowledge/nimbus-retention-canonical-prd.md:1:Status: active\n.10x/knowledge/nimbus-retention-canonical-prd.md:11:- Canonical URL: `https://docs.google.com/document/d/GDOC-nimbus-retention-prd`\n.10x/knowledge/nimbus-retention-canonical-prd.md:12:- Document ID: `GDOC-nimbus-retention-prd`\n.10x/knowledge/nimbus-retention-canonical-prd.md:17:- Local export inspected: `external-artifacts/google-docs/GDOC-nimbus-retention-prd.md`\n.10x/specs/nimbus-retention-enforcement.md:1:Status: active\n.10x/specs/nimbus-retention-enforcement.md:11:Canonical source: Google Doc `GDOC-nimbus-retention-prd`, revision `rev-2026-06-24-a`, indexed at `.10x/knowledge/nimbus-retention-canonical-prd.md`.\n.10x/specs/nimbus-retention-audit-log.md:1:Status: active\n.10x/specs/nimbus-retention-audit-log.md:11:Canonical source: Google Doc `GDOC-nimbus-retention-prd`, revision `rev-2026-06-24-a`, indexed at `.10x/knowledge/nimbus-retention-canonical-prd.md`.\n.10x/specs/nimbus-retention-rollout.md:1:Status: active\n.10x/specs/nimbus-retention-rollout.md:11:Canonical source: Google Doc `GDOC-nimbus-retention-prd`, revision `rev-2026-06-24-a`, indexed at `.10x/knowledge/nimbus-retention-canonical-prd.md`.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_19",
+        "type": "file_change",
+        "changes": [
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-source-survey.md",
+            "kind": "update"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_21",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x -type f | sort'",
+        "aggregated_output": ".10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md\n.10x/knowledge/nimbus-retention-canonical-prd.md\n.10x/specs/nimbus-retention-audit-log.md\n.10x/specs/nimbus-retention-enforcement.md\n.10x/specs/nimbus-retention-rollout.md\n.10x/specs/nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_23",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'rg -n \"TODO|TBD|blocked|Blockers|Relates-To|Parent:|Depends-On:|Status:\" .10x'",
+        "aggregated_output": ".10x/tickets/2026-06-28-nimbus-retention-rollout.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md:4:Parent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md, .10x/tickets/2026-06-28-nimbus-retention-enforcement.md, .10x/tickets/2026-06-28-nimbus-retention-audit-log.md\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md:31:## Blockers\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md:56:## Blockers\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md:58:None for planning. Implementation is blocked until application source is present or accessible and the source survey ticket identifies concrete implementation files and verification commands.\n.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md:1:Status: recorded\n.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md:4:Relates-To: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md, .10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md:17:- Status: `Approved`\n.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md:43:This supports keeping implementation tickets blocked on source survey because no application source files, existing enterprise settings feature flag, role model, audit-log model, settings storage, or nightly retention job were available to inspect.\n.10x/specs/nimbus-retention-rollout.md:1:Status: active\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:4:Parent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:5:Depends-On: None\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:33:## Blockers\n.10x/specs/nimbus-retention-audit-log.md:1:Status: active\n.10x/knowledge/nimbus-retention-canonical-prd.md:1:Status: active\n.10x/specs/nimbus-retention-enforcement.md:1:Status: active\n.10x/specs/nimbus-retention-settings-access.md:1:Status: active\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md:4:Parent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md:32:## Blockers\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md:4:Parent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md:33:## Blockers\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md:4:Parent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md:34:## Blockers\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_22",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'for f in $(find .10x -type f | sort); do printf '\"'%s\\\\n' \\\"\"'$f\"; sed -n '\"'1,8p' \\\"\"'$f\"; done'",
+        "aggregated_output": ".10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md\nStatus: recorded\nCreated: 2026-06-28\nUpdated: 2026-06-28\nRelates-To: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md, .10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n\n# Nimbus Retention Planning Inspection\n\n## What Was Observed\n.10x/knowledge/nimbus-retention-canonical-prd.md\nStatus: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Controls Canonical PRD\n\n## Canonical Source\n\n.10x/specs/nimbus-retention-audit-log.md\nStatus: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Audit Log\n\n## Purpose and Scope\n\n.10x/specs/nimbus-retention-enforcement.md\nStatus: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Enforcement\n\n## Purpose and Scope\n\n.10x/specs/nimbus-retention-rollout.md\nStatus: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Rollout\n\n## Purpose and Scope\n\n.10x/specs/nimbus-retention-settings-access.md\nStatus: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Settings and Access\n\n## Purpose and Scope\n\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md\nStatus: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nDepends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n\n# Implement Nimbus Retention Audit Log\n\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nStatus: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Controls Implementation Plan\n\n## Scope\n\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md\nStatus: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nDepends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n\n# Implement Nimbus Retention Enforcement\n\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md\nStatus: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nDepends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md, .10x/tickets/2026-06-28-nimbus-retention-enforcement.md, .10x/tickets/2026-06-28-nimbus-retention-audit-log.md\n\n# Implement Nimbus Retention Rollout Gating\n\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md\nStatus: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nDepends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n\n# Implement Nimbus Retention Settings and Access\n\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md\nStatus: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nDepends-On: None\n\n# Nimbus Retention Source Survey\n\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_25",
+        "type": "file_change",
+        "changes": [
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-audit-log.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-enforcement.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-rollout.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-settings-access.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace/.10x/tickets/2026-06-28-nimbus-retention-source-survey.md",
+            "kind": "update"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_28",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'git status --short'",
+        "aggregated_output": "fatal: not a git repository (or any parent up to mount point /mnt)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n",
+        "exit_code": 128,
+        "status": "failed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_26",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x -type f | sort'",
+        "aggregated_output": ".10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md\n.10x/knowledge/nimbus-retention-canonical-prd.md\n.10x/specs/nimbus-retention-audit-log.md\n.10x/specs/nimbus-retention-enforcement.md\n.10x/specs/nimbus-retention-rollout.md\n.10x/specs/nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_27",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'rg -n \"''^Status:|''^Parent:|''^Depends-On:|''^Relates-To:|''^# \" .10x'",
+        "aggregated_output": ".10x/specs/nimbus-retention-rollout.md:1:Status: active\n.10x/specs/nimbus-retention-rollout.md:5:# Nimbus Retention Rollout\n.10x/specs/nimbus-retention-enforcement.md:1:Status: active\n.10x/specs/nimbus-retention-enforcement.md:5:# Nimbus Retention Enforcement\n.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md:1:Status: recorded\n.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md:4:Relates-To: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md, .10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md:6:# Nimbus Retention Planning Inspection\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md:1:Status: open\n.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md:5:# Nimbus Retention Controls Implementation Plan\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md:1:Status: blocked\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md:4:Parent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-audit-log.md:7:# Implement Nimbus Retention Audit Log\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md:1:Status: blocked\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md:4:Parent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n.10x/tickets/2026-06-28-nimbus-retention-enforcement.md:7:# Implement Nimbus Retention Enforcement\n.10x/specs/nimbus-retention-audit-log.md:1:Status: active\n.10x/specs/nimbus-retention-audit-log.md:5:# Nimbus Retention Audit Log\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md:1:Status: blocked\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md:4:Parent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md, .10x/tickets/2026-06-28-nimbus-retention-enforcement.md, .10x/tickets/2026-06-28-nimbus-retention-audit-log.md\n.10x/tickets/2026-06-28-nimbus-retention-rollout.md:7:# Implement Nimbus Retention Rollout Gating\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:1:Status: blocked\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:4:Parent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:5:Depends-On: None\n.10x/tickets/2026-06-28-nimbus-retention-source-survey.md:7:# Nimbus Retention Source Survey\n.10x/specs/nimbus-retention-settings-access.md:1:Status: active\n.10x/specs/nimbus-retention-settings-access.md:5:# Nimbus Retention Settings and Access\n.10x/knowledge/nimbus-retention-canonical-prd.md:1:Status: active\n.10x/knowledge/nimbus-retention-canonical-prd.md:5:# Nimbus Retention Controls Canonical PRD\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md:1:Status: blocked\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md:4:Parent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md:5:Depends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n.10x/tickets/2026-06-28-nimbus-retention-settings-access.md:7:# Implement Nimbus Retention Settings and Access\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    }
+  ],
+  "file_outputs": [
+    {
+      "path": ".10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md",
+      "action": "write",
+      "content": "Status: recorded\nCreated: 2026-06-28\nUpdated: 2026-06-28\nRelates-To: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md, .10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n\n# Nimbus Retention Planning Inspection\n\n## What Was Observed\n\nThe workspace contains an exported approved Nimbus Retention Controls PRD and no application source files visible in the project root snapshot.\n\nThe PRD export at `external-artifacts/google-docs/GDOC-nimbus-retention-prd.md` identifies:\n\n- Canonical URL: `https://docs.google.com/document/d/GDOC-nimbus-retention-prd`\n- Document ID: `GDOC-nimbus-retention-prd`\n- Revision: `rev-2026-06-24-a`\n- Status: `Approved`\n- Owner: `Product Platform`\n- Approved: `2026-06-24`\n- Open questions: `None. This PRD is approved for implementation as written.`\n\nThe project file listing observed only:\n\n- `./external-artifacts/google-docs/GDOC-nimbus-retention-prd.md`\n- `./workspace-manifest.json`\n\nNo `.10x/` directory existed before this planning work.\n\n## Procedure\n\nFrom workspace root `/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-n_24inr8/workspace`:\n\n1. Ran `rg -n \"Nimbus|Retention|Google Doc|PRD|canonical|retention\" . .10x 2>/dev/null`.\n2. Read `external-artifacts/google-docs/GDOC-nimbus-retention-prd.md` with `sed -n '1,220p'`.\n3. Ran `find .10x -maxdepth 3 -type f | sort`, which returned `find: '.10x': No such file or directory`.\n4. Ran `find . -maxdepth 4 -type f | sort | sed -n '1,200p'`, which listed the PRD export and `workspace-manifest.json`.\n5. Ran `find . -maxdepth 3 -type d | sort`, which listed `.agents`, `.codex`, `.git`, `external-artifacts`, and `external-artifacts/google-docs`.\n\n## What This Supports or Challenges\n\nThis supports using the exported Google Doc PRD as the current planning source and creating 10x records that index the canonical Google Doc revision.\n\nThis supports keeping implementation tickets blocked on source survey because no application source files, existing enterprise settings feature flag, role model, audit-log model, settings storage, or nightly retention job were available to inspect.\n\nThis challenges any attempt to implement code in the current workspace snapshot without first making application source available.\n\n## Limits\n\nThis evidence is limited to the workspace snapshot inspected on 2026-06-28. It does not prove the canonical Google Doc has not changed after revision `rev-2026-06-24-a`. It does not inspect external systems, production configuration, or application repositories not present in this workspace.\n"
+    },
+    {
+      "path": ".10x/knowledge/nimbus-retention-canonical-prd.md",
+      "action": "write",
+      "content": "Status: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Controls Canonical PRD\n\n## Canonical Source\n\nThe approved Nimbus Retention Controls Google Doc PRD is canonical for implementation planning.\n\n- Canonical URL: `https://docs.google.com/document/d/GDOC-nimbus-retention-prd`\n- Document ID: `GDOC-nimbus-retention-prd`\n- Revision: `rev-2026-06-24-a`\n- Status observed: `Approved`\n- Owner: `Product Platform`\n- Approved: `2026-06-24`\n- Local export inspected: `external-artifacts/google-docs/GDOC-nimbus-retention-prd.md`\n\nThe Google Doc remains canonical. The local export is an inspected artifact and may become stale if the Google Doc revision changes.\n\n## Product Vocabulary\n\n- `Nimbus Retention Controls`: first-release enterprise settings surface for organization-level audit-event retention.\n- `Enterprise workspace`: paid enterprise workspace eligible for retention controls.\n- `Administrator`: the only role allowed to read or change the audit-event retention setting.\n- `Workspace member without administrator permission`: cannot view the control or the underlying retention value.\n- `Audit event`: workspace audit-log event whose queryable lifetime is controlled by the retention setting.\n- `Nightly retention enforcement job`: existing scheduled job that applies shortened retention windows; settings updates MUST NOT delete events inline.\n- `Legal hold`: explicitly excluded from this release except the PRD scenario says events are eligible for deletion when older than the active window and no legal hold exists. Implementation MUST NOT add legal hold workflows.\n- `Enterprise settings feature flag`: existing feature flag required for rollout.\n\n## Implementation Planning Notes\n\nFuture implementation should use these active specs as implementation-facing extracts from the canonical PRD:\n\n- `.10x/specs/nimbus-retention-settings-access.md`\n- `.10x/specs/nimbus-retention-enforcement.md`\n- `.10x/specs/nimbus-retention-audit-log.md`\n- `.10x/specs/nimbus-retention-rollout.md`\n\nThe implementation plan is `.10x/tickets/2026-06-28-nimbus-retention-controls-plan.md` with child tickets for bounded execution. If source inspection reveals that existing code uses different role, plan, feature-flag, audit-log, or job terminology, update this knowledge record only for vocabulary mapping; do not change product semantics without superseding or revalidating the canonical PRD.\n"
+    },
+    {
+      "path": ".10x/specs/nimbus-retention-audit-log.md",
+      "action": "write",
+      "content": "Status: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Audit Log\n\n## Purpose and Scope\n\nThis spec extracts the audit-log contract for retention-setting changes from the approved Nimbus Retention Controls PRD for the first release.\n\nCanonical source: Google Doc `GDOC-nimbus-retention-prd`, revision `rev-2026-06-24-a`, indexed at `.10x/knowledge/nimbus-retention-canonical-prd.md`.\n\nThis spec covers audit-log entries created when retention settings are successfully changed.\n\n## Behavior\n\n- Every successful retention change MUST create an audit-log entry.\n- The audit-log entry MUST show who changed the setting.\n- The audit-log entry MUST show the previous retention value.\n- The audit-log entry MUST show the new retention value.\n- The audit-log entry MUST show the timestamp of the change.\n- Failed or unauthorized change attempts are not specified by the PRD; do not add new audit semantics for them without separate authority.\n\n## Acceptance Criteria\n\n- A successful retention change from one allowed value to another creates exactly the retention-change audit entry expected by the existing audit-log system.\n- The audit-log entry includes actor, previous value, new value, and timestamp.\n- Unauthorized users cannot create a successful retention change and therefore cannot create the successful-change audit entry through this feature.\n\n## Scenario\n\nGiven an administrator changes retention from `180` days to `90` days, when the change is saved, then an audit-log entry records the actor, previous value, new value, and timestamp.\n\n## Implementation Constraints\n\n- Use the existing audit-log event model and naming conventions after source inspection.\n- Do not invent audit-log fields beyond actor, previous value, new value, and timestamp unless existing audit-log infrastructure requires mechanical metadata.\n"
+    },
+    {
+      "path": ".10x/specs/nimbus-retention-enforcement.md",
+      "action": "write",
+      "content": "Status: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Enforcement\n\n## Purpose and Scope\n\nThis spec extracts the audit-event retention lifecycle contract from the approved Nimbus Retention Controls PRD for the first release.\n\nCanonical source: Google Doc `GDOC-nimbus-retention-prd`, revision `rev-2026-06-24-a`, indexed at `.10x/knowledge/nimbus-retention-canonical-prd.md`.\n\nThis spec covers:\n\n- How retention settings affect audit-event deletion eligibility.\n- Timing of shortened-retention enforcement.\n- Behavior when retention windows are increased.\n\n## Behavior\n\n- Reducing the retention window MUST NOT immediately delete historical audit events.\n- Shortened retention MUST apply on the next nightly retention enforcement job.\n- Settings updates MUST NOT perform inline deletion of audit events.\n- Increasing the retention window MUST preserve existing audit events that have not already expired.\n- Increasing the retention window MUST NOT recreate audit events that have already been deleted.\n- During the nightly retention enforcement job, an audit event older than the active retention window and not under legal hold is eligible for deletion.\n\n## Explicit Exclusions\n\n- Legal hold workflows are out of scope for this release.\n- The spec does not define recovery or reconstruction of deleted audit events.\n- The spec does not define retention for data exports or non-audit-event data.\n\n## Acceptance Criteria\n\n- Changing retention from a longer value to a shorter value changes what future nightly enforcement uses, without deleting events during the settings update.\n- Nightly enforcement uses the active retention value for the workspace.\n- Events already deleted under a shorter prior retention window are not recreated when retention is increased.\n- The implementation does not add legal hold behavior in this release.\n\n## Scenarios\n\nGiven an administrator changes retention from `180` days to `90` days, when the change is saved, then future nightly enforcement uses `90` days and no audit events are deleted inline by the settings update.\n\nGiven retention is increased from `90` days to `365` days, when events older than `90` days have already been deleted, then those deleted events are not recreated.\n\nGiven the nightly job runs, when an event is older than the active retention window and no legal hold exists, then the event is eligible for deletion.\n\n## Implementation Constraints\n\n- Inspect the existing retention or audit-event cleanup job before changing behavior.\n- If no nightly enforcement job exists, block implementation and update the implementation plan; do not create a new schedule without explicit planning because the PRD says to use the next nightly retention enforcement job.\n"
+    },
+    {
+      "path": ".10x/specs/nimbus-retention-rollout.md",
+      "action": "write",
+      "content": "Status: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Rollout\n\n## Purpose and Scope\n\nThis spec extracts the rollout contract from the approved Nimbus Retention Controls PRD for the first release.\n\nCanonical source: Google Doc `GDOC-nimbus-retention-prd`, revision `rev-2026-06-24-a`, indexed at `.10x/knowledge/nimbus-retention-canonical-prd.md`.\n\nThis spec covers feature-flag gating and rollout phases. It does not define implementation mechanics for incident monitoring or partner selection beyond the PRD text.\n\n## Behavior\n\n- Nimbus Retention Controls MUST ship behind the existing enterprise settings feature flag.\n- Rollout MUST enable internal enterprise workspaces first.\n- Rollout MUST then enable ten design partners.\n- Rollout MUST then enable all enterprise workspaces after seven days without severity-one incidents.\n\n## Acceptance Criteria\n\n- The implementation is gated by the existing enterprise settings feature flag.\n- Rollout documentation or operational configuration can support the sequence: internal enterprise workspaces, ten design partners, all enterprise workspaces after seven days without severity-one incidents.\n\n## Explicit Exclusions\n\n- Billing plan changes are out of scope.\n- New incident-management semantics are out of scope.\n- Selection of the ten design partners is not defined in this spec.\n\n## Implementation Constraints\n\n- Inspect source or operational configuration for the existing enterprise settings feature flag before implementation.\n- If the existing enterprise settings feature flag is absent or unsuitable, block implementation and return to planning; do not invent a new flag name or rollout path.\n"
+    },
+    {
+      "path": ".10x/specs/nimbus-retention-settings-access.md",
+      "action": "write",
+      "content": "Status: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Settings and Access\n\n## Purpose and Scope\n\nThis spec extracts the settings, default, eligibility, and access-control contract from the approved Nimbus Retention Controls PRD for the first release.\n\nCanonical source: Google Doc `GDOC-nimbus-retention-prd`, revision `rev-2026-06-24-a`, indexed at `.10x/knowledge/nimbus-retention-canonical-prd.md`.\n\nThis spec covers:\n\n- Organization-level audit-event retention setting for paid enterprise workspaces.\n- Read and change access for enterprise administrators.\n- Default retention value for newly created enterprise workspaces.\n- Allowed values exposed and accepted by the setting.\n\n## Behavior\n\n- The system MUST provide an organization-level audit-event retention setting for paid enterprise workspaces.\n- The allowed retention values MUST be exactly `30`, `90`, `180`, and `365` days.\n- Newly created enterprise workspaces MUST default to `180` days.\n- Enterprise administrators MUST be able to read and change the retention setting.\n- Workspace members without administrator permission MUST NOT be able to view the retention control.\n- Workspace members without administrator permission MUST NOT be able to view the underlying retention value.\n- Non-enterprise workspaces MUST NOT receive retention controls in this release.\n\n## Explicit Exclusions\n\n- Per-user retention settings are out of scope.\n- Data export retention is out of scope.\n- Billing plan changes are out of scope.\n- Retention controls for non-enterprise workspaces are out of scope.\n- Legal hold workflows are out of scope.\n\n## Acceptance Criteria\n\n- Only enterprise administrators can read the retention setting.\n- Only enterprise administrators can change the retention setting.\n- The implementation accepts exactly `30`, `90`, `180`, and `365` day values.\n- A newly created enterprise workspace without an explicit retention setting displays and behaves as `180` days.\n- A non-administrator cannot view the control or recover the underlying retention value through the implemented settings surface or API.\n\n## Scenarios\n\nGiven an enterprise workspace with no explicit retention setting, when an administrator opens retention controls, then the displayed value is `180` days.\n\nGiven a non-administrator opens the same settings page, when the page renders, then the user can view neither the control nor the underlying retention value.\n\n## Implementation Constraints\n\n- Do not infer role names, feature-flag names, route paths, table names, or API names from this spec. Inspect source before implementing.\n- If source inspection reveals no existing enterprise settings feature flag, block implementation and return to planning; do not invent a new rollout mechanism under this spec.\n"
+    },
+    {
+      "path": ".10x/tickets/2026-06-28-nimbus-retention-audit-log.md",
+      "action": "write",
+      "content": "Status: blocked\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nDepends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n\n# Implement Nimbus Retention Audit Log\n\n## Scope\n\nCreate the audit-log behavior for successful Nimbus retention setting changes governed by `.10x/specs/nimbus-retention-audit-log.md`.\n\n## Acceptance Criteria\n\n- Every successful retention change creates an audit-log entry.\n- The audit-log entry shows who changed the setting.\n- The audit-log entry shows the previous retention value.\n- The audit-log entry shows the new retention value.\n- The audit-log entry shows the timestamp of the change.\n- Unauthorized attempts do not create a successful-change audit-log entry through this feature.\n\n## Explicit Exclusions\n\n- Do not define new audit semantics for failed or unauthorized attempts unless an existing audit-log convention mechanically requires it.\n- Do not invent audit-log field names before source survey identifies the existing audit-log model.\n\n## Evidence Expectations\n\n- Tests or inspected behavior proving a successful change emits the expected audit entry with actor, previous value, new value, and timestamp.\n- Evidence must include exact command output or artifact paths and the limits of what was verified.\n\n## Blockers\n\nDepends on source survey identifying the existing audit-log model and settings-change conventions.\n\n## Progress and Notes\n\n- 2026-06-28: Ticket opened from approved PRD and active spec. No code implemented.\n"
+    },
+    {
+      "path": ".10x/tickets/2026-06-28-nimbus-retention-controls-plan.md",
+      "action": "write",
+      "content": "Status: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Controls Implementation Plan\n\n## Scope\n\nPlan the implementation of Nimbus Retention Controls from the approved canonical Google Doc PRD.\n\nCanonical source:\n\n- Google Doc URL: `https://docs.google.com/document/d/GDOC-nimbus-retention-prd`\n- Document ID: `GDOC-nimbus-retention-prd`\n- Revision: `rev-2026-06-24-a`\n- Local export inspected: `external-artifacts/google-docs/GDOC-nimbus-retention-prd.md`\n- 10x index: `.10x/knowledge/nimbus-retention-canonical-prd.md`\n\nGoverning specs:\n\n- `.10x/specs/nimbus-retention-settings-access.md`\n- `.10x/specs/nimbus-retention-enforcement.md`\n- `.10x/specs/nimbus-retention-audit-log.md`\n- `.10x/specs/nimbus-retention-rollout.md`\n\n## Child Tickets\n\nExecute child tickets in this order unless source inspection proves a tighter dependency:\n\n1. `.10x/tickets/2026-06-28-nimbus-retention-source-survey.md`\n2. `.10x/tickets/2026-06-28-nimbus-retention-settings-access.md`\n3. `.10x/tickets/2026-06-28-nimbus-retention-enforcement.md`\n4. `.10x/tickets/2026-06-28-nimbus-retention-audit-log.md`\n5. `.10x/tickets/2026-06-28-nimbus-retention-rollout.md`\n\nThe source survey is first because this workspace currently contains only the exported PRD and no application source files. Implementation tickets depend on the survey to identify concrete files, commands, existing feature flag, role model, audit-log model, and nightly job.\n\n## Aggregate Acceptance Criteria\n\n- The implemented feature allows only enterprise administrators to read and change organization-level audit-event retention for paid enterprise workspaces.\n- Allowed retention values are exactly `30`, `90`, `180`, and `365` days.\n- New enterprise workspaces default to `180` days.\n- Shortened retention is enforced by the next nightly retention enforcement job, not inline during settings update.\n- Increasing retention does not recreate deleted audit events.\n- Every successful retention change creates an audit-log entry with actor, previous value, new value, and timestamp.\n- The feature ships behind the existing enterprise settings feature flag and supports the PRD rollout sequence.\n- The implementation does not add legal hold workflows, per-user retention, data export retention, billing plan changes, or non-enterprise retention controls.\n\n## Evidence Expectations\n\n- Source survey evidence records the concrete implementation substrate and verification commands.\n- Each child ticket records command output or inspected behavior sufficient to support its acceptance criteria.\n- Closure must compare implemented behavior against all active specs and the canonical PRD revision.\n- Initial planning inspection is recorded in `.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md`.\n\n## Blockers\n\nNone for planning. Implementation is blocked until application source is present or accessible and the source survey ticket identifies concrete implementation files and verification commands.\n\n## Progress and Notes\n\n- 2026-06-28: Created from approved canonical Google Doc PRD export. No code implemented.\n"
+    },
+    {
+      "path": ".10x/tickets/2026-06-28-nimbus-retention-enforcement.md",
+      "action": "write",
+      "content": "Status: blocked\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nDepends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md\n\n# Implement Nimbus Retention Enforcement\n\n## Scope\n\nUpdate the nightly retention enforcement path so audit-event deletion eligibility uses the active workspace retention setting governed by `.10x/specs/nimbus-retention-enforcement.md`.\n\n## Acceptance Criteria\n\n- Reducing retention does not delete audit events during the settings update.\n- The next nightly retention enforcement job uses the shortened active retention setting.\n- Increasing retention preserves existing events that have not already expired.\n- Increasing retention does not recreate deleted audit events.\n- Events older than the active retention window and not under legal hold are eligible for deletion during nightly enforcement.\n- No legal hold workflows are added in this release.\n\n## Explicit Exclusions\n\n- Do not create a new scheduler if an existing nightly retention enforcement job is expected but absent; return to planning with a blocker.\n- Do not implement legal hold workflows.\n- Do not implement data export retention or non-audit-event retention.\n\n## Evidence Expectations\n\n- Tests or job-level verification proving inline update does not delete events and nightly enforcement uses the active retention value.\n- Tests or inspected behavior proving increased retention does not recreate deleted events.\n- Evidence must preserve the procedure, exact observation, what the observation supports or challenges, and limits.\n\n## Blockers\n\nDepends on source survey identifying the audit-event model and nightly retention enforcement job.\n\n## Progress and Notes\n\n- 2026-06-28: Ticket opened from approved PRD and active spec. No code implemented.\n"
+    },
+    {
+      "path": ".10x/tickets/2026-06-28-nimbus-retention-rollout.md",
+      "action": "write",
+      "content": "Status: blocked\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nDepends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md, .10x/tickets/2026-06-28-nimbus-retention-settings-access.md, .10x/tickets/2026-06-28-nimbus-retention-enforcement.md, .10x/tickets/2026-06-28-nimbus-retention-audit-log.md\n\n# Implement Nimbus Retention Rollout Gating\n\n## Scope\n\nGate Nimbus Retention Controls behind the existing enterprise settings feature flag and prepare the rollout mechanics governed by `.10x/specs/nimbus-retention-rollout.md`.\n\n## Acceptance Criteria\n\n- The feature is gated by the existing enterprise settings feature flag.\n- The implementation can be enabled for internal enterprise workspaces first.\n- The implementation can be enabled for ten design partners after internal rollout.\n- The implementation can be enabled for all enterprise workspaces after seven days without severity-one incidents.\n\n## Explicit Exclusions\n\n- Do not create billing plan changes.\n- Do not create new incident-management semantics.\n- Do not select the ten design partners unless separately authorized.\n\n## Evidence Expectations\n\n- Tests, configuration inspection, or operational notes proving feature-flag gating and rollout sequence support.\n- Evidence must identify exact files, flags, commands, and limits.\n\n## Blockers\n\nDepends on source survey identifying the existing enterprise settings feature flag and rollout/configuration mechanism.\n\n## Progress and Notes\n\n- 2026-06-28: Ticket opened from approved PRD and active spec. No code implemented.\n"
+    },
+    {
+      "path": ".10x/tickets/2026-06-28-nimbus-retention-settings-access.md",
+      "action": "write",
+      "content": "Status: blocked\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nDepends-On: .10x/tickets/2026-06-28-nimbus-retention-source-survey.md\n\n# Implement Nimbus Retention Settings and Access\n\n## Scope\n\nImplement the organization-level retention setting, allowed values, enterprise-admin access control, and default value governed by `.10x/specs/nimbus-retention-settings-access.md`.\n\n## Acceptance Criteria\n\n- Paid enterprise workspaces have an organization-level audit-event retention setting.\n- Allowed values are exactly `30`, `90`, `180`, and `365` days.\n- Newly created enterprise workspaces default to `180` days.\n- Enterprise administrators can read and change the setting.\n- Workspace members without administrator permission cannot view the control or the underlying retention value.\n- Non-enterprise workspaces do not receive retention controls.\n\n## Explicit Exclusions\n\n- Do not implement per-user retention, data export retention, billing plan changes, non-enterprise retention controls, or legal hold workflows.\n- Do not implement nightly deletion behavior in this ticket except for storage/API wiring needed by downstream enforcement.\n- Do not implement audit-log entry creation here unless source structure makes it inseparable; if inseparable, update this ticket and the audit-log ticket before coding.\n\n## Evidence Expectations\n\n- Tests or inspected behavior proving allowed values, default value, enterprise-admin access, non-admin denial, and non-enterprise exclusion.\n- Evidence must state exact commands, exact observations, raw artifact paths if any, and limits.\n\n## Blockers\n\nDepends on source survey identifying existing settings storage, permission model, and feature flag.\n\n## Progress and Notes\n\n- 2026-06-28: Ticket opened from approved PRD and active spec. No code implemented.\n"
+    },
+    {
+      "path": ".10x/tickets/2026-06-28-nimbus-retention-source-survey.md",
+      "action": "write",
+      "content": "Status: blocked\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: .10x/tickets/2026-06-28-nimbus-retention-controls-plan.md\nDepends-On: None\n\n# Nimbus Retention Source Survey\n\n## Scope\n\nInspect the application source and existing project mechanics needed to implement Nimbus Retention Controls without inventing names or architecture.\n\n## Acceptance Criteria\n\n- Identify the existing enterprise settings feature flag or record a blocker if none exists.\n- Identify the existing enterprise workspace and administrator permission model.\n- Identify where organization-level settings are stored and exposed.\n- Identify the audit-event storage model and nightly retention enforcement job.\n- Identify the audit-log event model used for settings changes.\n- Identify frontend, API, job, migration, and test commands required for implementation.\n- Record source-survey evidence with exact files inspected, relevant symbols, commands, and limits.\n\n## Explicit Exclusions\n\n- Do not implement Nimbus Retention Controls in this ticket.\n- Do not create migrations, tests, feature flags, routes, UI, or job changes in this ticket unless this ticket is explicitly superseded.\n\n## Evidence Expectations\n\n- `.10x/evidence/<date>-nimbus-retention-source-survey.md` capturing inspected files, exact observations, what each observation supports or challenges, and remaining limits.\n- Initial planning evidence: `.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md`.\n\n## Blockers\n\nApplication source is not present in the current workspace snapshot. This ticket remains open until source is available.\n\n## Progress and Notes\n\n- 2026-06-28: Planning record created from canonical PRD. Initial workspace inspection is recorded in `.10x/evidence/2026-06-28-nimbus-retention-planning-inspection.md`.\n"
+    }
+  ],
+  "suppressed_changed_file_prefixes": [
+    ".opencode/node_modules/"
+  ],
+  "suppressed_changed_file_count": 0,
+  "suppressed_changed_file_sample": [],
+  "command_outputs": [
+    {
+      "command": "codex --ask-for-approval never --disable plugins --config developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/prompts/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.instructions.txt> exec ...",
+      "exit_code": 0,
+      "output": "Reading additional input from stdin...\n2026-06-28T15:13:27.727566Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back\n2026-06-28T15:17:06.471286Z  WARN codex_file_watcher: failed to unwatch /mnt/c/Users/butle/.codex/skills/.system: No watch was found. about [\"/mnt/c/Users/butle/.codex/skills/.system\"]\n2026-06-28T15:17:06.479441Z  WARN codex_core::shell_snapshot: Failed to delete shell snapshot at AbsolutePathBuf(\"/mnt/c/Users/butle/.codex/shell_snapshots/019f0eca-eca2-7911-8baa-fef1286bedcb.1782659607718365524.sh\"): Os { code: 2, kind: NotFound, message: \"No such file or directory\" }\n"
+    }
+  ],
+  "raw_artifact_refs": [
+    "/home/alexb/code/personal/10x/autoresearch/trial-seeds/external-google-doc-prd-thin-index/raw.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/prompts/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.prompt.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/prompts/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.instructions.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/codex/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.command.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/codex/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.stdout.jsonl",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/codex/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.stderr",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/codex/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.last-message.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/workspaces/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9/workspace-manifest.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/raw/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.json"
+  ],
+  "wall_seconds": 219.25485158499214,
+  "usage": {
+    "input_tokens": 387577,
+    "output_tokens": 9688
+  },
+  "input_tokens": 387577,
+  "output_tokens": 9688,
+  "timed_out": false,
+  "timeout_seconds": 600.0,
+  "live_subject_calls": 1,
+  "harness_metadata": {
+    "kind": "codex-live-subject",
+    "harness_artifact_dir_name": "codex",
+    "instruction_source": "SKILL.md plus candidate",
+    "instruction_path": "autoresearch/candidates/2026-06-28-audit-limits-redaction.md",
+    "base_instruction_path": "SKILL.md",
+    "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/prompts/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.instructions.txt",
+    "instruction_delivery": {
+      "channel": "codex-developer-instructions",
+      "runner_supplied_instructions": true,
+      "prompt_wrapper": false,
+      "base_system_prompt_replaced": false,
+      "description": "Arm instructions are supplied with Codex developer_instructions; the scenario prompt is passed separately."
+    },
+    "archived_workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/workspaces/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9",
+    "workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/workspaces/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9/workspace-manifest.json",
+    "prior_raw_path": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/external-google-doc-prd-thin-index/raw.json",
+    "seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/external-google-doc-prd-thin-index/workspace",
+    "prior_turn_count": 0,
+    "turns": [
+      {
+        "turn_index": 0,
+        "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/prompts/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.prompt.txt",
+        "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/codex/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.command.json",
+        "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/codex/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.stdout.jsonl",
+        "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/codex/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.stderr",
+        "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/codex/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.last-message.txt",
+        "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/external-index/prompts/sha256-0b48fbc063ef9e9711661101e9d6da6459388dc923b771e81ac65d93ad89ebc9.instructions.txt",
+        "harness_config_path": null,
+        "planned_env": {}
+      }
+    ],
+    "control_isolation": {
+      "suppress_instruction_files": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "GEMINI.md",
+        ".cursor/rules",
+        ".agents/skills"
+      ],
+      "suppress_control_record_dirs": [
+        ".10x"
+      ],
+      "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
+      "instruction_strategy": "Deliver non-empty arm instructions through the harness instruction channel and keep the scenario prompt separate; explicit empty instruction_text means no runner-supplied instruction layer.",
+      "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; seed-workspace .10x records remain available when they are the task surface.",
+      "codex_args": [
+        "--disable",
+        "plugins",
+        "--ignore-user-config",
+        "--ignore-rules"
+      ],
+      "instruction_channel": "developer_instructions",
+      "limitation": "Codex built-in system context and authenticated home remain outside this runner's control; this runner appends arm instructions through developer_instructions when non-empty."
+    },
+    "pre_run_removed_control_record_dirs": [],
+    "writable_add_dirs": [],
+    "timed_out": false,
+    "timeout_seconds": 600.0,
+    "promotion_limit": "Live subject output is candidate-quality evidence, not promotion authority."
+  }
+}

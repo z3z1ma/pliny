@@ -1,0 +1,841 @@
+{
+  "experiment_id": "EXP-20260628-s010-v2-retrospective-learning",
+  "method_tier": "MICRO",
+  "mode": "live",
+  "registered_definition": true,
+  "driver": "LLM scientist",
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "harness_kind": "codex-live-subject",
+  "harness_artifact_dir_name": "codex",
+  "scientific_contract": {
+    "question": "Does the compact cold-start record handoff candidate improve retrospective learning extraction versus current 10x?",
+    "hypothesis": "The compact candidate should preserve procedure, vocabulary, follow-up risk, closure evidence, and noise filtering with fewer added characters than source-delta.",
+    "expected_behavior": "Subject routes settlement reconciliation procedure learning, vocabulary, and FX follow-up risk into appropriate durable records; does not preserve local alias/laptop/log-style noise; does not change source.",
+    "inspection_criteria": [
+      "Durable operational procedure becomes a skill or suitable procedural record with enough triggers, limits, and validation detail.",
+      "Stable vocabulary becomes knowledge with examples/limits.",
+      "Historical FX rounding gap gets a bounded follow-up owner with blockers if semantics are unratified.",
+      "One-off local shell alias, laptop load, and personal log preference are not durable records.",
+      "Child/parent closure status remains coherent with retrospective obligations."
+    ],
+    "quality_floor": "Chat-only durable learning, untracked FX follow-up, noisy knowledge/skill records, source edits, or unsupported parent closure make the candidate non-promotable.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+  },
+  "arms": [
+    {
+      "id": "current-10x",
+      "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md",
+      "base_instruction_path": null,
+      "instruction_digest": "sha256:462569e87b6e6778fc0a8ecab902dcda8a6672953179f4e7b6e40a8252f1e5c6"
+    },
+    {
+      "id": "candidate-cold-start-record-handoff-check",
+      "instruction_source": "SKILL.md plus candidate",
+      "instruction_path": "autoresearch/candidates/2026-06-28-cold-start-record-handoff-check.md",
+      "base_instruction_path": "SKILL.md",
+      "instruction_digest": "sha256:da4f51853724ea91884af6d338aa3c67d68234e86d18ef25eef9cc7b39479fee"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SCN-012",
+      "prompt": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+      "prompts_by_arm": null,
+      "prior_raw_path": "autoresearch/trial-seeds/noisy-retrospective-routing/raw.json",
+      "prior_raw_paths": null,
+      "workspace_procedure": null
+    }
+  ],
+  "repetitions": 2,
+  "budget": {
+    "planned_harness_runs": 4,
+    "max_harness_runs": 4,
+    "estimated_wall_seconds_per_run": 180.0,
+    "timeout_seconds_per_run": 600.0,
+    "planned_wall_clock_hours": 0.2,
+    "max_wall_clock_hours": 10.0
+  },
+  "artifact_root": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning",
+  "artifact_dirs": {
+    "raw": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/raw",
+    "workspaces": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces",
+    "harness": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex",
+    "prompts": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts"
+  },
+  "samples": [
+    {
+      "experiment_id": "EXP-20260628-s010-v2-retrospective-learning",
+      "scenario_id": "SCN-012",
+      "variant_id": "current-10x",
+      "rep": 0,
+      "model": "codex-cli-default",
+      "harness": "codex-cli",
+      "harness_kind": "codex-live-subject",
+      "harness_artifact_dir_name": "codex",
+      "scientific_contract": {
+        "question": "Does the compact cold-start record handoff candidate improve retrospective learning extraction versus current 10x?",
+        "hypothesis": "The compact candidate should preserve procedure, vocabulary, follow-up risk, closure evidence, and noise filtering with fewer added characters than source-delta.",
+        "expected_behavior": "Subject routes settlement reconciliation procedure learning, vocabulary, and FX follow-up risk into appropriate durable records; does not preserve local alias/laptop/log-style noise; does not change source.",
+        "inspection_criteria": [
+          "Durable operational procedure becomes a skill or suitable procedural record with enough triggers, limits, and validation detail.",
+          "Stable vocabulary becomes knowledge with examples/limits.",
+          "Historical FX rounding gap gets a bounded follow-up owner with blockers if semantics are unratified.",
+          "One-off local shell alias, laptop load, and personal log preference are not durable records.",
+          "Child/parent closure status remains coherent with retrospective obligations."
+        ],
+        "quality_floor": "Chat-only durable learning, untracked FX follow-up, noisy knowledge/skill records, source edits, or unsupported parent closure make the candidate non-promotable.",
+        "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+      },
+      "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md",
+      "base_instruction_path": null,
+      "instruction_digest": "sha256:462569e87b6e6778fc0a8ecab902dcda8a6672953179f4e7b6e40a8252f1e5c6",
+      "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.instructions.txt",
+      "instruction_delivery": {
+        "channel": "codex-developer-instructions",
+        "runner_supplied_instructions": true,
+        "prompt_wrapper": false,
+        "base_system_prompt_replaced": false,
+        "description": "Arm instructions are supplied with Codex developer_instructions; the scenario prompt is passed separately."
+      },
+      "live_run_key": "sha256:2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f",
+      "scenario_prompt": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+      "prior_raw_path": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/raw.json",
+      "prior_transcript": [
+        {
+          "role": "user",
+          "content": "The settlement reconciliation child says implementation is complete, but the notes are messy."
+        },
+        {
+          "role": "assistant",
+          "content": "The subject workspace contains a ready-to-close settlement reconciliation parent/child, evidence, review, and noisy execution notes. The next turn should run the retrospective and preserve only durable learning in the correct record types."
+        }
+      ],
+      "planned_seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/workspace",
+      "planned_seed_workspace_kind": "seed-workspace",
+      "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.prompt.txt",
+      "planned_workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f",
+      "planned_raw_output_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/raw/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.json",
+      "planned_command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.command.json",
+      "planned_stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.stdout.jsonl",
+      "planned_stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.stderr",
+      "planned_last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.last-message.txt",
+      "planned_harness_config_path": null,
+      "planned_workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f/workspace-manifest.json",
+      "planned_turns": [
+        {
+          "turn_index": 1,
+          "user_message": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+          "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.prompt.txt",
+          "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.command.json",
+          "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.stdout.jsonl",
+          "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.stderr",
+          "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.last-message.txt",
+          "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.instructions.txt",
+          "harness_config_path": null,
+          "planned_argv": [
+            "codex",
+            "--ask-for-approval",
+            "never",
+            "--disable",
+            "plugins",
+            "--config",
+            "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.instructions.txt>",
+            "exec",
+            "--cd",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f",
+            "--skip-git-repo-check",
+            "--ephemeral",
+            "--json",
+            "--output-last-message",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.last-message.txt",
+            "--ignore-user-config",
+            "--ignore-rules",
+            "--sandbox",
+            "workspace-write",
+            "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.prompt.txt>"
+          ],
+          "planned_env": {}
+        }
+      ],
+      "planned_argv": [
+        "codex",
+        "--ask-for-approval",
+        "never",
+        "--disable",
+        "plugins",
+        "--config",
+        "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.instructions.txt>",
+        "exec",
+        "--cd",
+        ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--json",
+        "--output-last-message",
+        ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.last-message.txt",
+        "--ignore-user-config",
+        "--ignore-rules",
+        "--sandbox",
+        "workspace-write",
+        "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.prompt.txt>"
+      ],
+      "planned_env": {},
+      "writable_add_dirs": [],
+      "timeout_seconds": 600.0,
+      "control_isolation": {
+        "suppress_instruction_files": [
+          "AGENTS.md",
+          "CLAUDE.md",
+          "GEMINI.md",
+          ".cursor/rules",
+          ".agents/skills"
+        ],
+        "suppress_control_record_dirs": [
+          ".10x"
+        ],
+        "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
+        "instruction_strategy": "Deliver non-empty arm instructions through the harness instruction channel and keep the scenario prompt separate; explicit empty instruction_text means no runner-supplied instruction layer.",
+        "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; seed-workspace .10x records remain available when they are the task surface.",
+        "codex_args": [
+          "--disable",
+          "plugins",
+          "--ignore-user-config",
+          "--ignore-rules"
+        ],
+        "instruction_channel": "developer_instructions",
+        "limitation": "Codex built-in system context and authenticated home remain outside this runner's control; this runner appends arm instructions through developer_instructions when non-empty."
+      },
+      "live_subject_calls": 1,
+      "exit_code": 0,
+      "wall_seconds": 192.3377367970097,
+      "usage": {
+        "input_tokens": 462246,
+        "output_tokens": 8513
+      },
+      "timed_out": false,
+      "workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f/workspace-manifest.json",
+      "turns": [
+        {
+          "turn_index": 1,
+          "user_message": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+          "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.prompt.txt",
+          "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.command.json",
+          "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.stdout.jsonl",
+          "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.stderr",
+          "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.last-message.txt",
+          "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.instructions.txt",
+          "harness_config_path": null,
+          "planned_argv": [
+            "codex",
+            "--ask-for-approval",
+            "never",
+            "--disable",
+            "plugins",
+            "--config",
+            "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.instructions.txt>",
+            "exec",
+            "--cd",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f",
+            "--skip-git-repo-check",
+            "--ephemeral",
+            "--json",
+            "--output-last-message",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.last-message.txt",
+            "--ignore-user-config",
+            "--ignore-rules",
+            "--sandbox",
+            "workspace-write",
+            "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.prompt.txt>"
+          ],
+          "planned_env": {}
+        }
+      ],
+      "raw_output_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/raw/sha256-2bc34249f7c9311ae1a6a5d98a72758bae041b8d550b7198fcddf8ffb8cf2b0f.json",
+      "seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/workspace"
+    },
+    {
+      "experiment_id": "EXP-20260628-s010-v2-retrospective-learning",
+      "scenario_id": "SCN-012",
+      "variant_id": "current-10x",
+      "rep": 1,
+      "model": "codex-cli-default",
+      "harness": "codex-cli",
+      "harness_kind": "codex-live-subject",
+      "harness_artifact_dir_name": "codex",
+      "scientific_contract": {
+        "question": "Does the compact cold-start record handoff candidate improve retrospective learning extraction versus current 10x?",
+        "hypothesis": "The compact candidate should preserve procedure, vocabulary, follow-up risk, closure evidence, and noise filtering with fewer added characters than source-delta.",
+        "expected_behavior": "Subject routes settlement reconciliation procedure learning, vocabulary, and FX follow-up risk into appropriate durable records; does not preserve local alias/laptop/log-style noise; does not change source.",
+        "inspection_criteria": [
+          "Durable operational procedure becomes a skill or suitable procedural record with enough triggers, limits, and validation detail.",
+          "Stable vocabulary becomes knowledge with examples/limits.",
+          "Historical FX rounding gap gets a bounded follow-up owner with blockers if semantics are unratified.",
+          "One-off local shell alias, laptop load, and personal log preference are not durable records.",
+          "Child/parent closure status remains coherent with retrospective obligations."
+        ],
+        "quality_floor": "Chat-only durable learning, untracked FX follow-up, noisy knowledge/skill records, source edits, or unsupported parent closure make the candidate non-promotable.",
+        "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+      },
+      "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md",
+      "base_instruction_path": null,
+      "instruction_digest": "sha256:462569e87b6e6778fc0a8ecab902dcda8a6672953179f4e7b6e40a8252f1e5c6",
+      "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.instructions.txt",
+      "instruction_delivery": {
+        "channel": "codex-developer-instructions",
+        "runner_supplied_instructions": true,
+        "prompt_wrapper": false,
+        "base_system_prompt_replaced": false,
+        "description": "Arm instructions are supplied with Codex developer_instructions; the scenario prompt is passed separately."
+      },
+      "live_run_key": "sha256:219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909",
+      "scenario_prompt": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+      "prior_raw_path": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/raw.json",
+      "prior_transcript": [
+        {
+          "role": "user",
+          "content": "The settlement reconciliation child says implementation is complete, but the notes are messy."
+        },
+        {
+          "role": "assistant",
+          "content": "The subject workspace contains a ready-to-close settlement reconciliation parent/child, evidence, review, and noisy execution notes. The next turn should run the retrospective and preserve only durable learning in the correct record types."
+        }
+      ],
+      "planned_seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/workspace",
+      "planned_seed_workspace_kind": "seed-workspace",
+      "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.prompt.txt",
+      "planned_workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909",
+      "planned_raw_output_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/raw/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.json",
+      "planned_command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.command.json",
+      "planned_stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.stdout.jsonl",
+      "planned_stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.stderr",
+      "planned_last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.last-message.txt",
+      "planned_harness_config_path": null,
+      "planned_workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909/workspace-manifest.json",
+      "planned_turns": [
+        {
+          "turn_index": 1,
+          "user_message": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+          "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.prompt.txt",
+          "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.command.json",
+          "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.stdout.jsonl",
+          "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.stderr",
+          "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.last-message.txt",
+          "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.instructions.txt",
+          "harness_config_path": null,
+          "planned_argv": [
+            "codex",
+            "--ask-for-approval",
+            "never",
+            "--disable",
+            "plugins",
+            "--config",
+            "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.instructions.txt>",
+            "exec",
+            "--cd",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909",
+            "--skip-git-repo-check",
+            "--ephemeral",
+            "--json",
+            "--output-last-message",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.last-message.txt",
+            "--ignore-user-config",
+            "--ignore-rules",
+            "--sandbox",
+            "workspace-write",
+            "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.prompt.txt>"
+          ],
+          "planned_env": {}
+        }
+      ],
+      "planned_argv": [
+        "codex",
+        "--ask-for-approval",
+        "never",
+        "--disable",
+        "plugins",
+        "--config",
+        "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.instructions.txt>",
+        "exec",
+        "--cd",
+        ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--json",
+        "--output-last-message",
+        ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.last-message.txt",
+        "--ignore-user-config",
+        "--ignore-rules",
+        "--sandbox",
+        "workspace-write",
+        "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.prompt.txt>"
+      ],
+      "planned_env": {},
+      "writable_add_dirs": [],
+      "timeout_seconds": 600.0,
+      "control_isolation": {
+        "suppress_instruction_files": [
+          "AGENTS.md",
+          "CLAUDE.md",
+          "GEMINI.md",
+          ".cursor/rules",
+          ".agents/skills"
+        ],
+        "suppress_control_record_dirs": [
+          ".10x"
+        ],
+        "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
+        "instruction_strategy": "Deliver non-empty arm instructions through the harness instruction channel and keep the scenario prompt separate; explicit empty instruction_text means no runner-supplied instruction layer.",
+        "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; seed-workspace .10x records remain available when they are the task surface.",
+        "codex_args": [
+          "--disable",
+          "plugins",
+          "--ignore-user-config",
+          "--ignore-rules"
+        ],
+        "instruction_channel": "developer_instructions",
+        "limitation": "Codex built-in system context and authenticated home remain outside this runner's control; this runner appends arm instructions through developer_instructions when non-empty."
+      },
+      "live_subject_calls": 1,
+      "exit_code": 0,
+      "wall_seconds": 260.0158937009983,
+      "usage": {
+        "input_tokens": 576018,
+        "output_tokens": 10656
+      },
+      "timed_out": false,
+      "workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909/workspace-manifest.json",
+      "turns": [
+        {
+          "turn_index": 1,
+          "user_message": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+          "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.prompt.txt",
+          "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.command.json",
+          "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.stdout.jsonl",
+          "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.stderr",
+          "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.last-message.txt",
+          "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.instructions.txt",
+          "harness_config_path": null,
+          "planned_argv": [
+            "codex",
+            "--ask-for-approval",
+            "never",
+            "--disable",
+            "plugins",
+            "--config",
+            "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.instructions.txt>",
+            "exec",
+            "--cd",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909",
+            "--skip-git-repo-check",
+            "--ephemeral",
+            "--json",
+            "--output-last-message",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.last-message.txt",
+            "--ignore-user-config",
+            "--ignore-rules",
+            "--sandbox",
+            "workspace-write",
+            "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.prompt.txt>"
+          ],
+          "planned_env": {}
+        }
+      ],
+      "raw_output_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/raw/sha256-219535f1006d58b744f5b3c47aa4f194eeea1ae10352517e5460bce7d3861909.json",
+      "seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/workspace"
+    },
+    {
+      "experiment_id": "EXP-20260628-s010-v2-retrospective-learning",
+      "scenario_id": "SCN-012",
+      "variant_id": "candidate-cold-start-record-handoff-check",
+      "rep": 0,
+      "model": "codex-cli-default",
+      "harness": "codex-cli",
+      "harness_kind": "codex-live-subject",
+      "harness_artifact_dir_name": "codex",
+      "scientific_contract": {
+        "question": "Does the compact cold-start record handoff candidate improve retrospective learning extraction versus current 10x?",
+        "hypothesis": "The compact candidate should preserve procedure, vocabulary, follow-up risk, closure evidence, and noise filtering with fewer added characters than source-delta.",
+        "expected_behavior": "Subject routes settlement reconciliation procedure learning, vocabulary, and FX follow-up risk into appropriate durable records; does not preserve local alias/laptop/log-style noise; does not change source.",
+        "inspection_criteria": [
+          "Durable operational procedure becomes a skill or suitable procedural record with enough triggers, limits, and validation detail.",
+          "Stable vocabulary becomes knowledge with examples/limits.",
+          "Historical FX rounding gap gets a bounded follow-up owner with blockers if semantics are unratified.",
+          "One-off local shell alias, laptop load, and personal log preference are not durable records.",
+          "Child/parent closure status remains coherent with retrospective obligations."
+        ],
+        "quality_floor": "Chat-only durable learning, untracked FX follow-up, noisy knowledge/skill records, source edits, or unsupported parent closure make the candidate non-promotable.",
+        "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+      },
+      "instruction_source": "SKILL.md plus candidate",
+      "instruction_path": "autoresearch/candidates/2026-06-28-cold-start-record-handoff-check.md",
+      "base_instruction_path": "SKILL.md",
+      "instruction_digest": "sha256:da4f51853724ea91884af6d338aa3c67d68234e86d18ef25eef9cc7b39479fee",
+      "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.instructions.txt",
+      "instruction_delivery": {
+        "channel": "codex-developer-instructions",
+        "runner_supplied_instructions": true,
+        "prompt_wrapper": false,
+        "base_system_prompt_replaced": false,
+        "description": "Arm instructions are supplied with Codex developer_instructions; the scenario prompt is passed separately."
+      },
+      "live_run_key": "sha256:99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7",
+      "scenario_prompt": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+      "prior_raw_path": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/raw.json",
+      "prior_transcript": [
+        {
+          "role": "user",
+          "content": "The settlement reconciliation child says implementation is complete, but the notes are messy."
+        },
+        {
+          "role": "assistant",
+          "content": "The subject workspace contains a ready-to-close settlement reconciliation parent/child, evidence, review, and noisy execution notes. The next turn should run the retrospective and preserve only durable learning in the correct record types."
+        }
+      ],
+      "planned_seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/workspace",
+      "planned_seed_workspace_kind": "seed-workspace",
+      "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.prompt.txt",
+      "planned_workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7",
+      "planned_raw_output_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/raw/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.json",
+      "planned_command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.command.json",
+      "planned_stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.stdout.jsonl",
+      "planned_stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.stderr",
+      "planned_last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.last-message.txt",
+      "planned_harness_config_path": null,
+      "planned_workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7/workspace-manifest.json",
+      "planned_turns": [
+        {
+          "turn_index": 1,
+          "user_message": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+          "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.prompt.txt",
+          "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.command.json",
+          "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.stdout.jsonl",
+          "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.stderr",
+          "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.last-message.txt",
+          "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.instructions.txt",
+          "harness_config_path": null,
+          "planned_argv": [
+            "codex",
+            "--ask-for-approval",
+            "never",
+            "--disable",
+            "plugins",
+            "--config",
+            "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.instructions.txt>",
+            "exec",
+            "--cd",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7",
+            "--skip-git-repo-check",
+            "--ephemeral",
+            "--json",
+            "--output-last-message",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.last-message.txt",
+            "--ignore-user-config",
+            "--ignore-rules",
+            "--sandbox",
+            "workspace-write",
+            "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.prompt.txt>"
+          ],
+          "planned_env": {}
+        }
+      ],
+      "planned_argv": [
+        "codex",
+        "--ask-for-approval",
+        "never",
+        "--disable",
+        "plugins",
+        "--config",
+        "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.instructions.txt>",
+        "exec",
+        "--cd",
+        ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--json",
+        "--output-last-message",
+        ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.last-message.txt",
+        "--ignore-user-config",
+        "--ignore-rules",
+        "--sandbox",
+        "workspace-write",
+        "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.prompt.txt>"
+      ],
+      "planned_env": {},
+      "writable_add_dirs": [],
+      "timeout_seconds": 600.0,
+      "control_isolation": {
+        "suppress_instruction_files": [
+          "AGENTS.md",
+          "CLAUDE.md",
+          "GEMINI.md",
+          ".cursor/rules",
+          ".agents/skills"
+        ],
+        "suppress_control_record_dirs": [
+          ".10x"
+        ],
+        "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
+        "instruction_strategy": "Deliver non-empty arm instructions through the harness instruction channel and keep the scenario prompt separate; explicit empty instruction_text means no runner-supplied instruction layer.",
+        "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; seed-workspace .10x records remain available when they are the task surface.",
+        "codex_args": [
+          "--disable",
+          "plugins",
+          "--ignore-user-config",
+          "--ignore-rules"
+        ],
+        "instruction_channel": "developer_instructions",
+        "limitation": "Codex built-in system context and authenticated home remain outside this runner's control; this runner appends arm instructions through developer_instructions when non-empty."
+      },
+      "live_subject_calls": 1,
+      "exit_code": 0,
+      "wall_seconds": 185.36604513699422,
+      "usage": {
+        "input_tokens": 553415,
+        "output_tokens": 7782
+      },
+      "timed_out": false,
+      "workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7/workspace-manifest.json",
+      "turns": [
+        {
+          "turn_index": 1,
+          "user_message": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+          "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.prompt.txt",
+          "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.command.json",
+          "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.stdout.jsonl",
+          "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.stderr",
+          "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.last-message.txt",
+          "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.instructions.txt",
+          "harness_config_path": null,
+          "planned_argv": [
+            "codex",
+            "--ask-for-approval",
+            "never",
+            "--disable",
+            "plugins",
+            "--config",
+            "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.instructions.txt>",
+            "exec",
+            "--cd",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7",
+            "--skip-git-repo-check",
+            "--ephemeral",
+            "--json",
+            "--output-last-message",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.last-message.txt",
+            "--ignore-user-config",
+            "--ignore-rules",
+            "--sandbox",
+            "workspace-write",
+            "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.prompt.txt>"
+          ],
+          "planned_env": {}
+        }
+      ],
+      "raw_output_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/raw/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.json",
+      "seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/workspace"
+    },
+    {
+      "experiment_id": "EXP-20260628-s010-v2-retrospective-learning",
+      "scenario_id": "SCN-012",
+      "variant_id": "candidate-cold-start-record-handoff-check",
+      "rep": 1,
+      "model": "codex-cli-default",
+      "harness": "codex-cli",
+      "harness_kind": "codex-live-subject",
+      "harness_artifact_dir_name": "codex",
+      "scientific_contract": {
+        "question": "Does the compact cold-start record handoff candidate improve retrospective learning extraction versus current 10x?",
+        "hypothesis": "The compact candidate should preserve procedure, vocabulary, follow-up risk, closure evidence, and noise filtering with fewer added characters than source-delta.",
+        "expected_behavior": "Subject routes settlement reconciliation procedure learning, vocabulary, and FX follow-up risk into appropriate durable records; does not preserve local alias/laptop/log-style noise; does not change source.",
+        "inspection_criteria": [
+          "Durable operational procedure becomes a skill or suitable procedural record with enough triggers, limits, and validation detail.",
+          "Stable vocabulary becomes knowledge with examples/limits.",
+          "Historical FX rounding gap gets a bounded follow-up owner with blockers if semantics are unratified.",
+          "One-off local shell alias, laptop load, and personal log preference are not durable records.",
+          "Child/parent closure status remains coherent with retrospective obligations."
+        ],
+        "quality_floor": "Chat-only durable learning, untracked FX follow-up, noisy knowledge/skill records, source edits, or unsupported parent closure make the candidate non-promotable.",
+        "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+      },
+      "instruction_source": "SKILL.md plus candidate",
+      "instruction_path": "autoresearch/candidates/2026-06-28-cold-start-record-handoff-check.md",
+      "base_instruction_path": "SKILL.md",
+      "instruction_digest": "sha256:da4f51853724ea91884af6d338aa3c67d68234e86d18ef25eef9cc7b39479fee",
+      "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.instructions.txt",
+      "instruction_delivery": {
+        "channel": "codex-developer-instructions",
+        "runner_supplied_instructions": true,
+        "prompt_wrapper": false,
+        "base_system_prompt_replaced": false,
+        "description": "Arm instructions are supplied with Codex developer_instructions; the scenario prompt is passed separately."
+      },
+      "live_run_key": "sha256:4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb",
+      "scenario_prompt": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+      "prior_raw_path": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/raw.json",
+      "prior_transcript": [
+        {
+          "role": "user",
+          "content": "The settlement reconciliation child says implementation is complete, but the notes are messy."
+        },
+        {
+          "role": "assistant",
+          "content": "The subject workspace contains a ready-to-close settlement reconciliation parent/child, evidence, review, and noisy execution notes. The next turn should run the retrospective and preserve only durable learning in the correct record types."
+        }
+      ],
+      "planned_seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/workspace",
+      "planned_seed_workspace_kind": "seed-workspace",
+      "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.prompt.txt",
+      "planned_workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb",
+      "planned_raw_output_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/raw/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.json",
+      "planned_command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.command.json",
+      "planned_stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.stdout.jsonl",
+      "planned_stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.stderr",
+      "planned_last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.last-message.txt",
+      "planned_harness_config_path": null,
+      "planned_workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb/workspace-manifest.json",
+      "planned_turns": [
+        {
+          "turn_index": 1,
+          "user_message": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+          "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.prompt.txt",
+          "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.command.json",
+          "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.stdout.jsonl",
+          "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.stderr",
+          "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.last-message.txt",
+          "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.instructions.txt",
+          "harness_config_path": null,
+          "planned_argv": [
+            "codex",
+            "--ask-for-approval",
+            "never",
+            "--disable",
+            "plugins",
+            "--config",
+            "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.instructions.txt>",
+            "exec",
+            "--cd",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb",
+            "--skip-git-repo-check",
+            "--ephemeral",
+            "--json",
+            "--output-last-message",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.last-message.txt",
+            "--ignore-user-config",
+            "--ignore-rules",
+            "--sandbox",
+            "workspace-write",
+            "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.prompt.txt>"
+          ],
+          "planned_env": {}
+        }
+      ],
+      "planned_argv": [
+        "codex",
+        "--ask-for-approval",
+        "never",
+        "--disable",
+        "plugins",
+        "--config",
+        "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.instructions.txt>",
+        "exec",
+        "--cd",
+        ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb",
+        "--skip-git-repo-check",
+        "--ephemeral",
+        "--json",
+        "--output-last-message",
+        ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.last-message.txt",
+        "--ignore-user-config",
+        "--ignore-rules",
+        "--sandbox",
+        "workspace-write",
+        "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.prompt.txt>"
+      ],
+      "planned_env": {},
+      "writable_add_dirs": [],
+      "timeout_seconds": 600.0,
+      "control_isolation": {
+        "suppress_instruction_files": [
+          "AGENTS.md",
+          "CLAUDE.md",
+          "GEMINI.md",
+          ".cursor/rules",
+          ".agents/skills"
+        ],
+        "suppress_control_record_dirs": [
+          ".10x"
+        ],
+        "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
+        "instruction_strategy": "Deliver non-empty arm instructions through the harness instruction channel and keep the scenario prompt separate; explicit empty instruction_text means no runner-supplied instruction layer.",
+        "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; seed-workspace .10x records remain available when they are the task surface.",
+        "codex_args": [
+          "--disable",
+          "plugins",
+          "--ignore-user-config",
+          "--ignore-rules"
+        ],
+        "instruction_channel": "developer_instructions",
+        "limitation": "Codex built-in system context and authenticated home remain outside this runner's control; this runner appends arm instructions through developer_instructions when non-empty."
+      },
+      "live_subject_calls": 1,
+      "exit_code": 0,
+      "wall_seconds": 182.81257455900777,
+      "usage": {
+        "input_tokens": 632502,
+        "output_tokens": 6918
+      },
+      "timed_out": false,
+      "workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb/workspace-manifest.json",
+      "turns": [
+        {
+          "turn_index": 1,
+          "user_message": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code.",
+          "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.prompt.txt",
+          "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.command.json",
+          "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.stdout.jsonl",
+          "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.stderr",
+          "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.last-message.txt",
+          "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.instructions.txt",
+          "harness_config_path": null,
+          "planned_argv": [
+            "codex",
+            "--ask-for-approval",
+            "never",
+            "--disable",
+            "plugins",
+            "--config",
+            "developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.instructions.txt>",
+            "exec",
+            "--cd",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb",
+            "--skip-git-repo-check",
+            "--ephemeral",
+            "--json",
+            "--output-last-message",
+            ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.last-message.txt",
+            "--ignore-user-config",
+            "--ignore-rules",
+            "--sandbox",
+            "workspace-write",
+            "<prompt stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.prompt.txt>"
+          ],
+          "planned_env": {}
+        }
+      ],
+      "raw_output_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/raw/sha256-4f96036cf4487f2f66297700773823e21d8d749e63010720abcca7c631c922eb.json",
+      "seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/workspace"
+    }
+  ],
+  "live_subject_calls": 4,
+  "promotion_decision": "not-performed",
+  "limits": [
+    "This runner records live trial artifacts; the LLM researcher performs rubric inspection outside the runner.",
+    "Manual inspection is required before promotion or durable verdicts.",
+    "The runner executes one registered experiment and does not loop or generate candidates.",
+    "Codex built-in system context and authenticated home remain outside this runner's control; non-empty arm instructions use developer_instructions."
+  ]
+}

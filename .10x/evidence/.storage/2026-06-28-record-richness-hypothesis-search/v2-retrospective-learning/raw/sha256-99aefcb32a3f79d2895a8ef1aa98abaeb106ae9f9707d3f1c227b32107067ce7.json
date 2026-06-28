@@ -1,0 +1,610 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260628-s010-v2-retrospective-learning",
+  "scenario_id": "SCN-012",
+  "variant_id": "candidate-cold-start-record-handoff-check",
+  "rep": 0,
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "instruction_digest": "sha256:da4f51853724ea91884af6d338aa3c67d68234e86d18ef25eef9cc7b39479fee",
+  "scientific_contract": {
+    "question": "Does the compact cold-start record handoff candidate improve retrospective learning extraction versus current 10x?",
+    "hypothesis": "The compact candidate should preserve procedure, vocabulary, follow-up risk, closure evidence, and noise filtering with fewer added characters than source-delta.",
+    "expected_behavior": "Subject routes settlement reconciliation procedure learning, vocabulary, and FX follow-up risk into appropriate durable records; does not preserve local alias/laptop/log-style noise; does not change source.",
+    "inspection_criteria": [
+      "Durable operational procedure becomes a skill or suitable procedural record with enough triggers, limits, and validation detail.",
+      "Stable vocabulary becomes knowledge with examples/limits.",
+      "Historical FX rounding gap gets a bounded follow-up owner with blockers if semantics are unratified.",
+      "One-off local shell alias, laptop load, and personal log preference are not durable records.",
+      "Child/parent closure status remains coherent with retrospective obligations."
+    ],
+    "quality_floor": "Chat-only durable learning, untracked FX follow-up, noisy knowledge/skill records, source edits, or unsupported parent closure make the candidate non-promotable.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+  },
+  "transcript": [
+    {
+      "role": "user",
+      "content": "The settlement reconciliation child says implementation is complete, but the notes are messy."
+    },
+    {
+      "role": "assistant",
+      "content": "The subject workspace contains a ready-to-close settlement reconciliation parent/child, evidence, review, and noisy execution notes. The next turn should run the retrospective and preserve only durable learning in the correct record types."
+    },
+    {
+      "role": "user",
+      "content": "Perform the parent closure check for settlement reconciliation preview and extract the retrospective learning into the right durable records. Preserve only reusable project learning and real follow-up risk; do not change source code."
+    },
+    {
+      "role": "assistant",
+      "content": "Parent closure check is complete. I closed both settlement reconciliation tickets by moving them to `.10x/tickets/done/` and updated evidence/review references to the new child ticket path.\n\nRetrospective learning was extracted into:\n\n- [settlement-reconciliation-vocabulary.md](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/knowledge/settlement-reconciliation-vocabulary.md)\n- [settlement-mismatch-tests/SKILL.md](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/skills/settlement-mismatch-tests/SKILL.md), mirrored to `.claude/skills`\n- [2026-06-28-historical-fx-rounding-tolerance-coverage.md](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md), left `blocked` because FX tolerance semantics are not ratified\n\nI preserved the noisy laptop/alias/log-preference notes only as historical context in the closed child ticket, not as reusable knowledge or procedure. I did not change source code or rerun tests; validation was read-only record/source inspection plus stale-reference and skill mirror checks."
+    }
+  ],
+  "tool_invocations": [
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_1",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"pwd && rg --files -g '.10x/**' -g '\"'!*node_modules*'\"' -g '\"'!*.png'\"' -g '\"'!*.jpg'\"' -g '\"'!*.jpeg'\"' -g '\"'!*.gif'\"' -g '\"'!*.webp'\"'\"",
+        "aggregated_output": "",
+        "exit_code": 1,
+        "status": "failed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_5",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'git status --short'",
+        "aggregated_output": "fatal: not a git repository (or any parent up to mount point /mnt)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n",
+        "exit_code": 128,
+        "status": "failed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_3",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"find . -maxdepth 3 -type f | sed 's#\"'^./##'\"' | sort | head -200\"",
+        "aggregated_output": ".10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md\n.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n.10x/specs/settlement-reconciliation-preview.md\n.10x/tickets/2026-06-25-add-settlement-reconciliation-preview.md\n.10x/tickets/2026-06-25-settlement-reconciliation-parent.md\n.claude/skills/.gitkeep\npackage.json\nsrc/settlements/reconcile.js\nsrc/settlements/reconcile.test.js\nworkspace-manifest.json\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_4",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"find . -maxdepth 4 -type d | sed 's#\"'^./##'\"' | sort | head -200\"",
+        "aggregated_output": ".\n.10x\n.10x/evidence\n.10x/reviews\n.10x/specs\n.10x/tickets\n.agents\n.claude\n.claude/skills\n.codex\n.git\nsrc\nsrc/settlements\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_11",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' .10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\"",
+        "aggregated_output": "Status: recorded\nCreated: 2026-06-25\nUpdated: 2026-06-25\nTarget: .10x/tickets/2026-06-25-add-settlement-reconciliation-preview.md\nVerdict: pass\n\n# Settlement Reconciliation Child Review\n\n## Target\n\nChild executor output for\n`.10x/tickets/2026-06-25-add-settlement-reconciliation-preview.md`.\n\n## Findings\n\n- No blocking findings for the settlement reconciliation preview ticket.\n  Recorded evidence covers `settlementRef`, cent amounts, and lifecycle state.\n- The execution notes contain reusable operational learning: stable settlement\n  mismatch tests used tracked NDJSON fixtures under `testdata/settlements/`, a\n  frozen settlement date of `2026-04-30`, and the offline processor replay\n  adapter after inline fixtures and live sandbox replay failed.\n- The execution notes settled vocabulary: use `settlementRef`, not\n  `externalTransferId`.\n- The execution notes settled vocabulary: `pending_release` is a lifecycle\n  state, not a risk tier.\n- **Out of scope:** historical FX rounding tolerance still lacks coverage.\n- **Noise:** local shell alias failure, one-time `--runInBand`, and Mara's local\n  log-style preference are not review findings.\n\n## Verdict\n\nPass for the settlement reconciliation preview child ticket.\n\n## Residual Risk\n\nNo residual risk remains for the settlement reconciliation preview child ticket.\n\nHistorical FX rounding tolerance remains outside this review target and has no\ndurable follow-up owner in this seed.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_12",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' .10x/specs/settlement-reconciliation-preview.md\"",
+        "aggregated_output": "Status: active\nCreated: 2026-06-25\nUpdated: 2026-06-25\n\n# Settlement Reconciliation Preview\n\n## Purpose And Scope\n\nDefine the settlement reconciliation preview used by Finance Operations before\nposting settlement batches.\n\nExplicitly excluded:\n\n- posting settlements;\n- FX rounding tolerance for historical imports;\n- live processor API calls;\n- dashboard UI rendering.\n\n## Behavior\n\n- Preview rows MUST preserve the upstream settlement identifier as\n  `settlementRef`.\n- Preview rows MUST normalize decimal settlement amounts into integer cents.\n- Preview rows MUST preserve the processor lifecycle state as `lifecycleState`.\n- `pending_release` is a lifecycle state, not a risk tier.\n\n## Acceptance Criteria\n\n- A preview row includes `settlementRef`.\n- A preview row includes `amountCents`.\n- A preview row includes `lifecycleState`.\n- A row whose upstream lifecycle state is `pending_release` preserves that value\n  as a lifecycle state.\n\n## Constraints\n\n- Do not rename `settlementRef` to `externalTransferId`.\n- Do not add historical FX rounding behavior without a separate ratified\n  specification.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_7",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' .10x/tickets/2026-06-25-add-settlement-reconciliation-preview.md\"",
+        "aggregated_output": "Status: active\nCreated: 2026-06-25\nUpdated: 2026-06-25\nParent: .10x/tickets/2026-06-25-settlement-reconciliation-parent.md\nDepends-On: .10x/specs/settlement-reconciliation-preview.md, .10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md, .10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n\n# Add Settlement Reconciliation Preview\n\n## Scope\n\nImplement settlement reconciliation preview behavior for Finance Operations.\n\nIncluded:\n\n- Preserve imported row `settlementRef`.\n- Normalize settlement amounts into integer cents.\n- Preserve processor lifecycle state.\n\nExcluded:\n\n- Historical FX rounding tolerance.\n- Live processor API calls.\n- UI rendering.\n\n## Acceptance Criteria\n\n- AC-001: Preview output includes each row's `settlementRef`.\n- AC-002: Preview output includes normalized cent amounts.\n- AC-003: Preview output preserves lifecycle state.\n- AC-004: Closure captures retrospective obligations before the parent closes.\n\n## Progress And Notes\n\n- 2026-06-25: Child executor reported implementation complete and focused tests\n  passed.\n- 2026-06-25: Evidence covers `settlementRef`, cent amounts, and lifecycle\n  state preservation.\n- 2026-06-25: Review passed for the settlement reconciliation preview scope.\n- 2026-06-25: Durable procedure candidate: stable settlement mismatch tests\n  require tracked NDJSON fixtures under `testdata/settlements/`, a frozen\n  settlement date of `2026-04-30`, and the offline processor replay adapter.\n  This was learned after two failed attempts that used inline JSON and the live\n  processor sandbox.\n- 2026-06-25: Durable vocabulary candidate: imported settlement references are\n  named `settlementRef`, not `externalTransferId`.\n- 2026-06-25: Durable vocabulary candidate: `pending_release` is a processor\n  lifecycle state, not a risk tier.\n- 2026-06-25: Follow-up candidate: historical FX rounding tolerance still lacks\n  coverage and is outside this ticket.\n- 2026-06-25: Noise: one failed run was caused by a local shell alias named\n  `nr`; do not preserve that as project knowledge.\n- 2026-06-25: Noise: one rerun used `--runInBand` because the developer's laptop\n  was under heavy load; do not preserve that as a procedure unless repeated\n  evidence shows project-level test flake.\n- 2026-06-25: Noise: Mara prefers terse local debug logs; this did not affect\n  product behavior, tests, or project conventions.\n\n## Blockers\n\n- None for settlement reconciliation preview scope.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_8",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,240p' .10x/tickets/2026-06-25-settlement-reconciliation-parent.md\"",
+        "aggregated_output": "Status: active\nCreated: 2026-06-25\nUpdated: 2026-06-25\nParent:\nDepends-On: .10x/tickets/2026-06-25-add-settlement-reconciliation-preview.md\n\n# Settlement Reconciliation Parent\n\n## Scope\n\nCoordinate settlement reconciliation preview closure after child execution.\n\nIncluded:\n\n- Close the child only after evidence, review, and retrospective obligations are\n  coherent.\n- Preserve durable learning in the correct 10x record types.\n- Keep one-off debugging noise out of durable records unless it becomes a\n  reusable procedure, convention, or follow-up.\n\nExcluded:\n\n- Direct parent implementation.\n- Historical FX rounding implementation.\n\n## Acceptance Criteria\n\n- Child ticket closure is supported by recorded evidence and review.\n- Retrospective extraction routes durable operational procedure into a skill.\n- Retrospective extraction routes conceptual settlement vocabulary into\n  knowledge.\n- Retrospective extraction opens a separate follow-up for historical FX rounding\n  tolerance coverage.\n- One-off notes about laptop CPU, shell aliases, and personal log preferences do\n  not become skills or knowledge.\n- Parent remains active until retrospective obligations have durable owners.\n\n## Progress And Notes\n\n- 2026-06-25: Child executor reported implementation complete.\n- 2026-06-25: Evidence and review pass for settlement reconciliation preview.\n- 2026-06-25: Retrospective extraction remains open because execution notes mix\n  real durable learning with one-off noise.\n\n## Blockers\n\n- Awaiting parent closure check and retrospective extraction.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_10",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' .10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md\"",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_9",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x -maxdepth 2 -type f | sort'",
+        "aggregated_output": ".10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md\n.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n.10x/specs/settlement-reconciliation-preview.md\n.10x/tickets/2026-06-25-add-settlement-reconciliation-preview.md\n.10x/tickets/2026-06-25-settlement-reconciliation-parent.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_18",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,240p' src/settlements/reconcile.js\"",
+        "aggregated_output": "export function previewSettlementRows(rows) {\n  return rows.map((row) => ({\n    settlementRef: row.settlementRef,\n    amountCents: Math.round(row.amount * 100),\n    lifecycleState: row.lifecycleState,\n  }));\n}\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_16",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' src/settlements/reconcile.test.js\"",
+        "aggregated_output": "import { previewSettlementRows } from \"./reconcile.js\";\n\nconst rows = previewSettlementRows([\n  {\n    settlementRef: \"stl_123\",\n    amount: 12.34,\n    lifecycleState: \"pending_release\",\n  },\n]);\n\nif (rows[0].settlementRef !== \"stl_123\") {\n  throw new Error(\"settlementRef was not preserved\");\n}\n\nif (rows[0].amountCents !== 1234) {\n  throw new Error(\"amount was not normalized\");\n}\n\nif (rows[0].lifecycleState !== \"pending_release\") {\n  throw new Error(\"lifecycleState was not preserved\");\n}\n\nconsole.log(\"reconcile.test.js passed\");\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_17",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x -maxdepth 2 -type d | sort'",
+        "aggregated_output": ".10x\n.10x/evidence\n.10x/reviews\n.10x/specs\n.10x/tickets\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_14",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find . -maxdepth 4 -type f | sort'",
+        "aggregated_output": "./.10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md\n./.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n./.10x/specs/settlement-reconciliation-preview.md\n./.10x/tickets/2026-06-25-add-settlement-reconciliation-preview.md\n./.10x/tickets/2026-06-25-settlement-reconciliation-parent.md\n./.claude/skills/.gitkeep\n./package.json\n./src/settlements/reconcile.js\n./src/settlements/reconcile.test.js\n./workspace-manifest.json\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_15",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find . -maxdepth 4 -type d | sort'",
+        "aggregated_output": ".\n./.10x\n./.10x/evidence\n./.10x/reviews\n./.10x/specs\n./.10x/tickets\n./.agents\n./.claude\n./.claude/skills\n./.codex\n./.git\n./src\n./src/settlements\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_20",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' /mnt/c/Users/butle/.codex/skills/.system/skill-creator/SKILL.md\"",
+        "aggregated_output": "---\nname: skill-creator\ndescription: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Codex's capabilities with specialized knowledge, workflows, or tool integrations.\nmetadata:\n  short-description: Create or update a skill\n---\n\n# Skill Creator\n\nThis skill provides guidance for creating effective skills.\n\n## About Skills\n\nSkills are modular, self-contained folders that extend Codex's capabilities by providing\nspecialized knowledge, workflows, and tools. Think of them as \"onboarding guides\" for specific\ndomains or tasks\u2014they transform Codex from a general-purpose agent into a specialized agent\nequipped with procedural knowledge that no model can fully possess.\n\n### What Skills Provide\n\n1. Specialized workflows - Multi-step procedures for specific domains\n2. Tool integrations - Instructions for working with specific file formats or APIs\n3. Domain expertise - Company-specific knowledge, schemas, business logic\n4. Bundled resources - Scripts, references, and assets for complex and repetitive tasks\n\n## Core Principles\n\n### Concise is Key\n\nThe context window is a public good. Skills share the context window with everything else Codex needs: system prompt, conversation history, other Skills' metadata, and the actual user request.\n\n**Default assumption: Codex is already very smart.** Only add context Codex doesn't already have. Challenge each piece of information: \"Does Codex really need this explanation?\" and \"Does this paragraph justify its token cost?\"\n\nPrefer concise examples over verbose explanations.\n\n### Set Appropriate Degrees of Freedom\n\nMatch the level of specificity to the task's fragility and variability:\n\n**High freedom (text-based instructions)**: Use when multiple approaches are valid, decisions depend on context, or heuristics guide the approach.\n\n**Medium freedom (pseudocode or scripts with parameters)**: Use when a preferred pattern exists, some variation is acceptable, or configuration affects behavior.\n\n**Low freedom (specific scripts, few parameters)**: Use when operations are fragile and error-prone, consistency is critical, or a specific sequence must be followed.\n\nThink of Codex as exploring a path: a narrow bridge with cliffs needs specific guardrails (low freedom), while an open field allows many routes (high freedom).\n\n### Protect Validation Integrity\n\nYou may use subagents during iteration to validate whether a skill works on realistic tasks or whether a suspected problem is real. This is most useful when you want an independent pass on the skill's behavior, outputs, or failure modes after a revision.  Only do this when it is possible to start new subagents.\n\nWhen using subagents for validation, treat that as an evaluation surface. The goal is to learn whether the skill generalizes, not whether another agent can reconstruct the answer from leaked context.\n\nPrefer raw artifacts such as example prompts, outputs, diffs, logs, or traces. Give the minimum task-local context needed to perform the validation. Avoid passing the intended answer, suspected bug, intended fix, or your prior conclusions unless the validation explicitly requires them.\n\n### Anatomy of a Skill\n\nEvery skill consists of a required SKILL.md file and optional bundled resources:\n\n```\nskill-name/\n\u251c\u2500\u2500 SKILL.md (required)\n\u2502   \u251c\u2500\u2500 YAML frontmatter metadata (required)\n\u2502   \u2502   \u251c\u2500\u2500 name: (required)\n\u2502   \u2502   \u2514\u2500\u2500 description: (required)\n\u2502   \u2514\u2500\u2500 Markdown instructions (required)\n\u251c\u2500\u2500 agents/ (recommended)\n\u2502   \u2514\u2500\u2500 openai.yaml - UI metadata for skill lists and chips\n\u2514\u2500\u2500 Bundled Resources (optional)\n    \u251c\u2500\u2500 scripts/          - Executable code (Python/Bash/etc.)\n    \u251c\u2500\u2500 references/       - Documentation intended to be loaded into context as needed\n    \u2514\u2500\u2500 assets/           - Files used in output (templates, icons, fonts, etc.)\n```\n\n#### SKILL.md (required)\n\nEvery SKILL.md consists of:\n\n- **Frontmatter** (YAML): Contains `name` and `description` fields. These are the only fields that Codex reads to determine when the skill gets used, thus it is very important to be clear and comprehensive in describing what the skill is, and when it should be used.\n- **Body** (Markdown): Instructions and guidance for using the skill. Only loaded AFTER the skill triggers (if at all).\n\n#### Agents metadata (recommended)\n\n- UI-facing metadata for skill lists and chips\n- Read references/openai_yaml.md before generating values and follow its descriptions and constraints\n- Create: human-facing `display_name`, `short_description`, and `default_prompt` by reading the skill\n- Generate deterministically by passing the values as `--interface key=value` to `scripts/generate_openai_yaml.py` or `scripts/init_skill.py`\n- On updates: validate `agents/openai.yaml` still matches SKILL.md; regenerate if stale\n- Only include other optional interface fields (icons, brand color) if explicitly provided\n- See references/openai_yaml.md for field definitions and examples\n\n#### Bundled Resources (optional)\n\n##### Scripts (`scripts/`)\n\nExecutable code (Python/Bash/etc.) for tasks that require deterministic reliability or are repeatedly rewritten.\n\n- **When to include**: When the same code is being rewritten repeatedly or deterministic reliability is needed\n- **Example**: `scripts/rotate_pdf.py` for PDF rotation tasks\n- **Benefits**: Token efficient, deterministic, may be executed without loading into context\n- **Note**: Scripts may still need to be read by Codex for patching or environment-specific adjustments\n\n##### References (`references/`)\n\nDocumentation and reference material intended to be loaded as needed into context to inform Codex's process and thinking.\n\n- **When to include**: For documentation that Codex should reference while working\n- **Examples**: `references/finance.md` for financial schemas, `references/mnda.md` for company NDA template, `references/policies.md` for company policies, `references/api_docs.md` for API specifications\n- **Use cases**: Database schemas, API documentation, domain knowledge, company policies, detailed workflow guides\n- **Benefits**: Keeps SKILL.md lean, loaded only when Codex determines it's needed\n- **Best practice**: If files are large (>10k words), include grep search patterns in SKILL.md\n- **Avoid duplication**: Information should live in either SKILL.md or references files, not both. Prefer references files for detailed information unless it's truly core to the skill\u2014this keeps SKILL.md lean while making information discoverable without hogging the context window. Keep only essential procedural instructions and workflow guidance in SKILL.md; move detailed reference material, schemas, and examples to references files.\n\n##### Assets (`assets/`)\n\nFiles not intended to be loaded into context, but rather used within the output Codex produces.\n\n- **When to include**: When the skill needs files that will be used in the final output\n- **Examples**: `assets/logo.png` for brand assets, `assets/slides.pptx` for PowerPoint templates, `assets/frontend-template/` for HTML/React boilerplate, `assets/font.ttf` for typography\n- **Use cases**: Templates, images, icons, boilerplate code, fonts, sample documents that get copied or modified\n- **Benefits**: Separates output resources from documentation, enables Codex to use files without loading them into context\n\n#### What to Not Include in a Skill\n\nA skill should only contain essential files that directly support its functionality. Do NOT create extraneous documentation or auxiliary files, including:\n\n- README.md\n- INSTALLATION_GUIDE.md\n- QUICK_REFERENCE.md\n- CHANGELOG.md\n- etc.\n\nThe skill should only contain the information needed for an AI agent to do the job at hand. It should not contain auxiliary context about the process that went into creating it, setup and testing procedures, user-facing documentation, etc. Creating additional documentation files just adds clutter and confusion.\n\n### Progressive Disclosure Design Principle\n\nSkills use a three-level loading system to manage context efficiently:\n\n1. **Metadata (name + description)** - Always in context (~100 words)\n2. **SKILL.md body** - When skill triggers (<5k words)\n3. **Bundled resources** - As needed by Codex (Unlimited because scripts can be executed without reading into context window)\n\n#### Progressive Disclosure Patterns\n\nKeep SKILL.md body to the essentials and under 500 lines to minimize context bloat. Split content into separate files when approaching this limit. When splitting out content into other files, it is very important to reference them from SKILL.md and describe clearly when to read them, to ensure the reader of the skill knows they exist and when to use them.\n\n**Key principle:** When a skill supports multiple variations, frameworks, or options, keep only the core workflow and selection guidance in SKILL.md. Move variant-specific details (patterns, examples, configuration) into separate reference files.\n\n**Pattern 1: High-level guide with references**\n\n```markdown\n# PDF Processing\n\n## Quick start\n\nExtract text with pdfplumber:\n[code example]\n\n## Advanced features\n\n- **Form filling**: See [FORMS.md](FORMS.md) for complete guide\n- **API reference**: See [REFERENCE.md](REFERENCE.md) for all methods\n- **Examples**: See [EXAMPLES.md](EXAMPLES.md) for common patterns\n```\n\nCodex loads FORMS.md, REFERENCE.md, or EXAMPLES.md only when needed.\n\n**Pattern 2: Domain-specific organization**\n\nFor Skills with multiple domains, organize content by domain to avoid loading irrelevant context:\n\n```\nbigquery-skill/\n\u251c\u2500\u2500 SKILL.md (overview and navigation)\n\u2514\u2500\u2500 reference/\n    \u251c\u2500\u2500 finance.md (revenue, billing metrics)\n    \u251c\u2500\u2500 sales.md (opportunities, pipeline)\n    \u251c\u2500\u2500 product.md (API usage, features)\n    \u2514\u2500\u2500 marketing.md (campaigns, attribution)\n```\n\nWhen a user asks about sales metrics, Codex only reads sales.md.\n\nSimilarly, for skills supporting multiple frameworks or variants, organize by variant:\n\n```\ncloud-deploy/\n\u251c\u2500\u2500 SKILL.md (workflow + provider selection)\n\u2514\u2500\u2500 references/\n    \u251c\u2500\u2500 aws.md (AWS deployment patterns)\n    \u251c\u2500\u2500 gcp.md (GCP deployment patterns)\n    \u2514\u2500\u2500 azure.md (Azure deployment patterns)\n```\n\nWhen the user chooses AWS, Codex only reads aws.md.\n\n**Pattern 3: Conditional details**\n\nShow basic content, link to advanced content:\n\n```markdown\n# DOCX Processing\n\n## Creating documents\n\nUse docx-js for new documents. See [DOCX-JS.md](DOCX-JS.md).\n\n## Editing documents\n\nFor simple edits, modify the XML directly.\n\n**For tracked changes**: See [REDLINING.md](REDLINING.md)\n**For OOXML details**: See [OOXML.md](OOXML.md)\n```\n\nCodex reads REDLINING.md or OOXML.md only when the user needs those features.\n\n**Important guidelines:**\n\n- **Avoid deeply nested references** - Keep references one level deep from SKILL.md. All reference files should link directly from SKILL.md.\n- **Structure longer reference files** - For files longer than 100 lines, include a table of contents at the top so Codex can see the full scope when previewing.\n\n## Skill Creation Process\n\nSkill creation involves these steps:\n\n1. Understand the skill with concrete examples\n2. Plan reusable skill contents (scripts, references, assets)\n3. Initialize the skill (run init_skill.py)\n4. Edit the skill (implement resources and write SKILL.md)\n5. Validate the skill (run quick_validate.py)\n6. Iterate based on real usage and forward-test complex skills.\n\nFollow these steps in order, skipping only if there is a clear reason why they are not applicable.\n\n### Skill Naming\n\n- Use lowercase letters, digits, and hyphens only; normalize user-provided titles to hyphen-case (e.g., \"Plan Mode\" -> `plan-mode`).\n- When generating names, generate a name under 64 characters (letters, digits, hyphens).\n- Prefer short, verb-led phrases that describe the action.\n- Namespace by tool when it improves clarity or triggering (e.g., `gh-address-comments`, `linear-address-issue`).\n- Name the skill folder exactly after the skill name.\n\n### Step 1: Understanding the Skill with Concrete Examples\n\nSkip this step only when the skill's usage patterns are already clearly understood. It remains valuable even when working with an existing skill.\n\nTo create an effective skill, clearly understand concrete examples of how the skill will be used. This understanding can come from either direct user examples or generated examples that are validated with user feedback.\n\nFor example, when building an image-editor skill, relevant questions include:\n\n- \"What functionality should the image-editor skill support? Editing, rotating, anything else?\"\n- \"Can you give some examples of how this skill would be used?\"\n- \"I can imagine users asking for things like 'Remove the red-eye from this image' or 'Rotate this image'. Are there other ways you imagine this skill being used?\"\n- \"What would a user say that should trigger this skill?\"\n- \"Where should I create this skill? If you do not have a preference, I will place it in `$CODEX_HOME/skills` (or `~/.codex/skills` when `CODEX_HOME` is unset) so Codex can discover it automatically.\"\n\nTo avoid overwhelming users, avoid asking too many questions in a single message. Start with the most important questions and follow up as needed for better effectiveness.\n\nConclude this step when there is a clear sense of the functionality the skill should support.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_22",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '261,620p' /mnt/c/Users/butle/.codex/skills/.system/skill-creator/SKILL.md\"",
+        "aggregated_output": "\n### Step 2: Planning the Reusable Skill Contents\n\nTo turn concrete examples into an effective skill, analyze each example by:\n\n1. Considering how to execute on the example from scratch\n2. Identifying what scripts, references, and assets would be helpful when executing these workflows repeatedly\n\nExample: When building a `pdf-editor` skill to handle queries like \"Help me rotate this PDF,\" the analysis shows:\n\n1. Rotating a PDF requires re-writing the same code each time\n2. A `scripts/rotate_pdf.py` script would be helpful to store in the skill\n\nExample: When designing a `frontend-webapp-builder` skill for queries like \"Build me a todo app\" or \"Build me a dashboard to track my steps,\" the analysis shows:\n\n1. Writing a frontend webapp requires the same boilerplate HTML/React each time\n2. An `assets/hello-world/` template containing the boilerplate HTML/React project files would be helpful to store in the skill\n\nExample: When building a `big-query` skill to handle queries like \"How many users have logged in today?\" the analysis shows:\n\n1. Querying BigQuery requires re-discovering the table schemas and relationships each time\n2. A `references/schema.md` file documenting the table schemas would be helpful to store in the skill\n\nTo establish the skill's contents, analyze each concrete example to create a list of the reusable resources to include: scripts, references, and assets.\n\n### Step 3: Initializing the Skill\n\nAt this point, it is time to actually create the skill.\n\nSkip this step only if the skill being developed already exists. In this case, continue to the next step.\n\nBefore running `init_skill.py`, ask where the user wants the skill created. If they do not specify a location, default to `$CODEX_HOME/skills`; when `CODEX_HOME` is unset, fall back to `~/.codex/skills` so the skill is auto-discovered.\n\nWhen creating a new skill from scratch, always run the `init_skill.py` script. The script conveniently generates a new template skill directory that automatically includes everything a skill requires, making the skill creation process much more efficient and reliable.\n\nUsage:\n\n```bash\nscripts/init_skill.py <skill-name> --path <output-directory> [--resources scripts,references,assets] [--examples]\n```\n\nExamples:\n\n```bash\nscripts/init_skill.py my-skill --path \"${CODEX_HOME:-$HOME/.codex}/skills\"\nscripts/init_skill.py my-skill --path \"${CODEX_HOME:-$HOME/.codex}/skills\" --resources scripts,references\nscripts/init_skill.py my-skill --path ~/work/skills --resources scripts --examples\n```\n\nThe script:\n\n- Creates the skill directory at the specified path\n- Generates a SKILL.md template with proper frontmatter and TODO placeholders\n- Creates `agents/openai.yaml` using agent-generated `display_name`, `short_description`, and `default_prompt` passed via `--interface key=value`\n- Optionally creates resource directories based on `--resources`\n- Optionally adds example files when `--examples` is set\n\nAfter initialization, customize the SKILL.md and add resources as needed. If you used `--examples`, replace or delete placeholder files.\n\nGenerate `display_name`, `short_description`, and `default_prompt` by reading the skill, then pass them as `--interface key=value` to `init_skill.py` or regenerate with:\n\n```bash\nscripts/generate_openai_yaml.py <path/to/skill-folder> --interface key=value\n```\n\nOnly include other optional interface fields when the user explicitly provides them. For full field descriptions and examples, see references/openai_yaml.md.\n\n### Step 4: Edit the Skill\n\nWhen editing the (newly-generated or existing) skill, remember that the skill is being created for another instance of Codex to use. Include information that would be beneficial and non-obvious to Codex. Consider what procedural knowledge, domain-specific details, or reusable assets would help another Codex instance execute these tasks more effectively.\n\nAfter substantial revisions, or if the skill is particularly tricky, you should use subagents to forward-test the skill on realistic tasks or artifacts. When doing so, pass the artifact under validation rather than your diagnosis of what is wrong, and keep the prompt generic enough that success depends on transferable reasoning rather than hidden ground truth.\n\n#### Start with Reusable Skill Contents\n\nTo begin implementation, start with the reusable resources identified above: `scripts/`, `references/`, and `assets/` files. Note that this step may require user input. For example, when implementing a `brand-guidelines` skill, the user may need to provide brand assets or templates to store in `assets/`, or documentation to store in `references/`.\n\nAdded scripts must be tested by actually running them to ensure there are no bugs and that the output matches what is expected. If there are many similar scripts, only a representative sample needs to be tested to ensure confidence that they all work while balancing time to completion.\n\nIf you used `--examples`, delete any placeholder files that are not needed for the skill. Only create resource directories that are actually required.\n\n#### Update SKILL.md\n\n**Writing Guidelines:** Always use imperative/infinitive form.\n\n##### Frontmatter\n\nWrite the YAML frontmatter with `name` and `description`:\n\n- `name`: The skill name\n- `description`: This is the primary triggering mechanism for your skill, and helps Codex understand when to use the skill.\n  - Include both what the Skill does and specific triggers/contexts for when to use it.\n  - Include all \"when to use\" information here - Not in the body. The body is only loaded after triggering, so \"When to Use This Skill\" sections in the body are not helpful to Codex.\n  - Example description for a `docx` skill: \"Comprehensive document creation, editing, and analysis with support for tracked changes, comments, formatting preservation, and text extraction. Use when Codex needs to work with professional documents (.docx files) for: (1) Creating new documents, (2) Modifying or editing content, (3) Working with tracked changes, (4) Adding comments, or any other document tasks\"\n\nDo not include any other fields in YAML frontmatter.\n\n##### Body\n\nWrite instructions for using the skill and its bundled resources.\n\n### Step 5: Validate the Skill\n\nOnce development of the skill is complete, validate the skill folder to catch basic issues early:\n\n```bash\nscripts/quick_validate.py <path/to/skill-folder>\n```\n\nThe validation script checks YAML frontmatter format, required fields, and naming rules. If validation fails, fix the reported issues and run the command again.\n\n### Step 6: Iterate\n\nAfter testing the skill, you may detect the skill is complex enough that it requires forward-testing; or users may request improvements.\n\nUser testing often this happens right after using the skill, with fresh context of how the skill performed.\n\n**Forward-testing and iteration workflow:**\n\n1. Use the skill on real tasks\n2. Notice struggles or inefficiencies\n3. Identify how SKILL.md or bundled resources should be updated\n4. Implement changes and test again\n5. Forward-test if it is reasonable and appropriate\n\n## Forward-testing\n\nTo forward-test, launch subagents as a way to stress test the skill with minimal context.\nSubagents should *not* know that they are being asked to test the skill.  They should be treated as\nan agent asked to perform a task by the user.  Prompts to subagents should look like:\n  `Use $skill-x at /path/to/skill-x to solve problem y`\nNot:\n  `Review the skill at /path/to/skill-x; pretend a user asks you to...`\n\nDecision rule for forward-testing:\n  - Err on the side of forward-testing\n  - Ask for approval if you think there's a risk that forward-testing would:\n    * take a long time,\n    * require additional approvals from the user, or\n    * modify live production systems\n\n  In these cases, show the user your proposed prompt and request (1) a yes/no decision, and\n  (2) any suggested modifictions.\n\nConsiderations when forward-testing:\n   - use fresh threads for independent passes\n   - pass the skill, and a request in a similar way the user would.\n   - pass raw artifacts, not your conclusions\n   - avoid showing expected answers or intended fixes\n   - rebuild context from source artifacts after each iteration\n   - review the subagent's output and reasoning and emitted artifacts\n   - avoid leaving artifacts the agent can find on disk between iterations;\n     clean up subagents' artifacts to avoid additional contamination.\n\nIf forward-testing only succeeds when subagents see leaked context, tighten the skill or the\nforward-testing setup before trusting the result.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_24",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'mkdir -p .10x/knowledge .10x/skills/settlement-mismatch-tests .claude/skills/settlement-mismatch-tests .10x/tickets/done'",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_25",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'mv .10x/tickets/2026-06-25-settlement-reconciliation-parent.md .10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md && mv .10x/tickets/2026-06-25-add-settlement-reconciliation-preview.md .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md'",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_27",
+        "type": "file_change",
+        "changes": [
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/knowledge/settlement-reconciliation-vocabulary.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/skills/settlement-mismatch-tests/SKILL.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.claude/skills/settlement-mismatch-tests/SKILL.md",
+            "kind": "add"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_31",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,160p' .10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md\"",
+        "aggregated_output": "Status: recorded\nCreated: 2026-06-25\nUpdated: 2026-06-25\nRelates-To: .10x/tickets/2026-06-25-add-settlement-reconciliation-preview.md\n\n# Settlement Reconciliation Child Test Output\n\n## What Was Observed\n\nThe child executor reported this focused test output:\n\n```text\n$ npm test\n\n> test\n> node src/settlements/reconcile.test.js\n\nreconcile.test.js passed\n```\n\nThe child also reported failed setup attempts:\n\n- Inline JSON fixtures hid field-order mistakes and made mismatches hard to\n  inspect.\n- A live processor sandbox replay mutated fixture timestamps between runs.\n- A local `nr` shell alias pointed at an unrelated script and caused one false\n  failure.\n- One rerun used `--runInBand` while the developer's laptop was under heavy\n  load.\n\nThe passing setup used tracked NDJSON fixtures under `testdata/settlements/`,\nfroze the settlement date at `2026-04-30`, and used the offline processor replay\nadapter.\n\n## Procedure\n\nThe parent has not rerun the command in this seed. This evidence records the\nchild executor's reported output and setup notes.\n\n## What This Supports Or Challenges\n\nSupports:\n\n- AC-001: preview output includes `settlementRef`.\n- AC-002: preview output includes normalized cent amounts.\n- AC-003: lifecycle state is preserved.\n\nChallenges:\n\n- Historical FX rounding tolerance still lacks coverage, but that path is\n  outside the settlement reconciliation preview ticket.\n\n## Limits\n\nThis evidence is child-reported command output. It supports closure of the\npreview ticket but does not prove historical FX rounding behavior.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_32",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md\"",
+        "aggregated_output": "Status: done\nCreated: 2026-06-25\nUpdated: 2026-06-28\nParent:\nDepends-On: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md, .10x/skills/settlement-mismatch-tests/SKILL.md, .10x/knowledge/settlement-reconciliation-vocabulary.md, .10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md\n\n# Settlement Reconciliation Parent\n\n## Scope\n\nCoordinate settlement reconciliation preview closure after child execution.\n\nIncluded:\n\n- Close the child only after evidence, review, and retrospective obligations are\n  coherent.\n- Preserve durable learning in the correct 10x record types.\n- Keep one-off debugging noise out of durable records unless it becomes a\n  reusable procedure, convention, or follow-up.\n\nExcluded:\n\n- Direct parent implementation.\n- Historical FX rounding implementation.\n\n## Acceptance Criteria\n\n- Child ticket closure is supported by recorded evidence and review.\n- Retrospective extraction routes durable operational procedure into a skill.\n- Retrospective extraction routes conceptual settlement vocabulary into\n  knowledge.\n- Retrospective extraction opens a separate follow-up for historical FX rounding\n  tolerance coverage.\n- One-off notes about laptop CPU, shell aliases, and personal log preferences do\n  not become skills or knowledge.\n- Parent remains active until retrospective obligations have durable owners.\n\n## Progress And Notes\n\n- 2026-06-25: Child executor reported implementation complete.\n- 2026-06-25: Evidence and review pass for settlement reconciliation preview.\n- 2026-06-25: Retrospective extraction remains open because execution notes mix\n  real durable learning with one-off noise.\n- 2026-06-28: Parent closure check passed. Child closure is supported by\n  `.10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md`\n  and `.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md`.\n- 2026-06-28: Retrospective extraction routed settlement mismatch test setup to\n  `.10x/skills/settlement-mismatch-tests/SKILL.md`, vocabulary to\n  `.10x/knowledge/settlement-reconciliation-vocabulary.md`, and historical FX\n  rounding tolerance coverage to\n  `.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md`.\n- 2026-06-28: One-off notes about the local `nr` alias, laptop CPU load, and\n  personal debug-log preference were left out of reusable records because they\n  do not establish project-level procedure or vocabulary.\n\n## Blockers\n\n- None. Retrospective obligations have durable owners.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_33",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,240p' .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\"",
+        "aggregated_output": "Status: done\nCreated: 2026-06-25\nUpdated: 2026-06-28\nParent: .10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md\nDepends-On: .10x/specs/settlement-reconciliation-preview.md, .10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md, .10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n\n# Add Settlement Reconciliation Preview\n\n## Scope\n\nImplement settlement reconciliation preview behavior for Finance Operations.\n\nIncluded:\n\n- Preserve imported row `settlementRef`.\n- Normalize settlement amounts into integer cents.\n- Preserve processor lifecycle state.\n\nExcluded:\n\n- Historical FX rounding tolerance.\n- Live processor API calls.\n- UI rendering.\n\n## Acceptance Criteria\n\n- AC-001: Preview output includes each row's `settlementRef`.\n- AC-002: Preview output includes normalized cent amounts.\n- AC-003: Preview output preserves lifecycle state.\n- AC-004: Closure captures retrospective obligations before the parent closes.\n\n## Progress And Notes\n\n- 2026-06-25: Child executor reported implementation complete and focused tests\n  passed.\n- 2026-06-25: Evidence covers `settlementRef`, cent amounts, and lifecycle\n  state preservation.\n- 2026-06-25: Review passed for the settlement reconciliation preview scope.\n- 2026-06-25: Durable procedure candidate: stable settlement mismatch tests\n  require tracked NDJSON fixtures under `testdata/settlements/`, a frozen\n  settlement date of `2026-04-30`, and the offline processor replay adapter.\n  This was learned after two failed attempts that used inline JSON and the live\n  processor sandbox.\n- 2026-06-25: Durable vocabulary candidate: imported settlement references are\n  named `settlementRef`, not `externalTransferId`.\n- 2026-06-25: Durable vocabulary candidate: `pending_release` is a processor\n  lifecycle state, not a risk tier.\n- 2026-06-25: Follow-up candidate: historical FX rounding tolerance still lacks\n  coverage and is outside this ticket.\n- 2026-06-25: Noise: one failed run was caused by a local shell alias named\n  `nr`; do not preserve that as project knowledge.\n- 2026-06-25: Noise: one rerun used `--runInBand` because the developer's laptop\n  was under heavy load; do not preserve that as a procedure unless repeated\n  evidence shows project-level test flake.\n- 2026-06-25: Noise: Mara prefers terse local debug logs; this did not affect\n  product behavior, tests, or project conventions.\n- 2026-06-28: Closure check passed. Evidence supports AC-001 through AC-003;\n  retrospective obligations for AC-004 are now owned by\n  `.10x/skills/settlement-mismatch-tests/SKILL.md`,\n  `.10x/knowledge/settlement-reconciliation-vocabulary.md`, and\n  `.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md`.\n- 2026-06-28: Read-only source inspection found\n  `src/settlements/reconcile.js` and `src/settlements/reconcile.test.js` still\n  align with `.10x/specs/settlement-reconciliation-preview.md` for the preview\n  fields in scope. No tests were rerun during parent closure.\n\n## Blockers\n\n- None for settlement reconciliation preview scope.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_30",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x .claude/skills -maxdepth 4 -type f | sort'",
+        "aggregated_output": ".10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md\n.10x/knowledge/settlement-reconciliation-vocabulary.md\n.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n.10x/skills/settlement-mismatch-tests/SKILL.md\n.10x/specs/settlement-reconciliation-preview.md\n.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md\n.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\n.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md\n.claude/skills/.gitkeep\n.claude/skills/settlement-mismatch-tests/SKILL.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_29",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"rg -n \\\"\\\\.10x/tickets/2026-06-25|Status: active|Status: blocked|Relates-To:|Target:|Parent:|Depends-On:\\\" .10x .claude/skills/settlement-mismatch-tests/SKILL.md\"",
+        "aggregated_output": ".10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md:1:Status: blocked\n.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md:4:Parent:\n.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md:5:Depends-On: .10x/specs/settlement-reconciliation-preview.md\n.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md:4:Target: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\n.10x/specs/settlement-reconciliation-preview.md:1:Status: active\n.10x/knowledge/settlement-reconciliation-vocabulary.md:1:Status: active\n.10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md:4:Relates-To: .10x/tickets/2026-06-25-add-settlement-reconciliation-preview.md\n.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md:4:Parent: .10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md\n.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md:5:Depends-On: .10x/specs/settlement-reconciliation-preview.md, .10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md, .10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md:4:Parent:\n.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md:5:Depends-On: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md, .10x/skills/settlement-mismatch-tests/SKILL.md, .10x/knowledge/settlement-reconciliation-vocabulary.md, .10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_35",
+        "type": "file_change",
+        "changes": [
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md",
+            "kind": "update"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md",
+            "kind": "update"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_38",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x -maxdepth 3 -type f | sort'",
+        "aggregated_output": ".10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md\n.10x/knowledge/settlement-reconciliation-vocabulary.md\n.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n.10x/skills/settlement-mismatch-tests/SKILL.md\n.10x/specs/settlement-reconciliation-preview.md\n.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md\n.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\n.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_40",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/reviews/2026-06-25-settlement-reconciliation-child-review.md && sed -n '1,120p' .10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md\"",
+        "aggregated_output": "Status: recorded\nCreated: 2026-06-25\nUpdated: 2026-06-28\nTarget: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\nVerdict: pass\n\n# Settlement Reconciliation Child Review\n\n## Target\n\nChild executor output for\n`.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md`.\n\n## Findings\n\n- No blocking findings for the settlement reconciliation preview ticket.\n  Recorded evidence covers `settlementRef`, cent amounts, and lifecycle state.\n- The execution notes contain reusable operational learning: stable settlement\n  mismatch tests used tracked NDJSON fixtures under `testdata/settlements/`, a\n  frozen settlement date of `2026-04-30`, and the offline processor replay\n  adapter after inline fixtures and live sandbox replay failed.\n- The execution notes settled vocabulary: use `settlementRef`, not\n  `externalTransferId`.\n- The execution notes settled vocabulary: `pending_release` is a lifecycle\n  state, not a risk tier.\n- **Out of scope:** historical FX rounding tolerance still lacks coverage.\n- **Noise:** local shell alias failure, one-time `--runInBand`, and Mara's local\n  log-style preference are not review findings.\n\n## Verdict\n\nPass for the settlement reconciliation preview child ticket.\n\n## Residual Risk\n\nNo residual risk remains for the settlement reconciliation preview child ticket.\n\nHistorical FX rounding tolerance remains outside this review target and has no\ndurable follow-up owner in this seed.\nStatus: recorded\nCreated: 2026-06-25\nUpdated: 2026-06-28\nRelates-To: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\n\n# Settlement Reconciliation Child Test Output\n\n## What Was Observed\n\nThe child executor reported this focused test output:\n\n```text\n$ npm test\n\n> test\n> node src/settlements/reconcile.test.js\n\nreconcile.test.js passed\n```\n\nThe child also reported failed setup attempts:\n\n- Inline JSON fixtures hid field-order mistakes and made mismatches hard to\n  inspect.\n- A live processor sandbox replay mutated fixture timestamps between runs.\n- A local `nr` shell alias pointed at an unrelated script and caused one false\n  failure.\n- One rerun used `--runInBand` while the developer's laptop was under heavy\n  load.\n\nThe passing setup used tracked NDJSON fixtures under `testdata/settlements/`,\nfroze the settlement date at `2026-04-30`, and used the offline processor replay\nadapter.\n\n## Procedure\n\nThe parent has not rerun the command in this seed. This evidence records the\nchild executor's reported output and setup notes.\n\n## What This Supports Or Challenges\n\nSupports:\n\n- AC-001: preview output includes `settlementRef`.\n- AC-002: preview output includes normalized cent amounts.\n- AC-003: lifecycle state is preserved.\n\nChallenges:\n\n- Historical FX rounding tolerance still lacks coverage, but that path is\n  outside the settlement reconciliation preview ticket.\n\n## Limits\n\nThis evidence is child-reported command output. It supports closure of the\npreview ticket but does not prove historical FX rounding behavior.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_39",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"cmp -s .10x/skills/settlement-mismatch-tests/SKILL.md .claude/skills/settlement-mismatch-tests/SKILL.md && printf 'skill mirror matches\\\\n' || printf 'skill mirror differs\\\\n'\"",
+        "aggregated_output": "skill mirror matches\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_41",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md && sed -n '1,180p' .10x/knowledge/settlement-reconciliation-vocabulary.md && sed -n '1,180p' .10x/skills/settlement-mismatch-tests/SKILL.md\"",
+        "aggregated_output": "Status: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Settlement Reconciliation Vocabulary\n\n## Purpose\n\nPreserve settlement reconciliation terms established by the active preview spec,\nchild execution notes, and review so future agents do not rename fields or\nmisclassify processor states.\n\n## Terms\n\n- `settlementRef` is the upstream settlement identifier preserved on settlement\n  reconciliation preview rows. Do not rename it to `externalTransferId`.\n- `amountCents` is the integer-cent normalized settlement amount emitted by the\n  preview.\n- `lifecycleState` is the processor lifecycle state preserved on the preview\n  row.\n- `pending_release` is a `lifecycleState` value, not a risk tier.\n\n## Authority And Limits\n\nAuthority:\n\n- `.10x/specs/settlement-reconciliation-preview.md`\n- `.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md`\n- `.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md`\n\nLimits:\n\n- This record covers preview vocabulary only.\n- Historical FX rounding tolerance remains out of scope until governed by a\n  separate ratified specification.\n---\nname: settlement-mismatch-tests\ndescription: \"Use when writing or repairing settlement reconciliation mismatch tests, especially tests that replay processor settlement rows, compare fixture mismatches, or need stable settlement dates.\"\nmetadata:\n  created: 2026-06-28\n  updated: 2026-06-28\n---\n\n# Settlement Mismatch Tests\n\n## Objective\n\nCreate stable settlement reconciliation mismatch tests without live processor\nstate or hard-to-inspect inline fixtures.\n\n## Prerequisites\n\n- Use tracked NDJSON fixtures under `testdata/settlements/` when the repository\n  has or needs settlement replay fixtures.\n- Freeze settlement-date-dependent tests at `2026-04-30` unless a governing\n  spec or ticket names another date.\n- Use the offline processor replay adapter for replay behavior.\n\n## Procedure\n\n1. Put settlement input rows in tracked NDJSON fixture files so mismatch order\n   and field differences are reviewable.\n2. Freeze the settlement date before running reconciliation logic.\n3. Replay processor rows through the offline adapter.\n4. Assert stable domain fields such as `settlementRef`, `amountCents`, and\n   `lifecycleState` according to the governing spec.\n5. Treat live processor sandbox replay as out of scope for deterministic unit or\n   preview tests unless the ticket explicitly requires integration behavior.\n\n## Validation\n\n- Run the focused settlement reconciliation test command named by the ticket or\n  package scripts.\n- Inspect failures against the NDJSON fixture diff before changing product\n  behavior.\n- Do not preserve local shell aliases, one-time CPU workarounds, or personal log\n  preferences as project procedure without repeated project-level evidence.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_37",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"rg -n \\\"\\\\.10x/tickets/2026-06-25|historical FX rounding tolerance remains outside this review target and has no|Status: active|Status: blocked|Status: done|Relates-To:|Target:|Depends-On:\\\" .10x .claude/skills/settlement-mismatch-tests/SKILL.md\"",
+        "aggregated_output": ".10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md:1:Status: blocked\n.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md:5:Depends-On: .10x/specs/settlement-reconciliation-preview.md\n.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md:4:Target: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\n.10x/specs/settlement-reconciliation-preview.md:1:Status: active\n.10x/knowledge/settlement-reconciliation-vocabulary.md:1:Status: active\n.10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md:4:Relates-To: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\n.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md:1:Status: done\n.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md:5:Depends-On: .10x/specs/settlement-reconciliation-preview.md, .10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md, .10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md:1:Status: done\n.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md:5:Depends-On: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md, .10x/skills/settlement-mismatch-tests/SKILL.md, .10x/knowledge/settlement-reconciliation-vocabulary.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_43",
+        "type": "file_change",
+        "changes": [
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-16y4qlzl/workspace/.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md",
+            "kind": "update"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_45",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"cmp -s .10x/skills/settlement-mismatch-tests/SKILL.md .claude/skills/settlement-mismatch-tests/SKILL.md && printf 'skill mirror matches\\\\n' || printf 'skill mirror differs\\\\n'\"",
+        "aggregated_output": "skill mirror matches\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_47",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"find src -type f -maxdepth 3 -printf '%p\\\\n' | sort && sed -n '1,80p' src/settlements/reconcile.js && sed -n '1,120p' src/settlements/reconcile.test.js\"",
+        "aggregated_output": "export function previewSettlementRows(rows) {\n  return rows.map((row) => ({\n    settlementRef: row.settlementRef,\n    amountCents: Math.round(row.amount * 100),\n    lifecycleState: row.lifecycleState,\n  }));\n}\nimport { previewSettlementRows } from \"./reconcile.js\";\n\nconst rows = previewSettlementRows([\n  {\n    settlementRef: \"stl_123\",\n    amount: 12.34,\n    lifecycleState: \"pending_release\",\n  },\n]);\n\nif (rows[0].settlementRef !== \"stl_123\") {\n  throw new Error(\"settlementRef was not preserved\");\n}\n\nif (rows[0].amountCents !== 1234) {\n  throw new Error(\"amount was not normalized\");\n}\n\nif (rows[0].lifecycleState !== \"pending_release\") {\n  throw new Error(\"lifecycleState was not preserved\");\n}\n\nconsole.log(\"reconcile.test.js passed\");\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_46",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"rg -n \\\"\\\\.10x/tickets/2026-06-25|no durable follow-up owner|Status: active|Status: blocked|Status: done|Relates-To:|Target:|Depends-On:\\\" .10x .claude/skills/settlement-mismatch-tests/SKILL.md\"",
+        "aggregated_output": ".10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md:1:Status: blocked\n.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md:5:Depends-On: .10x/specs/settlement-reconciliation-preview.md\n.10x/knowledge/settlement-reconciliation-vocabulary.md:1:Status: active\n.10x/specs/settlement-reconciliation-preview.md:1:Status: active\n.10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md:4:Relates-To: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\n.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md:4:Target: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\n.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md:1:Status: done\n.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md:5:Depends-On: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md, .10x/skills/settlement-mismatch-tests/SKILL.md, .10x/knowledge/settlement-reconciliation-vocabulary.md\n.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md:1:Status: done\n.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md:5:Depends-On: .10x/specs/settlement-reconciliation-preview.md, .10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md, .10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    }
+  ],
+  "file_outputs": [
+    {
+      "path": ".10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md",
+      "action": "write",
+      "content": "Status: recorded\nCreated: 2026-06-25\nUpdated: 2026-06-28\nRelates-To: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\n\n# Settlement Reconciliation Child Test Output\n\n## What Was Observed\n\nThe child executor reported this focused test output:\n\n```text\n$ npm test\n\n> test\n> node src/settlements/reconcile.test.js\n\nreconcile.test.js passed\n```\n\nThe child also reported failed setup attempts:\n\n- Inline JSON fixtures hid field-order mistakes and made mismatches hard to\n  inspect.\n- A live processor sandbox replay mutated fixture timestamps between runs.\n- A local `nr` shell alias pointed at an unrelated script and caused one false\n  failure.\n- One rerun used `--runInBand` while the developer's laptop was under heavy\n  load.\n\nThe passing setup used tracked NDJSON fixtures under `testdata/settlements/`,\nfroze the settlement date at `2026-04-30`, and used the offline processor replay\nadapter.\n\n## Procedure\n\nThe parent has not rerun the command in this seed. This evidence records the\nchild executor's reported output and setup notes.\n\n## What This Supports Or Challenges\n\nSupports:\n\n- AC-001: preview output includes `settlementRef`.\n- AC-002: preview output includes normalized cent amounts.\n- AC-003: lifecycle state is preserved.\n\nChallenges:\n\n- Historical FX rounding tolerance still lacks coverage, but that path is\n  outside the settlement reconciliation preview ticket.\n\n## Limits\n\nThis evidence is child-reported command output. It supports closure of the\npreview ticket but does not prove historical FX rounding behavior.\n"
+    },
+    {
+      "path": ".10x/knowledge/settlement-reconciliation-vocabulary.md",
+      "action": "write",
+      "content": "Status: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Settlement Reconciliation Vocabulary\n\n## Purpose\n\nPreserve settlement reconciliation terms established by the active preview spec,\nchild execution notes, and review so future agents do not rename fields or\nmisclassify processor states.\n\n## Terms\n\n- `settlementRef` is the upstream settlement identifier preserved on settlement\n  reconciliation preview rows. Do not rename it to `externalTransferId`.\n- `amountCents` is the integer-cent normalized settlement amount emitted by the\n  preview.\n- `lifecycleState` is the processor lifecycle state preserved on the preview\n  row.\n- `pending_release` is a `lifecycleState` value, not a risk tier.\n\n## Authority And Limits\n\nAuthority:\n\n- `.10x/specs/settlement-reconciliation-preview.md`\n- `.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md`\n- `.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md`\n\nLimits:\n\n- This record covers preview vocabulary only.\n- Historical FX rounding tolerance remains out of scope until governed by a\n  separate ratified specification.\n"
+    },
+    {
+      "path": ".10x/reviews/2026-06-25-settlement-reconciliation-child-review.md",
+      "action": "write",
+      "content": "Status: recorded\nCreated: 2026-06-25\nUpdated: 2026-06-28\nTarget: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md\nVerdict: pass\n\n# Settlement Reconciliation Child Review\n\n## Target\n\nChild executor output for\n`.10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md`.\n\n## Findings\n\n- No blocking findings for the settlement reconciliation preview ticket.\n  Recorded evidence covers `settlementRef`, cent amounts, and lifecycle state.\n- The execution notes contain reusable operational learning: stable settlement\n  mismatch tests used tracked NDJSON fixtures under `testdata/settlements/`, a\n  frozen settlement date of `2026-04-30`, and the offline processor replay\n  adapter after inline fixtures and live sandbox replay failed.\n- The execution notes settled vocabulary: use `settlementRef`, not\n  `externalTransferId`.\n- The execution notes settled vocabulary: `pending_release` is a lifecycle\n  state, not a risk tier.\n- **Out of scope:** historical FX rounding tolerance still lacks coverage.\n- **Noise:** local shell alias failure, one-time `--runInBand`, and Mara's local\n  log-style preference are not review findings.\n\n## Verdict\n\nPass for the settlement reconciliation preview child ticket.\n\n## Residual Risk\n\nNo residual risk remains for the settlement reconciliation preview child ticket.\n\nHistorical FX rounding tolerance remains outside this review target. Parent\nclosure later opened\n`.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md` as the\ndurable follow-up owner.\n"
+    },
+    {
+      "path": ".10x/skills/settlement-mismatch-tests/SKILL.md",
+      "action": "write",
+      "content": "---\nname: settlement-mismatch-tests\ndescription: \"Use when writing or repairing settlement reconciliation mismatch tests, especially tests that replay processor settlement rows, compare fixture mismatches, or need stable settlement dates.\"\nmetadata:\n  created: 2026-06-28\n  updated: 2026-06-28\n---\n\n# Settlement Mismatch Tests\n\n## Objective\n\nCreate stable settlement reconciliation mismatch tests without live processor\nstate or hard-to-inspect inline fixtures.\n\n## Prerequisites\n\n- Use tracked NDJSON fixtures under `testdata/settlements/` when the repository\n  has or needs settlement replay fixtures.\n- Freeze settlement-date-dependent tests at `2026-04-30` unless a governing\n  spec or ticket names another date.\n- Use the offline processor replay adapter for replay behavior.\n\n## Procedure\n\n1. Put settlement input rows in tracked NDJSON fixture files so mismatch order\n   and field differences are reviewable.\n2. Freeze the settlement date before running reconciliation logic.\n3. Replay processor rows through the offline adapter.\n4. Assert stable domain fields such as `settlementRef`, `amountCents`, and\n   `lifecycleState` according to the governing spec.\n5. Treat live processor sandbox replay as out of scope for deterministic unit or\n   preview tests unless the ticket explicitly requires integration behavior.\n\n## Validation\n\n- Run the focused settlement reconciliation test command named by the ticket or\n  package scripts.\n- Inspect failures against the NDJSON fixture diff before changing product\n  behavior.\n- Do not preserve local shell aliases, one-time CPU workarounds, or personal log\n  preferences as project procedure without repeated project-level evidence.\n"
+    },
+    {
+      "path": ".10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md",
+      "action": "write",
+      "content": "Status: blocked\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent:\nDepends-On: .10x/specs/settlement-reconciliation-preview.md\n\n# Historical FX Rounding Tolerance Coverage\n\n## Scope\n\nOwn the out-of-scope risk that historical FX rounding tolerance lacks coverage\nfor settlement reconciliation.\n\nIncluded:\n\n- Define the historical FX rounding tolerance behavior in a ratified\n  specification before implementation or tests.\n- Add coverage only after the tolerance value, affected currencies/imports, and\n  expected mismatch handling are ratified or otherwise record-backed.\n\nExcluded:\n\n- Settlement reconciliation preview closure.\n- Live processor API calls.\n- Guessing tolerance thresholds from existing amount-normalization behavior.\n\n## Acceptance Criteria\n\n- A focused active specification or spec update defines historical FX rounding\n  tolerance behavior.\n- Coverage exercises accepted and rejected historical FX rounding cases using\n  record-backed thresholds.\n- Evidence records the verification command and its limits.\n\n## Progress And Notes\n\n- 2026-06-28: Opened during settlement reconciliation parent retrospective.\n  The child review identified this as real residual risk outside preview scope.\n\n## Blockers\n\n- Historical FX rounding tolerance semantics are unratified: threshold, eligible\n  imports/currencies, accepted-vs-rejected mismatch behavior, and verification\n  expectations are not defined by the preview spec.\n\n## References\n\n- `.10x/specs/settlement-reconciliation-preview.md`\n- `.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md`\n- `.10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md`\n"
+    },
+    {
+      "path": ".10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md",
+      "action": "write",
+      "content": "Status: done\nCreated: 2026-06-25\nUpdated: 2026-06-28\nParent: .10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md\nDepends-On: .10x/specs/settlement-reconciliation-preview.md, .10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md, .10x/reviews/2026-06-25-settlement-reconciliation-child-review.md\n\n# Add Settlement Reconciliation Preview\n\n## Scope\n\nImplement settlement reconciliation preview behavior for Finance Operations.\n\nIncluded:\n\n- Preserve imported row `settlementRef`.\n- Normalize settlement amounts into integer cents.\n- Preserve processor lifecycle state.\n\nExcluded:\n\n- Historical FX rounding tolerance.\n- Live processor API calls.\n- UI rendering.\n\n## Acceptance Criteria\n\n- AC-001: Preview output includes each row's `settlementRef`.\n- AC-002: Preview output includes normalized cent amounts.\n- AC-003: Preview output preserves lifecycle state.\n- AC-004: Closure captures retrospective obligations before the parent closes.\n\n## Progress And Notes\n\n- 2026-06-25: Child executor reported implementation complete and focused tests\n  passed.\n- 2026-06-25: Evidence covers `settlementRef`, cent amounts, and lifecycle\n  state preservation.\n- 2026-06-25: Review passed for the settlement reconciliation preview scope.\n- 2026-06-25: Durable procedure candidate: stable settlement mismatch tests\n  require tracked NDJSON fixtures under `testdata/settlements/`, a frozen\n  settlement date of `2026-04-30`, and the offline processor replay adapter.\n  This was learned after two failed attempts that used inline JSON and the live\n  processor sandbox.\n- 2026-06-25: Durable vocabulary candidate: imported settlement references are\n  named `settlementRef`, not `externalTransferId`.\n- 2026-06-25: Durable vocabulary candidate: `pending_release` is a processor\n  lifecycle state, not a risk tier.\n- 2026-06-25: Follow-up candidate: historical FX rounding tolerance still lacks\n  coverage and is outside this ticket.\n- 2026-06-25: Noise: one failed run was caused by a local shell alias named\n  `nr`; do not preserve that as project knowledge.\n- 2026-06-25: Noise: one rerun used `--runInBand` because the developer's laptop\n  was under heavy load; do not preserve that as a procedure unless repeated\n  evidence shows project-level test flake.\n- 2026-06-25: Noise: Mara prefers terse local debug logs; this did not affect\n  product behavior, tests, or project conventions.\n- 2026-06-28: Closure check passed. Evidence supports AC-001 through AC-003;\n  retrospective obligations for AC-004 are now owned by\n  `.10x/skills/settlement-mismatch-tests/SKILL.md`,\n  `.10x/knowledge/settlement-reconciliation-vocabulary.md`, and\n  `.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md`.\n- 2026-06-28: Read-only source inspection found\n  `src/settlements/reconcile.js` and `src/settlements/reconcile.test.js` still\n  align with `.10x/specs/settlement-reconciliation-preview.md` for the preview\n  fields in scope. No tests were rerun during parent closure.\n\n## Blockers\n\n- None for settlement reconciliation preview scope.\n"
+    },
+    {
+      "path": ".10x/tickets/done/2026-06-25-settlement-reconciliation-parent.md",
+      "action": "write",
+      "content": "Status: done\nCreated: 2026-06-25\nUpdated: 2026-06-28\nParent:\nDepends-On: .10x/tickets/done/2026-06-25-add-settlement-reconciliation-preview.md, .10x/skills/settlement-mismatch-tests/SKILL.md, .10x/knowledge/settlement-reconciliation-vocabulary.md\n\n# Settlement Reconciliation Parent\n\n## Scope\n\nCoordinate settlement reconciliation preview closure after child execution.\n\nIncluded:\n\n- Close the child only after evidence, review, and retrospective obligations are\n  coherent.\n- Preserve durable learning in the correct 10x record types.\n- Keep one-off debugging noise out of durable records unless it becomes a\n  reusable procedure, convention, or follow-up.\n\nExcluded:\n\n- Direct parent implementation.\n- Historical FX rounding implementation.\n\n## Acceptance Criteria\n\n- Child ticket closure is supported by recorded evidence and review.\n- Retrospective extraction routes durable operational procedure into a skill.\n- Retrospective extraction routes conceptual settlement vocabulary into\n  knowledge.\n- Retrospective extraction opens a separate follow-up for historical FX rounding\n  tolerance coverage.\n- One-off notes about laptop CPU, shell aliases, and personal log preferences do\n  not become skills or knowledge.\n- Parent remains active until retrospective obligations have durable owners.\n\n## Progress And Notes\n\n- 2026-06-25: Child executor reported implementation complete.\n- 2026-06-25: Evidence and review pass for settlement reconciliation preview.\n- 2026-06-25: Retrospective extraction remains open because execution notes mix\n  real durable learning with one-off noise.\n- 2026-06-28: Parent closure check passed. Child closure is supported by\n  `.10x/evidence/2026-06-25-settlement-reconciliation-child-test-output.md`\n  and `.10x/reviews/2026-06-25-settlement-reconciliation-child-review.md`.\n- 2026-06-28: Retrospective extraction routed settlement mismatch test setup to\n  `.10x/skills/settlement-mismatch-tests/SKILL.md`, vocabulary to\n  `.10x/knowledge/settlement-reconciliation-vocabulary.md`, and historical FX\n  rounding tolerance coverage to\n  `.10x/tickets/2026-06-28-historical-fx-rounding-tolerance-coverage.md`.\n- 2026-06-28: One-off notes about the local `nr` alias, laptop CPU load, and\n  personal debug-log preference were left out of reusable records because they\n  do not establish project-level procedure or vocabulary.\n\n## Blockers\n\n- None. Retrospective obligations have durable owners.\n"
+    },
+    {
+      "path": ".claude/skills/settlement-mismatch-tests/SKILL.md",
+      "action": "write",
+      "content": "---\nname: settlement-mismatch-tests\ndescription: \"Use when writing or repairing settlement reconciliation mismatch tests, especially tests that replay processor settlement rows, compare fixture mismatches, or need stable settlement dates.\"\nmetadata:\n  created: 2026-06-28\n  updated: 2026-06-28\n---\n\n# Settlement Mismatch Tests\n\n## Objective\n\nCreate stable settlement reconciliation mismatch tests without live processor\nstate or hard-to-inspect inline fixtures.\n\n## Prerequisites\n\n- Use tracked NDJSON fixtures under `testdata/settlements/` when the repository\n  has or needs settlement replay fixtures.\n- Freeze settlement-date-dependent tests at `2026-04-30` unless a governing\n  spec or ticket names another date.\n- Use the offline processor replay adapter for replay behavior.\n\n## Procedure\n\n1. Put settlement input rows in tracked NDJSON fixture files so mismatch order\n   and field differences are reviewable.\n2. Freeze the settlement date before running reconciliation logic.\n3. Replay processor rows through the offline adapter.\n4. Assert stable domain fields such as `settlementRef`, `amountCents`, and\n   `lifecycleState` according to the governing spec.\n5. Treat live processor sandbox replay as out of scope for deterministic unit or\n   preview tests unless the ticket explicitly requires integration behavior.\n\n## Validation\n\n- Run the focused settlement reconciliation test command named by the ticket or\n  package scripts.\n- Inspect failures against the NDJSON fixture diff before changing product\n  behavior.\n- Do not preserve local shell aliases, one-time CPU workarounds, or personal log\n  preferences as project procedure without repeated project-level evidence.\n"
+    }
+  ],
+  "suppressed_changed_file_prefixes": [
+    ".opencode/node_modules/"
+  ],
+  "suppressed_changed_file_count": 0,
+  "suppressed_changed_file_sample": [],
+  "command_outputs": [
+    {
+      "command": "codex --ask-for-approval never --disable plugins --config developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.instructions.txt> exec ...",
+      "exit_code": 0,
+      "output": "Reading additional input from stdin...\n2026-06-28T15:34:00.107893Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back\n2026-06-28T15:37:04.782208Z  WARN codex_file_watcher: failed to unwatch /mnt/c/Users/butle/.codex/skills/.system: No watch was found. about [\"/mnt/c/Users/butle/.codex/skills/.system\"]\n"
+    }
+  ],
+  "raw_artifact_refs": [
+    "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/raw.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.prompt.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.instructions.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.command.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.stdout.jsonl",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.stderr",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.last-message.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7/workspace-manifest.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/raw/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.json"
+  ],
+  "wall_seconds": 185.36604513699422,
+  "usage": {
+    "input_tokens": 553415,
+    "output_tokens": 7782
+  },
+  "input_tokens": 553415,
+  "output_tokens": 7782,
+  "timed_out": false,
+  "timeout_seconds": 600.0,
+  "live_subject_calls": 1,
+  "harness_metadata": {
+    "kind": "codex-live-subject",
+    "harness_artifact_dir_name": "codex",
+    "instruction_source": "SKILL.md plus candidate",
+    "instruction_path": "autoresearch/candidates/2026-06-28-cold-start-record-handoff-check.md",
+    "base_instruction_path": "SKILL.md",
+    "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.instructions.txt",
+    "instruction_delivery": {
+      "channel": "codex-developer-instructions",
+      "runner_supplied_instructions": true,
+      "prompt_wrapper": false,
+      "base_system_prompt_replaced": false,
+      "description": "Arm instructions are supplied with Codex developer_instructions; the scenario prompt is passed separately."
+    },
+    "archived_workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7",
+    "workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/workspaces/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7/workspace-manifest.json",
+    "prior_raw_path": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/raw.json",
+    "seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/noisy-retrospective-routing/workspace",
+    "prior_turn_count": 1,
+    "turns": [
+      {
+        "turn_index": 1,
+        "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.prompt.txt",
+        "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.command.json",
+        "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.stdout.jsonl",
+        "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.stderr",
+        "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/codex/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.last-message.txt",
+        "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-retrospective-learning/prompts/sha256-99aefcb32a3f79d2895a8ef1aa98abaeb106ae9f9707d3f1c227b32107067ce7.instructions.txt",
+        "harness_config_path": null,
+        "planned_env": {}
+      }
+    ],
+    "control_isolation": {
+      "suppress_instruction_files": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "GEMINI.md",
+        ".cursor/rules",
+        ".agents/skills"
+      ],
+      "suppress_control_record_dirs": [
+        ".10x"
+      ],
+      "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
+      "instruction_strategy": "Deliver non-empty arm instructions through the harness instruction channel and keep the scenario prompt separate; explicit empty instruction_text means no runner-supplied instruction layer.",
+      "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; seed-workspace .10x records remain available when they are the task surface.",
+      "codex_args": [
+        "--disable",
+        "plugins",
+        "--ignore-user-config",
+        "--ignore-rules"
+      ],
+      "instruction_channel": "developer_instructions",
+      "limitation": "Codex built-in system context and authenticated home remain outside this runner's control; this runner appends arm instructions through developer_instructions when non-empty."
+    },
+    "pre_run_removed_control_record_dirs": [],
+    "writable_add_dirs": [],
+    "timed_out": false,
+    "timeout_seconds": 600.0,
+    "promotion_limit": "Live subject output is candidate-quality evidence, not promotion authority."
+  }
+}

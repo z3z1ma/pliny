@@ -1,4 +1,4 @@
-Status: active
+Status: done
 Created: 2026-06-28
 Updated: 2026-06-28
 Depends-On: .10x/specs/10x-autoresearch-loop.md, autoresearch/program.md, autoresearch/catalogs/scores.json, autoresearch/trial-seeds/index.json
@@ -59,6 +59,11 @@ Excluded:
   promoted as-is. Added a 457-character synthesized cold-start record handoff
   candidate and registered a second-stage current-vs-v2 confirmation batch with
   two repetitions across the same five scenarios.
+- 2026-06-28: Completed 50 live samples total, recorded scoring in
+  `.10x/evidence/2026-06-28-record-richness-hypothesis-batch.md`, reviewed the
+  semantic skill change in
+  `.10x/reviews/2026-06-28-cold-start-record-handoff-skill-change.md`, and
+  promoted the compact candidate into canonical `SKILL.md`.
 
 ## Blockers
 

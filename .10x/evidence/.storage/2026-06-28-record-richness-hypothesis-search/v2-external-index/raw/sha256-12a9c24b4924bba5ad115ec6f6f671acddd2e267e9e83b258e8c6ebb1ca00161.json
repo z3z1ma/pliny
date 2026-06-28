@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260628-s010-v2-external-index",
+  "scenario_id": "SCN-004",
+  "variant_id": "current-10x",
+  "rep": 1,
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "instruction_digest": "sha256:462569e87b6e6778fc0a8ecab902dcda8a6672953179f4e7b6e40a8252f1e5c6",
+  "scientific_contract": {
+    "question": "Does the compact cold-start record handoff candidate improve external canonical PRD indexing versus current 10x?",
+    "hypothesis": "The compact candidate should preserve external PRD authority, behavior, limits, and next action with less record spread than first-batch broad candidates.",
+    "expected_behavior": "Subject creates durable 10x records from the approved Nimbus Retention Controls Google Doc PRD without implementation edits.",
+    "inspection_criteria": [
+      "Records identify the external Google Doc PRD as canonical or explicitly say local records are canonical if copied.",
+      "Records preserve status, revision, owner, URL/document ID, behavior scope, exclusions, acceptance scenarios, rollout/open-question status, limits, and next action.",
+      "Records avoid implementation edits, placeholder spread, missing source/provenance, and invented implementation names.",
+      "Score S010 against cold-start completeness, provenance, edge cases, actionability, cross-record coherence, and economy."
+    ],
+    "quality_floor": "Any wrong authority, implementation edit, missing PRD provenance, or future need to rediscover the PRD status and scope caps the candidate.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+  },
+  "transcript": [
+    {
+      "role": "user",
+      "content": "The approved Nimbus Retention Controls Google Doc PRD is canonical for implementation planning. Create the durable 10x record or records a future agent needs to implement from it without reading this chat. Do not implement code."
+    },
+    {
+      "role": "assistant",
+      "content": "Created the durable 10x records:\n\n- [nimbus-retention-controls-prd.md](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-jetevw1v/workspace/.10x/specs/nimbus-retention-controls-prd.md) indexes the approved Google Doc PRD as the canonical source and prevents inferred retention semantics.\n- [2026-06-28-nimbus-retention-controls-planning.md](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-jetevw1v/workspace/.10x/tickets/2026-06-28-nimbus-retention-controls-planning.md) is a blocked planning ticket requiring the canonical Doc URL/document ID/export before implementation specs or executable tickets are derived.\n\nNo code, tests, migrations, or runtime artifacts were created."
+    }
+  ],
+  "tool_invocations": [
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_3",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find . -maxdepth 2 -name AGENTS.md -o -name .10x 2>/dev/null'",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_2",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'git status --short'",
+        "aggregated_output": "fatal: not a git repository (or any parent up to mount point /mnt)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n",
+        "exit_code": 128,
+        "status": "failed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_1",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'rg --files .10x 2>/dev/null || true'",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_12",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'mkdir -p .10x/specs .10x/tickets .10x/knowledge'",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_14",
+        "type": "file_change",
+        "changes": [
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-jetevw1v/workspace/.10x/specs/nimbus-retention-controls-prd.md",
+            "kind": "add"
+          },
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-jetevw1v/workspace/.10x/tickets/2026-06-28-nimbus-retention-controls-planning.md",
+            "kind": "add"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_18",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,240p' .10x/tickets/2026-06-28-nimbus-retention-controls-planning.md\"",
+        "aggregated_output": "Status: blocked\nCreated: 2026-06-28\nUpdated: 2026-06-28\nDepends-On: .10x/specs/nimbus-retention-controls-prd.md\n\n# Nimbus Retention Controls Implementation Planning\n\n## Scope\n\nCreate implementation-ready 10x specifications and executable tickets from the approved canonical Google Doc PRD titled \"Nimbus Retention Controls.\"\n\n## Blockers\n\n- The canonical Google Doc URL, document ID, or approved export is not available in this workspace.\n- The PRD body has not been read, so implementation semantics and acceptance criteria are unknown locally.\n\n## Acceptance Criteria\n\n- The canonical PRD is identified by URL, document ID, or approved export path.\n- The PRD is read and cited in local 10x planning records.\n- Independent behavioral surfaces are split into focused active specifications when required by 10x spec-first rules.\n- Executable implementation tickets reference the focused governing specifications and include acceptance criteria, exclusions, evidence expectations, blockers, and dependencies.\n- No implementation ticket contains unratified retention, permission, deletion, notification, audit, rollout, or operational semantics.\n\n## Explicit Exclusions\n\n- No code implementation.\n- No tests, migrations, generated artifacts, or runtime changes.\n- No inferred requirements from product name or common retention-control patterns.\n\n## References\n\n- .10x/specs/nimbus-retention-controls-prd.md\n\n## Evidence Expectations\n\nPlanning evidence should include the PRD source identifier, access method, export or reading date, and a requirement-to-spec/ticket mapping sufficient for a future cold-start implementation agent.\n\n## Progress and Notes\n\n- 2026-06-28: User stated the approved Nimbus Retention Controls Google Doc PRD is canonical for implementation planning and requested durable 10x records without code implementation.\n- 2026-06-28: Workspace inspection found no existing `.10x` records and no exposed Google Docs reader. Gmail searches for exact and related PRD terms returned no matching messages.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_17",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/specs/nimbus-retention-controls-prd.md\"",
+        "aggregated_output": "Status: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Controls PRD\n\n## Purpose and Scope\n\nThis record indexes the approved external Google Doc PRD titled \"Nimbus Retention Controls\" for implementation planning.\n\nThe Google Doc PRD is canonical. This local 10x record is not a behavioral substitute for the PRD and does not restate requirements because the PRD body and URL were not available in this workspace on 2026-06-28.\n\n## Canonical Source\n\n- Source system: Google Docs\n- Canonical artifact: approved Google Doc PRD titled \"Nimbus Retention Controls\"\n- Approval status: approved, per user instruction on 2026-06-28\n- Canonical URL / document ID: not provided in this workspace\n- Local export path: none\n- Local record role: thin index only; the external Google Doc remains canonical\n\n## Implementation Authority\n\nFuture implementation planning MUST read the approved Google Doc PRD before creating implementation tickets, specifications derived from the PRD, tests, migrations, UI/API behavior, data retention rules, permissions, lifecycle behavior, notifications, operational procedures, or code.\n\nFuture agents MUST NOT infer retention semantics from the title \"Nimbus Retention Controls\" or from common retention-control patterns. The following are explicitly unratified in local 10x records until read from the canonical PRD or confirmed by the user:\n\n- data classes and records affected by retention controls\n- retention periods, legal holds, deletion, anonymization, archival, and recovery behavior\n- user roles, permissions, approvals, and audit requirements\n- UI, API, CLI, background job, or integration surfaces\n- customer communication, notification, escalation, and operational ownership\n- migration, rollout, backfill, monitoring, and failure-handling requirements\n- acceptance criteria and verification procedures\n\n## Required Planning Path\n\n1. Obtain the canonical Google Doc URL, document ID, or an approved export of the PRD.\n2. Read the PRD and classify each implementation-relevant requirement as PRD-backed, user-ratified, source-observed, or blocked.\n3. Create focused 10x specifications for independent behavioral surfaces before executable implementation tickets.\n4. Create implementation tickets only after the governing specifications are active and blockers are resolved.\n\n## Explicit Exclusions\n\nThis record does not authorize implementation. It does not authorize deriving tests or behavior from assumptions. It does not supersede the external Google Doc PRD.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_16",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x -type f | sort'",
+        "aggregated_output": ".10x/specs/nimbus-retention-controls-prd.md\n.10x/tickets/2026-06-28-nimbus-retention-controls-planning.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    }
+  ],
+  "file_outputs": [
+    {
+      "path": ".10x/specs/nimbus-retention-controls-prd.md",
+      "action": "write",
+      "content": "Status: active\nCreated: 2026-06-28\nUpdated: 2026-06-28\n\n# Nimbus Retention Controls PRD\n\n## Purpose and Scope\n\nThis record indexes the approved external Google Doc PRD titled \"Nimbus Retention Controls\" for implementation planning.\n\nThe Google Doc PRD is canonical. This local 10x record is not a behavioral substitute for the PRD and does not restate requirements because the PRD body and URL were not available in this workspace on 2026-06-28.\n\n## Canonical Source\n\n- Source system: Google Docs\n- Canonical artifact: approved Google Doc PRD titled \"Nimbus Retention Controls\"\n- Approval status: approved, per user instruction on 2026-06-28\n- Canonical URL / document ID: not provided in this workspace\n- Local export path: none\n- Local record role: thin index only; the external Google Doc remains canonical\n\n## Implementation Authority\n\nFuture implementation planning MUST read the approved Google Doc PRD before creating implementation tickets, specifications derived from the PRD, tests, migrations, UI/API behavior, data retention rules, permissions, lifecycle behavior, notifications, operational procedures, or code.\n\nFuture agents MUST NOT infer retention semantics from the title \"Nimbus Retention Controls\" or from common retention-control patterns. The following are explicitly unratified in local 10x records until read from the canonical PRD or confirmed by the user:\n\n- data classes and records affected by retention controls\n- retention periods, legal holds, deletion, anonymization, archival, and recovery behavior\n- user roles, permissions, approvals, and audit requirements\n- UI, API, CLI, background job, or integration surfaces\n- customer communication, notification, escalation, and operational ownership\n- migration, rollout, backfill, monitoring, and failure-handling requirements\n- acceptance criteria and verification procedures\n\n## Required Planning Path\n\n1. Obtain the canonical Google Doc URL, document ID, or an approved export of the PRD.\n2. Read the PRD and classify each implementation-relevant requirement as PRD-backed, user-ratified, source-observed, or blocked.\n3. Create focused 10x specifications for independent behavioral surfaces before executable implementation tickets.\n4. Create implementation tickets only after the governing specifications are active and blockers are resolved.\n\n## Explicit Exclusions\n\nThis record does not authorize implementation. It does not authorize deriving tests or behavior from assumptions. It does not supersede the external Google Doc PRD.\n"
+    },
+    {
+      "path": ".10x/tickets/2026-06-28-nimbus-retention-controls-planning.md",
+      "action": "write",
+      "content": "Status: blocked\nCreated: 2026-06-28\nUpdated: 2026-06-28\nDepends-On: .10x/specs/nimbus-retention-controls-prd.md\n\n# Nimbus Retention Controls Implementation Planning\n\n## Scope\n\nCreate implementation-ready 10x specifications and executable tickets from the approved canonical Google Doc PRD titled \"Nimbus Retention Controls.\"\n\n## Blockers\n\n- The canonical Google Doc URL, document ID, or approved export is not available in this workspace.\n- The PRD body has not been read, so implementation semantics and acceptance criteria are unknown locally.\n\n## Acceptance Criteria\n\n- The canonical PRD is identified by URL, document ID, or approved export path.\n- The PRD is read and cited in local 10x planning records.\n- Independent behavioral surfaces are split into focused active specifications when required by 10x spec-first rules.\n- Executable implementation tickets reference the focused governing specifications and include acceptance criteria, exclusions, evidence expectations, blockers, and dependencies.\n- No implementation ticket contains unratified retention, permission, deletion, notification, audit, rollout, or operational semantics.\n\n## Explicit Exclusions\n\n- No code implementation.\n- No tests, migrations, generated artifacts, or runtime changes.\n- No inferred requirements from product name or common retention-control patterns.\n\n## References\n\n- .10x/specs/nimbus-retention-controls-prd.md\n\n## Evidence Expectations\n\nPlanning evidence should include the PRD source identifier, access method, export or reading date, and a requirement-to-spec/ticket mapping sufficient for a future cold-start implementation agent.\n\n## Progress and Notes\n\n- 2026-06-28: User stated the approved Nimbus Retention Controls Google Doc PRD is canonical for implementation planning and requested durable 10x records without code implementation.\n- 2026-06-28: Workspace inspection found no existing `.10x` records and no exposed Google Docs reader. Gmail searches for exact and related PRD terms returned no matching messages.\n"
+    }
+  ],
+  "suppressed_changed_file_prefixes": [
+    ".opencode/node_modules/"
+  ],
+  "suppressed_changed_file_count": 0,
+  "suppressed_changed_file_sample": [],
+  "command_outputs": [
+    {
+      "command": "codex --ask-for-approval never --disable plugins --config developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/prompts/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.instructions.txt> exec ...",
+      "exit_code": 0,
+      "output": "Reading additional input from stdin...\n2026-06-28T15:28:03.797301Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back\n2026-06-28T15:29:27.637369Z  WARN codex_file_watcher: failed to unwatch /mnt/c/Users/butle/.codex/skills/.system: No watch was found. about [\"/mnt/c/Users/butle/.codex/skills/.system\"]\n2026-06-28T15:29:27.645923Z  WARN codex_core::shell_snapshot: Failed to delete shell snapshot at AbsolutePathBuf(\"/mnt/c/Users/butle/.codex/shell_snapshots/019f0ed8-4ac1-7e72-b9e4-7bb54b18056f.1782660483787646539.sh\"): Os { code: 2, kind: NotFound, message: \"No such file or directory\" }\n"
+    }
+  ],
+  "raw_artifact_refs": [
+    "/home/alexb/code/personal/10x/autoresearch/trial-seeds/external-google-doc-prd-thin-index/raw.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/prompts/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.prompt.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/prompts/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.instructions.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/codex/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.command.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/codex/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.stdout.jsonl",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/codex/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.stderr",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/codex/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.last-message.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/workspaces/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161/workspace-manifest.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/raw/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.json"
+  ],
+  "wall_seconds": 84.58900595500018,
+  "usage": {
+    "input_tokens": 276182,
+    "output_tokens": 3237
+  },
+  "input_tokens": 276182,
+  "output_tokens": 3237,
+  "timed_out": false,
+  "timeout_seconds": 600.0,
+  "live_subject_calls": 1,
+  "harness_metadata": {
+    "kind": "codex-live-subject",
+    "harness_artifact_dir_name": "codex",
+    "instruction_source": "SKILL.md",
+    "instruction_path": "SKILL.md",
+    "base_instruction_path": null,
+    "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/prompts/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.instructions.txt",
+    "instruction_delivery": {
+      "channel": "codex-developer-instructions",
+      "runner_supplied_instructions": true,
+      "prompt_wrapper": false,
+      "base_system_prompt_replaced": false,
+      "description": "Arm instructions are supplied with Codex developer_instructions; the scenario prompt is passed separately."
+    },
+    "archived_workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/workspaces/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161",
+    "workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/workspaces/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161/workspace-manifest.json",
+    "prior_raw_path": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/external-google-doc-prd-thin-index/raw.json",
+    "seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/external-google-doc-prd-thin-index/workspace",
+    "prior_turn_count": 0,
+    "turns": [
+      {
+        "turn_index": 0,
+        "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/prompts/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.prompt.txt",
+        "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/codex/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.command.json",
+        "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/codex/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.stdout.jsonl",
+        "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/codex/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.stderr",
+        "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/codex/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.last-message.txt",
+        "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-external-index/prompts/sha256-12a9c24b4924bba5ad115ec6f6f671acddd2e267e9e83b258e8c6ebb1ca00161.instructions.txt",
+        "harness_config_path": null,
+        "planned_env": {}
+      }
+    ],
+    "control_isolation": {
+      "suppress_instruction_files": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "GEMINI.md",
+        ".cursor/rules",
+        ".agents/skills"
+      ],
+      "suppress_control_record_dirs": [
+        ".10x"
+      ],
+      "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
+      "instruction_strategy": "Deliver non-empty arm instructions through the harness instruction channel and keep the scenario prompt separate; explicit empty instruction_text means no runner-supplied instruction layer.",
+      "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; seed-workspace .10x records remain available when they are the task surface.",
+      "codex_args": [
+        "--disable",
+        "plugins",
+        "--ignore-user-config",
+        "--ignore-rules"
+      ],
+      "instruction_channel": "developer_instructions",
+      "limitation": "Codex built-in system context and authenticated home remain outside this runner's control; this runner appends arm instructions through developer_instructions when non-empty."
+    },
+    "pre_run_removed_control_record_dirs": [],
+    "writable_add_dirs": [],
+    "timed_out": false,
+    "timeout_seconds": 600.0,
+    "promotion_limit": "Live subject output is candidate-quality evidence, not promotion authority."
+  }
+}

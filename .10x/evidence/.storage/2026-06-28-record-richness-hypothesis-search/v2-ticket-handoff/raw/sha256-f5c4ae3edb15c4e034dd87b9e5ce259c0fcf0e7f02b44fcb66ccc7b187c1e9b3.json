@@ -1,0 +1,315 @@
+{
+  "schema_version": 1,
+  "experiment_id": "EXP-20260628-s010-v2-ticket-handoff",
+  "scenario_id": "SCN-006",
+  "variant_id": "candidate-cold-start-record-handoff-check",
+  "rep": 1,
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "instruction_digest": "sha256:da4f51853724ea91884af6d338aa3c67d68234e86d18ef25eef9cc7b39479fee",
+  "scientific_contract": {
+    "question": "Does the compact cold-start record handoff candidate improve executable ticket handoff versus current 10x?",
+    "hypothesis": "The compact candidate should preserve active authority, source drift, exclusions, evidence expectations, and first inspection targets without bloating the ticket.",
+    "expected_behavior": "Subject creates a bounded executable ticket for bringing invoice retry export source/tests into alignment with active policy/spec while treating superseded, done, and cancelled records as history.",
+    "inspection_criteria": [
+      "Ticket references active decision and spec, not superseded or terminal records as authority.",
+      "Ticket states source drift: current code uses delinquent and enterprise filtering while active spec requires overdue, production, retryEligible, non-cancelled, no enterprise filter.",
+      "Ticket includes explicit exclusions, first source/tests to inspect, edge cases, evidence expectations, blockers/provenance, and next action.",
+      "No implementation edits occur."
+    ],
+    "quality_floor": "Any implementation edit, terminal-record authority mistake, missing acceptance criteria, or ticket that omits the known source drift caps the candidate.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-hypothesis-batch.md"
+  },
+  "transcript": [
+    {
+      "role": "user",
+      "content": "Please create the executable implementation ticket needed to bring invoice retry export behavior into alignment with the current active records. Do not implement code."
+    },
+    {
+      "role": "assistant",
+      "content": "Created the executable implementation ticket:\n\n[.10x/tickets/2026-06-28-align-invoice-retry-export-with-active-policy.md](/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-b5dbjaos/workspace/.10x/tickets/2026-06-28-align-invoice-retry-export-with-active-policy.md)\n\nIt references the active spec and decision, names the stale source/test behavior found by read-only inspection, defines acceptance criteria and exclusions, and sets evidence expectations for the eventual implementation. No code was changed."
+    }
+  ],
+  "tool_invocations": [
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_3",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'git status --short'",
+        "aggregated_output": "fatal: not a git repository (or any parent up to mount point /mnt)\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\n",
+        "exit_code": 128,
+        "status": "failed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_2",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'pwd && rg --files .10x AGENTS.md 2>/dev/null | sort'",
+        "aggregated_output": ".10x/decisions/invoice-retry-export-policy.md\n.10x/decisions/superseded/invoice-retry-window-v1.md\n.10x/evidence/2026-06-10-cancelled-invoice-prototype.md\n.10x/research/2025-12-01-retired-invoice-status-api.md\n.10x/specs/invoice-retry-export.md\n.10x/specs/superseded/invoice-retry-export-v1.md\n.10x/tickets/cancelled/2026-06-12-enterprise-only-invoice-retry-export.md\n.10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_1",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'rg -n \"invoice|retry|export\" .10x AGENTS.md 2>/dev/null'",
+        "aggregated_output": ".10x/specs/invoice-retry-export.md:9:Define the CSV export used by Billing Ops to review invoices eligible for the\n.10x/specs/invoice-retry-export.md:10:manual retry queue. This specification covers only row eligibility and CSV\n.10x/specs/invoice-retry-export.md:15:- retry execution;\n.10x/specs/invoice-retry-export.md:23:Given invoice rows, the export MUST include rows where:\n.10x/specs/invoice-retry-export.md:26:- `retryEligible === true`;\n.10x/specs/invoice-retry-export.md:38:Rows where `retryEligible !== true` MUST be excluded.\n.10x/specs/invoice-retry-export.md:40:The exported CSV columns MUST be exactly:\n.10x/specs/invoice-retry-export.md:43:invoice_id,account_id,amount_cents\n.10x/specs/invoice-retry-export.md:46:The export MUST preserve source row order after filtering.\n.10x/specs/invoice-retry-export.md:50:- Production overdue retry-eligible enterprise invoices are exported.\n.10x/specs/invoice-retry-export.md:51:- Production overdue retry-eligible non-enterprise invoices are exported.\n.10x/specs/invoice-retry-export.md:52:- Test invoices are excluded.\n.10x/specs/invoice-retry-export.md:53:- Cancelled invoices are excluded.\n.10x/specs/invoice-retry-export.md:54:- Non-overdue invoices are excluded.\n.10x/specs/invoice-retry-export.md:55:- Retry-ineligible invoices are excluded.\n.10x/specs/invoice-retry-export.md:57:  `invoice_id,account_id,amount_cents`.\n.10x/decisions/invoice-retry-export-policy.md:9:Billing Ops migrated from the retired invoice API that used `delinquent` to the\n.10x/decisions/invoice-retry-export-policy.md:11:cancelled-invoice inclusion and enterprise-only filtering. Those branches are no\n.10x/decisions/invoice-retry-export-policy.md:16:The invoice retry export uses the active `overdue` status, includes production\n.10x/decisions/invoice-retry-export-policy.md:17:retry-eligible invoices regardless of enterprise status, and excludes test,\n.10x/decisions/invoice-retry-export-policy.md:18:cancelled, non-overdue, and retry-ineligible invoices.\n.10x/decisions/invoice-retry-export-policy.md:22:Retired `delinquent` status: rejected because the current invoice source\n.10x/decisions/invoice-retry-export-policy.md:25:Enterprise-only retry export: rejected because Billing Ops reviews all\n.10x/decisions/invoice-retry-export-policy.md:26:production retry-eligible accounts.\n.10x/decisions/invoice-retry-export-policy.md:28:Cancelled-invoice inclusion: rejected because cancelled invoices leave the retry\n.10x/decisions/invoice-retry-export-policy.md:34:cancelled-invoice inclusion are stale. Historical records should inform why\n.10x/evidence/2026-06-10-cancelled-invoice-prototype.md:4:Relates-To: .10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md\n.10x/evidence/2026-06-10-cancelled-invoice-prototype.md:10:The old prototype exported cancelled delinquent invoices and used\n.10x/evidence/2026-06-10-cancelled-invoice-prototype.md:11:`invoice_id,account_id,amount_cents` as the header.\n.10x/evidence/2026-06-10-cancelled-invoice-prototype.md:19:Supports that the done historical ticket implemented cancelled-invoice\n.10x/evidence/2026-06-10-cancelled-invoice-prototype.md:25:establish current behavior after the active invoice retry export policy.\n.10x/research/2025-12-01-retired-invoice-status-api.md:9:Which invoice status value did the old retry API expose for invoices needing\n.10x/research/2025-12-01-retired-invoice-status-api.md:10:retry review?\n.10x/research/2025-12-01-retired-invoice-status-api.md:14:Inspected the retired 2025 invoice API export and old queue worker logs.\n.10x/research/2025-12-01-retired-invoice-status-api.md:18:The retired API used `delinquent` for invoices that needed retry review.\n.10x/specs/superseded/invoice-retry-export-v1.md:9:Superseded contract for the old invoice retry export.\n.10x/specs/superseded/invoice-retry-export-v1.md:13:The export used the retired `delinquent` invoice status and allowed cancelled\n.10x/specs/superseded/invoice-retry-export-v1.md:14:invoices to remain visible for audit review.\n.10x/specs/superseded/invoice-retry-export-v1.md:18:- Delinquent invoices are exported.\n.10x/specs/superseded/invoice-retry-export-v1.md:19:- Cancelled delinquent invoices are exported.\n.10x/specs/superseded/invoice-retry-export-v1.md:24:Superseded by `.10x/specs/invoice-retry-export.md`.\n.10x/decisions/superseded/invoice-retry-window-v1.md:9:The old retry queue used a two-attempt review window and treated cancelled\n.10x/decisions/superseded/invoice-retry-window-v1.md:10:invoices as audit-visible.\n.10x/decisions/superseded/invoice-retry-window-v1.md:14:Use the retired `delinquent` status and include invoices with\n.10x/decisions/superseded/invoice-retry-window-v1.md:15:`retryAttemptCount <= 2`, including cancelled invoices.\n.10x/decisions/superseded/invoice-retry-window-v1.md:19:Overdue-only export: rejected at the time because the current invoice source had\n.10x/tickets/cancelled/2026-06-12-enterprise-only-invoice-retry-export.md:5:Depends-On: .10x/specs/invoice-retry-export.md\n.10x/tickets/cancelled/2026-06-12-enterprise-only-invoice-retry-export.md:11:Limit invoice retry export rows to enterprise accounts.\n.10x/tickets/cancelled/2026-06-12-enterprise-only-invoice-retry-export.md:15:- Enterprise overdue invoices are exported.\n.10x/tickets/cancelled/2026-06-12-enterprise-only-invoice-retry-export.md:16:- Non-enterprise overdue invoices are excluded.\n.10x/tickets/cancelled/2026-06-12-enterprise-only-invoice-retry-export.md:20:- 2026-06-12: Ticket cancelled after Billing Ops confirmed the retry review feed\n.10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md:5:Depends-On: .10x/specs/superseded/invoice-retry-export-v1.md\n.10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md:11:Prototype cancelled-invoice visibility in the old retry export.\n.10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md:15:- Delinquent cancelled invoices appear in the CSV.\n.10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md:16:- Delinquent active invoices appear in the CSV.\n.10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md:17:- Header remains `invoice_id,account_id,amount_cents`.\n",
+        "exit_code": 2,
+        "status": "failed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_8",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md\"",
+        "aggregated_output": "Status: done\nCreated: 2026-06-10\nUpdated: 2026-06-10\nParent: None\nDepends-On: .10x/specs/superseded/invoice-retry-export-v1.md\n\n# Include Cancelled Invoice Retries\n\n## Scope\n\nPrototype cancelled-invoice visibility in the old retry export.\n\n## Acceptance Criteria\n\n- Delinquent cancelled invoices appear in the CSV.\n- Delinquent active invoices appear in the CSV.\n- Header remains `invoice_id,account_id,amount_cents`.\n\n## Progress And Notes\n\n- 2026-06-10: Prototype completed against the superseded V1 spec.\n\n## Blockers\n\nNone at closure. This ticket is historical and terminal.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_5",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/specs/invoice-retry-export.md\"",
+        "aggregated_output": "Status: active\nCreated: 2026-06-24\nUpdated: 2026-06-24\n\n# Invoice Retry Export\n\n## Purpose And Scope\n\nDefine the CSV export used by Billing Ops to review invoices eligible for the\nmanual retry queue. This specification covers only row eligibility and CSV\ncolumns.\n\nExplicit exclusions:\n\n- retry execution;\n- customer notification;\n- dunning workflow;\n- old `delinquent` status names from the retired API;\n- cancelled, done, or superseded workstreams.\n\n## Behavior\n\nGiven invoice rows, the export MUST include rows where:\n\n- `status === \"overdue\"`;\n- `retryEligible === true`;\n- `accountType === \"production\"`;\n- `cancelledAt == null`.\n\nEnterprise status MUST NOT be used as an eligibility filter.\n\nRows where `accountType === \"test\"` MUST be excluded.\n\nRows where `cancelledAt != null` MUST be excluded.\n\nRows where `status !== \"overdue\"` MUST be excluded.\n\nRows where `retryEligible !== true` MUST be excluded.\n\nThe exported CSV columns MUST be exactly:\n\n```text\ninvoice_id,account_id,amount_cents\n```\n\nThe export MUST preserve source row order after filtering.\n\n## Acceptance Criteria\n\n- Production overdue retry-eligible enterprise invoices are exported.\n- Production overdue retry-eligible non-enterprise invoices are exported.\n- Test invoices are excluded.\n- Cancelled invoices are excluded.\n- Non-overdue invoices are excluded.\n- Retry-ineligible invoices are excluded.\n- The header and column order are exactly\n  `invoice_id,account_id,amount_cents`.\n- Source order is preserved after filtering.\n\n## Constraints\n\nUse the existing JavaScript module and node test harness. Do not add\ndependencies.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_6",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/decisions/invoice-retry-export-policy.md\"",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_7",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' .10x/tickets/cancelled/2026-06-12-enterprise-only-invoice-retry-export.md\"",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_10",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'rg --files . | sort'",
+        "aggregated_output": "./package.json\n./src/invoices/exportRetryInvoices.js\n./src/invoices/exportRetryInvoices.test.js\n./workspace-manifest.json\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_11",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"rg -n \\\"invoice|retry|export|delinquent|overdue|enterprise|cancelled|retryEligible|accountType|cancelledAt\\\" . -g '\"'!*.git/*'\"'\"",
+        "aggregated_output": "./package.json:4:    \"test\": \"node --test src/invoices/exportRetryInvoices.test.js\"\n./src/invoices/exportRetryInvoices.js:1:export function exportRetryInvoicesCsv(rows) {\n./src/invoices/exportRetryInvoices.js:2:  const header = \"invoice_id,account_id,amount_cents\";\n./src/invoices/exportRetryInvoices.js:4:    .filter((row) => row.status === \"delinquent\")\n./src/invoices/exportRetryInvoices.js:5:    .filter((row) => row.retryEligible === true)\n./src/invoices/exportRetryInvoices.js:6:    .filter((row) => row.enterprise === true)\n./src/invoices/exportRetryInvoices.js:8:      row.invoiceId,\n./src/invoices/exportRetryInvoices.test.js:4:import { exportRetryInvoicesCsv } from \"./exportRetryInvoices.js\";\n./src/invoices/exportRetryInvoices.test.js:6:test(\"exports retryable delinquent enterprise invoices\", () => {\n./src/invoices/exportRetryInvoices.test.js:7:  const csv = exportRetryInvoicesCsv([\n./src/invoices/exportRetryInvoices.test.js:9:      invoiceId: \"inv-enterprise\",\n./src/invoices/exportRetryInvoices.test.js:12:      status: \"delinquent\",\n./src/invoices/exportRetryInvoices.test.js:13:      retryEligible: true,\n./src/invoices/exportRetryInvoices.test.js:14:      enterprise: true,\n./src/invoices/exportRetryInvoices.test.js:15:      accountType: \"production\",\n./src/invoices/exportRetryInvoices.test.js:16:      cancelledAt: null,\n./src/invoices/exportRetryInvoices.test.js:19:      invoiceId: \"inv-growth\",\n./src/invoices/exportRetryInvoices.test.js:22:      status: \"delinquent\",\n./src/invoices/exportRetryInvoices.test.js:23:      retryEligible: true,\n./src/invoices/exportRetryInvoices.test.js:24:      enterprise: false,\n./src/invoices/exportRetryInvoices.test.js:25:      accountType: \"production\",\n./src/invoices/exportRetryInvoices.test.js:26:      cancelledAt: null,\n./src/invoices/exportRetryInvoices.test.js:33:      \"invoice_id,account_id,amount_cents\",\n./src/invoices/exportRetryInvoices.test.js:34:      \"inv-enterprise,acct-ent,5000\",\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_14",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' src/invoices/exportRetryInvoices.test.js\"",
+        "aggregated_output": "import assert from \"node:assert/strict\";\nimport test from \"node:test\";\n\nimport { exportRetryInvoicesCsv } from \"./exportRetryInvoices.js\";\n\ntest(\"exports retryable delinquent enterprise invoices\", () => {\n  const csv = exportRetryInvoicesCsv([\n    {\n      invoiceId: \"inv-enterprise\",\n      accountId: \"acct-ent\",\n      amountCents: 5000,\n      status: \"delinquent\",\n      retryEligible: true,\n      enterprise: true,\n      accountType: \"production\",\n      cancelledAt: null,\n    },\n    {\n      invoiceId: \"inv-growth\",\n      accountId: \"acct-growth\",\n      amountCents: 4100,\n      status: \"delinquent\",\n      retryEligible: true,\n      enterprise: false,\n      accountType: \"production\",\n      cancelledAt: null,\n    },\n  ]);\n\n  assert.equal(\n    csv,\n    [\n      \"invoice_id,account_id,amount_cents\",\n      \"inv-enterprise,acct-ent,5000\",\n    ].join(\"\\n\"),\n  );\n});\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_15",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,160p' package.json\"",
+        "aggregated_output": "{\n  \"type\": \"module\",\n  \"scripts\": {\n    \"test\": \"node --test src/invoices/exportRetryInvoices.test.js\"\n  }\n}\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_13",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,220p' src/invoices/exportRetryInvoices.js\"",
+        "aggregated_output": "export function exportRetryInvoicesCsv(rows) {\n  const header = \"invoice_id,account_id,amount_cents\";\n  const body = rows\n    .filter((row) => row.status === \"delinquent\")\n    .filter((row) => row.retryEligible === true)\n    .filter((row) => row.enterprise === true)\n    .map((row) => [\n      row.invoiceId,\n      row.accountId,\n      row.amountCents,\n    ].join(\",\"));\n\n  return [header, ...body].join(\"\\n\");\n}\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_16",
+        "type": "command_execution",
+        "command": "/bin/bash -lc 'find .10x/tickets -maxdepth 2 -type f | sort'",
+        "aggregated_output": "",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_18",
+        "type": "file_change",
+        "changes": [
+          {
+            "path": "/mnt/c/Users/butle/AppData/Local/Temp/10x-autoresearch-b5dbjaos/workspace/.10x/tickets/2026-06-28-align-invoice-retry-export-with-active-policy.md",
+            "kind": "add"
+          }
+        ],
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_20",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"sed -n '1,260p' .10x/tickets/2026-06-28-align-invoice-retry-export-with-active-policy.md\"",
+        "aggregated_output": "Status: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: None\nDepends-On: .10x/specs/invoice-retry-export.md, .10x/decisions/invoice-retry-export-policy.md\n\n# Align Invoice Retry Export With Active Policy\n\n## Scope\n\nUpdate the existing invoice retry CSV export implementation and its node test so\nthey match the current active invoice retry export records.\n\nImplementation files in scope:\n\n- `src/invoices/exportRetryInvoices.js`\n- `src/invoices/exportRetryInvoices.test.js`\n\nCurrent source inspection on 2026-06-28 found stale behavior:\n\n- `src/invoices/exportRetryInvoices.js` filters `status === \"delinquent\"`;\n- `src/invoices/exportRetryInvoices.js` filters `enterprise === true`;\n- `src/invoices/exportRetryInvoices.test.js` asserts delinquent enterprise-only\n  output.\n\nThe active behavior is governed by\n`.10x/specs/invoice-retry-export.md` and\n`.10x/decisions/invoice-retry-export-policy.md`.\n\n## Acceptance Criteria\n\n- `exportRetryInvoicesCsv(rows)` exports rows where `status === \"overdue\"`,\n  `retryEligible === true`, `accountType === \"production\"`, and\n  `cancelledAt == null`.\n- Enterprise status is not used as an eligibility filter; production overdue\n  retry-eligible enterprise and non-enterprise invoices are both exported.\n- Rows with `accountType === \"test\"` are excluded.\n- Rows with `cancelledAt != null` are excluded.\n- Rows with `status !== \"overdue\"` are excluded.\n- Rows with `retryEligible !== true` are excluded.\n- The CSV header and column order remain exactly\n  `invoice_id,account_id,amount_cents`.\n- Exported rows preserve source order after filtering.\n- The node test suite covers the active inclusion and exclusion cases above and\n  no longer asserts the retired `delinquent` or enterprise-only behavior.\n\n## Explicit Exclusions\n\n- Do not implement retry execution.\n- Do not implement customer notification.\n- Do not implement dunning workflow changes.\n- Do not revive cancelled-invoice inclusion from\n  `.10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md`.\n- Do not revive enterprise-only filtering from\n  `.10x/tickets/cancelled/2026-06-12-enterprise-only-invoice-retry-export.md`.\n- Do not use the retired `delinquent` status from superseded records.\n- Do not add dependencies.\n\n## Evidence Expectations\n\n- Record test evidence showing `npm test` or the equivalent package script ran\n  after implementation.\n- Evidence must state the command, exit result, and that the assertions cover\n  overdue inclusion, non-enterprise inclusion, test exclusion, cancelled\n  exclusion, non-overdue exclusion, retry-ineligible exclusion, exact header, and\n  source-order preservation.\n\n## Blockers\n\nNone. The active specification, active decision, current source inspection, and\nexisting package script provide enough authority for implementation.\n\n## Progress And Notes\n\n- 2026-06-28: Created as the executable implementation owner for aligning the\n  invoice retry export with the active policy. No code changes were made.\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    },
+    {
+      "type": "item.completed",
+      "item": {
+        "id": "item_21",
+        "type": "command_execution",
+        "command": "/bin/bash -lc \"find . -maxdepth 4 -type f -printf '%p\\\\n' | sort\"",
+        "aggregated_output": "./.10x/decisions/invoice-retry-export-policy.md\n./.10x/decisions/superseded/invoice-retry-window-v1.md\n./.10x/evidence/2026-06-10-cancelled-invoice-prototype.md\n./.10x/research/2025-12-01-retired-invoice-status-api.md\n./.10x/specs/invoice-retry-export.md\n./.10x/specs/superseded/invoice-retry-export-v1.md\n./.10x/tickets/2026-06-28-align-invoice-retry-export-with-active-policy.md\n./.10x/tickets/cancelled/2026-06-12-enterprise-only-invoice-retry-export.md\n./.10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md\n./package.json\n./src/invoices/exportRetryInvoices.js\n./src/invoices/exportRetryInvoices.test.js\n./workspace-manifest.json\n",
+        "exit_code": 0,
+        "status": "completed"
+      }
+    }
+  ],
+  "file_outputs": [
+    {
+      "path": ".10x/tickets/2026-06-28-align-invoice-retry-export-with-active-policy.md",
+      "action": "write",
+      "content": "Status: open\nCreated: 2026-06-28\nUpdated: 2026-06-28\nParent: None\nDepends-On: .10x/specs/invoice-retry-export.md, .10x/decisions/invoice-retry-export-policy.md\n\n# Align Invoice Retry Export With Active Policy\n\n## Scope\n\nUpdate the existing invoice retry CSV export implementation and its node test so\nthey match the current active invoice retry export records.\n\nImplementation files in scope:\n\n- `src/invoices/exportRetryInvoices.js`\n- `src/invoices/exportRetryInvoices.test.js`\n\nCurrent source inspection on 2026-06-28 found stale behavior:\n\n- `src/invoices/exportRetryInvoices.js` filters `status === \"delinquent\"`;\n- `src/invoices/exportRetryInvoices.js` filters `enterprise === true`;\n- `src/invoices/exportRetryInvoices.test.js` asserts delinquent enterprise-only\n  output.\n\nThe active behavior is governed by\n`.10x/specs/invoice-retry-export.md` and\n`.10x/decisions/invoice-retry-export-policy.md`.\n\n## Acceptance Criteria\n\n- `exportRetryInvoicesCsv(rows)` exports rows where `status === \"overdue\"`,\n  `retryEligible === true`, `accountType === \"production\"`, and\n  `cancelledAt == null`.\n- Enterprise status is not used as an eligibility filter; production overdue\n  retry-eligible enterprise and non-enterprise invoices are both exported.\n- Rows with `accountType === \"test\"` are excluded.\n- Rows with `cancelledAt != null` are excluded.\n- Rows with `status !== \"overdue\"` are excluded.\n- Rows with `retryEligible !== true` are excluded.\n- The CSV header and column order remain exactly\n  `invoice_id,account_id,amount_cents`.\n- Exported rows preserve source order after filtering.\n- The node test suite covers the active inclusion and exclusion cases above and\n  no longer asserts the retired `delinquent` or enterprise-only behavior.\n\n## Explicit Exclusions\n\n- Do not implement retry execution.\n- Do not implement customer notification.\n- Do not implement dunning workflow changes.\n- Do not revive cancelled-invoice inclusion from\n  `.10x/tickets/done/2026-06-10-include-cancelled-invoice-retries.md`.\n- Do not revive enterprise-only filtering from\n  `.10x/tickets/cancelled/2026-06-12-enterprise-only-invoice-retry-export.md`.\n- Do not use the retired `delinquent` status from superseded records.\n- Do not add dependencies.\n\n## Evidence Expectations\n\n- Record test evidence showing `npm test` or the equivalent package script ran\n  after implementation.\n- Evidence must state the command, exit result, and that the assertions cover\n  overdue inclusion, non-enterprise inclusion, test exclusion, cancelled\n  exclusion, non-overdue exclusion, retry-ineligible exclusion, exact header, and\n  source-order preservation.\n\n## Blockers\n\nNone. The active specification, active decision, current source inspection, and\nexisting package script provide enough authority for implementation.\n\n## Progress And Notes\n\n- 2026-06-28: Created as the executable implementation owner for aligning the\n  invoice retry export with the active policy. No code changes were made.\n"
+    }
+  ],
+  "suppressed_changed_file_prefixes": [
+    ".opencode/node_modules/"
+  ],
+  "suppressed_changed_file_count": 0,
+  "suppressed_changed_file_sample": [],
+  "command_outputs": [
+    {
+      "command": "codex --ask-for-approval never --disable plugins --config developer_instructions=<instructions stored at .10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/prompts/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.instructions.txt> exec ...",
+      "exit_code": 0,
+      "output": "Reading additional input from stdin...\n2026-06-28T15:30:09.520259Z  WARN codex_rollout::list: state db discrepancy during find_thread_path_by_id_str_in_subdir: falling_back\n2026-06-28T15:31:22.457825Z  WARN codex_file_watcher: failed to unwatch /mnt/c/Users/butle/.codex/skills/.system: No watch was found. about [\"/mnt/c/Users/butle/.codex/skills/.system\"]\n2026-06-28T15:31:22.584364Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)\n2026-06-28T15:31:22.604971Z  WARN codex_analytics::client: failed to send events request: error sending request for url (https://chatgpt.com/backend-api/codex/analytics-events/events)\n"
+    }
+  ],
+  "raw_artifact_refs": [
+    "/home/alexb/code/personal/10x/autoresearch/trial-seeds/mixed-record-authority-cold-start/raw.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/prompts/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.prompt.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/prompts/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.instructions.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/codex/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.command.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/codex/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.stdout.jsonl",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/codex/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.stderr",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/codex/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.last-message.txt",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/workspaces/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3/workspace-manifest.json",
+    ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/raw/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.json"
+  ],
+  "wall_seconds": 73.60187709300953,
+  "usage": {
+    "input_tokens": 216899,
+    "output_tokens": 2810
+  },
+  "input_tokens": 216899,
+  "output_tokens": 2810,
+  "timed_out": false,
+  "timeout_seconds": 600.0,
+  "live_subject_calls": 1,
+  "harness_metadata": {
+    "kind": "codex-live-subject",
+    "harness_artifact_dir_name": "codex",
+    "instruction_source": "SKILL.md plus candidate",
+    "instruction_path": "autoresearch/candidates/2026-06-28-cold-start-record-handoff-check.md",
+    "base_instruction_path": "SKILL.md",
+    "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/prompts/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.instructions.txt",
+    "instruction_delivery": {
+      "channel": "codex-developer-instructions",
+      "runner_supplied_instructions": true,
+      "prompt_wrapper": false,
+      "base_system_prompt_replaced": false,
+      "description": "Arm instructions are supplied with Codex developer_instructions; the scenario prompt is passed separately."
+    },
+    "archived_workspace_dir": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/workspaces/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3",
+    "workspace_manifest_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/workspaces/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3/workspace-manifest.json",
+    "prior_raw_path": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/mixed-record-authority-cold-start/raw.json",
+    "seed_workspace_dir": "/home/alexb/code/personal/10x/autoresearch/trial-seeds/mixed-record-authority-cold-start/workspace",
+    "prior_turn_count": 0,
+    "turns": [
+      {
+        "turn_index": 0,
+        "prompt_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/prompts/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.prompt.txt",
+        "command_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/codex/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.command.json",
+        "stdout_jsonl_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/codex/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.stdout.jsonl",
+        "stderr_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/codex/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.stderr",
+        "last_message_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/codex/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.last-message.txt",
+        "instruction_artifact_path": ".10x/evidence/.storage/2026-06-28-record-richness-hypothesis-search/v2-ticket-handoff/prompts/sha256-f5c4ae3edb15c4e034dd87b9e5ce259c0fcf0e7f02b44fcb66ccc7b187c1e9b3.instructions.txt",
+        "harness_config_path": null,
+        "planned_env": {}
+      }
+    ],
+    "control_isolation": {
+      "suppress_instruction_files": [
+        "AGENTS.md",
+        "CLAUDE.md",
+        "GEMINI.md",
+        ".cursor/rules",
+        ".agents/skills"
+      ],
+      "suppress_control_record_dirs": [
+        ".10x"
+      ],
+      "workspace_strategy": "Run each sample in a private temporary workspace, then archive outputs under the experiment artifact directory.",
+      "instruction_strategy": "Deliver non-empty arm instructions through the harness instruction channel and keep the scenario prompt separate; explicit empty instruction_text means no runner-supplied instruction layer.",
+      "record_graph_strategy": "Remove inherited .10x only from no-10x-control continuation workspaces before execution; seed-workspace .10x records remain available when they are the task surface.",
+      "codex_args": [
+        "--disable",
+        "plugins",
+        "--ignore-user-config",
+        "--ignore-rules"
+      ],
+      "instruction_channel": "developer_instructions",
+      "limitation": "Codex built-in system context and authenticated home remain outside this runner's control; this runner appends arm instructions through developer_instructions when non-empty."
+    },
+    "pre_run_removed_control_record_dirs": [],
+    "writable_add_dirs": [],
+    "timed_out": false,
+    "timeout_seconds": 600.0,
+    "promotion_limit": "Live subject output is candidate-quality evidence, not promotion authority."
+  }
+}

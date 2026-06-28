@@ -3,8 +3,8 @@
 Candidate ID: `candidate-cold-start-record-handoff-check-v1`
 Created: 2026-06-28
 Canonical target: `SKILL.md`
-Status: draft
-Promotion: manual-only
+Status: promoted
+Promotion: promoted as compressed 297-character canonical wording in `SKILL.md` on 2026-06-28 after 50 live samples in `.10x/evidence/2026-06-28-record-richness-hypothesis-batch.md`
 
 ## Target Behavior
 
