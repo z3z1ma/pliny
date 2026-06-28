@@ -1,0 +1,54 @@
+{
+  "experiment_id": "EXP-20260628-record-regeneration-check-continuation",
+  "method_tier": "MICRO",
+  "driver": "LLM scientist",
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "repetitions": 1,
+  "scientific_contract": {
+    "question": "After the scientist supplies the missing policy clarification, does the record regeneration checklist improve or preserve S010 record richness compared with current 10x?",
+    "hypothesis": "The current arm will now create implementation records after its blocker question is answered, while the candidate arm will update its already-created records to preserve the newly clarified disposition. The candidate should remain at least as rich and coherent without adding implementation edits or record spam.",
+    "expected_behavior": "Both arms should treat every non-auto-approved instant payout as Ops Review after clarification, preserve policy provenance, update or create coherent records, and avoid implementing source changes.",
+    "inspection_criteria": [
+      "Continuation uses prior raw artifacts from EXP-20260628-record-regeneration-check.",
+      "Current arm creates or updates records after the clarification instead of continuing to block.",
+      "Candidate arm updates any prior open bound around under-USD-500 ineligible payouts rather than leaving stale ambiguity.",
+      "Records preserve objective/current state, authority/provenance, constraints/exclusions/edge cases, evidence/limits, blockers/semantic authority, and next action/verification where source material supports it.",
+      "No arm edits implementation files, closes unsupported tickets, creates record spam, or triggers S010 hard floors.",
+      "canonical_guard.json reports canonical files unchanged during the run."
+    ],
+    "quality_floor": "Any implementation edit, unsupported ticket closure, invented unprompted policy semantic, stale contradiction after the clarification, or record that leaves material future action ambiguous makes the result non-promotable.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-candidate-result.md"
+  },
+  "arms": [
+    {
+      "id": "current-10x",
+      "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md"
+    },
+    {
+      "id": "candidate-record-regeneration-check",
+      "instruction_source": "SKILL.md plus record regeneration check candidate",
+      "base_instruction_path": "SKILL.md",
+      "instruction_path": "autoresearch/candidates/2026-06-28-record-regeneration-check.md"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SCN-006",
+      "prior_raw_paths": {
+        "current-10x": ".10x/evidence/.storage/2026-06-28-record-richness-score/record-regeneration-check-codex/raw/sha256-5c4641dc77c707b367de174bfff839720eaaa6732e952acfa9424112e3f0ec37.json",
+        "candidate-record-regeneration-check": ".10x/evidence/.storage/2026-06-28-record-richness-score/record-regeneration-check-codex/raw/sha256-77a18238947f5b3017bce898fef45a8454b0aa6406e31fc96d6cf816242c3ea2.json"
+      },
+      "prompts_by_arm": {
+        "current-10x": "Yes. To remove the ambiguity: every instant payout request that is not auto-approved should route to Ops Review, including under-$500 requests from sellers who fail the 90-day account-age or 60-day chargeback eligibility checks. Please create the executable implementation ticket or tickets, but do not implement yet.",
+        "candidate-record-regeneration-check": "Clarification: every instant payout request that is not auto-approved should route to Ops Review, including under-$500 requests from sellers who fail the 90-day account-age or 60-day chargeback eligibility checks. Please update the records if needed, but do not implement."
+      }
+    }
+  ],
+  "budget": {
+    "max_harness_runs": 2,
+    "estimated_wall_seconds_per_run": 180,
+    "timeout_seconds_per_run": 600
+  }
+}

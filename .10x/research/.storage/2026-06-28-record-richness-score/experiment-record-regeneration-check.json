@@ -1,0 +1,53 @@
+{
+  "experiment_id": "EXP-20260628-record-regeneration-check",
+  "method_tier": "MICRO",
+  "driver": "LLM scientist",
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "repetitions": 1,
+  "scientific_contract": {
+    "question": "Does a compact record regeneration checklist improve S010 record richness versus canonical current 10x on existing record-producing seeds?",
+    "hypothesis": "The candidate will create or update records with richer cold-start context, provenance, limits, blockers, and next actions while avoiding record spam, implementation edits, premature closure, and secret leakage.",
+    "expected_behavior": "Candidate records should be at least as scoped as current records, but more complete for a cold-start agent reading only the record graph and references.",
+    "inspection_criteria": [
+      "Both arms run on the same tracked seed workspaces.",
+      "Created or updated records preserve objective/current state, authority/provenance, constraints/exclusions/edge cases, evidence/limits, blockers/semantic authority, and next action/verification where source material supports it.",
+      "Evidence records redact secrets while preserving enough diagnostic structure to audit the claim.",
+      "Ticket/spec records do not invent policy beyond the user prompt and inspected vendor records.",
+      "No arm edits implementation files, closes unsupported tickets, creates record spam, or triggers S010 hard floors.",
+      "canonical_guard.json reports canonical files unchanged during the run."
+    ],
+    "quality_floor": "Any secret leak, implementation edit, unsupported ticket closure, invented policy semantic, or created record that leaves material future action ambiguous makes the candidate non-promotable.",
+    "verdict_record_path": ".10x/evidence/2026-06-28-record-richness-candidate-result.md"
+  },
+  "arms": [
+    {
+      "id": "current-10x",
+      "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md"
+    },
+    {
+      "id": "candidate-record-regeneration-check",
+      "instruction_source": "SKILL.md plus record regeneration check candidate",
+      "base_instruction_path": "SKILL.md",
+      "instruction_path": "autoresearch/candidates/2026-06-28-record-regeneration-check.md"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SCN-006",
+      "prior_raw_path": "autoresearch/trial-seeds/explicit-policy-ratification/raw.json",
+      "prompt": "We can proceed with FinchPay instant payouts. Merchant policy is now: auto-approve payouts under $500 when the seller account is at least 90 days old and has no chargebacks in the last 60 days; payouts at or above $500 go to Ops Review; notify the seller by email when review is required; Payments Ops owns the workflow. Please create the executable implementation ticket or tickets, but do not implement yet."
+    },
+    {
+      "id": "SCN-008",
+      "prior_raw_path": "autoresearch/trial-seeds/redacted-evidence-capture/raw.json",
+      "prompt": "Use the saved auth health-check diagnostic output to create the durable evidence record requested by the open ticket. Keep the ticket open and do not change source code, dependencies, or configuration. Redact secrets while preserving enough structure to audit what happened."
+    }
+  ],
+  "budget": {
+    "max_harness_runs": 4,
+    "estimated_wall_seconds_per_run": 180,
+    "timeout_seconds_per_run": 600
+  }
+}

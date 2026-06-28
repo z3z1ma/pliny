@@ -134,7 +134,7 @@ Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 ```
 
-Write for cold readers. Include enough precision, rationale, examples, limits, and evidence that someone weeks later can use the record without reconstructing the conversation. Reference records by path. Repair affected references when records are renamed, moved, deleted, superseded, closed, or cancelled. Terminal and superseded records are history, evidence, or rationale, not active authority unless their current status and context make that role explicit.
+Write for cold readers. Before leaving a new or updated record, ensure the graph answers: objective/state; authority/provenance; constraints, exclusions, edge cases; evidence/limits; blockers/assumptions; next action/verification. Add missing material context, not padding or duplicated external canon. Reference records by path; repair references when records move. Terminal/superseded records are history, evidence, or rationale, not active authority unless explicitly current.
 
 Do not leak secrets or unnecessary sensitive data into records. Redact credentials, tokens, private keys, and sensitive personal data while preserving enough structure to substantiate the finding.
 
