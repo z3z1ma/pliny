@@ -155,82 +155,96 @@ Records reference each other by file path: a ticket cites its spec, evidence
 cites its ticket, a decision points to the research that informed it. Plain
 Markdown. Versioned by git. Greppable. Diffable. Reviewable in a PR.
 
-Here is a real 10x decision from this repo:
+Here is a realistic 10x decision:
 
 ```markdown
 Status: active
-Created: 2026-06-28
-Updated: 2026-06-28
+Created: 2026-04-18
+Updated: 2026-04-18
+Relates-To: .10x/research/2026-04-17-webhook-delivery-semantics.md, .10x/specs/billing-webhooks.md
 
-# Equal First-Class Install Paths
+# Use Provider Event IDs For Webhook Idempotency
 
 ## Context
 
-The public README needs to make 10x easy to try while preserving the product
-philosophy that the actual surface is Markdown instructions. The Vercel Skills
-CLI is useful because it automates placement across many agent harnesses.
-Direct copy-paste is equally important because it is more flexible,
-transparent, and faithful to the fact that 10x is English text, not a runtime
-or cloud marketplace dependency.
+Billing receives payment-provider webhooks for invoice payment, payment failure,
+refund, and dispute events. Providers retry deliveries, and retries can arrive
+after an operator manually replays an event from the admin console.
+
+The product requirement is not "process every delivery"; it is "apply each
+provider business event exactly once." Duplicate emails, duplicate credits, and
+double ledger writes are user-visible financial defects.
 
 ## Decision
 
-Present Skills CLI and copy-paste as equal first-class install paths.
+Use `(provider, provider_event_id)` as the idempotency key for webhook event
+processing.
 
-The Skills CLI path is for automatic placement across supported harnesses. The
-copy-paste path is for maximum control: inspect, fork, splice, adapt, or append
-the Markdown wherever an agent reads instructions.
+Every delivery is recorded in `webhook_events`. The processor first inserts or
+claims the provider event inside a transaction. If the event already exists, the
+system updates `last_seen_at` and `delivery_count`, returns success to the
+provider, and does not repeat side effects.
+
+Downstream side effects that can be triggered by multiple event types, such as
+invoice email or credit issuance, keep their own domain idempotency keys.
 
 ## Authority And Provenance
 
-- User ratified the equal-path positioning in chat on 2026-06-28 after rejecting
-  README wording that implied copy-paste was secondary.
-- The current README install section is the active public expression of this
-  decision.
-- `SKILL.md` is the canonical instruction artifact; no root package manifest or
-  runtime entrypoint defines 10x as software that must be executed.
+- Product ratified "no duplicate customer-visible billing effects" as the
+  governing requirement on 2026-04-18.
+- `.10x/research/2026-04-17-webhook-delivery-semantics.md` compared provider
+  retry behavior, payload identifiers, replay tools, and observed staging
+  failures.
+- `.10x/specs/billing-webhooks.md` owns the accepted behavior and test
+  scenarios.
+- Current source has partial dedupe by invoice ID in
+  `workers/billing/webhooks.ts`; that proves implementation drift, not intended
+  behavior.
 
 ## Alternatives Considered
 
-- Skills CLI as the recommended path, copy-paste as fallback. Rejected because
-  it misrepresents the product surface and undersells the intentional simplicity
-  of Markdown instructions.
-- Copy-paste as the only emphasized path. Rejected because the Skills CLI is a
-  real convenience layer and supports broad harness placement.
+- Dedupe by invoice ID. Rejected because refunds, disputes, and subscription
+  updates do not map cleanly to one invoice.
+- Dedupe by payload hash. Rejected because retry metadata can change while the
+  business event is the same.
+- Dedupe only at side-effect tables. Rejected because it leaves event replay,
+  auditing, and operator visibility inconsistent.
 
 ## Consequences
 
-- README copy must state that both install paths are first-class.
-- Claims about 70+ agent support must be attributed to the Vercel Skills CLI,
-  not to 10x as a runtime.
-- Instruction-file installs must tell users to omit YAML frontmatter.
-- Skill-directory installs must tell users to keep `SKILL.md` intact.
+- Add a unique constraint on `(provider, provider_event_id)`.
+- Store raw payload hash, first seen time, last seen time, delivery count, and
+  processing status.
+- Route operator replays through the same processor as provider deliveries.
+- Keep separate idempotency keys for customer email, credits, and ledger writes
+  when one provider event fans out into multiple domain effects.
+- Retry cadence, dead-letter behavior, and alert ownership remain blocked until
+  `.10x/tickets/2026-04-18-ratify-webhook-operations.md` closes.
 
 ## Evidence And Limits
 
-- The Vercel Skills CLI README says it supports OpenCode, Claude Code, Codex,
-  Cursor, and 68 more.
-- This repository has no runtime package manifest at the root; the primary
-  product artifact is `SKILL.md`.
-- `npm` is not installed in the current container, so `npx skills add` was not
-  executed locally during README validation.
+- Staging reproduction `EVID-2026-04-17-duplicate-invoice-email.md` shows two
+  deliveries caused duplicate customer email under the invoice-ID dedupe path.
+- Provider docs and captured staging payloads both expose stable event IDs.
+- This decision does not define the provider retry schedule or incident paging
+  policy.
 ```
 
 The point is not paperwork. The point is that the next agent knows what is
 settled, who authorized it, which alternatives were rejected, what limits still
-matter, and how future README or packaging work should preserve the decision.
+matter, and which follow-up owns unresolved operational behavior.
 
 ## Before and after
 
-**Without 10x:** New session. "Didn't we decide copy-paste and `npx skills`
-were equal install paths?" The agent does not know. It re-litigates the
-positioning from chat, makes one path sound secondary, and accidentally weakens
-the project's core simplicity story.
+**Without 10x:** New session. "Didn't we decide how billing webhooks should be
+deduped?" The agent does not know. It sees an invoice ID in the code, writes
+tests around that accidental implementation detail, and ships a fix that still
+duplicates refunds.
 
-**With 10x:** New session. The agent reads the decision, sees what was
-ratified, why the alternatives were rejected, what evidence supports the 70+
-installer claim, and what limits remain. It preserves the decision while making
-the next README edit.
+**With 10x:** New session. The agent reads the decision, follows the research
+and spec links, sees why invoice-ID dedupe was rejected, and notices retry
+operations are still blocked. It implements the right idempotency boundary and
+asks only about the unresolved operational policy.
 
 ## How it is tested
 
