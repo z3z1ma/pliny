@@ -25,7 +25,7 @@ OpenCode, Claude Code, Cursor, Gemini CLI, or any harness that reads project
 instructions. It teaches the agent to:
 
 - challenge vague work before coding;
-- preserve repo-local memory in `.10x/`;
+- preserve repo-local context in `.10x/`;
 - split discovery from execution;
 - prove changes with evidence and review;
 - turn mistakes, dead ends, and repeated friction into reusable knowledge.
@@ -85,14 +85,14 @@ declaring victory without verification.
 | --- | --- |
 | Plan mode | Reasoning disappears with the session |
 | `PLAN.md` or spec files | Plans rarely link to evidence, reviews, or later decisions |
-| Subagents | Reports sound authoritative before anyone verifies them |
+| Subagents | Intermediate reasoning, checkpoints, and validation vanish into a final reply |
 | Custom skills | They use different state and vocabulary from each other |
 | "Think before coding" prompts | The agent still guesses when requirements are vague |
 | Chat history | Important conclusions stay implicit, private, or impossible to grep |
 
 The gap is not tooling. It is judgment. 10x gives those failures an explicit
 place to be caught and turns the prevention mechanism into durable project
-memory.
+context.
 
 ## How it works
 
@@ -155,34 +155,66 @@ Records reference each other by file path: a ticket cites its spec, evidence
 cites its ticket, a decision points to the research that informed it. Plain
 Markdown. Versioned by git. Greppable. Diffable. Reviewable in a PR.
 
-A small decision record looks like this:
+The records are intentionally richer than a thin ADR. A useful 10x record
+captures not just the decision, but the authority behind it, the evidence that
+supports it, the limits that still matter, and the next work it enables:
 
 ```markdown
 Status: active
 Created: 2026-06-12
+Updated: 2026-06-12
+Relates-To: .10x/research/2026-06-10-auth-options.md, .10x/specs/mobile-auth.md
 
 # Use Refresh Tokens For Mobile Auth
 
 ## Context
 
-API authentication must support browser and mobile clients.
+API authentication must support browser and mobile clients. Browser-only session
+cookies would simplify the web flow, but mobile clients need a first-class
+reauthentication path that does not depend on cookie behavior.
+
+Current source has email/password login and access-token middleware, but no
+refresh-token persistence, rotation, revocation list, or device session model.
 
 ## Decision
 
-Use JWT access tokens with rotating refresh tokens.
+Use short-lived JWT access tokens plus rotating refresh tokens stored per device
+session. Refresh tokens are invalidated on rotation, logout, password reset, and
+explicit account revocation.
+
+## Authority And Provenance
+
+- User ratified mobile support as in scope on 2026-06-12.
+- `.10x/research/2026-06-10-auth-options.md` compared session cookies, opaque
+  bearer tokens, and JWT plus refresh tokens.
+- `src/auth/middleware.ts` proves current access-token validation exists but
+  does not prove refresh lifecycle behavior.
 
 ## Alternatives Considered
 
-Session cookies were simpler for browser auth but require a shared session
-store and do not fit mobile clients cleanly.
+- Session cookies: simpler browser implementation, rejected because mobile
+  support would require a parallel auth path.
+- Opaque bearer tokens: easier revocation, rejected because the current API
+  gateway already validates JWT claims locally.
 
 ## Consequences
 
-Token rotation interval remains open and is tracked in the auth ticket.
+- Requires refresh-token storage, rotation, replay detection, and revocation.
+- Login, logout, password reset, and account disable flows all need lifecycle
+  tests.
+- Token lifetime remains unratified and is blocked from implementation until
+  `.10x/tickets/2026-06-12-ratify-token-lifetimes.md` closes.
+
+## Evidence And Limits
+
+- Source inspection observed JWT middleware only; no refresh-token table exists.
+- Research did not evaluate enterprise SSO. That remains explicitly out of
+  scope for this decision.
 ```
 
-The point is not paperwork. The point is that the next agent starts from a
-settled decision instead of re-deriving it from old chat.
+The point is not paperwork. The point is that the next agent knows what is
+settled, who authorized it, what source proves, what source does not prove, and
+which unresolved semantics still block execution.
 
 ## Before and after
 
@@ -207,6 +239,11 @@ or selects a candidate instruction, runs live subject-agent trials, inspects raw
 transcripts and archived workspaces, scores the result against a rubric, and
 records the verdict in `.10x/`.
 
+That matters because instructions are software. A prompt change can improve one
+behavior while quietly weakening another. Autoresearch makes those changes
+observable: current skill vs candidate, clean seed workspaces, raw transcripts,
+archived artifacts, manual scientific judgment, and durable evidence records.
+
 That makes the experiments do two jobs:
 
 - compare current `SKILL.md` against candidate improvements;
@@ -220,28 +257,21 @@ instruction change, for example, was promoted after a 50-sample
 current-vs-candidate batch recorded in
 [`.10x/evidence/2026-06-28-record-richness-hypothesis-batch.md`](.10x/evidence/2026-06-28-record-richness-hypothesis-batch.md).
 
-## Why not RAG, vectors, or longer context windows?
+## Enhance your current workflow
 
-Those are retrieval mechanisms. They help the agent find relevant text in a
-large corpus. They do not make the agent challenge assumptions, define
-acceptance criteria, prove work, or record why one path beat another.
+10x does not replace your tools. It gives them a project context layer: typed
+authority, provenance, lifecycle state, evidence, review, and follow-up
+ownership that other workflows can stand on.
 
-10x is behavioral. The records are useful for retrieval, but the leverage comes
-from the discipline that produces them.
-
-## Keep your current workflow
-
-10x does not replace your tools. It gives the agent a working method that
-naturally coordinates across them.
-
-| Your workflow | How 10x integrates |
+| Your workflow | What 10x adds |
 | --- | --- |
-| Plan mode | Use it to think. What crystallizes goes into records. |
-| `PLAN.md` | Keep it canonical. A parent ticket points to it. |
-| Spec-driven development | Store specs in `.10x/specs/` or link to the canonical copy. |
-| Superpowers | Keep the methodology. 10x carries context across sessions. |
-| Custom skills | Source in `.10x/skills/`, mirrored to harness-native directories. |
-| External issue trackers | Keep delivery state there. 10x holds the local context. |
+| Plan mode | Useful reasoning becomes durable context instead of disappearing with the session. |
+| `PLAN.md` or spec files | Plans link to decisions, evidence, reviews, blockers, and later supersession. |
+| Spec-driven development | Specs gain authority/provenance and executable tickets inherit only ratified behavior. |
+| Subagents | Handoffs are typed records; final reports remain claims until checked against evidence. |
+| Superpowers or skill packs | Keep the execution discipline; 10x adds the context and authority substrate underneath it. |
+| Custom skills | Skills share project vocabulary, source identity, exposure paths, and retrospective learning. |
+| External issue trackers | Delivery state can stay external while 10x preserves local reasoning context and evidence. |
 
 ## Installing
 
@@ -328,8 +358,10 @@ ambiguous one-shot builds, it should prevent wrong-premise code.
 **Does 10x replace Superpowers or other skill packs?**
 
 No. Those often govern how the agent writes code or apply process pressure. 10x
-governs how the agent approaches work: when to clarify, when to execute, how to
-verify, and what to preserve. They compose naturally.
+governs how the agent reasons from project context: what kind of truth this is,
+what authorized it, what could change implementation, and what would prove the
+outcome. Skill packs can supply strong execution tactics; 10x supplies the
+authority and context substrate they can run on.
 
 **Is this too much process for small changes?**
 
@@ -350,7 +382,7 @@ references below.
 
 | Component | Source | What it does |
 | --- | --- | --- |
-| 10x Protocol | Original | Outer/inner loop, record graph, retrospectives, evidence, review, and durable project memory |
+| 10x Protocol | Original | Outer/inner loop, record graph, retrospectives, evidence, review, and durable project context |
 | Tactical Guidelines | [Karpathy's LLM coding guidelines](references/KARPATHY.md) | Behavioral mechanics that reduce common LLM coding mistakes |
 | Operational Minimalism | Distilled from [ponytail](references/MINIMALIST.md) | Ruthless simplicity constraints and the execution ladder |
 
