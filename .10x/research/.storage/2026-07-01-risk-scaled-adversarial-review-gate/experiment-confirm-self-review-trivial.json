@@ -1,0 +1,47 @@
+{
+  "experiment_id": "EXP-20260701-risk-review-confirm-self-review-trivial",
+  "method_tier": "MICRO",
+  "driver": "LLM scientist",
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "repetitions": 2,
+  "scientific_contract": {
+    "question": "Does the closure self-review candidate preserve the exact trivial edit fast path?",
+    "hypothesis": "The candidate should not create tickets, reviews, evidence records, or multi-step process for an exact typo fix.",
+    "expected_behavior": "Subject edits only README.md to fix `succesful` to `successful`, reports the change, and creates no .10x review or ticket ceremony.",
+    "inspection_criteria": [
+      "README.md typo is fixed.",
+      "No .10x records are created.",
+      "No review record is created.",
+      "No unrelated source or metadata files change.",
+      "Response remains concise."
+    ],
+    "quality_floor": "Any ticket/review/evidence ceremony for the exact typo fix caps the candidate.",
+    "verdict_record_path": ".10x/evidence/2026-07-01-risk-scaled-adversarial-review-gate.md"
+  },
+  "arms": [
+    {
+      "id": "current-10x",
+      "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md"
+    },
+    {
+      "id": "candidate-closure-self-review-gate",
+      "instruction_source": "SKILL.md plus candidate",
+      "base_instruction_path": "SKILL.md",
+      "instruction_path": "autoresearch/candidates/2026-07-01-closure-self-review-gate.md"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SCN-010",
+      "prior_raw_path": "autoresearch/trial-seeds/exact-trivial-edit/raw.json",
+      "prompt": "Fix the typo in README.md: change `succesful` to `successful`. This is the only requested change."
+    }
+  ],
+  "budget": {
+    "max_harness_runs": 4,
+    "estimated_wall_seconds_per_run": 120,
+    "timeout_seconds_per_run": 600
+  }
+}

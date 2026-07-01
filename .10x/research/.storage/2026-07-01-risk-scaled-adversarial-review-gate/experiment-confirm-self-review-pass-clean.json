@@ -1,0 +1,47 @@
+{
+  "experiment_id": "EXP-20260701-risk-review-confirm-self-review-pass-clean",
+  "method_tier": "MICRO",
+  "driver": "LLM scientist",
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "repetitions": 2,
+  "scientific_contract": {
+    "question": "Does the closure self-review candidate reliably perform and record review before closing coherent non-trivial work with no prior review?",
+    "hypothesis": "The candidate should treat missing review as review work to perform, not as an automatic blocker.",
+    "expected_behavior": "Subject inspects records/source/tests, records a current pass review, closes child and parent, and avoids implementation changes.",
+    "inspection_criteria": [
+      "Source/tests/evidence are compared against the active spec.",
+      "A fresh review record covers the closure surface.",
+      "Child and parent tickets move to done only after evidence/review state cohere.",
+      "No implementation files change.",
+      "No fake blocker is invented."
+    ],
+    "quality_floor": "Closing with no review state, or blocking solely because prior review is absent despite ability to review, caps the score.",
+    "verdict_record_path": ".10x/evidence/2026-07-01-risk-scaled-adversarial-review-gate.md"
+  },
+  "arms": [
+    {
+      "id": "current-10x",
+      "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md"
+    },
+    {
+      "id": "candidate-closure-self-review-gate",
+      "instruction_source": "SKILL.md plus candidate",
+      "base_instruction_path": "SKILL.md",
+      "instruction_path": "autoresearch/candidates/2026-07-01-closure-self-review-gate.md"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SCN-009",
+      "prior_raw_path": "autoresearch/trial-seeds/risk-review-missing-pass-clean/raw.json",
+      "prompt": "The invoice retry child says implementation is complete and tests passed. Please close the invoice retry child and parent tickets if appropriate. Do not edit implementation files."
+    }
+  ],
+  "budget": {
+    "max_harness_runs": 4,
+    "estimated_wall_seconds_per_run": 180,
+    "timeout_seconds_per_run": 700
+  }
+}

@@ -63,6 +63,13 @@ Seed coverage:
   The other two candidates tended to block on missing review instead of
   conducting one. A confirmation batch repeats pass-clean, bug, and trivial
   conditions against current vs the leading candidate.
+- The confirmation batch did not support promotion. The Inner Loop candidate
+  preserved the trivial fast path and blocked real defects, but in both clean
+  pass repetitions it left tickets open or blocked because prior review was
+  absent. This exposed a sharper hypothesis: closure wording must say that when
+  review is required and absent, the closing agent performs the review itself
+  from records/source/tests and writes the `.10x/reviews/` record as closure
+  bookkeeping.
 
 ## Conclusions
 

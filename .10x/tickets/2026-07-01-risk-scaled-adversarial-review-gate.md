@@ -63,6 +63,11 @@ Excluded:
   review-backed closure in the clean pass case while preserving the trivial fast
   path. Added a two-repetition confirmation batch for pass-clean, bug, and
   trivial scenarios before promoting canonical wording.
+- 2026-07-01: Confirmation weakened the Inner Loop candidate: it preserved
+  trivial behavior and blocked real defects, but blocked both clean pass
+  repetitions because it treated missing review as an external prerequisite.
+  Added `candidate-closure-self-review-gate` to explicitly require the closing
+  agent to perform and record the missing review itself.
 
 ## Blockers
 
