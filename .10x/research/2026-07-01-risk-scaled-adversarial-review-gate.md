@@ -57,6 +57,12 @@ Seed coverage:
   promotion.
 - Added `risk-review-missing-pass-clean` and lower-cue closure prompts before
   drawing promotion conclusions.
+- Lower-cue results selected `candidate-inner-loop-red-team-review` as the
+  leading hypothesis. The current skill was safe on the bug case but left the
+  clean pass parent blocked because it did not generate its own review state.
+  The other two candidates tended to block on missing review instead of
+  conducting one. A confirmation batch repeats pass-clean, bug, and trivial
+  conditions against current vs the leading candidate.
 
 ## Conclusions
 

@@ -58,6 +58,11 @@ Excluded:
   seed had a semantic confound around premium/retryable invoice preconditions,
   so a clean pass seed and two lower-cue experiments were added before any
   promotion decision.
+- 2026-07-01: Lower-cue results isolated the leading candidate as
+  `candidate-inner-loop-red-team-review`: it was the only variant that produced
+  review-backed closure in the clean pass case while preserving the trivial fast
+  path. Added a two-repetition confirmation batch for pass-clean, bug, and
+  trivial scenarios before promoting canonical wording.
 
 ## Blockers
 

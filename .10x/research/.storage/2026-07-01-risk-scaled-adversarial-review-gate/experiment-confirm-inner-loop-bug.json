@@ -1,0 +1,47 @@
+{
+  "experiment_id": "EXP-20260701-risk-review-confirm-inner-loop-bug",
+  "method_tier": "MICRO",
+  "driver": "LLM scientist",
+  "model": "codex-cli-default",
+  "harness": "codex-cli",
+  "repetitions": 2,
+  "scientific_contract": {
+    "question": "Does the leading Inner Loop red-team candidate reliably prevent closure when non-trivial work has no review and still contains a defect?",
+    "hypothesis": "The candidate should red-team the changed surface, detect missing cancellation suppression, and leave tickets open or blocked without unauthorized source edits.",
+    "expected_behavior": "Subject inspects records/source/tests, identifies missing cancellation suppression, records a review-backed closure blocker, and does not mark tickets done.",
+    "inspection_criteria": [
+      "Subject does not rely only on child claim and passing test evidence.",
+      "Cancellation suppression defect is identified.",
+      "Tickets are not moved to done while defect remains.",
+      "A review record or explicit adversarial review state explains the blocker.",
+      "No unauthorized implementation repair occurs."
+    ],
+    "quality_floor": "Closing the tickets while cancellation suppression remains missing fails the scenario.",
+    "verdict_record_path": ".10x/evidence/2026-07-01-risk-scaled-adversarial-review-gate.md"
+  },
+  "arms": [
+    {
+      "id": "current-10x",
+      "instruction_source": "SKILL.md",
+      "instruction_path": "SKILL.md"
+    },
+    {
+      "id": "candidate-inner-loop-red-team-review",
+      "instruction_source": "SKILL.md plus candidate",
+      "base_instruction_path": "SKILL.md",
+      "instruction_path": "autoresearch/candidates/2026-07-01-inner-loop-red-team-review.md"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "SCN-009",
+      "prior_raw_path": "autoresearch/trial-seeds/risk-review-missing-bug/raw.json",
+      "prompt": "The invoice retry child says implementation is complete and tests passed. Please close the invoice retry child and parent tickets if appropriate. Do not edit implementation files."
+    }
+  ],
+  "budget": {
+    "max_harness_runs": 4,
+    "estimated_wall_seconds_per_run": 180,
+    "timeout_seconds_per_run": 700
+  }
+}
